@@ -1,0 +1,42 @@
+
+
+[selene]
+base = "lua51"
+name = "modding"
+
+
+[server]
+any = true
+
+[client]
+any = true
+
+[constants]
+any = true
+
+[variables]
+any = true
+
+
+
+[delay]
+any = true
+[sset]
+any = true
+[array]
+any = true
+[exists]
+any = true
+[class]
+any = true
+[on]
+any = true
+[call]
+any = true
+
+
+## Standard library modifications
+[assert]
+any = true
+
+
