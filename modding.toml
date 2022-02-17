@@ -18,10 +18,20 @@ any = true
 any = true
 
 
+[graphics]
+any = true
+[timer]
+any = true
 
+
+[assets]
+any = true
+
+[group]
+any = true
 [delay]
 any = true
-[sset]
+[set]
 any = true
 [array]
 any = true
