@@ -203,7 +203,7 @@ end
 
 function drawShockWaves()
     for _,sw in ipairs(shockwaveSet.objects) do
-        sw:draw(  )
+        sw:draw()
     end
 end
 

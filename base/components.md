@@ -71,6 +71,13 @@ ent.physics = {
 }
 
 
+ent.collide = function(ent, other_ent)
+    -- called when 2 ents collide. (both must have physics component)
+    -- TODO: Should we have collideServer  and  collideClient  as seperate
+    -- components?
+end
+
+
 
 
 -- this entity can be controlled by a player
