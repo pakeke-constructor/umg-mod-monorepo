@@ -6,8 +6,10 @@ Will emit draw calls based on position, and in correct order.
 
 ]]
 
+local cameraLib = require("_libs.camera") -- HUMP Camera for love2d.
 
-local drawGroup = group("draw", "x", "y")
+
+local drawGroup = group("image", "x", "y")
 
 
 local floor = math.floor
@@ -94,16 +96,50 @@ local ipairs = ipairs
 
 local setColor = graphics.setColor
 
+local DEFAULT_ZOOM = 4
+
+local camera = cameraLib(0, 0, DEFAULT_ZOOM, 0)
+
+graphics.camera = camera -- First monkeypatch!
+
+
 
 local drawShockWaves
 
 
+local SCREEN_LEIGHWAY = 400 -- leighway of 400 pixels
+
+
+local function isOnScreen(ent, w, h)
+    --[[
+        `ent` the entity to be checked if on screen
+        `camera` the camera object, (graphics.camera)
+        
+        OPTIONAL:
+        `w` and `h` are the width and height of the screen. 
+            If these aren't supplied, they will be automatically given.
+            It's slightly faster if they are supplied though.
+
+        SCREEN_LEIGHWAY is just a constant that determines how many pixels
+        of "leighway" we can give each object before it's counted as offscreen
+    ]]
+    w, h = w or graphics.getWidth(), h or graphics.getHeight()
+    local x, y = camera:cameraCoords(ent.x, ent.y, 0,0, w, h)
+
+    return -SCREEN_LEIGHWAY <= x and x <= w + SCREEN_LEIGHWAY
+            and -SCREEN_LEIGHWAY <= y and y <= h + SCREEN_LEIGHWAY
+end
+
+
+
 local function mainDraw()
+    local w, h = graphics.getWidth(), graphics.getHeight()
+
     for z_dep = depthIndexer_min_depth, depthIndexer_max_depth do
         if rawget(depthIndexer, z_dep) then
             local entSet = depthIndexer[z_dep]
             for _, ent in ipairs(entSet.objects) do
-                if camera:isOnScreen(ent) then
+                if isOnScreen(ent, w, h) then
                     setColor(1,1,1)
                     if not ent.hidden then
                         if ent.colour then

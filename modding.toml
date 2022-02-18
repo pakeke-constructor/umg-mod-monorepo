@@ -22,6 +22,8 @@ any = true
 any = true
 [timer]
 any = true
+[physics]
+any = true
 
 
 [assets]
@@ -47,6 +49,9 @@ any = true
 
 ## Standard library modifications
 [assert]
+any = true
+
+[math]
 any = true
 
 

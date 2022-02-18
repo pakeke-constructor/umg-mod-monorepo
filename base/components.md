@@ -27,9 +27,11 @@ ent.animation = {"img1", "img2", "img3", speed = 3} -- Same as animations-
 ent.moveAnimation = {
     up = {"up1", "up2", ...},
     down = ...,  left = ..., right = ...
-    speed = 3
-}  -- Similar to PushOps;
--- in same format as ent.animation
+    speed = 3;
+
+    activation = 10 -- moveAnimation activates when entity is travelling at 
+    -- at least 10 units per second.
+}
 
 
 
@@ -55,6 +57,20 @@ ent.particles = {
     ox = 0;
     oy = 40
 }
+
+
+ent.physics = {
+    shape = love.physics.Shape(...), -- some shape object (compulsory)
+
+    -- OPTIONAL FIELDS:
+    friction = 0.15, -- number from 0 to 1.  (default is 0.3),
+
+    type = "kinematic" -- The bodyType of the entity. 
+    -- Default is `static` or `dynamic`, depending on whether the 
+        -- ent has vx and vy components.
+}
+
+
 
 
 -- this entity can be controlled by a player

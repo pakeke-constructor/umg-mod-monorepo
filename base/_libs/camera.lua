@@ -1,5 +1,9 @@
 
 --[[
+
+HUMP Camera
+https://github.com/vrld/hump
+
 Copyright (c) 2010-2015 Matthias Richter
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +30,16 @@ local cos, sin = math.cos, math.sin
 
 
 
--- MONKEYPATCH FOR BASE MOD: Start
+-- PAKEKE MONKEYPATCH FOR BASE MOD: Start
+--[[
+    The reason we can do this is because the graphics module and the timer
+    module are *essentially* mirrors of love.graphics and love.timer.
+]]
 local love = {
     graphics = graphics;
     timer = timer
 }
--- MONKEYPATCH FOR BASE MOD: End
+-- PAKEKE MONKEYPATCH FOR BASE MOD: End
 
 
 

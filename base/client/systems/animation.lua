@@ -4,11 +4,14 @@
 Handles animations of entities.
 
 TODO:
-Currently, all animation entities have the exact same
+Currently, all animation entities have the exact same cycle.
+Change this by having a table that maps `[ent] --> current_cycle` 
+to offset each entity animation
 
 ]]
 
-local anim_group = group("draw", "animation")
+
+local anim_group = group("image", "animation")
 
 
 
@@ -23,9 +26,11 @@ local function updateEnt(ent)
     local spd = anim.speed or DEFAULT_ANIM_SPEED
     local len = #anim
 
-    local frame_i = math.floor(((tick % spd) / spd) * len - EPSILON)
+    -- minus epsilon to ensure that we don't hit the top len value,
+    -- plus 1 because of lua's 1-based indexing.
+    local frame_i = math.floor(((tick % spd) / spd) * len - EPSILON) + 1
     local frame = anim[frame_i]
-    ent.draw = frame
+    ent.image = frame
 end
 
 
