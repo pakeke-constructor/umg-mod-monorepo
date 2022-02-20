@@ -11,6 +11,9 @@ any = true
 [client]
 any = true
 
+[username]
+any = true
+
 [constants]
 any = true
 
@@ -23,6 +26,8 @@ any = true
 [timer]
 any = true
 [physics]
+any = true
+[keyboard]
 any = true
 
 
@@ -44,6 +49,8 @@ any = true
 [on]
 any = true
 [call]
+any = true
+[entities]
 any = true
 
 

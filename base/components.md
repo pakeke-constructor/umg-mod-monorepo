@@ -41,8 +41,8 @@ ent.swaying, ent.bobbing
 -- changing ent sizes!
 -- (This should also affect the size of the physics body too.)
 ent.scale
-ent.scale_x
-ent.scale_y
+ent.scaleX
+ent.scaleY
 
 
 ent.riding -- This entity rides another entity!
@@ -71,13 +71,6 @@ ent.physics = {
 }
 
 
-ent.collide = function(ent, other_ent)
-    -- called when 2 ents collide. (both must have physics component)
-    -- TODO: Should we have collideServer  and  collideClient  as seperate
-    -- components?
-end
-
-
 
 
 -- this entity can be controlled by a player
@@ -93,30 +86,36 @@ right_ability: E
 space_ability: Space bar
 ]]
 ent.controllable = {
-    speed = 10;
-    controller = "player_username";
-     -- Warning: these functions are called on serverside AND clientside!!!
-    on_left_ability = function(ent) end;
-    on_right_ability = function(ent) end;
-    on_space_ability = function(ent) end;
+    onLeftAbility = function(ent) end;
+    onRightAbility = function(ent) end;
+    onSpaceAbility = function(ent) end;
 
-    on_click = function(ent, x, y) end;
+    onClick = function(ent, x, y) end;
 }
 
+ent.controller = "player_username" -- whoever is controlling this entity
+
+
+ent.speed = 100 -- The speed the ent moves at
+
+ent.agility = 50 -- How fast the ent can change it's speed (acceleration)
+-- By default, agility = ent.speed
 
 
 
-ent.on_damage = function(ent) ... end
+ent.damaged = function(ent) ... end
 
-ent.on_death = function(ent) ... end
+ent.death = function(ent) ... end
 
-ent.on_update = function(ent, dt)   end
+ent.update = function(ent, dt)   end
 
-ent.on_draw = function(ent) end  --  called when ent is drawn
+ent.draw = function(ent) end  --  called when ent is drawn
 
-ent.on_collide = function(ent, other, speed)   end
+ent.collide = function(ent, other_ent)
+    -- called when 2 ents collide. (both must have physics component)
+end
 
-ent.on_spawn = function(s)
+ent.spawn = function(s) end
 
 
 ```

@@ -82,7 +82,6 @@ drawGroup:on_removed(function( ent )
     -- Callback for entity removal
     removeEnt(ent)
     positions[ent] = nil
-    ent.draw = nil
 end)
 
 
@@ -93,7 +92,6 @@ end)
 
 local rawget = rawget
 local ipairs = ipairs
-
 local setColor = graphics.setColor
 
 local DEFAULT_ZOOM = 4
@@ -101,10 +99,6 @@ local DEFAULT_ZOOM = 4
 local camera = cameraLib(0, 0, DEFAULT_ZOOM, 0)
 
 graphics.camera = camera -- First monkeypatch!
-
-
-
-local drawShockWaves
 
 
 local SCREEN_LEIGHWAY = 400 -- leighway of 400 pixels
@@ -130,11 +124,12 @@ local function isOnScreen(ent, w, h)
             and -SCREEN_LEIGHWAY <= y and y <= h + SCREEN_LEIGHWAY
 end
 
+graphics.isOnScreen = isOnScreen -- Second monkeypatch!
+
 
 
 local function mainDraw()
     local w, h = graphics.getWidth(), graphics.getHeight()
-
     for z_dep = depthIndexer_min_depth, depthIndexer_max_depth do
         if rawget(depthIndexer, z_dep) then
             local entSet = depthIndexer[z_dep]
@@ -154,11 +149,7 @@ local function mainDraw()
     end
 
     graphics.atlas:flush()
-
-    drawShockWaves()
 end
-
-
 
 
 
@@ -166,6 +157,10 @@ on("draw", function()
     call("preDraw")
     call("mainDraw")
     call("postDraw")
+
+    call("preDrawUI")
+    call("mainDrawUI")
+    call("postDrawUI")
 end)
 
 
@@ -176,47 +171,11 @@ on("mainDraw", mainDraw)
 
 
 
-local newShockWave = require("src.misc.unique.shockwave")
-
--- a Set for all shockwave objects that are being drawn
-local shockwaveSet = set()
-
-
-
-on("update", function(dt)
-    for _,sw in ipairs(shockwaveSet.objects)do
-        sw:update(dt)
-        if sw.isFinished then
-            shockwaveSet:remove(sw)
-            sw.colour = nil -- easier on GC
-        end
-    end
-end)
-
-
-
-local function shockwave(x, y, start_size, end_size, thickness, time, colour)
-    local sw = newShockWave(x,y,start_size, end_size, thickness, time, colour or {1,1,1,1})
-    shockwaveSet:add(sw)
-end
-
-
-function drawShockWaves()
-    for _,sw in ipairs(shockwaveSet.objects) do
-        sw:draw()
-    end
-end
 
 
 
 
-
-
-
-
-
-
-local moveDrawGroup = group("x", "y", "draw", "vely")
+local moveDrawGroup = group("x", "y", "image", "vy")
 -- WELP! this sucks. 
 -- If an entity has a z velocity component, and no y component,
 -- it won't be changed in the Index structure...  Too bad lol!
