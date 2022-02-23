@@ -16,8 +16,6 @@ local ent_to_fixture = {}
 
 
 
-local world -- The box2d physics world used by entities
-
 
 local function beginContact(fixture_A, fixture_B, contact_obj)
     local ent_A = fixture_to_ent[fixture_A]
@@ -31,16 +29,22 @@ local function beginContact(fixture_A, fixture_B, contact_obj)
 end
 
 
+local world
 
-
-
-on("newWorld", function()    
+local function newWorld()
     if world then
         world:destroy()
     end
     world = physics.newWorld(0,0)
     world:setCallbacks(beginContact, nil, nil, nil)
-end)
+end
+
+
+newWorld() -- The box2d physics world used by entities
+
+
+
+on("newWorld", newWorld)
 
 
 

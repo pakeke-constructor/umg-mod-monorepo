@@ -67,11 +67,8 @@ but it depends on the configuration.
 Called when everything should be rendered.
 
 
-# newWorld(...)
-Called upon creation of a new world.
-`(...)` is just some arbitrary arguments.
-TODO- do some more thinking around this.
-
+# newWorld()
+Called upon creation of a new world.  (Before entities spawn)
 
 
 # join(username)

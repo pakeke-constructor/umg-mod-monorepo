@@ -2,14 +2,11 @@
 return {
     "x", "y", "vx", "vy",
     "controller",
-
-    image = "3d_player_down_1";
+    "image",
     
     controllable = {};
 
-    speed = 100;
-
-    player=true
+    speed = 100
 }
 
 

@@ -25,7 +25,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ]]--
 
-local _PATH = (...):match('^(.*[%./])[^%.%/]+$') or ''
 local cos, sin = math.cos, math.sin
 
 

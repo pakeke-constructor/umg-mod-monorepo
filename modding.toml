@@ -52,6 +52,8 @@ any = true
 any = true
 [entities]
 any = true
+[inspect]
+any = true
 
 
 ## Standard library modifications
