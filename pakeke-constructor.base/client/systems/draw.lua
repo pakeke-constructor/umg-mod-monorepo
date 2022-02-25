@@ -48,10 +48,9 @@ local positions = {}
 
 
 
-
 local function addEnt(ent)
     -- Adds entity to depthIndexer
-    local zindx = floor((ent.y + ent.z or 0)/2)
+    local zindx = floor((ent.y + (ent.z or 0))/2)
     depthIndexer[zindx]:add(ent)
 end
 
@@ -65,7 +64,7 @@ end
 local function setEnt(ent)
     -- Sets current position of entity in depthIndexer, to give system awareness
     -- of what location ent is currently in in depthIndexer sets.
-    positions[ent] = floor((ent.y + ent.z or 0)/2)
+    positions[ent] = floor((ent.y + (ent.z or 0))/2)
 end
 
 
@@ -83,9 +82,6 @@ drawGroup:on_removed(function( ent )
     removeEnt(ent)
     positions[ent] = nil
 end)
-
-
-
 
 
 
@@ -156,9 +152,11 @@ end
 
 
 on("draw", function()
+    camera:attach()
     call("preDraw")
     call("mainDraw")
     call("postDraw")
+    camera:detach()
 
     call("preDrawUI")
     call("mainDrawUI")
@@ -189,7 +187,7 @@ local function fshift(ent)
         shifts the entities around in the depthIndexer structure
         in a fast manner
     ]]
-    local z_index = floor((ent.y + ent.z or 0)/2)
+    local z_index = floor((ent.y + (ent.z or 0))/2)
     if positions[ent] ~= z_index then
         removeEnt(ent)
         setEnt(ent)

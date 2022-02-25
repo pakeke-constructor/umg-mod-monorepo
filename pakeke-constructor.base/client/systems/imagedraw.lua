@@ -1,6 +1,7 @@
 
 
-local quads = assets.quads
+local images = assets.images
+
 
 
 local quad_to_ox
@@ -24,7 +25,7 @@ quad_to_oy = setmetatable({}, {
 
 
 on("drawEntity", function(ent)
-    local quad = quads[ent.image]
+    local quad = images[ent.image]
     if not quad then
         if type(ent.image) ~= "string" then
             error(("Incorrect type for ent.image. Expected string, got: %s"):format(type(ent.image)))
