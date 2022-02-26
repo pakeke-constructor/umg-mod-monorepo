@@ -29,6 +29,8 @@ any = true
 any = true
 [keyboard]
 any = true
+[mouse]
+any = true
 
 
 [assets]

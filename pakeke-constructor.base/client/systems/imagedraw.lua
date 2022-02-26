@@ -10,6 +10,7 @@ quad_to_ox = setmetatable({}, {
     __index = function(_,quad)
         local _,_, w, _ = quad:getViewport()
         quad_to_ox[quad] = w / 2
+        return w/2
     end
 })
 
@@ -19,6 +20,7 @@ quad_to_oy = setmetatable({}, {
     __index = function(_,quad)
         local _,_,_, h = quad:getViewport()
         quad_to_oy[quad] = h / 2
+        return h/2
     end
 })
 

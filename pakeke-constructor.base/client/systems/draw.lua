@@ -8,6 +8,8 @@ Will emit draw calls based on position, and in correct order.
 
 local cameraLib = require("_libs.camera") -- HUMP Camera for love2d.
 
+local constants = require("client.constants")
+
 
 local drawGroup = group("image", "x", "y")
 
@@ -90,14 +92,14 @@ local rawget = rawget
 local ipairs = ipairs
 local setColor = graphics.setColor
 
-local DEFAULT_ZOOM = 4
+local DEFAULT_ZOOM = constants.DEFAULT_ZOOM
 
-local camera = cameraLib(0, 0, DEFAULT_ZOOM, 0)
+local camera = cameraLib(0, 0, nil, nil, DEFAULT_ZOOM, 0)
 
 graphics.camera = camera -- First monkeypatch!
 
 
-local SCREEN_LEIGHWAY = 400 -- leighway of 400 pixels
+local SCREEN_LEIGHWAY = constants.SCREEN_LEIGHWAY -- leighway of 400 pixels
 
 
 local function isOnScreen(ent, w, h)
@@ -114,7 +116,7 @@ local function isOnScreen(ent, w, h)
         of "leighway" we can give each object before it's counted as offscreen
     ]]
     w, h = w or graphics.getWidth(), h or graphics.getHeight()
-    local x, y = camera:cameraCoords(ent.x, ent.y, 0,0, w, h)
+    local x, y = camera:toCameraCoords(ent.x, ent.y, 0,0, w, h)
 
     return -SCREEN_LEIGHWAY <= x and x <= w + SCREEN_LEIGHWAY
             and -SCREEN_LEIGHWAY <= y and y <= h + SCREEN_LEIGHWAY
@@ -148,14 +150,18 @@ local function mainDraw()
 end
 
 
-
+on("resize", function(w, h)
+    camera.w = w
+    camera.h = h
+end)
 
 
 on("draw", function()
+    camera:draw()
     camera:attach()
     call("preDraw")
     call("mainDraw")
-    call("postDraw")
+    call("postDraw")    
     camera:detach()
 
     call("preDrawUI")
@@ -198,6 +204,7 @@ end
 
 
 on("update", function(_)    
+    camera:update()
     for _, ent in ipairs(moveDrawGroup) do
         fshift(ent)
     end

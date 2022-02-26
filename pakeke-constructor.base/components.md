@@ -35,6 +35,7 @@ ent.moveAnimation = {
 
 
 
+
 ent.swaying, ent.bobbing
 
 
@@ -70,6 +71,8 @@ ent.physics = {
         -- ent has vx and vy components.
 }
 
+
+ent.friction = 0.15 -- number from 0 to 1. (default is 0.3)
 
 
 

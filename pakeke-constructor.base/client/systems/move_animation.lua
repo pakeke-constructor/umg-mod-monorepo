@@ -20,8 +20,7 @@ local tick = 0
 
 local DEFAULT_ANIM_SPEED = 2 -- seconds to complete animation loop
 
-local EPSILON = 0.00001
-
+local DEFAULT_ANIM_ACTIVATION_SPEED = 5
 
 local ent_to_direction = {
     --[[
@@ -51,10 +50,11 @@ end)
 
 local distance = math.distance
 local abs = math.abs
+local min = math.min
+local floor = math.floor
 
-local function getDirection(ent)
+local function getDirection(ent, entspeed)
     local manim = ent.moveAnimation
-    local entspeed = distance(ent.vx, ent.vy)
     if entspeed > manim.activation then
         local dir
         if abs(ent.vx) > abs(ent.vy) then
@@ -72,6 +72,7 @@ local function getDirection(ent)
                 dir = "down"
             end
         end
+        ent_to_direction[ent] = dir
         return dir
     else
         -- The entity is not going fast enough;
@@ -81,21 +82,27 @@ local function getDirection(ent)
 end
 
 
+
+
 local function updateEnt(ent)
     local manim = ent.moveAnimation
-    local dir = getDirection(ent) -- should be up, down, left, or right
-    local spd = manim or DEFAULT_ANIM_SPEED
+    local entspeed = distance(ent.vx, ent.vy)
+    
+    local dir = getDirection(ent, entspeed) -- should be up, down, left, or right
+    local spd = manim.speed or DEFAULT_ANIM_SPEED
 
     local anim = ent.moveAnimation[dir]
     -- TODO: Chuck an assertion here to ensure that people aren't misusing
     -- the moveAnimation component. (all directions must be defined)
     local len = #anim
 
-    -- minus epsilon to ensure that we don't hit the top len value,
-    -- plus 1 because of lua's 1-based indexing.
-    local frame_i = math.floor(((tick % spd) / spd) * len - EPSILON) + 1
-    local frame = anim[frame_i]
-    ent.image = frame
+    if entspeed > (manim.activation or DEFAULT_ANIM_ACTIVATION_SPEED) then
+        local frame_i = min(len, floor(((tick % spd) / spd) * len) + 1)
+        local frame = anim[frame_i]
+        ent.image = frame
+    else
+        ent.image = anim[1]
+    end
 end
 
 

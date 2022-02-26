@@ -1,7 +1,7 @@
 
 
 
-local physics_ents = group("physics", "pos")
+local physics_ents = group("physics", "x", "y")
 
 --[[
 
@@ -15,6 +15,7 @@ local fixture_to_ent = {}
 local ent_to_fixture = {}
 
 
+local constants = require("client.constants")
 
 
 local function beginContact(fixture_A, fixture_B, contact_obj)
@@ -125,7 +126,7 @@ end
 
 
 
-local DEFAULT_FRICTION = 0.3
+local DEFAULT_FRICTION = constants.DEFAULT_FRICTION
 
 
 physics_ents:on_added(function(ent)
@@ -136,9 +137,7 @@ physics_ents:on_added(function(ent)
     local body = physics.newBody(world, ent.pos.x, ent.pos.y, getBodyType(ent))
     local fixture = physics.newFixture(body, ent.physics.shape)
 
-    if ent.physics.friction then
-        ent.physics.body:setLinearDamping(ent.physics.friction or DEFAULT_FRICTION)
-    end
+    fixture:setFriction(ent.physics.friction or DEFAULT_FRICTION)
 
     fixture_to_ent[fixture] = ent
     ent_to_fixture[ent] = fixture

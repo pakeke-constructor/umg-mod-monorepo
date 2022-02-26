@@ -56,7 +56,7 @@ local isDown = keyboard.isScancodeDown
 
 local DEFAULT_SPEED = 200
 
-local SPEED_AGILITY_SCALE = 7
+local SPEED_AGILITY_SCALE = 12
 
 
 local max, min = math.max, math.min
@@ -83,10 +83,24 @@ end
 
 
 on("update", function(dt)
+    local sum_x = 0
+    local sum_y = 0
+    local len = 0
+    
     for _, ent in ipairs(control_ents) do
-        if ent.controller == username then
+        if ent.controller == username and ent.x and ent.vx then
+            sum_x = sum_x + ent.x
+            sum_y = sum_y + ent.y
+            len = len + 1
             updateEnt(ent, dt)
         end
     end
+
+    local avg_x, avg_y = 0, 0
+    if len > 0 then
+        avg_x = sum_x / len
+        avg_y = sum_y / len
+    end
+    -- graphics.camera:follow(avg_x, avg_y)
 end)
 
