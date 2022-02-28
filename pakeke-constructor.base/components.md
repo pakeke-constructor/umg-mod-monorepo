@@ -106,6 +106,14 @@ ent.agility = 50 -- How fast the ent can change it's speed (acceleration)
 
 
 
+ent.inventory = {
+    -- TODO: Do planning for this!
+    -- We probably want inventories to be easily 
+}
+
+
+
+
 ent.damaged = function(ent) ... end
 
 ent.death = function(ent) ... end
