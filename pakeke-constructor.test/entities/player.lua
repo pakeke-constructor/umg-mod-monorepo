@@ -7,6 +7,8 @@ return {
     "x", "y", "vx", "vy",
     "controller",
     "image",
+
+    follow = true,
     
     controllable = {};
 

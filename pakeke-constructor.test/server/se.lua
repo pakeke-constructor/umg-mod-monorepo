@@ -1,5 +1,5 @@
 
-on("join", function(uname)
+on("join", function(uname)    
     local ent = entities.player()
     ent.image = "3d_player_down_1"
     ent.x = 10

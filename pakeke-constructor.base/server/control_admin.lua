@@ -16,6 +16,10 @@ local function filterPlayerPosition(sender_username, ent, x,y,z)
     if not exists(ent) then
         return false -- DENY! Non existant entity
     end
+    if type(x) ~= "number" or type(y) ~= "number" or (z and (type(z) ~= "number")) then
+        return false
+    end
+
     return ent.controllable and sender_username == ent.controller
         and ent.x and ent.y
 end
@@ -28,6 +32,10 @@ local function filterPlayerVelocity(sender_username, ent, vx,vy,vz)
     if not exists(ent) then
         return false -- DENY! Non existant entity
     end
+    if type(vx) ~= "number" or type(vy) ~= "number" or (vz and (type(vz) ~= "number")) then
+        return false
+    end
+
     return ent.controllable and sender_username == ent.controller
         and ent.vx and ent.vy
 end

@@ -1,17 +1,7 @@
 
 
 on("preDraw", function()
-    graphics.clear(0.5,0.2,0.7)
-end)
-
-
-on("keypressed", function(k)
-    if k == "a" then
-        
-    end
-    if k == "z" then
-        
-    end
+    graphics.clear(0.2,0.9,0.1)
 end)
 
 
