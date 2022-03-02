@@ -15,6 +15,7 @@ ent.vy
 ent.vz -- velocity components
 
 
+ent.color = {1,0.5,0.2} -- colour (RGBA)
 
 ent.image = "abc" -- Image components should be strings!
                 -- This makes stuff way nicer to work with.
@@ -36,7 +37,20 @@ ent.moveAnimation = {
 
 
 
-ent.swaying, ent.bobbing
+ent.swaying = {
+    magnitude = 1;
+    period = 2
+}
+
+ent.bobbing = {
+    period = 0.8;
+    magnitude = 0.15
+}
+
+ent.spinning = {
+    period = 2;
+    magnitude = 1
+}
 
 
 -- changing ent sizes!

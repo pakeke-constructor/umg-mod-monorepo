@@ -1,28 +1,14 @@
 
 
+local quad_offsets = require("client.image_helpers.quad_offsets")
+
+local bobbing = require("client.image_helpers.bobbing")
+local spinning = require("client.image_helpers.spinning")
+local swaying = require("client.image_helpers.swaying")
+
+
 local images = assets.images
 
-
-
-local quad_to_ox
-quad_to_ox = setmetatable({}, {
-    -- quadname -> offset x
-    __index = function(_,quad)
-        local _,_, w, _ = quad:getViewport()
-        quad_to_ox[quad] = w / 2
-        return w/2
-    end
-})
-
-local quad_to_oy
-quad_to_oy = setmetatable({}, {
-    -- quadname -> offset y
-    __index = function(_,quad)
-        local _,_,_, h = quad:getViewport()
-        quad_to_oy[quad] = h / 2
-        return h/2
-    end
-})
 
 
 
@@ -35,13 +21,25 @@ on("drawEntity", function(ent)
         error(("Unknown ent.image value: %s\nMake sure you put all images in the assets folder and name them!"):format(tostring(ent.image)))
     end
 
-    local ox = quad_to_ox[quad]
-    local oy = quad_to_oy[quad]
+    local ox, oy = quad_offsets(quad)
+
+    local bob_oy, bob_sy = bobbing(ent, oy)
+    local sway_ox, sway_shearx = swaying(ent, ox)
+    local spin_sx = spinning(ent)
 
     local scale = ent.scale or 1
     local sx = ent.scaleX or 1
     local sy = ent.scaleY or 1
-    graphics.atlas:draw(quad, ent.x, ent.y, ent.rot, sx * scale, sy * scale, ox, oy)
+
+    graphics.atlas:draw(
+        quad, 
+        ent.x, ent.y, ent.rot, 
+        spin_sx * sx * scale, 
+        bob_sy * sy * scale, 
+        ox + sway_ox,
+        bob_oy + oy,
+        sway_shearx
+    )
 end)
 
 

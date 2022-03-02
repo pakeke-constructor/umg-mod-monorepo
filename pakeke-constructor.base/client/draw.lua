@@ -135,8 +135,8 @@ local function mainDraw()
                 if isOnScreen(ent, w, h) then
                     setColor(1,1,1)
                     if not ent.hidden then
-                        if ent.colour then
-                            setColor(ent.colour)
+                        if ent.color then
+                            setColor(ent.color)
                         end
                         call("drawEntity", ent)
                     end
