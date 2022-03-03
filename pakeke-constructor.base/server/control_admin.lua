@@ -57,10 +57,11 @@ end)
 
 
 server.on("setPlayerVelocity", function(sender_username, ent, vx,vy,vz)
-    local speed = math.distance(vx, vy, vz)
-
-    if speed <= (ent.speed or constants.DEFAULT_SPEED) then
-        -- check that the player aint cheating
+    local max_spd = (ent.speed or constants.DEFAULT_SPEED) 
+    if max_spd >= vx and max_spd >= vy then
+        -- check that the player aint cheating.
+        -- Note that the player can cheat by "flying" though, haha.
+        -- (Because vz isn't checked)
         ent.vx = vx
         ent.vy = vy
         if ent.vz then

@@ -134,7 +134,7 @@ local function mainDraw()
             for _, ent in ipairs(entSet.objects) do
                 if isOnScreen(ent, w, h) then
                     setColor(1,1,1)
-                    if not ent.hidden then
+                    if ent.image then
                         if ent.color then
                             setColor(ent.color)
                         end

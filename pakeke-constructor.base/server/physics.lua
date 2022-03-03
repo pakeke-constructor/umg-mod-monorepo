@@ -134,7 +134,7 @@ physics_ents:on_added(function(ent)
         error("World was locked! This is a bug on my behalf, sorry")  
     end
 
-    local body = physics.newBody(world, ent.pos.x, ent.pos.y, getBodyType(ent))
+    local body = physics.newBody(world, ent.x, ent.y, getBodyType(ent))
     local fixture = physics.newFixture(body, ent.physics.shape)
 
     fixture:setFriction(ent.physics.friction or DEFAULT_FRICTION)

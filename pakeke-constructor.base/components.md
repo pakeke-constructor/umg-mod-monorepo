@@ -20,6 +20,8 @@ ent.color = {1,0.5,0.2} -- colour (RGBA)
 ent.image = "abc" -- Image components should be strings!
                 -- This makes stuff way nicer to work with.
             -- NOTE: this means that atlases must be identical across clients!
+-- if `ent.image` is nil, the entity is hidden.
+
 
 ent.animation = {"img1", "img2", "img3", speed = 3} -- Same as animations- 
     -- images should be put as strings.

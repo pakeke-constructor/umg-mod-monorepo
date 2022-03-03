@@ -7,16 +7,18 @@ on("join", function(uname)
     ent.vx, ent.vy = 0,0
     ent.controller = uname
 
-    for i=1, 1000 do
-        local MAG = 450
+    for i=1, 20 do
+        local MAG = 150
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
-        local grass = entities.grass()
-        grass.x = x
-        grass.y = y
+        local block = entities.block()
+        block.x = x
+        block.y = y
+        block.vx = 0
+        block.vy = 0
         if math.random() < 0.5 then
-            grass.image = "grass_5"
+            block.image = "slant_block"
         else
-            grass.image = "grass_6"
+            block.image = "slant_block2"
         end
     end
 end)

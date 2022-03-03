@@ -1,6 +1,6 @@
 
 
-local PLAYER_SPEED = 100
+local PLAYER_SPEED = 300
 
 
 return {
@@ -15,6 +15,10 @@ return {
     follow = true,
     
     controllable = {};
+
+    physics = {
+        shape = physics.newCircleShape(5)
+    };
 
     moveAnimation = {
         up = {"red_player_up_1", "red_player_up_2", "red_player_up_3", "red_player_up_4"},

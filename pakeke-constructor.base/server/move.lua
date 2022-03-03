@@ -58,12 +58,12 @@ end})
 local ent_to_z = {}
 
 local ent_to_vx = setmetatable({}, {__index = function(tab, ent)
-    tab[ent] = ent.vx
-    return ent.vx
+    tab[ent] = ent.vx or 0 -- defaults to 0
+    return tab[ent]
 end})
 local ent_to_vy = setmetatable({}, {__index = function(tab, ent)
-    tab[ent] = ent.vy
-    return ent.vy
+    tab[ent] = ent.vy or 0 -- defaults to 0
+    return tab[ent]
 end})
 local ent_to_vz = {}
 
