@@ -142,7 +142,9 @@ ent.collide = function(ent, other_ent)
     -- called when 2 ents collide. (both must have physics component)
 end
 
-ent.spawn = function(s) end
+ent.spawn = function(s, x, y)
+    -- Called when entity is spawned, with x,y values
+end
 
 
 ```

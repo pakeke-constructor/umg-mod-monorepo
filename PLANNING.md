@@ -23,9 +23,18 @@ like durability, enchantments, etc.
 -- item entity
 return {
 
-    stackSize = 32; -- stack size of this item
+    maxStackSize = 32; -- stack size of this item
+    stackSize
     image = "banana"
+
+    itemName = "..." -- item name
+
+    itemDescription = "..." -- item description
     
+    itemNameFancy = "dfdf"
+    itemDescriptionFancy = "..." -- coloured / bold / italic description.
+    -- If this exists, this overrides `description`!
+
     useItem = function(self, holderEnt)
         -- Called when item is used by `holderEnt`
     end
@@ -50,40 +59,41 @@ There will be no entity to call upon!
 
 
 
-
 # INVENTORY ANATOMY:
 ```lua
 
 local sword_entity = sword({damage = 10})
--- stack_size = 1
+-- maxStackSize = 1, so no stack.
 
 local banana_entity = banana()
+banana_entity.stackSize = 10 -- 10 bananas
 
 local apple_entity = apple()
+apple_entity.stackSize = 5 -- 5 apples
 
 
+-- Component definition
 ent.inventory = {
-    [banana_entity] = 5
-    -- this inventory has 5 bananas.
-    [apple_entity] = 203
-    -- and 203 apples
-    -- (assume stack size for apples is 50)
+    width = 6 -- width of inventory slots
+    height = 3 -- height
+    hotbar = true -- DST / minecraft like hotbar
+}
 
-    [sword_entity] = 1 -- sword_entity max stack size is 1,
-    -- therefore there can only be one per slot.
 
-    
-    -- type pointers:
-    -- These are typenames that point to the entities inside of the
-    -- inventory.   (managed internally)
-    ["pakeke-constructor.test:sword"] = sword_entity;
-    ["pakeke-constructor.test:banana"] = banana_entity;
-    ["pakeke-constructor.test:apple"] = apple_entity;
 
-    size = 209
-    slots_used = 7 -- 5 slots for apples, 1 for bananas, 1 for sword.
-    slots_width = 4
-    slots_height = 4
+InventoryObject = {
+    width = 6;
+    height = 3;
+    hotbar = true/false
+
+    inventory = {
+        [1] = banana_entity -- remember the banana item is stackable!
+        -- so there could be multiple bananas encased in `banana_entity`.
+        [3] = apple_entity
+
+        [7] = sword_entity -- Sword entity is NOT stackable.
+        -- Therefore there is only one
+    }
 }
 
 
@@ -93,37 +103,47 @@ ent.inventory = {
 ==========================================
 ]]
 
-function inventory:canRemove(item, amount)
+-- Callbacks:
+function inventory:canRemove(x, y)
     return true/false
 end
 
-function inventory:canAdd(item, amount)
+function inventory:canAdd(x, y)
     return true/false
 end
 
-function inventory:onAdd(item, amount)
+function inventory:onAdd(x, y, item_ent)
     ...
 end
 
-function inventory:onRemove(item, amount)
+function inventory:onRemove(x, y, item_ent)
     ...
 end
 
 
-function inventory:count(item)
-    return self[item] -- gets the amount of `item` in inventory
-end
+
+-- Regular methods:
+inventory:open() -- opens inventory
+
+inventory:close()
 
 
+inventory:count(item)
 
-function inventory.remove(item, amount)
-end
+inventory:remove(item, amount)
 
-function inventory.add(item, amount)
-end
+invventory:get()
+
+inventory:add(item, amount)
+
+inventory:has(item, amount)
+
+
 
 ```
 
 ### shops and stuff
+
+
 
 
