@@ -6,7 +6,6 @@ List of events defined by the base mod
 
 
 
-
 # drawIndex(i)
 Called when everything at Z order `i` should be drawn.
 (Where `Z` index is defined by `floor((ent.pos.y + ent.pos.z)/2)`)
@@ -27,6 +26,10 @@ Called when `ent` dies.
 
 
 
+## Networked events:
+
+# Server --> Client
+tick  :  when there is a server tick
 
 
 

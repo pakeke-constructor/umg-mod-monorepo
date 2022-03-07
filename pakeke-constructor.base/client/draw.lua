@@ -164,6 +164,7 @@ on("draw", function()
     call("postDraw")    
     camera:detach()
 
+    -- TODO: Do scaling here.
     call("preDrawUI")
     call("mainDrawUI")
     call("postDrawUI")

@@ -48,6 +48,12 @@ function Inventory:mousepressed(x, y, butto)
 end
 
 
+function Inventory:withinBounds(mouse_x, mouse_y)
+    -- returns true / false, depending on whether mouse_x or mouse_y is
+    -- within the inventory interface
+    return 
+end
+
 
 function Inventory:getIndex(x, y)
     -- private method
@@ -83,6 +89,16 @@ function Inventory:set(x, y, item_ent)
     end
 end
 
+
+
+function Inventory:open()
+    self.isOpen = true
+end
+
+
+function Inventory:close()
+    self.isOpen = false
+end
 
 
 function Inventory:get(x, y)
