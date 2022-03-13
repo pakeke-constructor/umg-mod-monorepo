@@ -80,7 +80,7 @@ ent.physics = {
     shape = love.physics.Shape(...), -- some shape object (compulsory)
 
     -- OPTIONAL FIELDS:
-    friction = 0.15, -- number from 0 to 1.  (default is 0.3),
+    friction = 6, -- friction number.  (default is 6),
 
     type = "kinematic" -- The bodyType of the entity. 
     -- Default is `static` or `dynamic`, depending on whether the 
@@ -88,7 +88,7 @@ ent.physics = {
 }
 
 
-ent.friction = 0.15 -- number from 0 to 1. (default is 0.3)
+ent.friction = 3.15 -- friction number. (default is roughtly 3.15)
 
 
 
@@ -114,6 +114,8 @@ ent.controllable = {
 
 ent.controller = "player_username" -- whoever is controlling this entity
 
+ent.follow = false -- Whether the camera should follow this ent or not.
+
 
 ent.speed = 100 -- The speed the ent moves at
 
@@ -123,12 +125,14 @@ ent.agility = 50 -- How fast the ent can change it's speed (acceleration)
 
 
 ent.inventory = {
-    -- TODO: Do planning for this!
-    -- We probably want inventories to be easily 
+    width = 3, -- 3 slots wide
+    height = 6 -- 6 slots high.
 }
 
 
 
+ent.init = function(ent) ... end
+-- Called when the entity is first created.
 
 ent.damaged = function(ent) ... end
 

@@ -1,12 +1,13 @@
 
 
-local PLAYER_SPEED = 300
+local PLAYER_SPEED = 160
 
 
 return {
     "x", "y", "vx", "vy",
     "controller",
     "image",
+    "inventory",
 
     "color",
 
@@ -17,7 +18,8 @@ return {
     controllable = {};
 
     physics = {
-        shape = physics.newCircleShape(5)
+        shape = physics.newCircleShape(5);
+        friction = 7
     };
 
     moveAnimation = {

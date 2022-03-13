@@ -1,21 +1,22 @@
 
 
 on("preDraw", function()
-    graphics.clear(0.2,0.9,0.1)
+    graphics.clear(0.3,0.9,0.2)
 end)
 
 
-local control_ents = group("controllable")
+local control_ents = group("controllable", "inventory")
 
-on("keypressed", function(key)
-    if key == "space" then
-        for _, ent in ipairs(control_ents) do
-            if ent.color ~= nil then
-                ent.color = {0.7,0.1,0}
-            end
+local isOpen = false
+
+on("keypressed",function(k)
+    if k == "e" then
+        local player = control_ents[1]
+        if player then
+            isOpen = not isOpen
+            player.inventory:setOpen(isOpen)
         end
     end
 end)
-
 
 

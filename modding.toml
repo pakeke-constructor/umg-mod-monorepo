@@ -57,6 +57,13 @@ any = true
 [inspect]
 any = true
 
+[serialize]
+any = true
+[deserialize]
+any = true
+[register]
+any = true
+
 
 ## Standard library modifications
 [assert]

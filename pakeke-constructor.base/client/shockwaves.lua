@@ -18,14 +18,13 @@ on("update", function(dt)
 end)
 
 
---[[
-    TODO: Monkeypatch this `shockwave` function into the graphics
-        module!!!!
-]]
+
 local function shockwave(x, y, start_size, end_size, thickness, time, colour)
     local sw = newShockWave(x,y,start_size, end_size, thickness, time, colour or {1,1,1,1})
     shockwaveSet:add(sw)
 end
+
+graphics.shockwave = shockwave
 
 
 on("postDraw", function()

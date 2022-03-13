@@ -1,11 +1,13 @@
 
 on("join", function(uname)    
     local ent = entities.player()
-    ent.image = "3d_player_down_1"
     ent.x = 10
     ent.y = 10
     ent.vx, ent.vy = 0,0
     ent.controller = uname
+    ent.inventory = {
+        width = 10; height = 3;color = {0.5,0.1,0.1}
+    }
 
     for i=1, 20 do
         local MAG = 150
@@ -22,5 +24,6 @@ on("join", function(uname)
         end
     end
 end)
+
 
 

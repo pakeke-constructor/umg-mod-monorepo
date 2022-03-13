@@ -1,7 +1,5 @@
 
 return {
-    -- DEFAULT_FRICTION = 0.3;
-    -- FRICTION_CONSTANT = 38
     DEFAULT_FRICTION = 6;
     FRICTION_CONSTANT = 1.9;
 
