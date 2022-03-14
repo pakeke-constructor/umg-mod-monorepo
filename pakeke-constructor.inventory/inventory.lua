@@ -28,8 +28,9 @@ local function new(inv)
     assert(inv.height, "Inventories must have a .height member!")
 
     inv.inventory = {}
-    inv.draw_x = 100
-    inv.draw_y = 100
+    -- randomize initial draw position, to avoid overlap
+    inv.draw_x = math.random(0, 100)
+    inv.draw_y = math.random(0, 100)
 
     if inv.color then
         assert(type(inv.color) == "table", "inventory colours must be {R,G,B} tables, with RGB values from 0-1!")
@@ -49,16 +50,7 @@ local function new(inv)
 end
 
 
-function Inventory:mousepressed(x, y, butto)
-    -- Should only be called on client side
-end
 
-
-function Inventory:withinBounds(mouse_x, mouse_y)
-    -- returns true / false, depending on whether mouse_x or mouse_y is
-    -- within the inventory interface
-    return 
-end
 
 
 function Inventory:getIndex(x, y)
@@ -77,7 +69,6 @@ end
 
 
 local function assertItem(item_ent)
-    assert(exists(item_ent))
     assert(item_ent.itemName)
     assert((not item_ent.description) or type(item_ent.description) == "string", "item entity descriptions must be strings")
     assert((not item_ent.stackSize) or type(item_ent.stackSize) == "number", "item entity stackSize must be a number")
@@ -88,9 +79,9 @@ end
 function Inventory:set(x, y, item_ent)
     -- Should only be called on server.
     -- If `item_ent` is nil, then it removes the item from inventory.
-    assertItem(item_ent)
     local i = self:getIndex(x,y)
-    if exists(item_ent) then
+    if item_ent then
+        assertItem(item_ent)
         self.inventory[i] = item_ent
         if server then
             call("setInventoryItem", self, x, y, item_ent)
@@ -128,16 +119,29 @@ end
 
 
 function Inventory:open()
+    -- Should only be called on client-side
+    call("openInventory", self, self.owner)
     self.isOpen = true
 end
 
 
 function Inventory:close()
+    -- Should only be called on client-side
+    call("closeInventory", self, self.owner)
     self.isOpen = false
 end
 
 
 function Inventory:setOpen(bool)
+    -- Should only be called client-side
+    if bool == self.isOpen then
+        return
+    end
+    if bool then
+        call("openInventory", self, self.owner)
+    else
+        call("closeInventory", self, self.owner)
+    end
     self.isOpen = bool
 end
 
@@ -170,6 +174,21 @@ local PACKED_SQUARE_SIZE = 20 -- The size of packed inventory grid pockets
 local BORDER_OFFSET = 4 -- border offset from inventory edge
 
 
+
+function Inventory:withinBounds(mouse_x, mouse_y)
+    -- returns true/false, depending on whether mouse_x or mouse_y is
+    -- within the inventory interface
+    if not graphics.getUIScale then
+        error("Inventory mod requires base mod to be loaded!")
+    end
+    local ui_scale = graphics.getUIScale()
+    local x, y = mouse_x / ui_scale, mouse_y / ui_scale
+    local x_valid = (self.draw_x - BORDER_OFFSET <= x) and (x <= self.draw_x + (self.width * PACKED_SQUARE_SIZE) + BORDER_OFFSET)
+    local y_valid = (self.draw_y - BORDER_OFFSET <= y) and (y <= self.draw_y + (self.height * PACKED_SQUARE_SIZE) + BORDER_OFFSET)
+    return x_valid and y_valid
+end
+
+
 function Inventory:drawItem(item_ent, x, y)
     --[[
         TODO:  Draw the stack number of the item entity!
@@ -200,16 +219,16 @@ function Inventory:drawUI()
     
     graphics.setColor(col[1] / 2, col[2] / 2, col[3] / 2)
     graphics.setLineWidth(4)
-    graphics.rectangle("line", self.draw_x, self.draw_y, W, H)
+    graphics.rectangle("line", self.draw_x - BORDER_OFFSET, self.draw_y - BORDER_OFFSET, W, H)
     graphics.setColor(col)
-    graphics.rectangle("fill", self.draw_x, self.draw_y, W, H)
+    graphics.rectangle("fill", self.draw_x - BORDER_OFFSET, self.draw_y - BORDER_OFFSET, W, H)
 
     local offset = (PACKED_SQUARE_SIZE - SQUARE_SIZE) / 2
 
     for x = 0, self.width - 1 do
         for y = 0, self.height - 1 do
-            local X = self.draw_x + x * PACKED_SQUARE_SIZE + BORDER_OFFSET + offset
-            local Y = self.draw_y + y * PACKED_SQUARE_SIZE + BORDER_OFFSET + offset
+            local X = self.draw_x + x * PACKED_SQUARE_SIZE + offset
+            local Y = self.draw_y + y * PACKED_SQUARE_SIZE + offset
             graphics.setColor(col[1] / 1.5, col[2] / 1.5, col[3] / 1.5)
             graphics.rectangle("fill", X, Y, SQUARE_SIZE, SQUARE_SIZE)
             if self:get(x, y) then

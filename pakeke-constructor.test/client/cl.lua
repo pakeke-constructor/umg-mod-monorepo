@@ -11,10 +11,10 @@ local isOpen = false
 
 on("keypressed",function(k)
     if k == "e" then
-        local player = control_ents[1]
-        if player then
-            isOpen = not isOpen
-            player.inventory:setOpen(isOpen)
+        isOpen = not isOpen
+        for i,ent in ipairs(control_ents)do
+            local inv = ent.inventory
+            inv:setOpen(isOpen)
         end
     end
 end)

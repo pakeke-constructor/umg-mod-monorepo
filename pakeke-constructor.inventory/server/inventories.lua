@@ -30,10 +30,13 @@ end)
 
 
 
-
 inv_ents:on_removed(function(ent)
-    -- delete all entities inside the inventory   
+    -- What do we actually do here??
+    -- if we delete the entities, then it gives no options to the modders
+    -- in terms of item drops.
+    -- However, if we *dont* delete the items, then its a memory leak  :/
 end)
+
 
 
 
@@ -44,20 +47,85 @@ end)
 
 
 
+
+local function drop(item, x, y)
+    --[[
+        Drops item on to the ground
+    ]]
+    item.hidden = false
+    item.x = (x or item.x) or 0
+    item.y = (y or item.y) or 0
+
+    -- Syncs state of item to clients
+    server.sync(item, "hidden")
+    server.sync(item, "x")
+    server.sync(item, "y")
+end
+
+
+
+local function checkCallback(ent, callbackName, x, y, item)
+    --[[
+        returns true/false according to inventoryCallbacks component.
+        (Only works on `canRemove` and `canAdd`!!!)
+    ]]
+    if ent.inventoryCallbacks and ent.inventoryCallbacks[callbackName] then
+        item = item or ent.inventory:get(x,y)
+        return ent.inventoryCallbacks[callbackName](ent.inventory, x, y, item)
+    end
+end
+
+
+
+local function hasAccess(username, ent)
+    --[[
+        returns true/false, depending on whether this username has access
+        to `ent`s inventory.
+    ]]
+    local inv = ent.inventory
+    if inv.private and ent.controller ~= username then
+        return false
+    else
+        return true
+    end
+end
+
+
+
 server.on("trySwapInventoryItem",
-function(username, ent, other_ent, x, y, other_x, other_y)
+function(username, ent, other_ent, x, y, x2, y2)
     --[[
         x, y, other_x, other_y are coordinates of the position
         IN THE INVENTORY.
         Not the position of an entity or anything!
     ]]
+    local inv1 = ent.inventory
+    local inv2 = other_ent.inventory
+    
+    local item1 = inv1:get(x,y)
+    local item2 = inv2:get(x2,y2)
 
+    if not (hasAccess(username, ent) and hasAccess(username, other_ent)) then
+        return -- this user doesn't have access to both inventories!
+        -- welp!
+    end
+    
+    if not checkCallback(ent, "canRemove", x, y, item1) then
+        return -- exit early
+    end
+    if not checkCallback(ent, "canAdd", x, y, item2) then
+        return -- exit early
+    end
+    if not checkCallback(other_ent, "canRemove", x, y, item2) then
+        return -- exit early
+    end
+    if not checkCallback(other_ent, "canAdd", x, y, item1) then
+        return -- exit early
+    end
+
+    inv1:set(x, y, item2)
+    inv2:set(x2, y2, item1)
 end)
-
-
-local function hasCallback(ent, callbackName)
-    return ent.inventoryCallbacks and ent.inventoryCallbacks[callbackName]
-end
 
 
 
@@ -88,28 +156,33 @@ function(username, ent, other_ent, x, y, x2, y2, count)
     if not exists(item) then
         return -- Nothing to move; exit early
     end
-
-    if inv1.private and ent.controller ~= username then
+    if not (hasAccess(username, ent) and hasAccess(username, other_ent)) then
+        return -- this user doesn't have access to both inventories!
+    end
+    if not checkCallback(ent, "canRemove", x, y) then
         return -- exit early
     end
-    if inv2.private and other_ent.controller ~= username then
+    if not checkCallback(other_ent, "canAdd", x2, y2) then
         return -- exit early
     end
-    
-    if hasCallback(ent, "canRemove") then
-        if not ent.inventoryCallbacks.canRemove(inv1, item, x, y) then
-            return -- exit early
-        end
-    end
-
-    if hasCallback(other_ent, "canAdd") then
-        if not ent.inventoryCallbacks.canAdd(inv2, item, x2, y2) then
+    if inv2:get(x2, y2) then
+        -- welp, we are replacing item2!
+        if not checkCallback(other_ent, "canRemove", x2, y2) then
             return -- exit early
         end
     end
 
     if count < stackSize then
         -- Damn, gotta create a new entity
+        local typename = item:type()
+        local new = entities[typename]()
+        new.stackSize = count
+        item.stackSize = stackSize - count
+        inv2:set(x2, y2, new)
+    else
+        -- Else we just move it
+        inv1:set(x, y, nil)
+        inv2:set(x2, y2, item)
     end
 end)
 
@@ -133,21 +206,11 @@ function(username, ent, x, y)
         return
     end
 
-    if ent.inventoryCallbacks then
-        if not ent.inventoryCallbacks.canRemove(inv, item, x, y) then
-            return
-        end
+    if not checkCallback(ent, "canRemove", x, y) then
+        return -- exit early
     end
 
-    -- Update item
-    item.hidden = false
-    item.x = ent.x
-    item.y = ent.y
-
-    -- Syncs state of item to clients
-    server.sync(item, "hidden")
-    server.sync(item, "x")
-    server.sync(item, "y")
+    drop(item, ent.x, ent.y)
     
     inv:set(x, y, nil)
 end)

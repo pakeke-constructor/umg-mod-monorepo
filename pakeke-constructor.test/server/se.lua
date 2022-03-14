@@ -1,13 +1,21 @@
 
-on("join", function(uname)    
+
+local function make_player(uname)
     local ent = entities.player()
-    ent.x = 10
-    ent.y = 10
+    ent.x = math.random(-10, 20)
+    ent.y = math.random(-10, 20)
     ent.vx, ent.vy = 0,0
     ent.controller = uname
     ent.inventory = {
-        width = 10; height = 3;color = {0.5,0.1,0.1}
+        width = 6; height = 4;color = {math.random(),math.random(),math.random()}
     }
+end
+
+
+on("join", function(uname)  
+    for i=1, 3 do  
+        make_player(uname)
+    end
 
     for i=1, 20 do
         local MAG = 150

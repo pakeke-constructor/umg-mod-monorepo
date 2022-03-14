@@ -156,6 +156,17 @@ on("resize", function(w, h)
 end)
 
 
+local scaleUI = constants.DEFAULT_UI_SCALE
+function graphics.setUIScale(scale)
+    assert(type(scale) == "number", "graphics.setUIScale(scale) requires a number")
+    scaleUI = scale
+end
+
+function graphics.getUIScale()
+    return scaleUI
+end
+
+
 on("draw", function()
     camera:draw()
     camera:attach()
@@ -164,7 +175,7 @@ on("draw", function()
     call("postDraw")    
     camera:detach()
 
-    -- TODO: Do scaling here.
+    graphics.scale(scaleUI)
     call("preDrawUI")
     call("mainDrawUI")
     call("postDrawUI")
