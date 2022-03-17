@@ -75,49 +75,62 @@ end
 
 
 
-local function sync_non_mover(ent)
+local function syncNonMover(ent)
+    local should_sync = false
+
     local last_x = ent_to_x[ent]
     if difference(last_x, ent.x) > SYNC_LEIGHWAY then
-        server.sync(ent, "x")
+        should_sync = true
     end
     
     local last_y = ent_to_y[ent]
     if difference(last_y, ent.y) > SYNC_LEIGHWAY then
-        server.sync(ent, "y")
+        should_sync = true
     end
 
     if ent.z then
         ent_to_z[ent] = ent_to_z[ent] or ent.z
         if difference(ent_to_z[ent], ent.z) > SYNC_LEIGHWAY then
-            server.sync(ent, "z")
+            should_sync = true
         end
+    end
+
+    if should_sync then
+        server.broadcast("changePosition", ent, ent.x, ent.y, ent.z)
     end
 end
 
 
 
-local function syncVxVy(ent)
+local function shouldSyncVxVy(ent)
     local last_x = ent_to_vx[ent]
-    if difference(last_x, ent.x) > SYNC_LEIGHWAY then
-        server.sync(ent, "x")
+    local should_sync = false
+    if difference(last_x, ent.vx) > SYNC_LEIGHWAY then
+        should_sync = true
     end
     
     local last_y = ent_to_vy[ent]
-    if difference(last_y, ent.y) > SYNC_LEIGHWAY then
-        server.sync(ent, "y")
+    if difference(last_y, ent.vy) > SYNC_LEIGHWAY then
+        should_sync = true
     end
+
+    return should_sync
 end
 
 
-local function sync_mover(ent)
-    syncVxVy(ent)
+local function syncMover(ent)
+    local should_sync = shouldSyncVxVy(ent)
 
     if ent.vz then
         local last_z = ent_to_vz[ent] or ent.vz
         ent_to_vz = ent_to_vz[ent]
         if difference(last_z, ent.vz) > SYNC_LEIGHWAY then
-            server.sync(ent, "vz")
+            should_sync = true
         end
+    end
+
+    if should_sync then
+        server.broadcast("changeVelocity", ent, ent.vx, ent.vy, ent.vz)
     end
 end
 
@@ -127,11 +140,11 @@ local positionGroup = group("x", "y")
 
 on("tick", function()
     for _, ent in ipairs(moveEnts) do
-        sync_mover(ent)
+        syncMover(ent)
     end
 
     for _, ent in ipairs(positionGroup) do
-        sync_non_mover(ent)
+        syncNonMover(ent)
     end
 end)
 

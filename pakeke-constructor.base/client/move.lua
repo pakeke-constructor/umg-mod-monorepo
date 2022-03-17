@@ -32,6 +32,20 @@ local function updateEnt(ent, dt)
 end
 
 
+client.on("changePosition", function(ent, x,y,z)
+    ent.x = x
+    ent.y = y
+    ent.z = z
+end)
+
+
+client.on("changeVelocity", function(ent, vx,vy,vz)
+    ent.vx = vx
+    ent.vy = vy
+    ent.vz = vz
+end)
+
+
 
 on("update", function(dt)
     for _, ent in ipairs(moveEnts) do
