@@ -7,15 +7,13 @@ local function make_player(uname)
     ent.vx, ent.vy = 0,0
     ent.controller = uname
     ent.inventory = {
-        width = 6; height = 4;color = {math.random(),math.random(),math.random()}
+        width = 6; height = 4; color = {1,1,1}
     }
 end
 
 
-on("join", function(uname)  
-    for i=1, 20 do  
-        make_player(uname)
-    end
+on("join", function(uname)
+    make_player(uname)
 
     for i=1, 30 do
         local MAG = 250

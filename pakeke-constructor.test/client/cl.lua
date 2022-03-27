@@ -9,6 +9,10 @@ local control_ents = group("controllable", "inventory")
 
 local isOpen = false
 
+
+
+
+
 on("keypressed",function(k)
     if k == "e" then
         isOpen = not isOpen

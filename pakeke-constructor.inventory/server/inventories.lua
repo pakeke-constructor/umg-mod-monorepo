@@ -56,10 +56,7 @@ local function drop(item, x, y)
     item.x = (x or item.x) or 0
     item.y = (y or item.y) or 0
 
-    -- Syncs state of item to clients
-    server.sync(item, "hidden")
-    server.sync(item, "x")
-    server.sync(item, "y")
+    server.broadcast("dropInventoryItem", item, x, y)
 end
 
 

@@ -189,6 +189,27 @@ function Inventory:withinBounds(mouse_x, mouse_y)
 end
 
 
+function Inventory:getBucket(mouse_x, mouse_y)
+    if not graphics.getUIScale then
+        error("Inventory mod requires base mod to be loaded!")
+    end
+    local ui_scale = graphics.getUIScale()
+    local x, y = mouse_x / ui_scale, mouse_y / ui_scale
+    local norm_x = x - self.draw_x 
+    local norm_y = y - self.draw_y
+
+    local bx, by = norm_x % PACKED_SQUARE_SIZE, norm_y % PACKED_SQUARE_SIZE
+    local bo = (PACKED_SQUARE_SIZE - SQUARE_SIZE) / 2
+    if bx > bo and bx < (PACKED_SQUARE_SIZE - bo) and by > bo and by < (PACKED_SQUARE_SIZE - bo) then
+        local ix = floor(norm_x / PACKED_SQUARE_SIZE) + 1
+        local iy = floor(norm_y / PACKED_SQUARE_SIZE) + 1
+        if ix >= 1 and ix <= self.width and iy >= 1 and iy <= self.height then
+            return ix, iy
+        end
+    end
+end
+
+
 function Inventory:drawItem(item_ent, x, y)
     --[[
         TODO:  Draw the stack number of the item entity!

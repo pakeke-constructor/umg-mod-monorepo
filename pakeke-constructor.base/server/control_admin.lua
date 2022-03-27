@@ -17,7 +17,7 @@ local function filterPlayerPosition(sender_username, ent, x,y,z)
         return false -- DENY! Non existant entity
     end
     if type(x) ~= "number" or type(y) ~= "number" or (z and (type(z) ~= "number")) then
-        return false
+        return false -- bad type for x,y, or z
     end
 
     return ent.controllable and sender_username == ent.controller
@@ -54,6 +54,16 @@ server.on("setPlayerPosition", function(sender_username, ent, x,y,z)
     ent.z = z or ent.z
 end)
 
+
+
+-- DEBUG ONLY.
+local players = group("controllable")
+on("tick", function()
+    local e = players[1]
+    if e ~= nil then
+        -- print(e.x, e.y)
+    end
+end)
 
 
 server.on("setPlayerVelocity", function(sender_username, ent, vx,vy,vz)

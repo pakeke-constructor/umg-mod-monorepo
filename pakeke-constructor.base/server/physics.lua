@@ -75,7 +75,7 @@ local function postUpdateEnt(ent)
     ]]
     local fixture = ent_to_fixture[ent]
     local body = fixture:getBody()
-    ent.x, ent.y = body:getPosition()
+    --ent.x, ent.y = body:getPosition()
     
     if ent.vx or ent.vy then
         local vx, vy = body:getLinearVelocity()

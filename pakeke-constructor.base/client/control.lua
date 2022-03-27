@@ -127,7 +127,7 @@ end)
     (Note that the server can choose to deny our player position 
       if it thinks we are cheating!!!)
 ]]
-client.on("tick", function(dt)
+on("tick", function(dt)
     for i=1, #control_ents do
         local ent = control_ents[i]
         if ent.controller == username then
@@ -138,5 +138,4 @@ client.on("tick", function(dt)
         end
     end
 end)
-
 

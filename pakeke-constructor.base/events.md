@@ -62,7 +62,8 @@ Called every 60 frames.
 
 
 # tick
-Called upon server tick. Server ticks usually occur 20-60 times per second;
+Called on client side and server-side.
+Server ticks usually occur 20-60 times per second;
 but it depends on the configuration.
 
 

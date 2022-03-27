@@ -8,11 +8,6 @@ local inv_ents = group("inventory")
 
 inv_ents:on_added(function(ent)
     if not ent.inventory then
-         -- Oh no! entity doesn't have a .inventory field yet.
-        -- Lets try to initialize the entity.
-        if ent.init then
-            ent:init()
-        end
         assert(ent.inventory, "Inventory component must be initialized either before entity creation, or inside a `.init` function!")
     end
 
@@ -69,11 +64,40 @@ end)
 
 on("closeInventory", function(inv, owner_ent)
     table_remove(open_inventories, inv)
+
+    if holding_inv == inv then
+        -- stop holding of item
+        holding_inv = nil
+        holding_x = nil
+        holding_y = nil
+    end
 end)
 
 
-local function execute_interaction(inv, mx, my)
 
+local function execute_put(inv, x, y)
+    -- Ok... so `holding` exists.
+    local hold_item = holding_inv:get(x,y)
+    if not exists(hold_item) then
+        holding_inv = nil
+        holding_x = nil
+        holding_y = nil
+        return -- erm, okay? I guess we just ignore this
+    end
+
+    if 
+end
+
+
+local function execute_interaction(inv, x, y)
+    if holding_inv and exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
+        execute_put(inv, x, y)
+    else
+        -- Else we just set the holding to a value.
+        holding_inv = inv
+        holding_x = x
+        holding_y = y
+    end
 end
 
 
@@ -83,21 +107,25 @@ on("mousepressed", function(mx, my, button)
     for i=len, 1, -1 do
         local inv = open_inventories[i]
         if inv:withinBounds(mx, my) then
-            if i == len then
-                -- It's top inventory, is interactable.
-                dragging_inv = inv
-                execute_interaction(inv, mx, my)
-                return
-            else
-                -- It's at the bottom- bring to top.
-                dragging_inv = inv
+            if i ~= len then
                 table.remove(open_inventories, i)
                 table.insert(open_inventories, inv)
-                return
+            end
+            local bx, by = inv:getBucket(mx,my)
+            if bx then
+                execute_interaction(inv, bx, by)
+            else
+                dragging_inv = inv
+            end
+        elseif holding_inv then
+            -- Then the player wants to drop an item
+            if exists(holding_inv:get(holding_x, holding_y)) then
+                client.send("tryDropInventoryItem", holding_inv.owner, holding_x, holding_y)
             end
         end
     end
 end)
+
 
 
 on("mousemoved", function(mx,my, dx, dy)
@@ -129,6 +157,19 @@ on("mainDrawUI", function()
             holding_inv:drawItem(item, mx, my)
         end
     end
+end)
+
+
+
+client.on("setInventoryItem", function(inventory, x, y, item_ent)
+    inventory:set(x,y,item_ent)
+end)
+
+
+client.on("dropInventoryItem", function(item, x, y)
+    item.x = x
+    item.y = y
+    item.hidden = false
 end)
 
 

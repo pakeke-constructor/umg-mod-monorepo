@@ -33,6 +33,9 @@ end
 
 
 client.on("changePosition", function(ent, x,y,z)
+    if ent.controller == username then
+        return
+    end
     ent.x = x
     ent.y = y
     ent.z = z
@@ -40,6 +43,9 @@ end)
 
 
 client.on("changeVelocity", function(ent, vx,vy,vz)
+    if ent.controller == username then
+        return
+    end
     ent.vx = vx
     ent.vy = vy
     ent.vz = vz
