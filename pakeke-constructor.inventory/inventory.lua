@@ -52,17 +52,17 @@ end
 
 
 
-
 function Inventory:getIndex(x, y)
     -- private method
-    return (self.width * x) + y
+    return (self.height * (x-1)) + y
 end
 
 
 local floor = math.floor
 
 function Inventory:getXY(index)
-    return floor(index / self.width), index % self.width
+    local yy = (index-1) % self.height + 1
+    return floor(index / self.height - 0.01) + 1, yy
 end
 
 
@@ -120,8 +120,15 @@ end
 
 function Inventory:getFreeSpace()
     for i=1, self.width * self.height do
-        if self.inventory[i] and exists(self.inventory[i]) then
-            return self:getXY(i)
+        if not exists(self.inventory[i]) then
+            if self.inventory[i] then
+                -- delete non-existant entity
+                self.inventory[i] = nil
+            end
+            local x,y = self:getXY(i)
+            assert(self:getIndex(x,y) == i)--sanity check
+            assert(not exists(self:get(x,y)))
+            return x,y
         end
     end
 end
@@ -180,7 +187,7 @@ local ITEM_SIZE = 16 -- item sizes are 16 by 16 pixels
 local SQUARE_SIZE = 18 -- the size of inventory "pockets"
 local PACKED_SQUARE_SIZE = 20 -- The size of packed inventory grid pockets
 
-local BORDER_OFFSET = 4 -- border offset from inventory edge
+local BORDER_OFFSET = 6 -- border offset from inventory edge
 
 
 
@@ -219,19 +226,24 @@ function Inventory:getBucket(mouse_x, mouse_y)
 end
 
 
+local WHITE = {1,1,1}
+
 function Inventory:drawItem(item_ent, x, y)
     --[[
         TODO:  Draw the stack number of the item entity!
     ]]
+    graphics.push()
+    graphics.setColor(item_ent.color or WHITE)
     local offset = (PACKED_SQUARE_SIZE - ITEM_SIZE) / 2
-    local quad = assets.image[item_ent.image]
-    local _,_, w,h = quad:getDimensions()
+    local quad = assets.images[item_ent.image]
+    local _,_, w,h = quad:getViewport()
     if (w ~= 16 or h ~= 16) then
         error("Image dimensions for items must be 16 by 16! Not the case for this entity:\n" .. tostring(item_ent))
     end
-    local X = PACKED_SQUARE_SIZE * x + BORDER_OFFSET + offset
-    local Y = PACKED_SQUARE_SIZE * y + BORDER_OFFSET + offset
+    local X = PACKED_SQUARE_SIZE * (x-1) + offset + self.draw_x
+    local Y = PACKED_SQUARE_SIZE * (y-1) + offset + self.draw_y
     graphics.atlas:draw(quad, X, Y)
+    graphics.pop()
 end
 
 
@@ -261,8 +273,8 @@ function Inventory:drawUI()
             local Y = self.draw_y + y * PACKED_SQUARE_SIZE + offset
             graphics.setColor(col[1] / 1.5, col[2] / 1.5, col[3] / 1.5)
             graphics.rectangle("fill", X, Y, SQUARE_SIZE, SQUARE_SIZE)
-            if self:get(x, y) then
-                self:drawItem(self:get(x,y), x, y)
+            if self:get(x + 1, y + 1) then
+                self:drawItem(self:get(x + 1, y + 1), x + 1, y + 1)
             end
         end
     end

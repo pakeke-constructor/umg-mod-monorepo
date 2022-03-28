@@ -132,7 +132,7 @@ local function mainDraw()
         if rawget(depthIndexer, z_dep) then
             local entSet = depthIndexer[z_dep]
             for _, ent in ipairs(entSet.objects) do
-                if isOnScreen(ent, w, h) then
+                if isOnScreen(ent, w, h) and (not ent.hidden) then
                     setColor(1,1,1)
                     if ent.image then
                         if ent.color then

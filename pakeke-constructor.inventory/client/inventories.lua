@@ -216,7 +216,8 @@ end)
 
 
 
-client.on("setInventoryItem", function(inventory, x, y, item_ent)
+client.on("setInventoryItem", function(ent, x, y, item_ent)
+    local inventory = ent.inventory
     inventory:set(x,y,item_ent)
 end)
 

@@ -4,7 +4,7 @@
 return {
     "x","y",
     "stackSize",
-    maxStackSize = 32;
-    image="yin_yang";
-    itemName = "yin yang badge"
+    maxStackSize = 1;
+    image="shroom_down_2";
+    itemName = "mushroom guy"
 }
