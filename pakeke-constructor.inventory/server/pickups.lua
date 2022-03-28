@@ -54,7 +54,6 @@ on("update5", function(dt)
         end
         if pickup then
             player.inventory:set(ix, iy, pickup)
-            print(ix, iy)
             server.broadcast("pickUpInventoryItem", pickup)
             seen[pickup] = true
             pickup.hidden = true -- hidden items means that it's inside an inventory

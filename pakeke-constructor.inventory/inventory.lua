@@ -83,11 +83,11 @@ function Inventory:set(x, y, item_ent)
     if item_ent then
         assertItem(item_ent)
         self.inventory[i] = item_ent
-        if server then
-            call("setInventoryItem", self, x, y, item_ent)
-        end
     else
         self.inventory[i] = nil
+    end
+    if server then
+        call("setInventoryItem", self, x, y, item_ent)
     end
 end
 
@@ -285,6 +285,26 @@ function Inventory:drawUI()
     end
     graphics.pop()
 end
+
+
+
+function Inventory:drawHoldWidget(x, y)
+    local item = self:get(x, y)
+    if not exists(item) then return end
+    local mx, my = mouse.getPosition()
+    local ui_scale = graphics.getUIScale()
+    mx, my = mx / ui_scale, my / ui_scale
+    graphics.push("all")
+    graphics.setLineWidth(3)
+    graphics.setColor(1,1,1,0.7)
+    local ix = (x-1) * PACKED_SQUARE_SIZE + self.draw_x + PACKED_SQUARE_SIZE/2
+    local iy = (y-1) * PACKED_SQUARE_SIZE + self.draw_y + PACKED_SQUARE_SIZE/2
+    graphics.line(mx, my, ix, iy)
+    graphics.setColor(1,1,1)
+    graphics.circle("fill", mx,my, 4)
+    graphics.pop()
+end
+
 
 
 return new

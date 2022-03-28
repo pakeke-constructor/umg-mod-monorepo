@@ -56,14 +56,6 @@ end)
 
 
 
--- DEBUG ONLY.
-local players = group("controllable")
-on("tick", function()
-    local e = players[1]
-    if e ~= nil then
-        -- print(e.x, e.y)
-    end
-end)
 
 
 server.on("setPlayerVelocity", function(sender_username, ent, vx,vy,vz)

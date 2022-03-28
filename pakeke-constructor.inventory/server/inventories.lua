@@ -70,6 +70,7 @@ local function checkCallback(ent, callbackName, x, y, item)
         item = item or ent.inventory:get(x,y)
         return ent.inventoryCallbacks[callbackName](ent.inventory, x, y, item)
     end
+    return true -- return true otherwise (no callbacks)
 end
 
 
@@ -138,6 +139,12 @@ function(username, ent, other_ent, x, y, x2, y2, count)
     -- moving `item` from `inv1` to `inv2`
 
     local item = inv1:get(x,y)
+    if not item then
+        return
+    end
+
+    count = count or item.stackSize
+    count = math.min(count, item.stackSize)
 
     if count <= 0 then
         return -- ooohkay?? exit here i guess

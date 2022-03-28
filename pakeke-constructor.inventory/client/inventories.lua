@@ -83,16 +83,18 @@ local function checkCallback(ent, callbackName, x, y, item)
         item = item or ent.inventory:get(x,y)
         return ent.inventoryCallbacks[callbackName](ent.inventory, x, y, item)
     end
+    return true -- return true otherwise (no callbacks)
 end
 
 
 local function executeFullPut(inv, x, y)
     -- Ok... so `holding` exists.
-    local holding = holding_inv:get(x,y)
+    local holding = holding_inv:get(holding_x, holding_y)
     if not exists(holding) then
         holding_inv = nil
         holding_x = nil
         holding_y = nil
+        print("WE HERE.. uh oh")
         return -- erm, okay? I guess we just ignore this
     end
 
@@ -117,14 +119,14 @@ local function executeFullPut(inv, x, y)
         return
     end
 
-    if not checkCallback(holding.owner, "canRemove", holding_x, holding_y) then
+    if not checkCallback(holding_inv.owner, "canRemove", holding_x, holding_y) then
         return
     end
 
     if swapping then
-        client.send("trySwapInventoryItem", holding_inv.owner, inv.owner,x,y,holding_x,holding_y)
+        client.send("trySwapInventoryItem", holding_inv.owner, inv.owner, holding_x,holding_y, x,y)
     else
-        client.send("tryMoveInventoryItem", holding_inv.owner, inv.owner,x,y,holding_x,holding_y)
+        client.send("tryMoveInventoryItem", holding_inv.owner, inv.owner, holding_x,holding_y, x,y)
     end
 end
 
@@ -173,9 +175,15 @@ on("mousepressed", function(mx, my, button)
                 dragging_inv = inv
             end
         elseif holding_inv then
-            -- Then the player wants to drop an item
-            if exists(holding_inv:get(holding_x, holding_y)) then
-                client.send("tryDropInventoryItem", holding_inv.owner, holding_x, holding_y)
+            if button == ALPHA_BUTTON then    
+                -- Then the player wants to drop an item
+                if exists(holding_inv:get(holding_x, holding_y)) then
+                    client.send("tryDropInventoryItem", holding_inv.owner, holding_x, holding_y)
+                end
+            elseif button == BETA_BUTTON then
+                holding_inv = nil
+                holding_x = nil
+                holding_y = nil
             end
         end
     end
@@ -204,13 +212,7 @@ on("mainDrawUI", function()
     end
     
     if holding_inv then
-        local item = holding_inv:get(holding_x, holding_y)
-        local mx, my = mouse.getPosition()
-        local ui_scale = graphics.getUIScale()
-        mx, my = mx / ui_scale, my / ui_scale
-        if item then
-            holding_inv:drawItem(item, mx, my)
-        end
+        holding_inv:drawHoldWidget(holding_x, holding_y)
     end
 end)
 
