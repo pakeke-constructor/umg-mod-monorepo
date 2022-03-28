@@ -57,6 +57,7 @@ any = true
 [inspect]
 any = true
 
+
 [serialize]
 any = true
 [deserialize]
@@ -72,4 +73,8 @@ any = true
 [math]
 any = true
 
+
+## mod-declared globals
+[base]
+any = true
 

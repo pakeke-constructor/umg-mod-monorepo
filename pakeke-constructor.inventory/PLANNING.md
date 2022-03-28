@@ -115,10 +115,21 @@ x,y = inventory:getSpace() -- gets a free space in the inventory.
 
 
 # server <--> client  events
+## Server --> Client
 `setInventoryItem( ent, x, y, item_ent )`
 Server --> Client ::: sets an inventory item
 
+`dropInventoryItem(item, x, y)`
+Server --> Client ::: drops item at x,y
 
+`pickUpInventoryItem(item)` 
+Server --> Client ::: removes item from the group
+
+`setInventoryItemStackSize(item, stackSize)`
+Server --> Client ::: sets stack size for inventory item
+
+
+## Client --> Server
 `trySwapInventoryItem( ent, other_ent, self_x, `
                         `self_y, other_x, other_y )`
 Client --> Server ::: tries to swap an inventory item with another inventory

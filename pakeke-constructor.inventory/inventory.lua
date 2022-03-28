@@ -118,6 +118,15 @@ function Inventory:count(item_or_itemName)
 end
 
 
+function Inventory:getFreeSpace()
+    for i=1, self.width * self.height do
+        if self.inventory[i] and exists(self.inventory[i]) then
+            return self:getXY(i)
+        end
+    end
+end
+
+
 function Inventory:open()
     -- Should only be called on client-side
     call("openInventory", self, self.owner)

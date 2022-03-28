@@ -2,7 +2,7 @@
 
 
 return {
-    "x","y", "vx", "vy",
+    "x","y",
     "stackSize",
     maxStackSize = 32;
     image="yin_yang";

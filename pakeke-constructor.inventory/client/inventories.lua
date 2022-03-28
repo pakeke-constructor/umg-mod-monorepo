@@ -74,24 +74,69 @@ on("closeInventory", function(inv, owner_ent)
 end)
 
 
+local function checkCallback(ent, callbackName, x, y, item)
+    --[[
+        returns true/false according to inventoryCallbacks component.
+        (Only works on `canRemove` and `canAdd`!!!)
+    ]]
+    if ent.inventoryCallbacks and ent.inventoryCallbacks[callbackName] then
+        item = item or ent.inventory:get(x,y)
+        return ent.inventoryCallbacks[callbackName](ent.inventory, x, y, item)
+    end
+end
 
-local function execute_put(inv, x, y)
+
+local function executeFullPut(inv, x, y)
     -- Ok... so `holding` exists.
-    local hold_item = holding_inv:get(x,y)
-    if not exists(hold_item) then
+    local holding = holding_inv:get(x,y)
+    if not exists(holding) then
         holding_inv = nil
         holding_x = nil
         holding_y = nil
         return -- erm, okay? I guess we just ignore this
     end
 
-    if 
+    local swapping = false
+    local targ = inv:get(x,y)
+    if targ then
+        if targ.itemName == holding.itemName and targ.stackSize < targ.maxStackSize then
+            -- they stack!  (no need to swap)
+            swapping = false
+        else
+            -- We are swapping- so lets check that we actually can:
+            swapping = true
+            local c1 = checkCallback(holding_inv.owner, "canAdd", holding_x, holding_y)
+            local c2 = checkCallback(inv.owner, "canRemove", x, y)
+            if not (c1 and c2) then
+                return
+            end
+        end
+    end
+
+    if not checkCallback(inv.owner, "canAdd", x, y, holding) then
+        return
+    end
+
+    if not checkCallback(holding.owner, "canRemove", holding_x, holding_y) then
+        return
+    end
+
+    if swapping then
+        client.send("trySwapInventoryItem", holding_inv.owner, inv.owner,x,y,holding_x,holding_y)
+    else
+        client.send("tryMoveInventoryItem", holding_inv.owner, inv.owner,x,y,holding_x,holding_y)
+    end
 end
 
 
-local function execute_interaction(inv, x, y)
+
+local function executeAlphaInteraction(inv, x, y)
+    --[[
+        "alpha" interactions are for stuff like placing full stacks
+        of items, etc.
+    ]]
     if holding_inv and exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
-        execute_put(inv, x, y)
+        executeFullPut(inv, x, y)
     else
         -- Else we just set the holding to a value.
         holding_inv = inv
@@ -100,6 +145,12 @@ local function execute_interaction(inv, x, y)
     end
 end
 
+
+local function executeBetaInteraction(inv, x, y) end
+
+
+local ALPHA_BUTTON = 1
+local BETA_BUTTON = 2 -- right click is clearly insuperior 
 
 
 on("mousepressed", function(mx, my, button)
@@ -113,8 +164,12 @@ on("mousepressed", function(mx, my, button)
             end
             local bx, by = inv:getBucket(mx,my)
             if bx then
-                execute_interaction(inv, bx, by)
-            else
+                if button == ALPHA_BUTTON then
+                   executeAlphaInteraction(inv, bx, by)
+                elseif button == BETA_BUTTON then
+                    executeBetaInteraction(inv, bx, by)
+                end
+            elseif button == ALPHA_BUTTON then
                 dragging_inv = inv
             end
         elseif holding_inv then
@@ -172,4 +227,8 @@ client.on("dropInventoryItem", function(item, x, y)
     item.hidden = false
 end)
 
+
+client.on("pickUpInventoryItem", function(item)
+    item.hidden = true
+end)
 

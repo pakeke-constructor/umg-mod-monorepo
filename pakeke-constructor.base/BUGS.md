@@ -9,7 +9,9 @@ and the client side moves the players away from the physics blocks before it
 can be registered on the server! 
 Oh no!
 
-Hacky solution:  Maybe make player hitboxes smaller on client-side?
+Ignore it for now- who cares :)
+
+Hacky solution:  Make player hitboxes smaller on client-side
 
 
 
