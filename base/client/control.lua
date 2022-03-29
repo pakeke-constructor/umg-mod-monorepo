@@ -92,7 +92,7 @@ local function follow_avg(sum_x, sum_y, len)
         avg_x = sum_x / len
         avg_y = sum_y / len
     end
-    graphics.camera:follow(avg_x, avg_y)
+    base.camera:follow(avg_x, avg_y)
 end
 
 

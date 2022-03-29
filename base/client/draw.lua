@@ -96,33 +96,45 @@ local DEFAULT_ZOOM = constants.DEFAULT_ZOOM
 
 local camera = cameraLib(0, 0, nil, nil, DEFAULT_ZOOM, 0)
 
-graphics.camera = camera -- First monkeypatch!
+
+local DEFAULT_LEIGHWAY = constants.SCREEN_LEIGHWAY
 
 
-local SCREEN_LEIGHWAY = constants.SCREEN_LEIGHWAY -- leighway of 400 pixels
-
-
-local function isOnScreen(ent, w, h)
+local function entOnScreen(ent, leighway, w, h)
     --[[
         `ent` the entity to be checked if on screen
-        `camera` the camera object, (graphics.camera)
-        
+
         OPTIONAL:
+        `leighway` the leighway given. If not supplied, a sensible
+            default is provided.
         `w` and `h` are the width and height of the screen. 
             If these aren't supplied, they will be automatically given.
             It's slightly faster if they are supplied though.
 
-        SCREEN_LEIGHWAY is just a constant that determines how many pixels
+        leighway is just a constant that determines how many pixels
         of "leighway" we can give each object before it's counted as offscreen
     ]]
+    leighway = leighway or DEFAULT_LEIGHWAY
     w, h = w or graphics.getWidth(), h or graphics.getHeight()
     local x, y = camera:toCameraCoords(ent.x, ent.y, 0,0, w, h)
 
-    return -SCREEN_LEIGHWAY <= x and x <= w + SCREEN_LEIGHWAY
-            and -SCREEN_LEIGHWAY <= y and y <= h + SCREEN_LEIGHWAY
+    return -leighway <= x and x <= w + leighway
+            and -leighway <= y and y <= h + leighway
 end
 
-graphics.isOnScreen = isOnScreen -- Second monkeypatch!
+
+local function isOnScreen(x, y, leighway, w, h)
+    --[[
+        same as above, but for a direct x,y position as opposed to
+        an entity.
+    ]]
+    leighway = leighway or DEFAULT_LEIGHWAY
+    w, h = w or graphics.getWidth(), h or graphics.getHeight()
+    x, y = camera:toCameraCoords(x, y, 0,0, w, h)
+
+    return -leighway <= x and x <= w + leighway
+            and -leighway <= y and y <= h + leighway
+end
 
 
 
@@ -132,7 +144,7 @@ local function mainDraw()
         if rawget(depthIndexer, z_dep) then
             local entSet = depthIndexer[z_dep]
             for _, ent in ipairs(entSet.objects) do
-                if isOnScreen(ent, w, h) and (not ent.hidden) then
+                if entOnScreen(ent, DEFAULT_LEIGHWAY, w, h) and (not ent.hidden) then
                     setColor(1,1,1)
                     if ent.image then
                         if ent.color then
@@ -157,14 +169,16 @@ end)
 
 
 local scaleUI = constants.DEFAULT_UI_SCALE
-function graphics.setUIScale(scale)
+
+local function setUIScale(scale)
     assert(type(scale) == "number", "graphics.setUIScale(scale) requires a number")
     scaleUI = scale
 end
 
-function graphics.getUIScale()
+local function getUIScale()
     return scaleUI
 end
+
 
 
 on("draw", function()
@@ -221,5 +235,17 @@ on("update", function(_)
         fshift(ent)
     end
 end)
+
+
+
+return {
+    camera = camera;
+
+    getUIScale = getUIScale;
+    setUIScale = setUIScale;
+
+    isOnScreen = isOnScreen;
+    entOnScreen = entOnScreen
+}
 
 

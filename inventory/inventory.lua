@@ -194,10 +194,10 @@ local BORDER_OFFSET = 6 -- border offset from inventory edge
 function Inventory:withinBounds(mouse_x, mouse_y)
     -- returns true/false, depending on whether mouse_x or mouse_y is
     -- within the inventory interface
-    if not graphics.getUIScale then
+    if not (base and base.getUIScale) then
         error("Inventory mod requires base mod to be loaded!")
     end
-    local ui_scale = graphics.getUIScale()
+    local ui_scale = base.getUIScale()
     local x, y = mouse_x / ui_scale, mouse_y / ui_scale
     local x_valid = (self.draw_x - BORDER_OFFSET <= x) and (x <= self.draw_x + (self.width * PACKED_SQUARE_SIZE) + BORDER_OFFSET)
     local y_valid = (self.draw_y - BORDER_OFFSET <= y) and (y <= self.draw_y + (self.height * PACKED_SQUARE_SIZE) + BORDER_OFFSET)
@@ -206,10 +206,10 @@ end
 
 
 function Inventory:getBucket(mouse_x, mouse_y)
-    if not graphics.getUIScale then
+    if not (base and base.getUIScale)  then
         error("Inventory mod requires base mod to be loaded!")
     end
-    local ui_scale = graphics.getUIScale()
+    local ui_scale = base.getUIScale()
     local x, y = mouse_x / ui_scale, mouse_y / ui_scale
     local norm_x = x - self.draw_x 
     local norm_y = y - self.draw_y
@@ -292,7 +292,7 @@ function Inventory:drawHoldWidget(x, y)
     local item = self:get(x, y)
     if not exists(item) then return end
     local mx, my = mouse.getPosition()
-    local ui_scale = graphics.getUIScale()
+    local ui_scale = base.getUIScale()
     mx, my = mx / ui_scale, my / ui_scale
     graphics.push("all")
     graphics.setLineWidth(3)

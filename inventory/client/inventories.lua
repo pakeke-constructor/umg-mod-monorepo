@@ -194,7 +194,7 @@ end)
 on("mousemoved", function(mx,my, dx, dy)
     -- used for dragging inventories around
     if dragging_inv then
-        local ui_scale = graphics.getUIScale()
+        local ui_scale = base.getUIScale()
         dx, dy = dx / ui_scale, dy / ui_scale
         dragging_inv.draw_x = dragging_inv.draw_x + dx
         dragging_inv.draw_y = dragging_inv.draw_y + dy

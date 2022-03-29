@@ -64,6 +64,8 @@ any = true
 any = true
 [register]
 any = true
+[export]
+any = true
 
 
 ## Standard library modifications
