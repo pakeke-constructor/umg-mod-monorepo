@@ -22,6 +22,10 @@ return {
         friction = 7
     };
 
+    light = {
+        radius = 50
+    };
+
     moveAnimation = {
         up = {"red_player_up_1", "red_player_up_2", "red_player_up_3", "red_player_up_4"},
         down = {"red_player_down_1", "red_player_down_2", "red_player_down_3", "red_player_down_4"}, 
