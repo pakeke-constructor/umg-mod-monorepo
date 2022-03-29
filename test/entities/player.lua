@@ -24,7 +24,7 @@ return {
 
     light = {
         radius = 150;
-        color = {1,0.5,0.5}
+        color = {1,1,1}
     };
 
     moveAnimation = {

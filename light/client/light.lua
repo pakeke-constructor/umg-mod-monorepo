@@ -1,6 +1,6 @@
 
 
-local DEFAULT = {0,0,0,1}--{0.85,0.85,0.85}
+local DEFAULT = {0.7,0.7,0.7,1} --{0.85,0.85,0.85}
 
 local base_lighting = DEFAULT
 
@@ -57,6 +57,8 @@ end
 local function drawCanvas()
     graphics.push("all")
     graphics.origin()
+    graphics.setColor(1,1,1,1)
+    graphics.setCanvas()
     graphics.setBlendMode("multiply", "premultiplied")
     graphics.draw(canvas)
     graphics.pop()
@@ -84,4 +86,8 @@ local function setBaseLighting(r,g,b)
 end
 
 
-return {setBaseLighting = setBaseLighting}
+local light = {setBaseLighting = setBaseLighting}
+
+export("light", light)
+
+
