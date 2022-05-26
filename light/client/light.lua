@@ -74,9 +74,9 @@ end)
 
 local function setBaseLighting(r,g,b)
     if type(r) == "table" then
-        r=r[1]
         g=r[2]
         b=r[3]
+        r=r[1]
     end
 
     assert(type(r) == "number" and type(g) == "number" and type(b) == "number", "Bad usage of graphics.setBaseLighting")

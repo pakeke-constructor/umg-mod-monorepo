@@ -129,6 +129,7 @@ Server --> Client ::: removes item from the group
 Server --> Client ::: sets stack size for inventory item
 
 
+
 ## Client --> Server
 `trySwapInventoryItem( ent, other_ent, self_x, `
                         `self_y, other_x, other_y )`
@@ -147,7 +148,7 @@ Player moves item in their own inventory:
 Generates two `setInventoryItem` calls, one for deletion, one for addition
 
 Player drops inventory item:
-Generates `setInventoryItem` nil call, and sets `item.draw` = 
+Generates `setInventoryItem` nil call, and sets `item.hidden = true`
 
 
 

@@ -56,6 +56,9 @@ local function drop(item, x, y)
     item.x = (x or item.x) or 0
     item.y = (y or item.y) or 0
 
+    call("_inventories_dropInventoryItem", item, x, y) 
+    -- private callback, used by pickups.lua
+
     server.broadcast("dropInventoryItem", item, x, y)
 end
 
@@ -138,23 +141,26 @@ function(username, ent, other_ent, x, y, x2, y2, count)
     local inv2 = other_ent.inventory
     -- moving `item` from `inv1` to `inv2`
 
+    if inv1 == inv2 and (x==x2) and (y==y2) then
+        return -- moving an item to it's own position...? nope!
+    end
+
     local item = inv1:get(x,y)
+    local targ = inv2:get(x2,y2)
+
     if not item then
         return
     end
 
-    count = count or item.stackSize
-    count = math.min(count, item.stackSize)
+    local stackSize = item.stackSize or 1
+    count = count or stackSize
+    count = math.min(count, stackSize)
+    if targ then
+        count = math.min(count, (targ.maxStackSize or 1) - targ.stackSize)
+    end
 
     if count <= 0 then
         return -- ooohkay?? exit here i guess
-    end
-
-    local stackSize = (item.stackSize or 1)
-    count = count or stackSize
-    if count > stackSize then
-        -- Is the client trying to cheat, or what? lol
-        count = stackSize
     end
 
     if not exists(item) then
@@ -169,24 +175,40 @@ function(username, ent, other_ent, x, y, x2, y2, count)
     if not checkCallback(other_ent, "canAdd", x2, y2) then
         return -- exit early
     end
-    if inv2:get(x2, y2) then
-        -- welp, we are replacing item2!
+    if targ then
+        -- welp, we are replacing/adding to targ!
         if not checkCallback(other_ent, "canRemove", x2, y2) then
             return -- exit early
         end
     end
 
-    if count < stackSize then
-        -- Damn, gotta create a new entity
-        local typename = item:type()
-        local new = entities[typename]()
-        new.stackSize = count
-        item.stackSize = stackSize - count
-        inv2:set(x2, y2, new)
+    if targ then
+        local item_stacksize = item.stackSize - count
+        if item_stacksize <= 0 then
+            inv1:set(x,y,nil)
+            item:delete()
+        else
+            item.stackSize = item_stacksize
+            server.broadcast("setInventoryItemStackSize", item, item_stacksize)
+        end
+        targ.stackSize = targ.stackSize + count
+        server.broadcast("setInventoryItemStackSize", targ, targ.stackSize)
     else
-        -- Else we just move it
-        inv1:set(x, y, nil)
-        inv2:set(x2, y2, item)
+        if count < stackSize then
+            -- Damn, gotta create a new entity
+            local typename = item:type()
+            local new = entities[typename]()
+            new.x = item.x
+            new.y = item.y
+            new.stackSize = count
+            item.stackSize = stackSize - count
+            inv2:set(x2, y2, new)
+            server.broadcast("setInventoryItemStackSize", item, item.stackSize)
+        else
+            -- Else we just move it
+            inv1:set(x, y, nil)
+            inv2:set(x2, y2, item)
+        end
     end
 end)
 

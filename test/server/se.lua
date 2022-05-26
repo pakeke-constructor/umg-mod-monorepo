@@ -19,7 +19,7 @@ on("join", function(uname)
         local MAG = 200
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
         local e = entities.item()
-        e.stackSize = 2
+        e.stackSize = math.floor(math.random(1,5))
         e.x = x
         e.y = y
     end

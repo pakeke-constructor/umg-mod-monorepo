@@ -27,9 +27,12 @@ local open_inventories = {}
     The inventory, along with the x and y of the item
     that the player is holding.
 ]]
-local holding_inv
-local holding_x
-local holding_y
+local holding_inv -- holding inventory
+local holding_x -- X pos in holding inv
+local holding_y -- Y pos in holding inv
+local holding_half -- whether only half a stack is being held
+-- (This is true if it was picked up by BETA_BUTTON. (right click))
+
 
 -- The inventory that is being dragged around by the player
 local dragging_inv
@@ -87,23 +90,44 @@ local function checkCallback(ent, callbackName, x, y, item)
 end
 
 
+
+
+
+local function resetHoldingInv()
+    holding_inv = nil
+    holding_x = nil
+    holding_y = nil
+    holding_half = nil
+end
+
+
+
+
 local function executeFullPut(inv, x, y)
     -- Ok... so `holding` exists.
     local holding = holding_inv:get(holding_x, holding_y)
     if not exists(holding) then
-        holding_inv = nil
-        holding_x = nil
-        holding_y = nil
-        print("WE HERE.. uh oh")
+        resetHoldingInv()
         return -- erm, okay? I guess we just ignore this
     end
 
+    if (inv==holding_inv) and (x==holding_x) and (y==holding_y) then
+        return -- moving an item to it's own position...? nope!
+    end
+
     local swapping = false
+    local move_count
     local targ = inv:get(x,y)
     if targ then
-        if targ.itemName == holding.itemName and targ.stackSize < targ.maxStackSize then
-            -- they stack!  (no need to swap)
-            swapping = false
+        if targ.itemName == holding.itemName then
+            if targ.stackSize == targ.maxStackSize and holding.stackSize == holding.maxStackSize then
+                swapping = true
+            else
+                -- they stack!  (no need to swap)
+                swapping = false
+                local div = holding_half and 2 or 1
+                move_count = math.min(math.ceil(holding.stackSize/div), targ.maxStackSize - targ.stackSize)
+            end            
         else
             -- We are swapping- so lets check that we actually can:
             swapping = true
@@ -126,8 +150,13 @@ local function executeFullPut(inv, x, y)
     if swapping then
         client.send("trySwapInventoryItem", holding_inv.owner, inv.owner, holding_x,holding_y, x,y)
     else
-        client.send("tryMoveInventoryItem", holding_inv.owner, inv.owner, holding_x,holding_y, x,y)
+        if not move_count then
+            move_count = math.ceil(holding.stackSize / (holding_half and 2 or 1))
+        end
+        client.send("tryMoveInventoryItem", holding_inv.owner, inv.owner, holding_x,holding_y, x,y, move_count)
     end
+
+    resetHoldingInv()
 end
 
 
@@ -140,15 +169,36 @@ local function executeAlphaInteraction(inv, x, y)
     if holding_inv and exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
         executeFullPut(inv, x, y)
     else
-        -- Else we just set the holding to a value.
+        -- Else we just set the holding to a value, so long as there is an item
+        -- in the target slot:
         holding_inv = inv
         holding_x = x
         holding_y = y
+        holding_half = false
+        if not inv:get(x,y) then
+            resetHoldingInv()
+        end
     end
 end
 
 
-local function executeBetaInteraction(inv, x, y) end
+local function executeBetaInteraction(inv, x, y)
+    --[[
+        "beta" interactions are for placing one item out of an entire stack,
+        or splitting a stack.
+    ]]
+    if holding_inv and exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
+
+    else
+        holding_inv = inv
+        holding_x = x
+        holding_y = y
+        holding_half = true
+        if not inv:get(x,y) then
+            resetHoldingInv()
+        end
+    end
+end
 
 
 local ALPHA_BUTTON = 1
@@ -173,6 +223,7 @@ on("mousepressed", function(mx, my, button)
                 end
             elseif button == ALPHA_BUTTON then
                 dragging_inv = inv
+                resetHoldingInv()
             end
         elseif holding_inv then
             if button == ALPHA_BUTTON then    
@@ -181,9 +232,7 @@ on("mousepressed", function(mx, my, button)
                     client.send("tryDropInventoryItem", holding_inv.owner, holding_x, holding_y)
                 end
             elseif button == BETA_BUTTON then
-                holding_inv = nil
-                holding_x = nil
-                holding_y = nil
+                resetHoldingInv()
             end
         end
     end
@@ -221,7 +270,16 @@ end)
 client.on("setInventoryItem", function(ent, x, y, item_ent)
     local inventory = ent.inventory
     inventory:set(x,y,item_ent)
+    if inventory == holding_inv and x == holding_x and y == holding_y then
+        resetHoldingInv()
+    end
 end)
+
+
+client.on("setInventoryItemStackSize", function(item, stackSize)
+    item.stackSize = stackSize
+end)
+
 
 
 client.on("dropInventoryItem", function(item, x, y)
@@ -234,4 +292,3 @@ end)
 client.on("pickUpInventoryItem", function(item)
     item.hidden = true
 end)
-

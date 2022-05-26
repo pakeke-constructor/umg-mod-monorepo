@@ -16,6 +16,7 @@ ent.vz -- velocity components
 
 
 ent.color = {1,0.5,0.2} -- colour (RGBA)
+-- (alpha channel is optional, defaults to 1.)
 
 ent.image = "abc" -- Image components should be strings!
                 -- This makes stuff way nicer to work with.
@@ -131,8 +132,12 @@ ent.inventory = {
 
 
 
-ent.init = function(ent) ... end
+ent.init = function(ent, ...) 
+    ... 
+end
 -- Called when the entity is first created.
+-- `...` is the args passed to the constructor.
+-- Generally, the first two args should always be (x, y)
 
 ent.damaged = function(ent) ... end
 
@@ -148,6 +153,7 @@ end
 
 ent.spawn = function(s, x, y)
     -- Called when entity is spawned, with x,y values
+    -- TODO: How are we actually going to implement this???
 end
 
 

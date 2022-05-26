@@ -4,9 +4,9 @@
 return {
     "x","y",
     "stackSize",
-    maxStackSize = 1;
+    maxStackSize = 40;
     image="shroom_down_2";
-    itemName = "mushroom guy";
+    itemName = "mushroom";
     
     spinning = {
         period = 0.8;
