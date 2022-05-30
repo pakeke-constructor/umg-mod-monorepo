@@ -12,9 +12,8 @@ local function make_player(uname)
 end
 
 
-on("join", function(uname)
-    make_player(uname)
 
+on("load", function()
     for i=1, 30 do
         local MAG = 200
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
@@ -38,6 +37,12 @@ on("join", function(uname)
             block.image = "slant_block2"
         end
     end
+end)
+
+
+
+on("join", function(uname)
+    make_player(uname)
 end)
 
 

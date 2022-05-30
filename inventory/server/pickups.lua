@@ -70,7 +70,7 @@ local function canBePickedUp(dist, best_dist, item)
 end
 
 
-on("_inventories_dropInventoryItem", function(item, x,y)
+on("_inventory_dropInventoryItem", function(item, x,y)
     item_to_lastheldtime[item] = timer.getTime()
 end)
 
@@ -83,22 +83,24 @@ on("update5", function(dt)
         local best_dist = math.huge
         local pickup
         local ix, iy = player.inventory:getFreeSpace()
-        for item in itemPartition:foreach(player.x, player.y) do
-            if not item.hidden and not seen[item] then 
-                -- then the item is on the ground
-                local d = math.distance(player, item)
-                if canBePickedUp(d, best_dist, item) then
-                    item_to_lastheldtime[item] = nil
-                    pickup = item
-                    best_dist = d
+        if ix then
+            for item in itemPartition:foreach(player.x, player.y) do
+                if not item.hidden and not seen[item] then 
+                    -- then the item is on the ground
+                    local d = math.distance(player, item)
+                    if canBePickedUp(d, best_dist, item) then
+                        item_to_lastheldtime[item] = nil
+                        pickup = item
+                        best_dist = d
+                    end
                 end
             end
-        end
-        if pickup then
-            player.inventory:set(ix, iy, pickup)
-            server.broadcast("pickUpInventoryItem", pickup)
-            seen[pickup] = true
-            pickup.hidden = true -- hidden items means that it's inside an inventory
+            if pickup then
+                player.inventory:set(ix, iy, pickup)
+                server.broadcast("pickUpInventoryItem", pickup)
+                pickup.hidden = true
+                seen[pickup] = true
+            end
         end
     end
 end)

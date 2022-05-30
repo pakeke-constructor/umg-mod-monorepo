@@ -188,7 +188,17 @@ local function executeBetaInteraction(inv, x, y)
         or splitting a stack.
     ]]
     if holding_inv and exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
-
+        local holding_item = holding_inv:get(holding_x, holding_y)
+        if not checkCallback(inv.owner, "canAdd", x, y, holding_item) then
+            return
+        end
+        if not checkCallback(holding_inv.owner, "canRemove", holding_x, holding_y) then
+            return
+        end
+        local targ = inv:get(x,y)
+        if (not targ) or targ.itemName == holding_item.itemName then
+            client.send("tryMoveInventoryItem", holding_inv.owner, inv.owner, holding_x,holding_y, x,y, 1)
+        end
     else
         holding_inv = inv
         holding_x = x
@@ -292,3 +302,4 @@ end)
 client.on("pickUpInventoryItem", function(item)
     item.hidden = true
 end)
+

@@ -96,6 +96,9 @@ local function syncNonMover(ent)
     end
 
     if should_sync then
+        ent_to_x[ent] = ent.x
+        ent_to_y[ent] = ent.y
+        ent_to_z[ent] = ent.z
         server.broadcast("changePosition", ent, ent.x, ent.y, ent.z)
     end
 end
@@ -130,6 +133,9 @@ local function syncMover(ent)
     end
 
     if should_sync then
+        ent_to_vx[ent] = ent.vx
+        ent_to_vy[ent] = ent.vy
+        ent_to_vz[ent] = ent.vz
         server.broadcast("changeVelocity", ent, ent.vx, ent.vy, ent.vz)
     end
 end

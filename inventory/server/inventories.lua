@@ -56,7 +56,7 @@ local function drop(item, x, y)
     item.x = (x or item.x) or 0
     item.y = (y or item.y) or 0
 
-    call("_inventories_dropInventoryItem", item, x, y) 
+    call("_inventory_dropInventoryItem", item, x, y) 
     -- private callback, used by pickups.lua
 
     server.broadcast("dropInventoryItem", item, x, y)
