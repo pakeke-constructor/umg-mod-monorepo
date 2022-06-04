@@ -17,6 +17,8 @@ return {
     
     controllable = {};
 
+    nametag = {};
+
     physics = {
         shape = physics.newCircleShape(5);
         friction = 7
