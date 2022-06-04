@@ -312,7 +312,7 @@ function Inventory:drawHoldWidget(x, y)
     local iy = (y-1) * PACKED_SQUARE_SIZE + self.draw_y + PACKED_SQUARE_SIZE/2
     graphics.line(mx, my, ix, iy)
     graphics.setColor(1,1,1)
-    graphics.circle("fill", mx,my, 4)
+    graphics.circle("fill", mx,my, 2)
     graphics.pop()
 end
 
