@@ -16,11 +16,32 @@ local Inventory_mt = {__index = Inventory}
 Since functions can't be sent over the network, (and the metatable contains
 functions,)  we must register the metatable on both the client and the server,
 so that it can be sent as a reference instead.
+
+TODO: This should be done as a `class` instead.
+Registering it direclty is a bit messy- it'd be cleaner to have a class() here.
 ]]
 register(Inventory_mt, "pakeke_inventory_mod:inventory_mt")
 
 
 local DEFAULT_INVENTORY_COLOUR = {0.8,0.8,0.8}
+
+
+
+
+local function checkCallback(ent, callbackName, x, y, item)
+    --[[
+        returns true/false according to inventoryCallbacks component.
+        (Only works on `canRemove` and `canAdd`!!!)
+    ]]
+    if ent.inventoryCallbacks and ent.inventoryCallbacks[callbackName] then
+        item = item or ent.inventory:get(x,y)
+        return ent.inventoryCallbacks[callbackName](ent.inventory, x, y, item)
+    end
+    return true -- return true otherwise (no callbacks)
+end
+
+
+
 
 
 local function new(inv)
@@ -79,6 +100,11 @@ end
 function Inventory:set(x, y, item_ent)
     -- Should only be called on server.
     -- If `item_ent` is nil, then it removes the item from inventory.
+    
+    if not checkCallback(self.owner, "slotExists", x, y) then
+        return -- No slot.. can't do anything
+    end
+
     local i = self:getIndex(x,y)
     if item_ent then
         assertItem(item_ent)

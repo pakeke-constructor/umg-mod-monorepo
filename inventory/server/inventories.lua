@@ -117,10 +117,16 @@ function(username, ent, other_ent, x, y, x2, y2)
     if not checkCallback(ent, "canAdd", x, y, item2) then
         return -- exit early
     end
-    if not checkCallback(other_ent, "canRemove", x, y, item2) then
+    if not checkCallback(other_ent, "canRemove", x2, y2, item2) then
         return -- exit early
     end
-    if not checkCallback(other_ent, "canAdd", x, y, item1) then
+    if not checkCallback(other_ent, "canAdd", x2, y2, item1) then
+        return -- exit early
+    end
+    if not checkCallback(ent, "slotExists", x, y) then
+        return -- exit early
+    end
+    if not checkCallback(other_ent, "slotExists", x2, y2) then
         return -- exit early
     end
 
@@ -148,8 +154,8 @@ function(username, ent, other_ent, x, y, x2, y2, count)
     local item = inv1:get(x,y)
     local targ = inv2:get(x2,y2)
 
-    if not item then
-        return
+    if not exists(item) then
+        return -- Nothing to move; exit early
     end
 
     local stackSize = item.stackSize or 1
@@ -163,9 +169,6 @@ function(username, ent, other_ent, x, y, x2, y2, count)
         return -- ooohkay?? exit here i guess
     end
 
-    if not exists(item) then
-        return -- Nothing to move; exit early
-    end
     if not (hasAccess(username, ent) and hasAccess(username, other_ent)) then
         return -- this user doesn't have access to both inventories!
     end
@@ -173,6 +176,12 @@ function(username, ent, other_ent, x, y, x2, y2, count)
         return -- exit early
     end
     if not checkCallback(other_ent, "canAdd", x2, y2) then
+        return -- exit early
+    end
+    if not checkCallback(ent, "slotExists", x,y) then
+        return  -- exit early
+    end
+    if not checkCallback(other_ent, "slotExists", x,y) then
         return -- exit early
     end
     if targ then
@@ -232,6 +241,9 @@ function(username, ent, x, y)
         return
     end
 
+    if not checkCallback(ent, "slotExists", x,y) then
+        return -- exit early
+    end
     if not checkCallback(ent, "canRemove", x, y) then
         return -- exit early
     end

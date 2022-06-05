@@ -180,6 +180,14 @@ function invCbs:canOpen(ent)
 end
 
 
+function invCbs:slotExists(x, y)
+    -- `self` is the inventory object
+    -- returns `true` if the slot at x,y exists, false if it doesn't exist.
+    -- This is useful for implementing special interfaces, such as crafting.
+    
+    -- If an (x,y) slot doesn't exist, it isn't drawn, and is not able to contain items.
+    -- (If this callback isn't specified, then it's assumed that all slots exist.)
+end
 
 
 

@@ -13,6 +13,16 @@ end
 
 
 
+local function make_grass(x,y)
+    local grass = entities.grass()
+    grass.x = x
+    grass.y = y
+    local rand = math.random(1, 7)
+    grass.image = "grass_" .. tostring(rand)
+end
+
+
+
 on("load", function()
     for i=1, 30 do
         local MAG = 200
@@ -36,6 +46,11 @@ on("load", function()
         else
             block.image = "slant_block2"
         end
+    end
+
+    for i=1, 100 do
+        local MAG = 50
+        make_grass(math.random(-MAG, MAG), math.random(-MAG, MAG))
     end
 end)
 
