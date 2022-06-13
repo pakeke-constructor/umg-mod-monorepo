@@ -9,7 +9,7 @@ Will emit draw calls based on position, and in correct order.
 local cameraLib = require("_libs.camera") -- HUMP Camera for love2d.
 
 local constants = require("other.constants")
-local set = require("other.set")
+local Set = require("other.set")
 
 
 local drawGroup = group("image", "x", "y")
@@ -36,7 +36,7 @@ local depthIndexer = setmetatable({},
         depthIndexer[zdep] will get the set that holds ent.
     ]]
     {__index = function(t, zindx)
-        t[zindx] = set()
+        t[zindx] = Set()
         depthIndexer_max_depth = max(depthIndexer_max_depth, zindx)
         depthIndexer_min_depth = min(depthIndexer_min_depth, zindx)
         return t[zindx]

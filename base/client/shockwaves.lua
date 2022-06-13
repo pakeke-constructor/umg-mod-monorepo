@@ -2,8 +2,13 @@
 
 local newShockWave = require("_libs.shockwave")
 
+
+-- Gotta make sure this is loaded:
+local Set = require("other.set")
+
+
 -- a Set for all shockwave objects that are being drawn
-local shockwaveSet = set()
+local shockwaveSet = Set()
 
 
 

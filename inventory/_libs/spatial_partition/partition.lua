@@ -19,7 +19,7 @@ local Partition = {}
 
 local mt = {__index = function(t,k)
     t[k] = setmetatable({}, {__index = function(te,ke)
-        te[ke] = set()
+        te[ke] = Set()
         return te[ke]
     end})
     return t[k]
@@ -32,7 +32,7 @@ function Partition:new(size_x, size_y)
     new.size_x = size_x
     new.size_y = size_y
 
-    new.moving_objects = set()
+    new.moving_objects = Set()
 
     for k, v in pairs(self) do
         new[k] = v

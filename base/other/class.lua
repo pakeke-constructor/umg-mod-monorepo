@@ -45,6 +45,7 @@ local function newClass(name, extends)
     end
 
     register(class, name)
+    return class
 end
 
 
