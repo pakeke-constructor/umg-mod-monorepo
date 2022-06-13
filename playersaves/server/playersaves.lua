@@ -14,7 +14,7 @@ end
 
 
 
-on("join", function(username)
+on("playerJoin", function(username)
     local fname = get_filename(username)
     local entity_data = loadLocal(fname)
 

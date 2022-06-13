@@ -40,13 +40,9 @@ any = true
 any = true
 [delay]
 any = true
-[set]
-any = true
 [array]
 any = true
 [exists]
-any = true
-[class]
 any = true
 [on]
 any = true
@@ -58,10 +54,6 @@ any = true
 any = true
 
 
-[serialize]
-any = true
-[deserialize]
-any = true
 [register]
 any = true
 [export]
@@ -80,3 +72,9 @@ any = true
 [base]
 any = true
 
+
+[Class]
+any = true
+
+[Set]
+any = true

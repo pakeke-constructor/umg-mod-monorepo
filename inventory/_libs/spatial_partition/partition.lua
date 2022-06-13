@@ -62,7 +62,12 @@ end
 local currentXIndex = setmetatable( {}, {__mode="k"} )
 local currentYIndex = setmetatable( {}, {__mode="k"} )
 -- (__mode just lessens GC burden.)
+-- TODO: Ensure that this doesn't make it run worse!
 
+
+function Partition:contains(object)
+    return currentXIndex[object] and currentYIndex[object]
+end
 
 
 function Partition:update()
@@ -97,6 +102,8 @@ end
 
 function Partition:___rem(obj)
     self:getSet(obj):remove(obj)
+    currentXIndex[obj] = nil
+    currentYIndex[obj] = nil
 end
 
 
@@ -123,8 +130,10 @@ end
 
 
 function Partition:remove(obj)
-    self.moving_objects:remove(obj)
-    self:___rem(obj)
+    if self:contains(obj) then
+        self.moving_objects:remove(obj)
+        self:___rem(obj)
+    end
 end
 
 
@@ -167,79 +176,6 @@ end
 
 
 
--- An extra function that will override Partition:getSet if a call to Partition:setGetters is made.
-function Partition:moddedGetSet(obj)
-    error("this aint running right..?")
-    local x, y = floor(self.___getx(obj)/self.size_x), floor(self.___gety(obj)/self.size_y)
-    local set_ = self[x][y]
-    -- Try for easy way out: Assume the object hasn't moved out of it's cell
-    if set_:has(obj) then
-        return set_, x, y
-    end
-     -- This is what unnessesary performance squeezing looks like. (Used to be a loop)
-    -- Horizontal and vertical cells are checked first as they are the most likely case.
-    set_ = self[x-1][y]
-    if set_:has(obj) then
-        return set_, x-1, y
-    end
-    set_ = self[x+1][y] 
-    if set_:has(obj) then
-        return set_, x+1, y
-    end
-    set_ = self[x][y-1]
-    if set_:has(obj) then
-        return set_, x, y-1
-    end
-    set_ = self[x][y+1]
-    if set_:has(obj) then
-        return set_, x, y+1
-    end
-    set_ = self[x-1][y-1]
-    if set_:has(obj) then
-        return set_, x-1, y-1
-    end
-    set_ = self[x-1][y+1]
-    if set_:has(obj) then
-        return set_, x-1, y+1
-    end
-    set_ = self[x+1][y-1]
-    if set_:has(obj) then
-        return set_, x+1, y-1
-    end
-    set_ = self[x+1][y+1]
-    if set_:has(obj) then
-        return set_, x+1, y+1
-    end
-    --[[
-    Old code::: This is functionally equivalent to above, above is slightly quicker tho
-    (Just because we can directly examine the most likely changed positions of obj first)
-
-    for X = x-1, x+1 do
-        for Y = y-1, y+1 do
-            set_ = self[X][Y]
-            if set_:has(obj) then
-                return set_, X, Y
-            end
-        end
-    end]]
-    -- Object has moved further than it's cell neighbourhood boundary.
-    -- Throw err
-    error("Bug in spatial partition")
-end
-
-
--- An extra function that will override Partition:___add if a call to Partition:setGetters is made.
-function Partition:modded____add(obj)
-    error("dont run this in push game")
-    self[floor(self.___getx(obj)/self.size_x)][floor(self.___gety(obj)/self.size_y)]:add(obj)
-end
--- An extra function that will override Partition:update_object if a call to Partition:setGetters is made.
-function Partition:moddedUpdateObj(obj)
-    error("dont run this in push game pls")
-    -- ___rem and ___add functions have been inlined for performance.
-    self:getSet(obj):remove(obj)                                     -- Same as self:___rem(obj)
-    self[floor(self.___getx(obj)/self.size_x)][floor(self.___gety(obj)/self.size_y)]:add(obj) -- Same as self:___add(obj)
-end
 
 
 

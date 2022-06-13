@@ -9,6 +9,7 @@ Will emit draw calls based on position, and in correct order.
 local cameraLib = require("_libs.camera") -- HUMP Camera for love2d.
 
 local constants = require("other.constants")
+local set = require("other.set")
 
 
 local drawGroup = group("image", "x", "y")

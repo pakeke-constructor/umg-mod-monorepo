@@ -72,12 +72,13 @@ end
 
 on("_inventory_dropInventoryItem", function(item, x,y)
     item_to_lastheldtime[item] = timer.getTime()
+    itemPartition:add(item)
 end)
 
 
 
 on("update5", function(dt)
-    local seen = {}
+    local picked = {}
     itemPartition:update(dt)
     for _, player in ipairs(invPlayers) do
         local best_dist = math.huge
@@ -85,7 +86,7 @@ on("update5", function(dt)
         local ix, iy = player.inventory:getFreeSpace()
         if ix then
             for item in itemPartition:foreach(player.x, player.y) do
-                if not item.hidden and not seen[item] then 
+                if not item.hidden and not picked[item] then 
                     -- then the item is on the ground
                     local d = math.distance(player, item)
                     if canBePickedUp(d, best_dist, item) then
@@ -99,9 +100,13 @@ on("update5", function(dt)
                 player.inventory:set(ix, iy, pickup)
                 server.broadcast("pickUpInventoryItem", pickup)
                 pickup.hidden = true
-                seen[pickup] = true
+                picked[pickup] = true
             end
         end
+    end
+
+    for ent, _ in pairs(picked) do
+        itemPartition:remove(ent)
     end
 end)
 

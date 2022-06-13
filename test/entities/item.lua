@@ -4,6 +4,7 @@
 return {
     "x","y",
     "stackSize",
+    "hidden",
     maxStackSize = 40;
     image="shroom_down_2";
     itemName = "mushroom";

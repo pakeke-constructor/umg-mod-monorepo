@@ -7,20 +7,9 @@ Inventory objects
 ]]
 
 
-local Inventory = {}
 
-local Inventory_mt = {__index = Inventory}
+local Inventory = Class( "inventory_mod:inventory")
 
-
---[[
-Since functions can't be sent over the network, (and the metatable contains
-functions,)  we must register the metatable on both the client and the server,
-so that it can be sent as a reference instead.
-
-TODO: This should be done as a `class` instead.
-Registering it direclty is a bit messy- it'd be cleaner to have a class() here.
-]]
-register(Inventory_mt, "pakeke_inventory_mod:inventory_mt")
 
 
 local DEFAULT_INVENTORY_COLOUR = {0.8,0.8,0.8}
@@ -44,30 +33,41 @@ end
 
 
 
-local function new(inv)
-    assert(inv.width, "Inventories must have a .width member!")
-    assert(inv.height, "Inventories must have a .height member!")
+function Inventory:init(options)
+    assert(options.width, "Inventories must have a .width member!")
+    assert(options.height, "Inventories must have a .height member!")
+    self.width = options.width
+    self.height = options.height
 
-    inv.inventory = {}
+    self.inventory = {}
     -- randomize initial draw position, to avoid overlap
-    inv.draw_x = math.random(0, 100)
-    inv.draw_y = math.random(0, 100)
+    self.draw_x = math.random(0, 100)
+    self.draw_y = math.random(0, 100)
 
-    if inv.color then
-        assert(type(inv.color) == "table", "inventory colours must be {R,G,B} tables, with RGB values from 0-1!")
+    if options.color then
+        assert(type(options.color) == "table", "inventory colours must be {R,G,B} tables, with RGB values from 0-1!")
+        self.color = options.color
     else
-        inv.color = DEFAULT_INVENTORY_COLOUR
+        self.color = DEFAULT_INVENTORY_COLOUR
     end
 
-    inv.hovering = nil -- The current item that the player is hovering
+    self.hovering = nil -- The current item that the player is hovering
     -- with the cursor.
 
-    inv.isOpen = false
+    self.isOpen = false
 
-    inv.owner = nil -- The entity that owns this inventory.
+    self.owner = nil -- The entity that owns this inventory.
     -- Should be set by some system.
+end
 
-    return setmetatable(inv, Inventory_mt)
+
+
+function Inventory:slotExists(x, y)
+    local ent = self.owner
+    if ent.inventoryCallbacks and ent.inventoryCallbacks.slotExists then
+        return ent.inventoryCallbacks.slotExists(self, x, y)
+    end
+    return true
 end
 
 
@@ -101,7 +101,7 @@ function Inventory:set(x, y, item_ent)
     -- Should only be called on server.
     -- If `item_ent` is nil, then it removes the item from inventory.
     
-    if not checkCallback(self.owner, "slotExists", x, y) then
+    if not self:slotExists(x, y) then
         return -- No slot.. can't do anything
     end
 
@@ -145,16 +145,19 @@ end
 
 
 function Inventory:getFreeSpace()
+    local x,y
     for i=1, self.width * self.height do
-        if not exists(self.inventory[i]) then
-            if self.inventory[i] then
-                -- delete non-existant entity
-                self.inventory[i] = nil
+        x, y = self:getXY(i)
+        if self:slotExists(x, y) then
+            if not exists(self.inventory[i]) then
+                if self.inventory[i] then
+                    -- delete non-existant entity
+                    self.inventory[i] = nil
+                end
+                assert(self:getIndex(x,y) == i)--sanity check
+                assert(not exists(self:get(x,y)))
+                return x,y
             end
-            local x,y = self:getXY(i)
-            assert(self:getIndex(x,y) == i)--sanity check
-            assert(not exists(self:get(x,y)))
-            return x,y
         end
     end
 end
@@ -223,6 +226,7 @@ function Inventory:withinBounds(mouse_x, mouse_y)
     if not (base and base.getUIScale) then
         error("Inventory mod requires base mod to be loaded!")
     end
+
     local ui_scale = base.getUIScale()
     local x, y = mouse_x / ui_scale, mouse_y / ui_scale
     local x_valid = (self.draw_x - BORDER_OFFSET <= x) and (x <= self.draw_x + (self.width * PACKED_SQUARE_SIZE) + BORDER_OFFSET)
@@ -246,7 +250,11 @@ function Inventory:getBucket(mouse_x, mouse_y)
         local ix = floor(norm_x / PACKED_SQUARE_SIZE) + 1
         local iy = floor(norm_y / PACKED_SQUARE_SIZE) + 1
         if ix >= 1 and ix <= self.width and iy >= 1 and iy <= self.height then
-            return ix, iy
+            if self:slotExists(ix, iy) then
+                return ix, iy
+            else
+                return nil -- No slot, therefore not within bounds
+            end
         end
     end
 end
@@ -255,9 +263,6 @@ end
 local WHITE = {1,1,1}
 
 function Inventory:drawItem(item_ent, x, y)
-    --[[
-        TODO:  Draw the stack number of the item entity!
-    ]]
     graphics.push()
     graphics.setColor(item_ent.color or WHITE)
     local offset = (PACKED_SQUARE_SIZE - ITEM_SIZE) / 2
@@ -306,12 +311,14 @@ function Inventory:drawUI()
 
     for x = 0, self.width - 1 do
         for y = 0, self.height - 1 do
-            local X = self.draw_x + x * PACKED_SQUARE_SIZE + offset
-            local Y = self.draw_y + y * PACKED_SQUARE_SIZE + offset
-            graphics.setColor(col[1] / 1.5, col[2] / 1.5, col[3] / 1.5)
-            graphics.rectangle("fill", X, Y, SQUARE_SIZE, SQUARE_SIZE)
-            if self:get(x + 1, y + 1) then
-                self:drawItem(self:get(x + 1, y + 1), x + 1, y + 1)
+            if self:slotExists(x+1, y+1) then
+                local X = self.draw_x + x * PACKED_SQUARE_SIZE + offset
+                local Y = self.draw_y + y * PACKED_SQUARE_SIZE + offset
+                graphics.setColor(col[1] / 1.5, col[2] / 1.5, col[3] / 1.5)
+                graphics.rectangle("fill", X, Y, SQUARE_SIZE, SQUARE_SIZE)
+                if self:get(x + 1, y + 1) then
+                    self:drawItem(self:get(x + 1, y + 1), x + 1, y + 1)
+                end
             end
         end
     end
@@ -344,6 +351,6 @@ end
 
 
 
-return new
+return Inventory
 
 

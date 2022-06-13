@@ -158,6 +158,10 @@ function(username, ent, other_ent, x, y, x2, y2, count)
         return -- Nothing to move; exit early
     end
 
+    if not (inv1:slotExists(x,y) and inv2:slotExists(x2,y2)) then
+        return  -- One of the slots doesn't exist
+    end
+
     local stackSize = item.stackSize or 1
     count = count or stackSize
     count = math.min(count, stackSize)
@@ -176,12 +180,6 @@ function(username, ent, other_ent, x, y, x2, y2, count)
         return -- exit early
     end
     if not checkCallback(other_ent, "canAdd", x2, y2) then
-        return -- exit early
-    end
-    if not checkCallback(ent, "slotExists", x,y) then
-        return  -- exit early
-    end
-    if not checkCallback(other_ent, "slotExists", x,y) then
         return -- exit early
     end
     if targ then
@@ -238,12 +236,13 @@ function(username, ent, x, y)
 
     local item = inv:get(x,y)
     if not item then
-        return
-    end
-
-    if not checkCallback(ent, "slotExists", x,y) then
         return -- exit early
     end
+
+    if not inv:slotExists(x,y) then
+        return  -- exit early
+    end
+
     if not checkCallback(ent, "canRemove", x, y) then
         return -- exit early
     end

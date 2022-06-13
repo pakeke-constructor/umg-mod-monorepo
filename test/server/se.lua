@@ -1,14 +1,17 @@
 
 
+
+
 local function make_player(uname)
     local ent = entities.player()
-    ent.x = math.random(-60, 60)
-    ent.y = math.random(-60, 60)
+    ent.x = math.random(-10, 10)
+    ent.y = math.random(-10, 10)
     ent.vx, ent.vy = 0,0
     ent.controller = uname
     ent.inventory = {
         width = 6; height = 4; color = {1,1,1}
     }
+    return ent
 end
 
 
@@ -22,8 +25,15 @@ local function make_grass(x,y)
 end
 
 
+server.on("spawnPlayer", function(username, x, y)
+    local e = make_player(username)
+    e.x = x
+    e.y = y
+end)
 
-on("load", function()
+
+
+on("createWorld", function()
     for i=1, 30 do
         local MAG = 200
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
@@ -57,7 +67,7 @@ end)
 
 
 
-on("join", function(uname)
+on("playerJoin", function(uname)
     make_player(uname)
 end)
 

@@ -3,6 +3,12 @@
 local PLAYER_SPEED = 160
 
 
+local function player_slotExists(_, x, y)
+    return (x > 1) and (y > 1)
+end
+
+
+
 return {
     "x", "y", "vx", "vy",
     "controller",
@@ -10,6 +16,10 @@ return {
     "inventory",
 
     "color",
+
+    inventoryCallbacks = {
+        slotExists = player_slotExists
+    };
 
     bobbing = {},
 
