@@ -1,6 +1,9 @@
 
 
 
+local uname_to_player = {
+
+}
 
 local function make_player(uname)
     local ent = entities.player()
@@ -11,6 +14,7 @@ local function make_player(uname)
     ent.inventory = {
         width = 6; height = 4; color = {1,1,1}
     }
+    uname_to_player[uname] = ent
     return ent
 end
 
@@ -58,13 +62,24 @@ on("createWorld", function()
         end
     end
 
-    for i=1, 100 do
-        local MAG = 50
+    for i=1, 160 do
+        local MAG = 150
         make_grass(math.random(-MAG, MAG), math.random(-MAG, MAG))
     end
 end)
 
 
+
+server.on("saveTest", function(uname)
+    local p = uname_to_player[uname]
+    save(uname, serialize({x = p.x, y = p.y}))
+    print("SAVED:", p.x, p.y)
+end)
+
+server.on("loadTest", function(uname)
+    local data = deserialize(load(uname))
+    print("LOAD:", data.x, data.y)
+end)
 
 
 on("playerJoin", function(uname)

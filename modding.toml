@@ -56,6 +56,15 @@ any = true
 
 [register]
 any = true
+[save]
+any = true
+[load]
+any = true
+[serialize]
+any = true
+[deserialize]
+any = true
+
 [export]
 any = true
 
@@ -72,9 +81,3 @@ any = true
 [base]
 any = true
 
-
-[Class]
-any = true
-
-[Set]
-any = true

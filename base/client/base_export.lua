@@ -19,8 +19,16 @@ local base = {
     isOnScreen = draw.isOnScreen;
     entOnScreen = draw.entOnScreen;
 
+    shockwave = shockwave;
 
-    shockwave = shockwave
+    Class = require("other.class");
+    Set = require("other.set");
+    Array = require("other.array");
+
+    getPlayer = require("other.get_player");
+
+    particles = require("client.particles");
+
 }
 
 

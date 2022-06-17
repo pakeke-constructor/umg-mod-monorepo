@@ -91,7 +91,6 @@ function Set:has(obj)
 end
 
 
-export("Set", Set)
 
 return Set
 

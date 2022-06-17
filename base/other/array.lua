@@ -1,4 +1,6 @@
 
+local Class = require("other.class")
+
 local Array = Class("base_mod:Array")
 
 
@@ -59,7 +61,5 @@ end
 
 
 
-
-export("Array", Array)
 
 return Array

@@ -8,7 +8,7 @@ Inventory objects
 
 
 
-local Inventory = Class( "inventory_mod:inventory")
+local Inventory = base.Class( "inventory_mod:inventory")
 
 
 

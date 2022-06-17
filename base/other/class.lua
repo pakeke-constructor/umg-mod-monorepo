@@ -50,8 +50,6 @@ end
 
 
 
-export("Class", newClass)
-
 
 return newClass
 
