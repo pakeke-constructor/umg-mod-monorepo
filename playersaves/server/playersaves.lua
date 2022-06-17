@@ -16,7 +16,7 @@ end
 
 on("playerJoin", function(username)
     local fname = get_filename(username)
-    local entity_data = loadLocal(fname)
+    local entity_data = load(fname)
 
     if entity_data then
         deserialize(entity_data)
@@ -51,7 +51,7 @@ on("leave", function(username)
             And since serialization / deserialization is done recursively, it
             doesn't matter that they are in a table- they will still be reached.
         ]]
-        saveLocal(fname, entity_data)
+        save(fname, entity_data)
     end
 end)
 

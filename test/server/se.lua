@@ -29,14 +29,6 @@ local function make_grass(x,y)
 end
 
 
-server.on("spawnPlayer", function(username, x, y)
-    local e = make_player(username)
-    e.x = x
-    e.y = y
-end)
-
-
-
 on("createWorld", function()
     for i=1, 30 do
         local MAG = 200
@@ -70,21 +62,8 @@ end)
 
 
 
-server.on("saveTest", function(uname)
-    local p = uname_to_player[uname]
-    save(uname, serialize({x = p.x, y = p.y}))
-    print("SAVED:", p.x, p.y)
-end)
 
-server.on("loadTest", function(uname)
-    local data = deserialize(load(uname))
-    print("LOAD:", data.x, data.y)
-end)
-
-
-on("playerJoin", function(uname)
+on("newPlayer", function(uname)
     make_player(uname)
 end)
-
-
 

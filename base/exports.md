@@ -50,12 +50,18 @@ base.camera -- Access to the client's camera object.
 
 
 
+
+base.sound -- sound helper table
+    sound.playSound(name, vol=1, pitch=1, effect=nil, vol_var=0, pitch_var=0)
+    sound.playMusic(name, start_time=0, vol=1)
+
+
+
 base.particles -- particle functions
-    base.particles.emit(particleSys_or_name, ...) -- emits particles
+    particles.emit(particleSys_or_name, ...) -- emits particles
 
     local love_psys = base.particles.newParticleSystem({"image1", "image2", ...})
-
-    base.particles.define(name, love_psys)
+    particles.define(name, love_psys)
 
 
 

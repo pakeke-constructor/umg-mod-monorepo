@@ -31,10 +31,16 @@ end)
 
 
 inv_ents:on_removed(function(ent)
-    -- What do we actually do here??
-    -- if we delete the entities, then it gives no options to the modders
-    -- in terms of item drops.
-    -- However, if we *dont* delete the items, then its a memory leak  :/
+    -- delete items
+    local inv = ent.inventory
+    for x=1, inv.width do
+        for y=1, inv.height do
+            local item = inv:get(x, y)
+            if exists(item) then
+                item:delete()
+            end
+        end
+    end
 end)
 
 

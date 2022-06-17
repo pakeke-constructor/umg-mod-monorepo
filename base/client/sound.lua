@@ -1,17 +1,19 @@
 
 
+local Set = require("other.set")
+
 
 local sound = {}
 
 
 
 
-local availableSourceClones = {
+local availableSourceClones = setmetatable({
     -- hasher of:
     --  {  [src] = set()   }
     -- to allow us to play the same sound
     -- multiple times at the same time
-}
+}, {__index = function(t,k) t[k] = Set() return t[k] end})
 
 
 
@@ -44,11 +46,12 @@ end
 
 
 
-local function playSound(src, vol, pitch, vol_v, p_v)
+local function playSound(src, vol, pitch, effect, vol_v, p_v)
     src = getFreeSource(src)
-    vol = math.min(1, vol + vol_v * math.sin(math.random() * 3.14159)) * sfxVol()
+    src:setEffect(effect)
+    vol = math.min(1, vol + vol_v * math.sin(math.random() * 6.282)) * sfxVol()
     src:setVolume(vol)
-    src:setPitch (pitch + p_v * math.sin(math.random() * 3.14159))
+    src:setPitch (pitch + p_v * math.sin(math.random() * 6.282))
     
     audio.play( src )
 end
@@ -57,8 +60,7 @@ end
 
 
 
-function sound.playSound(name, volume, pitch,
-                        volume_variance,  pitch_variance)
+function sound.playSound(name, volume, pitch, effect, volume_variance,  pitch_variance)
     --[[
         name : string
         volume : 0 no sound   ->   1 max vol
@@ -70,7 +72,7 @@ function sound.playSound(name, volume, pitch,
     volume_variance = volume_variance or 0
     pitch_variance = pitch_variance or 0
 
-    playSound(assets.sounds[name], volume, pitch, volume_variance, pitch_variance)
+    playSound(assets.sounds[name], volume, pitch, effect, volume_variance, pitch_variance)
 end
 
 
@@ -81,9 +83,9 @@ local current_music = nil
 local current_music_volume_modifier = 1
 
 
-function sound.playMusic(music_str, start_time, music_volume_modifier)
-    assert(assets.sounds[music_str], "unknown music:  "..music_str)
-    local src = assets.sounds[music_str]
+function sound.playMusic(name, start_time, music_volume_modifier)
+    assert(assets.sounds[name], "unknown music:  "..name)
+    local src = assets.sounds[name]
     
     if current_music then
         current_music:stop()
@@ -108,4 +110,9 @@ on("update", function()
         end
     end
 end)
+
+
+
+return sound
+
 

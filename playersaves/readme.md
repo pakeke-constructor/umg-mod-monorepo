@@ -16,10 +16,9 @@ This mod serializes player entities automatically, and serialization is done
 recursively.
 
 If you have a player entity that contains/references many other entities, they
-will ALL be serialized.
+will ALL be serialized.<br>
 This is BAD!
 Watch out for this!
 
-Also, note that the base mod must be active for this mod to work.
 
 
