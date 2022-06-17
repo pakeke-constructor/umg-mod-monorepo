@@ -31,6 +31,8 @@ any = true
 any = true
 [mouse]
 any = true
+[audio]
+any = true
 
 
 [assets]
