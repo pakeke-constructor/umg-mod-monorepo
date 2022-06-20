@@ -45,8 +45,6 @@ newWorld() -- The box2d physics world used by entities
 
 
 
-on("newWorld", newWorld)
-
 
 
 local function preUpdateEnt(ent)

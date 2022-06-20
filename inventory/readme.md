@@ -32,15 +32,9 @@ itemDescription = "A long yellow fruit"
 
 maxStackSize = 64 -- The maximum size this item can stack to.
 
-useItem = function(self, holderEnt)
-    -- Called when `holderEnt` attempts to use this item.
-
-    -- The return value for this function is how many items should be deleted
-    -- after use. (default is 0.)
-end
-
 
 stackSize = 31 -- how much this item is stacked. (Must NOT be shared!)
+
 
 
 ```
@@ -51,17 +45,38 @@ stackSize = 31 -- how much this item is stacked. (Must NOT be shared!)
 
 -- Advanced components for items:
 dropItem = function(self, holderEnt)
-    -- Called when `self` is dropped by `holderEnt`
+    -- Called when item `self` is dropped by `holderEnt`
 end
 
 collectItem = function(self, holderEnt)
-    -- Called when `self` is picked up by `holderEnt`
+    -- Called when item `self` is picked up by `holderEnt`
 end
 
 
+canUseItem = function(self, holderEnt, x, y)
+    -- returns true/false, depending on whether the player can use the item or not
+end
+
+useItem = function(self, holderEnt)
+    -- Called when `holderEnt` attempts to use this item.
+
+    -- The return value for this function is how many items should be deleted
+    -- after use. (default is 0.)
+end
+
+
+-- How the player should hold the item.
+-- If this value is nil
+holdType = "place", "tool", "spin", "above", 
+
+
+
+
+
+
 itemDescriptionFancy = "..." -- colored / bold / italic description
--- TODO ^^^ this isn't implemented yet
 itemNameFancy = "..."
+-- TODO ^^^ these aren't implemented yet
 
 
 

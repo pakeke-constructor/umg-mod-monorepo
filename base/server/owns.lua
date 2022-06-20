@@ -1,4 +1,17 @@
 
+--[[
+
+
+TODO:
+Maybe remove this??
+I dont think anything uses it.
+
+also its kinda a bad way of doing things.
+
+
+
+]]
+
 
 local owners = group("owns")
 
