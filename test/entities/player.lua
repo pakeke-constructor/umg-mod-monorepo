@@ -39,7 +39,7 @@ return {
         color = {1,1,1}
     };
 
-    moveAnimation = {
+    holdAnimation = {
         up = {"red_player_up_1", "red_player_up_2", "red_player_up_3", "red_player_up_4"},
         down = {"red_player_down_1", "red_player_down_2", "red_player_down_3", "red_player_down_4"}, 
         left = {"red_player_left_1", "red_player_left_2", "red_player_left_3", "red_player_left_4"}, 

@@ -174,6 +174,7 @@ local function executeAlphaInteraction(inv, x, y)
         holding_inv = inv
         holding_x = x
         holding_y = y
+        inv.holding_x, inv.holding_y = x, y
         holding_half = false
         if not inv:get(x,y) then
             resetHoldingInv()

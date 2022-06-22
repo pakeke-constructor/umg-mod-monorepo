@@ -27,7 +27,7 @@ return {
     -- OPTIONAL COMPONENTS:
 
     -- TODO: Support colours, bold + italics with display names and descriptions.
-    itemDisplayName = "..." -- item display name
+    itemName = "..." -- item display name
 
     itemDescription = "..." -- item description
     

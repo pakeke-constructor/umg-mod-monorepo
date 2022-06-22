@@ -24,6 +24,8 @@ local base = {
     Class = require("other.class");
     Set = require("other.set");
     Array = require("other.array");
+    
+    getQuadOffsets = require("client.image_helpers.quad_offsets");
 
     getPlayer = require("other.get_player");
 

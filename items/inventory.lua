@@ -51,8 +51,8 @@ function Inventory:init(options)
         self.color = DEFAULT_INVENTORY_COLOUR
     end
 
-    self.hovering = nil -- The current item that the player is hovering
-    -- with the cursor.
+    self.holding_x = 1 -- The current item that the player is hovering over.
+    self.holding_y = 1
 
     self.isOpen = false
 
@@ -86,6 +86,13 @@ function Inventory:getXY(index)
     return floor(index / self.height - 0.01) + 1, yy
 end
 
+
+
+function Inventory:getHoldingItem()
+    if self.holding_x and self.holding_y then
+        return self:get(self.holding_x, self.holding_y)
+    end
+end
 
 
 
@@ -274,17 +281,19 @@ function Inventory:drawItem(item_ent, x, y)
     local X = PACKED_SQUARE_SIZE * (x-1) + offset + self.draw_x
     local Y = PACKED_SQUARE_SIZE * (y-1) + offset + self.draw_y
     graphics.atlas:draw(quad, X, Y)
-    graphics.push()
-    graphics.translate(X-2,Y-2)
-    graphics.scale(0.5)
-    graphics.setColor(0,0,0,1)
-    graphics.print(item_ent.stackSize, -1,0)
-    graphics.print(item_ent.stackSize, 1,0)
-    graphics.print(item_ent.stackSize, 0,1)
-    graphics.print(item_ent.stackSize, 0,-1)
-    graphics.setColor(1,1,1,1)
-    graphics.print(item_ent.stackSize, 0,0)
-    graphics.pop()
+    if item_ent.stackSize > 1 then
+        graphics.push()
+        graphics.translate(X-2,Y-2)
+        graphics.scale(0.5)
+        graphics.setColor(0,0,0,1)
+        graphics.print(item_ent.stackSize, -1,0)
+        graphics.print(item_ent.stackSize, 1,0)
+        graphics.print(item_ent.stackSize, 0,1)
+        graphics.print(item_ent.stackSize, 0,-1)
+        graphics.setColor(1,1,1,1)
+        graphics.print(item_ent.stackSize, 0,0)
+        graphics.pop()
+    end
     graphics.pop()
 end
 
@@ -318,6 +327,10 @@ function Inventory:drawUI()
                 graphics.rectangle("fill", X, Y, SQUARE_SIZE, SQUARE_SIZE)
                 if self:get(x + 1, y + 1) then
                     self:drawItem(self:get(x + 1, y + 1), x + 1, y + 1)
+                end
+                if self.holding_x == x+1 and self.holding_y == y+1 then
+                    graphics.setColor(0,0,0, 0.5)
+                    graphics.rectangle("line", X, Y, SQUARE_SIZE, SQUARE_SIZE)
                 end
             end
         end

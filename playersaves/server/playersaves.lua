@@ -19,7 +19,11 @@ on("playerJoin", function(username)
     local entity_data = load(fname)
 
     if entity_data then
-        deserialize(entity_data)
+        local res, err = deserialize(entity_data)
+        if ((not res) and err) then
+            print("[playersaves]: couldn't deserialize player: ", err)
+            call("newPlayer", username)
+        end
     else
         -- Welp, this player has no savedata!
         -- A newPlayer event is emitted, and a player should be created
@@ -52,6 +56,11 @@ on("leave", function(username)
             doesn't matter that they are in a table- they will still be reached.
         ]]
         save(fname, entity_data)
+
+        for i=1, #buffer do
+            -- now delete all entities in the buffer
+            buffer[i]:delete()
+        end
     end
 end)
 

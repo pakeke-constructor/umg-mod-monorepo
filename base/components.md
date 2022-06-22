@@ -125,13 +125,6 @@ ent.agility = 50 -- How fast the ent can change it's speed (acceleration)
 
 
 
-ent.inventory = {
-    width = 3, -- 3 slots wide
-    height = 6 -- 6 slots high.
-}
-
-
-
 ent.init = function(ent, ...) 
     ... 
 end

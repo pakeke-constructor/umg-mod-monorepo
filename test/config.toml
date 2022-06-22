@@ -1,3 +1,3 @@
 
-uses = ["base", "light", "playersaves", "inventory", "test"]
+uses = ["base", "light", "playersaves", "items", "test"]
 

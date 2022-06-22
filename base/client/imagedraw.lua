@@ -1,6 +1,6 @@
 
 
-local quad_offsets = require("client.image_helpers.quad_offsets")
+local getQuadOffset = require("client.image_helpers.quad_offsets")
 
 local bobbing = require("client.image_helpers.bobbing")
 local spinning = require("client.image_helpers.spinning")
@@ -21,7 +21,7 @@ on("drawEntity", function(ent)
         error(("Unknown ent.image value: %s\nMake sure you put all images in the assets folder and name them!"):format(tostring(ent.image)))
     end
 
-    local ox, oy = quad_offsets(quad)
+    local ox, oy = getQuadOffset(quad)
 
     local bob_oy, bob_sy = bobbing(ent, oy)
     local sway_ox, sway_shearx = swaying(ent, ox)

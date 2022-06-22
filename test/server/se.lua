@@ -12,7 +12,7 @@ local function make_player(uname)
     ent.vx, ent.vy = 0,0
     ent.controller = uname
     ent.inventory = {
-        width = 6; height = 4; color = {1,1,1}
+        width = 7; height = 5; color = {1,1,1}
     }
     uname_to_player[uname] = ent
     return ent
@@ -35,6 +35,24 @@ on("createWorld", function()
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
         local e = entities.item()
         e.stackSize = math.floor(math.random(1,5))
+        e.x = x
+        e.y = y
+    end
+
+    for i=1, 4 do
+        local MAG = 200
+        local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
+        local e = entities.pickaxe()
+        e.stackSize = 1
+        e.x = x
+        e.y = y
+    end
+
+    for i=1, 4 do
+        local MAG = 200
+        local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
+        local e = entities.musket()
+        e.stackSize = 1
         e.x = x
         e.y = y
     end

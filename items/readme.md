@@ -26,7 +26,7 @@ inventory = {
 -- Item stacks are just entities.
 -- Here are the main components:
 
-itemName = "banana" -- item name must be unique!
+itemName = "banana" -- display name:
 
 itemDescription = "A long yellow fruit"
 
@@ -51,26 +51,6 @@ end
 collectItem = function(self, holderEnt)
     -- Called when item `self` is picked up by `holderEnt`
 end
-
-
-canUseItem = function(self, holderEnt, x, y)
-    -- returns true/false, depending on whether the player can use the item or not
-end
-
-useItem = function(self, holderEnt)
-    -- Called when `holderEnt` attempts to use this item.
-
-    -- The return value for this function is how many items should be deleted
-    -- after use. (default is 0.)
-end
-
-
--- How the player should hold the item.
--- If this value is nil
-holdType = "place", "tool", "spin", "above", 
-
-
-
 
 
 
