@@ -9,6 +9,9 @@ local draw = require("client.draw")
 
 local shockwave = require("client.shockwaves")
 
+local sound = require("client.sound")
+
+
 
 local base = {
     camera = draw.camera;
@@ -31,6 +34,8 @@ local base = {
 
     particles = require("client.particles");
 
+    playSound = sound.playSound;
+    playMusic = sound.playMusic
 }
 
 

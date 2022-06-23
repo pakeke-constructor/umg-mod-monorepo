@@ -45,6 +45,9 @@ on("keypressed", function(k)
         local e = base.getPlayer()
         base.particles.emit("smoke", e.x, e.y, 12, 10, {0.2,0.2,0.9})
     end
+    if k =="r" then
+        base.playSound("boom_main1", 1, 1)
+    end
 end)
 
 

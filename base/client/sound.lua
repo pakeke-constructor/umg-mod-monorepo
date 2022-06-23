@@ -30,6 +30,7 @@ local function getFreeSource(src)
             end
         end
         local newSrcClone = src:clone()
+        print("CLONE SOURCE")
         availableSourceClones[src]:add(newSrcClone)
         return newSrcClone
     end
@@ -48,7 +49,9 @@ end
 
 local function playSound(src, vol, pitch, effect, vol_v, p_v)
     src = getFreeSource(src)
-    src:setEffect(effect)
+    if effect then
+        src:setEffect(effect)
+    end
     vol = math.min(1, vol + vol_v * math.sin(math.random() * 6.282)) * sfxVol()
     src:setVolume(vol)
     src:setPitch (pitch + p_v * math.sin(math.random() * 6.282))

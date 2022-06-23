@@ -9,26 +9,25 @@ Represent items as entities.
 
 
 
-# ITEM ANATOMY:
+# ITEM EXAMPLE:
 ```lua
--- item entity
+
 return {
+    "stackSize", -- the current stack size of the item.
+    -- if this reaches 0, the item is deleted.
+
+    "x", "y",
+    "hidden",
 
     -- Item specific components:
     maxStackSize = 32; -- Maximum stack size of this item
-    stackSize = 1 -- 1 item here. If this is 0, the entity should be deleted.
     
     image = "banana" -- can be shared.
     hidden = true/false -- must not be shared!
 
     itemName = "..." -- item name
 
-
-    -- OPTIONAL COMPONENTS:
-
-    -- TODO: Support colours, bold + italics with display names and descriptions.
-    itemName = "..." -- item display name
-
+    -- OPTIONAL VALUES:
     itemDescription = "..." -- item description
     
     useItem = function(self, holderEnt)
@@ -49,18 +48,8 @@ return {
 
 
 
-# INVENTORY ANATOMY:
+# INVENTORY EXAMPLE:
 ```lua
-
-local sword_entity = sword({damage = 10})
--- maxStackSize = 1, so no stack.
-
-local banana_entity = banana()
-banana_entity.stackSize = 10 -- 10 bananas
-
-local apple_entity = apple()
-apple_entity.stackSize = 5 -- 5 apples
-
 
 -- Component definition
 ent.inventory = {
@@ -74,6 +63,9 @@ ent.inventory = {
 }
 
 
+
+
+```
 
 InventoryObject = {
     width = 6;
