@@ -10,8 +10,19 @@ can be registered on the server!
 Oh no!
 
 Ignore it for now- who cares :)
-
 Hacky solution:  Make player hitboxes smaller on client-side
 
+
+
+
+
+
+
+
+Position desync for client/serverside.
+This can be seen through the physics bodies.
+
+Perhaps it's a desync between physics bodies and entities 
+instead of position values on server/client?
 
 

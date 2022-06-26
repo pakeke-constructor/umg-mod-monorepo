@@ -104,31 +104,23 @@ chest.inventory = {
 
 
 
-### PLAYER:
 
-moveAnimations on the player can be changed to make the player point
-in the direction of the mouse.
 
-This component is called `holdAnimation`, and it only works on player entities.
+
+### Holding entities:
+If an entity should change it's move animation to face in the direction of
+the tool, then simply add the `faceDirection` component to the entity.
+For example, player:
 ```lua
 
---[[
-    holdAnimation is the same as base-mod moveAnimation, 
-    except the entity will face in the direction of the mouse.
-    This should be used for players that hold tools.
-    (If the player isn't holding a tool, then just face in the direction of movement.)
-]]
-ent.holdAnimation = {
-    up = {"up1", "up2", ...},
-    down = ...,  left = ..., right = ...
-    speed = 3;
+return {
+    "x", "y", "vx", "vy",
+    "controllable",
+    "faceDirection",
 
-    activation = 10 -- holdAnimation activates when entity is travelling at 
-    -- at least 10 units per second.
+    moveAnimation = {...}
+    controller = {...}
 }
 
-
-
-```
 
 

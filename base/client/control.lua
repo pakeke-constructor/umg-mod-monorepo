@@ -6,7 +6,7 @@ Handles player control
 
 ]]
 
-local control_ents = group("controllable", "controller")
+local control_ents = group("controllable", "controller", "x", "y")
 
 
 local UP = "w"

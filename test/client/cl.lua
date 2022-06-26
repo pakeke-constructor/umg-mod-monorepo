@@ -46,9 +46,17 @@ on("keypressed", function(k)
         base.particles.emit("smoke", e.x, e.y, 12, 10, {0.2,0.2,0.9})
     end
     if k =="r" then
-        base.playSound("boom_main1", 1, 1)
+        client.send("spawn", base.getPlayer())
+    end
+    if k == "f" then
+        client.send("CONGLOMERATE", base.getPlayer())
+        local ent = base.getPlayer()
+        for _,e in ipairs(control_ents)do
+            if e.controller == username then
+                e.x = ent.x
+                e.y = ent.y
+            end
+        end
     end
 end)
-
-
 

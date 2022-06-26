@@ -10,75 +10,11 @@ and item facing direction.
 ]]
 
 
-local anim_group = group("x", "y", "image", "holdAnimation", "inventory")
-
-
-
-local tick = 0
-
-local DEFAULT_ANIM_SPEED = 2 -- seconds to complete animation loop
-
-local DEFAULT_ANIM_ACTIVATION_SPEED = 5
-
-local ent_to_direction = {
-    --[[
-        [ent] = current_direction_of_this_ent
-    ]]
-}
-
---[[
-    directions are as follows:
-    `up`, `down`, `left`, `right`
-]]
-
-
-
-
-anim_group:on_added(function(ent)
-    ent_to_direction[ent] = "down"
-end)
-
-
-anim_group:on_removed(function(ent)
-    ent_to_direction[ent] = nil
-end)
-
-
-
 
 local distance = math.distance
 local abs = math.abs
 local min = math.min
 local floor = math.floor
-
-local function getSpeedDirection(ent, entspeed)
-    local manim = ent.holdAnimation
-    if entspeed > manim.activation then
-        local dir
-        if abs(ent.vx) > abs(ent.vy) then
-            -- Left or Right
-            if ent.vx < 0 then
-                dir = "left"
-            else
-                dir = "right"
-            end
-        else
-            -- up or down
-            if ent.vy < 0 then
-                dir = "up"
-            else
-                dir = "down"
-            end
-        end
-        ent_to_direction[ent] = dir
-        return dir
-    else
-        -- The entity is not going fast enough;
-        -- return it's previous direction
-        return ent_to_direction[ent]
-    end
-end
-
 
 
 
@@ -119,7 +55,7 @@ end)
 
 
 
-client.on("setInventoryHoldValues", function(ent, hold_x, hold_y, dx, dy)
+client.on("setInventoryHoldValues", function(ent, faceDir, hold_x, hold_y, dx, dy)
     if ent.controller == username then
         -- Ignore broadcasts for our own entities;
         -- We will have more up to date data.
@@ -130,6 +66,7 @@ client.on("setInventoryHoldValues", function(ent, hold_x, hold_y, dx, dy)
     inv.holding_y = hold_y
     ent_to_pointDirectionX[ent] = dx
     ent_to_pointDirectionY[ent] = dy
+    ent.faceDirection = faceDir
 end)
 
 
@@ -190,50 +127,62 @@ local function getTurnDirection(ent)
             return getFaceDirection(ent)
         end
     end
+    return nil -- else return nil; this means that `ent` will face in the
+    -- direction of movement.
 end
 
 
-local function getDirection(ent, entspeed)
-    local dir = getTurnDirection(ent)
-    if not dir then
-        return getSpeedDirection(ent, entspeed)
-    else
-        return dir
-    end
-end
-
-
-
-
-local function updateEnt(ent)
-    local manim = ent.holdAnimation
-    local entspeed = distance(ent.vx, ent.vy)
-    
-    local dir = getDirection(ent, entspeed) -- should be up, down, left, or right
-    local spd = manim.speed or DEFAULT_ANIM_SPEED
-
-    local anim = ent.holdAnimation[dir]
-    -- TODO: Chuck an assertion here to ensure that people aren't misusing
-    -- the holdAnimation component. (all directions must be defined)
-    local len = #anim
-
-    if entspeed > (manim.activation or DEFAULT_ANIM_ACTIVATION_SPEED) then
-        local frame_i = min(len, floor(((tick % spd) / spd) * len) + 1)
-        local frame = anim[frame_i]
-        ent.image = frame
-    else
-        ent.image = anim[1]
-    end
-end
+local control_turn_ents = group(
+    "faceDirection", "inventory", "controllable", "controller"
+)
 
 
 on("update", function(dt)
-    tick = tick + dt
-    for i=1, #anim_group do
-        local ent = anim_group[i]
-        updateEnt(ent)
+    for i=1, #control_turn_ents do
+        local ent = control_turn_ents[i]
+        if ent.controller == username then
+            ent.faceDirection = getTurnDirection(ent)
+        end
     end
 end)
+
+
+
+local control_inventory_ents = group("controllable", "controller", "inventory", "x", "y")
+
+on("tick", function(dt)
+    for i=1, #control_inventory_ents do
+        local ent = control_inventory_ents[i]
+        if ent.controller == username then
+            local inv = ent.inventory
+            local hold_x, hold_y = inv.holding_x, inv.holding_y
+            client.send("setInventoryHoldValues", ent, ent.faceDirection, hold_x, hold_y, getPointDirection(ent))
+        end
+    end
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -241,30 +190,15 @@ end)
 
 --[[
 
-rendering of the actual tool:
+===============================
+rendering of held items.
+===============================
 
 ]]
 
-
-
-local control_inventory_ents = group("controllable", "controller", "inventory", "x", "y")
-
-
-on("tick", function(dt)
-    -- TODO: Do delta compression for this.
-    for i=1, #control_inventory_ents do
-        local ent = control_inventory_ents[i]
-        if ent.controller == username then
-            local inv = ent.inventory
-            local hold_x, hold_y = inv.holding_x, inv.holding_y
-            client.send("setInventoryHoldValues", ent, hold_x, hold_y, getPointDirection(ent))
-        end
-    end
-end)
-
-
-
-local function renderHolder(ent, holder, rot, dist, sx, sy)
+local function renderHolder(ent, holder, rot, dist, sx, sy, oxx, oyy)
+    oxx = oxx or 0
+    oyy = oyy or 0
     local img = ent.itemHoldImage or ent.image
     if not assets.images[img] then
         error("Unknown image:  " .. tostring(img))
@@ -275,8 +209,8 @@ local function renderHolder(ent, holder, rot, dist, sx, sy)
 
     graphics.atlas:draw(
         quad, 
-        holder.x + dx*dist, 
-        holder.y + dy*dist,
+        holder.x + dx*dist + oxx, 
+        holder.y + dy*dist + oyy,
         rot,
         sx or 1,sy or 1,
         ox, oy
@@ -285,29 +219,41 @@ end
 
 local holdRendering = {}
 
-function holdRendering.tool(ent, holder)
 
+local TOOL_HOLD_DISTANCE = 20
+
+function holdRendering.tool(ent, holder)
+    local dx,dy = getPointDirection(holder)
+    local rot = -math.atan2(dx,dy) + math.pi/2
+    local sign = dx>0 and 1 or -1
+    renderHolder(ent, holder, rot, TOOL_HOLD_DISTANCE, 1, sign)
 end
+
 
 function holdRendering.spin(ent, holder)
-
+    local rot = timer.getTime() * 7
+    local dx,dy = getPointDirection(holder)
+    local sign = dx>0 and 1 or -1
+    renderHolder(ent, holder, rot, TOOL_HOLD_DISTANCE, 1, sign)
 end
 
 
-local SWING_HOLD_DISTANCE = 15
 function holdRendering.swing(ent, holder)
     local dx,dy = getPointDirection(holder)
     local rot = -math.atan2(dx,dy) + math.pi/2
     local sign = dx>0 and 1 or -1
-    renderHolder(ent, holder, rot, SWING_HOLD_DISTANCE, 1, sign)
+    renderHolder(ent, holder, rot, TOOL_HOLD_DISTANCE, 1, sign)
 end
+
 
 function holdRendering.recoil(ent)
 
 end
 
-function holdRendering.above(ent)
 
+function holdRendering.above(ent, holder)
+    local _,oy = base.getQuadOffsets(ent.image)
+    renderHolder(ent, holder, 0, 0, 1, 1, 0, -oy*2)
 end
 
 function holdRendering.place(ent)

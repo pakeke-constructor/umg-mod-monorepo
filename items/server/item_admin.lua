@@ -1,16 +1,20 @@
 
 
 
-server.on("setInventoryHoldValues", function(sender, ent, hold_x, hold_y, dx, dy)
-    server.broadcast("setInventoryHoldValues", ent, hold_x, hold_y, dx, dy)
+server.on("setInventoryHoldValues", function(sender, ent, faceDir, hold_x, hold_y, dx, dy)
+    server.broadcast("setInventoryHoldValues", ent, faceDir, hold_x, hold_y, dx, dy)
 end)
 
 
 
+local directions = {
+    up=true; down=true; left=true; right=true
+}
 
-server.filter("setInventoryHoldValues", function(sender, ent, hold_x, hold_y, dx, dy)
+server.filter("setInventoryHoldValues", function(sender, ent, faceDir, hold_x, hold_y, dx, dy)
     if ent.controller ~= sender 
         or (not ent.inventory)
+        or (not directions[faceDir])
         or type(dx)~="number" 
         or type(dy)~="number" 
         or type(hold_x)~="number"

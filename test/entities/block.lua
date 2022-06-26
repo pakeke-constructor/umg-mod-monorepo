@@ -8,6 +8,6 @@ return {
     physics = {
         shape = physics.newCircleShape(10)
     };
-    color = {0.6,0.6,0.6}
+    color = {.6,.6,.6};
 }
 

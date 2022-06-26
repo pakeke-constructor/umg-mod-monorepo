@@ -12,6 +12,8 @@ return {
     spinning = {
         period = 0.8;
         magnitude = 1.2
-    }
+    };
+
+    itemHoldType = "above"
 }
 

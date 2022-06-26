@@ -79,6 +79,38 @@ on("createWorld", function()
 end)
 
 
+server.on("spawn", function(u, e)
+    local ee = make_player(u)
+    ee.x = e.x + math.random(-100, 100)
+    ee.y = e.y + math.random(-100, 100)
+
+    for i=1, 3 do
+        local MAG = 250
+        local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
+        local block = entities.block()
+        block.x = x + e.x
+        block.y = y + e.y
+        block.vx = 0
+        block.vy = 0
+        if math.random() < 0.5 then
+            block.image = "slant_block"
+        else
+            block.image = "slant_block2"
+        end
+    end
+end)
+
+
+local control_ents = group("controllable", "x", "y")
+server.on("CONGLOMERATE", function(username, ent)
+    for _,e in ipairs(control_ents)do
+        if e.controller == username then
+            e.x = ent.x
+            e.y = ent.y
+        end
+    end
+end)
+
 
 
 on("newPlayer", function(uname)
