@@ -45,7 +45,7 @@ return {
         -- returns true/false, depending on whether the 
         -- item can be used or not.
         -- `...` is some arbitrary arguments, passed by 
-        --    inventory:use(item_x, item_y, ...)
+        --    item:use(...)
         -- CALLED ON BOTH SERVERSIDE __AND__ CLIENTSIDE!
     end
 
@@ -55,8 +55,14 @@ return {
         -- The return value for this function is how many items should be deleted
         -- after use. (default is 0.)
         -- `...` is some arbitrary arguments, passed by 
-        --    inventory:use(item_x, item_y, ...)
+        --    item:use(...)
         -- CALLED ON BOTH SERVERSIDE __AND__ CLIENTSIDE!
+    end
+
+    useItemDeny = function(self, holderEnt, ...)
+        -- Called when an item is tried to be used, but is denied.
+        -- (This will only called on the client that did 
+        --   item:use(...) unsuccessfully.)
     end
 
 
