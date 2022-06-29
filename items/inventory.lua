@@ -8,7 +8,7 @@ Inventory objects
 
 
 
-local Inventory = base.Class( "inventory_mod:inventory")
+local Inventory = base.Class( "items_mod:inventory")
 
 
 
@@ -112,13 +112,23 @@ function Inventory:set(x, y, item_ent)
         return -- No slot.. can't do anything
     end
 
+    local existing_item_ent = self:get(x, y)
+    if existing_item_ent and existing_item_ent.ownerInventory == self then
+        -- The reason we need this check is because sometimes `existing_item_ent`
+        -- may have been moved already. (for example, during swapping.)
+        -- In that case, we don't want to make ownerInventory nil.
+        existing_item_ent.ownerInventory = nil
+    end
+
     local i = self:getIndex(x,y)
     if item_ent then
         assertItem(item_ent)
         self.inventory[i] = item_ent
+        item_ent.ownerInventory = self
     else
         self.inventory[i] = nil
     end
+
     if server then
         call("setInventoryItem", self, x, y, item_ent)
     end
@@ -159,6 +169,7 @@ function Inventory:getFreeSpace()
             if not exists(self.inventory[i]) then
                 if self.inventory[i] then
                     -- delete non-existant entity
+                    -- yeah... idk what happened here lol.
                     self.inventory[i] = nil
                 end
                 assert(self:getIndex(x,y) == i)--sanity check
@@ -184,18 +195,6 @@ function Inventory:close()
 end
 
 
-function Inventory:setOpen(bool)
-    -- Should only be called client-side
-    if bool == self.isOpen then
-        return
-    end
-    if bool then
-        call("openInventory", self, self.owner)
-    else
-        call("closeInventory", self, self.owner)
-    end
-    self.isOpen = bool
-end
 
 
 function Inventory:get(x, y)

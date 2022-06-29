@@ -7,58 +7,65 @@ With inventories, you can make shops, reward systems, etc.
 They are highly customizable.
 
 Items can also be customized and held by other entities.
-
+(Items are just regular entities with an `itemName` component.)
 
 
 # entity components:
+See `readme_components.md`
+
+
+
+# using inventories:
+Inventories are automatically synced to serverside/clientside.
+
+Any changes that are made on clientside will be automatically
+checked on serverside, and then dispatched to other clients automatically.
+
+Any changes that are made on serverside will be automatically
+synced to all clients.
+
+
 ```lua
--- Basic inventory component usage:
-inventory = {
-    width = 6; -- width / height of inventory, in slots
-    height = 6;
-    hotbar = true -- hotbar shows up on player side!
-}
+local inv = ent.inventory
 
-
-
-
--- Item components
--- Item stacks are just entities.
--- Here are the main components:
-
-itemName = "banana" -- display name:
-
-itemDescription = "A long yellow fruit"
-
-maxStackSize = 64 -- The maximum size this item can stack to.
-
-
-stackSize = 31 -- how much this item is stacked. (Must NOT be shared!)
-
-
-
+local b = entities.banana()
+item.stackSize = 10
+print(item.itemName) -- "banana"
 ```
 
-
-## advanced components:
 ```lua
 
--- Advanced components for items:
-dropItem = function(self, holderEnt)
-    -- Called when item `self` is dropped by `holderEnt`
-end
-
-collectItem = function(self, holderEnt)
-    -- Called when item `self` is picked up by `holderEnt`
-end
+inv:set(1, 1, b) 
+-- sets slot (1, 1) to banana item.
+-- Inventory indexes start at (1,1) and go to (width,height)
 
 
-
-itemDescriptionFancy = "..." -- colored / bold / italic description
-itemNameFancy = "..."
--- TODO ^^^ these aren't implemented yet
-
+b = inv:get(1, 1) 
+-- returns the item at location (1, 1), 
+-- or nil if there is no item.
 
 
+inv:open() -- opens inventory for viewing
+inv:close() -- closes inventory
+
+
+inv:swap(other_inv, slot_x, slot_y, other_slot_x, other_slot_y)
+-- swaps an item with another inventory
+-- Good for stuff like player trading maybe?
+
+
+inv:useItem(slot_x, slot_y, ...)
+-- Uses the item at (slot_x, slot_y).
+-- If no item exists, an error is thrown.
+-- (Like everything else, this is automatically synced.)
+
+
+num = inv:count("banana") 
+-- gets count of the total number of "bananas" in the 
+
+x, y = inv:getFreeSpace() 
+-- returns the closest empty space in the inventory
 
 ```
+ 
+

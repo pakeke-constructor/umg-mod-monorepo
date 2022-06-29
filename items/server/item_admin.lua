@@ -12,7 +12,8 @@ local directions = {
 }
 
 server.filter("setInventoryHoldValues", function(sender, ent, faceDir, hold_x, hold_y, dx, dy)
-    if ent.controller ~= sender 
+    if not exists(ent)
+        or ent.controller ~= sender 
         or (not ent.inventory)
         or (not directions[faceDir])
         or type(dx)~="number" 
@@ -26,4 +27,19 @@ server.filter("setInventoryHoldValues", function(sender, ent, faceDir, hold_x, h
 end)
 
 
+
+
+--[[
+
+TODO:
+Do planning for this.
+
+]]
+server.on("useItem", function(sender, holder, item, ...)
+end)
+
+
+server.filter("useItem", function(sender, holder, item)
+    return exists(holder) and exists(item) and holder.controller
+end)
 

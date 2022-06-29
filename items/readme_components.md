@@ -1,7 +1,7 @@
 
 
 
-# ITEM EXAMPLE:
+# ITEM COMPONENTS:
 ```lua
 
 return {
@@ -44,7 +44,9 @@ return {
     canUseItem = function(self, holderEnt, ...)
         -- returns true/false, depending on whether the 
         -- item can be used or not.
-        -- `...` is some arbitrary arguments, passed by `items.useItem(ent)`
+        -- `...` is some arbitrary arguments, passed by 
+        --    inventory:use(item_x, item_y, ...)
+        -- CALLED ON BOTH SERVERSIDE __AND__ CLIENTSIDE!
     end
 
     useItem = function(self, holderEnt, ...)
@@ -52,6 +54,9 @@ return {
 
         -- The return value for this function is how many items should be deleted
         -- after use. (default is 0.)
+        -- `...` is some arbitrary arguments, passed by 
+        --    inventory:use(item_x, item_y, ...)
+        -- CALLED ON BOTH SERVERSIDE __AND__ CLIENTSIDE!
     end
 
 
@@ -73,7 +78,7 @@ return {
 
 
 
-# INVENTORY EXAMPLE:
+# INVENTORY COMPONENTS:
 ```lua
 
 -- Chest entity
@@ -88,6 +93,10 @@ return {
 
 local chest = entities.chest()
 
+
+
+-- Upon creation, the `inventory` component should be set to a table,
+-- like the following:
 chest.inventory = {
     width = 6 -- width of inventory slots
     height = 3 -- height
@@ -102,25 +111,8 @@ chest.inventory = {
 
 
 
-
-
-
-
-
 ### Holding entities:
 If an entity should change it's move animation to face in the direction of
 the tool, then simply add the `faceDirection` component to the entity.
-For example, player:
-```lua
-
-return {
-    "x", "y", "vx", "vy",
-    "controllable",
-    "faceDirection",
-
-    moveAnimation = {...}
-    controller = {...}
-}
-
-
+(Don't make it shared!)
 

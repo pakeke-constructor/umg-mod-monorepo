@@ -1,275 +1,35 @@
 
---[[
 
-Handles moving animation of entities holding items,
-item usage,
-and item facing direction.
+local usable_items = group("itemName", "useItem")
 
 
-
-]]
-
-
-
-local distance = math.distance
-local abs = math.abs
-local min = math.min
-local floor = math.floor
-
-
-
-local function normalize(x,y)
-    local mag = math.sqrt(x*x + y*y)
-    if mag > 0 then 
-        return x/mag, y/mag
-    else
-        return 0,0
-    end
+local function useMethod(item, ...)
+    -- item.ownerInventory is set by the inventory.
+    -- If this item is not in an inventory, then it's nil
+    local holder_ent = item.ownerInventory and item.ownerInventory.owner
+    return item:canUseItem(holder_ent, ...)
 end
 
 
-local function getMouseDirection(ent)
-    --[[
-        returns the normalized vector from entity towards mouse.
-    ]]
-    local mx, my = base.camera:getMousePosition()
-    local dx, dy = mx - ent.x, my - ent.y
-    return normalize(dx, dy)
-end
-
-
-
-local holding_ents = group("inventory", "x", "y")
-
-local ent_to_pointDirectionX = {
-    -- holding entity to point direction
-}
-local ent_to_pointDirectionY = {
-    -- holding entity to point direction
-}
-
-holding_ents:on_removed(function(ent)
-    ent_to_pointDirectionX[ent] = nil
-    ent_to_pointDirectionY[ent] = nil
-end)
-
-
-
-client.on("setInventoryHoldValues", function(ent, faceDir, hold_x, hold_y, dx, dy)
-    if ent.controller == username then
-        -- Ignore broadcasts for our own entities;
-        -- We will have more up to date data.
-        return 
-    end
-    local inv = ent.inventory
-    inv.holding_x = hold_x
-    inv.holding_y = hold_y
-    ent_to_pointDirectionX[ent] = dx
-    ent_to_pointDirectionY[ent] = dy
-    ent.faceDirection = faceDir
-end)
-
-
-
-
-local function getPointDirection(ent)
-    if ent.controller == username then
-        return normalize(getMouseDirection(ent))
-    else
-        local x,y = ent_to_pointDirectionX[ent], ent_to_pointDirectionY[ent]
-        if x and y then
-            return x,y
-        end
-        return 0,0
-    end
-end
-
-
-
-
-local function getFaceDirection(ent)
-    local dx, dy = getPointDirection(ent)
-    if math.abs(dx) > math.abs(dy) then
-        -- facing left or right
-        if dx > 0 then
-            return "right"
+local function canUseMethod(item, ...)
+    if item.canUseItem ~= nil then
+        if type(item.canUseItem) == "function" then
+            local holder_ent = item.ownerInventory and item.ownerInventory.owner
+            return item:canUseItem(holder_ent, ...) -- return callback value
         else
-            return "left"
-        end
-    else
-        -- facing up or down
-        if dy > 0 then
-            return "down"
-        else
-            return "up"
+            return item.canUseItem -- it's probably a boolean
         end
     end
+
+    return true
+    -- no `canUseItem` component; assume that it can be used.
 end
 
 
 
---[[
-    hold types where entities should face towards the mouse.
-]]
-local turnTypes = {
-    tool = true, 
-    spin = true,
-    swing = true,
-    recoil = true
-}
-
-
-local function getTurnDirection(ent)
-    local holding_item = ent.inventory:getHoldingItem()
-    if holding_item and holding_item.itemHoldType then
-        if turnTypes[holding_item.itemHoldType] then
-            -- face towards mouse
-            return getFaceDirection(ent)
-        end
-    end
-    return nil -- else return nil; this means that `ent` will face in the
-    -- direction of movement.
-end
-
-
-local control_turn_ents = group(
-    "faceDirection", "inventory", "controllable", "controller"
-)
-
-
-on("update", function(dt)
-    for i=1, #control_turn_ents do
-        local ent = control_turn_ents[i]
-        if ent.controller == username then
-            ent.faceDirection = getTurnDirection(ent)
-        end
-    end
-end)
-
-
-
-local control_inventory_ents = group("controllable", "controller", "inventory", "x", "y")
-
-on("tick", function(dt)
-    for i=1, #control_inventory_ents do
-        local ent = control_inventory_ents[i]
-        if ent.controller == username then
-            local inv = ent.inventory
-            local hold_x, hold_y = inv.holding_x, inv.holding_y
-            client.send("setInventoryHoldValues", ent, ent.faceDirection, hold_x, hold_y, getPointDirection(ent))
-        end
-    end
-end)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---[[
-
-===============================
-rendering of held items.
-===============================
-
-]]
-
-local function renderHolder(ent, holder, rot, dist, sx, sy, oxx, oyy)
-    oxx = oxx or 0
-    oyy = oyy or 0
-    local img = ent.itemHoldImage or ent.image
-    if not assets.images[img] then
-        error("Unknown image:  " .. tostring(img))
-    end
-    local dx, dy = getPointDirection(holder)
-    local quad = assets.images[img]
-    local ox, oy = base.getQuadOffsets(quad)
-
-    graphics.atlas:draw(
-        quad, 
-        holder.x + dx*dist + oxx, 
-        holder.y + dy*dist + oyy,
-        rot,
-        sx or 1,sy or 1,
-        ox, oy
-    )
-end
-
-local holdRendering = {}
-
-
-local TOOL_HOLD_DISTANCE = 20
-
-function holdRendering.tool(ent, holder)
-    local dx,dy = getPointDirection(holder)
-    local rot = -math.atan2(dx,dy) + math.pi/2
-    local sign = dx>0 and 1 or -1
-    renderHolder(ent, holder, rot, TOOL_HOLD_DISTANCE, 1, sign)
-end
-
-
-function holdRendering.spin(ent, holder)
-    local rot = timer.getTime() * 7
-    local dx,dy = getPointDirection(holder)
-    local sign = dx>0 and 1 or -1
-    renderHolder(ent, holder, rot, TOOL_HOLD_DISTANCE, 1, sign)
-end
-
-
-function holdRendering.swing(ent, holder)
-    local dx,dy = getPointDirection(holder)
-    local rot = -math.atan2(dx,dy) + math.pi/2
-    local sign = dx>0 and 1 or -1
-    renderHolder(ent, holder, rot, TOOL_HOLD_DISTANCE, 1, sign)
-end
-
-
-function holdRendering.recoil(ent)
-
-end
-
-
-function holdRendering.above(ent, holder)
-    local _,oy = base.getQuadOffsets(ent.image)
-    renderHolder(ent, holder, 0, 0, 1, 1, 0, -oy*2)
-end
-
-function holdRendering.place(ent)
-
-end
-
-
-on("drawEntity", function(ent)
-    if ent.inventory then
-        local h = ent.inventory:getHoldingItem()
-        if h and h.itemHoldType then
-            if not holdRendering[h.itemHoldType] then
-                error("Item entity had invalid itemHoldType value: " .. tostring(h.itemHoldType))
-            end
-            holdRendering[h.itemHoldType](h, ent)
-        end
-    end
+usable_items:on_added(function(ent)
+    assert(type("useItem") == "function", "ent.useItem needs to be a function")
+    ent.use = useMethod
+    ent.canUse = canUseMethod
 end)
 
