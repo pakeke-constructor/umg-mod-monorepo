@@ -135,7 +135,7 @@ physics_ents:on_added(function(ent)
     end
 
     local body = physics.newBody(world, ent.x, ent.y, getBodyType(ent))
-    fixture = physics.newFixture(body, ent.physics.shape)
+    local fixture = physics.newFixture(body, ent.physics.shape)
 
     body:setLinearDamping(ent.physics.friction or DEFAULT_FRICTION)
 

@@ -15,7 +15,11 @@ on("keypressed",function(k)
         for i,ent in ipairs(control_ents) do
             if username == ent.controller then
                 local inv = ent.inventory
-                inv:setOpen(isOpen)
+                if isOpen then
+                    inv:open()
+                else
+                    inv:close()
+                end
             end
         end
     end
@@ -57,6 +61,30 @@ on("keypressed", function(k)
                 e.y = ent.y
             end
         end
+    end
+end)
+
+
+
+on("mousepressed", function(x, y, button, istouch, presses)
+    if button == 1 then
+        local p = base.getPlayer()
+        if not p.inventory.isOpen then
+            local item = p.inventory:getHoldingItem()
+            if item and item.use then
+                local mx, my = base.camera:getMousePosition()
+                if item.itemHoldType == "place" then
+                    item:use(mx,my)
+                else
+                    item:use(mx-p.x,my-p.y)
+                end
+            end
+        end
+    end
+
+    if button == 2 then
+        local p = base.getPlayer()
+        client.send("plzSpawn", p.x, p.y)
     end
 end)
 

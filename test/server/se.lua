@@ -112,6 +112,13 @@ server.on("CONGLOMERATE", function(username, ent)
 end)
 
 
+server.on("plzSpawn", function(sender, x, y)
+    local e = entities.block_item()
+    e.x = x
+    e.y = y    
+    e.stackSize = 5
+end)
+
 
 on("newPlayer", function(uname)
     make_player(uname)

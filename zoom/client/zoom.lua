@@ -27,7 +27,7 @@ local last_camx, last_camy = base.camera.x or 0, base.camera.y or 0
 
 
 
-local DEFAULT_PAN_SPEED = 200
+local DEFAULT_PAN_SPEED = 900
 
 local MOUSE_PAN_THRESHOLD = 50 -- X pixels from the screen border to move.
 
@@ -36,17 +36,18 @@ local function moveCam(dt)
     local dx,dy = 0,0
     local x, y = mouse.getPosition()
     local w, h = graphics.getWidth(), graphics.getHeight()
+    local speed = (DEFAULT_PAN_SPEED * dt) / base.camera.scale
 
     if x < MOUSE_PAN_THRESHOLD then
-        dx = -DEFAULT_PAN_SPEED * dt
+        dx = -speed
     elseif x > (w - MOUSE_PAN_THRESHOLD) then
-        dx = DEFAULT_PAN_SPEED * dt
+        dx = speed
     end
 
     if y < MOUSE_PAN_THRESHOLD then
-        dy = - DEFAULT_PAN_SPEED * dt
+        dy = -speed
     elseif y > (h - MOUSE_PAN_THRESHOLD) then
-        dy = DEFAULT_PAN_SPEED * dt
+        dy = speed
     end
 
     base.camera.x = base.camera.x + dx

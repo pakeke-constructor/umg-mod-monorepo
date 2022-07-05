@@ -2,6 +2,8 @@
 
 local usable_items = group("itemName", "useItem")
 
+local itemRendering = require("client.item_rendering")
+
 
 local function useMethod(item, ...)
     -- item.ownerInventory is set by the inventory.
@@ -10,14 +12,15 @@ local function useMethod(item, ...)
     if item:canUse(...) then
         client.send("useItem", item, holder_ent, ...)
         item:useItem(holder_ent, ...)
-    else
+        itemRendering.onUseItem(item, holder_ent, ...)
+    elseif item.useItemDeny then
         item:useItemDeny(holder_ent, ...)
     end
 end
 
 
 local function adminCanUse(item_ent, holder_ent)
-    return holder_ent.controller == username and 
+    return holder_ent and holder_ent.controller == username and 
             item_ent.ownerInventory == holder_ent.inventory
 end
 
@@ -45,7 +48,9 @@ end
 
 
 usable_items:on_added(function(ent)
-    assert(type("useItem") == "function", "ent.useItem needs to be a function")
+    if (type(ent.useItem) ~= "function") then 
+        error("ent.useItem needs to be a function. Instead, it was "..type(ent.useItem))
+    end
     ent.use = useMethod
     ent.canUse = canUseMethod
 end)

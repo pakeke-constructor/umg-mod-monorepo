@@ -11,12 +11,6 @@ and item facing direction.
 
 
 
-local distance = math.distance
-local abs = math.abs
-local min = math.min
-local floor = math.floor
-
-
 
 local function normalize(x,y)
     local mag = math.sqrt(x*x + y*y)
@@ -115,7 +109,8 @@ local turnTypes = {
     tool = true, 
     spin = true,
     swing = true,
-    recoil = true
+    recoil = true,
+    place = true
 }
 
 
@@ -133,7 +128,7 @@ end
 
 
 local control_turn_ents = group(
-    "faceDirection", "inventory", "controllable", "controller"
+    "faceDirection", "inventory", "controllable", "controller", "x", "y"
 )
 
 
@@ -196,12 +191,24 @@ rendering of held items.
 
 ]]
 
+local time = timer.getTime()
+
+local function onUseItem(item, holder_ent, ...)
+    item.item_lastUseTime = time
+end
+
+on("update", function(dt)
+    time = timer.getTime()
+end)
+
+
+
 local function renderHolder(ent, holder, rot, dist, sx, sy, oxx, oyy)
     oxx = oxx or 0
     oyy = oyy or 0
     local img = ent.itemHoldImage or ent.image
     if not assets.images[img] then
-        error("Unknown image:  " .. tostring(img))
+        error("Unknown image for holding item:  " .. tostring(img))
     end
     local dx, dy = getPointDirection(holder)
     local quad = assets.images[img]
@@ -222,12 +229,16 @@ local holdRendering = {}
 
 local TOOL_HOLD_DISTANCE = 20
 
+local TOOL_USE_TIME = 0.3
 function holdRendering.tool(ent, holder)
     local dx,dy = getPointDirection(holder)
-    local rot = -math.atan2(dx,dy) + math.pi/2
+    local t = math.max(0, ((ent.item_lastUseTime or time) - time) + TOOL_USE_TIME) / TOOL_USE_TIME
+    local sinv = math.sin(t*6.282)
+    local rot = -math.atan2(dx,dy) + math.pi/2 + sinv/3
     local sign = dx>0 and 1 or -1
-    renderHolder(ent, holder, rot, TOOL_HOLD_DISTANCE, 1, sign)
+    renderHolder(ent, holder, rot, TOOL_HOLD_DISTANCE + sinv * TOOL_HOLD_DISTANCE/3, 1, sign)
 end
+
 
 
 function holdRendering.spin(ent, holder)
@@ -238,16 +249,20 @@ function holdRendering.spin(ent, holder)
 end
 
 
+local SWING_TIME = 0.3
 function holdRendering.swing(ent, holder)
-    local dx,dy = getPointDirection(holder)
-    local rot = -math.atan2(dx,dy) + math.pi/2
-    local sign = dx>0 and 1 or -1
-    renderHolder(ent, holder, rot, TOOL_HOLD_DISTANCE, 1, sign)
+    error("nyi")
 end
 
 
-function holdRendering.recoil(ent)
-
+local RECOIL_TIME = 0.3
+function holdRendering.recoil(ent, holder)
+    local dx,dy = getPointDirection(holder)
+    local t = math.max(0, ((ent.item_lastUseTime or time) - time) + RECOIL_TIME) / RECOIL_TIME
+    local sinv = math.sin(t*3.14)
+    local rot = -math.atan2(dx,dy) + math.pi/2
+    local sign = dx>0 and 1 or -1
+    renderHolder(ent, holder, rot, TOOL_HOLD_DISTANCE - sinv * TOOL_HOLD_DISTANCE/3, 1, sign)
 end
 
 
@@ -256,8 +271,26 @@ function holdRendering.above(ent, holder)
     renderHolder(ent, holder, 0, 0, 1, 1, 0, -oy*2)
 end
 
-function holdRendering.place(ent)
+function holdRendering.place(item, holder)
+    local img = item.itemHoldImage or item.image
+    if img then
+        graphics.push("all")
+        graphics.setLineWidth(6)
+        local x, y = base.camera:getMousePosition()
+        if item:canUse(x, y) then
+            graphics.setColor(1,1,1,0.4)
+        else
+            graphics.setColor(1,0,0,0.4)
+        end
 
+        graphics.line(x,y, holder.x,holder.y)
+        local quad = assets.images[img]
+        local ox, oy = base.getQuadOffsets(quad)
+        graphics.atlas:draw(
+            quad, x, y, 0, 1, 1, ox, oy
+        )
+        graphics.pop()
+    end
 end
 
 
@@ -272,4 +305,11 @@ on("drawEntity", function(ent)
         end
     end
 end)
+
+
+
+
+return {
+    onUseItem = onUseItem
+}
 

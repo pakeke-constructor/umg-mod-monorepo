@@ -11,7 +11,7 @@ local function useMethod(item, ...)
     if item:canUse(...) then
         server.broadcast("useItem", item, holder_ent, ...)
         item:useItem(holder_ent, ...)
-    else
+    elseif item.useItemDeny then
         item:useItemDeny(holder_ent, ...)
     end
 end
@@ -34,7 +34,9 @@ end
 
 
 usable_items:on_added(function(ent)
-    assert(type("useItem") == "function", "ent.useItem needs to be a function")
+    if (type(ent.useItem) ~= "function") then 
+        error("ent.useItem needs to be a function. Instead, it was "..type(ent.useItem))
+    end
     ent.use = useMethod
     ent.canUse = canUseMethod
 end)
@@ -45,24 +47,24 @@ end)
 
 server.filter("useItem", function(sender, item, holder_ent)
     if not (exists(item) and exists(holder_ent)) then
-        return
+        return false
     end
     if sender ~= holder_ent.controller then
-        return
+        return false
     end
     if item.ownerInventory ~= holder_ent.inventory then
-        return
+        return false
     end
+    return true
 end)
 
 
 
 server.on("useItem", function(username, item, holder_ent, ...)
-    if not item:canUse(...) then
-        return
+    if item:canUse(...) then 
+        item:useItem(holder_ent, ...)
+        server.broadcast("useItem", username, item, holder_ent, ...)
     end
-    
-    item:useItem(holder_ent, ...)
 end)
 
 

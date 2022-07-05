@@ -54,10 +54,9 @@ inv:swap(other_inv, slot_x, slot_y, other_slot_x, other_slot_y)
 -- Good for stuff like player trading maybe?
 
 
-inv:useItem(slot_x, slot_y, ...)
--- Uses the item at (slot_x, slot_y).
--- If no item exists, an error is thrown.
--- (Like everything else, this is automatically synced.)
+item = inv:getHoldingItem()
+-- gets the item that is currently being held.
+-- This will generally only work for "player" inventories.
 
 
 num = inv:count("banana") 
@@ -65,6 +64,7 @@ num = inv:count("banana")
 
 x, y = inv:getFreeSpace() 
 -- returns the closest empty space in the inventory
+
 
 ```
  

@@ -15,6 +15,16 @@ inv_ents:on_added(function(ent)
         -- Then the inventory hasn't been initialized and we should init it.
         ent.inventory = invCtor(ent.inventory)
         ent.inventory.owner = ent
+    else
+        local inv = ent.inventory
+        for w=1, inv.width do
+            for h=1, inv.height do
+                local item = inv:get(w,h)
+                if item then
+                    item.ownerInventory = inv
+                end
+            end
+        end
     end
 end)
 

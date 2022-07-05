@@ -28,18 +28,3 @@ end)
 
 
 
-
---[[
-
-TODO:
-Do planning for this.
-
-]]
-server.on("useItem", function(sender, holder, item, ...)
-end)
-
-
-server.filter("useItem", function(sender, holder, item)
-    return exists(holder) and exists(item) and holder.controller
-end)
-

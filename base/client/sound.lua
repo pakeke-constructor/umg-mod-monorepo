@@ -30,7 +30,6 @@ local function getFreeSource(src)
             end
         end
         local newSrcClone = src:clone()
-        print("CLONE SOURCE")
         availableSourceClones[src]:add(newSrcClone)
         return newSrcClone
     end
