@@ -53,13 +53,6 @@ Called every frame.
 `dt` is the time between the last frame and this frame.
 
 
-# update5()
-Called every 5 frames.
-
-
-# heavy60()
-Called every 60 frames.
-
 
 # tick
 Called on client side and server-side.
