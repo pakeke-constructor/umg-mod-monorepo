@@ -9,6 +9,8 @@ return {
     itemName = "block";
     itemHoldImage = "slant_block";
 
+    placeGridSize = 30;
+
     useItem = function(self, holderEnt, x, y)
         if server then
             local b = entities.block(x,y)

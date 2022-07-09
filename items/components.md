@@ -69,15 +69,20 @@ return {
     -- How the player should hold the item.
     -- (If this value is nil, the item cannot be held)
     itemHoldType = 
-    "place" -- shows an preview for placing an item
+    "place" -- shows an preview for placing an entity
     "tool"  -- holds in direction of mouse
     "spin"  -- holds in direction of mouse, spins around when used
     "swing" -- holds in direction of mouse, swings when used (think sword)
     "recoil"-- holds in direction of mouse, recoils back when used (think shotgun)
     "above" -- item is above player's head
-
+    
     itemHoldImage = "custom_image"
     -- an optional custom image for item holding
+
+
+    placeGridSize = 20 
+    -- the size of the grid to snap to when using `place` itemHoldType
+
 }
 ```
 

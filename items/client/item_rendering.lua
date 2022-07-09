@@ -110,7 +110,8 @@ local turnTypes = {
     spin = true,
     swing = true,
     recoil = true,
-    place = true
+    place = true,
+    custom = true
 }
 
 
@@ -276,7 +277,24 @@ function holdRendering.place(item, holder)
     if img then
         graphics.push("all")
         graphics.setLineWidth(6)
+        
         local x, y = base.camera:getMousePosition()
+        local modX, modY = 1,1
+        if item.placeGridSizeX or item.placeGridSizeY or item.placeGridSize then
+            if item.placeGridSizeX then
+                assert(type(item.placeGridSizeX) == "number")
+                assert(type(item.placeGridSizeY) == "number")
+                modX = item.placeGridSizeX or 1
+                modY = item.placeGridSizeY or 1
+            else
+                assert(type(item.placeGridSize) == "number")
+                modX = item.placeGridSize
+                modY = item.placeGridSize
+            end
+        end
+        x = math.floor((x / modX) + 1/2) * modX
+        y = math.floor((y / modY) + 1/2) * modY
+
         if item:canUse(x, y) then
             graphics.setColor(1,1,1,0.4)
         else
@@ -291,6 +309,12 @@ function holdRendering.place(item, holder)
         )
         graphics.pop()
     end
+end
+
+
+function holdRendering.custom(item, holder)
+    assert(item.customHoldDraw, "when itemHoldType is 'custom', item.customHoldDraw must be set.")
+    item:customHoldDraw(holder)
 end
 
 

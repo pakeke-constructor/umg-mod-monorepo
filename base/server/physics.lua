@@ -131,6 +131,9 @@ physics_ents:on_added(function(ent)
     if world:isLocked( ) then 
         error("World was locked! This is a bug on my behalf, sorry")  
     end
+    if (not ent.x) or (not ent.y) then
+        error("Physics entities must be given x and y values upon creation.")
+    end
 
     local body = physics.newBody(world, ent.x, ent.y, getBodyType(ent))
     local fixture = physics.newFixture(body, ent.physics.shape)

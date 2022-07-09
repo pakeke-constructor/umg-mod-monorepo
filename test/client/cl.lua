@@ -81,10 +81,5 @@ on("mousepressed", function(x, y, button, istouch, presses)
             end
         end
     end
-
-    if button == 2 then
-        local p = base.getPlayer()
-        client.send("plzSpawn", p.x, p.y)
-    end
 end)
 
