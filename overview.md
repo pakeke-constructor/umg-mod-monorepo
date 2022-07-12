@@ -15,7 +15,7 @@ Also, experience in [love2d](https://love2d.org) helps.
     - [Groups](#groups)
     - [Callbacks](#callbacks)
     - [Client-server communication](#client-server-communication)
-    - 
+    - [General API reference](#general-api-reference)
 
 
 ## Mod folder structure:
@@ -25,6 +25,7 @@ Each mod has a folder structure as follows:
 assets/
     sounds/ -- sounds and images go here.
     images/ -- they are automatically loaded on clientside.
+-- images are automatically put in the texture atlas (graphics.atlas) for auto-batching.
 
 server/
     file1.lua -- these files are automatically loaded
@@ -74,8 +75,11 @@ return {
     color = {1.0, 1.0, 0} -- (think like Java static member)
 }
 ```
-We can create an entity using the `entities` table.     
-Assuming the filename was `entities/my_entity.lua`:
+The components will determine the behaviour/properties of the entity.    
+For example, under the `base` mod, entities with `x`,`y` and `image` will get drawn to the screen. 
+
+To create an instance, use the `entities` table:   
+(Assume the filename was `entities/my_entity.lua`)
 ```lua
 local ent = entities.my_entity()
 ent.x = 69
@@ -132,7 +136,7 @@ end)
 
 local function draw()
     -- iteration is the same as a regular lua array.
-    for _, ent in ipairs(drawGroup) do
+    for i, ent in ipairs(drawGroup) do
         ...
     end
 end
@@ -198,9 +202,6 @@ Client-server communication also uses callbacks:
 
 Server side:
 ```lua
--- SERVER:
-
-
 -- broadcasts `message1` to all clients.
 server.broadcast("message1",   1, 2, 3, "blah data")
 
@@ -219,9 +220,6 @@ end)
 
 Client side:
 ```lua
--- CLIENT:
-
-
 -- send a message to the server.
 client.send("moveTo", x, y) 
 
@@ -238,6 +236,7 @@ If a table is sent across, all nested tables will be serialized and sent across.
 If an entity is sent across, it will be serialized by id.   
 Sending tables across is somewhat expensive. Try to only send numbers, strings, and entities across the network for best performance.
 
+If you need to send a metatable across, take a look at the `register` function.
 
 ## General API reference
 These are all the functions/modules that can be used whilst modding:  
@@ -252,6 +251,7 @@ math  -- (lua math module)
     math.distance(x, y, [z]) -- z is optional argument. Gets euclidean distance
 
 graphics -- (love.graphics module)
+    -- extra stuff:
     graphics.atlas -- access to global texture atlas
     -- Images are automatically put in the texture atlas,
     -- and are auto-batched.
