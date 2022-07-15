@@ -7,11 +7,23 @@ local constants = require("other.constants")
 local DEFAULT_FRICTION = constants.DEFAULT_FRICTION
 
 
-
 local FRICTION_CONSTANT = constants.FRICTION_CONSTANT
 -- I put this constant in here to make friction higher, and more consistent
 -- with Box2d, since they do it differently.
 -- (Why this number exactly? idk, it just "felt right", haha)
+
+
+
+moveEnts:on_added(function(ent)
+    if not (ent.x and ent.y) then
+        error("Entity wasn't provided x,y values: " .. tostring(ent:type()))
+    end 
+    ent.vx = ent.vx or 0
+    ent.vy = ent.vy or 0
+    if ent.vz ~= nil then
+        ent.vz = ent.vz or 0
+    end
+end)
 
 
 local function doFriction(ent, dt)
@@ -24,10 +36,14 @@ end
 
 local function updateEnt(ent, dt)
     -- We don't move entities if they are being handled by physics system
+    -- (although we do handle the Z component regardless)
     if not ent.physics then
         doFriction(ent, dt)
         ent.x = ent.x + ent.vx * dt
         ent.y = ent.y + ent.vy * dt
+    end
+    if ent.z then
+        ent.z = ent.z + (ent.vz or 0) * dt
     end
 end
 
@@ -126,7 +142,7 @@ local function syncMover(ent)
 
     if ent.vz then
         local last_z = ent_to_vz[ent] or ent.vz
-        ent_to_vz = ent_to_vz[ent]
+        ent_to_vz[ent] = ent.vz
         if difference(last_z, ent.vz) > SYNC_LEIGHWAY then
             should_sync = true
         end

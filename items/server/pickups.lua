@@ -17,8 +17,6 @@ local invPlayers = group("x", "y", "controllable", "inventory")
 
 local items = group("x", "y", "itemName")
 
-local partition = require("_libs.spatial_partition.partition")
-
 
 
 
@@ -27,7 +25,7 @@ local INTERACTION_DISTANCE = 15
 -- distance from when you can pick up an item
 
 
-local itemPartition = partition(INTERACTION_DISTANCE + 5, INTERACTION_DISTANCE + 5)
+local itemPartition = base.Partition(INTERACTION_DISTANCE + 5, INTERACTION_DISTANCE + 5)
 
 
 

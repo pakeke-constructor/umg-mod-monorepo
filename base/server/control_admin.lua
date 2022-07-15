@@ -67,7 +67,7 @@ server.on("setPlayerVelocity", function(sender_username, ent, vx,vy,vz)
         ent.vx = vx
         ent.vy = vy
         if ent.vz then
-        ent.vz = vz
+            ent.vz = vz
         end
     end
 end)

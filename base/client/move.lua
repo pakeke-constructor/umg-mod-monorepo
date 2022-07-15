@@ -29,6 +29,9 @@ local function updateEnt(ent, dt)
         ent.x = ent.x + ent.vx * dt
         ent.y = ent.y + ent.vy * dt
     end
+    if ent.z then
+        ent.z = ent.z + (ent.vz or 0) * dt
+    end
 end
 
 
@@ -58,4 +61,5 @@ on("update", function(dt)
         updateEnt(ent, dt)
     end
 end)
+
 

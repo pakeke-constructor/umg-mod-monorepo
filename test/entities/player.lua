@@ -10,7 +10,8 @@ end
 
 
 return {
-    "x", "y", "vx", "vy",
+    "x", "y", "z",
+    "vx", "vy","vz",
     "controller",
     "image",
     "inventory",
@@ -23,6 +24,10 @@ return {
 
     inventoryCallbacks = {
         slotExists = player_slotExists
+    };
+
+    shadow = {
+        size=6
     };
 
     bobbing = {},

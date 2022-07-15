@@ -15,11 +15,12 @@ local floor = math.floor
 
 local Partition = {}
 
+local Set = require("other.set")
 
 
 local mt = {__index = function(t,k)
     t[k] = setmetatable({}, {__index = function(te,ke)
-        te[ke] = base.Set()
+        te[ke] = Set()
         return te[ke]
     end})
     return t[k]
@@ -32,7 +33,7 @@ function Partition:new(size_x, size_y)
     new.size_x = size_x
     new.size_y = size_y
 
-    new.moving_objects = base.Set()
+    new.moving_objects = Set()
 
     for k, v in pairs(self) do
         new[k] = v

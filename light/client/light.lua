@@ -1,6 +1,6 @@
 
 
-local DEFAULT = {0.7,0.7,0.7,1} --{0.85,0.85,0.85}
+local DEFAULT = {0.55,0.55,0.7,1} --{0.85,0.85,0.85}
 
 local base_lighting = DEFAULT
 

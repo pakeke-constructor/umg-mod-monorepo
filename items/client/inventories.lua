@@ -228,9 +228,11 @@ local BETA_BUTTON = 2 -- right click is clearly insuperior
 
 on("mousepressed", function(mx, my, button)
     local len = #open_inventories
+    local loop_used = false
     for i=len, 1, -1 do
         local inv = open_inventories[i]
         if inv:withinBounds(mx, my) then
+            loop_used = true
             if i ~= len then
                 table.remove(open_inventories, i)
                 table.insert(open_inventories, inv)
@@ -246,15 +248,18 @@ on("mousepressed", function(mx, my, button)
                 dragging_inv = inv
                 resetHoldingInv()
             end
-        elseif holding_inv then
-            if button == ALPHA_BUTTON then    
-                -- Then the player wants to drop an item
-                if exists(holding_inv:get(holding_x, holding_y)) then
-                    client.send("tryDropInventoryItem", holding_inv.owner, holding_x, holding_y)
-                end
-            elseif button == BETA_BUTTON then
-                resetHoldingInv()
+            break
+        end
+    end
+
+    if (not loop_used) and holding_inv then
+        if button == ALPHA_BUTTON then    
+            -- Then the player wants to drop an item
+            if exists(holding_inv:get(holding_x, holding_y)) then
+                client.send("tryDropInventoryItem", holding_inv.owner, holding_x, holding_y)
             end
+        elseif button == BETA_BUTTON then
+            resetHoldingInv()
         end
     end
 end)

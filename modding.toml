@@ -79,7 +79,13 @@ any = true
 any = true
 
 
+
+
 ## mod-declared globals
 [base]
+any = true
+
+## placement mod:
+[placement]
 any = true
 

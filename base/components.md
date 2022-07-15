@@ -39,6 +39,12 @@ ent.moveAnimation = {
 
 
 
+ent.shadow = {
+    size = 10; -- default value is the size of the entity image / 2.
+    color = {0,0,0,0.4} -- <--- default value; this is the color of the shadow.
+}
+
+
 
 ent.swaying = {
     magnitude = 1;

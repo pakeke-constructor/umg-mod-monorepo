@@ -1,6 +1,5 @@
 
-
-return {
+return placement.newPlaceable({
     "x","y",
     "stackSize",
     "hidden",
@@ -10,23 +9,18 @@ return {
     itemHoldImage = "slant_block";
 
     placeGridSize = 30;
+   
+    itemHoldType = "place";
 
-    useItem = function(self, holderEnt, x, y)
+    spawn = function(x,y)
         if server then
-            local b = entities.block(x,y)
-            b.x = x
-            b.y = y
-            b.vx = 0
-            b.vy = 0
-            b.image = "slant_block"
+            local e = entities.block()
+            e.x = x
+            e.y = y
+            e.image = "slant_block"
+        else
+            base.shockwave(x,y,5,50,5,0.5)
         end
-    end;
-
-    canUseItem = function(self, holder, x, y)
-        return (math.floor(x/50 + y/50) % 2) == 0
-    end;
-    
-    itemHoldType = "place"
-}
-
+    end
+})
 

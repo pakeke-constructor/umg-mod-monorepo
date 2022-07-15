@@ -24,9 +24,13 @@ local base = {
 
     shockwave = shockwave;
 
+    gravity = require("other.gravity");
+
     Class = require("other.class");
     Set = require("other.set");
     Array = require("other.array");
+    
+    Partition = require("other.partition.partition");
     
     getQuadOffsets = require("client.image_helpers.quad_offsets");
 

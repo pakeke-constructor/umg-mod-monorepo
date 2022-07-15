@@ -218,7 +218,7 @@ local function renderHolder(ent, holder, rot, dist, sx, sy, oxx, oyy)
     graphics.atlas:draw(
         quad, 
         holder.x + dx*dist + oxx, 
-        holder.y + dy*dist + oyy,
+        holder.y - (holder.z or 0)/2 + dy*dist + oyy,
         rot,
         sx or 1,sy or 1,
         ox, oy

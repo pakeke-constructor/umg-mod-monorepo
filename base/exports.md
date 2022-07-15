@@ -10,6 +10,7 @@ base.Set() -- creates a sparse set
 base.Class(name) -- creates a class with a name. Class names must be unique.
 -- Also, classes should always be created on BOTH clientside AND serverside.
 
+base.Partition(bucketXWidth, bucketYWidth) -- creates a spatial partition
 
 
 base.getPlayer(username) -- gets an entity being controlled by `username`
@@ -31,7 +32,7 @@ base.animate(frames, ...) -- Same as ccall("animate"),
     -- except frames is a list of asset names, like:  
     -- { "image1", "image2", "image3" }
 
-base.shockwave(...) -- Same as ccall("shockwave")
+base.shockwave(x, y, start_size, end_size, thickness, time, colour={1,1,1,1})
 
 base.shake(duration, dx, dy, freq) -- Shakes the screen
 
