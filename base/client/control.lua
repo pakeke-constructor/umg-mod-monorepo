@@ -108,7 +108,7 @@ on("update", function(dt)
             if ent.follow then
                 has_follow = true
                 sum_x = sum_x + ent.x
-                sum_y = sum_y + ent.y
+                sum_y = sum_y + ent.y - (ent.z or 0) / 2
                 len = len + 1
             end
         end
@@ -137,5 +137,14 @@ on("tick", function(dt)
             end
         end
     end
+end)
+
+
+
+client.on("lockMovement", function(player, x, y, z, ack_number)
+    player.x = x
+    player.y = y
+    player.z = z
+    client.send("lockMovementAck", player, ack_number)
 end)
 

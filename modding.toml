@@ -89,3 +89,6 @@ any = true
 [placement]
 any = true
 
+## light mod:
+[light]
+any = true

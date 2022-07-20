@@ -8,7 +8,7 @@ placementRules = {
     {type = "closeTo", category = "foobar", amount = 4, distance = 50} 
     -- can only be placed within 50 units of 4 `foobar` entity category
 
-    {type = "awayFrom", category = "blah", amount = 1, distance = 20}
+    {type = "awayFrom", category = "blah", distance = 20}
     -- can only be placed 20 units away from a `blah` entity category
 }
 

@@ -242,6 +242,11 @@ do
     -- If `x` and `y` are numbers, will iterate over that spacial positioning Partition.
     
     function Partition:iter(obj_or_x ,y_)
+        if not y_ then
+            assert(exists(obj_or_x), "Partition:iter(ent) requires an entity as an argument.\nThe partition will iterate objects surrounding the entity.")
+        else
+            assert(type(obj_or_x) == "number" and type(y_) == "number", "Partition:iter(x,y) requires numbers as an iteration target area")
+        end
         local inst = { } -- The state of this iteration.
                          -- We can't use closures, because locals are shared
         table.insert(closure_caches, inst)
