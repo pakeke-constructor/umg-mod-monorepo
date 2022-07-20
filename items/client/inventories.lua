@@ -264,8 +264,6 @@ on("mousepressed", function(mx, my, button)
     end
 end)
 
-
-
 on("mousemoved", function(mx,my, dx, dy)
     -- used for dragging inventories around
     if dragging_inv then
