@@ -6,10 +6,15 @@ local Class = require("other.class")
 local Set = Class("base_mod:Set")
 
 
-function Set:init()
+function Set:init(initial)
     self.objects  = {}
     self.pointers = {}
     self.size     = 0
+    if initial then
+        for i=1, #initial do
+            self:add(initial[i])
+        end
+    end
 end
 
 

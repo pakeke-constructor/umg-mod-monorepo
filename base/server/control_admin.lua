@@ -40,6 +40,11 @@ local DELTA_THRESHOLD = 30 -- this number seems quite significant to force a syn
 
 
 on("update", function(dt)
+    --[[
+        Explanation for this code:
+        This code is quite scuffed. Basically, the issue here is that if
+        the server tries to move the client,
+    ]]
     for _, player in ipairs(playerGroup)do
         -- `player` is a player entity.
 
@@ -50,7 +55,7 @@ on("update", function(dt)
             -- Distance is too large: we warrant server forced sync.
             local ack_number = math.random(1,100000) -- we also send a random number so the client can't lie.
             player.lockMovement_acknumber = ack_number -- this is yucky, but oh well, who cares
-            server.unicast(player.controller, "lockMovement", player, x, y, z, ack_number)
+            server.unicast(player.controller, "lockMovement", player, x, y, z, player.vx, player.vy, player.vz, ack_number)
         end
     end
 end)

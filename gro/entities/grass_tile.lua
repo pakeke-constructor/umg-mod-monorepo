@@ -4,8 +4,8 @@ local constants = require("shared.constants")
 
 
 return {
-    "x", "y",
-    z = -10,
+    "x", "y", "image",
+    z = constants.TILE_Z_LEVEL,
 
     image = "grass_tile1";
 
@@ -17,5 +17,7 @@ return {
 
     placementCategories = {
         "groundTile"
-    }
+    };
+
+    init = base.entityHelper.initPosition
 }

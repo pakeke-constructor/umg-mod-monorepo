@@ -1,4 +1,6 @@
 
+local entityHelper = require("other.entity_helper")
+
 local base = {
     gravity = require("other.gravity");
     
@@ -8,6 +10,8 @@ local base = {
     Partition = require("other.partition.partition");
     
     getPlayer = require("other.get_player");
+
+    entityHelper = entityHelper
 }
 
 

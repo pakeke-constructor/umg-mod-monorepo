@@ -19,6 +19,9 @@ on("tick", function()
             ent.x = 0
             ent.y = 0
             ent.z = 0
+            ent.vx = 0
+            ent.vy = 0
+            ent.vz = 0
         end
     end
 end)

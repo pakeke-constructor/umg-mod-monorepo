@@ -141,7 +141,7 @@ end)
 
 
 
-client.on("lockMovement", function(player, x, y, z, ack_number)
+client.on("lockMovement", function(player, x, y, z, vx, vz, vy, ack_number)
     player.x = x
     player.y = y
     player.z = z

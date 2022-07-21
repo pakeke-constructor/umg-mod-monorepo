@@ -7,10 +7,13 @@ return placement.newPlaceable({
     "x","y",
     "stackSize",
     "hidden",
+
     maxStackSize = 20;
     image="grass_tile_item";
     itemName = "grass_tile_item";
     itemHoldImage = "grass_tile_item";
+    
+    color = constants.GRASS_COLOR;
 
     placeGridSize = constants.TILE_SIZE;
 
@@ -22,13 +25,6 @@ return placement.newPlaceable({
    
     itemHoldType = "place";
 
-    spawn = function(x,y)
-        if server then
-            local e = entities.grass_tile()
-            e.x = x
-            e.y = y
-        else
-            base.shockwave(x,y,5,50,5,0.5)
-        end
-    end
+    spawn = function(x,y) return entities.grass_tile(x,y) end
 })
+

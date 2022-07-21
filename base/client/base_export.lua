@@ -11,6 +11,7 @@ local shockwave = require("client.shockwaves")
 
 local sound = require("client.sound")
 
+local entityHelper = require("other.entity_helper")
 
 
 local base = {
@@ -39,7 +40,9 @@ local base = {
     particles = require("client.particles");
 
     playSound = sound.playSound;
-    playMusic = sound.playMusic
+    playMusic = sound.playMusic;
+
+    entityHelper = entityHelper
 }
 
 

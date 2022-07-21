@@ -17,7 +17,6 @@ on("newPlayer", function(username)
 end)
 
 
-
 on("createWorld", function()
     -- create world here.
     -- For future, we will want the initial spawn platform to be indestructable.
@@ -26,6 +25,7 @@ on("createWorld", function()
             local xx = x * constants.TILE_SIZE
             local yy = y * constants.TILE_SIZE
             local e = entities.grass_tile()
+            e.image = "grass_tile2"            
             e.x = xx
             e.y = yy
         end

@@ -65,7 +65,7 @@ ent.inventory = {
 
 
 
-```
+```lua
 
 InventoryObject = {
     width = 6;

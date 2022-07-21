@@ -111,23 +111,30 @@ end
 
 
 local function useItem(item, holder, build_x, build_y)
-    item.placementSpawnFunction(build_x, build_y)
+    if server then
+        item.placementSpawnFunctionServer(build_x, build_y)
+    elseif item.placementSpawnFunctionClient then
+        item.placementSpawnFunctionClient(build_x, build_y)
+    end
 end
 
 
 
 local function newPlaceable(options)
     assert(options.itemName)
-    assert(options.spawn)
+    assert(options.spawn, "newPlaceable was not given a .spawn function! (was nil)")
     assert(not options.canUseItem, "canUseItem is automatically generated for placeable items!")
     assert(not options.useItem, "useItem is automatically generated for placeable items!")
     assert((not options.itemHoldType) or options.itemHoldType == "place", "placeable items must have `place` as itemHoldType!")
 
     local spawnFunc = options.spawn
+    local feedbackFunc = options.feedback
     options.spawn = nil
+    options.feedback = nil
 
     local entity = {
-        placementSpawnFunction = spawnFunc;
+        placementSpawnFunctionServer = spawnFunc;
+        placementSpawnFunctionClient = feedbackFunc;
 
         itemHoldType = "place";
         canUseItem = canUseItem;
