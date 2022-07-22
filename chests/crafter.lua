@@ -2,7 +2,7 @@
 -- crafting table object:
 
 
-local Crafter = base.Class()
+local Crafter = base.Class("chest_mod:Crafter")
 
 
 function Crafter:addRecipe(ingredients, result)
@@ -19,30 +19,28 @@ function Crafter:addRecipe(ingredients, result)
         
         result:
         { 
-            result = "item_C";
+            result = "item_C";  <--- should be entity name
             count = 16
         }
-
     ]]
     assert(ingredients and result, "Crafter:addRecipe() expects ingredients and a result")
 
     local recipe = {
         ingredients = ingredients;
-        result = result
+        result = result;
+        ingredientCounts = {}
     }
-
-    local seen = {}
 
     for _, ingre in ipairs(ingredients) do
         local name = ingre.ingredient
         local count = ingre.count
         assert(count >= 1, "Ingredient count can't be less than 1")
-        if seen[name] then
+        if recipe.ingredientCounts[name] then
             error("Duplicate ingredient: " .. tostring(name))
         end
         local i2rl = self.ingredientToRecipeList[name] or base.Array()
         i2rl:add(recipe)
-        seen[name] = true
+        recipe.ingredientCounts[ingre.ingredient] = ingre.count or 1
         self.ingredientToRecipeList[name] = i2rl
     end
 
@@ -72,13 +70,13 @@ local function recipeIngredientsOk(recipe, ingredientsToCounts)
 end
 
 
-
-function Crafter:getResult(inventory)
-    -- expects a flat array of ingredients.
-    assert(inventory.drawHoldWidget, "Crafter:getResult(inv) takes an inventory as first argument!")
-    
+local function getIngredientsToCounts(inventory)
+    --[[
+        returns a mapping:
+        {itemName -> count}
+        that can be used to check how many items are in an inv.
+    ]]
     local ingredientsToCounts = {}
-    
     for x=1, inventory.width do
         for y=1, inventory.height do
             local val = inventory:get(x, y)
@@ -90,11 +88,21 @@ function Crafter:getResult(inventory)
             end
         end
     end
+    return {}
+end
+
+
+
+function Crafter:getResult(inventory)
+    -- expects a flat array of ingredients.
+    assert(inventory.drawHoldWidget, "Crafter:getResult(inv) takes an inventory as first argument!")
+    
+    local ingredientsToCounts = getIngredientsToCounts(inventory)
 
     for ingre, count in pairs(ingredientsToCounts) do
-        local arr = self.ingredientToRecipeList[ingre]
-        if arr then
-            for _, recipe in ipairs(arr) do
+        local recipe_arr = self.ingredientToRecipeList[ingre]
+        if recipe_arr then
+            for _, recipe in ipairs(recipe_arr) do
                 -- TODO: This might actually be quite slow, it could be faster
                 -- to loop over all recipes
                 if recipeIngredientsOk(recipe, ingredientsToCounts) then
@@ -106,6 +114,47 @@ function Crafter:getResult(inventory)
     return nil -- no recipe can be crafted.
 end
 
+
+
+local function removeIngredients(inventory, recipe)
+    assert(server, "This shouldn't be called on clientside.")
+
+    for x=1, inventory.width do
+        for y=1, inventory.height do
+            local item = inventory:get(x,y)
+            if item then
+                if recipe.ingredientsToCounts[item.itemName] then
+                    assert(recipe.ingredientsToCounts[item.itemName] >= item.stackSize, "Something is wrong... bug with crafter mod")
+                    item.stackSize = item.stackSize - recipe.ingredientsToCounts[item.itemName]
+                    if item.stackSize == 0 then
+                        item:delete()
+                        inventory:set(x,y,nil)
+                    end
+                end
+            end
+        end
+    end
+end
+
+
+function Crafter:craft(inventory, recipe, slotX, slotY)
+    assert(inventory.drawHoldWidget, "Crafter:getResult(inv) takes an inventory as first argument!")
+    assert(slotX and slotY, "ur not using this properly")    
+
+    if client then -- crafting should be handled by the server.
+        client.send("tryCraftItem", inventory.owner)
+        return
+    end
+
+    local ingredientsToCounts = getIngredientsToCounts(inventory)
+
+    if recipeIngredientsOk(recipe, ingredientsToCounts) then
+        local targ = inventory:get(slotX, slotY)
+        if (not targ) or (targ.itemName == recipe.)
+            removeIngredients(inventory, recipe)
+
+    end
+end
 
 
 

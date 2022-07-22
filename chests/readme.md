@@ -21,9 +21,7 @@ automatic crafters, etc.
 return {
     "inventory";
 
-    -- VVV maybe a component name like "openable"?
-    TODO_THINK_OF_NAME = {
-        
+    openable = {
         distance = 100; -- default distance that player can open the chest from
         openSound = "chestOpen"; -- default open/close sounds.
         closeSound = "chestClose"
@@ -76,3 +74,5 @@ return chests.newCrafter({
 
 
 ```
+
+

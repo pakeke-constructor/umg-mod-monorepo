@@ -172,12 +172,42 @@ function Inventory:getFreeSpace()
                     -- yeah... idk what happened here lol.
                     self.inventory[i] = nil
                 end
-                assert(self:getIndex(x,y) == i)--sanity check
-                assert(not exists(self:get(x,y)))
+                assert(self:getIndex(x,y) == i, "bug with inventory mod")--sanity check
+                assert(not exists(self:get(x,y)), "bug with inventory mod")
                 return x,y
             end
         end
     end
+end
+
+
+function Inventory:getFreeSpaceFor(itemName_or_ent, requiredSlots)
+    --[[
+        this function has been tested (a small amount)
+    ]]
+    local itemName
+    if exists(itemName_or_ent) then
+        itemName = itemName_or_ent.itemName
+        requiredSlots = itemName_or_ent.stackSize or 1
+    else
+        itemName = itemName_or_ent
+        requiredSlots = requiredSlots or 1
+    end
+    local x,y
+    for i=1, self.width * self.height do
+        x, y = self:getXY(i)
+        if self:slotExists(x, y) then
+            local item = self.inventory[i]
+            if item and item.itemName == itemName then
+                local freeSlots = (item.maxStackSize or 1) - (item.stackSize or 1)
+                if freeSlots >= requiredSlots then
+                    return x,y
+                end
+            end
+        end
+    end
+
+    return self:getFreeSpace()
 end
 
 
