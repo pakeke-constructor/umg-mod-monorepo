@@ -36,12 +36,12 @@ local ent_to_direction = {
 
 
 
-anim_group:on_added(function(ent)
+anim_group:onAdded(function(ent)
     ent_to_direction[ent] = "down"
 end)
 
 
-anim_group:on_removed(function(ent)
+anim_group:onRemoved(function(ent)
     ent_to_direction[ent] = nil
 end)
 

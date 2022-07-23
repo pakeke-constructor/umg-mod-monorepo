@@ -33,7 +33,7 @@ end
 
 
 
-usable_items:on_added(function(ent)
+usable_items:onAdded(function(ent)
     if (type(ent.useItem) ~= "function") then 
         error("ent.useItem needs to be a function. Instead, it was "..type(ent.useItem))
     end

@@ -130,6 +130,7 @@ function Inventory:set(x, y, item_ent)
     end
 
     if server then
+        -- We update the stacksize with this too.
         call("setInventoryItem", self, x, y, item_ent)
     end
 end

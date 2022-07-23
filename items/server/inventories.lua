@@ -1,11 +1,13 @@
 
 
 
-local inv_ents = group("inventory")
+local inventoryGroup = group("inventory")
 -- group of all entities that have an `inventory` component.
 
 local invCtor = require("inventory")
 local valid_callbacks = require("inventory_callbacks")
+
+local updateStackSize = require("server.update_stacksize")
 
 
 local function assertValidCallbacks(callbacks)
@@ -16,7 +18,7 @@ local function assertValidCallbacks(callbacks)
 end
 
 
-inv_ents:on_added(function(ent)
+inventoryGroup:onAdded(function(ent)
     if ent.inventoryCallbacks then
         assertValidCallbacks(ent.inventoryCallbacks)
     end
@@ -30,7 +32,7 @@ end)
 
 
 
-inv_ents:on_removed(function(ent)
+inventoryGroup:onRemoved(function(ent)
     -- delete items
     local inv = ent.inventory
     for x=1, inv.width do
@@ -202,10 +204,10 @@ function(username, ent, other_ent, x, y, x2, y2, count)
             item:delete()
         else
             item.stackSize = item_stacksize
-            server.broadcast("setInventoryItemStackSize", item, item_stacksize)
+            updateStackSize(item)
         end
         targ.stackSize = targ.stackSize + count
-        server.broadcast("setInventoryItemStackSize", targ, targ.stackSize)
+        updateStackSize(item)
     else
         if count < stackSize then
             -- Damn, gotta create a new entity
@@ -216,7 +218,7 @@ function(username, ent, other_ent, x, y, x2, y2, count)
             new.stackSize = count
             item.stackSize = stackSize - count
             inv2:set(x2, y2, new)
-            server.broadcast("setInventoryItemStackSize", item, item.stackSize)
+            updateStackSize(item)
         else
             -- Else we just move it
             inv1:set(x, y, nil)

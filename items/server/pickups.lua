@@ -30,12 +30,12 @@ local itemPartition = base.Partition(INTERACTION_DISTANCE + 5, INTERACTION_DISTA
 
 
 
-items:on_added(function(e)
+items:onAdded(function(e)
     itemPartition:add(e)
 end)
 
 
-items:on_removed(function(e)
+items:onRemoved(function(e)
     itemPartition:remove(e)
 end)
 

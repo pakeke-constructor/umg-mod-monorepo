@@ -6,7 +6,7 @@ local inv_ents = group("inventory")
 -- group of all entities that have an `inventory` component.
 
 
-inv_ents:on_added(function(ent)
+inv_ents:onAdded(function(ent)
     if not ent.inventory then
         assert(ent.inventory, "Inventory component must be initialized either before entity creation, or inside a `.init` function!")
     end
@@ -61,7 +61,7 @@ local function table_remove(tabl, item)
 end
 
 
-inv_ents:on_removed(function(ent)
+inv_ents:onRemoved(function(ent)
     local inv = ent.inventory
     if holding_inv == inv then
         holding_inv, holding_x, holding_y = nil, nil, nil

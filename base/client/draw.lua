@@ -72,7 +72,7 @@ end
 
 
 
-drawGroup:on_added(function( ent )
+drawGroup:onAdded(function( ent )
     -- Callback for entity addition
     setEnt(ent)
     addEnt(ent)
@@ -80,7 +80,7 @@ end)
 
 
 
-drawGroup:on_removed(function( ent )
+drawGroup:onRemoved(function( ent )
     -- Callback for entity removal
     removeEnt(ent)
     positions[ent] = nil

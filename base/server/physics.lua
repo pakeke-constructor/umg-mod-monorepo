@@ -127,7 +127,7 @@ end
 local DEFAULT_FRICTION = constants.DEFAULT_FRICTION
 
 
-physics_ents:on_added(function(ent)
+physics_ents:onAdded(function(ent)
     if world:isLocked( ) then 
         error("World was locked! This is a bug on my behalf, sorry")  
     end
@@ -148,7 +148,7 @@ end)
 
 
 
-physics_ents:on_removed(function(ent)
+physics_ents:onRemoved(function(ent)
     local fixture = ent_to_fixture[ent]
     local body = fixture:getBody()
     fixture_to_ent[fixture] = nil

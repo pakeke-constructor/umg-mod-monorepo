@@ -42,7 +42,7 @@ local ent_to_pointDirectionY = {
     -- holding entity to point direction
 }
 
-holding_ents:on_removed(function(ent)
+holding_ents:onRemoved(function(ent)
     ent_to_pointDirectionX[ent] = nil
     ent_to_pointDirectionY[ent] = nil
 end)

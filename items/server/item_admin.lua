@@ -28,3 +28,28 @@ end)
 
 
 
+
+
+local updateStackSize = require("server.update_stacksize")
+
+
+local itemGroup = group("itemName", "stackSize", "maxStackSize")
+
+
+itemGroup:onAdded(function(item_ent)
+    if not item_ent.stackSize then
+        item_ent.stackSize = 1
+    end
+    item_ent.last_seen_stackSize = item_ent.stackSize
+end)
+
+
+on("tick", function()
+    for _, item_ent in ipairs(itemGroup) do
+        updateStackSize(item_ent)
+    end
+end)
+
+
+
+

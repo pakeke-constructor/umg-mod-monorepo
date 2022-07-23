@@ -20,14 +20,14 @@ local ent_to_username = {
 }
 
 
-control_ents:on_added(function(ent)
+control_ents:onAdded(function(ent)
     local uname = ent.controller
     username_to_ent[uname] = ent
     ent_to_username[ent] = uname
 end)
 
 
-control_ents:on_removed(function(ent)
+control_ents:onRemoved(function(ent)
     local uname = ent_to_username[ent]
     if username_to_ent[uname] == ent then
         username_to_ent[uname] = nil

@@ -19,7 +19,7 @@ local placeEntities = group("x", "y", "placementCategory")
 
 
 
-placeEntities:on_added(function(ent)
+placeEntities:onAdded(function(ent)
     local category = ent.placementCategory
     assert(category, "entity was not given a placementCategory: " .. tostring(ent))
     -- if ent.placementCategory is not constant, there will be issues.
@@ -35,7 +35,7 @@ placeEntities:on_added(function(ent)
 end)
 
 
-placeEntities:on_removed(function(ent)
+placeEntities:onRemoved(function(ent)
     local category = ent.placementCategory
     if type(category) == "table" then
         -- this entity has multiple categories.

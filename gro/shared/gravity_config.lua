@@ -12,11 +12,11 @@ local tilePartition = base.Partition(PARTITION_SIZE, PARTITION_SIZE)
 local tileGroup = group("groundTile", "x", "y")
 
 
-tileGroup:on_added(function(ent)
+tileGroup:onAdded(function(ent)
     tilePartition:add(ent)
 end)
 
-tileGroup:on_removed(function(ent)
+tileGroup:onRemoved(function(ent)
     tilePartition:remove(ent)
 end)
 

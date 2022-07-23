@@ -20,7 +20,7 @@ local owners = group("owns")
 local Set = require("other.set")
 
 
-owners:on_added(function(ent)
+owners:onAdded(function(ent)
     if not ent.owns then
         ent.owns = Set()
     end
@@ -29,7 +29,7 @@ end)
 
 
 
-owners:on_removed(function(ent)
+owners:onRemoved(function(ent)
     -- `ent` has been deleted...
     -- Now, we must delete all entities that `ent` owns.
     local set = ent.owns

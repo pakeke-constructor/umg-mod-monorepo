@@ -124,11 +124,11 @@ local drawGroup = group("x", "y", "image")
 -- It doesn't matter if the components are shared or regular, as long as the entity has all of them.
 
 
-drawGroup:on_added(function(ent)
+drawGroup:onAdded(function(ent)
     ... -- callback for when `ent` is added to drawGroup
 end)
 
-drawGroup:on_removed(function(ent)
+drawGroup:onRemoved(function(ent)
     ... -- callback for  when `ent` is removed from drawGroup
     -- (This will only happen if `ent` is deleted.)
 end)

@@ -19,7 +19,7 @@ function Crafter:addRecipe(ingredients, result)
         
         result:
         { 
-            result = "item_C";  <--- should be entity name
+            entity = "item_C";  <--- should be entity name
             count = 16
         }
     ]]
@@ -129,6 +129,8 @@ local function removeIngredients(inventory, recipe)
                     if item.stackSize == 0 then
                         item:delete()
                         inventory:set(x,y,nil)
+                    else
+                        inventory:set(x,y,item)
                     end
                 end
             end
@@ -137,12 +139,33 @@ local function removeIngredients(inventory, recipe)
 end
 
 
+
+
+local function initializeItem(inventory, recipe, slotX, slotY)
+    local etype = entities[recipe.result.result]
+    local item_entity = etype()
+    local owner = inventory.owner
+    if owner then
+        if owner.x and owner.y then
+            item_entity.x = owner.x
+            item_entity.y = owner.y
+        end
+    end
+end
+
+
+function Crafter:deny()
+    -- todo: put something here
+    print("recipe denied.")
+end
+
+
 function Crafter:craft(inventory, recipe, slotX, slotY)
     assert(inventory.drawHoldWidget, "Crafter:getResult(inv) takes an inventory as first argument!")
     assert(slotX and slotY, "ur not using this properly")    
 
     if client then -- crafting should be handled by the server.
-        client.send("tryCraftItem", inventory.owner)
+        client.send("tryCraftItem", inventory.owner, recipe, slotX, slotY)
         return
     end
 
@@ -150,9 +173,24 @@ function Crafter:craft(inventory, recipe, slotX, slotY)
 
     if recipeIngredientsOk(recipe, ingredientsToCounts) then
         local targ = inventory:get(slotX, slotY)
-        if (not targ) or (targ.itemName == recipe.)
-            removeIngredients(inventory, recipe)
-
+        local targItemName = targ.itemName
+        local slotsLeft = (targ.maxStackSize or 1) - (targ.stackSize or 1)
+        local etype = entities[recipe.result.result]
+        if etype then
+            if (not targ) then 
+                removeIngredients(inventory, recipe)
+                initializeItem(inventory, recipe, slotX, slotY)
+            elseif (targItemName == etype.itemName and slotsLeft >= recipe.result.count) then
+                removeIngredients(inventory, recipe)
+                targ.stackSize = targ.stackSize + (recipe.result.count or 1)
+            else
+                Crafter:deny()
+            end
+        else
+            error("Unknown entity type for recipe: " .. tostring(recipe.result.result))
+        end
+    else
+        Crafter:deny()
     end
 end
 

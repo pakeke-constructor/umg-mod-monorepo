@@ -14,7 +14,7 @@ local FRICTION_CONSTANT = constants.FRICTION_CONSTANT
 
 
 
-moveEnts:on_added(function(ent)
+moveEnts:onAdded(function(ent)
     if not (ent.x and ent.y) then
         error("Entity wasn't provided x,y values: " .. tostring(ent:type()))
     end 
@@ -159,6 +159,21 @@ end
 
 
 local positionGroup = group("x", "y")
+
+
+positionGroup:onAdded(function(ent)
+    if not ent.x then
+        ent.x = 0  -- this is bad, but what else can we do?
+    end
+    if not ent.y then
+        ent.y = 0 -- this is bad too
+    end
+    if (not ent.z) and ent:isRegular("z") then
+        ent.z = 0
+    end
+end)
+
+
 
 on("tick", function()
     for _, ent in ipairs(moveEnts) do
