@@ -1,12 +1,2 @@
 
 
-local openGroup = group("openable")
-
-
-
-
-
-
-
-
-
