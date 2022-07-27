@@ -309,11 +309,7 @@ function Inventory:getBucket(mouse_x, mouse_y)
         local ix = floor(norm_x / PACKED_SQUARE_SIZE) + 1
         local iy = floor(norm_y / PACKED_SQUARE_SIZE) + 1
         if ix >= 1 and ix <= self.width and iy >= 1 and iy <= self.height then
-            if self:slotExists(ix, iy) then
-                return ix, iy
-            else
-                return nil -- No slot, therefore not within bounds
-            end
+            return ix, iy
         end
     end
 end

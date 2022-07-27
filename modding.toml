@@ -92,3 +92,9 @@ any = true
 ## light mod:
 [light]
 any = true
+
+## chests mod:
+[chests]
+any = true
+
+

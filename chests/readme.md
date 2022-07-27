@@ -38,8 +38,9 @@ Crafting can be done through a "crafter" object.
 
 local my_crafter = Crafter()
 
-my_crafter:addRecipe(ingredients, result)
+my_crafter:addRecipe(ingredients, result) -- adds a recipe to the crafter.
 
+-- example:
 my_crafter:addRecipe(
     {
         -- List of ingredients for a crafting recipe:
@@ -57,11 +58,10 @@ my_crafter:addRecipe(
 
 -- Creates a crafting table entity:
 return chests.newCrafter({
-    "inventory";
     crafter = crafter; -- the crafting schematic to be used.
 
-    craftItemLocation = {10, 10}; -- 
-    craftButtonLocation = {8, 9};
+    craftItemLocation = {5, 1}; -- where the items get put after crafting
+    craftButtonLocation = {5, 5}; -- where the craft button is
     
     openable = {
         distance = 100; -- default distance that player can open the chest from

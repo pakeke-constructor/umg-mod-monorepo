@@ -20,7 +20,10 @@ return {
     onAdd = true; 
     onRemove = true;
     onOpen = true;
-    draw = true
+    draw = true;
+
+    buttons = true; -- a list of buttons for this inventory interface.
+    -- This is hard to describe; look at an example and copy-paste probably
 }
 
 

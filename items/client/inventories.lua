@@ -171,11 +171,58 @@ end
 
 
 
+
+local function parseInitialButtonFormat(ent)
+    --[[
+        maps ent.inventoryButtons into a more easy-to-work with
+        format, and puts it in the inventorycallbacks._buttonMapping table
+    ]]
+    local buttonMapping = {}
+    local buttons = ent.inventoryButtons
+    for coord, onClick in pairs(buttons) do
+        local x,y = coord[1], coord[2]
+        buttonMapping[x] = buttonMapping[x] or {}
+        buttonMapping[x][y] = onClick
+    end
+    ent.inventoryButtons.buttonMapping = buttonMapping
+end
+
+
+
+local function tryPressButton(ent, inv, x, y)
+    --[[
+        tries to press a button at (x,y)
+    ]]
+    assert(ent.inventoryButtons, "?")
+    local buttonMapping = ent.inventoryButtons.buttonMapping
+    if not buttonMapping then
+        -- then we need to create it:
+        parseInitialButtonFormat(ent)
+        buttonMapping = ent.inventoryButtons.buttonMapping
+    end
+    if buttonMapping[x] and buttonMapping[x][y] then
+        buttonMapping[x][y](inv)
+        return true
+    end
+    return false
+end
+
+
 local function executeAlphaInteraction(inv, x, y)
     --[[
         "alpha" interactions are for stuff like placing full stacks
         of items, etc.
     ]]
+    local ent = inv.owner
+    if ent.inventoryButtons then
+        local buttonPressed = tryPressButton(ent, inv, x, y)
+        if buttonPressed then
+            -- button pressed means we can't do anything else with it.
+            resetHoldingInv()            
+            return
+        end
+    end
+
     if holding_inv and exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
         executeFullPut(inv, x, y)
     else
@@ -239,22 +286,24 @@ on("mousepressed", function(mx, my, button)
             end
             local bx, by = inv:getBucket(mx,my)
             if bx then
-                if button == ALPHA_BUTTON then
-                   executeAlphaInteraction(inv, bx, by)
-                elseif button == BETA_BUTTON then
-                    executeBetaInteraction(inv, bx, by)
+                if inv:slotExists(bx,by) then
+                    if button == ALPHA_BUTTON then
+                        executeAlphaInteraction(inv, bx, by)
+                    elseif button == BETA_BUTTON then
+                        executeBetaInteraction(inv, bx, by)
+                    end
+                elseif button == ALPHA_BUTTON then
+                    dragging_inv = inv
+                    resetHoldingInv()
                 end
-            elseif button == ALPHA_BUTTON then
-                dragging_inv = inv
-                resetHoldingInv()
+                break -- done; only 1 interaction should be done per click.
             end
-            break
         end
     end
 
     if (not loop_used) and holding_inv then
         if button == ALPHA_BUTTON then    
-            -- Then the player wants to drop an item
+            -- Then the player wants to drop an item on the floor:
             if exists(holding_inv:get(holding_x, holding_y)) then
                 client.send("tryDropInventoryItem", holding_inv.owner, holding_x, holding_y)
             end
@@ -273,6 +322,7 @@ on("mousemoved", function(mx,my, dx, dy)
         dragging_inv.draw_y = dragging_inv.draw_y + dy
     end
 end)
+
 
 on("mousereleased", function(mx,my, button)
     dragging_inv = nil

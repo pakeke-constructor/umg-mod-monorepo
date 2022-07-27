@@ -78,9 +78,8 @@ on("createWorld", function()
         make_grass(math.random(-MAG, MAG), math.random(-MAG, MAG))
     end
 
-    do
-        local c = entities.crate()
-    end
+    entities.crate()
+    entities.crate_button(100, 100)
 end)
 
 

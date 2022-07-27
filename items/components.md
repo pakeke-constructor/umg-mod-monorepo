@@ -128,6 +128,7 @@ chest.inventory = {
 Shops and stuff can be done through `inventoryCallbacks` component.
 (This is a shared component, because it contains functions.)
 
+Also, the `inventoryButtons` component can be used to add buttons to inventory
 
 ```lua
 
@@ -142,22 +143,6 @@ function invCbs:draw()
     ... -- called when the inventory interface is drawn.
     -- `self` is the inventory object.
 end
-
-
-function invCbs.buttons = {
-    -- This is a button at position (1,2) in the inventory
-    [{1, 2}] = {
-        onClick = function(self)
-            -- `self` is the inventory object
-            -- This is only called on the client-side.
-        end;
-        image = "button_image1" -- image of the button
-    };
-
-    [{3, 4}] = {
-        ... -- another button at (3,4)
-    }
-}
 
 
 function invCbs:canRemove(item, x, y)
@@ -204,10 +189,30 @@ function invCbs:onOpen(ent)
     ...
 end
 
+```
+
+
+#### Inventory buttons:
+```lua
+
+
+ent.inventoryButtons = {
+    -- This is a button at position (1,2) in the inventory
+    [{1, 2}] = {
+        onClick = function(self)
+            -- `self` is the inventory object
+            -- This is only called on the client-side.
+        end;
+        image = "button_image1" -- image of the button
+    };
+
+    [{3, 4}] = {
+        ... -- another button at position (3,4)
+    }
+}
 
 
 ```
-
 
 
 ### Holding entities:
