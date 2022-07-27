@@ -1,6 +1,6 @@
 
--- crafting table object:
 
+-- crafting table object:
 
 local Crafter = base.Class("chest_mod:Crafter")
 
@@ -45,6 +45,8 @@ function Crafter:addRecipe(ingredients, result)
     end
 
     self.recipes:add(recipe)
+    recipe.index = #self.recipes
+    assert(self.recipes[recipe.index] == recipe, "incorrect recipe index assigned")
 end
 
 
@@ -160,12 +162,36 @@ function Crafter:deny()
 end
 
 
-function Crafter:craft(inventory, recipe, slotX, slotY)
+function Crafter:tryCraft(inventory, slotX, slotY)
+    local recipe = self:getResult(inventory)
+    if recipe then
+        self:executeCraft(inventory, recipe, slotX, slotY)
+    else
+        self:deny()
+    end
+end
+
+
+
+function Crafter:getRecipeIndex(recipe)
+    return recipe.index
+end
+
+
+function Crafter:getRecipeFromIndex(indx)
+    return self.recipes[indx]
+end
+
+
+
+
+function Crafter:executeCraft(inventory, recipe, slotX, slotY)
     assert(inventory.drawHoldWidget, "Crafter:getResult(inv) takes an inventory as first argument!")
     assert(slotX and slotY, "ur not using this properly")    
 
     if client then -- crafting should be handled by the server.
-        client.send("tryCraftItem", inventory.owner, recipe, slotX, slotY)
+        local recipeIndex = self:getRecipeIndex(recipe)
+        client.send("tryCraftItem", inventory.owner, recipeIndex, slotX, slotY)
         return
     end
 
@@ -176,6 +202,7 @@ function Crafter:craft(inventory, recipe, slotX, slotY)
         local targItemName = targ.itemName
         local slotsLeft = (targ.maxStackSize or 1) - (targ.stackSize or 1)
         local etype = entities[recipe.result.result]
+        
         if etype then
             if (not targ) then 
                 removeIngredients(inventory, recipe)

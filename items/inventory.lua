@@ -16,7 +16,6 @@ local DEFAULT_INVENTORY_COLOUR = {0.8,0.8,0.8}
 
 
 
-
 local function checkCallback(ent, callbackName, x, y, item)
     --[[
         returns true/false according to inventoryCallbacks component.
@@ -212,6 +211,27 @@ function Inventory:getFreeSpaceFor(itemName_or_ent, requiredSlots)
 end
 
 
+
+
+function Inventory:canOpen(ent)
+    assert(exists(ent), "Inventory:canOpen(ent) takes an entity as first argument. (Where the entity is the one opening the inventory)")
+    local owner = self.owner
+    if owner.controllable or owner.controller then
+        if not (owner.publicInventory or (owner == ent)) then
+            return false
+        end
+    end
+    if ent.inventoryCallbacks and ent.inventoryCallbacks.canOpen then
+        local func = ent.inventoryCallbacks.canOpen
+        if not func(self, ent) then
+            return false
+        end
+    end
+    return true
+end
+
+
+
 function Inventory:open()
     -- Should only be called on client-side
     call("openInventory", self, self.owner)
@@ -240,6 +260,8 @@ function Inventory:swap(other_inv, self_x, self_y, other_x, other_y)
     other_inv:set(other_x, other_y, item_self)
     self:set(self_x, self_y, item_other)
 end
+
+
 
 
 
@@ -326,6 +348,8 @@ function Inventory:drawItem(item_ent, x, y)
     end
     graphics.pop()
 end
+
+
 
 
 function Inventory:drawUI()

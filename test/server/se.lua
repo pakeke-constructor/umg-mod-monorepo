@@ -80,9 +80,6 @@ on("createWorld", function()
 
     do
         local c = entities.crate()
-        c.x = 0
-        c.y = 0
-        c.inventory = {width=5;height=5}
     end
 end)
 

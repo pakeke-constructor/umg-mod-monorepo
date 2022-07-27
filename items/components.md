@@ -100,6 +100,7 @@ return {
     image = "chest_image"
 }
 ```
+
 ```lua
 
 local chest = entities.chest()
@@ -117,6 +118,93 @@ chest.inventory = {
     private = true/false -- This means that only the owner can open this
     -- inventory
 }
+-- if this isn't done, the client will crash.
+
+```
+
+
+
+### shops and stuff
+Shops and stuff can be done through `inventoryCallbacks` component.
+(This is a shared component, because it contains functions.)
+
+
+```lua
+
+local invCbs = ent.inventoryCallbacks
+
+
+-- Callbacks:
+
+
+-- Used to draw overlays and stuff, etc.
+function invCbs:draw()
+    ... -- called when the inventory interface is drawn.
+    -- `self` is the inventory object.
+end
+
+
+function invCbs.buttons = {
+    -- This is a button at position (1,2) in the inventory
+    [{1, 2}] = {
+        onClick = function(self)
+            -- `self` is the inventory object
+            -- This is only called on the client-side.
+        end;
+        image = "button_image1" -- image of the button
+    };
+
+    [{3, 4}] = {
+        ... -- another button at (3,4)
+    }
+}
+
+
+function invCbs:canRemove(item, x, y)
+    -- `self` is the inventory object
+    return true/false
+end
+
+function invCbs:canAdd(item, x, y)
+    -- `self` is the inventory object
+    return true/false
+end
+
+function invCbs:canOpen(ent)
+    -- `self` is the inventory object
+    -- `ent` is the player that is trying to open the inventory
+    return true/false
+end
+
+
+function invCbs:slotExists(x, y)
+    -- `self` is the inventory object
+    -- returns `true` if the slot at x,y exists, false if it doesn't exist.
+    -- This is useful for implementing special interfaces, such as crafting.
+    
+    -- If an (x,y) slot doesn't exist, it isn't drawn, and is not able to contain items.
+    -- (If this callback isn't specified, then it's assumed that all slots exist.)
+end
+
+
+
+function invCbs:onAdd(item, x, y)
+    -- `self` is the inventory object
+    ...
+end
+
+function invCbs:onRemove(item_ent, x, y)
+    -- `self` is the inventory object
+    ...
+end
+
+function invCbs:onOpen(ent)
+    -- `self` is the inventory object
+    -- `ent` is the player that is trying to open the inventory
+    ...
+end
+
+
 
 ```
 
@@ -125,5 +213,5 @@ chest.inventory = {
 ### Holding entities:
 If an entity should change it's move animation to face in the direction of
 the tool, then simply add the `faceDirection` component to the entity.
-(Don't make it shared!)
+(This should be a regular component, don't make it shared!)
 

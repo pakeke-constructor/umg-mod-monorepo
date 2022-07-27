@@ -71,7 +71,6 @@ on("keypressed", function(k)
 end)
 
 
-local all = group()
 
 on("mousepressed", function(x, y, button, istouch, presses)
     if button == 1 then
@@ -84,19 +83,6 @@ on("mousepressed", function(x, y, button, istouch, presses)
                     item:use(mx,my)
                 else
                     item:use(mx-p.x,my-p.y)
-                end
-            end
-        end
-    elseif button == 2 then -- IDC this is slow. its just for testing.
-        for _,ent in ipairs(all) do
-            if ent.inventory  then
-                local xxx,yyy = base.camera:getMousePosition()
-                if math.distance(xxx-ent.x,yyy-ent.y) < 30 then
-                    if not ent.inventory.isOpen then
-                        ent.inventory:open()
-                    else
-                        ent.inventory:close()
-                    end
                 end
             end
         end
