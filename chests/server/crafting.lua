@@ -1,7 +1,10 @@
 
 
 
-server.on("tryCraftItem", function(ent, recipeIndex, slotX, slotY)
+server.on("tryCraftItem", function(sender, ent, recipeIndex, slotX, slotY)
+    --[[
+        TODO: Assert that `sender` has access to `ent`s inventory.
+    ]]
     if not exists(ent) then return end
     if not (ent.crafter) then return end
     if not (ent.inventory) then return end

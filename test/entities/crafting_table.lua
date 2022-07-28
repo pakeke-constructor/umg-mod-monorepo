@@ -28,6 +28,11 @@ my_crafter:addRecipe(
 
 
 return chests.newCraftingTable({
-    crafter = my_crafter
+    "x","y",
+    image = "crate",
+    openable = {distance = 100};
+
+    crafter = my_crafter;
+    init = base.entityHelper.initPosition
 })
 

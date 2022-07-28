@@ -80,6 +80,7 @@ on("createWorld", function()
 
     entities.crate()
     entities.crate_button(100, 100)
+    entities.crafting_table(-100, 100)
 end)
 
 

@@ -6,9 +6,64 @@ local inv_ents = group("inventory")
 -- group of all entities that have an `inventory` component.
 
 
+
+
+local function checkButtonFormat(etype, inventoryButtons)
+    for coord, button in pairs(inventoryButtons) do
+        if type(coord) ~= "table" then
+            error("bad inventoryButtons table format for entity: " .. etype)
+        end
+        local x,y = coord[1], coord[2]
+        if (type(x) ~= "number" or type(y) ~= "number") then
+            error("bad inventoryButtons table format for entity: " .. etype)
+        end
+        if type(button) ~= "table" then
+            error("inventoryButtons values must be tables with a .onClick function. Not true for entity type: " .. etype)
+        end
+        if type(button.onClick) ~= "function" then
+            error("inventoryButtons values must be tables with a .onClick function. Not true for entity type: " .. etype)
+        end
+        if button.image and (not assets.images[button.image]) then
+            error(("invalid button image %s for entity %s"):format(button.image, etype))
+        end
+    end
+end
+
+
+
+
+local function parseInitialButtonFormat(ent)
+    --[[
+        maps ent.inventoryButtons into a more easy-to-work with
+        format, and puts it in the inventorycallbacks._buttonMapping table
+    ]]
+    if ent.inventoryButtons.buttonMapping then
+        return  -- already done.
+        -- this will usually mean that the inventoryButtons component is shared;
+        -- which is fine.
+    end
+    local buttonMapping = {}
+    local buttons = ent.inventoryButtons
+    local etype = ent:type()
+    checkButtonFormat(etype, ent.inventoryButtons)
+    for coord, button in pairs(buttons) do
+        local x,y = coord[1], coord[2]
+        buttonMapping[x] = buttonMapping[x] or {}
+        buttonMapping[x][y] = button
+    end
+    ent.inventoryButtons.buttonMapping = buttonMapping
+end
+
+
+
+
 inv_ents:onAdded(function(ent)
     if not ent.inventory then
         assert(ent.inventory, "Inventory component must be initialized either before entity creation, or inside a `.init` function!")
+    end
+
+    if ent.inventoryButtons then
+        parseInitialButtonFormat(ent)
     end
 
     if not getmetatable(ent.inventory) then
@@ -27,6 +82,7 @@ inv_ents:onAdded(function(ent)
         end
     end
 end)
+
 
 
 local open_inventories = {}
@@ -122,6 +178,7 @@ local function executeFullPut(inv, x, y)
     end
 
     if (inv==holding_inv) and (x==holding_x) and (y==holding_y) then
+        resetHoldingInv()
         return -- moving an item to it's own position...? nope!
     end
 
@@ -172,23 +229,6 @@ end
 
 
 
-local function parseInitialButtonFormat(ent)
-    --[[
-        maps ent.inventoryButtons into a more easy-to-work with
-        format, and puts it in the inventorycallbacks._buttonMapping table
-    ]]
-    local buttonMapping = {}
-    local buttons = ent.inventoryButtons
-    for coord, onClick in pairs(buttons) do
-        local x,y = coord[1], coord[2]
-        buttonMapping[x] = buttonMapping[x] or {}
-        buttonMapping[x][y] = onClick
-    end
-    ent.inventoryButtons.buttonMapping = buttonMapping
-end
-
-
-
 local function tryPressButton(ent, inv, x, y)
     --[[
         tries to press a button at (x,y)
@@ -201,7 +241,7 @@ local function tryPressButton(ent, inv, x, y)
         buttonMapping = ent.inventoryButtons.buttonMapping
     end
     if buttonMapping[x] and buttonMapping[x][y] then
-        buttonMapping[x][y](inv)
+        buttonMapping[x][y].onClick(inv)
         return true
     end
     return false
@@ -213,16 +253,6 @@ local function executeAlphaInteraction(inv, x, y)
         "alpha" interactions are for stuff like placing full stacks
         of items, etc.
     ]]
-    local ent = inv.owner
-    if ent.inventoryButtons then
-        local buttonPressed = tryPressButton(ent, inv, x, y)
-        if buttonPressed then
-            -- button pressed means we can't do anything else with it.
-            resetHoldingInv()            
-            return
-        end
-    end
-
     if holding_inv and exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
         executeFullPut(inv, x, y)
     else
@@ -293,10 +323,23 @@ on("mousepressed", function(mx, my, button)
                         executeBetaInteraction(inv, bx, by)
                     end
                 elseif button == ALPHA_BUTTON then
+                    local ent = inv.owner
+                    if ent.inventoryButtons then
+                        local buttonPressed = tryPressButton(ent, inv, bx, by)
+                        if buttonPressed then
+                            -- button pressed means we can't do anything else with it.
+                            resetHoldingInv()            
+                            return
+                        end
+                    end
                     dragging_inv = inv
                     resetHoldingInv()
                 end
                 break -- done; only 1 interaction should be done per click.
+            elseif button == ALPHA_BUTTON then
+                dragging_inv = inv
+                resetHoldingInv()
+                break
             end
         end
     end
@@ -327,6 +370,7 @@ end)
 on("mousereleased", function(mx,my, button)
     dragging_inv = nil
 end)
+
 
 
 on("mainDrawUI", function()

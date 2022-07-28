@@ -122,6 +122,7 @@ function Inventory:set(x, y, item_ent)
     local i = self:getIndex(x,y)
     if item_ent then
         assertItem(item_ent)
+        item_ent.hidden = true
         self.inventory[i] = item_ent
         item_ent.ownerInventory = self
     else
@@ -320,6 +321,7 @@ local WHITE = {1,1,1}
 function Inventory:drawItem(item_ent, x, y)
     graphics.push()
     graphics.setColor(item_ent.color or WHITE)
+
     local offset = (PACKED_SQUARE_SIZE - ITEM_SIZE) / 2
     local quad = assets.images[item_ent.image]
     local _,_, w,h = quad:getViewport()
@@ -329,6 +331,7 @@ function Inventory:drawItem(item_ent, x, y)
     local X = PACKED_SQUARE_SIZE * (x-1) + offset + self.draw_x
     local Y = PACKED_SQUARE_SIZE * (y-1) + offset + self.draw_y
     graphics.atlas:draw(quad, X, Y)
+
     if item_ent.stackSize > 1 then
         graphics.push()
         graphics.translate(X-2,Y-2)
@@ -345,6 +348,38 @@ function Inventory:drawItem(item_ent, x, y)
     graphics.pop()
 end
 
+
+
+
+local function drawQuad(self, x, y, quadName)
+    local offset = (PACKED_SQUARE_SIZE - ITEM_SIZE) / 2
+    local quad = assets.images[quadName]
+    if not quad then error("unknown image: " .. tostring(quadName)) end
+    local _,_, w,h = quad:getViewport()
+    if (w ~= 16 or h ~= 16) then
+        error("Image dimensions for items must be 16 by 16! Not the case for this quad:\n" .. tostring(quadName))
+    end
+    local X = PACKED_SQUARE_SIZE * (x-1) + offset + self.draw_x
+    local Y = PACKED_SQUARE_SIZE * (y-1) + offset + self.draw_y
+    graphics.atlas:draw(quad, X, Y)
+end
+
+
+local function drawButtons(self)
+    local ent = self.owner
+    if ent.inventoryButtons then
+        local mapping = ent.inventoryButtons.buttonMapping
+        for x=1, self.width do
+            for y=1, self.height do
+                if mapping[x] and mapping[x][y] then
+                    local button = mapping[x][y]
+                    local quadName = button.image or "default_button"
+                    drawQuad(self, x, y, quadName)
+                end
+            end
+        end
+    end
+end
 
 
 
@@ -390,6 +425,11 @@ function Inventory:drawUI()
     if callbacks and callbacks.draw then
         callbacks.draw(self)
     end
+
+    if self.owner.inventoryButtons then
+        drawButtons(self)
+    end
+    
     graphics.pop()
 end
 

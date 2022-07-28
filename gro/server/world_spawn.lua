@@ -20,6 +20,7 @@ end)
 on("createWorld", function()
     -- create world here.
     -- For future, we will want the initial spawn platform to be indestructable.
+    print("createWorld")
     for x=-5, 5 do
         for y=-5, 5 do
             local xx = x * constants.TILE_SIZE

@@ -5,10 +5,22 @@ local skyColor = {0.5, 0.9, 1}
 
 -- TODO: Do we even want lighting for this mod?
 -- We probably don't need it TBH
-light.setBaseLighting(1,1,1)
 
 
 on("preDraw", function()
     graphics.clear(skyColor)
 end)
+
+
+
+on("keypressed", function(key)
+    if key == "space" then
+        local e = base.getPlayer()
+        if base.gravity.isOnGround(e) then
+            e.vz = 400
+        end
+    end
+end)
+
+
 

@@ -64,7 +64,7 @@ local function recipeIngredientsOk(recipe, ingredientsToCounts)
     for _, ing in ipairs(recipe.ingredients) do
         local itemName = ing.ingredient
         local count = ing.count
-        if not (ingredientsToCounts[itemName] and count >= ingredientsToCounts[itemName]) then
+        if not (ingredientsToCounts[itemName] and count <= ingredientsToCounts[itemName]) then
             return false
         end
     end
@@ -90,9 +90,8 @@ local function getIngredientsToCounts(inventory)
             end
         end
     end
-    return {}
+    return ingredientsToCounts
 end
-
 
 
 function Crafter:getResult(inventory)
@@ -120,19 +119,21 @@ end
 
 local function removeIngredients(inventory, recipe)
     assert(server, "This shouldn't be called on clientside.")
+    local ingredientsRemoved = {}
 
     for x=1, inventory.width do
         for y=1, inventory.height do
             local item = inventory:get(x,y)
             if item then
-                if recipe.ingredientsToCounts[item.itemName] then
-                    assert(recipe.ingredientsToCounts[item.itemName] >= item.stackSize, "Something is wrong... bug with crafter mod")
-                    item.stackSize = item.stackSize - recipe.ingredientsToCounts[item.itemName]
+                local iname = item.itemName
+                if recipe.ingredientCounts[iname] then
+                    local tot_rem = ingredientsRemoved[iname] or 0
+                    local amount = math.min(item.stackSize, recipe.ingredientCounts[iname] - tot_rem)
+                    ingredientsRemoved[iname] = tot_rem + amount
+                    item.stackSize = item.stackSize - amount
                     if item.stackSize == 0 then
                         item:delete()
                         inventory:set(x,y,nil)
-                    else
-                        inventory:set(x,y,item)
                     end
                 end
             end
@@ -153,6 +154,7 @@ local function initializeItem(inventory, recipe, slotX, slotY)
             item_entity.y = owner.y
         end
     end
+    inventory:set(slotX, slotY, item_entity)
 end
 
 
@@ -199,9 +201,12 @@ function Crafter:executeCraft(inventory, recipe, slotX, slotY)
 
     if recipeIngredientsOk(recipe, ingredientsToCounts) then
         local targ = inventory:get(slotX, slotY)
-        local targItemName = targ.itemName
-        local slotsLeft = (targ.maxStackSize or 1) - (targ.stackSize or 1)
-        local etype = entities[recipe.result.result]
+        local targItemName, slotsLeft, etype
+        if targ then 
+            targItemName = targ.itemName
+            slotsLeft = (targ.maxStackSize or 1) - (targ.stackSize or 1)
+        end
+        etype = entities[recipe.result.result]
         
         if etype then
             if (not targ) then 

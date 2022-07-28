@@ -5,27 +5,6 @@ on("preDraw", function()
 end)
 
 
-local control_ents = group("controllable", "inventory")
-
-local isOpen = false
-
-on("keypressed",function(k)
-    if k == "e" then
-        isOpen = not isOpen
-        for i,ent in ipairs(control_ents) do
-            if username == ent.controller then
-                local inv = ent.inventory
-                if isOpen then
-                    inv:open()
-                else
-                    inv:close()
-                end
-            end
-        end
-    end
-end)
-
-
 
 
 local psys = base.particles.newParticleSystem({
@@ -51,16 +30,6 @@ on("keypressed", function(k)
     end
     if k =="r" then
         client.send("spawn", base.getPlayer())
-    end
-    if k == "f" then
-        client.send("CONGLOMERATE", base.getPlayer())
-        local ent = base.getPlayer()
-        for _,e in ipairs(control_ents)do
-            if e.controller == username then
-                e.x = ent.x
-                e.y = ent.y
-            end
-        end
     end
     if k == "space" then
         local e = base.getPlayer()

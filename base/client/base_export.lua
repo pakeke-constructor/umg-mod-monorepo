@@ -42,7 +42,9 @@ local base = {
     playSound = sound.playSound;
     playMusic = sound.playMusic;
 
-    entityHelper = entityHelper
+    entityHelper = entityHelper;
+
+    inspect = require("_libs.inspect")
 }
 
 

@@ -2,7 +2,7 @@
 
 
 local function assertNoDuplicate(buttons, x, y)
-    for loc, button in pairs(buttons) do
+    for loc, _ in pairs(buttons) do
         local bx = loc[1]
         local by = loc[2]
         if bx == x and by == y then
@@ -19,16 +19,14 @@ local function craftOnClick(inv)
     if not exists(ent) then
         return -- ???? I guess we can't craft...?
     end
-    local recipe = ent.crafter:getResult(inv)
-    if recipe then
-        local itemX = ent.craftItemLocation[1]
-        local itemY = ent.craftItemLocation[2]    
-        ent.crafter:tryCraft(inv, itemX, itemY)
-    end
+
+    local itemX = ent.craftItemLocation[1]
+    local itemY = ent.craftItemLocation[2]    
+    ent.crafter:tryCraft(inv, itemX, itemY)
 end
 
 
-local function defaultSlotExists(x,y)
+local function defaultSlotExists(_, x,y)
     if x <= 3 or (x==5 and y==2) then
         return true
     else
@@ -68,9 +66,7 @@ local function newCraftingTable(ent_template)
     local invButtons = ent_template.inventoryButtons or {}
     assertNoDuplicate(invButtons, itemX, itemY)
     assertNoDuplicate(invButtons, buttonX, buttonY)
-    table.insert(invButtons, {
-        [ent_template.craftButtonLocation] = defaultCraftButton
-    })
+    invButtons[ent_template.craftButtonLocation] = defaultCraftButton
 
     ent_template.inventoryButtons = invButtons
     ent_template.inventoryCallbacks = invCbs

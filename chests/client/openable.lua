@@ -67,7 +67,7 @@ local function tryOpenInv(player, inv_ent)
         open(inv)
     else
         local sound = opn.closeSound or DEFAULT_CLOSE_SOUND
-        base.playSound(sound, 1, 0.7, nil, 0, 0.3)
+        base.playSound(sound, 1, 0.7, nil, 0, 0.15)
     end
 end
 
@@ -82,7 +82,7 @@ on("update", function(dt)
             if player.inventory then
                 player.inventory:close()
             end
-            base.playSound(sound, 1, 0.7, nil, 0, 0.2)    
+            base.playSound(sound, 1, 0.7, nil, 0, 0.15)    
             openInv = nil
         end
     end
@@ -106,7 +106,7 @@ end)
 
 
 
-local INVENTORY_TOGGLE_BUTTON = "i"
+local INVENTORY_TOGGLE_BUTTON = "f"
 
 on("keypressed", function(key, scancode)
     if scancode == INVENTORY_TOGGLE_BUTTON then

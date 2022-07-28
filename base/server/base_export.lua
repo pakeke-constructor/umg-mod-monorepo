@@ -11,7 +11,9 @@ local base = {
     
     getPlayer = require("other.get_player");
 
-    entityHelper = entityHelper
+    entityHelper = entityHelper;
+
+    inspect = require("_libs.inspect")
 }
 
 

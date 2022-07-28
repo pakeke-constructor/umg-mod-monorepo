@@ -23,13 +23,17 @@ end)
 
 
 
+base.gravity.setGravity(1000)
 
 base.gravity.setGroundTest(function(ent)
     --  TODO: Spatial partition iteration is very slow, fix it,
     -- use lua iterators properly instead of creating tables
+    if ent.z > 0 then
+        return false
+    end
     for gtile in tilePartition:iter(ent.x, ent.y) do
         local dist = math.distance(gtile.x - ent.x, gtile.y - ent.y)
-        if dist <= TILE_SIZE and ent.z > -10 then
+        if dist <= TILE_SIZE and ent.z > -50 then
             return true
         end
     end
