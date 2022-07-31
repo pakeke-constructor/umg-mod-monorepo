@@ -8,7 +8,7 @@ return {
     DEFAULT_ZOOM = 3;
     SCREEN_LEIGHWAY = 400; -- used by graphics.isOnScreen
 
-    DEFAULT_UI_SCALE = 3;
+    DEFAULT_UI_SCALE = 2.5;
 
     
     SYNC_LEIGHWAY = 0.5; -- Can be 0.5 position of a difference before 

@@ -38,7 +38,15 @@ return {
     };
 
     speed = PLAYER_SPEED;
-    agility = PLAYER_SPEED * 20
+    agility = PLAYER_SPEED * 20;
+
+    init = function(e, username)
+        e.x = 0
+        e.y = 0
+        e.z = 0
+        e.controller = username
+        e.inventory = {width = 8, height = 8}
+    end;
 }
 
 

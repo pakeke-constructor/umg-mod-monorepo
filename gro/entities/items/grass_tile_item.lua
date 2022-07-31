@@ -10,7 +10,7 @@ return placement.newPlaceable({
 
     maxStackSize = 20;
     image="grass_tile_item";
-    itemName = "grass_tile_item";
+    itemName = "grass_tile";
     itemHoldImage = "grass_tile_item";
     
     color = constants.GRASS_COLOR;

@@ -18,7 +18,6 @@ local placeEntities = group("x", "y", "placementCategory")
 
 
 
-
 placeEntities:onAdded(function(ent)
     local category = ent.placementCategory
     assert(category, "entity was not given a placementCategory: " .. tostring(ent))

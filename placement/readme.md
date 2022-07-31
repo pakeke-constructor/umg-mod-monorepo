@@ -42,9 +42,15 @@ return {
     image = "table",
     ..., -- other components go here
 
-    placementCategories = {
+    placementCategory = {
         "foobar", "grass" -- this entity belongs to foobar category and grass category.
-    }
+    },
+
+
+    -- Alternatively, we could only add it to one placementCategory:
+    placementCategory = "grass"
 }
 
 ```
+
+

@@ -1,6 +1,8 @@
 
+local PLANT_PLACEMENT_SPACING = 5
 
-return {
+
+local constants = {
     TILE_SIZE = 16;
     -- must be 16, because this is the size of the tiles in pixels
 
@@ -12,3 +14,11 @@ return {
     -- change this if needed
 }
 
+
+constants.PLANT_PLACEMENTRULES = {
+    --{type = "closeTo", category = "groundTile", distance = constants.TILE_SIZE + 10; amount = 3};
+    {type = "awayFrom", category = "plant", distance = PLANT_PLACEMENT_SPACING}
+};
+
+
+return constants

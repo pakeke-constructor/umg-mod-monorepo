@@ -5,6 +5,16 @@ spatial_partition module
 
 partition expects all entities added to have a `x` and `y` component
 
+
+
+TODO::
+Pretty much all of this code is really scuffed.
+All of this needs a redo.
+
+Start by removing the closure_cache nonsense, and replace it with proper
+stateless iterators.
+
+
 ]]
 
 
@@ -28,10 +38,21 @@ end}
 
 
 
+local partitions = {}
+
+
+
 function Partition:new(size_x, size_y)
     local new = {}
     new.size_x = size_x
     new.size_y = size_y
+        
+    --[[
+        The last x and y position of each object in the spatial hash.
+        (As in, the position of the object the last time it was updated.)
+    ]]
+    new.currentXIndex = {}
+    new.currentYIndex = {}
 
     new.moving_objects = Set()
 
@@ -39,7 +60,9 @@ function Partition:new(size_x, size_y)
         new[k] = v
     end
 
-    return setmetatable(new, mt)
+    local partition = setmetatable(new, mt)
+    table.insert(partitions, partition)
+    return partition
 end
 
 
@@ -56,22 +79,22 @@ end
 
 
 
---[[
-    The last x and y position of each object in the spatial hash.
-    (As in, the position of the object the last time it was updated.)
-]]
-local currentXIndex = setmetatable( {}, {__mode="k"} )
-local currentYIndex = setmetatable( {}, {__mode="k"} )
--- (__mode just lessens GC burden.)
--- TODO: Ensure that this doesn't make it run worse!
+on("update", function(dt)
+    for _, partition in ipairs(partitions)do
+        partition.updated_this_frame = false
+    end
+end)
+
+
 
 
 function Partition:contains(object)
-    return currentXIndex[object] and currentYIndex[object]
+    return self.currentXIndex[object] and self.currentYIndex[object]
 end
 
 
 function Partition:update()
+    self.updated_this_frame = true
     for _, obj in ipairs(self.moving_objects.objects) do
         self:updateObj(obj)
     end
@@ -84,8 +107,8 @@ function Partition:updateObj(obj)
     self:getSet(obj):remove(obj)   -- Same as self:___rem(obj)
     local indexX = floor(obj.x/self.size_x)
     local indexY = floor(obj.y/self.size_y)
-    currentXIndex[obj] = indexX
-    currentYIndex[obj] = indexY
+    self.currentXIndex[obj] = indexX
+    self.currentYIndex[obj] = indexY
     self[indexX][indexY]:add(obj)
 end
 
@@ -94,8 +117,8 @@ end
 function Partition:___add(obj)
     local indexX = floor(obj.x/self.size_x)
     local indexY = floor(obj.y/self.size_y)
-    currentXIndex[obj] = indexX
-    currentYIndex[obj] = indexY
+    self.currentXIndex[obj] = indexX
+    self.currentYIndex[obj] = indexY
     self[indexX][indexY]:add(obj)
 end
 
@@ -103,8 +126,8 @@ end
 
 function Partition:___rem(obj)
     self:getSet(obj):remove(obj)
-    currentXIndex[obj] = nil
-    currentYIndex[obj] = nil
+    self.currentXIndex[obj] = nil
+    self.currentYIndex[obj] = nil
 end
 
 
@@ -117,8 +140,8 @@ function Partition:setPosition(obj, x, y)
     self:___rem(obj)
     local indexX = floor(x/self.size_x) 
     local indexY = floor(y/self.size_y)
-    currentXIndex[obj] = indexX
-    currentYIndex[obj] = indexY
+    self.currentXIndex[obj] = indexX
+    self.currentYIndex[obj] = indexY
     self[indexX][indexY]:add(obj)
 end
 
@@ -154,7 +177,7 @@ end
 
 
 function Partition:getSet(obj)
-    local x, y = currentXIndex[obj], currentYIndex[obj]
+    local x, y = self.currentXIndex[obj], self.currentYIndex[obj]
     local set_ = self[x][y]
     
     -- Try for easy way out: Assume the object hasn't moved out of it's cell
@@ -250,6 +273,10 @@ do
         local inst = { } -- The state of this iteration.
                          -- We can't use closures, because locals are shared
         table.insert(closure_caches, inst)
+        
+        if not self.updated_this_frame then
+            self:update()
+        end
 
         if y_ then
             -- obj is a number in this scenario; equivalent to  x.
@@ -313,6 +340,10 @@ do
         local inst = {} -- The state of this iteration.
                         -- We can't use closures, because locals are shared
         table.insert(l_closure_caches, inst)
+
+        if not self.updated_this_frame then
+            self:update()
+        end
 
         if y_ then
             -- obj is a number in this scenario; equivalent to  lx.
