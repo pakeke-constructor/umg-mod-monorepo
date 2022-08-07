@@ -31,6 +31,12 @@ local itemPartition = base.Partition(INTERACTION_DISTANCE + 5, INTERACTION_DISTA
 
 
 items:onAdded(function(e)
+    if not e:isRegular("hidden") then
+        error("Item entities must have a `hidden` regular component.\nNot the case for " .. e:type())
+    end
+    if not e:isRegular("itemBeingHeld") then
+        error("Item entities must have a `itemBeingHeld` regular component.\nNot the case for " .. e:type())
+    end
     itemPartition:add(e)
 end)
 
@@ -68,10 +74,15 @@ local function canBePickedUp(dist, best_dist, item)
 end
 
 
-on("_inventory_dropInventoryItem", function(item, x,y)
+
+local function dropInventoryItem(item, x, y)
+    item.x = (x or item.x) or 0
+    item.y = (y or item.y) or 0
     item_to_lastheldtime[item] = timer.getTime()
+    item.hidden = false
+    item.itemBeingHeld = false
     itemPartition:add(item)
-end)
+end
 
 
 
@@ -84,7 +95,7 @@ on("update5", function(dt)
         local ix, iy = player.inventory:getFreeSpace()
         if ix then
             for item in itemPartition:foreach(player.x, player.y) do
-                if not item.hidden and not picked[item] then 
+                if (not item.itemBeingHeld) and (not picked[item]) then 
                     -- then the item is on the ground
                     local d = math.distance(player, item)
                     if canBePickedUp(d, best_dist, item) then
@@ -97,6 +108,7 @@ on("update5", function(dt)
             if pickup then
                 player.inventory:set(ix, iy, pickup)
                 server.broadcast("pickUpInventoryItem", pickup)
+                pickup.itemBeingHeld = true
                 pickup.hidden = true
                 picked[pickup] = true
             end
@@ -108,4 +120,10 @@ on("update5", function(dt)
     end
 end)
 
+
+
+
+return {
+    dropInventoryItem = dropInventoryItem
+}
 

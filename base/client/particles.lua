@@ -69,7 +69,7 @@ end
 
 
 on("drawIndex", function( z_dep )
-    for _, emtr in ipairs(drawingPSyses[z_dep].objects) do
+    for _, emtr in drawingPSyses[z_dep]:iter() do
         drawEmitter(emtr)
     end
 end)
@@ -85,7 +85,7 @@ local function isFinished(emitter)
 end
 
 on("update", function(dt)
-    for _, emitr in ipairs(in_use.objects) do
+    for _, emitr in in_use:iter() do
         emitr.psys:update(dt)
         emitr.runtime = emitr.runtime + dt
         if isFinished(emitr) then

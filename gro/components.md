@@ -2,6 +2,10 @@
 
 ```lua
 
+ent.growStage = 0.65 -- the current growStage the entity is at
+-- (a floating point number from 0 to 1)
+
+
 -- this entity grows bigger via changing images:
 ent.growable = {
     time = 150; -- total time in seconds to grow

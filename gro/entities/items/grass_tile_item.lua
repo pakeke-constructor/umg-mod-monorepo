@@ -7,6 +7,7 @@ return placement.newPlaceable({
     "x","y",
     "stackSize",
     "hidden",
+    "itemBeingHeld",
 
     maxStackSize = 20;
     image="grass_tile_item";

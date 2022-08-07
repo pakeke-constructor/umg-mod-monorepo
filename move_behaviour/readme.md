@@ -32,18 +32,21 @@ ent.moveBehaviour = {
     type = anything from MOVE_TYPES,
     
     target = "redTeam", -- target is the closest redTeam entity.
-    -- alternatively, if `ent.pathfindTarget` is set, it will ignore this value,
+    -- alternatively, if `ent.moveBehaviourTarget` is set, it will ignore this value,
     -- and target that entity instead.
 
     activateDistance = 200,
     -- the distance required for a new target to be selected.
 
+    deactivateDistance = 250,
+    -- the distance required for 
 
 
     -- OPTIONAL VALUES:
 
     -- only used with `circle` pathfind type:
-    circleRadius = 50 -- circles around target with radius of 50 units
+    circleRadius = 50, -- circles around target with radius of 50 units
+    circlePeriod = 3, -- X second loop period
 
     -- only used with `kite` pathfind type:
     kiteRadius = 50 -- kites at a radius of 50 units
@@ -55,6 +58,11 @@ ent.moveBehaviour = {
     -- random distance to move, anywhere between 20 and 100 units.
 }
 
+
+
+ent.moveBehaviourTarget = nil
+-- the current target entity that `ent` is acting on.
+-- This can be modified whenever, no problem.
 
 
 ```

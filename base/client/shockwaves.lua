@@ -13,7 +13,7 @@ local shockwaveSet = Set()
 
 
 on("update", function(dt)
-    for _,sw in ipairs(shockwaveSet.objects)do
+    for _,sw in shockwaveSet:iter()do
         sw:update(dt)
         if sw.isFinished then
             shockwaveSet:remove(sw)
@@ -26,7 +26,7 @@ end)
 
 
 on("postDraw", function()
-    for _,sw in ipairs(shockwaveSet.objects) do
+    for _,sw in shockwaveSet:iter() do
         sw:draw()
     end
 end)

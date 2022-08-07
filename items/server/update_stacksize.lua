@@ -10,9 +10,12 @@ local function updateStackSize(item_ent)
     if item_ent.stackSize ~= item_ent.previous_stackSize then
         item_ent.previous_stackSize = item_ent.stackSize
         server.broadcast("setInventoryItemStackSize", item_ent, item_ent.stackSize)        
+
+        if item_ent.stackSize == 0 then
+            item_ent:delete()
+        end
     end
 end
-
 
 return updateStackSize
 

@@ -7,7 +7,7 @@ return {
     "x", "y", "image",
     z = constants.TILE_Z_LEVEL,
 
-    color = constants.GRASS_COLOR;
+    color = {0,1,0,0.2};--constants.GRASS_COLOR;
 
     groundTile = true, -- TODO: Change this up maybe?
     -- we should be able to put more important info in here.

@@ -1,13 +1,9 @@
 
 
 
-local constants = require("constants")
-
-
 local placementCategories = setmetatable({}, {
     __index = function(t,k)
-        local DD = constants.MAX_PLACEMENT_RULE_DISTANCE
-        t[k] = base.Partition(DD,DD)
+        t[k] = base.Set()
         return t[k]
     end
 })

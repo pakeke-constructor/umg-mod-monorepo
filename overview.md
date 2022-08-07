@@ -108,10 +108,28 @@ because these components are "shared" between all instances of `my_entity`.
 Next tick, `ent` will get sent over to all clients automatically.    
 (Only the "regular" components are sent over the network.)
 
-To delete an entity, use `ent:delete()`.     
-This can only be used on server-side.     
- Deleting an entity will automatically delete it for all clients next tick.
+There are a few more entity methods too:
+```lua
 
+ent:delete() -- deletes an entity.
+-- (This can only be used serverside!)
+-- Deleting an entity will automatically delete it for all clients next tick.
+
+ent:type() -- example_mod:my_entity
+-- returns the type of the entity.
+
+
+ent:hasComponent("x")
+-- returns true if entity has component `x`, false otherwise
+
+ent:isRegular("compName")
+-- returns true if "compName" is a regular component in ent, false otherwise
+
+ent:isShared("compName2") 
+-- returns true if compName2 is a shared component in ent, false otherwise
+
+
+```
 
 ## Groups:
 "Groups" are what contains entities.

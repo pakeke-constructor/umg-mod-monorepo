@@ -22,7 +22,8 @@ local function catchPlayer(ent)
 end
 
 
-server.on("i_fell_off", function(sender, ent)
+server.on("i_fell_off", function(sender)
+    local ent = base.getPlayer(sender)
     if ent.controller ~= sender then return end
     catchPlayer(ent)
 end)

@@ -7,7 +7,6 @@ return {
     "vx", "vy","vz",
     "controller",
     "image",
-    "inventory",
 
     "faceDirection",
 
@@ -18,11 +17,6 @@ return {
     controllable = {};
 
     nametag = {};
-
-    physics = {
-        shape = physics.newCircleShape(5);
-        friction = 7
-    };
 
     light = {
         radius = 120
@@ -37,22 +31,10 @@ return {
         activation = 15
     };
 
-    inventoryCallbacks = {
-        slotExists = function(inv,x,y)
-            return x>1 and y>1
-        end
-    };
-
     speed = PLAYER_SPEED;
     agility = PLAYER_SPEED * 20;
 
-    init = function(e, username)
-        e.x = 0
-        e.y = 0
-        e.z = 0
-        e.controller = username
-        e.inventory = {width = 8, height = 5}
-    end;
+    init = base.entityHelper.initPosition
 }
 
 

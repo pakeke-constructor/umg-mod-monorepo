@@ -2,13 +2,14 @@
 
 return {
     "x","y",
+    "image",
+    "growStage",
 
-    image = "grass_1",
-    placementCategories = {"plant"};
+    placementCategory = {"plant"};
     init = base.entityHelper.initPosition;
 
     growable = {
-        time = 30;
+        time = 10;
         stages = {
             "grass_1";
             "grass_2";
@@ -18,15 +19,17 @@ return {
         }
     };
 
+    swaying = {};
+
     harvest = {
         not_grown = {
             {max = 1, min = 1, value = "grass_seed_item"};
-            {max = 1, min = 0, value = "flax_item"}
+            {max = 1, min = 0, value = "grass_item"}
         };
     
         grown = {
             {max = 2, min = 1, value = "grass_seed_item"};
-            {max = 3, min = 1, value = "flax_item"}
+            {max = 3, min = 1, value = "grass_item"}
         }
     }    
 }

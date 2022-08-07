@@ -52,6 +52,17 @@ end
 
 
 
+
+-- iterates over a Set
+function Set:iter()
+    return ipairs(self.objects)
+end
+
+Set.ipairs = Set.iter -- alias
+
+
+
+
 -- Removes an object from the Set.
 -- If the object isn't in the Set, returns nil.
 function Set:remove(obj, index)

@@ -27,8 +27,17 @@ local placementCategories = require("placement_categories")
 local constants = require("constants")
 
 
+
+local requireDistance = {
+    closeTo=true; awayFrom=true
+}
+
 local function checkRuleValidity(rule)
-    
+    if requireDistance[rule.type] then
+        if not rule.distance then
+            error("placementRule was not given .distance value: " .. tostring(rule.type))
+        end
+    end
 end
 
 
@@ -47,7 +56,7 @@ local function closeTo(rule, item, holder, bx, by)
         return false -- none, deny
     end
     local count = 0
-    for ent in placementCategories[c] do
+    for _, ent in placementCategories[c]:iter() do
         -- TODO: Should we check z axis here?
         if math.distance(ent.x-bx, ent.y-by) < rule.distance then
             count = count + 1
@@ -65,7 +74,7 @@ local function awayFrom(rule, item, holder, bx, by)
     if not rawget(placementCategories, c) then
         return true -- none, we are fine lol
     end
-    for ent in placementCategories[c] do
+    for _, ent in placementCategories[c]:iter() do
         -- TODO: Should we check z axis here?
         if math.distance(ent.x-bx, ent.y-by) < rule.distance then
             return false
@@ -112,6 +121,7 @@ end
 
 local function useItem(item, holder, build_x, build_y)
     if server then
+        item.stackSize = item.stackSize - 1
         item.placementSpawnFunctionServer(build_x, build_y)
     elseif item.placementSpawnFunctionClient then
         item.placementSpawnFunctionClient(build_x, build_y)

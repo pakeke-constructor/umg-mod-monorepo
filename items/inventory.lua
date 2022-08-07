@@ -123,6 +123,7 @@ function Inventory:set(x, y, item_ent)
     if item_ent then
         assertItem(item_ent)
         item_ent.hidden = true
+        item_ent.itemBeingHeld = true
         self.inventory[i] = item_ent
         item_ent.ownerInventory = self
     else
@@ -411,7 +412,13 @@ function Inventory:drawUI()
                 graphics.setColor(col[1] / 1.5, col[2] / 1.5, col[3] / 1.5)
                 graphics.rectangle("fill", X, Y, SQUARE_SIZE, SQUARE_SIZE)
                 if self:get(x + 1, y + 1) then
-                    self:drawItem(self:get(x + 1, y + 1), x + 1, y + 1)
+                    local item = self:get(x+1,y+1)
+                    if exists(item) then
+                        -- only draw the item if it exists.
+                        self:drawItem(item, x + 1, y + 1)
+                    else
+                        self:set(x+1, y+1, nil)
+                    end
                 end
                 if self.holding_x == x+1 and self.holding_y == y+1 then
                     graphics.setColor(0,0,0, 0.5)

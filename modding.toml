@@ -97,4 +97,7 @@ any = true
 [chests]
 any = true
 
+## categories mod:
+[categories]
+any = true
 

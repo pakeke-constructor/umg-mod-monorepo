@@ -144,7 +144,7 @@ local function mainDraw()
     for z_dep = depthIndexer_min_depth, depthIndexer_max_depth do
         if rawget(depthIndexer, z_dep) then
             local entSet = depthIndexer[z_dep]
-            for _, ent in ipairs(entSet.objects) do
+            for _, ent in entSet:iter() do
                 if entOnScreen(ent, DEFAULT_LEIGHWAY, w, h) and (not ent.hidden) then
                     setColor(1,1,1)
                     if ent.image then

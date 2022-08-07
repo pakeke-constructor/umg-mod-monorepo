@@ -9,6 +9,9 @@ local valid_callbacks = require("inventory_callbacks")
 
 local updateStackSize = require("server.update_stacksize")
 
+local pickups = require("server.pickups")
+
+
 
 local function assertValidCallbacks(callbacks)
     for cbname, func in pairs(callbacks) do
@@ -60,13 +63,7 @@ local function drop(item, x, y)
     --[[
         Drops item on to the ground
     ]]
-    item.hidden = false
-    item.x = (x or item.x) or 0
-    item.y = (y or item.y) or 0
-
-    call("_inventory_dropInventoryItem", item, x, y) 
-    -- private callback, used by pickups.lua
-
+    pickups.dropInventoryItem(item, x, y)
     server.broadcast("dropInventoryItem", item, x, y)
 end
 
