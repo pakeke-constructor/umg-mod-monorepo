@@ -138,15 +138,15 @@ end
 -- `...` is the args passed to the constructor.
 -- Generally, the first two args should always be (x, y)
 
-ent.damaged = function(ent) ... end
+ent.onDamaged = function(ent) ... end
 
-ent.death = function(ent) ... end
+ent.onDeath = function(ent) ... end
 
-ent.update = function(ent, dt)   end
+ent.onUpdate = function(ent, dt)   end
 
-ent.draw = function(ent) end  --  called when ent is drawn
+ent.onDraw = function(ent) end  --  called when ent is drawn
 
-ent.collide = function(ent, other_ent)
+ent.onCollide = function(ent, other_ent)
     -- called when 2 ents collide. (both must have physics component)
 end
 

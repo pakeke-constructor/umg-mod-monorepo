@@ -152,6 +152,9 @@ local function mainDraw()
                             setColor(ent.color)
                         end
                         call("drawEntity", ent)
+                        if ent.onDraw then
+                            ent:onDraw()
+                        end
                     end
                 end
             end

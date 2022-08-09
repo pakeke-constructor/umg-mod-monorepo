@@ -101,3 +101,7 @@ any = true
 [categories]
 any = true
 
+
+## rgb chess:
+[rgb]
+any = true
