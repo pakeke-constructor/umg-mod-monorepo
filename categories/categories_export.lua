@@ -56,3 +56,5 @@ end
 
 export("categories", export)
 
+require("category_proximity")
+

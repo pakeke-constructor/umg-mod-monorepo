@@ -148,8 +148,13 @@ Enemy unit is stunned --> Take 40% reduced damage for this round
 
 
 
+## ANOTHER GOOD IDEA:
+There needs to be some cases of opposite-color cards synergizing with each other.
+For example:
 
-
+Hog-Brute:
+Start of round,
+Steals 10% of ally unit's stats that are diff color
 
 
 
