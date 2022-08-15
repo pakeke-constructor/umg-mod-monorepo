@@ -33,7 +33,11 @@ any = true
 any = true
 [audio]
 any = true
+[image]
+any = true
 
+[utf8]
+any = true
 
 [assets]
 any = true

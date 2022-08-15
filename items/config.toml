@@ -3,3 +3,4 @@ uses = [
     "base"
 ]
 
+baseMod = true
