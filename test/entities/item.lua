@@ -5,6 +5,7 @@ return {
     "x","y",
     "stackSize",
     "hidden",
+    "itemBeingHeld",
     maxStackSize = 40;
     image="shroom_down_2";
     itemName = "item";

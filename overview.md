@@ -34,7 +34,7 @@ server/
 client/
     cl_file.lua -- these files are auto-loaded on clientside.
     nested/
-        abc.lua -- nested directories work fine. `abc` is loaded.
+        abc.lua -- nested directories work fine. `abc.lua` is loaded.
 
 -- all entities for this mod are defined here.
 -- entities are loaded on both client and server.

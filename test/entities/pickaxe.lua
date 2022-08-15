@@ -5,6 +5,7 @@ return {
     "x","y",
     "stackSize",
     "hidden",
+    "itemBeingHeld",
     maxStackSize = 1;
     image="pickaxe";
     itemName = "pickaxe";

@@ -51,6 +51,9 @@ usable_items:onAdded(function(ent)
     if (type(ent.useItem) ~= "function") then 
         error("ent.useItem needs to be a function. Instead, it was "..type(ent.useItem))
     end
+    if ent.itemBeingHeld then
+        ent.hidden = true
+    end
     ent.use = useMethod
     ent.canUse = canUseMethod
 end)
