@@ -5,17 +5,65 @@ local attackGroup = group("attackBehaviour")
 
 
 
+local falloffs = {
+    none = function(dmg, x, y, rad) return dmg end;
+    linear = function(dmg, x, y, rad)
+        return dmg * (1-(math.distance(x,y) / rad))
+    end;
+    quadratic = function(dmg, x, y, rad)
+        return dmg * (1-(math.distance(x,y) / rad) ^ 2)
+    end
+}
 
-local function attackMelee(ent, target)
-    
+
+local function doSplash(ent, target)
+    local category = target.category
+    local hitx, hity = target.x, target.y
+    local splash = ent.attackBehaviour.splash
+
+    if category then
+        for _, e in categories.getSet(category):ipairs() do
+            if math.distance(e, target) <= splash.radius then
+                if e ~= ent then
+                    -- we dont want to entity hitting itself!
+                    local falloffType = splash.damageFalloff or "none"
+                    local dmg = falloffs[falloffType](
+                        ent.attackDamage, 
+                        e.x-hitx, e.y-hity,
+                        splash.radius
+                    )
+                    call("attack", ent, e, dmg)
+                end
+            end
+        end
+
+        if splash.shockwave then
+            base.shockwave(hitx, hity, 0, splash.radius, 2, 0.4)
+        end
+    end
 end
 
-local function attackRanged(ent, target)
 
+
+local function attackMelee(ent, target)
+    --[[
+        TODO: Do particle effects here maybe?
+    ]]
+    if ent.attackBehaviour.splash then
+        doSplash(ent, target)
+    else
+        call("attack", ent, target, ent.attackDamage)
+        target.hp = target.hp - ent.attackDamage
+    end
+end
+
+
+local function attackRanged(ent, target)
+    -- TODO.
 end
 
 local function attackItem(ent, target)
-
+    -- TODO.
 end
 
 
@@ -74,13 +122,14 @@ local function tryAttack(ent, target, now)
 end
 
 
-on("update", function()
+on("update5", function()
     local now = timer.getTime()
     for _, ent in ipairs(attackGroup) do
         if ent.attackBehaviour then
             local target = ent.attackBehaviour_targetEnt
+            local targetCategory = ent.attackBehaviour.target
             if not target then
-                target = findClosestEntity(ent, ent.attackBehaviour.target)
+                target = findClosestEntity(ent, targetCategory)
             end
             if target and math.dist(target, ent) < ent.attackBehaviour.range then
                 tryAttack(ent, target, now)

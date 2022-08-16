@@ -29,7 +29,6 @@ ent.attackBehaviour = {
     range = 10, -- range of attack
 
     
-
     -- OPTIONAL VALUES:
     
     -- splash damage:
@@ -48,6 +47,7 @@ ent.attackBehaviour = {
         -- This is called whenever a projectile is fired.
     end
     projectileCount = 1, -- default of 1
+    projectileSpeed = 100, -- default of X
 
 }
 

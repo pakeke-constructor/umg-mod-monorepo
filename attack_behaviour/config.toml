@@ -1,4 +1,4 @@
 
-uses = ["base"]
+uses = ["base", "categories"]
 
 baseMod = true
