@@ -9,7 +9,9 @@ local helper = require("server.helper")
 local follow = {}
 function follow.update(ent,dt)
     local targ = ent.moveBehaviourTarget
-    helper.moveTo(ent, targ.x, targ.y)
+    if targ then
+        helper.moveTo(ent, targ.x, targ.y)
+    end
 end
 function follow.heavyUpdate(ent,dt)
     helper.defaultHeavyUpdate(ent)
@@ -24,6 +26,7 @@ local CIRCLE_DEFAULT_PERIOD = 2
 local CIRCLE_DEFAULT_RADIUS = 50
 function circle.update(ent,dt)
     local targ = ent.moveBehaviourTarget
+    if not targ then return end
     local time = timer.getTime()
     local offset = ((ent.id % 10) / 10) * pi2
     local period = ent.moveBehaviour.circlePeriod or CIRCLE_DEFAULT_PERIOD

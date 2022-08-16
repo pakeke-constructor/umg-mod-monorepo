@@ -3,6 +3,7 @@ return placement.newPlaceable({
     "x","y",
     "stackSize",
     "hidden",
+    "itemBeingHeld",
     maxStackSize = 20;
     image="block_item";
     itemName = "block";

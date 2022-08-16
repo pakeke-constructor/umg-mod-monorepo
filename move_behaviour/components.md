@@ -32,14 +32,15 @@ ent.moveBehaviour = {
     type = anything from MOVE_TYPES,
     
     target = "redTeam", -- target is the closest redTeam entity.
+    -- (ie, targets all entities that have `ent.category = "redTeam"`)
     -- alternatively, if `ent.moveBehaviourTarget` is set, it will ignore this value,
-    -- and target that entity instead.
+    -- and target that category instead.
 
     activateDistance = 200,
     -- the distance required for a new target to be selected.
 
     deactivateDistance = 250,
-    -- the distance required for 
+    -- the distance required for this entity to stop following
 
 
     -- OPTIONAL VALUES:
@@ -60,9 +61,14 @@ ent.moveBehaviour = {
 
 
 
-ent.moveBehaviourTarget = nil
+ent.moveBehaviourTargetEntity = nil
 -- the current target entity that `ent` is acting on.
 -- This can be modified whenever, no problem.
+
+ent.moveBehaviourTargetCategory = nil
+-- the current target category that `ent` is acting on.
+-- this can be modified whenever, no problem.
+
 
 
 ```

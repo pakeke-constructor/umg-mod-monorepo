@@ -8,13 +8,25 @@ return {
     "x", "y",
     "vx", "vy",
     "image",
-    "team",
+    "color",
     "category",
-    "moveBehaviour",
 
-    "dmg", "attackSpeed",
+    "rgb_team", -- the team this entity is in
+    "rgb_saveStats", -- a table for saving entity stats before combat.
+
+    "attackDamage", "attackSpeed",
     "hp", "maxHp",
 
+    speed = 60,
+
+    attackBehaviour = {
+
+    };
+
+    moveBehaviour = {
+        type = "follow";
+        activateDistance = 1000,
+    };
 
     moveAnimation = {
         up = {"blank_player_up_1", "blank_player_up_2", "blank_player_up_3", "blank_player_up_4"},
@@ -29,7 +41,7 @@ return {
         ent.x = x;
         ent.y = y;
         
-        ent.dmg = BRUTE_DEFAULT_DMG
+        ent.attackDamage = BRUTE_DEFAULT_DMG
         ent.attackSpeed = BRUTE_DEFAULT_ATTACKSPEED
         ent.hp = BRUTE_DEFAULT_HP
         ent.maxHp = BRUTE_DEFAULT_HP

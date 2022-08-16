@@ -1,5 +1,5 @@
 
-local LL = require("_libs.doubly_linked_list")
+local LinkedList = require("_libs.doubly_linked_list")
 
 
 
@@ -16,7 +16,7 @@ local CHAT_WRAP_WIDTH = 300
 local TARGET_CHAT_HEIGHT = 6 -- This number is actually quite arbitrary
 
 
-local chatHistory = LL.new()
+local chatHistory = LinkedList.new()
 
 
 local function newMessageObject(msg)
@@ -55,12 +55,13 @@ local currMessage = ""
 local function drawMessage(msg, opacity)
     -- TODO: Do different colors here.
     graphics.setColor(1,1,1,opacity)
-    local _, wrappedtxt = curFont:getWrap(msg, CHAT_WRAP_WIDTH)
-    local newlines = #wrappedtxt
     local scale = curChatScale
+    local wrapWidth = CHAT_WRAP_WIDTH / scale
+    local _, wrappedtxt = curFont:getWrap(msg, wrapWidth)
+    local newlines = #wrappedtxt
     curHeight = curHeight + ((newlines * (curFontHeight)) + MESSAGE_SEP) * scale
     local y = curScreenHeight - curHeight
-    graphics.printf(msg, CHATBOX_START_X, y, CHAT_WRAP_WIDTH, "left", 0, scale,scale)
+    graphics.printf(msg, CHATBOX_START_X, y, wrapWidth, "left", 0, scale,scale)
 end
 
 
@@ -108,19 +109,39 @@ end)
 local isTyping = false
 
 
+
+keyboard.setKeyRepeat(true)
+
+
+on("textinput", function(t)
+    if isTyping then
+        currMessage = currMessage .. t
+    end
+end)
+
+
 on("keypressed", function(k)
     --[[
         TODO: Set keyboard blocking here!!!!
     ]]
-    if k == "return" then
+    if k=="backspace" then
+        -- get the byte offset to the last UTF-8 character in the string.
+        local byteoffset = utf8.offset(currMessage, -1)
+        if byteoffset then
+            -- remove the last UTF-8 character.
+            -- string.sub operates on bytes rather than UTF-8 characters, so we couldn't do string.sub(text, 1, -2).
+            currMessage = string.sub(currMessage, 1, byteoffset - 1)
+        end
+    elseif k == "return" then
         if isTyping then
-            client.send("chatMessage", currMessage)
+            if #currMessage>0 then
+                client.send("chatMessage", currMessage)
+                currMessage = ''
+            end
         end
         isTyping = not isTyping
     elseif k == "escape" then
         isTyping = false
-    elseif isTyping then
-        currMessage = currMessage .. k
     end
 end)
 
