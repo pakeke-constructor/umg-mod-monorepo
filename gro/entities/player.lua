@@ -50,6 +50,7 @@ return {
         e.x = 0
         e.y = 0
         e.z = 0
+        e.health = 100
         e.controller = username
         e.inventory = {width = 8, height = 5}
     end;

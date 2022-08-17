@@ -1,12 +1,6 @@
 
 
-local PLAYER_SPEED = 160
-
-
-local function player_slotExists(_, x, y)
-    return (x > 1) and (y > 1)
-end
-
+local SPEED = 160
 
 
 return {
@@ -14,23 +8,24 @@ return {
     "vx", "vy","vz",
     "controller",
     "image",
-    "inventory",
 
-    "color",
+    color = {0.9,0.1,0.1},
 
-    "faceDirection",
+    moveBehaviour = {
+        type = "follow",
+        target = "player",
+        activateDistance = 600,
+        deactivateeDistance = 900
+    },
 
-    "health",
-    maxHealth = 100,
-    healthBar = {},
+    attackBehaviour = {
+        type = "melee",
+        target = "player",
+        range = 20
+    },
 
-    category = "player",
-
-    follow = true;
-
-    inventoryCallbacks = {
-        slotExists = player_slotExists
-    };
+    attackSpeed = 0.5,
+    attackDamage = 4,
 
     shadow = {
         size=6
@@ -38,18 +33,9 @@ return {
 
     bobbing = {},
     
-    controllable = {};
-
-    nametag = {};
-
     physics = {
         shape = physics.newCircleShape(5);
         friction = 7
-    };
-
-    light = {
-        radius = 150;
-        color = {1,1,1}
     };
 
     moveAnimation = {
@@ -61,15 +47,10 @@ return {
         activation = 15
     };
 
-    speed = PLAYER_SPEED;
-    agility = PLAYER_SPEED * 20;
+    init = base.entityHelper.initPosition,
 
-    init = function(e, x, y)
-        e.x = x
-        e.y = y
-        e.health = e.maxHealth
-        e.inventory = {width=7, height = 4}
-    end
+    speed = SPEED;
+    agility = SPEED * 10
 }
 
 

@@ -43,8 +43,8 @@ return {
         
         ent.attackDamage = BRUTE_DEFAULT_DMG
         ent.attackSpeed = BRUTE_DEFAULT_ATTACKSPEED
-        ent.hp = BRUTE_DEFAULT_HP
-        ent.maxHp = BRUTE_DEFAULT_HP
+        ent.health = BRUTE_DEFAULT_HP
+        ent.maxHealth = BRUTE_DEFAULT_HP
     end;
 }
 

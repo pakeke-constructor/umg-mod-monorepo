@@ -85,10 +85,9 @@ end)
 
 
 server.on("spawn", function(u, e)
-    local b = entities.block_item()
-    b.x = e.x; b.y = e.y
-    b.stackSize = 5
+    entities.enemy(e.x,e.y + 20)
 end)
+
 
 
 local control_ents = group("controllable", "x", "y")

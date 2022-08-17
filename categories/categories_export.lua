@@ -54,7 +54,4 @@ function exp.changeEntity(ent, newCategory)
 end
 
 
-export("categories", export)
-
-require("category_proximity")
-
+export("categories", exp)

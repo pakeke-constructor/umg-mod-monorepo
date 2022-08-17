@@ -98,6 +98,21 @@ ent.physics = {
 ent.friction = 3.15 -- friction number. (default is roughtly 3.15)
 
 
+ent.health = 10 -- must be regular
+ent.maxHealth = 10 -- can be shared.
+
+ent.healthBar = { -- health bar above entity!
+    -- All of these are optional values:
+    offset = 10, -- how high it's drawn
+    drawWidth = 20,
+    drawHeight = 5,
+    healthColor = {1,0.2,0.2},
+    outlineColor = {0,0,0},
+    backgroundColor = {0.4,0.4,0.4,0.4}
+}
+
+
+
 
 -- this entity can be controlled by a player
 --[[  Buttons:
