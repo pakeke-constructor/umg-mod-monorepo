@@ -138,7 +138,7 @@ end
 
 
 local function syncMover(ent)
-    local should_sync = shouldSyncVxVy(ent)
+    local should_sync = shouldSyncVxVy(ent) or true
 
     if ent.vz then
         local last_z = ent_to_vz[ent] or ent.vz
@@ -162,12 +162,9 @@ local positionGroup = group("x", "y")
 
 
 positionGroup:onAdded(function(ent)
-    if not ent.x then
-        ent.x = 0  -- this is bad, but what else can we do?
-    end
-    if not ent.y then
-        ent.y = 0 -- this is bad too
-    end
+     -- this is bad, but what else can we do?
+    ent.x = ent.x or 0
+    ent.y = ent.y or 0
     if (not ent.z) and ent:isRegular("z") then
         ent.z = 0
     end

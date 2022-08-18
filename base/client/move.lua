@@ -58,7 +58,10 @@ end)
 
 on("update", function(dt)
     for _, ent in ipairs(moveEnts) do
-        updateEnt(ent, dt)
+        if ent.controller == username then
+            -- We only control the 
+            updateEnt(ent, dt)
+        end
     end
 end)
 

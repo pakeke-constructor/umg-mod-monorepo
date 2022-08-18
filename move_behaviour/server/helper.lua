@@ -59,7 +59,8 @@ local function moveTo(ent, x, y)
         Make it so the ent's velocity isnt instantaneously set.
         It's probably better to have some aspect of "agility" or something.
     ]]
-    local dx,dy = x - ent.x, y - ent.y
+    local dx = x - ent.x
+    local dy = y - ent.y
     local mag = math.distance(dx,dy)
     if mag > 0 then
         ent.vx = (dx / mag) * ent.speed

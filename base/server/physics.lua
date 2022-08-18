@@ -1,7 +1,7 @@
 
 
 
-local physics_ents = group("physics", "x", "y")
+local physicsGroup = group("physics", "x", "y")
 
 --[[
 
@@ -45,6 +45,10 @@ newWorld() -- The box2d physics world used by entities
 
 
 
+on("newWorld", newWorld)
+
+
+
 
 
 local function preUpdateEnt(ent)
@@ -73,7 +77,7 @@ local function postUpdateEnt(ent)
     ]]
     local fixture = ent_to_fixture[ent]
     local body = fixture:getBody()
-    --ent.x, ent.y = body:getPosition()
+    ent.x, ent.y = body:getPosition()
     
     if ent.vx or ent.vy then
         local vx, vy = body:getLinearVelocity()
@@ -84,11 +88,11 @@ end
 
 
 on("update", function(dt)
-    for _, ent in ipairs(physics_ents) do
+    for _, ent in ipairs(physicsGroup) do
         preUpdateEnt(ent)
     end
     world:update(dt)
-    for _, ent in ipairs(physics_ents) do
+    for _, ent in ipairs(physicsGroup) do
         postUpdateEnt(ent)
     end
 end)
@@ -127,7 +131,7 @@ end
 local DEFAULT_FRICTION = constants.DEFAULT_FRICTION
 
 
-physics_ents:onAdded(function(ent)
+physicsGroup:onAdded(function(ent)
     if world:isLocked( ) then 
         error("World was locked! This is a bug on my behalf, sorry")  
     end
@@ -148,7 +152,7 @@ end)
 
 
 
-physics_ents:onRemoved(function(ent)
+physicsGroup:onRemoved(function(ent)
     local fixture = ent_to_fixture[ent]
     local body = fixture:getBody()
     fixture_to_ent[fixture] = nil

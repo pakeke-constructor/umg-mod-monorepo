@@ -9,6 +9,10 @@ local helper = require("server.helper")
 local follow = {}
 function follow.update(ent,dt)
     local targ = ent.moveBehaviourTarget
+    if not exists(targ) then
+        ent.moveBehaviourTarget = nil
+        targ = nil
+    end
     if targ then
         helper.moveTo(ent, targ.x, targ.y)
     end
@@ -26,6 +30,10 @@ local CIRCLE_DEFAULT_PERIOD = 2
 local CIRCLE_DEFAULT_RADIUS = 50
 function circle.update(ent,dt)
     local targ = ent.moveBehaviourTarget
+    if not exists(targ) then
+        ent.moveBehaviourTarget = nil
+        targ = nil
+    end
     if not targ then return end
     local time = timer.getTime()
     local offset = ((ent.id % 10) / 10) * pi2

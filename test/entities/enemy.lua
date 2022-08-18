@@ -21,7 +21,7 @@ return {
     attackBehaviour = {
         type = "melee",
         target = "player",
-        range = 20
+        range = 30
     },
 
     attackSpeed = 0.5,
