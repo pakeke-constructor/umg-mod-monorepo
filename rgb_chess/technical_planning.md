@@ -16,18 +16,29 @@ card.onBuy = function(card) ... end
 card.onBuyAffectUnit = function(card, unit) ... end
 
 
-card.color = RED | GRN | BLU
+card.rgb = RED | GRN | BLU
 
-card.unit = {
-    amount = 4;
-    type = "entity_type"
+
+card = {
+    name = "brute x 1", -- card name
+    description = "hp 5\ndmg 5",
+
+    cost = X
+    
+    unit = {
+        amount = 4;
+        type = "entity_type";
+        
+        -- the health and damage of the entity type.
+        -- (These values are optional.)
+        health = 4,
+        damage = 4
+    },
 }
-
 
 card.buyTarget = "1_unit" | "all_units" | "board" | 
                 "1_unit_anycol" | "all_units_anycol"
 
-card.cost = X
 
 
 ```
@@ -35,6 +46,8 @@ card.cost = X
 
 # UNITS:
 ```lua
+
+ent.rgb = RED | GRN | BLU
 
 ent.moveBehaviour = {...}
 

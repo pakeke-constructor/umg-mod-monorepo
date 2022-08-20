@@ -11,7 +11,6 @@ local images = assets.images
 
 
 
-
 on("drawEntity", function(ent)
     local quad = images[ent.image]
     if not quad then
@@ -45,4 +44,7 @@ on("drawEntity", function(ent)
 end)
 
 
+return {
+    drawImage = drawImage
+}
 

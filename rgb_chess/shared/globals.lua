@@ -38,7 +38,12 @@ local colorMatch = {
     [COLS.MAG] = {COLS.RED,COLS.BLU,COLS.AQU,COLS.YLO};
 }
 
+
 function rgb.areMatchingColors(col1, col2)
+    if exists(col1) and exists(col2) then
+        local ent1, ent2 = col1, col2
+        return rgb.areMatchingColors(ent1.rgb, ent2.rgb)
+    end
     if not invert[col1] then
         error("invalid color for col1: " .. tostring(col1))
     end

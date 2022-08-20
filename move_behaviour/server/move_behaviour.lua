@@ -6,6 +6,8 @@ local helper = require("server.helper")
 
 
 
+
+
 local follow = {}
 function follow.update(ent,dt)
     local targ = ent.moveBehaviourTarget

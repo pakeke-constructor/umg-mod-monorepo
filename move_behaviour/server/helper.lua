@@ -1,5 +1,10 @@
 
 
+
+local DEFAULT_STOP_DISTANCE = 30
+
+
+
 local function findClosestEntity(src_ent, category)
     --[[
         finds the closest entity to `src_ent` in category `category`.
@@ -24,6 +29,7 @@ local DEACTIVATE_FACTOR = 1.15 -- 15% extra to deactivate, seems reasonable
 local function deactivateDist(moveBehaviour)
     return moveBehaviour.deactivateDistance or moveBehaviour.activateDistance * DEACTIVATE_FACTOR
 end
+
 
 
 local function tryPickNewTarget(ent, mb)
@@ -62,7 +68,9 @@ local function moveTo(ent, x, y)
     local dx = x - ent.x
     local dy = y - ent.y
     local mag = math.distance(dx,dy)
-    if mag > 0 then
+    local stopDistance = ent.moveBehaviour.stopDistance or DEFAULT_STOP_DISTANCE
+
+    if mag > 0 and stopDistance < mag then
         ent.vx = (dx / mag) * ent.speed
         ent.vy = (dy / mag) * ent.speed
     else

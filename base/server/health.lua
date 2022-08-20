@@ -4,21 +4,23 @@
 local hpGroup = group("health", "maxHealth")
 
 
+
+
 on("tick", function(dt)
     for _, ent in ipairs(hpGroup)do
         if ent.regen then
             local amount = ent.regen * dt
             ent.health = math.min(ent.maxHealth, ent.health + amount)
-            if ent._previousHealth then
-                if ent._previousHealth ~= ent.health then
-                    server.broadcast("changeEntHealth", ent.health, ent.maxHealth)
-                end
-            end
+        end
+
+        -- delta compression, syncing health values:
+        if ent._previousHealth ~= ent.health then
+            server.broadcast("changeEntHealth", ent, ent.health, ent.maxHealth)
             ent._previousHealth = ent.health
         end
 
         if ent.health <= 0 then
-            server.broadcast()
+            server.broadcast("dead", ent, ent.health)
             call("dead", ent)
             ent:delete()
         end

@@ -22,7 +22,12 @@ return {
 
     "health",
     maxHealth = 100,
-    healthBar = {},
+
+    healthBar = {
+        offset = 20,
+        drawWidth = 60,
+        color = {0,1,0}
+    },
 
     category = "player",
 

@@ -40,10 +40,13 @@ ent.moveBehaviour = {
     -- the distance required for a new target to be selected.
 
     deactivateDistance = 250,
-    -- the distance required for this entity to stop following
+    -- the distance required for this entity to stop following.
 
 
     -- OPTIONAL VALUES:
+    
+    stopDistance = 30, -- (default value is 30!)
+    -- this entity stops following when they are within 30 units.
 
     -- only used with `circle` pathfind type:
     circleRadius = 50, -- circles around target with radius of 50 units

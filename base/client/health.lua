@@ -7,6 +7,9 @@ client.on("changeEntHealth",function(ent, health, maxHealth)
 end)
 
 
+client.on("dead", function(ent)
+    call("dead",ent)
+end)
 
 
 

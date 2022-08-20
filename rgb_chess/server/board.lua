@@ -34,4 +34,5 @@ function Board:iterUnits()
     return ipairs(self.units)
 end
 
+return Board
 

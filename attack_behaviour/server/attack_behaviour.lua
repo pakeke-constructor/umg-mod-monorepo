@@ -49,6 +49,7 @@ end)
 
 
 local function attackMelee(ent, target_ent)
+    print("attack!")
     attack(ent, target_ent)
 end
 
@@ -131,7 +132,8 @@ end
 
 local function tryAttack(ent, target, now)
     local typ = ent.attackBehaviour.type
-    local last_attack = ent.attackBehaviour_lastAttack or now
+    ent.attackBehaviour_lastAttack = ent.attackBehaviour_lastAttack or now
+    local last_attack = ent.attackBehaviour_lastAttack
     if (now - last_attack) > ent.attackSpeed then
         attackTypes[typ](ent, target)
         ent.attackBehaviour_lastAttack = now + ((now - last_attack) - ent.attackSpeed)

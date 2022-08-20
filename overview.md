@@ -205,8 +205,8 @@ keypressed ( key, scancode, isrepeat )  -- CLIENTSIDE: when a key is pressed (li
 mousepressed (x, y, button, istouch, presses) -- CLIENTSIDE: when mouse is clicked (like love.mousepressed)
 
 tick  ( dt ) -- called every game tick
-join (username) -- called when `username` joins the server
-leave (username) -- called when `username` leaves the server
+playerJoin (username) -- called when `username` joins the server
+playerLeave (username) -- called when `username` leaves the server
 ```
 Here some other callbacks that are defined by the base mod:
 ```

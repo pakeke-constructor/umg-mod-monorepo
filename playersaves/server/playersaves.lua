@@ -35,7 +35,7 @@ end)
 
 
 
-on("leave", function(username)
+on("playerLeave", function(username)
     local fname = get_filename(username)
 
     local buffer = {}

@@ -14,6 +14,7 @@ local sound = require("client.sound")
 local entityHelper = require("other.entity_helper")
 
 
+
 local base = {
     camera = draw.camera;
 
@@ -22,6 +23,9 @@ local base = {
 
     isOnScreen = draw.isOnScreen;
     entOnScreen = draw.entOnScreen;
+
+    getQuadOffsets = require("client.image_helpers.quad_offsets");
+    drawImage = require("client.image_helpers.draw_image");
 
     shockwave = shockwave;
 
@@ -33,8 +37,6 @@ local base = {
     
     Partition = require("other.partition.partition");
     
-    getQuadOffsets = require("client.image_helpers.quad_offsets");
-
     getPlayer = require("other.get_player");
 
     particles = require("client.particles");
