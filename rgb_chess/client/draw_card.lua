@@ -12,7 +12,7 @@ local UNIT_INFO_OX3 = 16
 
 local currentTime = 0
 
-local BOB_PERIOD = 3
+local BOB_PERIOD = 7
 local BOB_AMPL = 8
 local PI2 = math.pi * 2
 
@@ -29,11 +29,9 @@ end
 
 
 local function drawUnitCard(ent)
-    local x, y = ent.x, ent.y
+    local x, y = ent.x, ent.y + getBob(ent)
     local card = ent.card
     local unit = card.unit
-
-    y = y + getBob(ent)
 
     graphics.push("all")
     base.drawImage("unit_card", x, y)
@@ -46,7 +44,7 @@ local function drawUnitCard(ent)
     
     local health = unit.health or "NA"
     local damage = unit.damage or "NA"
-    local cost = card.cost or 1
+    local cost = "$" .. tostring(card.cost or 1)
 
     graphics.setColor(0.3, 0.1, 0.1)
     graphics.print(

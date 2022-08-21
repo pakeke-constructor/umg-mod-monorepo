@@ -52,6 +52,10 @@ For example,
 - `yellow` cards have both `red` and `green` color.
 - `white` cards have all colors.
 
+
+For the first 3 rounds, only red,blue,green cards are available.
+On the 4th round, the color chances are as follows:
+
 color chances:
 ```
 Each card spawns with a color. Here are the chances:
@@ -63,8 +67,7 @@ Each card spawns with a color. Here are the chances:
 5% chance of magenta (red + blue)
 1% chance of white (all)
 ```
-NOTE: 
-For the first few turns, only red, blue, and green cards should spawn.
+
 
 
 

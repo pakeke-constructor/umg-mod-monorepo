@@ -8,6 +8,8 @@ function Board:init(x, y, owner)
     self.x = x
     self.y = y
 
+    self.money = 0
+
     self.shopSize = 5
     self.shop = {--[[card1, card2, ... ]]}
     self.shopLocks = {--[[
