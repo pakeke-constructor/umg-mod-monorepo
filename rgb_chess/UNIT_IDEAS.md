@@ -88,7 +88,7 @@ mimic the stats of the strongest [same color] ally
 ranged, 3/3
 start of turn:
 if this is the only [same color] ally on the board,
-rerolling is discounted
+rerolling is discounted by `X`
 // TODO:: put some exact numbers on this!!!
 
 # shifter
@@ -185,4 +185,6 @@ give all [same color] allies +10% hp
 
 // NOTE: priest and monk synergize together SUPER WELL!!!!
 // They create a chain reaction of buffs.
+
+
 

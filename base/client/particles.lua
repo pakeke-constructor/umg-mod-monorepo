@@ -201,6 +201,11 @@ end
 
 
 
+function particles.getParticleSystem(name)
+    return nameToPsys[name]
+end
+
+
 
 return particles
 

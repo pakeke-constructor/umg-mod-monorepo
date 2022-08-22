@@ -49,7 +49,6 @@ end)
 
 
 local function attackMelee(ent, target_ent)
-    print("attack!")
     attack(ent, target_ent)
 end
 

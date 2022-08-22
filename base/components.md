@@ -63,36 +63,13 @@ ent.spinning = {
 
 
 -- changing ent sizes!
--- (This should also affect the size of the physics body too.)
-ent.scale
-ent.scaleX
-ent.scaleY
+ent.scale = 1
+ent.scaleX = 1
+ent.scaleY = 1
 
 
-ent.riding -- This entity rides another entity!
+ent.riding = horse_ent
 
-
-ent.trail = {
-    -- like `friction` component in PushOps; leaves a particle trail.
-}
-
-ent.particles = {
-    type = "dust",
-    ox = 0;
-    oy = 40
-}
-
-
-ent.physics = {
-    shape = love.physics.Shape(...), -- some shape object (compulsory)
-
-    -- OPTIONAL FIELDS:
-    friction = 6, -- friction number.  (default is 6),
-
-    type = "kinematic" -- The bodyType of the entity. 
-    -- Default is `static` or `dynamic`, depending on whether the 
-        -- ent has vx and vy components.
-}
 
 
 ent.friction = 3.15 -- friction number. (default is roughtly 3.15)
@@ -109,6 +86,47 @@ ent.healthBar = { -- health bar above entity!
     healthColor = {1,0.2,0.2},
     outlineColor = {0,0,0},
     backgroundColor = {0.4,0.4,0.4,0.4}
+}
+
+
+
+
+-- please note that entities with particles break auto batching.
+-- Don't use particles EVERYWHERE; it'll be slow
+ent.particles = {
+    type = "dust", -- `dust` is defined by base.particles.define()
+    
+    -- OPTIONAL FIELDS:
+    rate = 5, -- emits 5 particles per second (default = 5)
+    
+    spread = {x = 4, y = 4}, -- particle emit spread
+
+    offset = {x = 0, y = 20}, -- draw offsets for x and y.
+    -- (^^^ for example, if you wanted to draw the particles at feet of entity.)
+    
+    shared = true -- Whether this particle system should be shared or not.
+    -- NOTE: If you are worried about performance, turn this on!!!!
+}
+
+-- entities can also have multiple particles attatched to them:
+ent.particles = {
+    { type = "smoke", offset = {x = 0, y = 20} },
+    { type = "dust", offset = {x = 0, y = 20} }
+    -- ^^^ these take same args as above.
+}
+
+
+
+
+ent.physics = {
+    shape = love.physics.Shape(...), -- some shape object (compulsory)
+
+    -- OPTIONAL FIELDS:
+    friction = 6, -- friction number.  (default is 6),
+
+    type = "kinematic" -- The bodyType of the entity. 
+    -- Default is `static` or `dynamic`, depending on whether the 
+        -- ent has vx and vy components.
 }
 
 
@@ -147,11 +165,12 @@ ent.agility = 50 -- How fast the ent can change it's speed (acceleration)
 
 
 ent.init = function(ent, ...) 
+    -- Called when the entity is first created.
+    -- `...` is the args passed to the constructor.
+    -- Generally, the first two args should always be (x, y)
     ... 
 end
--- Called when the entity is first created.
--- `...` is the args passed to the constructor.
--- Generally, the first two args should always be (x, y)
+
 
 ent.onDamaged = function(ent) ... end
 
