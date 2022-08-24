@@ -34,6 +34,7 @@ local function doSplash(ent, target_ent)
                         splash.radius
                     )
                     call("attack", ent, e, dmg)
+                    server.broadcast("attack", ent, e, dmg)
                     e.health = e.health - ent.attackDamage
                 end
             end
@@ -55,6 +56,7 @@ local function attack(ent, target_ent)
         doSplash(ent, target_ent)
     else
         call("attack", ent, target_ent, ent.attackDamage)
+        server.broadcast("attack", ent, target_ent, ent.attackDamage)
         target_ent.health = target_ent.health - ent.attackDamage
     end
 end

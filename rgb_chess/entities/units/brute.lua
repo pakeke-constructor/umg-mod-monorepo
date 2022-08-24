@@ -1,7 +1,7 @@
 
 local BRUTE_DEFAULT_DMG = 5
 local BRUTE_DEFAULT_HP = 10
-local BRUTE_DEFAULT_ATTACKSPEED = 1
+local BRUTE_DEFAULT_ATTACKSPEED = 0.5
 
 
 return {
@@ -11,6 +11,7 @@ return {
     "color",
     "category",
 
+    "rgb",
     "rgb_team", -- the team this entity is in
     "rgb_saveStats", -- a table for saving entity stats before combat.
 
@@ -19,9 +20,7 @@ return {
 
     speed = 60,
 
-    attackBehaviour = {
-
-    };
+    attackBehaviour = {};
 
     moveBehaviour = {
         type = "follow";

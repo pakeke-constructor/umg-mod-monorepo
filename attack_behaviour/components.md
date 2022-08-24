@@ -28,7 +28,8 @@ ent.attackBehaviour = {
     type = anything from ATTACK_TYPES,
     range = 10, -- range of attack
 
-    
+    target = "player", -- targets player entities (entities in `player` category.)
+
     -- OPTIONAL VALUES:
     
     -- splash damage:
@@ -43,15 +44,21 @@ ent.attackBehaviour = {
     -- ranged:
     projectile = "entity_name",
     fireProjectile = function(ent, targ)
-        ... -- callback for custom projectile stuff.
+        ... -- OPTIONAL:
+        --  callback for custom projectile stuff.
         -- This is called whenever a projectile is fired.
     end
     projectileCount = 1, -- default of 1
     projectileSpeed = 100, -- default of X
-
 }
 
 
+ent.attackBehaviourTargetCategory = "neutral"
+-- This is an override for `ent.attackBehaviour.target`.
+
+
+ent.attackBehaviourTargetEntity = ent_1
+-- override to allow attackBehaviour to target one specific entity.
 
 
 
@@ -69,7 +76,7 @@ They must have an `x`, `y`, and `attackBehaviourProjectile` component.
 
 local proj_ent = {
     "x","y",
-    "projectile"
+    "attackBehaviourProjectile"
 }
 proj_ent.attackBehaviourProjectile = {
     target_ent = target_ent;

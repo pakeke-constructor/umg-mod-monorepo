@@ -30,7 +30,6 @@ on("drawEntity", function(ent)
     if nametagGroup:has(ent) then
         local ox, oy = quad_offsets(images[ent.image])
         local text = ent.nametag.value or ent.controller or DEFAULT
-        local z = ent.z or 0
 
         local width = text_to_width[text] or font:getWidth(text)
         text_to_width[text] = width
@@ -41,10 +40,13 @@ on("drawEntity", function(ent)
         graphics.push("all")
         
         graphics.setColor(0.2,0.2,0.2, 0.5)
+
+        local y = base.getScreenY(ent)
+
         graphics.rectangle(
             "fill", 
             ent.x + ox/2 - ((width/2) * SCALE),
-            ent.y - oy - z/2 - ((height/2) * SCALE) - EXTRA_OY,
+            y - oy - ((height/2) * SCALE) - EXTRA_OY,
             width * SCALE, height * SCALE
         )
 
@@ -52,7 +54,7 @@ on("drawEntity", function(ent)
         graphics.print(
             text, 
             ent.x + ox/2, 
-            ent.y - z/2 - oy - EXTRA_OY,
+            y - oy - EXTRA_OY,
             ent.rot, SCALE, SCALE,
             width/2, height/2
         )

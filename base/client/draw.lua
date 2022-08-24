@@ -20,14 +20,6 @@ local floor = math.floor
 
 
 
-local depthIndexer_max_depth = 0
-local depthIndexer_min_depth = 0
-
-
-local min = math.min
-local max = math.max
-
-
 -- Ordered drawing data structure
 local depthIndexer = setmetatable({},
     --[[
@@ -37,8 +29,6 @@ local depthIndexer = setmetatable({},
     ]]
     {__index = function(t, zindx)
         t[zindx] = Set()
-        depthIndexer_max_depth = max(depthIndexer_max_depth, zindx)
-        depthIndexer_min_depth = min(depthIndexer_min_depth, zindx)
         return t[zindx]
     end}
 )
@@ -138,10 +128,22 @@ local function isOnScreen(x, y, leighway, w, h)
 end
 
 
+local CAMERA_DEPTH_LEIGHWAY = 200
+local function cameraTopDepth()
+    local _, y = camera:toWorldCoords(0,-CAMERA_DEPTH_LEIGHWAY)
+    return math.floor(y)
+end
+
+local function cameraBotDepth()
+    local _, y = camera:toWorldCoords(0,graphics.getHeight() + CAMERA_DEPTH_LEIGHWAY)
+    return math.floor(y)
+end
+
 
 local function mainDraw()
     local w, h = graphics.getWidth(), graphics.getHeight()
-    for z_dep = depthIndexer_min_depth, depthIndexer_max_depth do
+    local topDep, botDep = cameraTopDepth(), cameraBotDepth()
+    for z_dep = topDep, botDep do
         if rawget(depthIndexer, z_dep) then
             local entSet = depthIndexer[z_dep]
             for _, ent in entSet:iter() do
@@ -184,6 +186,15 @@ local function getUIScale()
 end
 
 
+local function getScreenY(ent_or_y, z_or_nil)
+    if type(ent_or_y) == "table" then
+        return ent_or_y.y - (ent_or_y.z or 0)/2
+    else
+        return ent_or_y - (z_or_nil or 0)/2
+    end
+end
+
+
 
 on("draw", function()
     camera:draw()
@@ -223,7 +234,7 @@ local function fshift(ent)
         shifts the entities around in the depthIndexer structure
         in a fast manner
     ]]
-    local z_index = floor((ent.y + (ent.z or 0))/2)
+    local z_index = floor(getScreenY(ent))
     if positions[ent] ~= z_index then
         removeEnt(ent)
         setEnt(ent)
@@ -244,6 +255,8 @@ end)
 
 return {
     camera = camera;
+
+    getScreenY = getScreenY;
 
     getUIScale = getUIScale;
     setUIScale = setUIScale;

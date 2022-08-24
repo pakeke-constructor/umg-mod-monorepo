@@ -19,9 +19,6 @@ attackGroup:onAdded(function(ent)
         ensuring that the attackBehaviour component is formatted correctly.
     ]]
     local ab = ent.attackBehaviour
-    if not ab.target then
-        error("attackBehaviour must have a `target` category value. Not the case for: " .. ent:type())
-    end
     if (not ab.type) or (not ATTACK_TYPES[ab.type]) then
         error("invalid attack type for " .. ent:type() .. ": " .. tostring(ab.type))
     end
@@ -144,13 +141,15 @@ on("update5", function()
     local now = timer.getTime()
     for _, ent in ipairs(attackGroup) do
         if ent.attackBehaviour then
-            local target = ent.attackBehaviour_targetEnt
-            local targetCategory = ent.attackBehaviour.target
-            if not target then
-                target = findClosestEntity(ent, targetCategory)
-            end
-            if target and math.distance(target, ent) < ent.attackBehaviour.range then
-                tryAttack(ent, target, now)
+            local target = ent.attackBehaviourTargetEntity
+            local targetCategory = ent.attackBehaviourTargetCategory or ent.attackBehaviour.target
+            if targetCategory then
+                if not exists(target) then
+                    target = findClosestEntity(ent, targetCategory)
+                end
+                if target and math.distance(target, ent) < ent.attackBehaviour.range then
+                    tryAttack(ent, target, now)
+                end
             end
         end
     end

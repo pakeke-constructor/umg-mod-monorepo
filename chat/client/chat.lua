@@ -1,6 +1,7 @@
 
 local LinkedList = require("_libs.doubly_linked_list")
 
+local constants = require("constants")
 
 
 local MAX_CHATHISTORY_SIZE = 300 -- After this many messages, messages begin to be deleted.
@@ -14,6 +15,13 @@ local MESSAGE_SEP = 10
 local CHAT_WRAP_WIDTH = 300
 
 local TARGET_CHAT_HEIGHT = 6 -- This number is actually quite arbitrary
+
+
+local IS_COMMAND_CHAR = {}
+for _,char in ipairs(constants.COMMAND_CHARS) do
+    IS_COMMAND_CHAR[char] = true
+end
+
 
 
 local chatHistory = LinkedList.new()
@@ -120,6 +128,20 @@ on("textinput", function(t)
 end)
 
 
+
+local function doCommand(message)
+    local buffer = {}
+    local _,f = message:find("%S+")
+    local command = message:sub(2, f)
+    if #message > 0 then
+        for arg in message:sub(f+1):gmatch("%S+") do
+            table.insert(buffer, arg)
+        end
+        client.send("commandMessage", command, unpack(buffer))
+    end
+end
+
+
 on("keypressed", function(k)
     --[[
         TODO: Set keyboard blocking here!!!!
@@ -135,7 +157,12 @@ on("keypressed", function(k)
     elseif k == "return" then
         if isTyping then
             if #currMessage>0 then
-                client.send("chatMessage", currMessage)
+                local startChar = currMessage:sub(1,1)
+                if IS_COMMAND_CHAR[startChar] then
+                    doCommand(currMessage)
+                else
+                    client.send("chatMessage", currMessage)
+                end
                 currMessage = ''
             end
         end

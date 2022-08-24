@@ -98,14 +98,9 @@ ent.particles = {
     
     -- OPTIONAL FIELDS:
     rate = 5, -- emits 5 particles per second (default = 5)
-    
     spread = {x = 4, y = 4}, -- particle emit spread
-
     offset = {x = 0, y = 20}, -- draw offsets for x and y.
     -- (^^^ for example, if you wanted to draw the particles at feet of entity.)
-    
-    shared = true -- Whether this particle system should be shared or not.
-    -- NOTE: If you are worried about performance, turn this on!!!!
 }
 
 -- entities can also have multiple particles attatched to them:
@@ -114,6 +109,11 @@ ent.particles = {
     { type = "dust", offset = {x = 0, y = 20} }
     -- ^^^ these take same args as above.
 }
+
+ent.shouldEmitParticles = function(ent)
+    return true -- whether this entity should emit particles or not.
+    -- for example, good for running. If entity speed > X, return true,
+end 
 
 
 
@@ -172,7 +172,6 @@ ent.init = function(ent, ...)
 end
 
 
-ent.onDamaged = function(ent) ... end
 
 ent.onDeath = function(ent) ... end
 
@@ -182,6 +181,10 @@ ent.onDraw = function(ent) end  --  called when ent is drawn
 
 ent.onCollide = function(ent, other_ent)
     -- called when 2 ents collide. (both must have physics component)
+end
+
+ent.onClick = function(ent, button, x, y)
+    -- called when ent is clicked. (`ent` must have an x, y position.)
 end
 
 

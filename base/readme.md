@@ -28,9 +28,9 @@ base.getPlayer(username) -- gets an entity being controlled by `username`
          CLIENT SIDE ONLY:::
 ========================================================================
 ]]
-base.animate(frames, ...) -- Same as ccall("animate"), 
-    -- except frames is a list of asset names, like:  
-    -- { "image1", "image2", "image3" }
+base.animate(frames, time, x, y, z, cycles=1, colour={1,1,1}, follow_ent=nil, hide_ent=false)
+-- frames is a list of asset names, like:  
+-- { "image1", "image2", "image3" }
 
 base.shockwave(x, y, start_size, end_size, thickness, time, colour={1,1,1,1})
 

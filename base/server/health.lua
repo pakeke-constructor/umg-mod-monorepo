@@ -22,6 +22,9 @@ on("tick", function(dt)
         if ent.health <= 0 then
             server.broadcast("dead", ent, ent.health)
             call("dead", ent)
+            if ent.onDeath then
+                ent:onDeath()
+            end
             ent:delete()
         end
     end

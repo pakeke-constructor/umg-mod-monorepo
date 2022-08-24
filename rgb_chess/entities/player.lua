@@ -1,5 +1,32 @@
 
-local PLAYER_SPEED = 90
+local PLAYER_SPEED = 290
+
+
+local function shouldEmitParticles(ent)
+    return math.distance(ent.vx, ent.vy) > 20
+end
+
+
+
+local function init(ent, x, y)
+    ent.particles = {
+        type = "dust",
+        rate = 100,
+        offset = {y = 8},
+        spread = {x = 3, y = 0}
+    }
+
+    base.entityHelper.initPosition(ent, x, y)
+end
+
+
+
+
+
+
+
+
+
 
 
 return {
@@ -7,12 +34,13 @@ return {
     "vx", "vy","vz",
     "controller",
     "image",
+    "particles",
 
     "faceDirection",
 
     follow = true;
 
-    color = {0.9,0.9,0.9,0.3},
+    color = {0.9,0.9,0.9,0.7},
 
     bobbing = {},
     
@@ -33,10 +61,13 @@ return {
         activation = 15
     };
 
+    shouldEmitParticles = shouldEmitParticles,
+
     speed = PLAYER_SPEED;
     agility = PLAYER_SPEED * 20;
 
-    init = base.entityHelper.initPosition
+
+    init = init
 }
 
 

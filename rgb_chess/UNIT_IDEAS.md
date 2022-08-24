@@ -129,7 +129,7 @@ end of turn:
 give the strongest [same color] ally +15% hp and dmg
 
 # monk
-ranged, 2/5
+ranged, 2/3
 on buff:
 give all [same color] allies +10% dmg
 

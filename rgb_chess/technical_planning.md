@@ -70,6 +70,8 @@ ent.onUpdateSecond = function(ent) ... end -- called once per second.
 ent.onDamage = function(ent, dmger_ent) ... end
 ent.onHeal = function(ent, healer_ent) ... end
 
+ent.onAttack = function(ent, targ, dmg) ... end -- called whenever `ent` attacks.
+
 ent.onStun = function(ent) ... end
 
 ent.onSummon = function(ent, summoned_ent) ... end
@@ -88,8 +90,8 @@ ent.onRoundEnd = function(ent) ... end
 ### Callbacks:
 ```lua
 
-call("buff", unit, attackAmount, healthAmount, fromUnit=nil)
-call("debuff", unit, attackAmount, healthAmount, fromUnit=nil)
+call("buff", unit, attackAmount, healthAmount, fromUnit=nil, depth=0)
+call("debuff", unit, attackAmount, healthAmount, fromUnit=nil, depth=0)
 
 
 
@@ -97,3 +99,4 @@ call("debuff", unit, attackAmount, healthAmount, fromUnit=nil)
 
 
 ```
+

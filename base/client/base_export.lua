@@ -24,8 +24,12 @@ local base = {
     isOnScreen = draw.isOnScreen;
     entOnScreen = draw.entOnScreen;
 
+    getScreenY = draw.getScreenY;
+
     getQuadOffsets = require("client.image_helpers.quad_offsets");
     drawImage = require("client.image_helpers.draw_image");
+
+    animate = require("client.animate");
 
     shockwave = shockwave;
 
