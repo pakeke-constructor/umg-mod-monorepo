@@ -13,6 +13,7 @@ local sound = require("client.sound")
 
 local entityHelper = require("other.entity_helper")
 
+local animate = require("client.animate")
 
 
 local base = {
@@ -29,7 +30,8 @@ local base = {
     getQuadOffsets = require("client.image_helpers.quad_offsets");
     drawImage = require("client.image_helpers.draw_image");
 
-    animate = require("client.animate");
+    animate = animate.animate;
+    animateEntity = animate.animateEntity;
 
     shockwave = shockwave;
 

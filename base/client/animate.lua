@@ -97,7 +97,21 @@ end
 
 on("update", function(dt)
     curTime = timer.getTime()
+end)
 
+
+
+
+on("preDraw", function()
+    --[[
+    Updates entity animations from `animateEntity(...)`
+
+    we aren't actually drawing anything here, we are updating stuff.
+    The reason we are updating here is so it doesn't get overridden by 
+    other systems;  like moveAnimation component or animation component.
+    
+    If we update directly before drawing, nothing can override it.
+    ]]
     for i=#entAnimations,1,-1 do
         local obj = entAnimations[i]
         if isFinished(obj) then

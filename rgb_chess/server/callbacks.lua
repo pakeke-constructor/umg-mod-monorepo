@@ -1,5 +1,9 @@
 
 
+local Board = require("server.board")
+
+
+
 on("attack", function(atcker_ent, targ_ent, dmg)
     if targ_ent.onDamage then
         targ_ent:onDamage(atcker_ent, dmg)
@@ -49,10 +53,12 @@ end)
 
 
 
-local rerollEnts = group("onReroll")
-on("reroll", function()
-    for _, ent in ipairs(rerollEnts) do
-        ent:onReroll()
+on("reroll", function(username)
+    local board = Board.getBoard(username)
+    for _, ent in board:iterUnits() do
+        if ent.onReroll then
+            ent:onReroll()
+        end
     end
 end)
 
