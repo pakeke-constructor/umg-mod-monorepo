@@ -23,7 +23,7 @@ categories.getSet("enemy")
 -- returns a set of all the entities that `category = "enemy"`
 
 
-categories.changeEntity(ent, "ally")
+categories.changeEntityCategory(ent, "ally")
 -- changes `ent`s category to "ally".
 
 

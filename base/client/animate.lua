@@ -7,11 +7,18 @@ local drawImage = require("client.image_helpers.draw_image")
 
 local drawIndexToAnimObj = {}
 
+local entAnimations = {}
+
+
 
 local WHITE = {1,1,1}
 
 
-local function animate(frames, time, x,y,z, cycles, color, follow_ent, hide_ent)
+-- the current time.
+local curTime = timer.getTime()
+
+
+local function animate(frames, time, x,y,z, color)
     local obj = {
         frames = frames;
         startTime = timer.getTime();
@@ -19,18 +26,10 @@ local function animate(frames, time, x,y,z, cycles, color, follow_ent, hide_ent)
         x = x,
         y = y,
         z = z or 0,
-        cycles = cycles or 1,
         color = color or WHITE,
-        follow_ent = follow_ent,
-        hide_ent = hide_ent
     }
 
     local indx = math.floor(draw.getScreenY(obj))
-    if exists(follow_ent) then
-        indx = math.floor(draw.getScreenY(follow_ent))
-    else
-        indx = math.floor(draw.getScreenY(obj))
-    end
     drawIndexToAnimObj[indx] = drawIndexToAnimObj[indx] or {}
     table.insert(drawIndexToAnimObj[indx], obj)
 end
@@ -38,20 +37,27 @@ end
 
 
 
-local curTime = timer.getTime()
 
 
-on("update", function(dt)
-    curTime = timer.getTime()
-end)
+local function animateEntity(ent, frames, time)
+    local obj = {
+        ent = ent,
+        frames = frames,
+        time = time,
+        old_image = ent.image,
+        startTime = timer.getTime()
+    }
 
-
+    table.insert(entAnimations, obj)
+end
 
 
 
 local function isFinished(animObj)
     return curTime >= (animObj.startTime + animObj.time)
 end
+
+
 
 
 local function drawAnimObj(animObj)
@@ -80,6 +86,35 @@ local function drawAnimObj(animObj)
 end
 
 
+
+local function updateEntAnimationObject(obj)
+    local i = math.floor(((curTime - obj.startTime) / obj.time) * (#obj.frames)) + 1
+    local quadName = obj.frames[i]
+    obj.ent.image = quadName
+end
+
+
+
+on("update", function(dt)
+    curTime = timer.getTime()
+
+    for i=#entAnimations,1,-1 do
+        local obj = entAnimations[i]
+        if isFinished(obj) then
+            -- remove from array
+            local arr = entAnimations
+            arr[i] = arr[#arr]
+            arr[#arr] = nil
+            obj.ent.image = obj.old_image
+        else
+            updateEntAnimationObject(obj)
+        end
+    end
+end)
+
+
+
+
 on("drawIndex", function(indx)
     if drawIndexToAnimObj[indx] then
         local arr = drawIndexToAnimObj[indx]
@@ -88,7 +123,8 @@ on("drawIndex", function(indx)
             local animObj = arr[i]
             if isFinished(animObj) then
                 -- remove from array
-                arr[i], arr[#arr] = arr[#arr], nil
+                arr[i] = arr[#arr]
+                arr[#arr] = nil
             else
                 drawAnimObj(animObj)
             end
@@ -101,5 +137,8 @@ on("drawIndex", function(indx)
 end)
 
 
-return animate
+return {
+    animate = animate,
+    animateEntity = animateEntity
+}
 

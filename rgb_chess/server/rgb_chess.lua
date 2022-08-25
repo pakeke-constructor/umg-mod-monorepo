@@ -3,13 +3,8 @@ require("shared.globals")
 
 local Board = require("server.board")
 
-local generateEnemies = require("server.pve.generate_enemies")
+local generateEnemies = require("server.gen.generate_enemies")
 
-
-
-local usernameToPlayer = {
-    -- [username] = player_ent
-}
 
 
 
@@ -26,15 +21,13 @@ end
 on("playerJoin", function(username)
     local plyr_ent = entities.player(0, 0)
     plyr_ent.controller = username
-    usernameToPlayer[username] = plyr_ent
 end)
 
 
 
 on("playerLeave", function(username)
-    usernameToPlayer[username]:delete()
+    base.getPlayer(username):delete()
     Board.getBoard(username):delete()
-    usernameToPlayer[username] = nil
 end)
 
 

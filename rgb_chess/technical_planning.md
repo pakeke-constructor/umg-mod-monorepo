@@ -65,8 +65,6 @@ ent.onDebuff = function(ent, debuffer_ent) ... end
 ent.onBuy = function(ent) ... end
 ent.onSell = function(ent) ... end
 
-ent.onUpdateSecond = function(ent) ... end -- called once per second.
-
 ent.onDamage = function(ent, dmger_ent) ... end
 ent.onHeal = function(ent, healer_ent) ... end
 
@@ -74,13 +72,15 @@ ent.onAttack = function(ent, targ, dmg) ... end -- called whenever `ent` attacks
 
 ent.onStun = function(ent) ... end
 
-ent.onSummon = function(ent, summoned_ent) ... end
+ent.onAllySummoned = function(ent, summoned_ent) ... end
 
 ent.onReroll = function(ent) ... end
 
-ent.onRoundStart = function(ent) ... end
+ent.onStartTurn = function(ent) ... end
+ent.onEndTurn = function(ent) ... end
 
-ent.onRoundEnd = function(ent) ... end
+ent.onStartBattle = function(ent) ... end
+ent.onEndBattle = function(ent) ... end
 
 ```
 
@@ -93,10 +93,15 @@ ent.onRoundEnd = function(ent) ... end
 call("buff", unit, attackAmount, healthAmount, fromUnit=nil, depth=0)
 call("debuff", unit, attackAmount, healthAmount, fromUnit=nil, depth=0)
 
+call("attack", attacker_ent, target_ent, dmg) -- from attackBehaviour mod.
 
 
+ -- self explanatory:
+call("startBattle")
+call("endBattle")
 
-
+call("startTurn")
+call("endTurn")
 
 ```
 

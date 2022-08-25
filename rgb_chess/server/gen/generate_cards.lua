@@ -1,8 +1,13 @@
 
 
+--[[
+
+Generates cards for shop rerolls.
+
+]]
 
 
-return {
+local tiers = {
     [1] = {
         "card_brute"
     },

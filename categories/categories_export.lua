@@ -15,7 +15,7 @@ end
 
 
 
-function exp.changeEntity(ent, newCategory)
+function exp.changeEntityCategory(ent, newCategory)
     --[[
         changes an entities category/s.
         This MUST be called instead of doing `ent.category = X`

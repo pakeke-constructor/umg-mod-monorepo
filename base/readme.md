@@ -28,9 +28,14 @@ base.getPlayer(username) -- gets an entity being controlled by `username`
          CLIENT SIDE ONLY:::
 ========================================================================
 ]]
-base.animate(frames, time, x, y, z, cycles=1, colour={1,1,1}, follow_ent=nil, hide_ent=false)
+base.animate(frames, time, x, y, z, colour={1,1,1})
+-- plays an animation at (x,y,z) position.
 -- frames is a list of asset names, like:  
 -- { "image1", "image2", "image3" }
+
+base.animateEntity(ent, frames, time)
+-- plays an animation on an entity. (This will overwrite the entity's image.)
+
 
 base.shockwave(x, y, start_size, end_size, thickness, time, colour={1,1,1,1})
 

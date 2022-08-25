@@ -34,9 +34,14 @@ local function updateEnt(ent)
     local range = prox.range
     local category = ent.proximityTargetCategory or prox.targetCategory
 
-    if ent.proximityTarget then
+    if exists(ent.proximityTargetEntity) then
+        -- this vvv is an internal value for use only in this file.
+        ent.proximityTarget_entity = ent.proximityTargetEntity
+    end
+
+    if ent.proximityTarget_entity and exists(ent.proximityTarget_entity) then
         -- then we already have a target!
-        local targ = ent.proximityTarget
+        local targ = ent.proximityTarget_entity
         if math.distance(ent, targ) > range or (not exists(targ)) then
             -- oh no! We have to try select a new target.
             local new_target_ent = selectNew(ent, category, range)
@@ -45,7 +50,7 @@ local function updateEnt(ent)
                     callExit(ent, targ)
                 end
                 callEnter(ent, new_target_ent)
-                ent.proximityTarget = new_target_ent
+                ent.proximityTarget_entity = new_target_ent
             else
                 callExit(ent, targ)
             end
@@ -53,6 +58,7 @@ local function updateEnt(ent)
     else
         local new_target_ent = selectNew(ent, category, range)
         if new_target_ent then
+            ent.proximityTarget_entity = new_target_ent
             callEnter(ent, new_target_ent)
         end
     end

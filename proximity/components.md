@@ -31,6 +31,9 @@ ent.proximityTargetCategory = "enemy",
 -- and then fall back to ent.proximity.targetCategory if this is nil.
 -- (Useful for stuff like changing teams, etc.)
 
+-- override for a specific entity.
+ent.proximityTargetEntity = enemy_ent
+
 
 ```
 

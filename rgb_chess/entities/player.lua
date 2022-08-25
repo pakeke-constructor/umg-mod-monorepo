@@ -11,7 +11,7 @@ end
 local function init(ent, x, y)
     ent.particles = {
         type = "dust",
-        rate = 100,
+        rate = 20,
         offset = {y = 8},
         spread = {x = 3, y = 0}
     }
@@ -47,10 +47,6 @@ return {
     controllable = {};
 
     nametag = {};
-
-    light = {
-        radius = 120
-    };
 
     moveAnimation = {
         up = {"red_player_up_1", "red_player_up_2", "red_player_up_3", "red_player_up_4"},
