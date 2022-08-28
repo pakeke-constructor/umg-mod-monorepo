@@ -12,7 +12,7 @@ end
 
 
 
-server.on("clickEntity", function(sender, ent, button, worldX, worldY)
+server.on("clickEntity", function(sender_uname, ent, button, worldX, worldY)
     if not (exists(ent) and ent.onClick) then
         return
     end
@@ -22,8 +22,8 @@ server.on("clickEntity", function(sender, ent, button, worldX, worldY)
     if not isInRange(ent, worldX, worldY) then
         return
     end
-    ent:onClick(sender, button, worldX, worldY)
-    server.broadcast("clickEntity", ent, button, worldX, worldY)
+    ent:onClick(sender_uname, button, worldX, worldY)
+    server.broadcast("clickEntity", ent, sender_uname, button, worldX, worldY)
 end)
 
 

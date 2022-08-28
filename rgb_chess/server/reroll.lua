@@ -19,7 +19,9 @@ local function reroll(board)
         if not isLocked then
             -- then we reroll
             if exists(card) then
-                -- TODO: play sound here.
+                -- TODO:
+                -- im an idiot.
+                -- this needs to be broadcasted to the client.
                 base.animate(breakFrames, 0.3, card.x, card.y, card.z, card.color)
                 card:delete()
             end

@@ -1,9 +1,6 @@
 
 
-return {
-    "x","y",
-    image = "nothing",
-
+return extend("abstract_card", {
     card = {
         name = "BRUTE X 1", -- card name
         description = "hp 5\ndmg 5",
@@ -17,8 +14,6 @@ return {
             health = 4
         },
     },
-
-    init = base.entityHelper.initPosition
-}
+})
 
 

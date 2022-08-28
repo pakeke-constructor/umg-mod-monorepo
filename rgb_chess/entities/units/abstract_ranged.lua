@@ -6,6 +6,8 @@ local DEFAULT_SPEED = 60
 
 --[[
     abstract melee entity
+
+    entities that extend this will inherit these components:
 ]]
 return {
     "x", "y",
@@ -15,7 +17,7 @@ return {
     "category",
 
     "rgb",
-    "rgb_team", -- the team this entity is in
+    "rgbTeam", -- the team this entity is in
     "rgb_saveStats", -- a table for saving entity stats before combat.
 
     "attackDamage", "attackSpeed",

@@ -4,29 +4,12 @@ local SLIME_DEFAULT_HP = 4
 local SLIME_DEFAULT_ATTACKSPEED = 0.4
 
 
-return {
-    "x", "y",
-    "vx", "vy",
-    "image",
-    "color",
-    "category",
 
-    "rgb",
-    "rgb_team", -- the team this entity is in
+return extend("abstract_melee", {
 
-    "attackDamage", "attackSpeed",
-    "hp", "maxHp",
+    animation = {"blob0", "blob1", "blob2", "blob3", "blob2", "blob1", speed=0.6};
 
-    speed = 70,
-
-    attackBehaviour = {};
-
-    moveBehaviour = {
-        type = "follow";
-        activateDistance = 1000,
-    };
-
-    animation = {"huhu1","huhu2","huhu3","huhu2", speed=0.6};
+    bobbing = {},
 
     init = function(ent, x, y)
         ent.x = x;
@@ -37,4 +20,6 @@ return {
         ent.health = SLIME_DEFAULT_HP
         ent.maxHealth = SLIME_DEFAULT_HP
     end;
-}
+})
+
+

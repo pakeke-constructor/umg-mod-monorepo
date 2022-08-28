@@ -1,10 +1,17 @@
 
 
+local BOARD_WIDTH = 2000
+local BOARD_HEIGHT = 2000
+
+
 local Board = base.Class("rgb_chess:board")
 
 local usernameToBoard = {
 --[[
     [username] = Board
+
+    Note that `username` is also the value of the `.rgbTeam` component
+    for all the entities owned by that user.
 ]]
 }
 
@@ -12,8 +19,8 @@ local usernameToBoard = {
 
 
 -- Static method:
-function Board.getBoard(username)
-    return usernameToBoard[username]
+function Board.getBoard(username_or_team)
+    return usernameToBoard[username_or_team]
 end
 
 
@@ -28,6 +35,9 @@ function Board:init(x, y, owner)
     self.x = x
     self.y = y
 
+    self.width = BOARD_WIDTH
+    self.height = BOARD_HEIGHT
+
     self.money = 0
 
     self.shopSize = 5
@@ -38,6 +48,7 @@ function Board:init(x, y, owner)
     ]]}
 
     self.owner = owner
+    self.rgbTeam = owner
 
     self.units = {--[[
         ent1, ent2, ...
@@ -55,6 +66,10 @@ end
 
 
 function Board:getOwner()
+    return self.owner
+end
+
+function Board:getTeam()
     return self.owner
 end
 
@@ -118,6 +133,8 @@ function Board:putEnemies(data)
     --[[
         puts enemies on the board
         TODO: Make particle effects and stuff here
+        TODO: Make sure to change the position of enemies too!!!
+              right now we aren't actually doing that
     ]]
     local arr, err
     if type(data) == "string" then

@@ -5,9 +5,8 @@ local HUHU_DEFAULT_ATTACKSPEED = 0.4
 
 
 return extend("abstract_melee", {
-    animation = {
-        ""
-    }
+    
+    animation = {"huhu1","huhu2","huhu3","huhu2", speed=0.6};
 
     init = function(ent, x, y)
         ent.x = x;

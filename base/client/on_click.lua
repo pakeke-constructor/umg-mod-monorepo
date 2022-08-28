@@ -61,8 +61,8 @@ end)
 
 
 
-client.on("clickEntity", function(ent, button, username, worldX, worldY)
-    ent:onClick(button, username, worldX, worldY)
+client.on("clickEntity", function(ent, username, button, worldX, worldY)
+    ent:onClick(username, button, worldX, worldY)
 end)
 
 
