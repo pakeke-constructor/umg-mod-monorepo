@@ -15,7 +15,7 @@ ent.vy
 ent.vz -- velocity components
 
 
-ent.color = {1,0.5,0.2} -- colour (RGBA)
+ent.color = {1,0.5,0.2} -- color of entity (RGBA)
 -- (alpha channel is optional, defaults to 1.)
 
 ent.image = "abc" -- Image components should be strings!
@@ -88,6 +88,10 @@ ent.healthBar = { -- health bar above entity!
     backgroundColor = {0.4,0.4,0.4,0.4}
 }
 
+
+ent.nametag = { -- creates a nametag above the entity
+    value = "name", --  if value is nil, `.controller` component is used instead.
+}
 
 
 

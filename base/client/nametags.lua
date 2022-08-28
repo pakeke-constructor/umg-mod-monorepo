@@ -5,7 +5,7 @@ local nametagGroup = group("x", "y", "nametag", "image")
 
 local DEFAULT = "UNNAMED"
 
-local quad_offsets = require("client.image_helpers.quad_offsets")
+local quadOffsets = require("client.image_helpers.quad_offsets")
 local images = assets.images
 
 local font = graphics.getFont()
@@ -27,8 +27,8 @@ local EXTRA_OY = 5
 
 
 on("drawEntity", function(ent)
-    if nametagGroup:has(ent) then
-        local ox, oy = quad_offsets(images[ent.image])
+    if ent.nametag then
+        local ox, oy = quadOffsets(images[ent.image])
         local text = ent.nametag.value or ent.controller or DEFAULT
 
         local width = text_to_width[text] or font:getWidth(text)

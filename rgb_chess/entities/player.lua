@@ -24,11 +24,6 @@ end
 
 
 
-
-
-
-
-
 return {
     "x", "y", "z",
     "vx", "vy","vz",

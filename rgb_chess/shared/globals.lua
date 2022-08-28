@@ -29,14 +29,6 @@ end
 
 
 
-local COLS = rgb.COLS
-
-
-local colorMatch = {
-    [COLS.YLO] = {COLS.RED,COLS.GRN,COLS.AQU,COLS.MAG};
-    [COLS.AQU] = {COLS.BLU,COLS.GRN,COLS.YLO,COLS.MAG};
-    [COLS.MAG] = {COLS.RED,COLS.BLU,COLS.AQU,COLS.YLO};
-}
 
 
 function rgb.areMatchingColors(col1, col2)
@@ -51,27 +43,11 @@ function rgb.areMatchingColors(col1, col2)
         error("invalid color for col2: " .. tostring(col2))
     end
 
-    if (col1 == COLS.BLK) or (col2 == COLS.BLK) then
-        return false
-    end
+    local r = col1[1]*col2[1]
+    local g = col1[2]*col2[2]
+    local b = col1[3]*col2[3]
 
-    if col1 == col2 then
-        return true
-    end
-
-    if col1 == COLS.WHI or col2 == COLS.WHI then
-        return true
-    end
-
-    if colorMatch[col1] then
-        local ar = colorMatch[col1]
-        for i=1, #ar do
-            if ar[i] == col2 then
-                return true
-            end
-        end
-    end
-    return false
+    return (r+g+b) > 0
 end
 
 

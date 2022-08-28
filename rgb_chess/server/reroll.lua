@@ -28,7 +28,8 @@ local function reroll(board)
             local newCard = genCards.getCard(board)
             board.shop[i] = newCard
         end
-    end    local username = board:getOwner()
+    end
+    local username = board:getOwner()
     call("reroll", username)
 end
 

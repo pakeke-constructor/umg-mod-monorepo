@@ -302,6 +302,7 @@ exists(ent) -- returns `true` if `ent` still exists as an entity, false otherwis
 extend("parent_ent", ent_def) 
 -- deepcopies all data from entity `parent_ent` into table ent_def.
 -- useful for doing OOP-like inheritance in entity definitions.
+-- See https://en.wikipedia.org/wiki/Abstract_type
 
 -- Local event dispatch
 on(msg, func) -- listens to an event
