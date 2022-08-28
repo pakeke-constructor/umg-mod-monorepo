@@ -3,6 +3,8 @@
 
 Projectile entity.
 
+Used when ranged units attack.
+
 ]]
 
 local constants = require("shared.constants")
@@ -22,7 +24,6 @@ return {
     moveBehaviour = {
         type = "follow"
     },
-
 
     init = function(ent, x, y)
         ent.x = x

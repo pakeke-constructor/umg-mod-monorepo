@@ -4,29 +4,7 @@ local BRUTE_DEFAULT_HP = 10
 local BRUTE_DEFAULT_ATTACKSPEED = 0.5
 
 
-return {
-    "x", "y",
-    "vx", "vy",
-    "image",
-    "color",
-    "category",
-
-    "rgb",
-    "rgb_team", -- the team this entity is in
-    "rgb_saveStats", -- a table for saving entity stats before combat.
-
-    "attackDamage", "attackSpeed",
-    "hp", "maxHp",
-
-    speed = 60,
-
-    attackBehaviour = {};
-
-    moveBehaviour = {
-        type = "follow";
-        activateDistance = 1000,
-    };
-
+return extend("abstract_melee", {
     moveAnimation = {
         up = {"blank_player_up_1", "blank_player_up_2", "blank_player_up_3", "blank_player_up_4"},
         down = {"blank_player_down_1", "blank_player_down_2", "blank_player_down_3", "blank_player_down_4"}, 
@@ -45,5 +23,6 @@ return {
         ent.health = BRUTE_DEFAULT_HP
         ent.maxHealth = BRUTE_DEFAULT_HP
     end;
-}
+})
+
 

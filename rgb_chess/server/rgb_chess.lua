@@ -60,6 +60,7 @@ local function startBattle()
     saveBoards()
 end
 
+
 local function startPvE()
     startBattle()
     for _, board in Board.iterBoards() do
@@ -92,6 +93,8 @@ local function startGame()
         allocateBoard(player)
     end
 end
+
+
 
 
 

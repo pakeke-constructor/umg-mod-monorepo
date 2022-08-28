@@ -1,5 +1,5 @@
 
-local my_crafter = chests.Crafter()
+local my_crafter = crafting.Crafter()
 
 
 my_crafter:addRecipe(
@@ -27,7 +27,7 @@ my_crafter:addRecipe(
 
 
 
-return chests.newCraftingTable({
+return extend("abstract_crafter", {
     "x","y",
     image = "crate",
     openable = {distance = 100};

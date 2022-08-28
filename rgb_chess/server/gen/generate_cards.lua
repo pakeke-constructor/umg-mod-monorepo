@@ -4,6 +4,7 @@
 
 Generates cards for shop rerolls.
 
+USAGE:
 ]]
 
 
@@ -24,5 +25,18 @@ local tiers = {
 
     }
 }
+
+
+
+
+local genCards = {}
+
+
+function genCards.getCard(board)
+    local turn = board:getTurn()
+    return "card_brute" -- TODO: Write this function
+end
+
+
 
 

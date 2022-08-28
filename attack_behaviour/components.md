@@ -43,7 +43,7 @@ ent.attackBehaviour = {
 
     -- ranged:
     projectile = "entity_name",
-    fireProjectile = function(ent, targ)
+    fireProjectile = function(ent, targ_ent, projectile_ent)
         ... -- OPTIONAL:
         --  callback for custom projectile stuff.
         -- This is called whenever a projectile is fired.

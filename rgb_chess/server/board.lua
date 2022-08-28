@@ -54,6 +54,14 @@ function Board:init(x, y, owner)
 end
 
 
+function Board:getOwner()
+    return self.owner
+end
+
+function Board:getTurn()
+    return self.turn
+end
+
 
 function Board:delete()
     usernameToBoard[self.owner] = nil
@@ -101,6 +109,9 @@ function Board:clear()
         ent:delete()
     end
 end
+
+
+
 
 
 function Board:putEnemies(data)

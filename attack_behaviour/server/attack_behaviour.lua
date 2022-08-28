@@ -59,6 +59,9 @@ local function attackRanged(ent, target_ent)
     assert(etype and entities[etype], "ranged attacker doesn't have a valid projectile")
     local projectile_ent = entities[etype](ent.x, ent.y)
     assert(projectile_ent:hasComponent("attackBehaviourProjectile"), "This entity is not a projectile! (projectiles require attackBehaviourProjectile component.)")
+    if ent.fireProjectile then
+        ent:fireProjectile(target_ent, projectile_ent)
+    end
     projectile_ent.attackBehaviourProjectile = {
         target_ent = target_ent;
         target_x = target_ent.x;

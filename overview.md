@@ -299,6 +299,9 @@ local g = group("comp1", "comp2", ...)  -- gets an entity group.
 
 exists(ent) -- returns `true` if `ent` still exists as an entity, false otherwise
 
+extend("parent_ent", ent_def) 
+-- deepcopies all data from entity `parent_ent` into table ent_def.
+-- useful for doing OOP-like inheritance in entity definitions.
 
 -- Local event dispatch
 on(msg, func) -- listens to an event

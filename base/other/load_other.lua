@@ -8,5 +8,4 @@ require("other.set")
 require("other.array")
 require("other.updates")
 require("other.constants")
-require("other.click")
 

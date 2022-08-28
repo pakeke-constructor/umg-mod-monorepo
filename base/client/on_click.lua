@@ -54,9 +54,15 @@ on("mousepressed", function(mx, my, button, istouch, presses)
     end
 
     if bestEnt then
-        bestEnt:onClick(button, worldX, worldY)
+        client.send("clickEntity", bestEnt, button, worldX, worldY)
     end
 end)
 
+
+
+
+client.on("clickEntity", function(ent, button, username, worldX, worldY)
+    ent:onClick(button, username, worldX, worldY)
+end)
 
 

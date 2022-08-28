@@ -73,7 +73,8 @@ any = true
 
 [export]
 any = true
-
+[extend]
+any = true
 
 ## Standard library modifications
 [assert]
@@ -99,8 +100,8 @@ any = true
 [light]
 any = true
 
-## chests mod:
-[chests]
+## crafting mod:
+[crafting]
 any = true
 
 ## categories mod:

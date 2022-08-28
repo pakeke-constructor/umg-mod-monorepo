@@ -57,7 +57,7 @@ my_crafter:addRecipe(
 
 
 -- Creates a crafting table entity:
-return chests.newCrafter({
+return extend("abstract_crafter", {
     crafter = crafter; -- the crafting schematic to be used.
 
     craftItemLocation = {5, 1}; -- where the items get put after crafting
@@ -67,11 +67,12 @@ return chests.newCrafter({
         distance = 100; -- default distance that player can open the chest from
         openSound = "chestOpen"; -- default open/close sounds.
         closeSound = "chestClose"
-    }
+    },
+
+    init = function(ent,x,y)
+        ent:super()
+    end
 })
-
-
-
 
 
 
