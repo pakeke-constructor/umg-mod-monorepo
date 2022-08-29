@@ -13,7 +13,8 @@ end
 
 
 
-local function reroll(board)
+local function reroll(rgbTeam)
+    local board = Board.getBoard(rgbTeam)
     for i, card in ipairs(board.shop) do
         local isLocked = board.shopLocks[i]
         if not isLocked then

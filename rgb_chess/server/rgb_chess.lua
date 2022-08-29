@@ -3,8 +3,8 @@ require("shared.globals")
 
 local Board = require("server.board")
 
-local generateEnemies = require("server.gen.generate_enemies")
-
+local generateEnemies = require("server.gen.generate_pve")
+local generateBoardDecor = require("server.gen.generate_board_decor")
 
 
 
@@ -13,8 +13,9 @@ local currentClientBoardPos = 0
 
 local function allocateBoard(username)
     -- Allocate board space:
-    Board(0, currentClientBoardPos, username)
+    local board = Board(0, currentClientBoardPos, username)
     currentClientBoardPos = currentClientBoardPos + 1000
+    generateBoardDecor(board)
 end
 
 
@@ -121,5 +122,10 @@ on("update", function(dt)
     updates[state](dt)
 end)
 
+
+
+chat.handleCommand("start", function(sender)
+    startGame()
+end)
 
 

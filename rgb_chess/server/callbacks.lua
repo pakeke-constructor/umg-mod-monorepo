@@ -53,8 +53,8 @@ end)
 
 
 
-on("reroll", function(username)
-    local board = Board.getBoard(username)
+on("reroll", function(rgbTeam)
+    local board = Board.getBoard(rgbTeam)
     for _, ent in board:iterUnits() do
         if ent.onReroll then
             ent:onReroll()

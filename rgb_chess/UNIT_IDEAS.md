@@ -40,7 +40,7 @@ become a 7/7.
 # pigbank
 melee, 2/3
 start of turn:
-if this unit has been alive for exactly 3 rounds,
+if this unit has been alive for more than 3 rounds,
 give `X` gold.
 // TODO: Balance this amount of gold!!
 

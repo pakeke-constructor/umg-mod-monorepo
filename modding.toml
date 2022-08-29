@@ -108,6 +108,12 @@ any = true
 [categories]
 any = true
 
+## chat mod:
+[chat]
+any = true
+
+
+
 
 ## rgb chess:
 [rgb]

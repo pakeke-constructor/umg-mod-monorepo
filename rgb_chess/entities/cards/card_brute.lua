@@ -1,5 +1,6 @@
 
 
+
 return extend("abstract_card", {
     card = {
         name = "BRUTE X 1", -- card name

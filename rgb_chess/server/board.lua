@@ -1,7 +1,7 @@
 
 
-local BOARD_WIDTH = 2000
-local BOARD_HEIGHT = 2000
+local BOARD_WIDTH = 700
+local BOARD_HEIGHT = 700
 
 
 local Board = base.Class("rgb_chess:board")
@@ -64,6 +64,13 @@ function Board:init(x, y, owner)
     usernameToBoard[owner] = self
 end
 
+function Board:getXY()
+    return self.x, self.y
+end
+
+function Board:getWH()
+    return self.width, self.height
+end
 
 function Board:getOwner()
     return self.owner

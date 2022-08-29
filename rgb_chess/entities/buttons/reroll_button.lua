@@ -23,8 +23,7 @@ return {
                 -- TODO: play sound here
                 base.animateEntity(ent, frames, 0.35)
             else
-                local board = Board.getBoard(ent.rgbTeam)
-                reroll.reroll(board)
+                reroll.reroll(ent.rgbTeam)
             end
         end
     end,

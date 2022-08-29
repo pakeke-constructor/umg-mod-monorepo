@@ -216,6 +216,24 @@ drawEntity ( ent ) -- an entity is getting drawn
 
 
 ## Client-Server communication
+
+In UMG, there isn't automatic syncing; lots has to be done by mods.
+
+**What IS synced:**
+- creation of entities, (and their component values directly upon creation)
+- deletion of entities
+- joining / leaving of players
+
+**What ISN'T synced:**
+- entity components
+- local events (`call` and `on` from above. Client and server have separate buses.)
+
+It's important to note, though, that a lot of syncing is done by base mods.
+For example, the `inventory` mod automatically syncs entity inventories.
+The `base` mod will automatically sync entity positions, entity velocities,
+entity health, and entity physics bodies.
+
+
 Client-server communication also uses callbacks:
 
 Server side:
@@ -225,7 +243,7 @@ server.broadcast("message1",   1, 2, 3, "blah data")
 
 
 -- Same as broadcast, but it only sends to the client called `playerUsername`.
-server.unicast("message1", playerUsername,   1, 2, 3, "blah data")
+server.unicast("message1", playerUsername,   1.0545, 2.9, -5, "random data :)")
 
 
 -- listens to `moveTo` messages sent by clients
@@ -244,12 +262,12 @@ client.send("moveTo", x, y)
 
 -- listens to `message1` from the server
 client.on("message1", function(x, y, z, blah)
-
+    print("received message1 from server:  ", x, y, z, blah)
 end)
 
 ```
 
-Functions cannot be sent across the network.
+Any data can be sent across the network, except for functions and userdata.
 If a table is sent across, all nested tables will be serialized and sent across.
 If an entity is sent across, it will be serialized by id.   
 Sending tables across is somewhat expensive. Try to only send numbers, strings, and entities across the network for best performance.
@@ -300,9 +318,9 @@ local g = group("comp1", "comp2", ...)  -- gets an entity group.
 exists(ent) -- returns `true` if `ent` still exists as an entity, false otherwise
 
 extend("parent_ent", ent_def) 
--- deepcopies all data from entity `parent_ent` into table ent_def.
+-- deepcopies all data from entity `parent_ent` into table `ent_def`.
 -- useful for doing OOP-like inheritance in entity definitions.
--- See https://en.wikipedia.org/wiki/Abstract_type
+
 
 -- Local event dispatch
 on(msg, func) -- listens to an event
