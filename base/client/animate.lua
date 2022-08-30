@@ -29,7 +29,7 @@ local function animate(frames, time, x,y,z, color)
         color = color or WHITE,
     }
 
-    local indx = math.floor(draw.getScreenY(obj))
+    local indx = math.floor(draw.getDrawY(obj.y, obj.z))
     drawIndexToAnimObj[indx] = drawIndexToAnimObj[indx] or {}
     table.insert(drawIndexToAnimObj[indx], obj)
 end
@@ -80,7 +80,7 @@ local function drawAnimObj(animObj)
     local quadName = animObj.frames[i]
     local r,g,b,a = graphics.getColor()
     graphics.setColor(animObj.color)
-    local y = draw.getScreenY(add_y, add_z) + draw.getScreenY(animObj)
+    local y = draw.getDrawY(add_y, add_z) + draw.getDrawY(animObj.y, animObj.z)
     drawImage(quadName, animObj.x + add_x, y)
     graphics.setColor(r,g,b,a)
 end

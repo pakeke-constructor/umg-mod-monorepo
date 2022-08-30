@@ -25,7 +25,7 @@ local base = {
     isOnScreen = draw.isOnScreen;
     entOnScreen = draw.entOnScreen;
 
-    getScreenY = draw.getScreenY;
+    getDrawY = draw.getDrawY;
 
     getQuadOffsets = require("client.image_helpers.quad_offsets");
     drawImage = require("client.image_helpers.draw_image");

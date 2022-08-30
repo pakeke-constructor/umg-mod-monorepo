@@ -1,8 +1,5 @@
 
 
-local nametagGroup = group("x", "y", "nametag", "image")
-
-
 local DEFAULT = "UNNAMED"
 
 local quadOffsets = require("client.image_helpers.quad_offsets")
@@ -41,7 +38,7 @@ on("drawEntity", function(ent)
         
         graphics.setColor(0.2,0.2,0.2, 0.5)
 
-        local y = base.getScreenY(ent)
+        local y = base.getDrawY(ent.y,ent.z)
 
         graphics.rectangle(
             "fill", 

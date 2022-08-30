@@ -7,7 +7,7 @@ local spinning = require("client.image_helpers.spinning")
 local swaying = require("client.image_helpers.swaying")
 
 local draw = require("client.draw")
-local getScreenY = draw.getScreenY
+local getDrawY = draw.getDrawY
 
 
 local images = assets.images
@@ -35,7 +35,7 @@ on("drawEntity", function(ent)
 
     graphics.atlas:draw(
         quad, 
-        ent.x, getScreenY(ent), ent.rot, 
+        ent.x, getDrawY(ent.y,ent.z), ent.rot, 
         spin_sx * sx * scale, 
         bob_sy * sy * scale, 
         ox + sway_ox,

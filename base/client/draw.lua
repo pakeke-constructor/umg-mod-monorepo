@@ -9,13 +9,14 @@ Will emit draw calls based on position, and in correct order.
 local cameraLib = require("_libs.camera") -- HUMP Camera for love2d.
 
 local constants = require("other.constants")
-local Set = require("other.set")
 
 
 local drawGroup = group("image", "x", "y")
 
 
 local floor = math.floor
+local min = math.min
+local max = math.max
 
 
 
@@ -28,36 +29,6 @@ local sortedMoveEnts = {} -- for ents that move
 
 
 
-
-
-
-drawGroup:onAdded(function( ent )
-    -- Callback for entity addition
-    if ent:hasComponent("vy") or ent:hasComponent("vz") then
-        table.insert(sortedMoveEnts, ent)
-    else
-        table.insert(sortedFrozenEnts, ent)
-    end
-end)
-
-
-
-local function removeFrom()
-
-drawGroup:onRemoved(function( ent )
-    -- Callback for entity removal
-    if ent:hasComponent("vy") or ent:hasComponent("vz") then
-        table.insert(sortedMoveEnts, ent)
-    else
-        table.insert(sortedFrozenEnts, ent)
-    end
-end)
-
-
-
-
-local rawget = rawget
-local ipairs = ipairs
 local setColor = graphics.setColor
 
 local DEFAULT_ZOOM = constants.DEFAULT_ZOOM
@@ -68,12 +39,36 @@ local camera = cameraLib(0, 0, nil, nil, DEFAULT_ZOOM, 0)
 local DEFAULT_LEIGHWAY = constants.SCREEN_LEIGHWAY
 
 
-local function getScreenY(ent_or_y, z_or_nil)
-    if type(ent_or_y) == "table" then
-        return ent_or_y.y - (ent_or_y.z or 0)/2
-    else
-        return ent_or_y - (z_or_nil or 0)/2
-    end
+
+
+local function binarySearch(arr, targ_draw_dep, keyfunc)
+    --[[
+        returns the index for a target draw depth.
+    ]]
+	local low = 1
+	local high = #arr
+	while low <= high do
+		local mid = floor((low + high) / 2)
+		local mid_val = arr[mid]
+		if targ_draw_dep < keyfunc(mid_val.y, mid_val.z) then
+			high = mid - 1
+		else
+			low = mid + 1
+		end
+	end
+    return low
+end
+
+
+
+-- gets the "screen" Y from y and z position.
+local function getDrawY(y, z)
+    return y - (z or 0)/2
+end
+
+
+local function getDepth(y,z)
+    return floor(y + (z or 0))
 end
 
 
@@ -93,7 +88,7 @@ local function entOnScreen(ent, leighway, w, h)
     ]]
     leighway = leighway or DEFAULT_LEIGHWAY
     w, h = w or graphics.getWidth(), h or graphics.getHeight()
-    local screen_y = getScreenY(ent)
+    local screen_y = getDrawY(ent.y, ent.z)
     local x, y = camera:toCameraCoords(ent.x, screen_y)
 
     local ret = -leighway <= x and x <= w + leighway
@@ -119,46 +114,168 @@ local function isOnScreen(x, y, leighway, w, h)
 end
 
 
-local CAMERA_DEPTH_LEIGHWAY = 200
+
+local CAMERA_DEPTH_LEIGHWAY = 300
+
 local function cameraTopDepth()
     local _, y = camera:toWorldCoords(0,-CAMERA_DEPTH_LEIGHWAY)
-    return math.floor(y)
+    return getDepth(y, 0)
 end
 
 local function cameraBotDepth()
     local _, y = camera:toWorldCoords(0,graphics.getHeight() + CAMERA_DEPTH_LEIGHWAY)
-    return math.floor(y)
+    return getDepth(y, 0)
 end
 
 
+
+
+
+
+
+
+drawGroup:onAdded(function( ent )
+    -- Callback for entity addition
+    if ent:hasComponent("vy") or ent:hasComponent("vz") then
+        -- then the entity moves, add it to move array
+        local i = binarySearch(sortedMoveEnts, getDepth(ent.y,ent.z), getDepth)
+        table.insert(sortedMoveEnts, i, ent)
+    else
+        -- the entity doesn't move, add it to frozen array
+        local i = binarySearch(sortedFrozenEnts, getDepth(ent.y,ent.z), getDepth)
+        table.insert(sortedFrozenEnts, i, ent)
+    end
+end)
+
+
+
+local removeBufferMove = {} --  [ent] -> true   entity needs to be removed.
+local removeBufferFrozen = {}-- [ent] -> true   entity needs to be removed.
+
+
+drawGroup:onRemoved(function( ent )
+    if ent:hasComponent("vy") or ent:hasComponent("vz") then
+        -- the entity moves, its in the move array
+        removeBufferMove[ent] = true
+    else
+        -- the entity doesnt move, its in the frozen array
+        removeBufferFrozen[ent] = true
+    end
+end)
+
+
+local function pollRemoveBuffer(array, buffer)
+    for i=#array,1,-1 do
+        local ent = array[i]
+        if buffer[ent] then
+            table.remove(array, i)
+            buffer[ent] = nil
+        end
+    end
+end
+
+on("update", function()
+    pollRemoveBuffer(sortedFrozenEnts, removeBufferFrozen)
+    pollRemoveBuffer(sortedMoveEnts, removeBufferMove)
+end)
+
+
+
+
 local function mainDraw()
+    --[[
+        explanation:
+        We have two sorted lists of entities:
+        frozen ents, and moving ents.
+
+        We sort the moving entities every frame.
+        When we go to draw them, we iterate through both lists at once,
+        and take the entity with the biggest screen Y.
+    ]]    
     local w, h = graphics.getWidth(), graphics.getHeight()
-    for i=1, #sortedEntityArray do
-        local ent = sortedEntityArray[i]
-        if entOnScreen(ent, DEFAULT_LEIGHWAY, w, h) and (not ent.hidden) then
+    
+    local draw_dep
+    local draw_ent
+
+    local min_depth = cameraTopDepth() -- top depth = smaller screenY
+    local max_depth = cameraBotDepth() -- bot depth is bigger screenY
+
+    -- we start at the bottom of the screen, and work up.
+    local frozen_i = max(1, binarySearch(sortedFrozenEnts, min_depth, getDepth))
+    local moving_i = max(1, binarySearch(sortedMoveEnts, min_depth, getDepth))
+    local frozen_ent = sortedFrozenEnts[frozen_i]
+    local moving_ent = sortedMoveEnts[moving_i]
+    local frozen_dep
+    local moving_dep
+
+    frozen_dep = frozen_ent and getDepth(frozen_ent.y,frozen_ent.z) or 0xffffffffff
+    moving_dep = moving_ent and getDepth(moving_ent.y,moving_ent.z) or 0xffffffffff
+    
+    if frozen_dep < moving_dep then
+        -- then we draw entity from frozen list
+        frozen_i = frozen_i + 1
+        draw_ent = frozen_ent
+        frozen_ent = sortedFrozenEnts[frozen_i]
+        draw_dep = frozen_dep
+    else --  else draw entity from moving list
+        moving_i = moving_i + 1
+        draw_ent = moving_ent
+        moving_ent = sortedMoveEnts[moving_i]
+        draw_dep = moving_dep
+    end
+
+    local last_draw_dep = draw_dep
+
+    while draw_ent and draw_dep < max_depth do
+        if entOnScreen(draw_ent, DEFAULT_LEIGHWAY, w, h) and (not draw_ent.hidden) then
             setColor(1,1,1)
-            if ent.image then
-                if ent.color then
-                    setColor(ent.color)
+            if draw_ent.image then
+                if draw_ent.color then
+                    setColor(draw_ent.color)
                 end
-                call("drawEntity", ent)
-                if ent.onDraw then
-                    ent:onDraw()
+                call("drawEntity", draw_ent)
+                if draw_ent.onDraw then
+                    draw_ent:onDraw()
                 end
             end
         end
 
-        call("drawIndex", z_dep) -- TODO: do this
+        for dep=last_draw_dep+1, draw_dep do
+            call("drawIndex", dep)
+        end
+        last_draw_dep = draw_dep
+
+        -- select next draw entity:
+        frozen_dep = frozen_ent and getDepth(frozen_ent.y,frozen_ent.z) or 0xffffffffff
+        moving_dep = moving_ent and getDepth(moving_ent.y,moving_ent.z) or 0xffffffffff
+        if frozen_dep < moving_dep then
+            -- then we draw entity from frozen list
+            frozen_i = frozen_i + 1
+            draw_ent = frozen_ent
+            frozen_ent = sortedFrozenEnts[frozen_i]
+            draw_dep = frozen_dep
+        else --  else draw entity from moving list
+            moving_i = moving_i + 1
+            draw_ent = moving_ent
+            moving_ent = sortedMoveEnts[moving_i]
+            draw_dep = moving_dep
+        end
+    
     end
 
     graphics.atlas:flush()
 end
 
 
+
+
+
 on("resize", function(w, h)
     camera.w = w
     camera.h = h
 end)
+
+
 
 
 local scaleUI = constants.DEFAULT_UI_SCALE
@@ -173,8 +290,19 @@ local function getUIScale()
 end
 
 
+local function less(ent_a, ent_b)
+    return getDepth(ent_a.y, ent_a.z) < getDepth(ent_b.y, ent_b.z)
+end
+
+
+on("update60", function()
+    table.sort(sortedFrozenEnts, less)
+end)
+
 
 on("draw", function()
+    table.sort(sortedMoveEnts, less)
+
     camera:draw()
     camera:attach()
     call("preDraw")
@@ -204,7 +332,8 @@ end)
 return {
     camera = camera;
 
-    getScreenY = getScreenY;
+    getDrawY = getDrawY;
+    getDepth = getDepth;
 
     getUIScale = getUIScale;
     setUIScale = setUIScale;

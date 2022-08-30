@@ -62,13 +62,15 @@ local currMessage = ""
 
 local function drawMessage(msg, opacity)
     -- TODO: Do different colors here.
-    graphics.setColor(1,1,1,opacity)
     local scale = curChatScale
     local wrapWidth = CHAT_WRAP_WIDTH / scale
     local _, wrappedtxt = curFont:getWrap(msg, wrapWidth)
     local newlines = #wrappedtxt
     curHeight = curHeight + ((newlines * (curFontHeight)) + MESSAGE_SEP) * scale
     local y = curScreenHeight - curHeight
+    graphics.setColor(0.1,0.1,0.1,opacity)
+    graphics.printf(msg, CHATBOX_START_X - 1, y - 1, wrapWidth, "left", 0, scale,scale)    
+    graphics.setColor(1,1,1,opacity)
     graphics.printf(msg, CHATBOX_START_X, y, wrapWidth, "left", 0, scale,scale)
 end
 
