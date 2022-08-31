@@ -58,13 +58,41 @@ end
 local IS_PAN_MODE = false
 
 
-on("update", function(dt)
-    if keyboard.isDown("lshift") then
-        IS_PAN_MODE = true
-    else
-        IS_PAN_MODE = false
-    end
 
+local LSHIFT = "lshift"
+
+local controlEnts = group("controllable", "controller", "x", "y")
+
+
+on("keypressed", function(key)
+    if key == LSHIFT then
+        -- unlock camera
+        IS_PAN_MODE = true
+        for _, ent in ipairs(controlEnts)do
+            -- we set follow to false for ALL ents, regardless of whether we
+            -- are controlling them or not.
+            -- This is so if control is changed dynamically, nothing will break.
+            -- (This is also a desync between client-server, but it doesn't matter,
+            --  because .follow is only used on clientside.)
+            ent.follow = false
+        end
+    end
+end)
+
+
+
+on("keyreleased", function(key)
+    if key == LSHIFT then
+        -- lock camera.
+        IS_PAN_MODE = false
+        for _, ent in ipairs(controlEnts) do
+            ent.follow = true
+        end
+    end
+end)
+
+
+on("update", function(dt)
     if IS_PAN_MODE then
         base.camera.x = last_camx
         base.camera.y = last_camy

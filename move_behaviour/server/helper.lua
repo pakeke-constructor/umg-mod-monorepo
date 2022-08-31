@@ -34,6 +34,9 @@ end
 
 local function tryPickNewTarget(ent, mb)
     -- then we pick a new target:
+    if not mb.target then
+        return
+    end
     local best_ent, best_dist = findClosestEntity(ent, mb.target)
     if best_dist <= mb.activateDistance then
         ent.moveBehaviourTarget = best_ent

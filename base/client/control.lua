@@ -6,7 +6,7 @@ Handles player control
 
 ]]
 
-local control_ents = group("controllable", "controller", "x", "y")
+local controlEnts = group("controllable", "controller", "x", "y")
 
 
 local UP = "w"
@@ -20,7 +20,7 @@ local RIGHT_ABILITY = "e"
 
 
 local function pollControlEnts(func_key, a,b,c)
-    for _, ent in ipairs(control_ents) do
+    for _, ent in ipairs(controlEnts) do
         if ent.controller == username then
             -- if this ent is being controlled by the player:
             if ent.controllable[func_key] then
@@ -102,7 +102,7 @@ on("update", function(dt)
     local len = 0
     local has_follow = false
     
-    for _, ent in ipairs(control_ents) do
+    for _, ent in ipairs(controlEnts) do
         if ent.controller == username and ent.x and ent.vx then
             updateEnt(ent, dt)
             if ent.follow then
@@ -128,8 +128,8 @@ end)
       if it thinks we are cheating!!!)
 ]]
 on("tick", function(dt)
-    for i=1, #control_ents do
-        local ent = control_ents[i]
+    for i=1, #controlEnts do
+        local ent = controlEnts[i]
         if ent.controller == username then
             client.send("setPlayerPosition", ent, ent.x, ent.y, ent.z)
             if ent.vx and ent.vy then

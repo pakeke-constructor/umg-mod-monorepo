@@ -25,6 +25,11 @@ return {
 
     speed = DEFAULT_SPEED,
 
+    physics = {
+        shape = physics.newCircleShape(5);
+        friction = 7
+    };
+
     attackBehaviour = {
         type = "melee",
         range = MELEE_RANGE

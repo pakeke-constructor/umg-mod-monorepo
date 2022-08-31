@@ -91,6 +91,7 @@ function genCards.spawnCard(board, i)
     ent.rgbTeam = board:getTeam()
     ent.rgb = genCards.getRGB(turn)
     ent.color = getCardColor(ent.rgb)
+    ent.shopIndex = i
     board.shop[i] = ent
 end
 

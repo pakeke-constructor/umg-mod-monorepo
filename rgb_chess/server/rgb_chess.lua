@@ -6,6 +6,10 @@ local Board = require("server.board")
 local generateEnemies = require("server.gen.generate_pve")
 local generateBoardDecor = require("server.gen.generate_board_decor")
 
+local readyUp = require("server.ready_up")
+
+local START_MONEY = 10
+
 
 
 local currentClientBoardPos = 0
@@ -16,6 +20,7 @@ local function allocateBoard(username)
     local board = Board(0, currentClientBoardPos, username)
     currentClientBoardPos = currentClientBoardPos + 1000
     generateBoardDecor(board)
+    board:setMoney(START_MONEY)
 
     local rbx,rby = board:getRerollButtonXY()
     local butto = entities.reroll_button(rbx, rby)
@@ -107,8 +112,12 @@ end
 
 
 local function updateTurn()
-    
+    if readyUp.shouldStartBattle() then
+        startPvE()
+        readyUp.resetReady()
+    end
 end
+
 
 local function updateBattle()
 

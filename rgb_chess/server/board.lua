@@ -67,6 +67,14 @@ function Board:init(x, y, owner)
     usernameToBoard[owner] = self
 end
 
+function Board:getMoney()
+    return self.money
+end
+
+function Board:setMoney(x)
+    self.money = x
+end
+
 function Board:getXY()
     return self.x, self.y
 end
@@ -107,6 +115,11 @@ end
 function Board:iterUnits()
     return ipairs(self.units)
 end
+
+function Board:addUnit(unit_ent)
+    table.insert(self.units, unit_ent)
+end
+
 
 
 

@@ -47,8 +47,8 @@ local function generateBoardDecor(board)
     end
 
     -- Grass:
-    for xx = x + PINE_RANDOM, x + w - 140, GRASS_STEP do
-        for yy = y + PINE_RANDOM, y + h - 140, GRASS_STEP do
+    for xx = x + 20, x + w - 20, GRASS_STEP do
+        for yy = y + 50, y + h - 160, GRASS_STEP do
             if math.random() < GRASS_SPAWN_CHANCE then
                 local dx, dy = getRandXY(GRASS_RANDOM)
                 entities.grass(xx + dx, yy + dy)

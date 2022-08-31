@@ -27,11 +27,6 @@ for colName, val in pairs(rgb.COLS) do
 end
 
 
-for colName, color in pairs(rgb.COLS) do
-    register("rgb_color_" .. colName, color)
-end
-
-
 
 
 function rgb.areMatchingColors(col1, col2)
