@@ -9,7 +9,9 @@
 return {
     "x","y",
     "rgbTeam",
-    image = "nothing",
+    "rgb",
+    "color",
+    image = "invisible_card",
 
     init = base.entityHelper.initPosition
 }

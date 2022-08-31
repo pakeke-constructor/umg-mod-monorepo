@@ -33,9 +33,11 @@ on("drawEntity", function(ent)
     local sx = ent.scaleX or 1
     local sy = ent.scaleY or 1
 
+    local ent_ox, ent_oy = ent.ox or 0, ent.oy or 0
+
     graphics.atlas:draw(
         quad, 
-        ent.x, getDrawY(ent.y,ent.z), ent.rot, 
+        ent.x + ent_ox, getDrawY(ent.y + ent_oy,ent.z), ent.rot, 
         spin_sx * sx * scale, 
         bob_sy * sy * scale, 
         ox + sway_ox,

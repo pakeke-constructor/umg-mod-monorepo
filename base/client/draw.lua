@@ -67,7 +67,7 @@ local function getDrawY(y, z)
 end
 
 
-local function getDepth(y,z)
+local function getDrawDepth(y,z)
     return floor(y + (z or 0))
 end
 
@@ -119,12 +119,12 @@ local CAMERA_DEPTH_LEIGHWAY = 300
 
 local function cameraTopDepth()
     local _, y = camera:toWorldCoords(0,-CAMERA_DEPTH_LEIGHWAY)
-    return getDepth(y, 0)
+    return getDrawDepth(y, 0)
 end
 
 local function cameraBotDepth()
     local _, y = camera:toWorldCoords(0,graphics.getHeight() + CAMERA_DEPTH_LEIGHWAY)
-    return getDepth(y, 0)
+    return getDrawDepth(y, 0)
 end
 
 
@@ -138,11 +138,11 @@ drawGroup:onAdded(function( ent )
     -- Callback for entity addition
     if ent:hasComponent("vy") or ent:hasComponent("vz") then
         -- then the entity moves, add it to move array
-        local i = binarySearch(sortedMoveEnts, getDepth(ent.y,ent.z), getDepth)
+        local i = binarySearch(sortedMoveEnts, getDrawDepth(ent.y,ent.z), getDrawDepth)
         table.insert(sortedMoveEnts, i, ent)
     else
         -- the entity doesn't move, add it to frozen array
-        local i = binarySearch(sortedFrozenEnts, getDepth(ent.y,ent.z), getDepth)
+        local i = binarySearch(sortedFrozenEnts, getDrawDepth(ent.y,ent.z), getDrawDepth)
         table.insert(sortedFrozenEnts, i, ent)
     end
 end)
@@ -201,15 +201,15 @@ local function mainDraw()
     local max_depth = cameraBotDepth() -- bot depth is bigger screenY
 
     -- we start at the bottom of the screen, and work up.
-    local frozen_i = max(1, binarySearch(sortedFrozenEnts, min_depth, getDepth))
-    local moving_i = max(1, binarySearch(sortedMoveEnts, min_depth, getDepth))
+    local frozen_i = max(1, binarySearch(sortedFrozenEnts, min_depth, getDrawDepth))
+    local moving_i = max(1, binarySearch(sortedMoveEnts, min_depth, getDrawDepth))
     local frozen_ent = sortedFrozenEnts[frozen_i]
     local moving_ent = sortedMoveEnts[moving_i]
     local frozen_dep
     local moving_dep
 
-    frozen_dep = frozen_ent and getDepth(frozen_ent.y,frozen_ent.z) or 0xffffffffff
-    moving_dep = moving_ent and getDepth(moving_ent.y,moving_ent.z) or 0xffffffffff
+    frozen_dep = frozen_ent and getDrawDepth(frozen_ent.y,frozen_ent.z) or 0xffffffffff
+    moving_dep = moving_ent and getDrawDepth(moving_ent.y,moving_ent.z) or 0xffffffffff
     
     if frozen_dep < moving_dep then
         -- then we draw entity from frozen list
@@ -246,8 +246,8 @@ local function mainDraw()
         last_draw_dep = draw_dep
 
         -- select next draw entity:
-        frozen_dep = frozen_ent and getDepth(frozen_ent.y,frozen_ent.z) or 0xffffffffff
-        moving_dep = moving_ent and getDepth(moving_ent.y,moving_ent.z) or 0xffffffffff
+        frozen_dep = frozen_ent and getDrawDepth(frozen_ent.y,frozen_ent.z) or 0xffffffffff
+        moving_dep = moving_ent and getDrawDepth(moving_ent.y,moving_ent.z) or 0xffffffffff
         if frozen_dep < moving_dep then
             -- then we draw entity from frozen list
             frozen_i = frozen_i + 1
@@ -291,7 +291,7 @@ end
 
 
 local function less(ent_a, ent_b)
-    return getDepth(ent_a.y, ent_a.z) < getDepth(ent_b.y, ent_b.z)
+    return getDrawDepth(ent_a.y, ent_a.z) < getDrawDepth(ent_b.y, ent_b.z)
 end
 
 
@@ -333,7 +333,7 @@ return {
     camera = camera;
 
     getDrawY = getDrawY;
-    getDepth = getDepth;
+    getDrawDepth = getDrawDepth;
 
     getUIScale = getUIScale;
     setUIScale = setUIScale;

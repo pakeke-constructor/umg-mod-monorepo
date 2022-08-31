@@ -16,6 +16,10 @@ local function allocateBoard(username)
     local board = Board(0, currentClientBoardPos, username)
     currentClientBoardPos = currentClientBoardPos + 1000
     generateBoardDecor(board)
+
+    local rbx,rby = board:getRerollButtonXY()
+    local butto = entities.reroll_button(rbx, rby)
+    butto.rgbTeam = username
 end
 
 
@@ -28,7 +32,10 @@ end)
 
 on("playerLeave", function(username)
     base.getPlayer(username):delete()
-    Board.getBoard(username):delete()
+    local b = Board.getBoard(username)
+    if b then
+        b:delete()
+    end
 end)
 
 

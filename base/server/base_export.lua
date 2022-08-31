@@ -13,6 +13,8 @@ local base = {
 
     entityHelper = entityHelper;
 
+    weightedRandom = require("other.weighted_random");
+
     inspect = require("_libs.inspect")
 }
 

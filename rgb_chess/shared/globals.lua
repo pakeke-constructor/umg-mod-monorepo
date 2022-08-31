@@ -27,6 +27,9 @@ for colName, val in pairs(rgb.COLS) do
 end
 
 
+for colName, color in pairs(rgb.COLS) do
+    register("rgb_color_" .. colName, color)
+end
 
 
 
@@ -53,4 +56,5 @@ end
 
 
 _G.rgb = rgb
+_G.constants = require("shared.constants")
 

@@ -16,8 +16,11 @@ local entityHelper = require("other.entity_helper")
 local animate = require("client.animate")
 
 
+
 local base = {
     camera = draw.camera;
+
+    isHovered = require("client.mouse_hover");
 
     getUIScale = draw.getUIScale;
     setUIScale = draw.setUIScale;
@@ -26,6 +29,7 @@ local base = {
     entOnScreen = draw.entOnScreen;
 
     getDrawY = draw.getDrawY;
+    getDrawDepth = draw.getDrawDepth;
 
     getQuadOffsets = require("client.image_helpers.quad_offsets");
     drawImage = require("client.image_helpers.draw_image");
@@ -51,6 +55,8 @@ local base = {
     playMusic = sound.playMusic;
 
     entityHelper = entityHelper;
+
+    weightedRandom = require("other.weighted_random");
 
     inspect = require("_libs.inspect")
 }

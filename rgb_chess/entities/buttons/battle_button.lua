@@ -1,20 +1,17 @@
 
 
-
-local reroll
+local readyUp
 if server then
-    reroll = require("server.reroll")
+    readyUp = require("server.reroll")
 end
 
 
 return extend("abstract_button", {
-
     nametag = {
-        value = "REROLL"
+        value = "READY UP"
     },
 
     onClickServer = function(ent)
-        reroll.reroll(ent.rgbTeam)
     end,
 
     init = function(ent, x, y)

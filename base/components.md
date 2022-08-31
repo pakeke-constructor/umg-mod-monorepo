@@ -23,6 +23,9 @@ ent.image = "abc" -- Image components should be strings!
             -- NOTE: this means that atlases must be identical across clients!
 -- if `ent.image` is nil, the entity is hidden.
 
+ent.ox = 0 -- draw offsets for x and y.  (defaults to 0)
+ent.oy = 0
+
 
 ent.animation = {"img1", "img2", "img3", speed = 3} -- Same as animations- 
     -- images should be put as strings.

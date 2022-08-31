@@ -2,8 +2,6 @@
 local getQuadOffsets = require("client.image_helpers.quad_offsets")
 
 
-
-
 local clickEnts = group("x", "y", "onClick")
 
 
@@ -23,13 +21,15 @@ local function isInRange(ent, worldX, worldY, dist)
         if dx <= ox and dy <= oy then
             return true
         end
-    end
-
-    local size = ent.size or DEFAULT_SIZE
-    if dist <= size then
-        return true
+    else
+        local size = ent.size or DEFAULT_SIZE
+        if dist <= size then
+            return true
+        end
     end
 end
+
+
 
 
 
@@ -64,5 +64,7 @@ end)
 client.on("clickEntity", function(ent, username, button, worldX, worldY)
     ent:onClick(username, button, worldX, worldY)
 end)
+
+
 
 

@@ -5,9 +5,11 @@ local drawImage = require("client.image_helpers.draw_image")
 
 
 
-local drawIndexToAnimObj = {}
+local drawIndexToAnimObj = {} -- [draw_index] -> anim_object
 
-local entAnimations = {}
+
+local entToAnimObj = {} -- [ent] -> anim_object
+local entAnimations = {} -- array of anim_object
 
 
 
@@ -40,6 +42,10 @@ end
 
 
 local function animateEntity(ent, frames, time)
+    if entToAnimObj[ent] then
+        return false -- can't have 2 animations at once
+    end
+    
     local obj = {
         ent = ent,
         frames = frames,
@@ -48,7 +54,9 @@ local function animateEntity(ent, frames, time)
         startTime = timer.getTime()
     }
 
+    entToAnimObj[ent] = obj
     table.insert(entAnimations, obj)
+    return true
 end
 
 
@@ -120,6 +128,7 @@ on("preDraw", function()
             arr[i] = arr[#arr]
             arr[#arr] = nil
             obj.ent.image = obj.old_image
+            entToAnimObj[obj.ent] = nil
         else
             updateEntAnimationObject(obj)
         end

@@ -1,5 +1,7 @@
 
 
+require("shared.globals")
+
 --[[
 
 Generates cards for shop rerolls.
@@ -38,35 +40,60 @@ end
 
 
 
-function genCards.getXY(board, i)
-    -- TODO: get the (x,y) position of cards from a given index i
-end
-
-
-
-local function copyColor(col)
+local function getCardColor(col)
     local cpy = {}
     for i=1, 3 do
-        cpy[i] = col[i]
+        cpy[i] = math.max(constants.CARD_LIGHTNESS, col[i])
     end
     return cpy
 end
 
 
 
+
+local earlyRGBSelection = base.weightedRandom({
+    -- [result]    =  probability weight
+    [rgb.COLS.RED] =    0.3,
+    [rgb.COLS.BLU] =    0.3,
+    [rgb.COLS.GRN] =    0.3
+})
+
+
+
+local RGBSelection = base.weightedRandom({
+    -- [result]    =  probability weight
+    [rgb.COLS.RED] =   0.3,
+    [rgb.COLS.BLU] =   0.3,
+    [rgb.COLS.GRN] =   0.3,
+    [rgb.COLS.YLO] =   0.05,
+    [rgb.COLS.MAG] =   0.05,
+    [rgb.COLS.AQU] =   0.05,
+    [rgb.COLS.WHI] =   0.03
+})
+
+
+
 function genCards.getRGB(turn)
-    return rgb.RED -- TODO: Do something proper for this
+    if turn < 4 then
+        -- we dont want players to be getting OP colors in early rounds.
+        return earlyRGBSelection()
+    else
+        return RGBSelection
+    end
 end
 
 
 function genCards.spawnCard(board, i)
     local turn = board:getTurn()
     local etype = genCards.getCard(board)
-    local x, y = genCards.getXY(board, i)
+    local x, y = board:getCardXY(i)
     local ent = entities[etype](x, y)
     ent.rgbTeam = board:getTeam()
     ent.rgb = genCards.getRGB(turn)
-    ent.color = copyColor(ent.rgb)
+    ent.color = getCardColor(ent.rgb)
+    board.shop[i] = ent
 end
 
+
+return genCards
 

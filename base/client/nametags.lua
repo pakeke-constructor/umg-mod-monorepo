@@ -19,7 +19,7 @@ local text_to_height = {
 
 local SCALE = 1/2
 
-local EXTRA_OY = 5
+local EXTRA_OY = 10
 
 
 
@@ -42,15 +42,15 @@ on("drawEntity", function(ent)
 
         graphics.rectangle(
             "fill", 
-            ent.x + ox/2 - ((width/2) * SCALE),
-            y - oy - ((height/2) * SCALE) - EXTRA_OY,
+            ent.x - (width/2) * SCALE,
+            y - oy - (height/2) * SCALE - EXTRA_OY,
             width * SCALE, height * SCALE
         )
 
         graphics.setColor(1,1,1)
         graphics.print(
             text, 
-            ent.x + ox/2, 
+            ent.x, 
             y - oy - EXTRA_OY,
             ent.rot, SCALE, SCALE,
             width/2, height/2

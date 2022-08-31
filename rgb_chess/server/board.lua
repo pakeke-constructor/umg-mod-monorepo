@@ -3,6 +3,9 @@
 local BOARD_WIDTH = 700
 local BOARD_HEIGHT = 700
 
+local CARD_SPACING = 80
+local CARD_EXTRA_X = 100
+
 
 local Board = base.Class("rgb_chess:board")
 
@@ -68,6 +71,16 @@ function Board:getXY()
     return self.x, self.y
 end
 
+function Board:getCardXY(i)
+    local x1 = self.x + self.width/2
+    local dx = ((i - 1) - (self.shopSize/2)) * CARD_SPACING
+    return CARD_EXTRA_X + x1 + dx, self.y + (self.height * (5/6))
+end
+
+function Board:getRerollButtonXY()
+    return self.x + (self.width * (1/6)), self.y + (self.height * (5/6))
+end
+    
 function Board:getWH()
     return self.width, self.height
 end
@@ -86,6 +99,7 @@ end
 
 
 function Board:delete()
+    self:clear()
     usernameToBoard[self.owner] = nil
 end
 

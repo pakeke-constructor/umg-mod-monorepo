@@ -1,0 +1,44 @@
+
+local GRAY = {0.7,0.7,0.7}
+local WHITE = {1,1,1}
+
+
+local frames = {1,2,3,4,5,4,3,2,1}
+for i=1, #frames do
+    frames[i] = "button" .. tostring(frames[i])
+end
+
+
+return {
+    "x", "y", "rgbTeam",
+    "color",
+    image = "button1",
+
+    onUpdate = function(ent)
+        if client then
+            if base.isHovered(ent) then
+                ent.color = GRAY
+            else
+                ent.color = WHITE
+            end
+        end
+    end,
+
+    onClick = function(ent, username, button)
+        if button == 1 and username == ent.rgbTeam then
+            if client then
+                -- TODO: play sound here
+                base.animateEntity(ent, frames, 0.15)
+            elseif server then
+                ent:onClickServer()
+            end
+        end
+    end,
+
+
+    init = function(ent, x, y)
+        base.entityHelper.initPosition(ent,x,y)
+    end
+}
+
+

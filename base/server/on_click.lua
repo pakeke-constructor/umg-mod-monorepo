@@ -1,12 +1,12 @@
 
 
-local RANGE_ACCEPTANCE = 20 
+local RANGE_ACCEPTANCE = 40 
 
 
 
 local function isInRange(ent, worldX, worldY)
     local dist = math.distance(ent.x - worldX, ent.y - worldY)
-    return dist > RANGE_ACCEPTANCE
+    return dist < RANGE_ACCEPTANCE
 end
 
 
