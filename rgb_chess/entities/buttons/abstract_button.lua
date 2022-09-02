@@ -29,6 +29,9 @@ return {
             if client then
                 -- TODO: play sound here
                 base.animateEntity(ent, frames, 0.15)
+                if ent.onClickClient then
+                    ent:onClickClient()
+                end
             elseif server then
                 ent:onClickServer()
             end

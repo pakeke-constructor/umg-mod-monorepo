@@ -58,7 +58,9 @@ local base = {
 
     weightedRandom = require("other.weighted_random");
 
-    inspect = require("_libs.inspect")
+    inspect = require("_libs.inspect");
+
+    delay = require("other.delay")
 }
 
 

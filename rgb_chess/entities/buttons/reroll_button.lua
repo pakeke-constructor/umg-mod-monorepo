@@ -17,8 +17,10 @@ return extend("abstract_button", {
         reroll.reroll(ent.rgbTeam)
     end,
 
-    init = function(ent, x, y)
+    init = function(ent, x, y, rgbTeam)
+        assert(rgbTeam, "need to pass in rgbTeam")
         base.entityHelper.initPosition(ent,x,y)
+        ent.rgbTeam = rgbTeam
     end
 })
 

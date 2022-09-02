@@ -1,5 +1,6 @@
 
 
+
 local RANGE = 300
 local DEFAULT_SPEED = 60
 
@@ -18,7 +19,6 @@ return {
 
     "rgb",
     "rgbTeam", -- the team this entity is in
-    "rgb_saveStats", -- a table for saving entity stats before combat.
 
     "attackDamage", "attackSpeed",
     "hp", "maxHp",
@@ -37,13 +37,11 @@ return {
     };
 
     moveBehaviour = {
-        type = "follow";
+        type = "circle";
         activateDistance = 1000,
-    };
 
-    healthBar = {
-        offset = 20,
-        color = {1,0,0}
-    }
+        circleRadius = RANGE - 10,
+        circlePeriod = 100,
+    };
 }
 

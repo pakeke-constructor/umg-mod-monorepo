@@ -39,5 +39,10 @@ return {
         type = "follow";
         activateDistance = 1000,
     };
+
+    healthBar = {
+        offset = 20,
+        color = {1,0,0}
+    }
 }
 

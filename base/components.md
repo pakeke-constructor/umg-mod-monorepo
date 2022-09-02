@@ -23,6 +23,7 @@ ent.image = "abc" -- Image components should be strings!
             -- NOTE: this means that atlases must be identical across clients!
 -- if `ent.image` is nil, the entity is hidden.
 
+
 ent.ox = 0 -- draw offsets for x and y.  (defaults to 0)
 ent.oy = 0
 
@@ -92,9 +93,22 @@ ent.healthBar = { -- health bar above entity!
 }
 
 
-ent.nametag = { -- creates a nametag above the entity
+
+
+ent.nametag = { -- renders a nametag above the entity
     value = "name", --  if value is nil, `.controller` component is used instead.
 }
+
+
+-- renders text in front of the entity
+-- (Similar to nametag component)
+ent.text = {
+    value = "brute",
+    ox = 0, oy = -20, -- draw offsets
+    scale = 1,
+    overlay = true -- (text will look nicer with this enabled)
+}
+
 
 
 

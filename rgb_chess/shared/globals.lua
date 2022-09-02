@@ -50,6 +50,47 @@ end
 
 
 
-_G.rgb = rgb
+
+function rgb.getPVEEnemyTeam(rgbTeam)
+    -- generates a team ID for use by PVE enemies
+    return constants.PVE_PREFIX .. rgbTeam
+end
+
+
+function rgb.setTeam(ent, rgbTeam)
+    --  sets a team for an entity
+    if ent.rgbTeam ~= rgbTeam and ent.rgbTeam then
+        error("Entity teams should be constant.")
+    end
+    ent.rgbTeam = rgbTeam
+    categories.changeEntityCategory(ent, rgbTeam)
+end
+
+
+function rgb.setTarget(ent, rgbTeam)
+    -- sets a target for an entity
+    ent.moveBehaviourTargetCategory = rgbTeam
+    ent.attackBehaviourTargetCategory = rgbTeam
+end
+
+
+
+function rgb.isRanged(ent)
+    return ent.attackBehaviour and ent.attackBehaviour.type == "ranged"
+end
+
+
+function rgb.ipairs(rgbTeam)
+    return categories.getSet(rgbTeam):ipairs()
+end
+
+
+
+
 _G.constants = require("shared.constants")
+
+
+
+_G.rgb = rgb
+
 

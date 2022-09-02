@@ -6,10 +6,10 @@ local BRUTE_DEFAULT_ATTACKSPEED = 0.5
 
 return extend("abstract_melee", {
     moveAnimation = {
-        up = {"blank_player_up_1", "blank_player_up_2", "blank_player_up_3", "blank_player_up_4"},
-        down = {"blank_player_down_1", "blank_player_down_2", "blank_player_down_3", "blank_player_down_4"}, 
-        left = {"blank_player_left_1", "blank_player_left_2", "blank_player_left_3", "blank_player_left_4"}, 
-        right = {"blank_player_right_1", "blank_player_right_2", "blank_player_right_3", "blank_player_right_4"},
+        up = {"enemy_up_1", "enemy_up_2", "enemy_up_3", "enemy_up_4"},
+        down = {"enemy_down_1", "enemy_down_2", "enemy_down_3", "enemy_down_4"}, 
+        left = {"enemy_left_1", "enemy_left_2", "enemy_left_3", "enemy_left_4"}, 
+        right = {"enemy_right_1", "enemy_right_2", "enemy_right_3", "enemy_right_4"},
         speed = 0.7;
         activation = 15
     };

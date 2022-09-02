@@ -3,7 +3,9 @@ require("shared.globals")
 
 local Board = require("server.board")
 
-local generateEnemies = require("server.gen.generate_pve")
+local matchmaking = require("server.matchmaking")
+
+local generatePVE = require("server.gen.generate_pve")
 local generateBoardDecor = require("server.gen.generate_board_decor")
 
 local readyUp = require("server.ready_up")
@@ -11,6 +13,7 @@ local readyUp = require("server.ready_up")
 local START_MONEY = 10
 
 
+local turn = 1
 
 local currentClientBoardPos = 0
 
@@ -23,9 +26,15 @@ local function allocateBoard(username)
     board:setMoney(START_MONEY)
 
     local rbx,rby = board:getRerollButtonXY()
-    local butto = entities.reroll_button(rbx, rby)
-    butto.rgbTeam = username
+    entities.reroll_button(rbx, rby, username)
+
+    local monx, mony = board:getMoneyTextXY()
+    entities.money_text(monx, mony, username)
+
+    local bbx,bby = board:getBattleButtonXY()
+    entities.battle_button(bbx, bby, username)
 end
+
 
 
 on("playerJoin", function(username)
@@ -66,7 +75,7 @@ local state = states.LOBBY_STATE
 
 
 
-local function startBattle()
+local function setupBattle()
     call("endTurn")
     call("startBattle")
     state = states.BATTLE_STATE
@@ -75,15 +84,53 @@ end
 
 
 local function startPvE()
-    startBattle()
+    setupBattle()
     for _, board in Board.iterBoards() do
-        generateEnemies(board.turn)
+        local enemyTeam = rgb.getPVEEnemyTeam(board:getTeam())
+        board:setEnemyTeam(enemyTeam)
+        local enemies = generatePVE.generateEnemies(board.turn)
+        board:putEnemies(enemies)
+        local allyArray = {}
+        for _,ent in rgb.ipairs(board:getTeam()) do 
+            table.insert(allyArray, ent)
+        end
+        board:putAllies(allyArray)
     end
 end
 
 
+
+
+
+local function setupPvPMatch(match)
+    -- TODO: Lock camera positions to this board.
+    local board = Board.getBoard(match.home)
+
+    -- TODO: Maybe delay this for cool effect?
+    board:setEnemyTeam(match.away)
+    local allyArray = {}
+    for _,ent in rgb.ipairs(match.home) do 
+        table.insert(allyArray, ent)
+    end
+    local enemyArray = {}
+    for _,ent in rgb.ipairs(match.away) do 
+        table.insert(enemyArray, ent)
+    end
+    board:putAllies(allyArray)
+    board:putEnemies(enemyArray)
+end
+
+
 local function startPvP()
-    startBattle()
+    setupBattle()
+    local matches = matchmaking.makeMatches()
+    for _, match in ipairs(matches)do
+        if not match.bye then
+            setupPvPMatch(match)
+        else
+            -- Do something for byes..?
+        end
+    end
 end
 
 
@@ -105,6 +152,7 @@ local function startGame()
     for _,player in ipairs(server.getPlayers()) do
         allocateBoard(player)
     end
+    state = states.TURN_STATE
 end
 
 
@@ -113,19 +161,39 @@ end
 
 local function updateTurn()
     if readyUp.shouldStartBattle() then
-        startPvE()
+        -- transition to battle state:
+        if matchmaking.isPVE(turn) then
+            startPvE()
+        else
+            startPvP()
+        end
         readyUp.resetReady()
+        turn = turn + 1
     end
 end
 
 
 local function updateBattle()
+    -- check if all boards are done battle.
+    -- If so, start turn.
+    local isBattleOver = true
+    for _, board in Board.iterBoards()do
+        if not board:isBattleOver() then
+            isBattleOver = false
+        end
+    end
 
+    if isBattleOver then
+        -- battle is over! Transition to `turn` state.
+        startTurn()
+    end
 end
+
 
 local function updateLobby()
     
 end
+
 
 
 local updates = {

@@ -22,7 +22,7 @@ function exp.changeEntityCategory(ent, newCategory)
         If an entity's category is changed manually it will cause stuff to break.
     ]]
 
-    assert(exists(ent), "Entity doesn't exist!")
+    assert(exists(ent), "Entity doesn't exist! (maybe you need to wait a frame...?)")
     if type(ent.category) == "table" then
         -- its a list of categories:
         for i=1, #ent.category do

@@ -72,6 +72,7 @@ function Board:getMoney()
 end
 
 function Board:setMoney(x)
+    server.broadcast("setMoney", self:getTeam(), x)
     self.money = x
 end
 
@@ -87,6 +88,14 @@ end
 
 function Board:getRerollButtonXY()
     return self.x + (self.width * (1/6)), self.y + (self.height * (5/6))
+end
+
+function Board:getMoneyTextXY()
+    return self.x + (self.width * (1/6)), self.y + (self.height * (11/12))
+end
+
+function Board:getBattleButtonXY()
+    return self.x + (self.width * (1/6)), self.y + (self.height)
 end
     
 function Board:getWH()
@@ -113,7 +122,7 @@ end
 
 
 function Board:iterUnits()
-    return ipairs(self.units)
+    return categories.getSet(self:getTeam()):ipairs()
 end
 
 function Board:addUnit(unit_ent)
@@ -125,72 +134,140 @@ end
 
 function Board:serialize()
     -- serializes the allies on the board
-    self.serialized = serialize(self.units)
+    local buffer = {}
+    for _, ent in rgb.ipairs(self:getTeam()) do
+        table.insert(buffer, ent)
+    end
+    self.serialized = serialize(buffer)
 end
 
-
-
-function Board:reset()
-    -- puts allies back onto the board, (deserialized)
-    local arr, err = deserialize(self.serialized)
-    if (not arr) and err then
-        print("[rgb_chess]: error in deserializing allies for board: ", err)
+function Board:deserializeAllies()
+    if self.serialized then
+        local arr, err = deserialize(self.serialized)
+        if (not arr) and err then
+            print("[rgb_chess]: error in deserializing allies for board: ", err)
+        end
+        return arr
+    else
+        return {}
     end
-    for i=1, #arr do
-        local ally = arr[i]
-        ally.attackBehaviourTargetCategory = nil
-    end
-    self.units = arr
 end
+
 
 
 
 function Board:clear()
-    --[[
-        deletes all units on the board.
-    ]]
-    for i=1, #self.units do
-        local ent = self.units[i]
+    local enemyTeam = self.enemyRgbTeam
+    if enemyTeam then
+        for _, ent in rgb.ipairs(enemyTeam) do
+            ent:delete()
+        end
+    end
+    for _, ent in rgb.ipairs(self:getTeam()) do
         ent:delete()
     end
-    for i=1, #self.enemies do
-        local ent = self.enemies[i]
-        ent:delete()
+end
+
+
+function Board:reset()
+    --[[
+        resets board state and deserializes allies.
+    ]]
+    self.winner = nil
+    self.enemyTeam = nil
+
+    local arr = self:deserializeAllies()
+    for i=1, #arr do
+        rgb.setTeam(arr[i], self:getTeam())
     end
 end
 
 
 
 
+local function rand(middle, ampli)
+    return middle + (math.random()-.5) * ampli * 2
+end
 
-function Board:putEnemies(data)
+
+function Board:putEnemies(enemyArray)
     --[[
         puts enemies on the board
         TODO: Make particle effects and stuff here
-        TODO: Make sure to change the position of enemies too!!!
-              right now we aren't actually doing that
+        Enemy units top of board, Allied units start bottom.
     ]]
-    local arr, err
-    if type(data) == "string" then
-        arr, err = deserialize(data)
-        if (not arr) and err then
-            print("[rgb chess]: Unable to deserialize enemy data:", err)
-            return
+    local x, y = self:getXY()
+    local w, h = self:getWH()
+    local team = self:getTeam()
+    assert(self.enemyRgbTeam, "enemy team id must be set.")
+
+    for _, ent in ipairs(enemyArray) do
+        rgb.setTeam(ent, self.enemyRgbTeam)
+        rgb.setTarget(ent, team)
+        if rgb.isRanged(ent) then
+            -- put ranged units at the back
+            ent.x = rand(x + w, w/3)
+            ent.y = rand(y + h/6, h/20)
+        else
+            -- and melee units at the front
+            ent.x = rand(x + w, w/3)
+            ent.y = rand(y + h/3, h/20)
+        end
+    end
+end
+
+
+function Board:putAllies(allyArray)
+    --[[
+        puts allies on the board
+        TODO: Make particle effects and stuff here
+        Enemy units top of board, Allied units start bottom.
+    ]]
+    local x, y = self:getXY()
+    local w, h = self:getWH()
+    assert(self.enemyRgbTeam, "enemy team id must be set.")
+
+    for _, ent in ipairs(allyArray) do
+        rgb.setTarget(ent, self.enemyRgbTeam)
+        if rgb.isRanged(ent) then
+            -- put ranged units at the back
+            ent.x = rand(x + w, w/3)
+            ent.y = rand(y + h*5/6, h/20)
+        else
+            -- and melee units at the front
+            ent.x = rand(x + w, w/3)
+            ent.y = rand(y + h*2/3, h/20)
+        end
+    end
+end
+
+
+function Board:setEnemyTeam(enemyRgbTeam)
+    self.enemyRgbTeam = enemyRgbTeam
+end
+
+function Board:isBattleOver()
+    local self_category = self.rgbTeam
+    local enemy_category = self.enemyRgbTeam
+    if enemy_category then
+        local enemies = categories.getSet(enemy_category)
+        local allies = categories.getSet(self_category)
+        if enemies.size == 0 then
+            self.winner = self:getTeam()
+            return true
+        end
+        if allies.size == 0 then
+            self.winner = enemy_category
+            return true
         end
     else
-        arr = data
+        return true -- this board isn't having a fight.
     end
+end
 
-    local enemyCategory = arr[1] and arr[1].category
-    for i=1, #arr do
-        local ent = arr[i]
-        ent.attackBehaviourTargetCategory = self.owner
-        table.insert(self.enemies, ent)
-    end
 
-    for i=1, #self.units do
-        self.units[i].attackBehaviourTargetCategory = enemyCategory
-    end
+function Board:getWinner()
+    return self.winner
 end
 
 
