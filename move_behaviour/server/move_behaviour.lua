@@ -10,9 +10,9 @@ local helper = require("server.helper")
 
 local follow = {}
 function follow.update(ent,dt)
-    local targ = ent.moveBehaviourTarget
+    local targ = ent.moveBehaviourTargetEntity
     if not exists(targ) then
-        ent.moveBehaviourTarget = nil
+        ent.moveBehaviourTargetEntity = nil
         targ = nil
     end
     if targ then
@@ -31,9 +31,9 @@ local pi2 = math.pi*2
 local CIRCLE_DEFAULT_PERIOD = 2
 local CIRCLE_DEFAULT_RADIUS = 50
 function circle.update(ent,dt)
-    local targ = ent.moveBehaviourTarget
+    local targ = ent.moveBehaviourTargetEntity
     if not exists(targ) then
-        ent.moveBehaviourTarget = nil
+        ent.moveBehaviourTargetEntity = nil
         targ = nil
     end
     if not targ then return end
@@ -54,22 +54,25 @@ end
 
 local flee = {}
 function flee.update(ent,dt)
-    local targ = ent.moveBehaviourTarget
+    local targ = ent.moveBehaviourTargetEntity
         --[[
         TODO::::
         Make it so the ent's velocity isnt instantaneously set.
         It's probably better to have some aspect of "agility" or something.
     ]]
-    local dx,dy = ent.x - targ.x, ent.y - targ.y
-    local mag = math.distance(dx,dy)
-    if mag > 0 then
-        ent.vx = (dx / mag) * ent.speed
-        ent.vy = (dy / mag) * ent.speed
-    else
-        ent.vx = 0
-        ent.vy = 0
+    if targ then
+        local dx,dy = ent.x - targ.x, ent.y - targ.y
+        local mag = math.distance(dx,dy)
+        if mag > 0 then
+            ent.vx = (dx / mag) * ent.speed
+            ent.vy = (dy / mag) * ent.speed
+        else
+            ent.vx = 0
+            ent.vy = 0
+        end
     end
 end
+
 function flee.heavyUpdate(ent,dt)
     helper.defaultHeavyUpdate(ent)
 end
@@ -81,7 +84,7 @@ end
 
 local kite = {}
 function kite.update(ent,dt)
-    local targ = ent.moveBehaviourTarget
+    local targ = ent.moveBehaviourTargetEntity
     helper.moveTo(ent, targ.x, targ.y)
 end
 function kite.heavyUpdate(ent,dt)

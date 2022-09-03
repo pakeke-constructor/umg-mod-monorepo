@@ -21,7 +21,7 @@ return {
     "rgb_saveStats", -- a table for saving entity stats before combat.
 
     "attackDamage", "attackSpeed",
-    "hp", "maxHp",
+    "health", "maxHealth",
 
     speed = DEFAULT_SPEED,
 

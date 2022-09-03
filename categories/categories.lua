@@ -15,7 +15,10 @@ local categoryEntities = group("x", "y", "category")
 
 categoryEntities:onAdded(function(ent)
     local category = ent.category
-    assert(category, "entity was not given a category value: " .. tostring(ent))
+    if not category then 
+        return -- assume that this entity doesn't have a category yet.
+    end
+
     -- if ent.category is not constant, there will be issues.
     if type(category) == "table" then
         -- this entity has multiple categories.
@@ -31,6 +34,9 @@ end)
 
 categoryEntities:onRemoved(function(ent)
     local category = ent.category
+    if not category then
+        return -- nothing much we can do here!
+    end
     if type(category) == "table" then
         -- this entity has multiple categories.
         for _, c in ipairs(category) do

@@ -50,17 +50,19 @@ end
 
 function readyUp.shouldStartBattle()
     local time = timer.getTime()
-    if time + AUTO_START_TIME > turnStartTime then
+    if time > turnStartTime + AUTO_START_TIME then
         return true
     end
 
+    local itered = false
     for username, _ in Board.iterBoards() do
+        itered = true
         if not usernameToIsReady[username] then
             return false
         end
     end
 
-    return true
+    return itered
 end
 
 

@@ -34,12 +34,13 @@ end
 
 local function tryPickNewTarget(ent, mb)
     -- then we pick a new target:
-    if not mb.target then
+    local targCategory = ent.moveBehaviourTargetCategory or mb.target
+    if not targCategory then
         return
     end
-    local best_ent, best_dist = findClosestEntity(ent, mb.target)
+    local best_ent, best_dist = findClosestEntity(ent, targCategory)
     if best_dist <= mb.activateDistance then
-        ent.moveBehaviourTarget = best_ent
+        ent.moveBehaviourTargetEntity = best_ent
     end
 end
 
@@ -49,11 +50,11 @@ local function defaultHeavyUpdate(ent,dt)
         selects the closest entity in target category
     ]]
     local mb = ent.moveBehaviour
-    local targ = ent.moveBehaviourTarget
+    local targ = ent.moveBehaviourTargetEntity
     if targ then
         local dist = math.distance(ent,targ)
         if dist > deactivateDist(mb) then
-            ent.moveBehaviourTarget = nil
+            ent.moveBehaviourTargetEntity = nil
             tryPickNewTarget(ent, mb)
         end
     else

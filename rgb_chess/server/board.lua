@@ -206,11 +206,11 @@ function Board:putEnemies(enemyArray)
         rgb.setTarget(ent, team)
         if rgb.isRanged(ent) then
             -- put ranged units at the back
-            ent.x = rand(x + w, w/3)
+            ent.x = rand(x + w/2, w/3)
             ent.y = rand(y + h/6, h/20)
         else
             -- and melee units at the front
-            ent.x = rand(x + w, w/3)
+            ent.x = rand(x + w/2, w/3)
             ent.y = rand(y + h/3, h/20)
         end
     end
@@ -231,11 +231,11 @@ function Board:putAllies(allyArray)
         rgb.setTarget(ent, self.enemyRgbTeam)
         if rgb.isRanged(ent) then
             -- put ranged units at the back
-            ent.x = rand(x + w, w/3)
+            ent.x = rand(x + w/2, w/3)
             ent.y = rand(y + h*5/6, h/20)
         else
             -- and melee units at the front
-            ent.x = rand(x + w, w/3)
+            ent.x = rand(x + w/2, w/3)
             ent.y = rand(y + h*2/3, h/20)
         end
     end

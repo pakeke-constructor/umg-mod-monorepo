@@ -75,11 +75,26 @@ local state = states.LOBBY_STATE
 
 
 
+local battleStartTime = timer.getTime()
+
 local function setupBattle()
+    battleStartTime = timer.getTime()
     call("endTurn")
     call("startBattle")
     state = states.BATTLE_STATE
     saveBoards()
+end
+
+
+
+
+local function finalizePvE(board, enemies)
+    board:putEnemies(enemies)
+    local allyArray = {}
+    for _,ent in rgb.ipairs(board:getTeam()) do 
+        table.insert(allyArray, ent)
+    end
+    board:putAllies(allyArray)
 end
 
 
@@ -89,15 +104,9 @@ local function startPvE()
         local enemyTeam = rgb.getPVEEnemyTeam(board:getTeam())
         board:setEnemyTeam(enemyTeam)
         local enemies = generatePVE.generateEnemies(board.turn)
-        board:putEnemies(enemies)
-        local allyArray = {}
-        for _,ent in rgb.ipairs(board:getTeam()) do 
-            table.insert(allyArray, ent)
-        end
-        board:putAllies(allyArray)
+        base.delay(finalizePvE, 1, board, enemies)
     end
 end
-
 
 
 
@@ -153,6 +162,7 @@ local function startGame()
         allocateBoard(player)
     end
     state = states.TURN_STATE
+    matchmaking.startGame()
 end
 
 
@@ -173,10 +183,14 @@ local function updateTurn()
 end
 
 
+local MINIMUM_BATTLE_DURATION = 5
+
 local function updateBattle()
     -- check if all boards are done battle.
     -- If so, start turn.
-    local isBattleOver = true
+    local time = timer.getTime()
+
+    local isBattleOver = true and (time > battleStartTime + MINIMUM_BATTLE_DURATION)
     for _, board in Board.iterBoards()do
         if not board:isBattleOver() then
             isBattleOver = false
