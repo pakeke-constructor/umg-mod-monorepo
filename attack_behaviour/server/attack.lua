@@ -55,6 +55,8 @@ local function attack(ent, target_ent)
     if ent.attackBehaviour.splash then
         doSplash(ent, target_ent)
     else
+        assert(exists(ent), "ent")
+        assert(exists(target_ent),"targ")
         call("attack", ent, target_ent, ent.attackDamage)
         server.broadcast("attack", ent, target_ent, ent.attackDamage)
         target_ent.health = target_ent.health - ent.attackDamage

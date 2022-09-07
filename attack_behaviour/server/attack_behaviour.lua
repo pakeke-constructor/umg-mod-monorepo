@@ -146,13 +146,12 @@ on("update5", function()
         if ent.attackBehaviour then
             local target = ent.attackBehaviourTargetEntity
             local targetCategory = ent.attackBehaviourTargetCategory or ent.attackBehaviour.target
-            if targetCategory then
-                if not exists(target) then
-                    target = findClosestEntity(ent, targetCategory)
-                end
-                if target and math.distance(target, ent) < ent.attackBehaviour.range then
-                    tryAttack(ent, target, now)
-                end
+            if targetCategory and not exists(target) then
+                target = findClosestEntity(ent, targetCategory)
+            end
+            if target and math.distance(target, ent) < ent.attackBehaviour.range then
+                ent.attackBehaviourTargetEntity = target -- we do a bit of cacheing
+                tryAttack(ent, target, now)
             end
         end
     end

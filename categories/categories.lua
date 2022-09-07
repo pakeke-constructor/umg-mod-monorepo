@@ -40,10 +40,10 @@ categoryEntities:onRemoved(function(ent)
     if type(category) == "table" then
         -- this entity has multiple categories.
         for _, c in ipairs(category) do
-            categories[c]:add(ent)
+            categories[c]:remove(ent)
         end
     else
-        categories[category]:add(ent)
+        categories[category]:remove(ent)
     end
 end)
 
