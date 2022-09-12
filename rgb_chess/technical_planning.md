@@ -23,7 +23,7 @@ card = {
     name = "brute x 1", -- card name
     description = "hp 5\ndmg 5",
 
-    cost = X
+    baseCost = X
     
     unit = {
         amount = 4;
@@ -44,10 +44,13 @@ card.buyTarget = "1_unit" | "all_units" | "board" |
 ```
 
 
-# UNITS:
+# UNIT COMPONENTS:
 ```lua
 
 ent.rgb = RED | GRN | BLU
+
+ent.rgbTeam = username
+ent.category = ent.rgbTeam
 
 ent.moveBehaviour = {...}
 
@@ -69,6 +72,11 @@ ent.attackDamage = 10
 
 ent.defaultAttackSpeed = 0.5
 ent.attackSpeed = 0.5
+
+
+ent.squadron = {ent1, ent2, ...} -- The squadron that this unit belongs to.
+-- This is only set if `ent` is a swarm unit.  
+-- (Swarm units count as 1 slot.)
 
 
 -- UNIT CALLBACKS:

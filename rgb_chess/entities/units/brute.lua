@@ -1,10 +1,15 @@
 
-local BRUTE_DEFAULT_DMG = 5
-local BRUTE_DEFAULT_HP = 10
-local BRUTE_DEFAULT_ATTACKSPEED = 0.5
 
 
 return extend("abstract_melee", {
+
+    defaultSpeed = 60,
+    defaultHealth = 10,
+    defaultAttackDamage = 5,
+    defaultAttackSpeed = 0.5,
+
+    bobbing = {},
+
     moveAnimation = {
         up = {"enemy_up_1", "enemy_up_2", "enemy_up_3", "enemy_up_4"},
         down = {"enemy_down_1", "enemy_down_2", "enemy_down_3", "enemy_down_4"}, 
@@ -14,15 +19,8 @@ return extend("abstract_melee", {
         activation = 15
     };
 
-    init = function(ent, x, y)
-        ent.x = x;
-        ent.y = y;
-        
-        ent.attackDamage = BRUTE_DEFAULT_DMG
-        ent.attackSpeed = BRUTE_DEFAULT_ATTACKSPEED
-        ent.health = BRUTE_DEFAULT_HP
-        ent.maxHealth = BRUTE_DEFAULT_HP
-    end;
+    init = base.entityHelper.initPosition
+
 })
 
 

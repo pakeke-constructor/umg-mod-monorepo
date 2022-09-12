@@ -103,10 +103,15 @@ local function drawCard(ent)
 end
 
 
-on("drawEntity", function(ent)
+on("update",function()
     currentTime = timer.getTime()
+end)
+
+on("drawEntity", function(ent)
     if ent.card then
-        drawCard(ent)
+        if rgb.state == rgb.STATES.TURN_STATE then
+            drawCard(ent)
+        end
     end
 end)
 

@@ -1,7 +1,6 @@
 
 
-local RANGE = 300
-local DEFAULT_SPEED = 60
+local RANGE = 200
 
 
 --[[
@@ -22,8 +21,9 @@ return {
 
     "attackDamage", "attackSpeed",
     "health", "maxHealth",
+    "speed",
 
-    speed = DEFAULT_SPEED,
+    "squadron",
 
     attackBehaviour = {
         type = "ranged",

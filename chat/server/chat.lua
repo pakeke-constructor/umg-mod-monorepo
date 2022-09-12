@@ -10,6 +10,8 @@ per user, to prevent spamming.
 local constants = require("constants")
 
 
+local chat = {}
+
 
 -- start of command character in minecraft, like `/` in minecraft.
 local commandCharString = "/!;?$"
@@ -32,8 +34,19 @@ server.on("chatMessage", function(sender, message, channel)
         return  -- nope!
     end
     if not channel then
+        -- TODO: Do colored names here
         local msg = "[" .. sender .. "]" .. " " .. message
         server.broadcast("chatMessage", msg)
     end
 end)
+
+
+
+function chat.message(message)
+    server.broadcast("chatMessage", message)
+end
+
+
+
+return chat
 

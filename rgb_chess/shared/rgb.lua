@@ -1,4 +1,7 @@
 
+require("shared.constants")
+
+
 local rgb = {}
 
 rgb.COLS = {
@@ -81,13 +84,58 @@ end
 
 
 function rgb.ipairs(rgbTeam)
+    assert(rgbTeam, "rgb.ipairs not given rgbTeam")
     return categories.getSet(rgbTeam):ipairs()
 end
 
 
 
+function rgb.getSquadronCount(rgbTeam)
+    local seenEntities = {}
+    local count = 0
+    for _, ent in rgb.ipairs(rgbTeam)do
+        if not seenEntities[ent] then
+            seenEntities[ent] = true
+            if ent.squadron then
+                for _, e in ipairs(ent.squadron) do
+                    seenEntities[e] = true
+                end
+            end
+            count = count + 1
+        end
+    end
+    return count
+end
 
-_G.constants = require("shared.constants")
+
+rgb.STATES = setmetatable({
+    LOBBY_STATE = "lobby_state",
+    BATTLE_STATE = "battle_state",
+    TURN_STATE = "turn_state"
+}, {__index=function(_,k) error("invalid rgb state: " .. tostring(k)) end})
+
+local states_invert = {}
+for k,v in pairs(rgb.STATES)do states_invert[v] = k end
+
+rgb.state = rgb.STATES.LOBBY_STATE
+
+
+function rgb.getState()
+    return rgb.state 
+end
+
+
+if server then
+    function rgb.setState(state)
+        assert(states_invert[state])
+        rgb.state = state
+        server.broadcast("setRGBState", state)
+    end
+else
+    client.on("setRGBState", function(state)
+        rgb.state = state
+    end)
+end
 
 
 

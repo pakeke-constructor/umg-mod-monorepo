@@ -2,19 +2,19 @@
 
 ```lua
 
-
-base.Array() -- creates an array
-
-base.Set() -- creates a sparse set
-
 base.Class(name) -- creates a class with a name. Class names must be unique.
 -- Also, classes should always be created on BOTH clientside AND serverside.
 
+base.Array() -- creates an array
+base.Set() -- creates a sparse set
 base.Partition(bucketXWidth, bucketYWidth) -- creates a spatial partition
+base.Heap(compareFunc) -- creates a heap
 
 
 base.getPlayer(username) -- gets an entity being controlled by `username`
 
+
+base.delay(0.5, func, ...) -- delays a function call for 0.5 seconds
 
 
 
@@ -37,6 +37,12 @@ base.animateEntity(ent, frames, time)
 -- plays an animation on an entity. (This will overwrite the entity's image.)
 
 
+-- displays a title on screen
+base.title("I'm a title!", {
+    x = 1/2, y = 1/2, scale=1, color = {1,1,1},   
+})
+
+-- emits a shockwave at (x,y)
 base.shockwave(x, y, start_size, end_size, thickness, time, colour={1,1,1,1})
 
 base.shake(duration, dx, dy, freq) -- Shakes the screen

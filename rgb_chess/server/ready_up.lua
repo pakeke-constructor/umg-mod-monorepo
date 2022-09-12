@@ -5,7 +5,7 @@ local Board = require("server.board")
 local readyUpButtonEnts = group("readyUpButton")
 
 
-local AUTO_START_TIME = 60 -- max 60 seconds for turn time.
+local AUTO_START_TIME = math.huge -- battle will auto start after X seconds.
 
 
 local usernameToIsReady = {

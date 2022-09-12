@@ -53,15 +53,6 @@ function Board:init(x, y, owner)
     self.owner = owner
     self.rgbTeam = owner
 
-    self.units = {--[[
-        ent1, ent2, ...
-    ]]}
-
-    -- Only used during battle.
-    self.enemies = {--[[
-        enemy1, enemy2, enemy3
-    ]]}
-
     self.turn = 0
 
     usernameToBoard[owner] = self
@@ -124,11 +115,6 @@ end
 function Board:iterUnits()
     return categories.getSet(self:getTeam()):ipairs()
 end
-
-function Board:addUnit(unit_ent)
-    table.insert(self.units, unit_ent)
-end
-
 
 
 

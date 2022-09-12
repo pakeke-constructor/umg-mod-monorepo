@@ -55,7 +55,7 @@ function matchmaking.makeMatches()
 
     for i=1, len-1, 2 do
         local t1 = teamsCopy[i]
-        local t2 =teamsCopy[2]
+        local t2 = teamsCopy[2]
         if t1 and t2 then
             teamMatched[t1]=true
             teamMatched[t2]=true

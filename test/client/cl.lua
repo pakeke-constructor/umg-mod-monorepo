@@ -14,7 +14,6 @@ local psys = base.particles.newParticleSystem({
 
 base.particles.define("smoke", psys)
 
-local ctttt = 0
 
 on("keypressed", function(k)
     if k == "q" then
@@ -30,7 +29,8 @@ on("keypressed", function(k)
         base.particles.emit("smoke", e.x, e.y, 12, 10, {0.2,0.2,0.9})
     end
     if k =="r" then
-        base.delay(math.random() + 1, function() ctttt = ctttt + 1 print(ctttt) end)
+        base.title("Title!")
+        base.title("subtitle!", {scale = 0.6, y=2/3})
     end
     if k == "space" then
         local e = base.getPlayer()

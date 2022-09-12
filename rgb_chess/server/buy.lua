@@ -1,7 +1,7 @@
 
 local Board = require("server.board")
 
-local genCards = require("server.gen.generate_cards")
+local reroll = require("server.reroll")
 
 
 
@@ -10,24 +10,17 @@ local buy = {}
 
 
 
-
-
 local SPAWN_RANDOM_RAD = 100
 
 
-local function spawnUnit(card_ent)
-    --[[
-        spawns a unit described by a card.
-    ]]
+local function spawnEntity(card_ent)
+    local unit = card_ent.card.unit
     local board = Board.getBoard(card_ent.rgbTeam)
     local x,y = board:getXY()
     local w,h = board:getWH()
     local spawn_x = x + w/2 + (math.random()-.5) * SPAWN_RANDOM_RAD
     local spawn_y = y + h/2 + (math.random()-.5) * SPAWN_RANDOM_RAD
-    
-    local unit = card_ent.card.unit
-    assert(entities[unit.type], "invalid unit type: " .. unit.type)
-    
+
     local ent = entities[unit.type](spawn_x, spawn_y)
 
     ent.x = spawn_x
@@ -39,8 +32,75 @@ local function spawnUnit(card_ent)
     ent.health = unit.health
     ent.maxHealth = unit.health
     ent.category = card_ent.rgbTeam
-    board:addUnit(ent)
+    return ent
+end
+
+
+
+local function spawnUnit(card_ent)
+    --[[
+        spawns a unit described by a card.
+    ]]
+    
+    local unit = card_ent.card.unit
+    assert(entities[unit.type], "invalid unit type: " .. unit.type)
+    
+    local squadron = {}
+    local numUnits = unit.amount or 1
+    for _=1, numUnits do
+        local ent = spawnEntity(card_ent)
+        table.insert(squadron, ent)
+        ent.squadron = squadron
+    end
     -- TODO: Do feedback and stuff here.
+end
+
+
+
+
+local function unitPriceFunction(baseCardPrice, numSquadrons)
+    -- price function for unit cards.
+    return baseCardPrice + numSquadrons
+end
+
+function buy.getCost(card_ent, squadronCount)
+    assert(card_ent.rgbTeam, "not given rgbTeam")
+    squadronCount = squadronCount or rgb.getSquadronCount(card_ent.rgbTeam)
+    local baseCost = card_ent.card.baseCost
+    if card_ent.card.unit then
+        return unitPriceFunction(baseCost, squadronCount)
+    else
+        return card_ent.card.baseCost
+    end
+end
+
+
+
+function buy.setCosts(rgbTeam)
+    -- sets the card costs appropriately for the board owned by rgbTeam.
+    local ct = rgb.getSquadronCount(rgbTeam)
+    local board = Board.getBoard(rgbTeam)
+    for i=1, #board.shop do
+        local card = board.shop[i]
+        if exists(card) then
+            card.cost = buy.getPrice(card, ct)
+            server.broadcast("setRGBCardCost", card, card.cost)
+        end
+    end
+end
+
+
+
+function buy.changeCosts(rgbTeam, dCost)
+    -- changes all card costs by a flat amount.
+    local board = Board.getBoard(rgbTeam)
+    for i=1, #board.shop do
+        local card = board.shop[i]
+        if exists(card) then
+            card.cost = card.cost + dCost
+            server.broadcast("setRGBCardCost", card, card.cost)
+        end
+    end
 end
 
 
@@ -56,9 +116,7 @@ function buy.buyCard(card_ent)
     end
 
     board:setMoney(board:getMoney() - cost)
-    card_ent:delete()
-    -- TODO: Send event to client: do feedback, sfx and stuff
-    genCards.spawnCard(board, card_ent.shopIndex)
+    reroll.rerollSingle(card_ent.rgbTeam, card_ent.shopIndex)
 end
 
 
@@ -68,6 +126,9 @@ function buy.tryBuy(card_ent)
     --[[
         tries to buy a card entity
     ]]
+    if rgb.state ~= rgb.STATES.TURN_STATE then
+        return
+    end
     local cost = card_ent.card.cost or 1
     local board = Board.getBoard(card_ent.rgbTeam)
     if cost <= board:getMoney() then

@@ -1,8 +1,5 @@
 
-
 local MELEE_RANGE = 30
-local DEFAULT_SPEED = 60
-
 
 --[[
     abstract melee entity
@@ -22,8 +19,9 @@ return {
 
     "attackDamage", "attackSpeed",
     "health", "maxHealth",
+    "speed",
 
-    speed = DEFAULT_SPEED,
+    "squadron",
 
     physics = {
         shape = physics.newCircleShape(5);

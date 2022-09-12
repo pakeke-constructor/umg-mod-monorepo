@@ -348,6 +348,10 @@ server
     server.lazyBroadcast(msg, ...) -- lazy broadcast: efficient, but not guaranteed arrival
     server.lazyUnicast(msg, ...) -- lazy unicast: efficient, but not guaranteed arrival
 
+    server.forceSpawn(ent) -- forces an entity spawn event for `ent`
+    server.forceDelete(ent) -- forces an entity delete event for `ent`
+    -- ITS NOT RECOMMENDED TO USE THESE TWO ^^^
+
 username -- The player's username.  (Available client side ONLY)
 ```
 

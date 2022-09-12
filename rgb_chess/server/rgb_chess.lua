@@ -1,5 +1,5 @@
 
-require("shared.globals")
+require("shared.rgb")
 
 local Board = require("server.board")
 
@@ -40,6 +40,9 @@ end
 on("playerJoin", function(username)
     local plyr_ent = entities.player(0, 0)
     plyr_ent.controller = username
+    
+    rgb.setState(rgb.getState()) -- this doesnt change the state,
+    -- we just need to update the new player.
 end)
 
 
@@ -65,13 +68,7 @@ end
 
 
 
-local states = {
-    LOBBY_STATE = 1,
-    BATTLE_STATE = 2,
-    TURN_STATE = 3
-}
-
-local state = states.LOBBY_STATE
+rgb.setState(rgb.STATES.LOBBY_STATE)
 
 
 
@@ -81,7 +78,7 @@ local function setupBattle()
     battleStartTime = timer.getTime()
     call("endTurn")
     call("startBattle")
-    state = states.BATTLE_STATE
+    rgb.setState(rgb.STATES.BATTLE_STATE)
     saveBoards()
 end
 
@@ -144,11 +141,14 @@ end
 
 
 
+local inTurnTransition = false
+
 
 local function startTurn()
+    inTurnTransition = false
     call("endBattle")
     call("startTurn")
-    state = states.TURN_STATE
+    rgb.setState(rgb.STATES.TURN_STATE)
     for _, board in Board.iterBoards() do
         board:clear()
         board:reset()
@@ -157,28 +157,37 @@ end
 
 
 local function startGame()
-    assert(state == states.LOBBY_STATE)
+    assert(rgb.state == rgb.STATES.LOBBY_STATE)
     for _,player in ipairs(server.getPlayers()) do
         allocateBoard(player)
     end
-    state = states.TURN_STATE
+    rgb.setState(rgb.STATES.TURN_STATE)
     matchmaking.startGame()
 end
 
 
 
-
-
 local function updateTurn()
-    if readyUp.shouldStartBattle() then
-        -- transition to battle state:
-        if matchmaking.isPVE(turn) then
-            startPvE()
-        else
-            startPvP()
+    if (not inTurnTransition) and readyUp.shouldStartBattle() then
+        inTurnTransition = true
+        for i=1, 10 do
+            base.delay(10 - i, function(x)
+                chat.message("(SERVER) - starting battle in " .. tostring(x) .. " seconds.")
+            end, i)
         end
-        readyUp.resetReady()
-        turn = turn + 1
+
+        base.delay(10, function()
+            -- transition to battle state:
+            if matchmaking.isPVE(turn) then
+                chat.message("(SERVER) - starting PvE battle!")
+                startPvE()
+            else
+                chat.message("(SERVER) - starting Player PvP battle!")
+                startPvP()
+            end
+            readyUp.resetReady()
+            turn = turn + 1
+        end)
     end
 end
 
@@ -199,6 +208,7 @@ local function updateBattle()
 
     if isBattleOver then
         -- battle is over! Transition to `turn` state.
+        chat.message("(SERVER) - battle round has completed.")
         startTurn()
     end
 end
@@ -211,13 +221,13 @@ end
 
 
 local updates = {
-    [states.LOBBY_STATE] = updateLobby,
-    [states.BATTLE_STATE] = updateBattle,
-    [states.TURN_STATE] = updateTurn
+    [rgb.STATES.LOBBY_STATE] = updateLobby,
+    [rgb.STATES.BATTLE_STATE] = updateBattle,
+    [rgb.STATES.TURN_STATE] = updateTurn
 }
 
 on("update", function(dt)
-    updates[state](dt)
+    updates[rgb.state](dt)
 end)
 
 

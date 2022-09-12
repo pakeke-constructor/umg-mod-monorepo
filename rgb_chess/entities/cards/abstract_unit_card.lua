@@ -17,6 +17,8 @@ return {
     "rgbTeam",
     "rgb",
     "color",
+    "cost",
+
     image = "invisible_card",
 
     onClick = function(ent, username, button)

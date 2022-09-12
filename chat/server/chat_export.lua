@@ -22,7 +22,7 @@ end)
 
 
 
-local chat = {}
+local chat = require("server.chat")
 
 
 
@@ -37,6 +37,7 @@ function chat.handleCommand(commandName, func)
     table.insert(ar, func)
     commandToCallback[commandName] = ar
 end
+
 
 
 export("chat", chat)

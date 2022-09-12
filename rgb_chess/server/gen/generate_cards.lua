@@ -1,6 +1,6 @@
 
 
-require("shared.globals")
+require("shared.rgb")
 
 --[[
 
@@ -78,7 +78,7 @@ function genCards.getRGB(turn)
         -- we dont want players to be getting OP colors in early rounds.
         return earlyRGBSelection()
     else
-        return RGBSelection
+        return RGBSelection()
     end
 end
 

@@ -15,7 +15,9 @@ local function rerollSingle(rgbTeam, shopIndex)
             server.broadcast("rerollCard", card)
             card:delete()
         end
-        genCards.spawnCard(board, shopIndex)
+        base.delay(constants.REROLL_TIME, function()
+            genCards.spawnCard(board, shopIndex)
+        end)
     end
 end
 
@@ -27,7 +29,8 @@ local function reroll(rgbTeam)
     local rgb_team = board:getOwner()
 
     for i=1, board.shopSize do
-        rerollSingle(rgbTeam, i)
+        local delay = (i/board.shopSize) * 0.3
+        base.delay(delay, function() rerollSingle(rgbTeam, i) end)
     end
 
     call("reroll", rgb_team)

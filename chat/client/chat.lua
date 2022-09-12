@@ -60,6 +60,17 @@ local curChatScale = TARGET_CHAT_HEIGHT / curFontHeight
 local currMessage = ""
 
 
+local function drawCursor(opacity)
+    local x = CHATBOX_START_X + curFont:getWidth(currMessage) * curChatScale
+    local y = curScreenHeight - curHeight
+    graphics.push("all")
+    opacity = math.floor(opacity + 0.65)
+    graphics.setColor(0,0,0,opacity)
+    graphics.rectangle("fill", x, y, 4, 10)
+    graphics.pop()
+end
+
+
 local function drawMessage(msg, opacity)
     -- TODO: Do different colors here.
     local scale = curChatScale
@@ -93,6 +104,8 @@ local function iterMessage(messageObj)
 end
 
 
+local isTyping = false
+
 
 on("mainDrawUI", function()
     --[[
@@ -106,8 +119,10 @@ on("mainDrawUI", function()
     curChatScale = TARGET_CHAT_HEIGHT / curFontHeight
 
     graphics.push("all")
-    if #currMessage > 0 then
+    if isTyping then
+        local opacity = (math.sin(curTime * 12) + 1) / 2
         drawMessage(currMessage, 1)
+        drawCursor(opacity)
     end
 
     chatHistory:foreach(iterMessage)
@@ -115,8 +130,6 @@ on("mainDrawUI", function()
 end)
 
 
-
-local isTyping = false
 
 
 
