@@ -117,6 +117,9 @@ local function findClosestEntity(src_ent, category)
         if ent ~= src_ent and ent:hasComponent("health") then
             -- we don't want to attack self, and we don't want to hit an entity without
             -- a health component (that wouldn't make sense.)
+            if not exists(ent) then
+                error("what the fuck")
+            end
             local dist = math.distance(ent, src_ent)
             if dist < best_dist then
                 best_dist = dist
@@ -145,11 +148,15 @@ on("update5", function()
     for _, ent in ipairs(attackGroup) do
         if ent.attackBehaviour then
             local target = ent.attackBehaviourTargetEntity
+            if not exists(target) then
+                ent.attackBehaviourTargetEntity = nil
+                target = nil
+            end
             local targetCategory = ent.attackBehaviourTargetCategory or ent.attackBehaviour.target
-            if targetCategory and not exists(target) then
+            if targetCategory and (not target) then
                 target = findClosestEntity(ent, targetCategory)
             end
-            if target and math.distance(target, ent) < ent.attackBehaviour.range then
+            if exists(target) and math.distance(target, ent) < ent.attackBehaviour.range then
                 ent.attackBehaviourTargetEntity = target -- we do a bit of cacheing
                 tryAttack(ent, target, now)
             end

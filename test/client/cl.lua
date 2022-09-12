@@ -30,7 +30,7 @@ on("keypressed", function(k)
         base.particles.emit("smoke", e.x, e.y, 12, 10, {0.2,0.2,0.9})
     end
     if k =="r" then
-        base.delay(function() ctttt = ctttt + 1 print(ctttt) end, math.random() + 1)
+        base.delay(math.random() + 1, function() ctttt = ctttt + 1 print(ctttt) end)
     end
     if k == "space" then
         local e = base.getPlayer()

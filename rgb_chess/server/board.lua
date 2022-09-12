@@ -177,9 +177,11 @@ function Board:reset()
     self.enemyTeam = nil
 
     local arr = self:deserializeAllies()
-    for i=1, #arr do
-        rgb.setTeam(arr[i], self:getTeam())
-    end
+    base.delay(0.4, function()
+        for i=1, #arr do
+            rgb.setTeam(arr[i], self:getTeam())
+        end
+    end)
 end
 
 

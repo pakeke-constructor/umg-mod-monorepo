@@ -14,6 +14,8 @@ return extend("abstract_button", {
     "nametag",
     "rgb_is_ready",
 
+    readyUpButton = true,
+
     onClickServer = function(ent)
         if not ent.rgb_is_ready then
             readyUp.readyUp(ent.rgbTeam)

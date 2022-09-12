@@ -2,7 +2,7 @@
 
 
 local inventoryGroup = group("inventory")
--- group of all entities that have an `inventory` component.
+-- group of all ents that have an `inventory` component.
 
 local invCtor = require("inventory")
 local valid_callbacks = require("inventory_callbacks")
@@ -214,6 +214,7 @@ function(username, ent, other_ent, x, y, x2, y2, count)
             new.y = item.y
             new.stackSize = count
             item.stackSize = stackSize - count
+            server.forceSpawn(new)
             inv2:set(x2, y2, new)
             updateStackSize(item)
         else

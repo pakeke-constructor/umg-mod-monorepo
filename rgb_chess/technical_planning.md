@@ -54,7 +54,24 @@ ent.moveBehaviour = {...}
 ent.attackBehaviour = {...}
 
 
+-- UNIT STATS:
+-- units should have all of these stats:
+-- NOTE: The defaults should be compulsory!!!! 
+-- (This way, we can calculate how much "bonus" stats each unit has.)
+ent.defaultSpeed = 20
+ent.speed = 20
 
+ent.defaultHealth = 100
+ent.health, ent.maxHealth
+
+ent.defaultAttackDamage = 10
+ent.attackDamage = 10
+
+ent.defaultAttackSpeed = 0.5
+ent.attackSpeed = 0.5
+
+
+-- UNIT CALLBACKS:
 ent.onDeath = function(ent) ... end
 
 ent.onUpgrade = function(ent) ... end

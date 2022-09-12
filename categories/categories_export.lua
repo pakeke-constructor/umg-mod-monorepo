@@ -21,20 +21,24 @@ function exp.changeEntityCategory(ent, newCategory)
         This MUST be called instead of doing `ent.category = X`
         If an entity's category is changed manually it will cause stuff to break.
     ]]
+    if not exists(ent) then
+        error("Entity doesn't exist!\n(If you just created this entity, then you must wait a frame. Entities are buffered and spawned inbetween frames..)")
+    end
 
-    assert(exists(ent), "Entity doesn't exist! (maybe you need to wait a frame...?)")
-    if type(ent.category) == "table" then
-        -- its a list of categories:
-        for i=1, #ent.category do
-            local c = ent.category[i]
+    if ent.category then
+        if type(ent.category) == "table" then
+            -- its a list of categories:
+            for i=1, #ent.category do
+                local c = ent.category[i]
+                if rawget(categories, c) then
+                    categories[c]:remove(ent)
+                end
+            end
+        else -- its just a category string:
+            local c = ent.category
             if rawget(categories, c) then
                 categories[c]:remove(ent)
             end
-        end
-    else -- its just a category string:
-        local c = ent.category
-        if rawget(categories, c) then
-            categories[c]:remove(ent)
         end
     end
 
@@ -51,6 +55,7 @@ function exp.changeEntityCategory(ent, newCategory)
         end
         categories[newCategory]:add(ent)
     end
+    ent.category = newCategory
 end
 
 

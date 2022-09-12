@@ -9,18 +9,18 @@ local function superInit(e, ...)
 end
 
 
-function ehelp.initPosition(e, x, y)
+function ehelp.initPosition(e, x, y, ...)
     -- if this is set as the ent.init method, you can do entities.my_entity(x,y)
     e.x = x
     e.y = y
     if e:hasComponent("z") then
         e.z = 0
     end
-    superInit(e,x,y)
+    superInit(e,x,y, ...)
 end
 
 
-function ehelp.initVelocity(e, x, y, vx, vy)
+function ehelp.initVelocity(e, x, y, vx, vy, ...)
     -- if this is set as the ent.init method, you can do entities.my_entity(x,y, vx,vy)
     e.x = x
     e.y = y
@@ -32,7 +32,7 @@ function ehelp.initVelocity(e, x, y, vx, vy)
     if e:hasComponent("vz") then
         e.vz = 0
     end
-    superInit(e,x,y,vx,vy)
+    superInit(e,x,y,vx,vy,...)
 end
 
 

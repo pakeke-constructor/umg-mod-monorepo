@@ -34,7 +34,7 @@ local function binarySearch(arr, target_time)
 end
 
 
-local function delay(func, time, ...)
+local function delay(time, func, ...)
     local obj = {
         func = func;
         endTime = timer.getTime() + time,

@@ -2,6 +2,8 @@
 local Board = require("server.board")
 
 
+local readyUpButtonEnts = group("readyUpButton")
+
 
 local AUTO_START_TIME = 60 -- max 60 seconds for turn time.
 
@@ -44,6 +46,10 @@ end)
 
 
 function readyUp.resetReady()
+    for _, ent in ipairs(readyUpButtonEnts) do
+        server.broadcast("rgbReadyButton_setReadyFalse", ent)
+        ent.rgb_is_ready = false
+    end
     usernameToIsReady = {}
 end
 

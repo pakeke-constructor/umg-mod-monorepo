@@ -162,7 +162,6 @@ local positionGroup = group("x", "y")
 
 
 positionGroup:onAdded(function(ent)
-     -- this is bad, but what else can we do?
     ent.x = ent.x or 0
     ent.y = ent.y or 0
     if (not ent.z) and ent:isRegular("z") then

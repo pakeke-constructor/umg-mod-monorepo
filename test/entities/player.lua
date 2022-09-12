@@ -69,10 +69,11 @@ return {
     speed = PLAYER_SPEED;
     agility = PLAYER_SPEED * 20;
 
-    init = function(e, x, y)
+    init = function(e, x, y, uname)
         e.x = x
         e.y = y
         e.health = e.maxHealth
+        e.controller = uname
         e.inventory = {width=7, height = 4}
     end
 }

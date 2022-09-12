@@ -66,3 +66,22 @@ on("update", function(dt)
 end)
 
 
+moveEnts:onAdded(function(ent)
+    ent.vx = ent.vx or 0
+    ent.vy = ent.vy or 0
+    if ent:isRegular("vz") then
+        ent.vz = ent.vz or 0
+    end
+end)
+
+
+local positionEnts = group("x","y")
+
+positionEnts:onAdded(function(ent)
+    ent.x = ent.x or 0
+    ent.y = ent.y or 0
+    if ent:isRegular("z") then
+        ent.z = ent.z or 0
+    end
+end)
+

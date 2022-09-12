@@ -32,7 +32,7 @@ local function allocateBoard(username)
     entities.money_text(monx, mony, username)
 
     local bbx,bby = board:getBattleButtonXY()
-    entities.battle_button(bbx, bby, username)
+    entities.readyup_button(bbx, bby, username)
 end
 
 
@@ -104,7 +104,7 @@ local function startPvE()
         local enemyTeam = rgb.getPVEEnemyTeam(board:getTeam())
         board:setEnemyTeam(enemyTeam)
         local enemies = generatePVE.generateEnemies(board.turn)
-        base.delay(finalizePvE, 1, board, enemies)
+        base.delay(1, finalizePvE, board, enemies)
     end
 end
 
