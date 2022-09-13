@@ -5,6 +5,8 @@ local Board = require("server.board")
 
 local matchmaking = require("server.matchmaking")
 
+local income = require("server.income")
+
 local generatePVE = require("server.gen.generate_pve")
 local generateBoardDecor = require("server.gen.generate_board_decor")
 
@@ -13,7 +15,7 @@ local readyUp = require("server.ready_up")
 local START_MONEY = 10
 
 
-local turn = 1
+
 
 local currentClientBoardPos = 0
 
@@ -33,6 +35,8 @@ local function allocateBoard(username)
 
     local bbx,bby = board:getBattleButtonXY()
     entities.readyup_button(bbx, bby, username)
+
+    board:lockPlayerCamera(username)
 end
 
 
@@ -40,7 +44,7 @@ end
 on("playerJoin", function(username)
     local plyr_ent = entities.player(0, 0)
     plyr_ent.controller = username
-    
+
     rgb.setState(rgb.getState()) -- this doesnt change the state,
     -- we just need to update the new player.
 end)
@@ -88,7 +92,7 @@ end
 local function finalizePvE(board, enemies)
     board:putEnemies(enemies)
     local allyArray = {}
-    for _,ent in rgb.ipairs(board:getTeam()) do 
+    for _,ent in rgb.iterUnits(board:getTeam()) do 
         table.insert(allyArray, ent)
     end
     board:putAllies(allyArray)
@@ -100,7 +104,7 @@ local function startPvE()
     for _, board in Board.iterBoards() do
         local enemyTeam = rgb.getPVEEnemyTeam(board:getTeam())
         board:setEnemyTeam(enemyTeam)
-        local enemies = generatePVE.generateEnemies(board.turn)
+        local enemies = generatePVE.generateEnemies(rgb.getTurn())
         base.delay(1, finalizePvE, board, enemies)
     end
 end
@@ -109,17 +113,18 @@ end
 
 
 local function setupPvPMatch(match)
-    -- TODO: Lock camera positions to this board.
     local board = Board.getBoard(match.home)
+    board:lockPlayerCamera(match.home)
+    board:lockPlayerCamera(match.away)
 
     -- TODO: Maybe delay this for cool effect?
     board:setEnemyTeam(match.away)
     local allyArray = {}
-    for _,ent in rgb.ipairs(match.home) do 
+    for _,ent in rgb.iterUnits(match.home) do 
         table.insert(allyArray, ent)
     end
     local enemyArray = {}
-    for _,ent in rgb.ipairs(match.away) do 
+    for _,ent in rgb.iterUnits(match.away) do 
         table.insert(enemyArray, ent)
     end
     board:putAllies(allyArray)
@@ -153,6 +158,7 @@ local function startTurn()
         board:clear()
         board:reset()
     end
+    income.doAllIncome()
 end
 
 
@@ -178,7 +184,7 @@ local function updateTurn()
 
         base.delay(10, function()
             -- transition to battle state:
-            if matchmaking.isPVE(turn) then
+            if matchmaking.isPVE(rgb.getTurn()) then
                 chat.message("(SERVER) - starting PvE battle!")
                 startPvE()
             else
@@ -186,7 +192,7 @@ local function updateTurn()
                 startPvP()
             end
             readyUp.resetReady()
-            turn = turn + 1
+            rgb.increaseTurnCount()
         end)
     end
 end

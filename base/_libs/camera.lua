@@ -101,6 +101,7 @@ local function new(x, y, w, h, scale, rotation)
     }, Camera)
 end
 
+
 function Camera:attach()
     love.graphics.push()
     love.graphics.translate(self.w/2, self.h/2)
@@ -218,8 +219,12 @@ function Camera:update(dt)
     if not self.deadzone then 
         self.x, self.y = self.target_x, self.target_y 
         if self.bound then
-            self.x = math.min(math.max(self.x, self.bounds_min_x + self.w/2), self.bounds_max_x - self.w/2)
-            self.y = math.min(math.max(self.y, self.bounds_min_y + self.h/2), self.bounds_max_y - self.h/2)
+            -- PAKEKE MONKEYPATCH:
+            -- old code:
+            --self.x = math.min(math.max(self.x, self.bounds_min_x + self.w/2), self.bounds_max_x - self.w/2)
+            --self.y = math.min(math.max(self.y, self.bounds_min_y + self.h/2), self.bounds_max_y - self.h/2)
+            self.x = math.min(math.max(self.x, self.bounds_min_x), self.bounds_max_x)
+            self.y = math.min(math.max(self.y, self.bounds_min_y), self.bounds_max_y)
         end
         return
     end
@@ -247,12 +252,6 @@ function Camera:update(dt)
         end
         self.x = lerp(self.x, self.screen_x, self.follow_lerp_x)
         self.y = lerp(self.y, self.screen_y, self.follow_lerp_y)
-
-        -- Apply bounds
-        if self.bound then
-            self.x = math.min(math.max(self.x, self.bounds_min_x + self.w/2), self.bounds_max_x - self.w/2)
-            self.y = math.min(math.max(self.y, self.bounds_min_y + self.h/2), self.bounds_max_y - self.h/2)
-        end
 
     -- All other follow modes
     else
@@ -283,12 +282,16 @@ function Camera:update(dt)
         -- Scroll towards target with lerp
         self.x = lerp(self.x, self.x + scroll_x, self.follow_lerp_x)
         self.y = lerp(self.y, self.y + scroll_y, self.follow_lerp_y)
+    end
 
-        -- Apply bounds
-        if self.bound then
-            self.x = math.min(math.max(self.x, self.bounds_min_x + self.w/2), self.bounds_max_x - self.w/2)
-            self.y = math.min(math.max(self.y, self.bounds_min_y + self.h/2), self.bounds_max_y - self.h/2)
-        end
+    -- Apply bounds
+    if self.bound then
+        -- PAKEKE MONKEYPATCH:
+        -- old code:
+        --self.x = math.min(math.max(self.x, self.bounds_min_x + self.w/2), self.bounds_max_x - self.w/2)
+        --self.y = math.min(math.max(self.y, self.bounds_min_y + self.h/2), self.bounds_max_y - self.h/2)
+        self.x = math.min(math.max(self.x, self.bounds_min_x), self.bounds_max_x)
+        self.y = math.min(math.max(self.y, self.bounds_min_y), self.bounds_max_y)
     end
 end
 

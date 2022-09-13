@@ -83,8 +83,8 @@ function rgb.isRanged(ent)
 end
 
 
-function rgb.ipairs(rgbTeam)
-    assert(rgbTeam, "rgb.ipairs not given rgbTeam")
+function rgb.iterUnits(rgbTeam)
+    assert(rgbTeam, "rgb.iterUnits not given rgbTeam")
     return categories.getSet(rgbTeam):ipairs()
 end
 
@@ -93,7 +93,7 @@ end
 function rgb.getSquadronCount(rgbTeam)
     local seenEntities = {}
     local count = 0
-    for _, ent in rgb.ipairs(rgbTeam)do
+    for _, ent in rgb.iterUnits(rgbTeam)do
         if not seenEntities[ent] then
             seenEntities[ent] = true
             if ent.squadron then
@@ -125,15 +125,50 @@ function rgb.getState()
 end
 
 
+rgb.turn = 1
+
+function rgb.getTurn()
+    return rgb.turn
+end
+
+
 if server then
+    local Board = require("server.board")
+
+    function rgb.iterShop(rgbTeam)
+        assert(rgbTeam, "rgb.iterShop not given rgbTeam")
+        local board = Board.getBoard(rgbTeam)
+        return ipairs(board.shop)
+    end
+
     function rgb.setState(state)
         assert(states_invert[state])
         rgb.state = state
         server.broadcast("setRGBState", state)
     end
+
+    function rgb.setMoney(rgbTeam, x)
+        local board = Board.getBoard(rgbTeam)
+        board:setMoney(x)
+    end
+
+    function rgb.getMoney(rgbTeam)
+        local board = Board.getBoard(rgbTeam)
+        return board:getMoney()
+    end
+
+    function rgb.increaseTurnCount()
+        rgb.turn = rgb.turn + 1
+        server.broadcast("setRGBTurnCount", rgb.turn)
+    end
+
 else
     client.on("setRGBState", function(state)
         rgb.state = state
+    end)
+
+    client.on("setRGBTurnCount", function(tc)
+        rgb.turn = tc
     end)
 end
 

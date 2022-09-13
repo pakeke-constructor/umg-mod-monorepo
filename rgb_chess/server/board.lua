@@ -53,8 +53,6 @@ function Board:init(x, y, owner)
     self.owner = owner
     self.rgbTeam = owner
 
-    self.turn = 0
-
     usernameToBoard[owner] = self
 end
 
@@ -101,10 +99,6 @@ function Board:getTeam()
     return self.owner
 end
 
-function Board:getTurn()
-    return self.turn
-end
-
 
 function Board:delete()
     self:clear()
@@ -121,7 +115,7 @@ end
 function Board:serialize()
     -- serializes the allies on the board
     local buffer = {}
-    for _, ent in rgb.ipairs(self:getTeam()) do
+    for _, ent in rgb.iterUnits(self:getTeam()) do
         table.insert(buffer, ent)
     end
     self.serialized = serialize(buffer)
@@ -145,11 +139,11 @@ end
 function Board:clear()
     local enemyTeam = self.enemyRgbTeam
     if enemyTeam then
-        for _, ent in rgb.ipairs(enemyTeam) do
+        for _, ent in rgb.iterUnits(enemyTeam) do
             ent:delete()
         end
     end
-    for _, ent in rgb.ipairs(self:getTeam()) do
+    for _, ent in rgb.iterUnits(self:getTeam()) do
         ent:delete()
     end
 end
@@ -234,18 +228,35 @@ function Board:setEnemyTeam(enemyRgbTeam)
     self.enemyRgbTeam = enemyRgbTeam
 end
 
+
+local function setWinners(self, selfWon, enemyWon)
+    local enemy_category = self.enemyRgbTeam
+    local enemyBoard = Board.getBoard(enemy_category)
+    self.wonBattle = selfWon
+    if enemyBoard then
+        enemyBoard.wonBattle = enemyWon
+    end
+end
+
+
 function Board:isBattleOver()
     local self_category = self.rgbTeam
     local enemy_category = self.enemyRgbTeam
+
     if enemy_category then
         local enemies = categories.getSet(enemy_category)
         local allies = categories.getSet(self_category)
+
+        if enemies.size == 0 and allies.size == 0 then
+            setWinners(self, false, false)
+            return true
+        end
         if enemies.size == 0 then
-            self.winner = self:getTeam()
+            setWinners(self, true, false)
             return true
         end
         if allies.size == 0 then
-            self.winner = enemy_category
+            setWinners(self, false, true)
             return true
         end
     else
@@ -254,8 +265,19 @@ function Board:isBattleOver()
 end
 
 
-function Board:getWinner()
-    return self.winner
+function Board:lockPlayerCamera(player_uname)
+    local x,y = self:getXY()
+    local w,h = self:getWH()
+    local player_ent = base.getPlayer(player_uname)
+    player_ent.x = x+w/2
+    player_ent.y = y+h/2
+    server.unicast(player_uname, "setRGBCameraBounds", x,y, w,h)
+end
+
+
+
+function Board:isWinner()
+    return self.wonBattle
 end
 
 

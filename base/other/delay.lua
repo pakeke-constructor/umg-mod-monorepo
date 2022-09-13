@@ -3,7 +3,7 @@
 
 local times = {}
 --[[
-Each `time` object is represented as a table:
+Each `delay` object is represented as a table:
 {
     ...  --> the arguments to the function
     func = func -- The func is constructed with varargs saved as a closure (bad but oh well)

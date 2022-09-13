@@ -1,6 +1,7 @@
 
-local buy
+local buy, reroll
 if server then
+    reroll = require("server.reroll")
     buy = require("server.buy")
 end
 
@@ -24,7 +25,9 @@ return {
     onClick = function(ent, username, button)
         if button == 1 and ent.rgbTeam == username then
             if server then
-                buy.tryBuy(ent)
+                if buy.tryBuy(ent) then
+                    reroll.rerollSingle(ent.rgbTeam, ent.shopIndex)
+                end
             end
         end
     end,

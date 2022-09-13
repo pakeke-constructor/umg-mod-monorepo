@@ -8,19 +8,29 @@ end
 
 
 return extend("abstract_button", {
-
-    nametag = {
-        value = "REROLL"
-    },
+    "nametag",
+    "rerollCost",
 
     onClickServer = function(ent)
-        reroll.reroll(ent.rgbTeam)
+        local cost = ent.rerollCost
+        local money = rgb.getMoney(ent.rgbTeam)
+        if money >= cost then
+            rgb.setMoney(ent.rgbTeam, money - cost)
+            reroll.reroll(ent.rgbTeam)
+        else
+            -- TODO:
+            -- send feedback here. (Deny sound or something?)
+        end
     end,
 
     init = function(ent, x, y, rgbTeam)
         assert(rgbTeam, "need to pass in rgbTeam")
         base.entityHelper.initPosition(ent,x,y)
         ent.rgbTeam = rgbTeam
+        ent.rerollCost = constants.REROLL_COST
+        ent.nametag = {
+            value = "REROLL (COST " .. tostring(ent.rerollCost) .. ")"
+        }
     end
 })
 

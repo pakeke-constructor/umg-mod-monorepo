@@ -1,13 +1,10 @@
 
 local Board = require("server.board")
 
-local reroll = require("server.reroll")
 
 
 
 local buy = {}
-
-
 
 
 local SPAWN_RANDOM_RAD = 100
@@ -64,6 +61,10 @@ local function unitPriceFunction(baseCardPrice, numSquadrons)
 end
 
 function buy.getCost(card_ent, squadronCount)
+    --[[
+        unit card costs will increase linearly with respect to the number
+        of squadrons on the board.
+    ]]
     assert(card_ent.rgbTeam, "not given rgbTeam")
     squadronCount = squadronCount or rgb.getSquadronCount(card_ent.rgbTeam)
     local baseCost = card_ent.card.baseCost
@@ -83,7 +84,7 @@ function buy.setCosts(rgbTeam)
     for i=1, #board.shop do
         local card = board.shop[i]
         if exists(card) then
-            card.cost = buy.getPrice(card, ct)
+            card.cost = buy.getCost(card, ct)
             server.broadcast("setRGBCardCost", card, card.cost)
         end
     end
@@ -107,7 +108,8 @@ end
 
 
 function buy.buyCard(card_ent)
-    local cost = card_ent.card.cost or 1
+    local cost = card_ent.cost
+    assert(cost, "what? : " .. card_ent:type())
     local board = Board.getBoard(card_ent.rgbTeam)
     assert(card_ent.shopIndex)
 
@@ -116,7 +118,13 @@ function buy.buyCard(card_ent)
     end
 
     board:setMoney(board:getMoney() - cost)
-    reroll.rerollSingle(card_ent.rgbTeam, card_ent.shopIndex)
+
+    --[[
+        this is terrible code!
+        We intentially wait 0.2 seconds here, because the unit/s are still spawning.
+         (They will be officially spawned in next frame.)
+    ]]
+    base.delay(0.2, buy.setCosts, card_ent.rgbTeam)
 end
 
 
@@ -133,6 +141,7 @@ function buy.tryBuy(card_ent)
     local board = Board.getBoard(card_ent.rgbTeam)
     if cost <= board:getMoney() then
         buy.buyCard(card_ent)
+        return true
     end
 end
 

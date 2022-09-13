@@ -36,7 +36,7 @@ local function shouldAccept(player)
     return not blockingPlayers[player] 
 end
 
-local DELTA_THRESHOLD = 30 -- this number seems quite significant to force a sync.
+local DELTA_THRESHOLD = 100 -- this number seems quite significant to force a sync.
 
 
 on("update", function(dt)
@@ -54,7 +54,13 @@ on("update", function(dt)
         if math.distance(x-lx,y-ly,(z or 0)-(lz or 0)) > DELTA_THRESHOLD then
             -- Distance is too large: we warrant server forced sync.
             local ack_number = math.random(1,100000) -- we also send a random number so the client can't lie.
-            player.lockMovement_acknumber = ack_number -- this is yucky, but oh well, who cares
+            blockingPlayersAckNumber[player] = ack_number
+            blockingPlayers[player] = true
+            playerToLastX[player] = x
+            playerToLastY[player] = y
+            if z then
+                playerToLastZ[player] = z
+            end
             server.unicast(player.controller, "lockMovement", player, x, y, z, player.vx, player.vy, player.vz, ack_number)
         end
     end
@@ -85,11 +91,22 @@ local function filterPlayerPosition(sender_username, ent, x,y,z)
         return false -- bad type for x,y, or z
     end
 
-    return ent.controllable and sender_username == ent.controller
-        and ent.x and ent.y
-end
+    local basics = ent.controllable and sender_username == ent.controller and ent.x and ent.y
+    if not basics then
+        return false
+    end
 
-server.filter("setPlayerPosition", filterPlayerPosition)
+    local dist = math.distance(ent.x-x, ent.y-y, ent.z-z)
+    if dist > DELTA_THRESHOLD then
+        return false -- ent moving too fast!
+    end
+
+    if not shouldAccept(ent) then
+        return false
+    end
+
+    return true
+end
 
 
 
@@ -111,19 +128,18 @@ server.filter("setPlayerVelocity", filterPlayerVelocity)
 
 
 server.on("setPlayerPosition", function(sender_username, ent, x,y,z)
-    --[[
-        TODO: Make it so players cannot cheat by lying about their position!
-    ]]
-    if shouldAccept(ent) then
-        ent.x = x
-        ent.y = y
-        ent.z = z or ent.z
+    if not filterPlayerPosition(sender_username, ent, x,y,z)then
+        return
+    end
 
-        playerToLastX[ent] = x
-        playerToLastY[ent] = y
-        if z then
-            playerToLastZ[ent] = z
-        end
+    ent.x = x
+    ent.y = y
+    ent.z = z or ent.z
+
+    playerToLastX[ent] = x
+    playerToLastY[ent] = y
+    if z then
+        playerToLastZ[ent] = z
     end
 end)
 

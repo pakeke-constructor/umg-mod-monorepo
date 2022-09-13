@@ -2,6 +2,7 @@
 
 require("shared.rgb")
 
+
 --[[
 
 Generates cards for shop rerolls.
@@ -34,7 +35,7 @@ local genCards = {}
 
 
 function genCards.getCard(board)
-    local turn = board:getTurn()
+    local turn = rgb.getTurn()
     return "card_brute" -- TODO: Write this function
 end
 
@@ -83,8 +84,8 @@ function genCards.getRGB(turn)
 end
 
 
-function genCards.spawnCard(board, i)
-    local turn = board:getTurn()
+function genCards.spawnCard(board, i, numSquadrons)
+    local turn = rgb.getTurn()
     local etype = genCards.getCard(board)
     local x, y = board:getCardXY(i)
     local ent = entities[etype](x, y)
@@ -93,6 +94,7 @@ function genCards.spawnCard(board, i)
     ent.color = getCardColor(ent.rgb)
     ent.shopIndex = i
     board.shop[i] = ent
+    return ent
 end
 
 
