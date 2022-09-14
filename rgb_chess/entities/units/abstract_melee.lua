@@ -1,6 +1,14 @@
 
 local MELEE_RANGE = 30
 
+local select
+if server then
+    select = require("server.select")
+else
+    select = require("client.select")
+end
+
+
 --[[
     abstract melee entity
 
@@ -22,6 +30,12 @@ return {
     "speed",
 
     "squadron",
+
+    onClick = function(ent, username, button)
+        if username == ent.rgbTeam and button == 1 then
+            select.select(username, ent)
+        end
+    end;
 
     physics = {
         shape = physics.newCircleShape(5);
