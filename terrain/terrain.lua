@@ -59,6 +59,11 @@ function Terrain:init(options)
 
     self.cutoffHeight = options.cutoffHeight or DEFAULT_CUTOFF_HEIGHT
 
+    self.vertexInterpolationRate = options.vertexInterpolationRate
+    if self.vertexInterpolationRate and self.vertexInterpolationRate > 0.5 then
+        error("vertexInterpolationRate shouldn't be higher than 0.5; a good value is between 0 and 0.3")
+    end
+
     self.stepX = options.stepX
     self.stepY = options.stepY
     self.sizeX = options.sizeX
@@ -130,7 +135,7 @@ end
 
 
 local LERP_ITERATIONS = 4
-local START_DELTA = 0.3
+local DEFAULT_LERP_DELTA = 0.3
 
 local TERRAIN_LERP_EPSILON = 0.015 -- ngl this is pretty arbitrary, i dont think it matters too much
 
@@ -139,11 +144,14 @@ local abs = math.abs
 local DEFAULT_LERP_EPSILON = 0.0001
 
 
-local function lerpTowardsTarget(target, epsilon, a,b,c,d)
+local function lerpTowardsTarget(target, epsilon, delta, a,b,c,d)
     --[[
         Given height values for corners (a,b,c,d),
         return a good guess for a position (x,y)
         where the height is equal to target.
+
+        Returns (X,Y) position in normalized space,
+        i.e. X and Y are both between 0 and 1.
 
         a-- AB --b
         |        |
@@ -154,10 +162,8 @@ local function lerpTowardsTarget(target, epsilon, a,b,c,d)
     local x = 0.5
     local y = 0.5
 
-    local delta = START_DELTA
-
+    delta = delta or DEFAULT_LERP_DELTA
     epsilon = epsilon or DEFAULT_LERP_EPSILON
-
 
     for _=1, LERP_ITERATIONS do
         local ab = (a*(1-x) + b*x)
@@ -175,8 +181,6 @@ local function lerpTowardsTarget(target, epsilon, a,b,c,d)
         local dyheur = target - height_heur_y
         local dist = dxheur*dxheur + dyheur*dyheur
         dist = math.sqrt(dist)
-
-        print(dxheur, dyheur)
 
         if abs(dxheur) < epsilon or abs(bc-ad) == 0 then
             dx = 0
@@ -198,6 +202,8 @@ local function lerpTowardsTarget(target, epsilon, a,b,c,d)
         y = y + dy
         delta = delta / 2
     end
+
+    return x, y
 end
 
 
@@ -261,8 +267,11 @@ local function getVertexCornerHeightsABCD(self, x, y)
 end
 
 
-local function generateVertex(self, x, y)
+local function genVertexPos(self, x, y)
     --[[
+        Generates a vertex,
+        where (x, y) are indexes on the self.map[x][y].
+
         a-- AB --b
         |        |
        AD   @@   BC
@@ -270,22 +279,28 @@ local function generateVertex(self, x, y)
         d-- CD --c
 
         This function will always generate the TOP LEFT vertex.
-        (i.e. the vertex at (0,0))
-
-        So for example, in the diagram above,
-        if `@@` is at (x, y), this function will generate vertex `a`.
+        (i.e. vertex `a`.
     ]]
-
+    local delta = self.vertexInterpolationRate
     local cutoffHeight = self.cutoffHeight
     local a,b,c,d = getVertexCornerHeightsABCD(self, x-1, y-1)
-    local height = lerpTowardsTarget(cutoffHeight, TERRAIN_LERP_EPSILON, a,b,c,d)
-    --[[ TODO:
-        How do we represent the vertex here?
-        Maybe we need a 2d map specifically for quad vertices.
-        That way, we can discover duplicates easily too.
-    ]]--
+    local vertx, verty = lerpTowardsTarget(cutoffHeight, TERRAIN_LERP_EPSILON, delta, a,b,c,d)
+    local wx, wy = toWorldCoords(self, x, y)
+    vertx = (vertx - 0.5) * self.stepX
+    verty = (verty - 0.5) * self.stepY
+    return {
+        x = wx+vertx, 
+        y = wy+verty
+    }
 end
 
+
+local array2d_mt = {
+    __index = function(t,k)
+        t[k] = {} 
+        return t[k] 
+    end
+}
 
 
 local function generateQuads(self)
@@ -293,6 +308,8 @@ local function generateQuads(self)
         assumes that the heightmap exists.
     ]]
     local quads = {}
+    local vertexMap = setmetatable({}, array2d_mt)
+
     local cuttoffHeight = self.cutoffHeight
     for x=1, self.w do
         for y=1, self.h do
@@ -300,10 +317,23 @@ local function generateQuads(self)
             if height > cuttoffHeight then
                 if isNextToUnfilled(self, x,y) then
                     -- Then we generate vertices for this node
-                    
+                    local vertA = vertexMap[x][y] or genVertexPos(self,x,y)
+                    local vertB = vertexMap[x+1][y] or genVertexPos(self,x+1,y)
+                    local vertC = vertexMap[x+1][y+1] or genVertexPos(self,x+1,y+1)
+                    local vertD = vertexMap[x][y+1] or genVertexPos(self,x,y+1)
+                    vertexMap[x][y] = vertA
+                    vertexMap[x+1][y] = vertB
+                    vertexMap[x+1][y+1] = vertC
+                    vertexMap[x][y+1] = vertD
+                    table.insert(quads, {
+                        a=vertA,
+                        b=vertB,
+                        c=vertC,
+                        d=vertD
+                    })
                 else
                     -- else, we flag this node to be greedy-meshed.
-
+                    error("TODO!")
                 end
             end
         end
@@ -331,7 +361,7 @@ end
 client.on("terrainFinalize", function(ent, map)
     local tobj = ent.terrain
     assert(tobj.ownerEntity == tobj, "??? Bad event received from server")
-    tobj:setMap(map)
+    setMap(tobj, map)
     finalize(tobj)
 end)
 end
