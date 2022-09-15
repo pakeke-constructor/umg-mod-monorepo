@@ -3,6 +3,36 @@
 local Terrain = base.Class("terrain_mod:terrain")
 
 
+
+--[[
+
+
+
+algorithm idea:
+
+=====================
+Easy marching squares
+=====================
+
+Given a heightmap H,
+and a grid of nodes G,
+and a height threshold X,
+
+Get the height at each node.
+If the height at node is above height threshold X,
+then set the node as "filled".
+
+For all filled nodes N:
+    if N is next to an unfilled node:
+        Create 4 vertices around N, in a square.
+        (MAKE SURE TO SHARE THESE VERTICES!!!)
+        Lerp the 4 vertices towards height threhold X.
+
+
+
+]]
+
+
 local function setMap0(self)
     for x=1, self.w do
         local t = {}
@@ -97,35 +127,12 @@ end
 
 
 
---[[
-
-algorithm idea:
-
-=====================
-Easy marching squares
-=====================
-
-Given a heightmap H,
-and a grid of nodes G,
-and a height threshold X,
-
-Get the height at each node.
-If the height at node is above height threshold X,
-then set the node as "filled".
-
-For all filled nodes N:
-    if N is next to an unfilled node:
-        Create 4 vertices around N, in a square.
-        (MAKE SURE TO SHARE THESE VERTICES!!!)
-        Lerp the 4 vertices towards height threhold X.
-
-
-]]
-
 
 
 local LERP_ITERATIONS = 4
 local START_DELTA = 0.3
+
+local TERRAIN_LERP_EPSILON = 0.015 -- ngl this is pretty arbitrary, i dont think it matters too much
 
 local abs = math.abs
 
@@ -195,12 +202,115 @@ end
 
 
 
-local function generateTriangles(self)
+
+--[[
+
+algorithm idea:
+
+=====================
+Easy marching squares
+=====================
+
+Given a heightmap H,
+and a grid of nodes G,
+and a height threshold X,
+
+Get the height at each node.
+If the height at node is above height threshold X,
+then set the node as "filled".
+
+For all filled nodes N:
+    if N is next to an unfilled node:
+        Create 4 vertices around N, in a square.
+        (MAKE SURE TO SHARE THESE VERTICES!!!)
+        Lerp the 4 vertices towards height threhold X.
+
+]]
+
+local function getHeight(self, x, y)
+    local map = self.map
+    if x < 1 or x > self.w or y < 1 or y > self.h then
+        return 0 -- default height
+    end
+    return map[x][y]
+end
+
+
+local function isNextToUnfilled(self, x, y)
+    local cutoffHeight = self.cutoffHeight
+    for xi=-1, 1 do
+        for yi=-1, 1 do
+            if xi~=0 and yi~=0 then
+                local h = getHeight(self, x+xi, y+yi)
+                if h < cutoffHeight then
+                    return true
+                end
+            end
+        end
+    end
+    return false
+end
+
+
+local function getVertexCornerHeightsABCD(self, x, y)
+    local a = getHeight(self, x, y)
+    local b = getHeight(self, x+1, y)
+    local c = getHeight(self, x+1, y+1)
+    local d = getHeight(self, x, y+1)
+    return a,b,c,d
+end
+
+
+local function generateVertex(self, x, y)
+    --[[
+        a-- AB --b
+        |        |
+       AD   @@   BC
+        |        |
+        d-- CD --c
+
+        This function will always generate the TOP LEFT vertex.
+        (i.e. the vertex at (0,0))
+
+        So for example, in the diagram above,
+        if `@@` is at (x, y), this function will generate vertex `a`.
+    ]]
+
+    local cutoffHeight = self.cutoffHeight
+    local a,b,c,d = getVertexCornerHeightsABCD(self, x-1, y-1)
+    local height = lerpTowardsTarget(cutoffHeight, TERRAIN_LERP_EPSILON, a,b,c,d)
+    --[[ TODO:
+        How do we represent the vertex here?
+        Maybe we need a 2d map specifically for quad vertices.
+        That way, we can discover duplicates easily too.
+    ]]--
+end
+
+
+
+local function generateQuads(self)
+    --[[
+        assumes that the heightmap exists.
+    ]]
+    local quads = {}
+    local cuttoffHeight = self.cutoffHeight
     for x=1, self.w do
         for y=1, self.h do
+            local height = getHeight(x,y)
+            if height > cuttoffHeight then
+                if isNextToUnfilled(self, x,y) then
+                    -- Then we generate vertices for this node
+                    
+                else
+                    -- else, we flag this node to be greedy-meshed.
+
+                end
+            end
         end
     end
 end
+
+
 
 
 --[[
