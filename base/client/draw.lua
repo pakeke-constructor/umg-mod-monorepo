@@ -182,7 +182,10 @@ end)
 
 
 
-local function mainDraw()
+--[[
+    main draw function
+]]
+on("mainDraw", function()
     --[[
         explanation:
         We have two sorted lists of entities:
@@ -264,7 +267,7 @@ local function mainDraw()
     end
 
     graphics.atlas:flush()
-end
+end)
 
 
 
@@ -317,7 +320,6 @@ on("draw", function()
 end)
 
 
-on("mainDraw", mainDraw)
 
 
 

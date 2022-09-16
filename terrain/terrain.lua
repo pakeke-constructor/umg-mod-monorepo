@@ -22,12 +22,22 @@ Get the height at each node.
 If the height at node is above height threshold X,
 then set the node as "filled".
 
+output 1:  quadList = array()
+output 2:  greedyQuadList = array()
+(for greedy mesh optimization)
+
 For all filled nodes N:
     if N is next to an unfilled node:
         Create 4 vertices around N, in a square.
         (MAKE SURE TO SHARE THESE VERTICES!!!)
         Lerp the 4 vertices towards height threhold X.
+        convert vertices into a quad, and add to `quadList`.
+    else, N is only next to unfilled nodes:
+        this means we can optimize using greedy mesh algorithm.
+        Add N to `greedyQuadList`
 
+Iterate over greedyQuadList,
+and optimize using 2d greedy mesh algorithm
 
 
 ]]
@@ -113,25 +123,6 @@ local function toMapXY(self, worldX, worldY)
 end
 
 
-local function getCase(a,b,c,d)
-    --[[
-        a,b,c,d are all ether 0 or 1
-    ]]
-    return a*8 + b*4 + c*2 + d
-end
-
-
-local function lerp(A,B,targ)
-    --[[
-        returns a value from 0->1,
-        representing how far along the line A -----> B targ is.
-    ]]
-    assert(A<B)
-    return (targ - A) / (B-A)
-end
-
-
-
 
 
 local LERP_ITERATIONS = 4
@@ -209,29 +200,6 @@ end
 
 
 
---[[
-
-algorithm idea:
-
-=====================
-Easy marching squares
-=====================
-
-Given a heightmap H,
-and a grid of nodes G,
-and a height threshold X,
-
-Get the height at each node.
-If the height at node is above height threshold X,
-then set the node as "filled".
-
-For all filled nodes N:
-    if N is next to an unfilled node:
-        Create 4 vertices around N, in a square.
-        (MAKE SURE TO SHARE THESE VERTICES!!!)
-        Lerp the 4 vertices towards height threhold X.
-
-]]
 
 local function getHeight(self, x, y)
     local map = self.map
@@ -285,7 +253,13 @@ local function genVertexPos(self, x, y)
     local cutoffHeight = self.cutoffHeight
     local a,b,c,d = getVertexCornerHeightsABCD(self, x-1, y-1)
     local vertx, verty = lerpTowardsTarget(cutoffHeight, TERRAIN_LERP_EPSILON, delta, a,b,c,d)
-    local wx, wy = toWorldCoords(self, x, y)
+    
+    local wx, wy = toWorldCoords(self, x-0.5, y-0.5)
+    -- Okay::: this is a bit hacky. toWorldCoords is supposed to take a indexes
+    -- in `self.map`, but the vertex map is offset by 0.5 units.
+    -- since we are acting on the top left vertex, minusing 0.5 from the position
+    -- will give the correct results here, even though it's super hacky.
+    
     vertx = (vertx - 0.5) * self.stepX
     verty = (verty - 0.5) * self.stepY
     return {
@@ -303,11 +277,51 @@ local array2d_mt = {
 }
 
 
+local function greedyMesh(self, greedyQuadMap)
+    local greedyQuads = {}
+
+    for x=1, self.w do
+        for y=1, self.h do
+            if rawget(greedyQuadMap,x) and greedyQuadMap[x][y] then
+                local endx, endy = x, y
+                while rawget(greedyQuadMap,endx+1) and greedyQuadMap[endx+1][y] do
+                    endx = endx + 1
+                end
+
+                local should_expand_y = true
+                
+                while should_expand_y do
+                    for xx=x, endx do
+                        if not(rawget(greedyQuadMap,xx) and greedyQuadMap[xx][endy]) then
+                            should_expand_y = false
+                            break
+                        end
+                    end
+                    if should_expand_y then
+                        endy = endy + 1
+                    end
+                end
+
+                table.insert(greedyQuads, {
+                    x = x, y = y,
+                    width = endx - x, height = endy - y
+                })
+            end
+        end
+    end
+
+    return greedyQuads
+end
+
+
 local function generateQuads(self)
     --[[
+        Generates heightmap.
+
         assumes that the heightmap exists.
     ]]
     local quads = {}
+    local greedyQuadMap = setmetatable({}, array2d_mt)
     local vertexMap = setmetatable({}, array2d_mt)
 
     local cuttoffHeight = self.cutoffHeight
@@ -325,7 +339,10 @@ local function generateQuads(self)
                     vertexMap[x+1][y] = vertB
                     vertexMap[x+1][y+1] = vertC
                     vertexMap[x][y+1] = vertD
+                    local cx,cy = toWorldCoords(x,y)
                     table.insert(quads, {
+                        centerX = cx,
+                        centerY = cy,
                         a=vertA,
                         b=vertB,
                         c=vertC,
@@ -333,11 +350,89 @@ local function generateQuads(self)
                     })
                 else
                     -- else, we flag this node to be greedy-meshed.
-                    error("TODO!")
+                    greedyQuadMap[x][y] = true
                 end
             end
         end
     end
+
+    return quads, greedyQuadMap, vertexMap
+end
+
+
+
+local function newPhysicsRectangle(x,y,w,h)
+    --[[
+        (x,y) is top left.
+        w,h is width and height of the block.
+    ]]
+    local world = base.physics.getWorld()
+    local body = physics.newBody(world,x+w/2,y+h/2,"static")
+    local shape = physics.newRectangleShape(w,h)
+    local fixture = physics.newFixture(body,shape)
+    return fixture
+end
+
+
+local function newPhysicsPolygon(cX, cY, a,b,c,d)
+    -- cX and cY are centerX and centerY
+    local world = base.physics.getWorld()
+    local body = physics.newBody(world, cX, cY, "static") 
+    local shape = physics.newPolygonShape(
+        a.x-cX, a.y-cY, 
+        b.x-cX, b.y-cY, 
+        c.x-cX, c.y-cY, 
+        d.x-cX, d.y-cY
+    )
+    local fixture = physics.newFixture(body,shape)
+    return fixture
+end
+
+
+local function generatePhysics(self, quads, greedyQuads)
+    local fixtures = {}
+
+    for _, quad in ipairs(quads) do
+        local centerX, centerY = quad.centerx, quad.centerY
+        local fixture = newPhysicsPolygon(
+            centerX, centerY, 
+            quad.a,quad.b,quad.c,quad.d
+        )
+        table.insert(fixtures, fixture)
+    end
+
+    for _, gquad in ipairs(greedyQuads) do
+        local fixture = newPhysicsRectangle(
+            gquad.x, gquad.x, gquad.width, gquad.height
+        )
+        table.insert(fixtures, fixture)
+    end
+
+    return fixtures
+end
+
+
+
+if client then
+function Terrain:draw()
+    assert(self.quads and self.greedyQuads, "terrain not initialized")
+    graphics.push("all")
+    graphics.setColor(1,1,1)
+    for _,quad in ipairs(self.quads) do
+        local a,b,c,d = quad.a,quad.b,quad.c,quad.d
+        graphics.polygon(
+            "line",
+            a.x,a.y,
+            b.x,b.y,
+            c.x,c.y,
+            d.x,d.y
+        )
+    end
+    for _, rect in ipairs(self.greedyQuads) do
+        graphics.rectangle("line", rect.x, rect.y, rect.width, rect.height)
+    end
+    graphics.pop()
+end
 end
 
 
@@ -347,23 +442,36 @@ end
     generates physics colliders and triangle meshes
 ]]
 local finalize
+
 if server then
 
 function finalize(self)
     server.broadcast("terrainFinalize", self.ownerEntity, self.map)
+    local quads, greedyQuadMap, vertexMap = generateQuads(self)
+    local greedyQuads = greedyMesh(greedyQuadMap)
+    
+    self.fixtures = generatePhysics(self, quads, greedyQuads)
 end
 
-else
+else --============================================
 
+    
 function finalize(self)
+    local quads, greedyQuadMap, vertexMap = generateQuads(self)
+    local greedyQuads = greedyMesh(greedyQuadMap)
 
+    self.fixtures = generatePhysics(self, quads, greedyQuads)
+    self.quads = quads -- used for rendering.
+    self.greedyQuads = greedyQuads
 end
+
 client.on("terrainFinalize", function(ent, map)
     local tobj = ent.terrain
     assert(tobj.ownerEntity == tobj, "??? Bad event received from server")
     setMap(tobj, map)
     finalize(tobj)
 end)
+
 end
 
 
@@ -377,7 +485,5 @@ function Terrain:generateFromHeightFunction(func)
 end
 
 
-
-
-
+return Terrain
 

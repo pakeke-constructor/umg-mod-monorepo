@@ -9,6 +9,8 @@ local base = {
     Array = require("other.array");
     Heap = require("other.heap");
     Partition = require("other.partition.partition");
+
+    physics = require("server.physics");
     
     getPlayer = require("other.get_player");
 

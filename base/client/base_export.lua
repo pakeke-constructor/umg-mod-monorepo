@@ -22,6 +22,8 @@ local base = {
 
     isHovered = require("client.mouse_hover");
 
+    physics = require("client.physics");
+
     getUIScale = draw.getUIScale;
     setUIScale = draw.setUIScale;
 

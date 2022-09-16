@@ -10,6 +10,10 @@ Handles all entities that require physics in the game.
 ]]
 
 
+local physics_API = {} -- little API
+
+
+
 local fixture_to_ent = {}
 local ent_to_fixture = {}
 
@@ -167,3 +171,11 @@ physicsGroup:onRemoved(function(ent)
 end)
 
 
+
+
+function physics_API.getWorld()
+    return world
+end
+
+
+return physics_API
