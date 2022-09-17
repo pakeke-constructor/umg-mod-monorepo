@@ -21,14 +21,6 @@ rgb.COLS = {
 setmetatable(rgb.COLS, {__index = function(_,k) error("invalid color: " .. tostring(k)) end})
 
 
-local invert = {
-    -- [{0,1,0}] = GRN
-    -- ... etc 
-}
-for colName, val in pairs(rgb.COLS) do
-    invert[val] = colName
-end
-
 
 
 
@@ -36,12 +28,6 @@ function rgb.areMatchingColors(col1, col2)
     if exists(col1) and exists(col2) then
         local ent1, ent2 = col1, col2
         return rgb.areMatchingColors(ent1.rgb, ent2.rgb)
-    end
-    if not invert[col1] then
-        error("invalid color for col1: " .. tostring(col1))
-    end
-    if not invert[col2] then
-        error("invalid color for col2: " .. tostring(col2))
     end
 
     local r = col1[1]*col2[1]

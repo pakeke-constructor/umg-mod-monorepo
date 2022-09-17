@@ -39,6 +39,5 @@ function chat.handleCommand(commandName, func)
 end
 
 
-
 export("chat", chat)
 

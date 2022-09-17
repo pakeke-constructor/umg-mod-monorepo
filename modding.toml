@@ -112,6 +112,10 @@ any = true
 [chat]
 any = true
 
+## terrain mod:
+[terrain]
+any = true
+
 
 
 

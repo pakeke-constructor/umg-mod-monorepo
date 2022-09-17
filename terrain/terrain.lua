@@ -2,10 +2,7 @@
 
 local Terrain = base.Class("terrain_mod:terrain")
 
-
-
 --[[
-
 
 
 algorithm idea:
@@ -63,9 +60,6 @@ local DEFAULT_CUTOFF_HEIGHT = 0.5
 function Terrain:init(options)
     assert(options.stepX and options.stepY, "incorrect options table")
     assert(options.sizeX and options.sizeY, "incorrect options table")
-    assert(exists(options.ownerEntity), "terrain needs an owner entity")
-
-    self.ownerEntity = options.ownerEntity
 
     self.cutoffHeight = options.cutoffHeight or DEFAULT_CUTOFF_HEIGHT
 
@@ -78,8 +72,6 @@ function Terrain:init(options)
     self.stepY = options.stepY
     self.sizeX = options.sizeX
     self.sizeY = options.sizeY
-    self.worldX = options.worldX or 0
-    self.worldY = options.worldY or 0
 
     self.w = math.ceil(self.sizeX / self.stepX)
     self.h = math.ceil(self.sizeY / self.stepY)
@@ -90,20 +82,39 @@ end
 
 
 
+function Terrain:bindEntity(ent)
+    -- binds terrain to a specific entity.
+    if exists(self.boundEntity) then
+        error("terrain object was already bound to an entity: " .. tostring(self.boundEntity))
+    end
+    assert(exists(ent), "entity doesn't exist")
+
+    self.boundEntity = ent
+    assert(self.boundEntity:hasComponent("x"), "terrain entities need an x component")
+    assert(self.boundEntity:hasComponent("y"), "terrain entities need a y component")
+end
+
+
+
 function Terrain:clear()
     setMap0(self)
 end
 
 
-function Terrain:setWorldPosition(x,y)
-    self.worldX = x
-    self.worldY = y
+function Terrain:getWorldPosition()
+    if self.boundEntity then
+        local e = self.boundEntity
+        return e.x, e.y
+    else
+        assert(self.worldX and self.worldY, "terrain not given world position!")
+        return self.worldX, self.worldY
+    end
 end
 
 
 local function toWorldCoords(self, ix, iy)
     -- converts indexes in the .map structure to world coords
-    local x,y = self.worldX, self.worldY
+    local x,y = self:getWorldPosition()
     x = x + (ix-1) * self.stepX
     y = y + (iy-1) * self.stepY
     return x,y
@@ -112,7 +123,8 @@ end
 
 local function toMapXY(self, worldX, worldY)
     -- converts world XY position to indexes in the .map structure.
-    local x,y = worldX - self.worldX, worldY - self.worldY
+    local wx, wy = self:getWorldPosition()
+    local x,y = worldX - wx, worldY - wy
     x = math.floor(x / self.stepX + 0.5) + 1
     y = math.floor(y / self.stepY + 0.5) + 1
     if x > self.w or x < 1 or y > self.h or y < 1 then
@@ -441,12 +453,14 @@ end
 --[[
     generates physics colliders and triangle meshes
 ]]
-local finalize
 
 if server then
 
-function finalize(self)
-    server.broadcast("terrainFinalize", self.ownerEntity, self.map)
+function Terrain:finalize(self)
+    if self.boundEntity then
+        --  if there is no bound entity, then there will be no auto-sync.
+        server.broadcast("terrainFinalize", self.boundEntity, self.map)
+    end
     local quads, greedyQuadMap, vertexMap = generateQuads(self)
     local greedyQuads = greedyMesh(greedyQuadMap)
     
@@ -455,7 +469,7 @@ end
 
 else --============================================
 
-    
+
 function finalize(self)
     local quads, greedyQuadMap, vertexMap = generateQuads(self)
     local greedyQuads = greedyMesh(greedyQuadMap)
@@ -467,7 +481,7 @@ end
 
 client.on("terrainFinalize", function(ent, map)
     local tobj = ent.terrain
-    assert(tobj.ownerEntity == tobj, "??? Bad event received from server")
+    assert(tobj.boundEntity == tobj, "??? Bad event received from server")
     setMap(tobj, map)
     finalize(tobj)
 end)

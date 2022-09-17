@@ -48,6 +48,7 @@ local function spawnUnit(card_ent)
         local ent = spawnEntity(card_ent)
         table.insert(squadron, ent)
         ent.squadron = squadron
+        ent.cardType = card_ent:type()
     end
     -- TODO: Do feedback and stuff here.
 end

@@ -323,30 +323,32 @@ extend("parent_ent", ent_def)
 
 
 -- Local event dispatch
-on(msg, func) -- listens to an event
-call(msg, ...) -- broadcasts an event
+-- (these exist on both client-side and server-side, but act independently of
+-- one another.  For example, the "draw" event is only available client-side)
+on(msg, func) -- listens to a local event
+call(msg, ...) -- broadcasts a local event
 
 
 
-register(name, alias) -- registers a resource
+register(name, alias) -- registers a resource for serialization
 local data = serialize(obj) -- NOTE: If obj involves an entity, the id is set to nil.
 local obj, err = deserialize(data) -- deserializes data.
 
-save(name, data) -- saves data to `name`, (relative to world)
-load(name) -- loads data from `name` (relative to world)
+save(name, data) -- saves data to string `name`, (relative to world)
+load(name) -- loads data from string `name` (relative to world)
 
 export("var", value) -- exports `var` to the global mod namespace.
 -- Now, all other mods can access `value` in their global environment.
 
 client  -- message sending/receiving for client
-    client.send(msg, ...) -- sends a message to server
-    client.on(msg, func) -- listens to a message from server
+    client.send(event_name, ...) -- sends a message to server
+    client.on(event_name, func) -- listens to a message from server
 
 server
-    server.broadcast(msg, ...) -- broadcasts to clients
+    server.broadcast(event_name, ...) -- broadcasts an event to clients
     server.unicast(username, msg, ...) -- unicasts to one client
-    server.lazyBroadcast(msg, ...) -- lazy broadcast: efficient, but not guaranteed arrival
-    server.lazyUnicast(msg, ...) -- lazy unicast: efficient, but not guaranteed arrival
+    server.lazyBroadcast(event_name, ...) -- lazy broadcast: efficient, but not guaranteed arrival
+    server.lazyUnicast(event_name, ...) -- lazy unicast: efficient, but not guaranteed arrival
 
     server.forceSpawn(ent) -- forces an entity spawn event for `ent`
     server.forceDelete(ent) -- forces an entity delete event for `ent`

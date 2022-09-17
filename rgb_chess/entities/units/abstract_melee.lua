@@ -29,6 +29,7 @@ return {
     "health", "maxHealth",
     "speed",
 
+    "cardType",
     "squadron",
 
     onClick = function(ent, username, button)

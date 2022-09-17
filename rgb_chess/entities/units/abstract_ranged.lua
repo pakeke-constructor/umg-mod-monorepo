@@ -23,6 +23,7 @@ return {
     "health", "maxHealth",
     "speed",
 
+    "cardType",
     "squadron",
 
     attackBehaviour = {

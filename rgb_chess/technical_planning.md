@@ -21,7 +21,13 @@ card.rgb = RED | GRN | BLU
 
 card = {
     name = "brute x 1", -- card name
-    description = "hp 5\ndmg 5",
+
+    description = [[ 
+        hp 5
+        dmg 5
+        gains +1 hp when an @ ally spawns
+    ]], -- card description.
+    -- All `@` symbols are replaced with the color of the card.
 
     baseCost = X
     
@@ -57,6 +63,14 @@ ent.moveBehaviour = {...}
 ent.attackBehaviour = {...}
 
 
+ent.squadron = {ent1, ent2, ...} -- The squadron that this unit belongs to.
+-- This is only set if `ent` is a swarm unit.  
+-- (Swarm units count as 1 slot.)
+
+ent.cardType = "rgb_chess.card_entity" 
+-- reference to the card this unit was spawned from.
+
+
 -- UNIT STATS:
 -- units should have all of these stats:
 -- NOTE: The defaults should be compulsory!!!! 
@@ -72,11 +86,6 @@ ent.attackDamage = 10
 
 ent.defaultAttackSpeed = 0.5
 ent.attackSpeed = 0.5
-
-
-ent.squadron = {ent1, ent2, ...} -- The squadron that this unit belongs to.
--- This is only set if `ent` is a swarm unit.  
--- (Swarm units count as 1 slot.)
 
 
 -- UNIT CALLBACKS:
