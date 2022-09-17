@@ -1,6 +1,6 @@
 
 
-# full modding overview.
+# Full modding overview.
 This overview is meant to be as concise as possible. 
 I'm not going to waste your time.     
 You must be a programmer with some experience in lua to understand this.   
