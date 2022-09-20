@@ -3,6 +3,8 @@
 
 local DEFAULT_STOP_DISTANCE = 30
 
+local DEFAULT_ACTIVATE_DISTANCE = 1000
+
 
 
 local function findClosestEntity(src_ent, category)
@@ -27,7 +29,12 @@ end
 local DEACTIVATE_FACTOR = 1.15 -- 15% extra to deactivate, seems reasonable
 
 local function deactivateDist(moveBehaviour)
-    return moveBehaviour.deactivateDistance or moveBehaviour.activateDistance * DEACTIVATE_FACTOR
+    if moveBehaviour.deactivateDistance then
+        return moveBehaviour.deactivateDistance
+    else
+        local actdist = moveBehaviour.activateDistance or DEFAULT_ACTIVATE_DISTANCE
+        return actdist * DEACTIVATE_FACTOR
+    end
 end
 
 
@@ -39,7 +46,8 @@ local function tryPickNewTarget(ent, mb)
         return
     end
     local best_ent, best_dist = findClosestEntity(ent, targCategory)
-    if best_dist <= mb.activateDistance then
+    local actdist = mb.activateDistance or DEFAULT_ACTIVATE_DISTANCE
+    if best_dist <= actdist then
         ent.moveBehaviourTargetEntity = best_ent
     end
 end

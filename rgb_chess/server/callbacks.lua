@@ -53,6 +53,45 @@ end)
 
 
 
+local allySummonEnts = group("onSummon")
+local allySoldEnts = group("onAllySold")
+local allyDeathEnts = group("onAllyDeath")
+
+on("summonUnit", function(summoned_ent)
+    for _, e in ipairs(allySummonEnts) do
+        if e.rgbTeam == summoned_ent.rgbTeam and summoned_ent ~= e then
+            e:onAllySummoned(summoned_ent)
+        end
+    end
+end)
+
+on("sellUnit", function(sold_ent)
+    for _, e in ipairs(allySoldEnts) do
+        if e.rgbTeam == sold_ent.rgbTeam and sold_ent ~= e then
+            e:onAllySold(sold_ent)
+        end
+    end
+    if sold_ent:onSell() then
+        sold_ent:onSell()
+    end
+end)
+
+on("dead", function(dead_ent)
+    for _, e in ipairs(allyDeathEnts) do
+        if e.rgbTeam == dead_ent.rgbTeam and dead_ent ~= e then
+            e:onAllyDeath(dead_ent)
+        end
+    end 
+end)
+
+on("buyUnit", function(ent)
+    if ent.onBuy then
+        ent:onBuy()
+    end
+end)
+
+
+
 on("reroll", function(rgbTeam)
     local board = Board.getBoard(rgbTeam)
     for _, ent in board:iterUnits() do
@@ -64,20 +103,45 @@ end)
 
 
 
-on("buff", function(unit, attackAmount, healthAmount, fromUnit, depth)
+local BUFF_TYPES = constants.BUFF_TYPES
+
+on("buff", function(unit, buffType, amount, buffer_ent, depth)
+    assert(constants.BUFF_TYPES[buffType], "???")
+    
+    if buffType == BUFF_TYPES.HEALTH then
+        unit.health = unit.health + amount
+        unit.maxHealth = unit.maxHealth + amount
+    elseif buffType == BUFF_TYPES.ATTACK_DAMAGE then
+        unit.attackDamage = unit.attackDamage + amount
+    elseif buffType == BUFF_TYPES.ATTACK_SPEED then
+        unit.attackSpeed = unit.attackSpeed + amount
+    elseif buffType == BUFF_TYPES.SPEED then
+        unit.speed = unit.speed + amount
+    end
+
     if unit.onBuff then
-        unit:onBuff(attackAmount, healthAmount, fromUnit, depth)
+        unit:onBuff(buffType, amount, buffer_ent, depth)
     end
 end)
 
-on("debuff", function(unit, attackAmount, healthAmount, fromUnit, depth)
+on("debuff", function(unit, buffType, amount, buffer_ent, depth)
+    assert(constants.BUFF_TYPES[buffType], "???")
+    
+    if buffType == BUFF_TYPES.HEALTH then
+        unit.health = unit.health - amount
+        unit.maxHealth = unit.maxHealth - amount
+    elseif buffType == BUFF_TYPES.ATTACK_DAMAGE then
+        unit.attackDamage = unit.attackDamage - amount
+    elseif buffType == BUFF_TYPES.ATTACK_SPEED then
+        unit.attackSpeed = unit.attackSpeed - amount
+    elseif buffType == BUFF_TYPES.SPEED then
+        unit.speed = unit.speed - amount
+    end
+
     if unit.onDebuff then
-        unit:onDebuff(attackAmount, healthAmount, fromUnit, depth)
+        unit:onDebuff(buffType, amount, buffer_ent, depth)
     end
 end)
-
-
-
 
 
 

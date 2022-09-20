@@ -19,15 +19,15 @@ card.onBuyAffectUnit = function(card, unit) ... end
 card.rgb = RED | GRN | BLU
 
 
-card = {
+card.card = {
     name = "brute x 1", -- card name
 
     description = [[ 
         hp 5
         dmg 5
-        gains +1 hp when an @ ally spawns
+        gains +1 hp when a [color] ally spawns
     ]], -- card description.
-    -- All `@` symbols are replaced with the color of the card.
+    -- All [color] occurances are replaced with the color of the card.
 
     baseCost = X
     
@@ -91,10 +91,10 @@ ent.attackSpeed = 0.5
 -- UNIT CALLBACKS:
 ent.onDeath = function(ent) ... end
 
-ent.onUpgrade = function(ent) ... end
+-- ent.onUpgrade = function(ent) ... end -- NOT USING THIS... MAYBE REMOVE?
 
-ent.onBuff = function(ent, buffer_ent) ... end
-ent.onDebuff = function(ent, debuffer_ent) ... end
+ent.onBuff = function(ent, buffType, amount, buffer_ent, depth) ... end
+ent.onDebuff = function(ent, buffType, amount, buffer_ent, depth) ... end
 
 ent.onBuy = function(ent) ... end
 ent.onSell = function(ent) ... end
@@ -107,6 +107,8 @@ ent.onAttack = function(ent, targ, dmg) ... end -- called whenever `ent` attacks
 ent.onStun = function(ent) ... end
 
 ent.onAllySummoned = function(ent, summoned_ent) ... end
+ent.onAllySold = function(ent, sold_ent) ... end
+ent.onAllyDeath = function(ent, dead_ent) ... end
 
 ent.onReroll = function(ent) ... end
 
@@ -124,8 +126,15 @@ ent.onEndBattle = function(ent) ... end
 ### Callbacks:
 ```lua
 
-call("buff", unit, attackAmount, healthAmount, fromUnit=nil, depth=0)
-call("debuff", unit, attackAmount, healthAmount, fromUnit=nil, depth=0)
+BUFF_TYPES = {
+    ATTACK_DAMAGE = "ATTACK_DAMAGE",
+    ATTACK_SPEED = "ATTACK_SPEED",
+    SPEED = "SPEED",
+    HEALTH = "HEALTH"
+}
+call("buff", unit, BUFF_TYPE, amount, fromUnit=nil, depth=0)
+call("debuff", unit, BUFF_TYPE, amount, fromUnit=nil, depth=0)
+
 
 call("attack", attacker_ent, target_ent, dmg) -- from attackBehaviour mod.
 
@@ -136,6 +145,8 @@ call("endBattle")
 
 call("startTurn")
 call("endTurn")
+
+call("sellUnit", )
 
 ```
 

@@ -1,7 +1,11 @@
 
+local buffAPI
+if server then
+    buffAPI = require("server.buffapi")
+end
 
 
-return extend("abstract_melee", {
+local brute = extend("abstract_melee", {
 
     defaultSpeed = 60,
     defaultHealth = 10,
@@ -9,6 +13,14 @@ return extend("abstract_melee", {
     defaultAttackSpeed = 0.5,
 
     bobbing = {},
+
+    onBuy = function(ent)
+        for _, e in rgb.iterUnits(ent.rgbTeam) do
+            if e~=ent and rgb.areMatchingColors(e,ent)then
+                buffAPI.buffHealth(e, 2, ent)
+            end
+        end
+    end;
 
     moveAnimation = {
         up = {"enemy_up_1", "enemy_up_2", "enemy_up_3", "enemy_up_4"},
@@ -23,4 +35,6 @@ return extend("abstract_melee", {
 
 })
 
+
+return brute
 

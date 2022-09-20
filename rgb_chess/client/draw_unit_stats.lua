@@ -1,25 +1,16 @@
 
 
 
---[[
-OK:::
-What stats do we need to show??
-
-Hp
-Dmg
-attackSpeed
-
-RGB Color components
-
-Description
-
-
-]]
 
 local F2 = "%.2f"
---[[
+
 local font = graphics.getFont()
-local H = font:getHeight("bjA")
+local H = font:getHeight("bjA") -- pretty arbitrarly letters, doesnt matter tbh
+
+local setCol = graphics.setColor
+
+local WIDTH = 50
+local RECT_BORDER = 10
 
 
 local function drawUnitStats(ent, x, y)
@@ -33,20 +24,38 @@ local function drawUnitStats(ent, x, y)
 
     graphics.push("all")
 
+    local _, wrappedtext = font:getWrap(card_ent.card.description, WIDTH)
+    local _, newlineCount = string.gsub(wrappedtext, "\n", "")
+    wrappedtext:gsub("%[color%]", rgb.getColorString(ent.rgb))
+
     local dy = H + 1
-    
+    local height = (dy*5) + (dy*newlineCount)
+
+    setCol(ent.color)
+    graphics.rectangle(
+        "fill", x-RECT_BORDER, y-RECT_BORDER, 
+        WIDTH+RECT_BORDER*2,height+RECT_BORDER*2,
+        RECT_BORDER/2,RECT_BORDER/2
+    )
+
+    setCol(ent.color[1]/2,ent.color[2]/2,ent.color[3]/2)
+    graphics.rectangle(
+        "line", x-RECT_BORDER, y-RECT_BORDER, 
+        WIDTH+RECT_BORDER*2,height+RECT_BORDER*2,
+        RECT_BORDER/2,RECT_BORDER/2
+    )
+
+    setCol(0.3,0.05,0.05)
     graphics.print("health :   " .. tostring(health), x, y)
+    setCol(0.2,0.1,0.05)
     graphics.print("damage :   " .. tostring(dmg), x, y + dy)
+    setCol(0.2,0.1,0.05)
     graphics.print("atk spd:   " .. tostring(atckSpeed), x, y + dy*2)
+    setCol(0.05,0.05,0.3)
     graphics.print("mov spd: " .. tostring(speed), x, y + dy*3)
 
-    -- TODO: do all of this
-    -- What about importing Slab to the base mod,
-    -- and using Slab to display this info?
-    -- That sounds like a good idea
-    local width, wraptxt = width, wrappedtext = Font:getWrap( text, wraplimit )
-
-    graphics.printf("")
+    setCol(0.2,0.2,0.2)
+    graphics.printf(wrappedtext, x, y + dy*5)
 
     graphics.pop()
 end
@@ -54,4 +63,3 @@ end
 
 return drawUnitStats
 
-]]

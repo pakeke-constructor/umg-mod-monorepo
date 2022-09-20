@@ -8,14 +8,15 @@ local helper = require("server.helper")
 
 
 
+
+
 local follow = {}
 function follow.update(ent,dt)
     local targ = ent.moveBehaviourTargetEntity
     if not exists(targ) then
         ent.moveBehaviourTargetEntity = nil
         targ = nil
-    end
-    if targ then
+    else
         helper.moveTo(ent, targ.x, targ.y)
     end
 end

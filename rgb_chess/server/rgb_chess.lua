@@ -22,19 +22,12 @@ local currentClientBoardPos = 0
 
 local function allocateBoard(username)
     -- Allocate board space:
-    local board = Board(0, currentClientBoardPos, username)
+    local board = Board(currentClientBoardPos, 0, username)
     currentClientBoardPos = currentClientBoardPos + 1000
     generateBoardDecor(board)
     board:setMoney(START_MONEY)
 
-    local rbx,rby = board:getRerollButtonXY()
-    entities.reroll_button(rbx, rby, username)
-
-    local monx, mony = board:getMoneyTextXY()
-    entities.money_text(monx, mony, username)
-
-    local bbx,bby = board:getBattleButtonXY()
-    entities.readyup_button(bbx, bby, username)
+    board:spawnWidgets()
 
     board:lockPlayerCamera(username)
 end
@@ -85,7 +78,6 @@ local function setupBattle()
     rgb.setState(rgb.STATES.BATTLE_STATE)
     saveBoards()
 end
-
 
 
 
@@ -155,6 +147,7 @@ local function startTurn()
     call("startTurn")
     rgb.setState(rgb.STATES.TURN_STATE)
     for _, board in Board.iterBoards() do
+        board:lockPlayerCamera(board:getTeam())
         board:clear()
         board:reset()
     end
@@ -242,4 +235,11 @@ chat.handleCommand("start", function(sender)
     startGame()
 end)
 
+chat.handleCommand("setMoney", function(sender, money)
+    local board = Board.getBoard(sender)
+    if board then
+        local num = tonumber(money,10)
+        if num then board:setMoney(num) end
+    end
+end)
 

@@ -17,9 +17,9 @@ return {
     onUpdate = function(ent)
         if client then
             if base.isHovered(ent) then
-                ent.color = GRAY
+                ent.color = ent.hoverColor or GRAY
             else
-                ent.color = WHITE
+                ent.color = ent.normalColor or WHITE
             end
         end
     end,
@@ -33,7 +33,9 @@ return {
                     ent:onClickClient()
                 end
             elseif server then
-                ent:onClickServer()
+                if ent.onClickServer then
+                    ent:onClickServer()
+                end
             end
         end
     end,

@@ -6,7 +6,7 @@ local SPEED = 160
 return {
     "x", "y", "z",
     "vx", "vy","vz",
-    "controller",
+    "testComponent",
     "image",
 
     color = {0.9,0.1,0.1},

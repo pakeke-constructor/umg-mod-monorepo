@@ -20,45 +20,60 @@ local function callExit(ent, target)
     if ent.proximity.exit then
         ent.proximity.exit(ent, target)
     end
+    ent.proximity_inRange = false    
+    ent.proximity_targetEnt = nil
 end
 
 local function callEnter(ent, target)
     if ent.proximity.enter then
         ent.proximity.enter(ent, target)
     end
+    ent.proximity_inRange = true
+    ent.proximity_targetEnt = target
+end
+
+
+local function doCalls(ent, targ, range)
+    if ent.proximity_inRange then
+        if math.distance(ent, targ) > range then
+            callExit(ent, targ)
+        end
+    else
+        if math.distance(ent, targ) < range then
+            callEnter(ent, targ)
+        end
+    end
 end
 
 
 local function updateEnt(ent)
     local prox = ent.proximity
+    assert(type(prox) == "table", "incorrect usage of proximity component.")
     local range = prox.range
+    assert(range, "proximity component doesn't have range value!")
     local category = ent.proximityTargetCategory or prox.targetCategory
 
+    -- INTERNAL VALUES, USED BY THIS SYSTEM:
+    -- ent.proximity_targetEnt = ent
+    -- ent.proximity_inRange = true/false
+
+    -- Special case, when we are looking for only one target ent
     if exists(ent.proximityTargetEntity) then
-        -- this vvv is an internal value for use only in this file.
-        ent.proximityTarget_entity = ent.proximityTargetEntity
+        ent.proximity_targetEnt = ent.proximityTargetEntity
+        local targ = ent.proximity_targetEnt
+        doCalls(ent, targ, range)
+        return
     end
 
-    if ent.proximityTarget_entity and exists(ent.proximityTarget_entity) then
-        -- then we already have a target!
-        local targ = ent.proximityTarget_entity
-        if math.distance(ent, targ) > range or (not exists(targ)) then
-            -- oh no! We have to try select a new target.
-            local new_target_ent = selectNew(ent, category, range)
-            if new_target_ent then
-                if exists(targ) then
-                    callExit(ent, targ)
-                end
-                callEnter(ent, new_target_ent)
-                ent.proximityTarget_entity = new_target_ent
-            else
-                callExit(ent, targ)
-            end
+    if ent.proximity_inRange then
+        local targ = ent.proximity_targetEnt
+        if (not exists(targ)) or math.distance(ent, targ) > range then
+            callExit(ent, targ)
         end
     else
+        -- We have to try select a new target.
         local new_target_ent = selectNew(ent, category, range)
         if new_target_ent then
-            ent.proximityTarget_entity = new_target_ent
             callEnter(ent, new_target_ent)
         end
     end

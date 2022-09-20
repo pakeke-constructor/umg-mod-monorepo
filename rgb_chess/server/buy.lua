@@ -1,36 +1,14 @@
 
 local Board = require("server.board")
 
+local spawnEntity = require("server.spawn_entity")
+
 
 
 
 local buy = {}
 
 
-local SPAWN_RANDOM_RAD = 100
-
-
-local function spawnEntity(card_ent)
-    local unit = card_ent.card.unit
-    local board = Board.getBoard(card_ent.rgbTeam)
-    local x,y = board:getXY()
-    local w,h = board:getWH()
-    local spawn_x = x + w/2 + (math.random()-.5) * SPAWN_RANDOM_RAD
-    local spawn_y = y + h/2 + (math.random()-.5) * SPAWN_RANDOM_RAD
-
-    local ent = entities[unit.type](spawn_x, spawn_y)
-
-    ent.x = spawn_x
-    ent.y = spawn_y
-    ent.rgbTeam = card_ent.rgbTeam
-    ent.rgb = card_ent.rgb
-    ent.color = card_ent.color
-    ent.damage = unit.damage
-    ent.health = unit.health
-    ent.maxHealth = unit.health
-    ent.category = card_ent.rgbTeam
-    return ent
-end
 
 
 
@@ -45,10 +23,11 @@ local function spawnUnit(card_ent)
     local squadron = {}
     local numUnits = unit.amount or 1
     for _=1, numUnits do
-        local ent = spawnEntity(card_ent)
+        local ent = spawnEntity.spawnEntityFromCard(card_ent)
         table.insert(squadron, ent)
         ent.squadron = squadron
         ent.cardType = card_ent:type()
+        call("buyUnit", ent)
     end
     -- TODO: Do feedback and stuff here.
 end
@@ -136,7 +115,7 @@ function buy.tryBuy(card_ent)
         tries to buy a card entity
     ]]
     if rgb.state ~= rgb.STATES.TURN_STATE then
-        return
+        return 
     end
     local cost = card_ent.card.cost or 1
     local board = Board.getBoard(card_ent.rgbTeam)
@@ -145,6 +124,45 @@ function buy.tryBuy(card_ent)
         return true
     end
 end
+
+
+
+
+local function sellUnit(ent)
+    call("sellUnit", ent)
+    ent:delete()
+end
+
+
+function buy.sellSquadron(ent)
+    call("sellSquadron", ent.squadron)
+    local ctype = entities[ent.cardType]
+    local baseCost = ctype.card.baseCost
+    assert(ent.squadron,"?")
+    local board = Board.getBoard(ent.rgbTeam)
+    board:setMoney(board:getMoney() - baseCost)
+    for _, e in ipairs(ent.squadron)do
+        sellUnit(e)
+    end
+end
+
+
+server.on("sellSquadron", function(sender, ent)
+    if not exists(ent) then
+        return
+    end
+    if not ent.squadron then
+        return
+    end
+    if ent.rgbTeam ~= sender then
+        return
+    end
+
+    local board = Board.getBoard(sender)
+    if board then
+        buy.sellSquadron(ent)
+    end
+end)
 
 
 

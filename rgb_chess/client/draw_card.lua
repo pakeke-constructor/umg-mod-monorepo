@@ -56,7 +56,8 @@ local function drawUnitCard(ent)
     
     local health = unit.health or "NA"
     local damage = unit.damage or "NA"
-    local cost = "$" .. tostring(card.cost or 1)
+    assert(ent.cost,"?")
+    local cost = "$" .. tostring(ent.cost)
 
     graphics.setColor(0.3, 0.1, 0.1)
     graphics.print(
@@ -87,9 +88,15 @@ local function drawUnitCard(ent)
 end
 
 
+
+
 local function drawSpellCard(ent)
+    graphics.push("all")
     base.drawImage("spell_card", ent.x, ent.y)
+    graphics.pop()
 end
+
+
 
 
 local function drawCard(ent)

@@ -38,8 +38,7 @@ function select.getSelected()
     if currentlySelected then
         for _, ent in ipairs(currentlySelected) do
             if not exists(ent)then
-                currentlySelected = nil
-                selectedEnts = {}
+                select.deselect()
                 break
             end
         end
@@ -48,31 +47,27 @@ function select.getSelected()
 end
 
 
+function select.isSelected(ent)
+    if selectedEnts then
+        return selectedEnts[ent]
+    end
+end
 
-local WHITE = {1,1,1}
-local SAMECOL_OPACITY = 0.95
 
-on("drawEntity", function(ent)
-    if ent.rgb then
-        if selectedEnts[ent] then
-            local t = timer.getTime()
-            graphics.push("all")
-            graphics.setColor(0,0,0)
-            base.drawImage("target", ent.x, ent.y, t, 1.1,1.1)
-            base.drawImage("target", ent.x, ent.y, t, 0.9,0.9)
-            graphics.setColor(WHITE)
-            base.drawImage("target", ent.x, ent.y, t)
-            graphics.pop("all")
-        elseif rgb.areMatchingColors(ent.rgb, currentlySelectedRGB) then
-            local t = timer.getTime()
-            graphics.push("all")
-            local c = ent.color
-            graphics.setColor(c[1],c[2],c[3],SAMECOL_OPACITY)
-            base.drawImage("target", ent.x, ent.y, t, 1.2,1.2)
-            graphics.pop("all")
+function select.getSelectedRGB()
+    return currentlySelectedRGB
+end
+
+
+on("update", function()
+    for ent,_ in pairs(selectedEnts) do
+        if not exists(ent) then
+            select.deselect()
+            break
         end
     end
 end)
+
 
 
 return select

@@ -23,9 +23,28 @@ setmetatable(rgb.COLS, {__index = function(_,k) error("invalid color: " .. tostr
 
 
 
+local function not_xor(a,b)
+    return ((a>0) and (b>0)) or ((a==0) and (b==0))
+end
+
+function rgb.getColorString(rgbColor)
+    --[[
+        returns the name of the color, as a string.
+    ]]
+    for col, tabl in pairs(rgb.COLS) do
+        local rOk = not_xor(tabl[1], rgbColor[1])
+        local gOk = not_xor(tabl[2], rgbColor[2])
+        local bOk = not_xor(tabl[3], rgbColor[3])
+        if rOk and gOk and bOk then
+            return col
+        end
+    end
+    return "BLK"
+end
+
 
 function rgb.areMatchingColors(col1, col2)
-    if exists(col1) and exists(col2) then
+    if col1.rgb and col2.rgb then
         local ent1, ent2 = col1, col2
         return rgb.areMatchingColors(ent1.rgb, ent2.rgb)
     end

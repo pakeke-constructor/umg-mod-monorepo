@@ -2,9 +2,7 @@
 local MELEE_RANGE = 30
 
 local select
-if server then
-    select = require("server.select")
-else
+if client then
     select = require("client.select")
 end
 
@@ -33,8 +31,10 @@ return {
     "squadron",
 
     onClick = function(ent, username, button)
-        if username == ent.rgbTeam and button == 1 then
-            select.select(username, ent)
+        if client then
+            if username == ent.rgbTeam and button == 1 then
+                select.select(username, ent)
+            end
         end
     end;
 

@@ -25,8 +25,7 @@ on("keypressed", function(k)
         base.particles.emit("smoke", x, y, 8, 10)
     end
     if k == "c" then
-        local e = base.getPlayer()
-        base.particles.emit("smoke", e.x, e.y, 12, 10, {0.2,0.2,0.9})
+        client.send("spawn",base.getPlayer())
     end
     if k =="r" then
         base.title("Title!")

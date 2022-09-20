@@ -1,7 +1,9 @@
 
+require("shared.constants")
 
-local BOARD_WIDTH = 700
-local BOARD_HEIGHT = 700
+
+local BOARD_WIDTH = constants.BOARD_WIDTH
+local BOARD_HEIGHT = constants.BOARD_HEIGHT
 
 local CARD_SPACING = 80
 local CARD_EXTRA_X = 100
@@ -75,18 +77,40 @@ function Board:getCardXY(i)
     return CARD_EXTRA_X + x1 + dx, self.y + (self.height * (5/6))
 end
 
-function Board:getRerollButtonXY()
-    return self.x + (self.width * (1/6)), self.y + (self.height * (5/6))
+function Board:spawnRerollButton()
+    local x,y = self.x + (self.width * (1/6)), self.y + (self.height * (5/6))
+    entities.reroll_button(x, y, self:getTeam())
 end
 
-function Board:getMoneyTextXY()
-    return self.x + (self.width * (1/6)), self.y + (self.height * (11/12))
+function Board:spawnSellButton()
+    local x,y = self.x + (self.width * (1/3)), self.y + self.height
+    entities.sell_button(x,y,self:getTeam())
 end
 
-function Board:getBattleButtonXY()
-    return self.x + (self.width * (1/6)), self.y + (self.height)
+function Board:spawnToggleDetailsButton()
+    local x,y = self.x + (self.width * (1/2)), self.y + self.height
+    entities.show_details_button(x,y,self:getTeam())
 end
-    
+
+function Board:spawnMoneyText()
+    local x, y = self.x + (self.width * (1/6)), self.y + (self.height * (11/12))
+    entities.money_text(x, y, self:getTeam())
+end
+
+function Board:spawnBattleButton()
+    local x,y = self.x + (self.width * (1/6)), self.y + (self.height)
+    entities.readyup_button(x, y, self:getTeam())
+end
+
+function Board:spawnWidgets()
+    self:spawnRerollButton()
+    self:spawnMoneyText()
+    self:spawnBattleButton()
+    self:spawnSellButton()
+    self:spawnToggleDetailsButton()
+end
+
+
 function Board:getWH()
     return self.width, self.height
 end
