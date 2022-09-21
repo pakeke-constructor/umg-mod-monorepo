@@ -137,6 +137,26 @@ function rgb.getTurn()
 end
 
 
+
+if server then
+function rgb.changeRGB(ent, newRGB)
+    if rgb.areMatchingColors(ent.rgb, newRGB) then
+        ent.rgb = newRGB
+        return
+    else
+        ent.rgb = newRGB
+        server.broadcast("swapRGB", ent, newRGB)
+        call("swapRGB", ent, newRGB)
+    end
+end
+else
+client.on("swapRGB", function(ent, newRGB)
+    ent.rgb = newRGB
+end)
+end
+
+
+
 if server then
     local Board = require("server.board")
 
@@ -166,7 +186,6 @@ if server then
         rgb.turn = rgb.turn + 1
         server.broadcast("setRGBTurnCount", rgb.turn)
     end
-
 else
     client.on("setRGBState", function(state)
         rgb.state = state

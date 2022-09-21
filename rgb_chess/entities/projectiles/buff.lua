@@ -18,6 +18,8 @@ return {
     "x", "y",
     "vx", "vy",
     "particles",
+    "buffType",
+    "color",
 
     speed = constants.PROJECTILE_SPEED / 2,
     image = "nothing",
@@ -41,11 +43,12 @@ return {
         range = 20
     },
 
-    init = function(ent, target_ent, buff_amount, source_ent, depth)
+    init = function(ent, target_ent, buff_type, buff_amount, source_ent, depth)
         assert(
-            ent.buffType and constants.BUFF_TYPES[ent.buffType], 
+            buff_type and constants.BUFF_TYPES[buff_type], 
             "ent.buffType needs to be defined in the child entity."
         )
+        ent.buffType = buff_type
         ent.target_buff_ent = target_ent
         ent.buff_amount = buff_amount
         ent.source_buff_ent = source_ent

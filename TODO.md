@@ -1,28 +1,9 @@
 
 
 # DAY PLAN:
-9:40 - 10:10 ::: Work on rgb_chess (Game planning! Try for emergence)
-
-
-10:10 - 10:30 ::: break, breakfast
-
-10:30 - 11:30 ::: Apply for steam, get documents thru.
-            After you are done for that, work on rgb_chess
-RGB_CHESS TASKS:
-Get selection of Squadrons working (able to see unit stats too) (use Slab??)
-Get selling of units working (make it able to sell whole squadrons)
 
 
 
-11:30 - 11:40 ::: break
-
-11:40 - 12:20 ::: Work on terrain mod
-
-12:20 - 12:40 ::: break
-
-12:40 - 1:30 ::: work on mod downloading/uploading (via steamworks SDK)
-
-  
 # IDEA:
   
 

@@ -4,21 +4,34 @@ if server then
     buffAPI = require("server.buffapi")
 end
 
+local DELTA_HEALTH = 4
+local DELTA_DMG = 1
 
-local brute = extend("abstract_melee", {
+return extend("abstract_melee", {
+    --[[
+        on buy:
+        gives a random [color] ally +1/4
+    ]]
 
     defaultSpeed = 60,
-    defaultHealth = 10,
-    defaultAttackDamage = 5,
+    defaultHealth = 15,
+    defaultAttackDamage = 4,
     defaultAttackSpeed = 0.5,
 
     bobbing = {},
 
     onBuy = function(ent)
+        local buffer = {}
         for _, e in rgb.iterUnits(ent.rgbTeam) do
             if e~=ent and rgb.areMatchingColors(e,ent)then
-                buffAPI.buffHealth(e, 2, ent)
+                table.insert(buffer, e)
             end
+        end
+        table.shuffle(buffer)
+        local e = buffer[1]
+        if e then
+            buffAPI.buffHealth(e, DELTA_HEALTH, ent)
+            buffAPI.buffDamage(e, DELTA_DMG, ent)
         end
     end;
 
@@ -34,7 +47,4 @@ local brute = extend("abstract_melee", {
     init = base.entityHelper.initPosition
 
 })
-
-
-return brute
 

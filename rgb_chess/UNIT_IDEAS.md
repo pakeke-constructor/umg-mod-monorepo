@@ -7,55 +7,47 @@
 ### TIER 1 UNITS:::
 
 # brute
-melee, 4/4
+melee, 4/15
 on buy:
-give a random [color] ally 1/1
+give a random [color] ally 1/4
 
 # huhu
 // Usually should spawn in groups of 2.
-melee, 1/1
+melee, 1/3
 on sell:
 grant all [color] huhus 2 x hp and 2 x dmg
 
 # slime
-melee, 1/4
+melee, 1/15
 start of turn:
-gain +1 gold
+if there are at least 2 [color] allies
+gain +2 gold
 
 # tanko
-melee, 2/7
+melee, 2/35
 splash damage.
 start of turn:
-lose 1 max hp permanently
+lose 3 max hp permanently
 
 
 # squash
 // same sprite as `brute`, but squashed (.sy = 0.6)
-melee, 3/3
+melee, 3/10
 start of fight:
 if no [color] allies exist,
-become a 7/7.
-
-
-# pigbank
-melee, 2/3
-start of turn:
-if this unit has been alive for more than 3 rounds,
-give `X` gold.
-// TODO: Balance this amount of gold!!
+become a 9/50.
 
 
 # enhancer
 melee, 2/2
 on ally summoned:
-if ally is [color], give ally +1/1.
+if ally is [color], give ally +2/3.
 
 
-# swapper
-melee, 3/4
-on buy:
-Convert a non-[color] ally to [color].
-
+# arrowdude
+melee, 3/8
+on turn start:
+grant all ranged [color] allies +2 dmg
 
 
 
@@ -63,8 +55,8 @@ Convert a non-[color] ally to [color].
 
 # mage
 ranged, 5/4
-on buff:
-gain +10% dmg
+buffs are 30% more effective for this unit
+
 
 # imp
 // This should be a swarm unit! (brute sprite scaled down)

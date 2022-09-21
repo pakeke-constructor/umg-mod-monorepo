@@ -8,10 +8,6 @@ local spawn = {}
 local SPAWN_RANDOM_RAD = 300
 
 
-local function doCbs(ent)
-    call("summonUnit", ent)
-end
-
 
 function spawn.spawnEntityFromCard(card_ent, spawnX, spawnY)
     -- spawns a squadron from a card.
@@ -30,12 +26,14 @@ function spawn.spawnEntityFromCard(card_ent, spawnX, spawnY)
     ent.rgbTeam = card_ent.rgbTeam
     ent.rgb = card_ent.rgb
     ent.color = card_ent.color
-    ent.damage = unit.damage
-    ent.health = unit.health
-    ent.maxHealth = unit.health
+    ent.attackDamage = ent.defaultAttackDamage
+    ent.health = ent.defaultHealth
+    ent.maxHealth = ent.defaultHealth
+    ent.attackSpeed = ent.defaultAttackSpeed
+    ent.speed = ent.defaultSpeed
     ent.category = card_ent.rgbTeam
 
-    doCbs(ent)
+    call("summonUnit", ent)
     return ent
 end
 
@@ -52,7 +50,7 @@ function spawn.spawnEntity(etype, rgbTeam, spawnX, spawnY)
     local ent = ctor(spawnX, spawnY)
     ent.rgbTeam = rgbTeam
 
-    doCbs(ent)
+    call("summonUnit", ent)
     return ent
 end
 
