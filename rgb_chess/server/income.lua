@@ -14,7 +14,7 @@ function income.getIncome(board)
     else
         inc = inc + constants.LOSE_INCOME
     end
-    return inc
+    return math.min(inc, constants.MAX_INCOME)
 end
 
 
@@ -27,3 +27,4 @@ end
 
 
 return income
+

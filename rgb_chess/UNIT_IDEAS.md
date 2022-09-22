@@ -6,10 +6,21 @@
 
 ### TIER 1 UNITS:::
 
+
+# arrowdude
+melee, 3/8
+on turn start:
+grant all ranged [color] allies +2 dmg
+
 # brute
 melee, 4/15
 on buy:
 give a random [color] ally 1/4
+
+# enhancer
+melee, 2/2
+on ally summoned:
+if ally is [color], give ally +2/3.
 
 # huhu
 // Usually should spawn in groups of 2.
@@ -23,13 +34,6 @@ start of turn:
 if there are at least 2 [color] allies
 gain +2 gold
 
-# tanko
-melee, 2/35
-splash damage.
-start of turn:
-lose 3 max hp permanently
-
-
 # squash
 // same sprite as `brute`, but squashed (.sy = 0.6)
 melee, 3/10
@@ -37,17 +41,12 @@ start of fight:
 if no [color] allies exist,
 become a 9/50.
 
+# tanko
+melee, 2/35
+splash damage.
+start of turn:
+lose 3 max hp permanently
 
-# enhancer
-melee, 2/2
-on ally summoned:
-if ally is [color], give ally +2/3.
-
-
-# arrowdude
-melee, 3/8
-on turn start:
-grant all ranged [color] allies +2 dmg
 
 
 

@@ -3,6 +3,8 @@
 _G.constants = {
     PROJECTILE_SPEED = 280,
 
+    MAX_INCOME = 20,
+
     BUFF_TYPES = setmetatable({
         ATTACK_DAMAGE = "ATTACK_DAMAGE",
         ATTACK_SPEED = "ATTACK_SPEED",

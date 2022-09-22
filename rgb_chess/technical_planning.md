@@ -1,75 +1,91 @@
 
 ## Technical planning:
 
-How are we going to represent cards?
 
-IDEA: Represent cards and units seperately.
 
 
 # CARDS:
+There are two types of cards: "Unit cards" and "Other cards".
+Unit cards spawn units,
+Other cards are spells, items, or upgrades.
 ```lua
 
--- called when card is bought
-card.onBuy = function(card) ... end
+-- FOR UNITS:
+isUnitCard = true
+card_ent.cardBuyTarget = entities.brute
+-- FOR SPELLS / ITEMS / OTHER:
+isOtherCard = true
+card_ent.cardBuyTarget = entities.spell_1
 
--- called for every unit that this card affects. (When bought)
-card.onBuyAffectUnit = function(card, unit) ... end
+card_ent.cost = X
 
-
-card.rgb = RED | GRN | BLU
-
-
-card.card = {
-    name = "brute x 1", -- card name
-
-    description = [[ 
-        hp 5
-        dmg 5
-        gains +1 hp when a [color] ally spawns
-    ]], -- card description.
-    -- All [color] occurances are replaced with the color of the card.
-
-    baseCost = X
-    
-    unit = {
-        amount = 4;
-        type = "entity_type";
-        
-        -- the health and damage of the entity type.
-        -- (These values are optional.)
-        health = 4,
-        damage = 4
-    },
-}
-
-card.buyTarget = "1_unit" | "all_units" | "board" | 
-                "1_unit_anycol" | "all_units_anycol"
-
-
+card_ent.rgb = RED
+card_ent.color = {1,0.3,0.3}
 
 ```
 
 
-# UNIT COMPONENTS:
+
+
+
+
+
+
+
+
+
+
+# SPELLS / ITEMS / OTHER:
 ```lua
+-- called when card is bought
+ent.onBuy = function(card) ... end
+
+-- called for every unit that this card affects. (When bought)
+ent.onBuyAffectUnit = function(card, unit) ... end
 
 ent.rgb = RED | GRN | BLU
 
+ent.otherCardInfo = {
+    cost = 4,
+    name = "Strength spell", -- card name
+
+    description = [[
+         [color] ally spawns
+    ]], -- card description.
+}
+
+ent.buyTarget = "1_unit" | "all_units" | "board" | 
+                "1_unit_anycol" | "all_units_anycol"
+```
+
+
+
+
+
+
+
+
+
+
+
+# UNIT COMPONENTS:
+```lua
+ent.rgb = RED | GRN | BLU
 ent.rgbTeam = username
 ent.category = ent.rgbTeam
-
 ent.moveBehaviour = {...}
-
 ent.attackBehaviour = {...}
-
 
 ent.squadron = {ent1, ent2, ...} -- The squadron that this unit belongs to.
 -- This is only set if `ent` is a swarm unit.  
 -- (Swarm units count as 1 slot.)
 
-ent.cardType = "rgb_chess.card_entity" 
--- reference to the card this unit was spawned from.
-
+ent.unitCardInfo = {
+    cost = 1,
+    name = "Monster x 1",
+    description = "Gives +1/1 to a random [color] ally",
+    -- All [color] occurances are replaced with the color of the card.
+    squadronSize = 1, }
 
 -- UNIT STATS:
 -- units should have all of these stats:
@@ -86,7 +102,6 @@ ent.attackDamage = 10
 
 ent.defaultAttackSpeed = 0.5
 ent.attackSpeed = 0.5
-
 
 -- UNIT CALLBACKS:
 ent.onDeath = function(ent) ... end

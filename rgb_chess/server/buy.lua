@@ -5,33 +5,14 @@ local spawnEntity = require("server.spawn_entity")
 
 
 
-
 local buy = {}
 
 
-
-
-
-local function spawnUnit(card_ent)
-    --[[
-        spawns a unit described by a card.
-    ]]
-    
-    local unit = card_ent.card.unit
-    assert(entities[unit.type], "invalid unit type: " .. unit.type)
-    
-    local squadron = {}
-    local numUnits = unit.amount or 1
-    for _=1, numUnits do
-        local ent = spawnEntity.spawnEntityFromCard(card_ent)
-        table.insert(squadron, ent)
-        ent.squadron = squadron
-        ent.cardType = card_ent:type()
-        call("buyUnit", ent)
-    end
-    -- TODO: Do feedback and stuff here.
+local function isUnitCard(card_ent)
+    -- retures true if `card_ent` is spawning a unit,
+    -- false otherwise.
+    return card_ent.isUnitCard
 end
-
 
 
 
@@ -40,6 +21,10 @@ local function unitPriceFunction(baseCardPrice, numSquadrons)
     return baseCardPrice + numSquadrons
 end
 
+
+
+
+
 function buy.getCost(card_ent, squadronCount)
     --[[
         unit card costs will increase linearly with respect to the number
@@ -47,11 +32,14 @@ function buy.getCost(card_ent, squadronCount)
     ]]
     assert(card_ent.rgbTeam, "not given rgbTeam")
     squadronCount = squadronCount or rgb.getSquadronCount(card_ent.rgbTeam)
-    local baseCost = card_ent.card.baseCost
-    if card_ent.card.unit then
-        return unitPriceFunction(baseCost, squadronCount)
+    
+    if isUnitCard(card_ent) then
+        local info = card_ent.cardBuyTarget.unitCardInfo
+        return unitPriceFunction(info.cost)
     else
-        return card_ent.card.baseCost
+        local info = card_ent.cardBuyTarget.otherCardInfo
+        assert(info.cost, "?")
+        return info.cost
     end
 end
 
@@ -86,23 +74,45 @@ end
 
 
 
-
-function buy.buyCard(card_ent)
-    local cost = card_ent.cost
-    assert(cost, "what? : " .. card_ent:type())
-    local board = Board.getBoard(card_ent.rgbTeam)
-    assert(card_ent.shopIndex)
-
-    if card_ent.card.unit then
-        spawnUnit(card_ent)
+local function buyUnitCard(card_ent)
+    --[[
+        buys a squadron described by a card.
+    ]]
+    local squadron = {}
+    local unit_etype = card_ent.cardBuyTarget
+    local info = unit_etype.unitCardInfo
+    local numUnits = info.squadronSize or 1
+    for _=1, numUnits do
+        local ent = spawnEntity.spawnUnitFromCard(card_ent)
+        table.insert(squadron, ent)
+        ent.squadron = squadron
+        call("buyUnit", ent)
     end
+    -- TODO: Do feedback and stuff here.
+end
 
+
+
+local function buyOtherCard(card_ent)
+
+end
+
+
+
+function buy.buyCard(card_ent, cost)
+    local board = Board.getBoard(card_ent.rgbTeam)
+    cost = cost or buy.getCost(card_ent)
+    if isUnitCard(card_ent) then
+        buyUnitCard(card_ent)
+    else
+        buyOtherCard(card_ent)
+    end
     board:setMoney(board:getMoney() - cost)
 
     --[[
-        this is terrible code!
-        We intentially wait 0.2 seconds here, because the unit/s are still spawning.
-         (They will be officially spawned in next frame.)
+    this is lowkey terrible code!
+    We intentially wait 0.2 seconds here, because unit(s) might still be spawning.
+        (They will be officially spawned in next frame.)
     ]]
     base.delay(0.2, buy.setCosts, card_ent.rgbTeam)
 end
@@ -117,10 +127,11 @@ function buy.tryBuy(card_ent)
     if rgb.state ~= rgb.STATES.TURN_STATE then
         return 
     end
-    local cost = card_ent.card.cost or 1
+
+    local cost = buy.getCost(card_ent)
     local board = Board.getBoard(card_ent.rgbTeam)
     if cost <= board:getMoney() then
-        buy.buyCard(card_ent)
+        buy.buyCard(card_ent, cost)
         return true
     end
 end
@@ -136,8 +147,7 @@ end
 
 function buy.sellSquadron(ent)
     call("sellSquadron", ent.squadron)
-    local ctype = entities[ent.cardType]
-    local baseCost = ctype.card.baseCost
+    local baseCost = ent.unitCardInfo.cost
     assert(ent.squadron,"?")
     local board = Board.getBoard(ent.rgbTeam)
     board:setMoney(board:getMoney() - baseCost)

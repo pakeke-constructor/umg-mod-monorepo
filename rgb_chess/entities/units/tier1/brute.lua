@@ -8,10 +8,10 @@ local DELTA_HEALTH = 4
 local DELTA_DMG = 1
 
 return extend("abstract_melee", {
-    --[[
-        on buy:
-        gives a random [color] ally +1/4
-    ]]
+    unit = {
+        name = "Brute x 1",
+        description = "on buy:\ngive a random [color] ally +1/4"
+    };
 
     defaultSpeed = 60,
     defaultHealth = 15,

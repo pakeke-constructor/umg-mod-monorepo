@@ -7,11 +7,8 @@ end
 
 
 
-
 --[[
-    abstract card entity
-
-    entities that extend this will inherit these components:
+    Unit card entity
 ]]
 return {
     "x","y",
@@ -19,6 +16,10 @@ return {
     "rgb",
     "color",
     "cost",
+    "cardBuyTarget",
+
+    "isUnitCard",
+    "isOtherCard",
 
     image = "invisible_card",
 
@@ -32,7 +33,15 @@ return {
         end
     end,
 
-    init = base.entityHelper.initPosition
+    init = function(e,fields)
+        assert(fields.x and fields.y)
+        assert(fields.rgbTeam)
+        assert(fields.cardBuyTarget)
+
+        e.cardBuyTarget = fields.cardBuyTarget
+        e.rgbTeam = fields.rgbTeam
+        base.entityHelper.initPosition(e,fields.x,fields.y)
+    end
 }
 
 

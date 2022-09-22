@@ -34,9 +34,9 @@ local tiers = {
 local genCards = {}
 
 
-function genCards.getCard(board)
+function genCards.getBuyTarget()
     local turn = rgb.getTurn()
-    return "card_brute" -- TODO: Write this function
+    return entities.brute
 end
 
 
@@ -86,9 +86,9 @@ end
 
 function genCards.spawnCard(board, i, numSquadrons)
     local turn = rgb.getTurn()
-    local etype = genCards.getCard(board)
+    local etype = genCards.getCard()
     local x, y = board:getCardXY(i)
-    local ent = entities[etype](x, y)
+    local ent = entities.card(x, y)
     ent.rgbTeam = board:getTeam()
     ent.rgb = genCards.getRGB(turn)
     ent.color = getCardColor(ent.rgb)
