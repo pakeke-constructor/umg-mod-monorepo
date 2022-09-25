@@ -2,15 +2,28 @@
 
 local DEFAULT = {0.55,0.55,0.7,1} --{0.85,0.85,0.85}
 
+local DEFAULT_LIGHT_IMAGE = "default_light.png"
+
 local base_lighting = DEFAULT
 
 
+local light = {}
 
 local lights = group("x","y","light")
 
 
-local light_image = graphics.newImage("default_light.png")
-local W,H = light_image:getDimensions()
+local light_image, W, H
+
+
+function light.setLightImage(imgName)
+    light_image = graphics.newImage(imgName)
+    W, H = light_image:getDimensions()
+end
+
+
+light.setLightImage(DEFAULT_LIGHT_IMAGE)
+
+
 
 local LEIGH = 20
 
@@ -41,11 +54,12 @@ local function setupCanvas()
     --graphics.setBlendMode("add")
 
     for _, ent in ipairs(lights) do
-        local light = ent.light
-        local radius = light.radius or DEFAULT_RADIUS
+        -- TODO: Check if entity is on the screen
+        local l = ent.light
+        local radius = l.radius or DEFAULT_RADIUS
         local scale = (radius*2) / W
         -- times by 2, because W is twice as large as light image radius
-        graphics.setColor(light.color or DEFAULT_COLOR)
+        graphics.setColor(l.color or DEFAULT_COLOR)
         graphics.draw(light_image, ent.x, ent.y, 0, scale, scale, W/2, H/2)
     end
 
@@ -72,7 +86,7 @@ end)
 
 
 
-local function setBaseLighting(r,g,b)
+function light.setBaseLighting(r,g,b)
     if type(r) == "table" then
         g=r[2]
         b=r[3]
@@ -86,7 +100,6 @@ local function setBaseLighting(r,g,b)
 end
 
 
-local light = {setBaseLighting = setBaseLighting}
 
 export("light", light)
 

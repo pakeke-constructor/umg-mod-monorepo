@@ -35,14 +35,13 @@ end
 
 
 
-
 local function drawUnitCard(ent)
     local x, y = ent.x, ent.y + getBob(ent)
     if base.isHovered(ent) then
         y = y + MOUSE_HOVER_OY
     end
-    local card = ent.card
-    local unit = card.unit
+    local unitEType = ent.cardBuyTarget
+    local unitCardInfo = unitEType.unitCardInfo
 
     graphics.push("all")
     graphics.setColor(ent.color)
@@ -50,13 +49,17 @@ local function drawUnitCard(ent)
     
     graphics.setColor(0.2,0.2,0.2)
     graphics.print(
-        card.name, x + UNIT_NAME_OX, y + UNIT_NAME_OY,
+        unitCardInfo.name, x + UNIT_NAME_OX, y + UNIT_NAME_OY,
         0,fontScale,fontScale
     )
     
-    local health = unit.health or "NA"
-    local damage = unit.damage or "NA"
-    assert(ent.cost,"?")
+    local health = unitEType.defaultHealth
+    local damageEstimate = rgb.getDamageEstimate(unitEType.defaultAttackDamage, unitEType.defaultAttackSpeed)
+    local damage = ("%.1f"):format(damageEstimate)
+    local color_str = rgb.getColorString(ent.rgb)
+    local description = unitCardInfo.description:gsub(constants.COLOR_SUB_TAG, color_str)
+
+    assert(unitCardInfo.cost,"?")
     local cost = "$" .. tostring(ent.cost)
 
     graphics.setColor(0.3, 0.1, 0.1)
@@ -78,10 +81,10 @@ local function drawUnitCard(ent)
     graphics.setColor(0.1,0.1,0.1)
     graphics.scale(fontScale)
     graphics.printf(
-        ent.card.description, 
+        description, 
         (x + UNIT_NAME_OX) / fontScale, 
         (y + DESCRIPTION_OY) / fontScale,
-        100, "left"
+        160, "left"
     )
     
     graphics.pop()
@@ -100,10 +103,8 @@ end
 
 
 local function drawCard(ent)
-    local card = ent.card
-
     if ent.x and ent.y then
-        if card.unit then
+        if rgb.isUnitCard(ent) then
             drawUnitCard(ent)
         else
             drawSpellCard(ent)
@@ -117,7 +118,7 @@ on("update",function()
 end)
 
 on("drawEntity", function(ent)
-    if ent.card then
+    if ent.cardBuyTarget then
         if rgb.state == rgb.STATES.TURN_STATE then
             drawCard(ent)
         end

@@ -8,10 +8,15 @@ local GOLD_AMOUNT = 3
 
 return extend("abstract_melee", {
     --[[
-        start of turn:
+        turn start:
         if there are at least 2 [color] allies,
         gain +3 gold
     ]]
+    unitCardInfo = {
+        name = "Slime x 1",
+        description = "turn start:\nIf theres 2 or more [color] allies, gain +3 gold",
+        cost = 1,
+    };
 
     defaultSpeed = 25,
     defaultHealth = 15,

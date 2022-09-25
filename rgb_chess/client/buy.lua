@@ -5,6 +5,10 @@ client.on("setRGBCardCost", function(card, cost)
 end)
 
 
+client.on("buyUnitSquadron", function(squadron)
+
+end)
+
 
 local buy = {}
 

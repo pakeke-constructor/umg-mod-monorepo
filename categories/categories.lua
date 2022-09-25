@@ -1,7 +1,5 @@
 
 
-
-
 local categories = setmetatable({}, {
     __index = function(t,k)
         t[k] = base.Set()

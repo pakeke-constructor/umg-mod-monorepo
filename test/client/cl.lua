@@ -15,6 +15,7 @@ local psys = base.particles.newParticleSystem({
 base.particles.define("smoke", psys)
 
 
+
 on("keypressed", function(k)
     if k == "q" then
         local e = base.getPlayer()

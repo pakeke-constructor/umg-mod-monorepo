@@ -25,6 +25,8 @@ _G.constants = {
     BOARD_WIDTH = 700,
     BOARD_HEIGHT = 700,
 
+    COLOR_SUB_TAG = "%[color%]",
+
     PVE_PREFIX = "@pve_enemy_" -- concat this with another rgbTeam to get the category.,
 }
 

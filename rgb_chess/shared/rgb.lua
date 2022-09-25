@@ -58,6 +58,38 @@ end
 
 
 
+rgb.cardTypes = setmetatable({
+    unit="unit",
+    UNIT="unit",
+    Unit="unit",
+
+    other="other",
+    OTHER="other",
+    Other="other"
+},{__index=function(t,k) error("undefined cardType") end})
+
+
+function rgb.isUnitCard(card_ent)
+    -- retures true if `card_ent` is spawning a unit,
+    -- false otherwise.
+    return card_ent.cardType == rgb.cardTypes.UNIT
+end
+
+function rgb.isOtherCard(card_ent)
+    return card_ent.cardType == rgb.cardTypes.OTHER
+end
+
+function rgb.setCardType(card_ent, cardType)
+    assert(rgb.cardTypes[cardType])
+    card_ent.cardType = rgb.cardTypes[cardType]
+end
+
+
+
+function rgb.getDamageEstimate(attackDamage, attackSpeed)
+    return attackDamage * attackSpeed
+end
+
 
 function rgb.getPVEEnemyTeam(rgbTeam)
     -- generates a team ID for use by PVE enemies

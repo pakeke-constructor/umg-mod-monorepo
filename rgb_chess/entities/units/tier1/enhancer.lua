@@ -13,6 +13,11 @@ return extend("abstract_ranged", {
         on ally summoned:
         if ally is [color], give ally 1/1
     ]]
+    unitCardInfo = {
+        name = "Enhancer",
+        description = "on ally summon:\nif ally is [color], give ally 1/1",
+        cost = 1
+    };
 
     defaultSpeed = 50,
     defaultHealth = 3,
@@ -29,10 +34,10 @@ return extend("abstract_ranged", {
     end;
 
     moveAnimation = {
-        up = {"wizard_up_1", "wizard_up_2", "wizard_up_3", "wizard_up_4"},
-        down = {"wizard_down_1", "wizard_down_2", "wizard_down_3", "wizard_down_4"}, 
-        left = {"wizard_left_1", "wizard_left_2", "wizard_left_3", "wizard_left_4"}, 
-        right = {"wizard_right_1", "wizard_right_2", "wizard_right_3", "wizard_right_4"},
+        up = {"wizard_up_1", "wizard_up_2"},
+        down = {"wizard_down_1", "wizard_down_2"}, 
+        left = {"wizard_left_1", "wizard_left_2"}, 
+        right = {"wizard_right_1", "wizard_right_2"},
         speed = 0.7;
         activation = 15
     };

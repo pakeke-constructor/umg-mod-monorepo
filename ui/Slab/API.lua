@@ -28,8 +28,12 @@ if SLAB_PATH == nil then
 	SLAB_PATH = (...):match("(.-)[^%.]+$")
 end
 
-SLAB_FILE_PATH = debug.getinfo(1, 'S').source:match("^@(.+)/")
-SLAB_FILE_PATH = SLAB_FILE_PATH == nil and "" or SLAB_FILE_PATH
+
+-- PAKEKE MONKEYPATCH: Removed these lines (debug module not available.)
+--SLAB_FILE_PATH = debug.getinfo(1, 'S').source:match("^@(.+)/")
+--SLAB_FILE_PATH = SLAB_FILE_PATH == nil and "" or SLAB_FILE_PATH
+
+
 local StatsData = {}
 local PrevStatsData = {}
 
@@ -39,7 +43,6 @@ local ColorPicker = require(SLAB_PATH .. '.Internal.UI.ColorPicker')
 local ComboBox = require(SLAB_PATH .. '.Internal.UI.ComboBox')
 local Config = require(SLAB_PATH .. '.Internal.Core.Config')
 local Cursor = require(SLAB_PATH .. '.Internal.Core.Cursor')
-local Dialog = require(SLAB_PATH .. '.Internal.UI.Dialog')
 local Dock = require(SLAB_PATH .. '.Internal.UI.Dock')
 local DrawCommands = require(SLAB_PATH .. '.Internal.Core.DrawCommands')
 local Image = require(SLAB_PATH .. '.Internal.UI.Image')
@@ -247,57 +250,23 @@ local Verbose = false
 local Initialized = false
 
 local function LoadState()
-	if INIStatePath == nil then return end
-
-	local Result, Error = Config.LoadFile(INIStatePath, IsDefault)
-	if Result ~= nil then
-		Dock.Load(Result)
-		Tree.Load(Result)
-		Window.Load(Result)
-	end
-
-	if Verbose then
-		print("Load INI file:", INIStatePath, "Error:", Error)
-	end
+    -- PAKEKE MONKEYPATCH: Removed due to filesystem usage
 end
 
 local function SaveState()
-	if INIStatePath == nil then return end
-
-	local Table = {}
-	Dock.Save(Table)
-	Tree.Save(Table)
-	Window.Save(Table)
-	local Result, Error = Config.Save(INIStatePath, Table, IsDefault)
-
-	if Verbose then
-		print("Save INI file:", INIStatePath, "Error:", Error)
-	end
+	-- PAKEKE MONKEYPATCH: Removed due to filesystem usage
 end
 
 local function TextInput(Ch)
 	Input.Text(Ch)
-
-	if love.textinput ~= nil then
-		love.textinput(Ch)
-	end
+    -- PAKEKE MONKEYPATCH: Removed love call
 end
 
 local function WheelMoved(X, Y)
 	Window.WheelMoved(X, Y)
-
-	if love.wheelmoved ~= nil then
-		love.wheelmoved(X, Y)
-	end
+    -- PAKEKE MONKEYPATCH: Removed love call
 end
 
-local function OnQuit()
-	SaveState()
-
-	if QuitFn ~= nil then
-		QuitFn()
-	end
-end
 
 --[[
 	Initialize
@@ -317,14 +286,23 @@ function Slab.Initialize(args)
 	end
 
 	Style.API.Initialize()
-	love.handlers['textinput'] = TextInput
-	love.handlers['wheelmoved'] = WheelMoved
 
-	-- In Love 11.3, overriding love.handlers['quit'] doesn't seem to affect the callback during shutdown.
-	-- Storing and overriding love.quit manually will properly call Slab's callback. This function will call
-	-- the stored function once Slab is finished with its process.
-	QuitFn = love.quit
-	love.quit = OnQuit
+    -- PAKEKE MONKEYPATCH:
+    -- This stuff obviously doesn't work here.
+	--love.handlers['textinput'] = TextInput
+	--love.handlers['wheelmoved'] = WheelMoved
+
+    -- PAKEKE MONKEYPATCH:
+    -- Removed onQuit stuff. (It was just savestate stuff, which we cant use anyway)
+    
+    -- PAKEKE MONKEYPATCH START
+    on("textinput", function(...)
+        TextInput(...)
+    end)
+    on("wheelmoved", function(...)
+        WheelMoved(...)
+    end)
+    -- PAKEKE MONKEYPATCH END
 
 	args = args or {}
 	if type(args) == 'table' then
@@ -344,6 +322,9 @@ function Slab.Initialize(args)
 
 	Initialized = true
 end
+
+
+
 
 --[[
 	GetVersion

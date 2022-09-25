@@ -35,6 +35,9 @@ any = true
 any = true
 [image]
 any = true
+[system]
+any = true
+
 
 [utf8]
 any = true
@@ -115,6 +118,11 @@ any = true
 ## terrain mod:
 [terrain]
 any = true
+
+## Slab ui mod:
+[Slab]
+any = true
+
 
 
 

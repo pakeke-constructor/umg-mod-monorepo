@@ -11,15 +11,20 @@ return extend("abstract_melee", {
         on sell:
         grants all other [color] huhus x2 damage and x2 health
     ]]
-
     "squadron_buff_done",
+
+    unitCardInfo = {
+        name = "Huhu x 3",
+        description = "on sell:\nDouble all [color] huhus x2 dmg and hp",
+        cost = 2,
+        squadronSize = 3,
+    };
 
     defaultSpeed = 70,
     defaultHealth = 3,
     defaultAttackDamage = 1,
     defaultAttackSpeed = 0.4,
 
-    
     animation = {"huhu1","huhu2","huhu3","huhu2", speed=0.6};
 
     onSell = function(ent)

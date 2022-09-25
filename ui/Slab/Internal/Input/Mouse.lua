@@ -46,8 +46,7 @@ local State =
 local Cursors = nil
 local CurrentCursor = "arrow"
 local PendingCursor = ""
-local MouseMovedFn = nil
-local MousePressedFn = nil
+
 local MouseReleasedFn = nil
 local Events = {}
 local eventPool = TablePool()
@@ -62,15 +61,12 @@ local function TransformPoint(X,Y)
 end
 
 local function OnMouseMoved(X, Y, DX, DY, IsTouch)
+    -- PAKEKE MONKEYPATCH: Removed love callback mangling
 	X, Y = TransformPoint(X, Y)
 	State.X = X
 	State.Y = Y
 	State.AsyncDeltaX = State.AsyncDeltaX + DX
 	State.AsyncDeltaY = State.AsyncDeltaY + DY
-
-	if MouseMovedFn ~= nil then
-		MouseMovedFn(X, Y, DX, DY, IsTouch)
-	end
 end
 
 local function PushEvent(Type, X, Y, Button, IsTouch, Presses)
@@ -84,22 +80,16 @@ local function PushEvent(Type, X, Y, Button, IsTouch, Presses)
 	insert(Events, 1, ev)
 end
 
-local function OnMousePressed(X, Y, Button, IsTouch, Presses)
+local function OnMousePressed(X, Y, Button, IsTouch, Presses)    
+    -- PAKEKE MONKEYPATCH: Removed love callback mangling
 	X, Y = TransformPoint(X, Y)
 	PushEvent(Common.Event.Pressed, X, Y, Button, IsTouch, Presses)
-
-	if MousePressedFn ~= nil then
-		MousePressedFn(X, Y, Button, IsTouch, Presses)
-	end
 end
 
 local function OnMouseReleased(X, Y, Button, IsTouch, Presses)
+    -- PAKEKE MONKEYPATCH: Removed love callback mangling
 	X, Y = TransformPoint(X, Y)
 	PushEvent(Common.Event.Released, X, Y, Button, IsTouch, Presses)
-
-	if MouseReleasedFn ~= nil then
-		MouseReleasedFn(X, Y, Button, IsTouch, Presses)
-	end
 end
 
 local function ProcessEvents()
@@ -130,14 +120,22 @@ local function ProcessEvents()
 end
 
 function Mouse.Initialize(Args)
+    -- PAKEKE MONKEYPATCH START
 	TransformPoint = Args.TransformPointToSlab or TransformPoint
 
+    on("mousemoved", OnMouseMoved)
+    on("mousepressed", OnMousePressed)
+    on("mousereleased", OnMouseReleased)
+    --[[
+    --OLD CODE:
 	MouseMovedFn = love.handlers['mousemoved']
 	MousePressedFn = love.handlers['mousepressed']
 	MouseReleasedFn = love.handlers['mousereleased']
 	love.handlers['mousemoved'] = OnMouseMoved
 	love.handlers['mousepressed'] = OnMousePressed
 	love.handlers['mousereleased'] = OnMouseReleased
+    ]]
+    -- PAKEKE MONKEYPATCH END
 end
 
 function Mouse.Update()

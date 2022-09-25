@@ -12,6 +12,11 @@ return extend("abstract_melee", {
         on turn start:
         lose 3 health
     ]]
+    unitCardInfo = {
+        name = "Tanko x 1",
+        description = "turn start:\nLose 3 max hp.",
+        cost = 1,
+    };
 
     defaultSpeed = 60,
     defaultHealth = 10,

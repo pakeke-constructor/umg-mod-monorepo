@@ -17,9 +17,8 @@ return {
     "color",
     "cost",
     "cardBuyTarget",
-
-    "isUnitCard",
-    "isOtherCard",
+    "shopIndex",
+    "cardType",
 
     image = "invisible_card",
 

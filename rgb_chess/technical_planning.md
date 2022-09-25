@@ -11,10 +11,10 @@ Other cards are spells, items, or upgrades.
 ```lua
 
 -- FOR UNITS:
-isUnitCard = true
 card_ent.cardBuyTarget = entities.brute
+card_ent.cardType = "unit"
 -- FOR SPELLS / ITEMS / OTHER:
-isOtherCard = true
+card_ent.cardType = "other"
 card_ent.cardBuyTarget = entities.spell_1
 
 card_ent.cost = X

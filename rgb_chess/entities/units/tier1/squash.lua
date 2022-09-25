@@ -9,17 +9,23 @@ local BUFFED_DMG = 9
 
 return extend("abstract_melee", {
     --[[
-        on buy:
-        gives a random [color] ally 1/1
+        battle start:
+        if no [color] allies exist,
+        become a 9/50.
     ]]
+    unitCardInfo = {
+        name = "Squash x 1",
+        description = "battle start:\nif no [color] allies exist, become a 9/50.",
+        cost = 1,
+    };
 
     defaultSpeed = 60,
     defaultHealth = 10,
     defaultAttackDamage = 5,
     defaultAttackSpeed = 0.5,
 
-    scaleY = 0.6,
-    scaleX = 1.4,
+    scaleY = 0.8,
+    scaleX = 1.2,
 
     bobbing = {},
 

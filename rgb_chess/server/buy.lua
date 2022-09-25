@@ -8,12 +8,6 @@ local spawnEntity = require("server.spawn_entity")
 local buy = {}
 
 
-local function isUnitCard(card_ent)
-    -- retures true if `card_ent` is spawning a unit,
-    -- false otherwise.
-    return card_ent.isUnitCard
-end
-
 
 
 local function unitPriceFunction(baseCardPrice, numSquadrons)
@@ -32,10 +26,10 @@ function buy.getCost(card_ent, squadronCount)
     ]]
     assert(card_ent.rgbTeam, "not given rgbTeam")
     squadronCount = squadronCount or rgb.getSquadronCount(card_ent.rgbTeam)
-    
-    if isUnitCard(card_ent) then
+
+    if rgb.isUnitCard(card_ent) then
         local info = card_ent.cardBuyTarget.unitCardInfo
-        return unitPriceFunction(info.cost)
+        return unitPriceFunction(info.cost, squadronCount)
     else
         local info = card_ent.cardBuyTarget.otherCardInfo
         assert(info.cost, "?")
@@ -84,8 +78,10 @@ local function buyUnitCard(card_ent)
     local numUnits = info.squadronSize or 1
     for _=1, numUnits do
         local ent = spawnEntity.spawnUnitFromCard(card_ent)
-        table.insert(squadron, ent)
         ent.squadron = squadron
+        table.insert(squadron, ent)
+    end
+    for _, ent in ipairs(squadron) do
         call("buyUnit", ent)
     end
     -- TODO: Do feedback and stuff here.
@@ -102,7 +98,7 @@ end
 function buy.buyCard(card_ent, cost)
     local board = Board.getBoard(card_ent.rgbTeam)
     cost = cost or buy.getCost(card_ent)
-    if isUnitCard(card_ent) then
+    if rgb.isUnitCard(card_ent) then
         buyUnitCard(card_ent)
     else
         buyOtherCard(card_ent)

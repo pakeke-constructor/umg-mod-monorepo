@@ -12,7 +12,7 @@ Generates cards for shop rerolls.
 
 local tiers = {
     [1] = {
-        "card_brute"
+        "brute","enhancer","hoodlum","huhu","slime","squash","tanko"
     },
 
     [2] = {
@@ -36,7 +36,11 @@ local genCards = {}
 
 function genCards.getBuyTarget()
     local turn = rgb.getTurn()
-    return entities.brute
+    local buf = table.copy(tiers[1])
+    table.shuffle(buf)
+    local ret = entities[buf[1]]
+    assert(ret,"??" .. buf[1])
+    return ret
 end
 
 
@@ -84,17 +88,30 @@ function genCards.getRGB(turn)
 end
 
 
-function genCards.spawnCard(board, i, numSquadrons)
+
+function genCards.spawnCard(board, shopIndex)
     local turn = rgb.getTurn()
-    local etype = genCards.getCard()
-    local x, y = board:getCardXY(i)
-    local ent = entities.card(x, y)
-    ent.rgbTeam = board:getTeam()
-    ent.rgb = genCards.getRGB(turn)
-    ent.color = getCardColor(ent.rgb)
-    ent.shopIndex = i
-    board.shop[i] = ent
-    return ent
+    local etype_buyTarget = genCards.getBuyTarget()
+    local x, y = board:getCardXY(shopIndex)
+
+    local card_ent = entities.card({
+        x=x,
+        y=y,
+        rgbTeam = board:getTeam(),
+        cardBuyTarget = etype_buyTarget
+    })
+    card_ent.rgb = genCards.getRGB(turn)
+    card_ent.color = getCardColor(card_ent.rgb)
+    card_ent.shopIndex = shopIndex
+    board.shop[shopIndex] = card_ent
+
+    if etype_buyTarget.unitCardInfo then
+        rgb.setCardType(card_ent, rgb.cardTypes.unit)
+    else
+        rgb.setCardType(card_ent, rgb.cardTypes.other)
+    end
+
+    return card_ent
 end
 
 

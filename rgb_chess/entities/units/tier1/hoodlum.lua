@@ -13,6 +13,11 @@ return extend("abstract_melee", {
         on turn start:
         grant all ranged [color] allies +2 dmg
     ]]
+    unitCardInfo = {
+        name = "Hoodlum x 1",
+        description = "on turn start:\ngrant all ranged [color] allies +2 dmg",
+        cost = 1
+    };
 
     defaultSpeed = 55,
     defaultHealth = 8,
