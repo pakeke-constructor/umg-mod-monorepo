@@ -18,15 +18,16 @@ very nice.
 
 
 local function addErrorFuncsToModule(illegal_module, module, err_func)
-    for name, val in pairs(illegal_module) do 
-        if type(name) == "number" and type(val) == "string" then
+    for key, val in pairs(illegal_module) do 
+        if type(key) == "number" and type(val) == "string" then
             -- then we are dealing with a function: set it to err_func
             -- (make sure we don't overwrite anything.)
-            module[name] = module[name] or err_func
-        elseif type(name) == "string" and type(val) == "table" then
+            local funcName = val
+            module[funcName] = module[funcName] or err_func
+        elseif type(key) == "string" and type(val) == "table" then
             -- its a nested module.
-            module[name] = module[name] or {}
-            addErrorFuncsToModule(val, module[name], err_func)
+            module[key] = module[key] or {}
+            addErrorFuncsToModule(val, module[key], err_func)
         end
     end
 end
@@ -105,7 +106,7 @@ serverSideOnlyExports = {}
 
 
 on("playerJoin", function(username)
-    server.unicast("defineServerOnlyAPI", username, serverSideOnlyExports, needsClientExports)
+    server.unicast(username, "defineServerOnlyAPI", serverSideOnlyExports, needsClientExports)
 end)
 
 
@@ -172,7 +173,12 @@ local function loadServer(options, api)
         if serverSideOnlyExports[options.name] then
             error("Overwriting an existing export: " .. options.name)
         end
+        -- Record server functions so the client can know about them eventually
         mergeExportDefinition(serverSideOnlyExports, seAPI, options.name)
+        -- now put the functions in the actual exported api
+        for k,v in pairs(seAPI) do
+            api[k] = v
+        end    
     end
 end
 
@@ -188,7 +194,12 @@ local function loadClient(options, api)
         if clientSideOnlyExports[options.name] then
             error("Overwriting an existing export: " .. options.name)
         end
+        -- Record client functions so the server can know about them eventually
         mergeExportDefinition(clientSideOnlyExports, clAPI, options.name)
+        -- now put the functions in the actual exported api
+        for k,v in pairs(clAPI) do
+            api[k] = v
+        end    
     end
 end
 
