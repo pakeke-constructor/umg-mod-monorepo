@@ -35,10 +35,28 @@ functions?
 ^^^ this is a great idea.
 Something like:
 ```lua
+
+
+local function loadServer(base)
+
+local module1 = require("...")
+local module2 = require("...")
+
+function base.spawnEntity(...)
+    ...
+end
+
+function base.doOtherThing()
+    ...
+end
+
+end
+
+
 base.defineExports({
-    name = "exportName", 
-    serverFuncs = serverFuncs, 
-    clientFuncs = clientFuncs, 
+    name = "base", 
+    loadServer = loadServer,
+    loadClient = loadClient,
     sharedFuncs = sharedFuncs
 })
 ```

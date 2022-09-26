@@ -198,7 +198,8 @@ Hello two: 1 2 3
 ```
 
 Some callback events are emitted automatically by the engine:
-```
+```lua
+load() -- called when the mods and entities are done loading
 update ( dt )   -- called every frame (like love.update)
 draw  () -- CLIENTSIDE: when stuff should get drawn (like love.draw)
 keypressed ( key, scancode, isrepeat )  -- CLIENTSIDE: when a key is pressed (like love.keypressed)
@@ -209,7 +210,7 @@ playerJoin (username) -- called when `username` joins the server
 playerLeave (username) -- called when `username` leaves the server
 ```
 Here some other callbacks that are defined by the base mod:
-```
+```lua
 drawIndex ( i ) -- stuff at Z index `i` should get drawn
 drawEntity ( ent ) -- an entity is getting drawn
 ```

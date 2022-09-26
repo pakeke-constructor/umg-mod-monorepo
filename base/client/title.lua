@@ -1,5 +1,5 @@
 
-local Heap = require("other.heap")
+local Heap = require("shared.heap")
 
 
 

@@ -11,7 +11,7 @@ local shockwave = require("client.shockwaves")
 
 local sound = require("client.sound")
 
-local entityHelper = require("other.entity_helper")
+local entityHelper = require("shared.entity_helper")
 
 local animate = require("client.animate")
 
@@ -41,15 +41,15 @@ local base = {
 
     shockwave = shockwave;
 
-    gravity = require("other.gravity");
+    gravity = require("shared.gravity");
 
-    Class = require("other.class");
-    Set = require("other.set");
-    Array = require("other.array");
-    Heap = require("other.heap");
-    Partition = require("other.partition.partition");
+    Class = require("shared.class");
+    Set = require("shared.set");
+    Array = require("shared.array");
+    Heap = require("shared.heap");
+    Partition = require("shared.partition.partition");
     
-    getPlayer = require("other.get_player");
+    getPlayer = require("shared.get_player");
 
     particles = require("client.particles");
 
@@ -58,13 +58,13 @@ local base = {
 
     entityHelper = entityHelper;
 
-    weightedRandom = require("other.weighted_random");
+    weightedRandom = require("shared.weighted_random");
 
     inspect = require("_libs.inspect");
 
     title = require("client.title");
 
-    delay = require("other.delay")
+    delay = require("shared.delay")
 }
 
 

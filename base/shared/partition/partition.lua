@@ -25,7 +25,7 @@ local floor = math.floor
 
 local Partition = {}
 
-local Set = require("other.set")
+local Set = require("shared.set")
 
 
 local mt = {__index = function(t,k)

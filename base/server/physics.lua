@@ -18,7 +18,7 @@ local fixture_to_ent = {}
 local ent_to_fixture = {}
 
 
-local constants = require("other.constants")
+local constants = require("shared.constants")
 
 
 local function beginContact(fixture_A, fixture_B, contact_obj)

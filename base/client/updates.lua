@@ -1,2 +1,2 @@
 
-require("other.updates")
+require("shared.updates")

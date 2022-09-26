@@ -2,8 +2,8 @@
 
 local particles = {}
 
-local Set = require("other.set")
-local Array = require("other.array")
+local Set = require("shared.set")
+local Array = require("shared.array")
 
 
 

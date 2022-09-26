@@ -1,5 +1,5 @@
 
-local Class = require("other.class")
+local Class = require("shared.class")
 
 local Array = Class("base_mod:Array")
 

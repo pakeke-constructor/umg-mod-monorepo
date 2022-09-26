@@ -9,7 +9,7 @@ this means that modified clients can teleport anywhere on the screen
 ]]
 
 
-local constants = require("other.constants")
+local constants = require("shared.constants")
 
 
 

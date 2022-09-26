@@ -2,7 +2,7 @@
 
 local moveEnts = group("x", "y", "vx", "vy")
 
-local constants = require("other.constants")
+local constants = require("shared.constants")
 
 local DEFAULT_FRICTION = constants.DEFAULT_FRICTION
 

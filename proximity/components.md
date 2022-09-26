@@ -32,7 +32,7 @@ ent.proximityTargetCategory = "enemy",
 -- (Useful for stuff like changing teams, etc.)
 
 -- override for a specific entity.
-ent.proximityTargetEntity = enemy_ent
+ent.proximityTargetEntity = entity
 
 
 ```

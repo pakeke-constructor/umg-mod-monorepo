@@ -1,26 +1,26 @@
 
-local entityHelper = require("other.entity_helper")
+local entityHelper = require("shared.entity_helper")
 
 local base = {
-    gravity = require("other.gravity");
+    gravity = require("shared.gravity");
     
-    Class = require("other.class");
-    Set = require("other.set");
-    Array = require("other.array");
-    Heap = require("other.heap");
-    Partition = require("other.partition.partition");
+    Class = require("shared.class");
+    Set = require("shared.set");
+    Array = require("shared.array");
+    Heap = require("shared.heap");
+    Partition = require("shared.partition.partition");
 
     physics = require("server.physics");
     
-    getPlayer = require("other.get_player");
+    getPlayer = require("shared.get_player");
 
     entityHelper = entityHelper;
 
-    weightedRandom = require("other.weighted_random");
+    weightedRandom = require("shared.weighted_random");
 
     inspect = require("_libs.inspect");
 
-    delay = require("other.delay")
+    delay = require("shared.delay")
 }
 
 

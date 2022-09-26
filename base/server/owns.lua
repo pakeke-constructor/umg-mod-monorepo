@@ -17,7 +17,7 @@ local owners = group("owns")
 
 
 -- Need to make sure this is loaded; it may not be loaded yet
-local Set = require("other.set")
+local Set = require("shared.set")
 
 
 owners:onAdded(function(ent)

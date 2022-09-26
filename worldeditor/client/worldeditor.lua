@@ -1,9 +1,11 @@
 
-local newEntity = require("client.new_entity")
 
+--[[
+    TODO:
+    Write the API here.
 
-on("slabUpdate", function()
-    newEntity.update()
-end)
+    We should be able to programmatically add our own tools and features
+    to the worldeditor.
+]]
 
 

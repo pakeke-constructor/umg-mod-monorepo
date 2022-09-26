@@ -1,6 +1,6 @@
 
 
-local Set = require("other.set")
+local Set = require("shared.set")
 
 
 local sound = {}

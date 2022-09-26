@@ -1,6 +1,6 @@
 
 -- Need to make sure this is loaded; it may not be loaded yet
-local Class = require("other.class")
+local Class = require("shared.class")
 
 
 local Set = Class("base_mod:Set")
