@@ -11,7 +11,7 @@ else:
     PATH = "."
 
 
-IGNORE = ["binpack", "set", "sset", "sets"]
+IGNORE = ["binpack", "set", "sset", "sets", "Slab"]
 
 
 

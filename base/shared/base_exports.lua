@@ -15,8 +15,11 @@ local function loadClient(base)
     local shockwave = require("client.shockwaves")
     local sound = require("client.sound")
     local animate = require("client.animate")
+    local input = require("client.input")
     
     base.camera = draw.camera;
+
+    base.input = input
     
     base.isHovered = require("client.mouse_hover")
     
