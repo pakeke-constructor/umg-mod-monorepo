@@ -59,13 +59,11 @@ local IS_PAN_MODE = false
 
 
 
-local LSHIFT = "lshift"
-
 local controlEnts = group("controllable", "controller", "x", "y")
 
 
-on("keypressed", function(key)
-    if key == LSHIFT then
+on("inputPressed", function(inputEnum)
+    if inputEnum == base.input.BUTTON_SHIFT then
         -- unlock camera
         IS_PAN_MODE = true
         for _, ent in ipairs(controlEnts)do
@@ -81,8 +79,8 @@ end)
 
 
 
-on("keyreleased", function(key)
-    if key == LSHIFT then
+on("inputReleased", function(inputEnum)
+    if inputEnum == base.input.BUTTON_SHIFT then
         -- lock camera.
         IS_PAN_MODE = false
         for _, ent in ipairs(controlEnts) do

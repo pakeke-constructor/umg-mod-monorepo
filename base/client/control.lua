@@ -6,17 +6,10 @@ Handles player control
 
 ]]
 
+local input = require("client.input")
+
+
 local controlEnts = group("controllable", "controller", "x", "y")
-
-
-local UP = "w"
-local LEFT = "a"
-local DOWN = "s"
-local RIGHT = "d"
-
-local LEFT_ABILITY = "q"
-local RIGHT_ABILITY = "e"
-
 
 
 local function pollControlEnts(func_key, a,b,c)
@@ -32,12 +25,21 @@ local function pollControlEnts(func_key, a,b,c)
 end
 
 
-on("keypressed", function(key, scancode)
-    if scancode == LEFT_ABILITY then
-        pollControlEnts("onLeftAbility")
-    end
-    if scancode == RIGHT_ABILITY then
-        pollControlEnts("onRightAbility")
+on("inputPressed", function(inputEnum)
+    if inputEnum == input.BUTTON_LEFT then
+        pollControlEnts("onLeftButton")
+    elseif inputEnum == input.BUTTON_RIGHT then
+        pollControlEnts("onRightButton")
+    elseif inputEnum == input.BUTTON_SPACE then
+        pollControlEnts("onSpaceButton")
+    elseif inputEnum == input.BUTTON_1 then
+        pollControlEnts("onButton1")
+    elseif inputEnum == input.BUTTON_2 then
+        pollControlEnts("onButton2")    
+    elseif inputEnum == input.BUTTON_3 then
+        pollControlEnts("onButton3")
+    elseif inputEnum == input.BUTTON_4 then
+        pollControlEnts("onButton4")
     end
 end)
 
@@ -49,9 +51,6 @@ on("mousepressed", function(butto, x, y)
         pollControlEnts(nil, "onClick", x, y)
     end
 end)
-
-
-local isDown = keyboard.isScancodeDown
 
 
 local DEFAULT_SPEED = 200
@@ -66,16 +65,16 @@ local function updateEnt(ent, dt)
     local agility = ent.agility or (speed * SPEED_AGILITY_SCALE)
     local delta = agility * dt
 
-    if isDown(UP) then
+    if input.isDown(input.UP) then
         ent.vy = max(-speed, ent.vy - delta)
     end
-    if isDown(DOWN) then
+    if input.isDown(input.DOWN) then
         ent.vy = min(speed, ent.vy + delta)
     end
-    if isDown(LEFT) then
+    if input.isDown(input.LEFT) then
         ent.vx = max(-speed, ent.vx - delta)
     end
-    if isDown(RIGHT) then
+    if input.isDown(input.RIGHT) then
         ent.vx = min(speed, ent.vx + delta)
     end
 end

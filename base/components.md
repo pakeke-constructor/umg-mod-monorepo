@@ -153,22 +153,14 @@ ent.physics = {
 
 
 
--- this entity can be controlled by a player
---[[  Buttons:
-up:    W
-left:  A
-down:  S
-right: D
-^^^ These are handled automatically by the base mod.
-
-left_ability:  Q
-right_ability: E
-space_ability: Space bar
-]]
+-- this entity can be controlled by a player.
+-- (WASD is move by default)
 ent.controllable = {
-    onLeftAbility = function(ent) end;
-    onRightAbility = function(ent) end;
-    onSpaceAbility = function(ent) end;
+    -- callbacks when buttons are pressed:
+    onLeftButton = function(ent) end; -- `Q` by default
+    onRightButton = function(ent) end;-- `E` by default
+    onSpaceButton = function(ent) end;-- `space bar` by default
+    ... -- same callbacks for all stuff defined with base.input
 
     onClick = function(ent, x, y) end;
 }

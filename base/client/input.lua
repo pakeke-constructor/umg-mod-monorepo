@@ -7,13 +7,18 @@ TODO: Allow for even more custom stuff, like joysticks
 
 ]]
 
+
+-- The input mapping can be defined as anything,
+-- but the base mod uses these controls by default:::
 local DEFAULT_INPUT_MAPPING =  {
-    UP = "w",
-    LEFT = "a",
+    UP = "w", -- (If you do change the controls, note that you can change the key it points to,
+    LEFT = "a", -- but make sure to always keep the UP, DOWN, RIGHT, BUTTON_1, etc.)
     DOWN = "s",
     RIGHT = "d",
 
     BUTTON_SPACE = "space",
+    BUTTON_SHIFT = "lshift",
+    BUTTON_CONTROL = "lctrl",
 
     BUTTON_LEFT = "q",
     BUTTON_RIGHT = "e",
@@ -27,6 +32,10 @@ local DEFAULT_INPUT_MAPPING =  {
 
 
 local validInputEnums = {}
+
+for enum,_ in pairs(DEFAULT_INPUT_MAPPING) do
+    validInputEnums[enum] = true
+end
 
 
 local function invert(mapping)
@@ -71,13 +80,11 @@ local function updateTables(inpMapping)
     inputMapping = inpMapping
     scancodeMapping = invert(inpMapping)
     isDownMapping = {}
-    validInputEnums = {}
     inputEnums = {}
     inputList = {}
 
-    for inpEnum, _ in ipairs(inpMapping)do
+    for inpEnum, _ in pairs(inpMapping)do
         isDownMapping[inpEnum] = false
-        validInputEnums[inpEnum] = true
         inputEnums[inpEnum] = inpEnum
         table.insert(inputList, inpEnum)
     end
@@ -85,26 +92,14 @@ end
 
 
 
-function input.isDown(inputEnum)
-    inputEnum = inputEnum or "nil" -- to ensure we dont get `table index nil`
-    if not validInputEnums(inputEnum) then
-        error("invalid input enum: " .. inputEnum, 2)
-    end
-
-    return isDownMapping[inputEnum]
-end
-
-
-
 local function assertValid(inpMapping)
     for inputEnum, scancode in pairs(inpMapping) do
-        if not validInputEnums(inputEnum) then
+        if not validInputEnums[inputEnum] then
             error("invalid input enum: " .. inputEnum, 2)
         end
         keyboard.getKeyFromScancode(scancode) -- this just assets that the scancode is valid.
     end
 end
-
 
 
 
@@ -116,9 +111,6 @@ end
 
 
 input.setControls(DEFAULT_INPUT_MAPPING)
-
-
-
 
 
 
@@ -139,6 +131,22 @@ end
 function input.isLocked()
     return locked
 end
+
+
+
+
+function input.isDown(inputEnum)
+    if locked then
+        return false
+    end
+    inputEnum = inputEnum or "nil" -- to ensure we dont get `table index nil`
+    if not validInputEnums[inputEnum] then
+        error("invalid input enum: " .. inputEnum, 2)
+    end
+
+    return isDownMapping[inputEnum]
+end
+
 
 
 
