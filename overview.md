@@ -244,7 +244,7 @@ server.broadcast("message1",   1, 2, 3, "blah data")
 
 
 -- Same as broadcast, but it only sends to the client called `playerUsername`.
-server.unicast("message1", playerUsername,   1.0545, 2.9, -5, "random data :)")
+server.unicast(playerUsername, "message1",   1.0545, 2.9, -5, "random data :)")
 
 
 -- listens to `moveTo` messages sent by clients
@@ -347,9 +347,9 @@ client  -- message sending/receiving for client
 
 server
     server.broadcast(event_name, ...) -- broadcasts an event to clients
-    server.unicast(username, msg, ...) -- unicasts to one client
+    server.unicast(username, event_name, ...) -- unicasts to one client
     server.lazyBroadcast(event_name, ...) -- lazy broadcast: efficient, but not guaranteed arrival
-    server.lazyUnicast(event_name, ...) -- lazy unicast: efficient, but not guaranteed arrival
+    server.lazyUnicast(username, event_name, ...) -- lazy unicast: efficient, but not guaranteed arrival
 
     server.forceSpawn(ent) -- forces an entity spawn event for `ent`
     server.forceDelete(ent) -- forces an entity delete event for `ent`

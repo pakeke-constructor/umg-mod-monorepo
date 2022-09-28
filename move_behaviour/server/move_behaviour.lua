@@ -114,9 +114,17 @@ local moveBehaviours = {
 
 
 
+local ct = 0
 
+on("gameUpdate", function(dt)
+    -- This function runes once every 50 frames:
+    ct = ct + 1
+    if ct < 50 then
+        return -- return early
+    else
+        ct = 0 -- else, we run function
+    end
 
-on("update60", function(dt)
     for _, ent in ipairs(moveBehaviourGroup)do
         local mb = ent.moveBehaviour
         if not (moveBehaviours[mb.type]) then 
@@ -128,7 +136,7 @@ end)
 
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     for _, ent in ipairs(moveBehaviourGroup) do
         local mb = ent.moveBehaviour
         if not (moveBehaviours[mb.type]) then 

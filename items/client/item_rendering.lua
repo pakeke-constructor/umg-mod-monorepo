@@ -133,7 +133,7 @@ local control_turn_ents = group(
 )
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     for i=1, #control_turn_ents do
         local ent = control_turn_ents[i]
         if ent.controller == username then
@@ -192,14 +192,14 @@ rendering of held items.
 
 ]]
 
-local time = timer.getTime()
+local curTime = timer.getTime()
 
 local function onUseItem(item, holder_ent, ...)
-    item.item_lastUseTime = time
+    item.item_lastUseTime = curTime
 end
 
-on("update", function(dt)
-    time = timer.getTime()
+on("gameUpdate", function(dt)
+    curTime = curTime + dt
 end)
 
 
@@ -233,7 +233,7 @@ local TOOL_HOLD_DISTANCE = 20
 local TOOL_USE_TIME = 0.3
 function holdRendering.tool(ent, holder)
     local dx,dy = getPointDirection(holder)
-    local t = math.max(0, ((ent.item_lastUseTime or time) - time) + TOOL_USE_TIME) / TOOL_USE_TIME
+    local t = math.max(0, ((ent.item_lastUseTime or curTime) - curTime) + TOOL_USE_TIME) / TOOL_USE_TIME
     local sinv = math.sin(t*6.282)
     local rot = -math.atan2(dx,dy) + math.pi/2 + sinv/3
     local sign = dx>0 and 1 or -1
@@ -243,7 +243,7 @@ end
 
 
 function holdRendering.spin(ent, holder)
-    local rot = timer.getTime() * 7
+    local rot = curTime * 7
     local dx,dy = getPointDirection(holder)
     local sign = dx>0 and 1 or -1
     renderHolder(ent, holder, rot, TOOL_HOLD_DISTANCE, 1, sign)
@@ -259,7 +259,7 @@ end
 local RECOIL_TIME = 0.3
 function holdRendering.recoil(ent, holder)
     local dx,dy = getPointDirection(holder)
-    local t = math.max(0, ((ent.item_lastUseTime or time) - time) + RECOIL_TIME) / RECOIL_TIME
+    local t = math.max(0, ((ent.item_lastUseTime or curTime) - curTime) + RECOIL_TIME) / RECOIL_TIME
     local sinv = math.sin(t*3.14)
     local rot = -math.atan2(dx,dy) + math.pi/2
     local sign = dx>0 and 1 or -1

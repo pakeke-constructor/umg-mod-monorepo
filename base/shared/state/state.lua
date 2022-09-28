@@ -1,5 +1,18 @@
 
 
+--[[
+
+base state module.
+
+Used for representing when the game is paused,
+or when the game is in an alternative state, 
+(i.e. worldeditor mode or something)
+
+
+
+]]
+
+
 local state = {}
 
 
@@ -40,6 +53,11 @@ function state.setState(newState)
     changeState(newState)
 end
 
+on("playerJoin", function(username)
+    server.unicast(username, "baseModSetState", currentState)
+end)
+
+
 else -- we on client side
 
 client.on("baseModSetState", function(newState)
@@ -67,6 +85,7 @@ function state.defineState(stateObj)
             assert(type(stateObj[cb]) == "function", "state callbacks must be functions")
         end
     end
+    stateTable[name] = stateObj
 end
 
 
@@ -75,7 +94,7 @@ for _, cb in ipairs(CALLBACKS) do
     -- This kind of reflective, meta programming is kind of hacky..
     -- I'm not a fan of it, but oh well! :-)
     on(cb, function(...)
-        if currentState then
+        if currentState and currentState[cb] then
             currentState[cb](...)
         end
     end)

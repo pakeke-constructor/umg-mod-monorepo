@@ -84,7 +84,7 @@ local function isFinished(emitter)
     end
 end
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     for _, emitr in in_use:iter() do
         emitr.psys:update(dt)
         emitr.runtime = emitr.runtime + dt

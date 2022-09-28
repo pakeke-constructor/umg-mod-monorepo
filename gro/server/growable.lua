@@ -33,12 +33,13 @@ growableEntities:onAdded(function(ent)
 end)
 
 
+local curTime = timer.getTime()
 
-on("update", function()
-    local time = timer.getTime()
-    local dt = time - last_tick
-    if dt > 1 then
-        last_tick = time + (dt-1)
+on("gameUpdate", function(dt)
+    local time = curTime + dt
+    local dtt = time - last_tick
+    if dtt > 1 then
+        last_tick = time + (dtt-1)
         call("growStep")
         -- `growStep` is called once every second.
     end

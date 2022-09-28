@@ -31,7 +31,7 @@ local function move(ent, x, y, dt)
 end
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     for _, ent in ipairs(projectileEnts)do
         local abp = ent.attackBehaviourProjectile
         if abp then

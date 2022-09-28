@@ -20,6 +20,8 @@ local items = group("x", "y", "itemName")
 
 
 
+local currentTime = timer.getTime()
+
 
 local INTERACTION_DISTANCE = 15
 -- distance from when you can pick up an item
@@ -64,7 +66,7 @@ local function canBePickedUp(dist, best_dist, item)
     if not bool2 then return end
 
     if item_to_lastheldtime[item] then
-        local time = timer.getTime() - item_to_lastheldtime[item]
+        local time = currentTime - item_to_lastheldtime[item]
         if time < PICKUP_DELAY_TIME then
             return
         end
@@ -85,8 +87,18 @@ local function dropInventoryItem(item, x, y)
 end
 
 
+local ct = 0
 
-on("update5", function(dt)
+on("gameUpdate", function(dt)
+    -- This function runes once every 5 frames:
+    ct = ct + 1
+    if ct < 5 then
+        return -- return early
+    else
+        ct = 0 -- else, we run function
+    end
+    -- ==========
+
     local picked = {}
     itemPartition:update(dt)
     for _, player in ipairs(invPlayers) do

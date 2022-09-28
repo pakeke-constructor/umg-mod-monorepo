@@ -16,17 +16,17 @@ local gameState = {
 
 
 
-function gameState.update(...)
-    call("gameUpdate", ...)
+function gameState.update(dt)
+    call("gameUpdate", dt)
 end
-function gameState.draw(...)
-    call("gameDraw", ...)
+function gameState.draw()
+    call("gameDraw")
 end
-function gameState.keypressed(...)
-    call("gameKeypressed", ...)
+function gameState.keypressed(key,sc,isrepeat)
+    call("gameKeypressed", key,sc,isrepeat)
 end
-function gameState.keyreleased(...)
-    call("gameKeyreleased", ...)
+function gameState.keyreleased(key,sc,isrepeat)
+    call("gameKeyreleased", key,sc,isrepeat)
 end
 function gameState.textedited(...)
     call("gameTextedited", ...)
@@ -55,5 +55,10 @@ end
 
 -- define gamestate
 state.defineState(gameState)
+
+-- and set to gamestate if we are on serverside
+if server then
+    state.setState("game")
+end
 
 

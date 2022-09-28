@@ -52,10 +52,6 @@ local inputMapping = DEFAULT_INPUT_MAPPING
 -- { [inputEnum] -> scancode }
 local scancodeMapping = invert(inputMapping)
 -- { [scancode] -> inputEnum }
-
-local isDownMapping = {}
--- { [inputEnum] -> true/false (whether input is down or not) }
-
 local inputEnums = {}
 -- { [inputEnum] -> inputEnum } used by input table.
 -- i.e.  base.input.BUTTON_1
@@ -79,12 +75,10 @@ local input = setmetatable({}, {
 local function updateTables(inpMapping)
     inputMapping = inpMapping
     scancodeMapping = invert(inpMapping)
-    isDownMapping = {}
     inputEnums = {}
     inputList = {}
 
     for inpEnum, _ in pairs(inpMapping)do
-        isDownMapping[inpEnum] = false
         inputEnums[inpEnum] = inpEnum
         table.insert(inputList, inpEnum)
     end
@@ -144,7 +138,8 @@ function input.isDown(inputEnum)
         error("invalid input enum: " .. inputEnum, 2)
     end
 
-    return isDownMapping[inputEnum]
+    local scancode = inputMapping[inputEnum]
+    return keyboard.isScancodeDown(scancode)
 end
 
 
@@ -153,22 +148,43 @@ end
 
 
 
+error[[
+TODO:
+Change these `keypressed`, `keyreleased` callbacks to
+`gameKeypressed` and `gameKeyreleased` so they only activate when
+in the game state.
+
+Actually, should we do that?
+Or should input be global across all states???
+^^^ Do some thinking about this.
 
 
-on("keypressed", function(_, scancode, isrepeat)
+Things we DEFINITELY need to do:
+For all `draw` callbacks, replace required ones with `gameDraw`,
+For all `update` callbacks, replace required ones with `gameUpdate`,
+etc etc,
+Do the same for keypressed,
+wheelmoved, mousepressed, etc etc.
+
+Callbacks such as `ent.onUpdate()` should only be called during the game state.
+
+]]
+
+
+
+
+on("gameKeypressed", function(_, scancode, isrepeat)
     if (not locked) and scancodeMapping[scancode] then
         local inputEnum = scancodeMapping[scancode]
         call("inputPressed", inputEnum, isrepeat)
-        isDownMapping[inputEnum] = true
     end
 end)
 
 
-on("keyreleased", function(_, scancode, isrepeat)
+on("gameKeyreleased", function(_, scancode, isrepeat)
     if (not locked) and scancodeMapping[scancode] then
         local inputEnum = scancodeMapping[scancode]
         call("inputReleased", inputEnum, isrepeat)
-        isDownMapping[inputEnum] = false
     end
 end)
 

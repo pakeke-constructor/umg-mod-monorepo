@@ -26,11 +26,12 @@ end
 local titleObjs = Heap(compare)
 
 
+local curTime = timer.getTime() -- current time
 
-on("update",function()
-    local t = timer.getTime()
+on("gameUpdate",function(dt)
+    curTime = curTime + dt
     local obj = titleObjs:peek()
-    while obj and obj.endTime <= t do
+    while obj and obj.endTime <= curTime do
         titleObjs:pop()
         obj = titleObjs:peek()
     end
@@ -63,7 +64,7 @@ end
 
 
 on("mainDrawUI", function()
-    local time = timer.getTime()
+    local time = curTime
     for i=1, #titleObjs do
         local obj = titleObjs[i]
         drawTitle(obj, time)
@@ -86,7 +87,7 @@ local function title(text, options)
     assert(type(text) == "string", "title(text, options) requires a string as first arg")
     local obj = options or {}
 
-    obj.endTime = timer.getTime() + (obj.time or DEFAULT_TITLE_TIME)
+    obj.endTime = curTime + (obj.time or DEFAULT_TITLE_TIME)
     obj.fade = obj.fade or DEFAULT_FADE_TIME
     obj.color = obj.color or WHITE
     obj.x = obj.x or DEFAULT_X

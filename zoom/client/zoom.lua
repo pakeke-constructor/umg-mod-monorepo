@@ -9,7 +9,7 @@ local MAX_ZOOM = 10
 local MIN_ZOOM = 0.1
 
 
-on("wheelmoved", function(_, dy)
+on("gameWheelmoved", function(_, dy)
     local speed = zoom_speed or DEFAULT_ZOOM_SPEED
     if dy > 0 then
         base.camera.scale = base.camera.scale * (1+(1/speed))
@@ -90,7 +90,7 @@ on("inputReleased", function(inputEnum)
 end)
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     if IS_PAN_MODE then
         base.camera.x = last_camx
         base.camera.y = last_camy
@@ -105,7 +105,7 @@ end)
 
 local MIDDLE_MOUSE_BUTTON = 3
 
-on("mousemoved", function(x,y, dx,dy)
+on("gameMousemoved", function(x,y, dx,dy)
     if mouse.isDown(MIDDLE_MOUSE_BUTTON) then
         local c = base.camera
         local wx1, wy1 = c:toWorldCoords(x-dx,y-dy)

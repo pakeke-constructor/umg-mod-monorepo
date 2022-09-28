@@ -225,7 +225,7 @@ local updates = {
     [rgb.STATES.TURN_STATE] = updateTurn
 }
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     updates[rgb.state](dt)
 end)
 

@@ -298,7 +298,20 @@ local function less(ent_a, ent_b)
 end
 
 
-on("update60", function()
+
+local froz_ct = 0
+
+on("update", function(dt)
+    -- This function runes once every 50 frames:
+    froz_ct = froz_ct + 1
+    if froz_ct < 50 then
+        return -- return early
+    else
+        froz_ct = 0 -- else, we run function
+    end
+    -- ==========
+    -- The reason we don't need to sort every frame is because these entities
+    -- dont have velocity components, so they probably aren't moving.
     table.sort(sortedFrozenEnts, less)
 end)
 

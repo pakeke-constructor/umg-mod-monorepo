@@ -69,7 +69,7 @@ local function updateParticleTable(ent, ptable, dt)
 end
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     frameCount = frameCount + 1
     for _, ent in ipairs(particleEntities)do
         local ent_particles = ent.particles

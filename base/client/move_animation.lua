@@ -115,7 +115,7 @@ local function updateEnt(ent)
 end
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     tick = tick + dt
     for i=1, #anim_group do
         local ent = anim_group[i]

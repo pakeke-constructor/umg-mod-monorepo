@@ -6,7 +6,7 @@ local tick = 0
 
 local BIG = 0xffffff
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     tick = (tick + dt) % BIG
 end)
 

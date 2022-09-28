@@ -12,7 +12,7 @@ local shockwaveSet = Set()
 
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     for _,sw in shockwaveSet:iter()do
         sw:update(dt)
         if sw.isFinished then

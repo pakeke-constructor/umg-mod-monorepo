@@ -49,7 +49,7 @@ end
 
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     for _, ent in ipairs(moveEnts) do
         updateEnt(ent, dt)
     end

@@ -81,7 +81,7 @@ end
 
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     --[[
         TODO:
         This is O(n^2). I don't like this!

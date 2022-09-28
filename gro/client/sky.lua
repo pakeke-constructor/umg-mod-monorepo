@@ -13,8 +13,8 @@ end)
 
 
 
-on("keypressed", function(key)
-    if key == "space" then
+on("inputPressed", function(inputEnum)
+    if inputEnum == base.input.BUTTON_SPACE then
         local e = base.getPlayer()
         if base.gravity.isOnGround(e) then
             e.vz = 400

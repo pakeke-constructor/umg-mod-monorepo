@@ -72,7 +72,7 @@ local function tryOpenInv(player, inv_ent)
 end
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     if openInv then
         local player = base.getPlayer()
         if math.distance(player, openInv.owner) > (DEFAULT_OPENABLE_DISTANCE + 1) then
@@ -106,10 +106,9 @@ end)
 
 
 
-local INVENTORY_TOGGLE_BUTTON = "f"
 
-on("keypressed", function(key, scancode)
-    if scancode == INVENTORY_TOGGLE_BUTTON then
+on("inputPressed", function(inputEnum)
+    if inputEnum == base.input.BUTTON_2 then
         local player = base.getPlayer()
         if player.inventory then
             if player.inventory.isOpen then

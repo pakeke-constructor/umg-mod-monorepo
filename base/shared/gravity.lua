@@ -30,7 +30,7 @@ function gravity.isOnGround(ent)
 end
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     for _, ent in ipairs(gravityGroup) do
         if groundTest(ent) then
             -- force the entity to stop moving downwards.

@@ -113,8 +113,8 @@ local function drawCard(ent)
 end
 
 
-on("update",function()
-    currentTime = timer.getTime()
+on("gameUpdate",function(dt)
+    currentTime = currentTime + dt
 end)
 
 on("drawEntity", function(ent)

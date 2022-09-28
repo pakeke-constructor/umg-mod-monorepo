@@ -11,6 +11,8 @@ this means that modified clients can teleport anywhere on the screen
 
 local constants = require("shared.constants")
 
+local state = require("shared.state.state")
+
 
 
 --[[
@@ -39,7 +41,7 @@ end
 local DELTA_THRESHOLD = 100 -- this number seems quite significant to force a sync.
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     --[[
         Explanation for this code:
         This code is quite scuffed. Basically, the issue here is that if
@@ -90,6 +92,9 @@ local function filterPlayerPosition(sender_username, ent, x,y,z)
     if type(x) ~= "number" or type(y) ~= "number" or (z and (type(z) ~= "number")) then
         return false -- bad type for x,y, or z
     end
+    if state.getState() ~= "game" then
+        return false -- game is probably paused
+    end
 
     local basics = ent.controllable and sender_username == ent.controller and ent.x and ent.y
     if not basics then
@@ -116,6 +121,9 @@ local function filterPlayerVelocity(sender_username, ent, vx,vy,vz)
     end
     if type(vx) ~= "number" or type(vy) ~= "number" or (vz and (type(vz) ~= "number")) then
         return false
+    end
+    if state.getState() ~= "game" then
+        return false -- game is probably paused
     end
 
     return ent.controllable and sender_username == ent.controller

@@ -59,7 +59,7 @@ function select.getSelectedRGB()
 end
 
 
-on("update", function()
+on("gameUpdate", function()
     for ent,_ in pairs(selectedEnts) do
         if not exists(ent) then
             select.deselect()

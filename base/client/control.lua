@@ -95,7 +95,7 @@ local function follow_avg(sum_x, sum_y, len)
 end
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     local sum_x = 0
     local sum_y = 0
     local len = 0

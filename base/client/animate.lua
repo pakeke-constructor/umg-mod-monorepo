@@ -23,7 +23,7 @@ local curTime = timer.getTime()
 local function animate(frames, time, x,y,z, color)
     local obj = {
         frames = frames;
-        startTime = timer.getTime();
+        startTime = curTime;
         time = time;
         x = x,
         y = y,
@@ -51,7 +51,7 @@ local function animateEntity(ent, frames, time)
         frames = frames,
         time = time,
         old_image = ent.image,
-        startTime = timer.getTime()
+        startTime = curTime
     }
 
     entToAnimObj[ent] = obj
@@ -103,8 +103,8 @@ end
 
 
 
-on("update", function(dt)
-    curTime = timer.getTime()
+on("gameUpdate", function(dt)
+    curTime = curTime + dt
 end)
 
 

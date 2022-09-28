@@ -88,7 +88,7 @@ end
 
 
 
-on("update", function(dt)
+on("gameUpdate", function(dt)
     for _, ent in ipairs(physicsGroup) do
         preUpdateEnt(ent)
     end

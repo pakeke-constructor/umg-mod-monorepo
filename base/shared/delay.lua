@@ -32,10 +32,13 @@ local function binarySearch(arr, target_time)
 end
 
 
+local curTime = timer.getTime()
+
+
 local function delay(time, func, ...)
     local obj = {
         func = func;
-        endTime = timer.getTime() + time,
+        endTime = curTime + time,
         ...
     }
     local index = binarySearch(times, obj.endTime)
@@ -44,11 +47,10 @@ end
 
 
 
-
-on("update", function()
-    local time = timer.getTime()
+on("gameUpdate", function(dt)
+    curTime = curTime + dt
     local i = #times
-    while (i>0) and (time >= times[i].endTime) do
+    while (i>0) and (curTime >= times[i].endTime) do
         local obj = times[i]
         times[i] = nil
         obj.func(unpack(obj))
@@ -59,3 +61,4 @@ end)
 
 
 return delay
+
