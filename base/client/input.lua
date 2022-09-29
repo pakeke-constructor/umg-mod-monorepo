@@ -148,30 +148,6 @@ end
 
 
 
-error[[
-TODO:
-Change these `keypressed`, `keyreleased` callbacks to
-`gameKeypressed` and `gameKeyreleased` so they only activate when
-in the game state.
-
-Actually, should we do that?
-Or should input be global across all states???
-^^^ Do some thinking about this.
-
-
-Things we DEFINITELY need to do:
-For all `draw` callbacks, replace required ones with `gameDraw`,
-For all `update` callbacks, replace required ones with `gameUpdate`,
-etc etc,
-Do the same for keypressed,
-wheelmoved, mousepressed, etc etc.
-
-Callbacks such as `ent.onUpdate()` should only be called during the game state.
-
-]]
-
-
-
 
 on("gameKeypressed", function(_, scancode, isrepeat)
     if (not locked) and scancodeMapping[scancode] then

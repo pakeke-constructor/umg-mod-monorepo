@@ -90,7 +90,7 @@ end)
 
 
 
-on("mousepressed", function(mx, my, button)
+on("gameMousepressed", function(mx, my, button)
     if button == OPEN_BUTTON then
         local player = base.getPlayer()
         if (not openInv) or (not openInv:withinBounds(mx,my)) then

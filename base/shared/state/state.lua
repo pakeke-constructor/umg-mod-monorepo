@@ -19,25 +19,26 @@ local state = {}
 
 local stateTable = {}
 
-local currentState = nil
+local currentStateName = nil
 
 
 
 function state.getState()
-    return currentState
+    return currentStateName
 end
 
 
-local function changeState(newState)
-    if newState ~= currentState then
-        if currentState and stateTable[currentState].exit then
-            stateTable[currentState].exit()
+local function changeState(name)
+    assert(name)
+    if name ~= currentStateName then
+        if currentStateName and stateTable[currentStateName].exit then
+            stateTable[currentStateName].exit()
         end
-        if stateTable[newState].enter then
-            stateTable[newState].enter()
+        if stateTable[name].enter then
+            stateTable[name].enter()
         end
     end
-    currentState = newState
+    currentStateName = name
 end
 
 
@@ -45,23 +46,23 @@ end
 
 if server then
 
-function state.setState(newState)
-    if (not newState) or (not stateTable[newState]) then
-        error("Invalid state: " .. tostring(newState))
+function state.setState(name)
+    if (not name) or (not stateTable[name]) then
+        error("Invalid state: " .. tostring(name))
     end
-    server.broadcast("baseModSetState", newState)
-    changeState(newState)
+    server.broadcast("baseModSetState", name)
+    changeState(name)
 end
 
 on("playerJoin", function(username)
-    server.unicast(username, "baseModSetState", currentState)
+    server.unicast(username, "baseModSetState", currentStateName)
 end)
 
 
 else -- we on client side
 
-client.on("baseModSetState", function(newState)
-    changeState(newState)
+client.on("baseModSetState", function(name)
+    changeState(name)
 end)
 
 end
@@ -94,8 +95,9 @@ for _, cb in ipairs(CALLBACKS) do
     -- This kind of reflective, meta programming is kind of hacky..
     -- I'm not a fan of it, but oh well! :-)
     on(cb, function(...)
-        if currentState and currentState[cb] then
-            currentState[cb](...)
+        local stateObj = stateTable[currentStateName]
+        if stateObj and stateObj[cb] then
+            stateObj[cb](...)
         end
     end)
 end

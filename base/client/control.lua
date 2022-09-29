@@ -45,7 +45,7 @@ end)
 
 
 
-on("mousepressed", function(butto, x, y)
+on("gameMousepressed", function(butto, x, y)
     -- TODO: This aint working!!! Maybe it's mousedown??? idk 
     if butto == 1 then
         pollControlEnts(nil, "onClick", x, y)

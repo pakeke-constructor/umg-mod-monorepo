@@ -33,7 +33,7 @@ end
 
 
 
-on("mousepressed", function(mx, my, button, istouch, presses)
+on("gameMousepressed", function(mx, my, button, istouch, presses)
     -- TODO: This is kinda trash.
     -- this needs to be spatial partitioned probably.
 

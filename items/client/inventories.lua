@@ -303,7 +303,7 @@ local ALPHA_BUTTON = 1
 local BETA_BUTTON = 2 -- right click is clearly insuperior 
 
 
-on("mousepressed", function(mx, my, button)
+on("gameMousepressed", function(mx, my, button)
     local len = #open_inventories
     local loop_used = false
     for i=len, 1, -1 do
@@ -356,7 +356,7 @@ on("mousepressed", function(mx, my, button)
     end
 end)
 
-on("mousemoved", function(mx,my, dx, dy)
+on("gameMousemoved", function(mx,my, dx, dy)
     -- used for dragging inventories around
     if dragging_inv then
         local ui_scale = base.getUIScale()
@@ -367,7 +367,7 @@ on("mousemoved", function(mx,my, dx, dy)
 end)
 
 
-on("mousereleased", function(mx,my, button)
+on("gameMousereleased", function(mx,my, button)
     dragging_inv = nil
 end)
 

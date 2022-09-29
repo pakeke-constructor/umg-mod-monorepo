@@ -56,6 +56,7 @@ end
 -- define gamestate
 state.defineState(gameState)
 
+
 -- and set to gamestate if we are on serverside
 if server then
     state.setState("game")
