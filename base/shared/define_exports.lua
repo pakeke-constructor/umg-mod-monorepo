@@ -46,10 +46,10 @@ local function makeIllegal(illegal_api, err_func)
     ]]
     for name, illegal_module in pairs(illegal_api) do
         assert(type(name) == "string", "invalid format")
+        local module = {}
         if not _G[name] then
-            export(name, {})
+            export(name, module)
         end
-        local module = _G[name]
         addErrorFuncsToModule(illegal_module, module, err_func)
     end
 end
