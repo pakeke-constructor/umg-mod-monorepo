@@ -40,6 +40,7 @@ and optimize using 2d greedy mesh algorithm
 ]]
 
 
+
 local function setMap0(self)
     for x=1, self.w do
         local t = {}
@@ -56,6 +57,7 @@ end
 
 
 local DEFAULT_CUTOFF_HEIGHT = 0.5
+
 
 function Terrain:init(options)
     assert(options.stepX and options.stepY, "incorrect options table")
@@ -82,18 +84,6 @@ end
 
 
 
-function Terrain:bindEntity(ent)
-    -- binds terrain to a specific entity.
-    if exists(self.boundEntity) then
-        error("terrain object was already bound to an entity: " .. tostring(self.boundEntity))
-    end
-    assert(exists(ent), "entity doesn't exist")
-
-    self.boundEntity = ent
-    assert(self.boundEntity:hasComponent("x"), "terrain entities need an x component")
-    assert(self.boundEntity:hasComponent("y"), "terrain entities need a y component")
-end
-
 
 
 function Terrain:clear()
@@ -102,13 +92,8 @@ end
 
 
 function Terrain:getWorldPosition()
-    if self.boundEntity then
-        local e = self.boundEntity
-        return e.x, e.y
-    else
-        assert(self.worldX and self.worldY, "terrain not given world position!")
-        return self.worldX, self.worldY
-    end
+    assert(self.worldX and self.worldY, "terrain not given world position!")
+    return self.worldX, self.worldY
 end
 
 
@@ -456,11 +441,8 @@ end
 
 if server then
 
-function Terrain:finalize(self)
-    if self.boundEntity then
-        --  if there is no bound entity, then there will be no auto-sync.
-        server.broadcast("terrainFinalize", self.boundEntity, self.map)
-    end
+function Terrain:sync(self)
+    server.broadcast("terrainSync", self:getID(), self.map)
     local quads, greedyQuadMap, vertexMap = generateQuads(self)
     local greedyQuads = greedyMesh(greedyQuadMap)
     
@@ -468,6 +450,11 @@ function Terrain:finalize(self)
 end
 
 else --============================================
+assert(client, "client table was deleted...?")
+
+local id_to_terrainObj = {
+    -- [id] = terrainObj
+}
 
 
 function finalize(self)
@@ -479,9 +466,9 @@ function finalize(self)
     self.greedyQuads = greedyQuads
 end
 
-client.on("terrainFinalize", function(ent, map)
-    local tobj = ent.terrain
-    assert(tobj.boundEntity == tobj, "??? Bad event received from server")
+
+client.on("terrainSync", function(tobj_id, map)
+    local tobj = id_to_terrainObj[tobj_id]
     setMap(tobj, map)
     finalize(tobj)
 end)
@@ -492,7 +479,7 @@ end
 function Terrain:generateFromHeightFunction(func)
     for x=1, self.w do
         for y=1, self.h do
-            local wx, wy = toWorldCoords(x,y)
+            local wx, wy = toWorldCoords(self, x,y)
             self.map[x][y] = func(wx,wy)
         end
     end

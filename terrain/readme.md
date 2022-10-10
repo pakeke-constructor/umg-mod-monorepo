@@ -1,17 +1,32 @@
 
 
 # terrain mod
-Uses an algorithm similar to marching squares
+The Terrain Mod is used to represent impassable terrain,
+such as walls, cliffs, or level edges.
+
+It is highly customizable, and allows for destructable terrain.
+
+
+
+## TECHNICAL DETAILS:
+
+- Uses a custom algorithm similar to marching squares
+  
+- Syncing needs to be done manually
+  
+NOTE: <br>
+Terrain objects ARE NOT SAVED AUTOMATICALLY!!! If you want to save terrain to a world, create an entity with a regular "terrain" component and do `ent.terrain = myTerrainObject`. This enables the terrain to be saved and loaded alongside the world.
 
 
 PLANNING:
 ```lua
 
 
-local tobj = terrain.newTerrain({
+local tobj = terrain.Terrain({
     stepX = 16, stepY = 16, -- step amounts for noise values
     sizeX = 1000, sizeY = 1000,
     -- Optional values:
+    chunkWidth = 6, chunkHeight = 6,
     worldX = 100, worldY = 100,
     noPhysics = false,
 })
@@ -32,9 +47,6 @@ terrainObj:clear() -- clears terrain
 
 
 terrainObj:setWorldPosition(x, y) -- sets world (x, y) of terrain. 
--- (this should usually be the entity x,y position)
-
-terrainObj:bindEntity(ent) -- binds an entity to this terrain object
 
 
 
@@ -66,10 +78,12 @@ terrainObj:removeTerrain(worldX, worldY, radius)
 
 terrainObj:finalize()
 -- Finalizes any changes made to the terrain, and syncs to all clients.
--- WARNING: if this terrain has no bound entity, no syncing will be done!!! 
--- (Instead, you'll have to sync manually.)
 
 
 
+
+-- Allowing the terrain object to be saved alongside a chunk:
+local chunk_ent = entities.chunk()
+chunk_ent.terrain = terrainObj
 ```
 

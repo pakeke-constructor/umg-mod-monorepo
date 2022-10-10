@@ -66,7 +66,7 @@ end)
 local e1
 server.on("spawn", function(u, e)
     if e1 then e1:delete() end
-    e1 = entities.enemy(e.x,e.y + 20)
+    e1 = entities.terrain(e.x,e.y + 20)
 end)
 
 
