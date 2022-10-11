@@ -24,11 +24,11 @@ local constants = require("shared.constants")
 local function beginContact(fixture_A, fixture_B, contact_obj)
     local ent_A = fixture_to_ent[fixture_A]
     local ent_B = fixture_to_ent[fixture_B]
-    if ent_A.collide then
-        ent_A.collide(ent_A, ent_B)
+    if ent_A and ent_A.onCollide then
+        ent_A.onCollide(ent_A, ent_B)
     end
-    if ent_B.collide then
-        ent_B.collide(ent_B, ent_A)
+    if ent_B and ent_B.onCollide then
+        ent_B.onCollide(ent_B, ent_A)
     end
 end
 

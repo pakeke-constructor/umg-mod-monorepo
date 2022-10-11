@@ -27,7 +27,7 @@ local tobj = terrain.Terrain({
     sizeX = 1000, sizeY = 1000,
     -- Optional values:
     chunkWidth = 6, chunkHeight = 6,
-    worldX = 100, worldY = 100,
+    x = 0, y = 0,
     noPhysics = false,
 })
 
@@ -35,11 +35,11 @@ local tobj = terrain.Terrain({
 -- Clientside only:
 tobj:setTopTexture("image_name") 
 -- The texture for the top of the terrain
--- texture will loop by default.
+-- texture will wrap by default.
 
 tobj:setWallTexture("image_name2")
 -- The texture for the walls of the terrain
--- texture will loop by default.
+-- texture will wrap by default.
 
 
 
@@ -54,7 +54,7 @@ terrainObj:generateFromHeightFunction(function(x,y)
     return math.noise(x/5, y/6)
 end)
 -- clears all terrain, and then generates new terrain from a height function.
--- NOTE: This function will have no effect until you call terrainObj:finalize()
+-- NOTE: This function will have no effect until you call terrainObj:sync()
 
 
 local img = graphics.newImage("assets/my_heightmap.png")
@@ -63,20 +63,20 @@ terrainObj:generateFromImage(img, {
     imgEndX = imageWidth, imgEndY = imageHeight
 })
 -- generates terrain from an input image. (Heightmap image)
--- NOTE: This function will have no effect until you call terrainObj:finalize()
+-- NOTE: This function will have no effect until you call terrainObj:sync()
 
 
 terrainObj:addTerrain(worldX, worldY, radius)
 -- adds terrain in a radius, and syncs to clients.
--- NOTE: This function will have no effect until you call terrainObj:finalize()
+-- NOTE: This function will have no effect until you call terrainObj:sync()
 
 
 terrainObj:removeTerrain(worldX, worldY, radius)
 -- removes terrain in a radius
--- NOTE: This function will have no effect until you call terrainObj:finalize()
+-- NOTE: This function will have no effect until you call terrainObj:sync()
 
 
-terrainObj:finalize()
+terrainObj:sync()
 -- Finalizes any changes made to the terrain, and syncs to all clients.
 
 

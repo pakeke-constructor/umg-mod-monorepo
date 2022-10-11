@@ -32,6 +32,15 @@ end
 function terrainIds.setTerrainId(terrainObj, id)
     id_to_terrainObj[id] = terrainObj
     terrainObj_to_id[terrainObj] = id
+    if not terrainObjects:has(terrainObj) then
+        terrainObjects:add(terrainObj)
+    end
+end
+
+
+
+function terrainIds.getTerrainObjects()
+    return terrainObjects
 end
 
 
@@ -41,17 +50,18 @@ function terrainIds.deleteTerrain(terrainObj)
     assert(id,"?")
     terrainObj_to_id[terrainObj] = nil
     id_to_terrainObj[id] = nil
+    terrainObjects:remove(terrainObj)
 end
 
 
 
 function terrainIds.getId(terrainObj)
-    return id_to_terrainObj[terrainObj]
+    return terrainObj_to_id[terrainObj]
 end
 
-
-
-
+function terrainIds.getTerrainObject(id)
+    return id_to_terrainObj[id]
+end
 
 
 
@@ -59,22 +69,11 @@ end
 local terrainGroup = group("terrain")
 
 terrainGroup:onAdded(function(ent)
-    if ent.terrain then
+    if ent.terrain and server then
         local id = terrainIds.generateId()
         terrainIds.setTerrainId(ent.terrain, id)
     end
 end)
-
-
-
-
-if server then
-
-on("playerJoin", function(username)
-    
-end)
-
-end
 
 
 

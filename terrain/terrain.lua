@@ -1,4 +1,6 @@
 
+local terrainIds = require("terrain_ids")
+
 
 local Terrain = base.Class("terrain_mod:terrain")
 
@@ -70,6 +72,10 @@ function Terrain:init(options)
         error("vertexInterpolationRate shouldn't be higher than 0.5; a good value is between 0 and 0.3")
     end
 
+    self.syncOptions = options
+    -- We need to keep this table as a reference if we want to sync
+    -- from clientside -> serverside
+
     self.stepX = options.stepX
     self.stepY = options.stepY
     self.sizeX = options.sizeX
@@ -77,6 +83,13 @@ function Terrain:init(options)
 
     self.w = math.ceil(self.sizeX / self.stepX)
     self.h = math.ceil(self.sizeY / self.stepY)
+
+    self.worldX = options.x or 0
+    self.worldY = options.y or 0
+
+    if server then
+        terrainIds.setTerrainId(self, terrainIds.generateId())
+    end
 
     self.map = {}
     setMap0(self)
@@ -88,6 +101,16 @@ end
 
 function Terrain:clear()
     setMap0(self)
+end
+
+
+function Terrain:setWorldPosition(x,y)
+    self.syncOptions.x = x
+    self.syncOptions.y = y
+    self.worldX = x
+    self.worldY = y
+    -- TODO: Update the physics objects and the quads here!!!
+    error("not yet implemented")
 end
 
 
@@ -203,7 +226,7 @@ local function getHeight(self, x, y)
     if x < 1 or x > self.w or y < 1 or y > self.h then
         return 0 -- default height
     end
-    return map[x][y]
+    return map[x][y] or 0
 end
 
 
@@ -275,13 +298,18 @@ local array2d_mt = {
 
 
 local function greedyMesh(self, greedyQuadMap)
+    --[[
+        greedyQuadMap is a 2d array of booleans;
+        true if the quad is surrounded by terrain.
+    ]]
     local greedyQuads = {}
-
+    
     for x=1, self.w do
         for y=1, self.h do
             if rawget(greedyQuadMap,x) and greedyQuadMap[x][y] then
                 local endx, endy = x, y
                 while rawget(greedyQuadMap,endx+1) and greedyQuadMap[endx+1][y] do
+                    greedyQuadMap[endx+1][y] = false -- ensure this quad doesn't get greedy meshed multiple times
                     endx = endx + 1
                 end
 
@@ -289,18 +317,22 @@ local function greedyMesh(self, greedyQuadMap)
                 
                 while should_expand_y do
                     for xx=x, endx do
-                        if not(rawget(greedyQuadMap,xx) and greedyQuadMap[xx][endy]) then
+                        if not(rawget(greedyQuadMap,xx) and greedyQuadMap[xx][endy+1]) then
                             should_expand_y = false
-                            break
                         end
                     end
                     if should_expand_y then
+                        for x2=x, endx do
+                            greedyQuadMap[x2][endy+1] = false -- ensure these quads don't get greedy meshed multiple times
+                        end
                         endy = endy + 1
                     end
                 end
 
+                local wx, wy = toWorldCoords(self, x, y)
+                endx, endy = toWorldCoords(self, endx, endy)
                 table.insert(greedyQuads, {
-                    x = x, y = y,
+                    x = wx, y = wy,
                     width = endx - x, height = endy - y
                 })
             end
@@ -324,7 +356,7 @@ local function generateQuads(self)
     local cuttoffHeight = self.cutoffHeight
     for x=1, self.w do
         for y=1, self.h do
-            local height = getHeight(x,y)
+            local height = getHeight(self, x,y)
             if height > cuttoffHeight then
                 if isNextToUnfilled(self, x,y) then
                     -- Then we generate vertices for this node
@@ -336,7 +368,7 @@ local function generateQuads(self)
                     vertexMap[x+1][y] = vertB
                     vertexMap[x+1][y+1] = vertC
                     vertexMap[x][y+1] = vertD
-                    local cx,cy = toWorldCoords(x,y)
+                    local cx,cy = toWorldCoords(self, x,y)
                     table.insert(quads, {
                         centerX = cx,
                         centerY = cy,
@@ -390,7 +422,7 @@ local function generatePhysics(self, quads, greedyQuads)
     local fixtures = {}
 
     for _, quad in ipairs(quads) do
-        local centerX, centerY = quad.centerx, quad.centerY
+        local centerX, centerY = quad.centerX, quad.centerY
         local fixture = newPhysicsPolygon(
             centerX, centerY, 
             quad.a,quad.b,quad.c,quad.d
@@ -414,9 +446,18 @@ if client then
 function Terrain:draw()
     assert(self.quads and self.greedyQuads, "terrain not initialized")
     graphics.push("all")
-    graphics.setColor(1,1,1)
+    graphics.setColor(1,0.5,0.5,0.4)
     for _,quad in ipairs(self.quads) do
         local a,b,c,d = quad.a,quad.b,quad.c,quad.d
+        graphics.setColor(1,0.5,0.5,0.4)
+        graphics.polygon(
+            "fill",
+            a.x,a.y,
+            b.x,b.y,
+            c.x,c.y,
+            d.x,d.y
+        )
+        graphics.setColor(1,0,0)
         graphics.polygon(
             "line",
             a.x,a.y,
@@ -426,6 +467,9 @@ function Terrain:draw()
         )
     end
     for _, rect in ipairs(self.greedyQuads) do
+        graphics.setColor(0.5,0.5,1,0.4)
+        graphics.rectangle("fill", rect.x, rect.y, rect.width, rect.height)
+        graphics.setColor(0,0,1)
         graphics.rectangle("line", rect.x, rect.y, rect.width, rect.height)
     end
     graphics.pop()
@@ -441,10 +485,11 @@ end
 
 if server then
 
-function Terrain:sync(self)
-    server.broadcast("terrainSync", self:getID(), self.map)
+function Terrain:sync()
+    -- pass by id across the network
+    server.broadcast("terrainSync", terrainIds.getId(self), self.syncOptions, self.map)
     local quads, greedyQuadMap, vertexMap = generateQuads(self)
-    local greedyQuads = greedyMesh(greedyQuadMap)
+    local greedyQuads = greedyMesh(self, greedyQuadMap)
     
     self.fixtures = generatePhysics(self, quads, greedyQuads)
 end
@@ -452,14 +497,13 @@ end
 else --============================================
 assert(client, "client table was deleted...?")
 
-local id_to_terrainObj = {
-    -- [id] = terrainObj
-}
-
+function Terrain:sync()
+    error("terrain:sync() can only be called on server-side")
+end
 
 function finalize(self)
     local quads, greedyQuadMap, vertexMap = generateQuads(self)
-    local greedyQuads = greedyMesh(greedyQuadMap)
+    local greedyQuads = greedyMesh(self, greedyQuadMap)
 
     self.fixtures = generatePhysics(self, quads, greedyQuads)
     self.quads = quads -- used for rendering.
@@ -467,8 +511,13 @@ function finalize(self)
 end
 
 
-client.on("terrainSync", function(tobj_id, map)
-    local tobj = id_to_terrainObj[tobj_id]
+client.on("terrainSync", function(tobj_id, syncOptions, map)
+    -- pass by id across the network
+    local tobj = terrainIds.getTerrainObject(tobj_id)
+    if not tobj then
+        tobj = Terrain(syncOptions)
+        terrainIds.setTerrainId(tobj, tobj_id)
+    end
     setMap(tobj, map)
     finalize(tobj)
 end)
@@ -480,7 +529,11 @@ function Terrain:generateFromHeightFunction(func)
     for x=1, self.w do
         for y=1, self.h do
             local wx, wy = toWorldCoords(self, x,y)
-            self.map[x][y] = func(wx,wy)
+            local height = func(wx,wy)
+            if not (type(height) == "number" and height>0) then
+                error("Invalid height value: " .. tostring(height))
+            end
+            self.map[x][y] = height
         end
     end
 end
