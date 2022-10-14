@@ -297,49 +297,59 @@ local array2d_mt = {
 }
 
 
+local function greedyMeshExpandY(greedyQuadMap, x, endx, y)
+    local expanding = true
+    local height = 1
+    while expanding do
+        for xx=x, endx do
+            if not(rawget(greedyQuadMap,xx) and greedyQuadMap[xx][y+height]) then
+                expanding = false
+            end
+        end
+        if expanding then
+            for x2=x, endx do
+                greedyQuadMap[x2][y+height] = false -- ensure these quads don't get greedy meshed multiple times
+            end
+            height = height + 1
+        end
+    end
+    return height
+end
+
+
 local function greedyMesh(self, greedyQuadMap)
     --[[
         greedyQuadMap is a 2d array of booleans;
         true if the quad is surrounded by terrain.
     ]]
-    local greedyQuads = {}
+    local greedyQuadList = {}
     
     for x=1, self.w do
         for y=1, self.h do
             if rawget(greedyQuadMap,x) and greedyQuadMap[x][y] then
-                local endx, endy = x, y
-                while rawget(greedyQuadMap,endx+1) and greedyQuadMap[endx+1][y] do
-                    greedyQuadMap[endx+1][y] = false -- ensure this quad doesn't get greedy meshed multiple times
-                    endx = endx + 1
+                -- generate a greedy mesh
+                local width = 1
+                greedyQuadMap[x][y] = false
+
+                while rawget(greedyQuadMap,x+width) and greedyQuadMap[x+width][y] do
+                    greedyQuadMap[x+width][y] = false -- ensure this quad doesn't get greedy meshed multiple times
+                    width = width + 1
                 end
 
-                local should_expand_y = true
-                
-                while should_expand_y do
-                    for xx=x, endx do
-                        if not(rawget(greedyQuadMap,xx) and greedyQuadMap[xx][endy+1]) then
-                            should_expand_y = false
-                        end
-                    end
-                    if should_expand_y then
-                        for x2=x, endx do
-                            greedyQuadMap[x2][endy+1] = false -- ensure these quads don't get greedy meshed multiple times
-                        end
-                        endy = endy + 1
-                    end
-                end
+                local endx = x + width - 1 -- minus 1, because if the width is 1, we want  x == endx.
+                local height = greedyMeshExpandY(greedyQuadMap, x, endx, y)
 
-                local wx, wy = toWorldCoords(self, x, y)
-                endx, endy = toWorldCoords(self, endx, endy)
-                table.insert(greedyQuads, {
+                local wx, wy = toWorldCoords(self, x-0.5, y-0.5)
+                width, height = width * self.stepX, height * self.stepY
+                table.insert(greedyQuadList, {
                     x = wx, y = wy,
-                    width = endx - x, height = endy - y
+                    width = width, height = height
                 })
             end
         end
     end
 
-    return greedyQuads
+    return greedyQuadList
 end
 
 
@@ -488,6 +498,7 @@ if server then
 function Terrain:sync()
     -- pass by id across the network
     server.broadcast("terrainSync", terrainIds.getId(self), self.syncOptions, self.map)
+
     local quads, greedyQuadMap, vertexMap = generateQuads(self)
     local greedyQuads = greedyMesh(self, greedyQuadMap)
     
