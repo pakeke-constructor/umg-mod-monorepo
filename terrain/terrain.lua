@@ -255,7 +255,79 @@ local function getVertexCornerHeightsABCD(self, x, y)
 end
 
 
-local function genVertexPos(self, x, y)
+
+local rawget = rawget
+
+local function mapPosFilled(map, x, y)
+    return rawget(map, x) and map[x][y]
+end
+
+local function trySnapOntoGreedyMesh(self, x, y, greedyQuadMap)
+    --[[
+        (x,y) are indexes on self.map  (and/or)  greedyQuadMap.
+        ------------------
+
+        Snaps a vertex onto the greedy mesh if possible.
+
+        CASES:  (V = vertex, G = greedy-meshed-vert )
+
+        CASE A:
+        X   .
+          V    snap left <---   (same for right)
+        X   .
+
+        CASE B:
+        X   X
+          V    snap up ^^^  (same for down)
+        .   . 
+
+        CASE C:
+        .   .
+          V    snap bottom left  (same for all symmetries)
+        X   .
+
+        CASE D:
+        .   .
+          V    snap bottom left  (same for all symmetries)
+        X   .
+    ]]
+    local cx,cy = toWorldCoords(self, x, y)
+
+    local dx, dy = self.stepX/2, self.stepY/2
+    local m = greedyQuadMap
+
+    -- case C,D bot-left
+    if (mapPosFilled(m, x-1, y) and mapPosFilled(m, x, y+1)) or mapPosFilled(m,x-1,y+1) then
+        return cx-dx, cy+dy
+    -- case C,D top-left
+    elseif (mapPosFilled(m, x-1, y) and mapPosFilled(m, x, y-1)) or mapPosFilled(m,x-1,y-1) then
+        return cx-dx, cy-dy
+    -- case C,D bot-right
+    elseif (mapPosFilled(m, x+1, y) and mapPosFilled(m, x, y+1)) or mapPosFilled(m,x+1,y+1) then
+        return cx+dx, cy+dy
+    -- case C,D top-right
+    elseif (mapPosFilled(m, x+1, y) and mapPosFilled(m, x, y-1)) or mapPosFilled(m,x+1,y-1) then
+        return cx+dx, cy-dy
+    
+    -- cases A and B:
+    -- snap to top
+    elseif mapPosFilled(m, x+1, y-1) and mapPosFilled(m, x-1, y-1) then
+        return cx, cy-dy
+    -- snap to bottom
+    elseif mapPosFilled(m, x+1, y+1) and mapPosFilled(m, x-1, y+1) then
+        return cx, cy+dy
+    -- snap to right
+    elseif mapPosFilled(m, x+1, y-1) and mapPosFilled(m, x+1, y+1) then
+        return cx+dx, cy
+    -- snap to left
+    elseif mapPosFilled(m, x-1, y-1) and mapPosFilled(m, x-1, y+1) then
+        return cx-dx, cy
+    end
+end
+
+
+
+local function genVertexPos(self, x, y, greedyQuadMap, corner)
     --[[
         Generates a vertex,
         where (x, y) are indexes on the self.map[x][y].
@@ -269,6 +341,16 @@ local function genVertexPos(self, x, y)
         This function will always generate the TOP LEFT vertex.
         (i.e. vertex `a`.
     ]]
+    local center
+    if corner == 
+    local snap_x, snap_y = trySnapOntoGreedyMesh(self, x,y, greedyQuadMap)
+    if false and snap_x and snap_y then
+        return {
+            x = snap_x,
+            y = snap_y
+        }
+    end
+
     local delta = self.vertexInterpolationRate
     local cutoffHeight = self.cutoffHeight
     local a,b,c,d = getVertexCornerHeightsABCD(self, x-1, y-1)
@@ -364,33 +446,43 @@ local function generateQuads(self)
     local vertexMap = setmetatable({}, array2d_mt)
 
     local cuttoffHeight = self.cutoffHeight
+
+    -- discover greedy mesh nodes:
     for x=1, self.w do
         for y=1, self.h do
             local height = getHeight(self, x,y)
-            if height > cuttoffHeight then
-                if isNextToUnfilled(self, x,y) then
-                    -- Then we generate vertices for this node
-                    local vertA = vertexMap[x][y] or genVertexPos(self,x,y)
-                    local vertB = vertexMap[x+1][y] or genVertexPos(self,x+1,y)
-                    local vertC = vertexMap[x+1][y+1] or genVertexPos(self,x+1,y+1)
-                    local vertD = vertexMap[x][y+1] or genVertexPos(self,x,y+1)
-                    vertexMap[x][y] = vertA
-                    vertexMap[x+1][y] = vertB
-                    vertexMap[x+1][y+1] = vertC
-                    vertexMap[x][y+1] = vertD
-                    local cx,cy = toWorldCoords(self, x,y)
-                    table.insert(quads, {
-                        centerX = cx,
-                        centerY = cy,
-                        a=vertA,
-                        b=vertB,
-                        c=vertC,
-                        d=vertD
-                    })
-                else
-                    -- else, we flag this node to be greedy-meshed.
-                    greedyQuadMap[x][y] = true
-                end
+            if height > cuttoffHeight and (not isNextToUnfilled(self, x,y)) then
+                -- we flag this node to be greedy-meshed.
+                -- The reason we do multiple passes with our for-loops is so
+                -- the data from greedyQuadMap is fully available for genVertexPos.
+                greedyQuadMap[x][y] = true
+            end
+        end
+    end
+
+    -- Now generate outer mesh:
+    for x=1, self.w do
+        for y=1, self.h do
+            local height = getHeight(self, x,y)
+            if height > cuttoffHeight and (not (rawget(greedyQuadMap, x) and greedyQuadMap[x][y])) then
+                -- Then we generate vertices for this node
+                local vertA = vertexMap[x][y] or genVertexPos(self, x, y, greedyQuadMap, "a")
+                local vertB = vertexMap[x+1][y] or genVertexPos(self, x+1, y, greedyQuadMap, "b")
+                local vertC = vertexMap[x+1][y+1] or genVertexPos(self, x+1, y+1, greedyQuadMap, "c")
+                local vertD = vertexMap[x][y+1] or genVertexPos(self, x, y+1, greedyQuadMap, "d")
+                vertexMap[x][y] = vertA
+                vertexMap[x+1][y] = vertB
+                vertexMap[x+1][y+1] = vertC
+                vertexMap[x][y+1] = vertD
+                local cx,cy = toWorldCoords(self, x,y)
+                table.insert(quads, {
+                    centerX = cx,
+                    centerY = cy,
+                    a=vertA,
+                    b=vertB,
+                    c=vertC,
+                    d=vertD
+                })
             end
         end
     end
@@ -417,6 +509,7 @@ local function newPhysicsPolygon(cX, cY, a,b,c,d)
     -- cX and cY are centerX and centerY
     local world = base.physics.getWorld()
     local body = physics.newBody(world, cX, cY, "static") 
+    do return end
     local shape = physics.newPolygonShape(
         a.x-cX, a.y-cY, 
         b.x-cX, b.y-cY, 
@@ -482,6 +575,10 @@ function Terrain:draw()
         graphics.setColor(0,0,1)
         graphics.rectangle("line", rect.x, rect.y, rect.width, rect.height)
     end
+    for x=1, self.w do for y=1, self.h do 
+        local wx,wy = toWorldCoords(self,x,y)
+        graphics.setColor(1,1,1) graphics.circle("line",wx,wy,10)
+    end end
     graphics.pop()
 end
 end

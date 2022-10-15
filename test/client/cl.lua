@@ -47,7 +47,7 @@ end)
 on("mousepressed", function(x, y, button, istouch, presses)
     if button == 1 then
         local p = base.getPlayer()
-        if not p.inventory.isOpen then
+        if p and (not p.inventory.isOpen) then
             local item = p.inventory:getHoldingItem()
             if item and item.use then
                 local mx, my = base.camera:getMousePosition()
