@@ -11,7 +11,7 @@ return {
             sizeX = 2700, sizeY = 2700
         })
         ent.terrain:generateFromHeightFunction(function(xx, yy)
-            return math.noise(xx/270, yy/270) 
+            return math.noise(xx/870, yy/870) 
         end)
         ent.terrain:sync()
     end

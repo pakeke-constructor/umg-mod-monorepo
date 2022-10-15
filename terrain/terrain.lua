@@ -271,63 +271,74 @@ local function trySnapOntoGreedyMesh(self, x, y, greedyQuadMap)
 
         CASES:  (V = vertex, G = greedy-meshed-vert )
 
-        CASE A:
+        list of cases,
+        where the top left is (x-1, y-1).
+           _____
+           |A B|
+           | V |
+           |D C|
+           -----
+        
+        CASE X:
         X   .
           V    snap left <---   (same for right)
         X   .
 
-        CASE B:
+        CASE Y:
         X   X
           V    snap up ^^^  (same for down)
         .   . 
 
-        CASE C:
-        .   .
-          V    snap bottom left  (same for all symmetries)
-        X   .
-
-        CASE D:
+        CASE Z:
         .   .
           V    snap bottom left  (same for all symmetries)
         X   .
     ]]
-    local cx,cy = toWorldCoords(self, x, y)
+    local cx,cy = toWorldCoords(self, x-0.5, y-0.5)
+
+    x = x-1 -- before this, (x,y) represented the bottom-right node. (Due to how x,y is represented in genVertexPos.)
+    y = y-1 -- we change it to represent the top-left, since that's easier to visualize.
+    
+    local m = greedyQuadMap
+    local A = mapPosFilled(m,x,y)
+    local B = mapPosFilled(m,x+1,y)
+    local C = mapPosFilled(m,x+1,y+1)
+    local D = mapPosFilled(m,x,y+1)
 
     local dx, dy = self.stepX/2, self.stepY/2
-    local m = greedyQuadMap
-
-    -- case C,D bot-left
-    if (mapPosFilled(m, x-1, y) and mapPosFilled(m, x, y+1)) or mapPosFilled(m,x-1,y+1) then
-        return cx-dx, cy+dy
-    -- case C,D top-left
-    elseif (mapPosFilled(m, x-1, y) and mapPosFilled(m, x, y-1)) or mapPosFilled(m,x-1,y-1) then
-        return cx-dx, cy-dy
-    -- case C,D bot-right
-    elseif (mapPosFilled(m, x+1, y) and mapPosFilled(m, x, y+1)) or mapPosFilled(m,x+1,y+1) then
-        return cx+dx, cy+dy
-    -- case C,D top-right
-    elseif (mapPosFilled(m, x+1, y) and mapPosFilled(m, x, y-1)) or mapPosFilled(m,x+1,y-1) then
-        return cx+dx, cy-dy
     
-    -- cases A and B:
-    -- snap to top
-    elseif mapPosFilled(m, x+1, y-1) and mapPosFilled(m, x-1, y-1) then
-        return cx, cy-dy
-    -- snap to bottom
-    elseif mapPosFilled(m, x+1, y+1) and mapPosFilled(m, x-1, y+1) then
-        return cx, cy+dy
-    -- snap to right
-    elseif mapPosFilled(m, x+1, y-1) and mapPosFilled(m, x+1, y+1) then
-        return cx+dx, cy
-    -- snap to left
-    elseif mapPosFilled(m, x-1, y-1) and mapPosFilled(m, x-1, y+1) then
+    -- case X:  left
+    if A and D then
         return cx-dx, cy
+    -- case X:  right
+    elseif B and C then
+        return cx+dx, cy
+    
+    -- case B:  top
+    elseif A and B then
+        return cx, cy-dy
+    -- case B:  bot
+    elseif D and C then
+        return cx, cy+dy
+
+    -- case C:    A vertex
+    elseif A then
+        return cx-dx, cy-dy
+    -- case C:    B vertex
+    elseif B then
+        return cx+dx, cy-dy
+        -- case C:    A vertex
+    elseif C then
+        return cx+dx, cy+dy
+    -- case C:    B vertex
+    elseif D then
+        return cx-dx, cy+dy
     end
 end
 
 
 
-local function genVertexPos(self, x, y, greedyQuadMap, corner)
+local function genVertexPos(self, x, y, greedyQuadMap)
     --[[
         Generates a vertex,
         where (x, y) are indexes on the self.map[x][y].
@@ -341,10 +352,8 @@ local function genVertexPos(self, x, y, greedyQuadMap, corner)
         This function will always generate the TOP LEFT vertex.
         (i.e. vertex `a`.
     ]]
-    local center
-    if corner == 
     local snap_x, snap_y = trySnapOntoGreedyMesh(self, x,y, greedyQuadMap)
-    if false and snap_x and snap_y then
+    if snap_x and snap_y then
         return {
             x = snap_x,
             y = snap_y
@@ -466,10 +475,10 @@ local function generateQuads(self)
             local height = getHeight(self, x,y)
             if height > cuttoffHeight and (not (rawget(greedyQuadMap, x) and greedyQuadMap[x][y])) then
                 -- Then we generate vertices for this node
-                local vertA = vertexMap[x][y] or genVertexPos(self, x, y, greedyQuadMap, "a")
-                local vertB = vertexMap[x+1][y] or genVertexPos(self, x+1, y, greedyQuadMap, "b")
-                local vertC = vertexMap[x+1][y+1] or genVertexPos(self, x+1, y+1, greedyQuadMap, "c")
-                local vertD = vertexMap[x][y+1] or genVertexPos(self, x, y+1, greedyQuadMap, "d")
+                local vertA = vertexMap[x][y] or genVertexPos(self, x, y, greedyQuadMap)
+                local vertB = vertexMap[x+1][y] or genVertexPos(self, x+1, y, greedyQuadMap)
+                local vertC = vertexMap[x+1][y+1] or genVertexPos(self, x+1, y+1, greedyQuadMap)
+                local vertD = vertexMap[x][y+1] or genVertexPos(self, x, y+1, greedyQuadMap)
                 vertexMap[x][y] = vertA
                 vertexMap[x+1][y] = vertB
                 vertexMap[x+1][y+1] = vertC
@@ -508,8 +517,8 @@ end
 local function newPhysicsPolygon(cX, cY, a,b,c,d)
     -- cX and cY are centerX and centerY
     local world = base.physics.getWorld()
-    local body = physics.newBody(world, cX, cY, "static") 
     do return end
+    local body = physics.newBody(world, cX, cY, "static") 
     local shape = physics.newPolygonShape(
         a.x-cX, a.y-cY, 
         b.x-cX, b.y-cY, 
@@ -575,10 +584,6 @@ function Terrain:draw()
         graphics.setColor(0,0,1)
         graphics.rectangle("line", rect.x, rect.y, rect.width, rect.height)
     end
-    for x=1, self.w do for y=1, self.h do 
-        local wx,wy = toWorldCoords(self,x,y)
-        graphics.setColor(1,1,1) graphics.circle("line",wx,wy,10)
-    end end
     graphics.pop()
 end
 end
