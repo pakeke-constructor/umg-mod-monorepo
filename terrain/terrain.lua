@@ -442,7 +442,7 @@ local function generatePhysics(self, quads, greedyQuads)
 
     for _, gquad in ipairs(greedyQuads) do
         local fixture = newPhysicsRectangle(
-            gquad.x, gquad.x, gquad.width, gquad.height
+            gquad.x, gquad.y, gquad.width, gquad.height
         )
         table.insert(fixtures, fixture)
     end
