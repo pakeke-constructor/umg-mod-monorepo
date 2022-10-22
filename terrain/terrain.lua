@@ -484,14 +484,18 @@ local function generateQuads(self)
                 vertexMap[x+1][y+1] = vertC
                 vertexMap[x][y+1] = vertD
                 local cx,cy = toWorldCoords(self, x,y)
-                table.insert(quads, {
-                    centerX = cx,
-                    centerY = cy,
-                    a=vertA,
-                    b=vertB,
-                    c=vertC,
-                    d=vertD
-                })
+
+                -- only add the quad if it's a convex polygon
+                if math.isConvex(vertA.x, vertA.y, vertB.x, vertB.y, vertC.x, vertC.y, vertD.x, vertD.y) then
+                    table.insert(quads, {
+                        centerX = cx,
+                        centerY = cy,
+                        a=vertA,
+                        b=vertB,
+                        c=vertC,
+                        d=vertD
+                    })    
+                end
             end
         end
     end
@@ -517,7 +521,6 @@ end
 local function newPhysicsPolygon(cX, cY, a,b,c,d)
     -- cX and cY are centerX and centerY
     local world = base.physics.getWorld()
-    do return end
     local body = physics.newBody(world, cX, cY, "static") 
     local shape = physics.newPolygonShape(
         a.x-cX, a.y-cY, 

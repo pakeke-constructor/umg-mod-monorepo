@@ -62,6 +62,8 @@ local function loadShared(base)
     base.Heap = require("shared.heap");
     base.Partition = require("shared.partition.partition");
 
+    base.components = require("shared.components")
+
     base.delay = require("shared.delay")
     base.inspect = require("_libs.inspect");
 
