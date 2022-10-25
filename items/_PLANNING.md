@@ -140,8 +140,31 @@ Player moves item in their own inventory:
 Generates two `setInventoryItem` calls, one for deletion, one for addition
 
 Player drops inventory item:
-Generates `setInventoryItem` nil call, and sets `item.hidden = true`
+Generates `setInventoryItem` nil call, and sets `item.hidden = true`,
+and `item.itemBeingHeld = false`
 
 
 
+
+# Item holding and usage:
+```lua
+
+ent.holdItem = my_item_ent
+-- ent is now holding `my_item_ent`
+
+my_item_ent.itemOwner = ent
+-- this should be set to ensure stuff works properly
+
+
+
+```
+
+
+### Picking up items:
+```lua
+
+ent.canPickUp = true
+-- Now this entity can pick up items
+
+```
 

@@ -163,8 +163,27 @@ function Inventory:count(item_or_itemName)
 end
 
 
-function Inventory:getFreeSpace()
+function Inventory:getFreeSpace(item)
     local x,y
+    if item then
+        -- then we first search for an item slot that is same type as `item`
+        for i=1, self.width * self.height do
+            x, y = self:getXY()
+            if self:slotExists(x, y) then
+                local item_ent = exists(self.inventory[i]) and self.inventory[i]
+                if item_ent then
+                    if item_ent.itemName == item.itemName then
+                        local remainingStackSize = (item_ent.maxStackSize or 1) - (item_ent.stackSize or 1)
+                        if (remainingStackSize >= (item.stackSize or 1)) then
+                            return x, y
+                        end
+                    end
+                end
+            end
+        end
+    end
+    
+    -- else search for empty inventory space
     for i=1, self.width * self.height do
         x, y = self:getXY(i)
         if self:slotExists(x, y) then
@@ -177,7 +196,6 @@ function Inventory:getFreeSpace()
                 assert(self:getIndex(x,y) == i, "bug with inventory mod")--sanity check
                 assert(not exists(self:get(x,y)), "bug with inventory mod")
                 return x,y
-            end
         end
     end
 end

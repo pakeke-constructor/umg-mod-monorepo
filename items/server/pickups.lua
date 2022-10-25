@@ -1,21 +1,15 @@
 
-
 --[[
 
-If a player is close enough to an item, the item will
-be picked up.
-
-I.e, the entity needs `controllable` and `inventory` component to pick up
-stuff.
-
+Entities that can pick up items off the ground have a `canPickUp` component.
 
 ]]
 
 
 
-local invPlayers = group("x", "y", "controllable", "inventory")
+local pickUpEntities = group("x", "y", "canPickUp")
 
-local items = group("x", "y", "itemName")
+local itemEntities = group("x", "y", "itemName")
 
 
 
@@ -32,7 +26,7 @@ local itemPartition = base.Partition(INTERACTION_DISTANCE + 5, INTERACTION_DISTA
 
 
 
-items:onAdded(function(e)
+itemEntities:onAdded(function(e)
     if not e:isRegular("hidden") then
         error("Item entities must have a `hidden` regular component.\nNot the case for " .. e:type())
     end
@@ -43,7 +37,7 @@ items:onAdded(function(e)
 end)
 
 
-items:onRemoved(function(e)
+itemEntities:onRemoved(function(e)
     itemPartition:remove(e)
 end)
 
@@ -87,12 +81,74 @@ local function dropInventoryItem(item, x, y)
 end
 
 
+
+local function canPickUpAnItem(ent)
+    if not ent.canPickUp then
+        return false
+    end
+    if ent.inventory then
+        return true
+    elseif ent:isRegular("holdItem") and (not exists(ent.holdItem)) then
+        return true
+    end
+end
+
+
+
+
+local function tryPickUp(ent, picked)
+    local best_dist = math.huge
+
+    local ix, iy
+    local item_pickup
+    local pickup_type
+    for item in itemPartition:foreach(ent.x, ent.y) do
+        if (not item.itemBeingHeld) and (not picked[item]) then 
+            -- then the item is on the ground
+            local d = math.distance(ent, item)
+            if canBePickedUp(d, best_dist, item) then
+                ix, iy = ent.inventory:getFreeSpace(item)
+                if ix then
+                    pickup_type = "inventory"
+                    item_pickup = item
+                    best_dist = d
+                elseif ent:isRegular("holdItem") and (not exists(ent.holdItem)) and item.useItem then
+                    ent.holdItem = nil -- this is just to ensure that dangling, deleted item entity references are cleaned up.
+                    -- (if everything is done properly, the above line should never be needed)
+                    pickup_type = "hold"
+                    item_pickup = item
+                    best_dist = d
+                end
+            end
+        end
+    end
+
+    if item_pickup then
+        if pickup_type == "inventory" then
+            ent.inventory:set(ix, iy, item_pickup)
+            server.broadcast("pickUpInventoryItem", item_pickup)
+        else
+            assert(pickup_type == "hold", "Bad enum value")
+            ent.holdItem = item_pickup
+            server.broadcast("pickUpInventoryItem", ent, item_pickup)
+        end
+        item_to_lastheldtime[item_pickup] = nil
+        item_pickup.itemBeingHeld = true
+        item_pickup.hidden = true
+        picked[item_pickup] = true
+    end
+end
+
+
+
+
 local ct = 0
+local LOOP_CT = 8
 
 on("gameUpdate", function(dt)
-    -- This function runes once every 5 frames:
+    -- This function runes once every LOOP_CT frames:
     ct = ct + 1
-    if ct < 5 then
+    if ct < LOOP_CT then
         return -- return early
     else
         ct = 0 -- else, we run function
@@ -101,29 +157,9 @@ on("gameUpdate", function(dt)
 
     local picked = {}
     itemPartition:update(dt)
-    for _, player in ipairs(invPlayers) do
-        local best_dist = math.huge
-        local pickup
-        local ix, iy = player.inventory:getFreeSpace()
-        if ix then
-            for item in itemPartition:foreach(player.x, player.y) do
-                if (not item.itemBeingHeld) and (not picked[item]) then 
-                    -- then the item is on the ground
-                    local d = math.distance(player, item)
-                    if canBePickedUp(d, best_dist, item) then
-                        item_to_lastheldtime[item] = nil
-                        pickup = item
-                        best_dist = d
-                    end
-                end
-            end
-            if pickup then
-                player.inventory:set(ix, iy, pickup)
-                server.broadcast("pickUpInventoryItem", pickup)
-                pickup.itemBeingHeld = true
-                pickup.hidden = true
-                picked[pickup] = true
-            end
+    for _, ent in ipairs(pickUpEntities) do
+        if canPickUpAnItem(ent) then
+            tryPickUp(ent, picked)
         end
     end
 

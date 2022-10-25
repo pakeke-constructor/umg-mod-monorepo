@@ -1,7 +1,12 @@
 
+
 --[[
 
+This module allows us to define what our components look like.
+
+
 ]]
+
 
 local components = {}
 
@@ -58,6 +63,7 @@ local function doChecks(compName, compInfo)
     assert(type(compInfo) == "table", "compInfo must be a table")
     assert(compInfo.type and validTypes[compInfo.type], "Invalid type for compInfo: " .. compInfo.type)
     assert(compInfo.kind and validKinds[compInfo.kind], "Invalid component kind for compInfo: " .. compInfo.kind)
+    assert((not compInfo.description) or type(compInfo.description) == "string", "compInfo.description must be a string")
     if compInfo.type == "function" then
         assert(compInfo.kind == "shared", "function components must be shared. (This is because lua functions can't be serialized.)")
     end
@@ -115,3 +121,4 @@ end
 
 
 return components
+
