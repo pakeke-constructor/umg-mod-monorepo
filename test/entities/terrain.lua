@@ -7,11 +7,11 @@ return {
         ent.y=y
         
         ent.terrain = terrain.Terrain({
-            stepX = 40, stepY = 40, -- step amounts for noise values
+            stepX = 16, stepY = 16, -- step amounts for noise values
             sizeX = 2700, sizeY = 2700
         })
         ent.terrain:generateFromHeightFunction(function(xx, yy)
-            return math.noise(xx/870, yy/870) 
+            return math.noise(xx/370, yy/370) 
         end)
         ent.terrain:sync()
     end

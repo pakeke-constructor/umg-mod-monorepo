@@ -196,6 +196,7 @@ function Inventory:getFreeSpace(item)
                 assert(self:getIndex(x,y) == i, "bug with inventory mod")--sanity check
                 assert(not exists(self:get(x,y)), "bug with inventory mod")
                 return x,y
+            end
         end
     end
 end

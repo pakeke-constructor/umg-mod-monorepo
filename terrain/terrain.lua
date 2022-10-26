@@ -305,7 +305,10 @@ local function trySnapOntoGreedyMesh(self, x, y, greedyQuadMap)
     local C = mapPosFilled(m,x+1,y+1)
     local D = mapPosFilled(m,x,y+1)
 
-    local dx, dy = self.stepX/2, self.stepY/2
+    -- WTF???? Apparently dx and dy are irrellevant here?????
+    -- WHAT???????
+    local dx, dy = self.stepX * 0, self.stepY * 0
+    --local dx, dy = self.stepX / 4, self.stepY / 4
     
     -- case X:  left
     if A and D then

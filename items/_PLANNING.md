@@ -168,3 +168,26 @@ ent.canPickUp = true
 
 ```
 
+
+### PLANNING FOR ITEM HOLDING:::
+I don't *really* like the way that it's currently being done.
+
+With items being able to be held OR in inventory, there needs to be twice
+as much syncing, and there are way more moving parts.
+It needs to be made more robust.
+
+IDEA 1:
+Directly set the hold item:
+`items.setHoldItem(holder_ent, item_ent)`
+(Can be called both client and server, 
+but only on client if holder_ent is controlled by `username`.)
+
+^^^ This is probably the best way to do it tbh.
+
+
+
+IDEA 2:
+Have `holder_ent.holdItem` be constantly polled over in an update function.
+Any changes to it should be noted, and updated immediately.
+
+This is a very clean way of doing things
