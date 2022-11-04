@@ -33,6 +33,7 @@ return {
 
     follow = true;
 
+    canPickUp = true,
     inventoryCallbacks = {
         slotExists = player_slotExists
     };

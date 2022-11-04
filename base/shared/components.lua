@@ -72,7 +72,7 @@ local function doChecks(compName, compInfo)
         if compInfo.kind ~= "shared" then
             local funcExists, key = deepSearchFor(compInfo.table, "function")
             if funcExists then
-                error("table is a regular component, but has a function inside of it. Components with functions embedded in them cannot be shared. The key with the function is: " .. tostring(key))
+                error("table is a regular component, but has a function inside of it. Components with functions embedded in them cannot be regular. The key with the function is: " .. tostring(key))
             end
         end
     end
@@ -108,6 +108,17 @@ function components.defineComponent(compName, compInfo)
     ]]
     doChecks(compName, compInfo)
     compNameToCompInfo[compName] = compInfo
+end
+
+
+
+
+function components.getAllComponents()
+    local buffer = {}
+    for compName, _ in pairs(compNameToCompInfo) do
+        table.insert(buffer, compName)
+    end
+    return buffer
 end
 
 

@@ -49,15 +49,18 @@ end)
 
 
 
-client.on("setInventoryHoldValues", function(ent, faceDir, hold_x, hold_y, dx, dy)
+client.on("setInventoryHoldItem", function(ent, item)
     if ent.controller == username then
         -- Ignore broadcasts for our own entities;
         -- We will have more up to date data.
         return 
     end
-    local inv = ent.inventory
-    inv.holding_x = hold_x
-    inv.holding_y = hold_y
+
+    ent.holdItem = item
+end)
+
+
+client.on("setInventoryHoldDirection", function(ent, faceDir, dx, dy)
     ent_to_pointDirectionX[ent] = dx
     ent_to_pointDirectionY[ent] = dy
     ent.faceDirection = faceDir
@@ -73,6 +76,9 @@ local function getPointDirection(ent)
         local x,y = ent_to_pointDirectionX[ent], ent_to_pointDirectionY[ent]
         if x and y then
             return x,y
+        elseif ent.vx and ent.vy and math.distance(ent.vx,ent.vy) > 0 then
+            local dst = math.distance(ent.vx, ent.vy)
+            return ent.vx / dst, ent.vy / dst
         end
         return 0,0
     end

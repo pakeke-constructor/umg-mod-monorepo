@@ -411,3 +411,4 @@ client.on("pickUpInventoryItem", function(item)
     item.hidden = true
 end)
 
+

@@ -6,6 +6,8 @@ Entities that can pick up items off the ground have a `canPickUp` component.
 ]]
 
 
+local common = require("shared.common")
+
 
 local pickUpEntities = group("x", "y", "canPickUp")
 
@@ -17,13 +19,6 @@ local itemEntities = group("x", "y", "itemName")
 local currentTime = timer.getTime()
 
 
-local INTERACTION_DISTANCE = 15
--- distance from when you can pick up an item
-
-
-local itemPartition = base.Partition(INTERACTION_DISTANCE + 5, INTERACTION_DISTANCE + 5)
-
-
 
 
 itemEntities:onAdded(function(e)
@@ -33,35 +28,26 @@ itemEntities:onAdded(function(e)
     if not e:isRegular("itemBeingHeld") then
         error("Item entities must have a `itemBeingHeld` regular component.\nNot the case for " .. e:type())
     end
-    itemPartition:add(e)
+    common.itemPartition:add(e)
 end)
 
 
 itemEntities:onRemoved(function(e)
-    itemPartition:remove(e)
+    common.itemPartition:remove(e)
 end)
 
 
 
-local PICKUP_DELAY_TIME = 2 --- 2 seconds delay is reasonable
-
-local item_to_lastheldtime = {
---[[
-This data structure is used to ensure that there is a delay before an item
-can be picked up.
-
-    [item] = last_held_time
-]]
-}
-
-
 local function canBePickedUp(dist, best_dist, item)
-    local bool2 = (dist < INTERACTION_DISTANCE) and (dist < best_dist)
-    if not bool2 then return end
+    if dist > common.PICKUP_DISTANCE or dist > best_dist then 
+        -- we want to try and pick up the closest item.
+        -- if there is an item that is closer, ignore it
+        return
+    end
 
-    if item_to_lastheldtime[item] then
-        local time = currentTime - item_to_lastheldtime[item]
-        if time < PICKUP_DELAY_TIME then
+    if item._item_last_holdtime then
+        local time = currentTime - item._item_last_holdtime
+        if time < common.PICKUP_DELAY_TIME then
             return
         end
     end
@@ -69,16 +55,6 @@ local function canBePickedUp(dist, best_dist, item)
     return true
 end
 
-
-
-local function dropInventoryItem(item, x, y)
-    item.x = (x or item.x) or 0
-    item.y = (y or item.y) or 0
-    item_to_lastheldtime[item] = timer.getTime()
-    item.hidden = false
-    item.itemBeingHeld = false
-    itemPartition:add(item)
-end
 
 
 
@@ -95,47 +71,79 @@ end
 
 
 
+local function tryPickUpHold(ent, picked)
+    --[[
+        tries to pick up an item via `ent.holdItem` component
+    ]]
+    if exists(ent.holdItem) then
+        return
+    end
 
-local function tryPickUp(ent, picked)
+    local best_item
     local best_dist = math.huge
 
+    for item in common.itemPartition:foreach(ent.x, ent.y) do
+        if item.itemHoldType and (not item.itemBeingHeld) and (not picked[item]) then 
+            -- then the item is on the ground
+            local d = math.distance(ent, item)
+            if canBePickedUp(d, best_dist, item) then
+                best_dist = d
+                best_item = item
+            end
+        end
+    end
+    if best_item then
+        ent.holdItem = best_item
+        server.broadcast("setInventoryHoldItem", ent, best_item)
+    end
+end
+
+
+
+local function tryPickUpInventory(ent, picked)
+    --[[
+        tries to pick up an item via `ent.inventory` component
+    ]]
     local ix, iy
-    local item_pickup
-    local pickup_type
-    for item in itemPartition:foreach(ent.x, ent.y) do
+    local best_item
+    local combine = false -- whether stacks are combined or not
+    local best_dist = math.huge
+
+    local free_ix, free_iy = ent.inventory:getFreeSpace()
+    for item in common.itemPartition:foreach(ent.x, ent.y) do
         if (not item.itemBeingHeld) and (not picked[item]) then 
             -- then the item is on the ground
             local d = math.distance(ent, item)
             if canBePickedUp(d, best_dist, item) then
-                ix, iy = ent.inventory:getFreeSpace(item)
+                ix, iy = ent.inventory:getFreeSpaceFor(item)
                 if ix then
-                    pickup_type = "inventory"
-                    item_pickup = item
+                    -- first, we try to put into existing slot
+                    combine = true
                     best_dist = d
-                elseif ent:isRegular("holdItem") and (not exists(ent.holdItem)) and item.useItem then
-                    ent.holdItem = nil -- this is just to ensure that dangling, deleted item entity references are cleaned up.
-                    -- (if everything is done properly, the above line should never be needed)
-                    pickup_type = "hold"
-                    item_pickup = item
+                    best_item = item
+                elseif (not combine) and free_ix then
+                    -- we only want to pick up an item into a free spot,
+                    -- if there are no opportunities to combine stacks.
                     best_dist = d
+                    best_item = item
                 end
             end
         end
     end
 
-    if item_pickup then
-        if pickup_type == "inventory" then
-            ent.inventory:set(ix, iy, item_pickup)
-            server.broadcast("pickUpInventoryItem", item_pickup)
+    if best_item then
+        -- pick up this item.
+        if combine then
+            -- we combine stacks
+            local item = ent.inventory:get(ix, iy)
+            item.stackSize = (item.stackSize or 1) + (best_item.stackSize or 1)
+            best_item:delete()
         else
-            assert(pickup_type == "hold", "Bad enum value")
-            ent.holdItem = item_pickup
-            server.broadcast("pickUpInventoryItem", ent, item_pickup)
+            -- we just set normally
+            ent.inventory:set(free_ix, free_iy, best_item)
         end
-        item_to_lastheldtime[item_pickup] = nil
-        item_pickup.itemBeingHeld = true
-        item_pickup.hidden = true
-        picked[item_pickup] = true
+        picked[best_item] = true
+        common.pickupItem(best_item)
     end
 end
 
@@ -156,22 +164,16 @@ on("gameUpdate", function(dt)
     -- ==========
 
     local picked = {}
-    itemPartition:update(dt)
+    common.itemPartition:update(dt)
     for _, ent in ipairs(pickUpEntities) do
         if canPickUpAnItem(ent) then
-            tryPickUp(ent, picked)
+            if ent:isRegular("inventory") then
+                tryPickUpInventory(ent, picked)
+            end 
+            if ent:isRegular("holdItem") then
+                tryPickUpHold(ent, picked)
+            end
         end
     end
-
-    for ent, _ in pairs(picked) do
-        itemPartition:remove(ent)
-    end
 end)
-
-
-
-
-return {
-    dropInventoryItem = dropInventoryItem
-}
 

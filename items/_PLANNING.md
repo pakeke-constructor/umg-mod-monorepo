@@ -149,7 +149,7 @@ and `item.itemBeingHeld = false`
 # Item holding and usage:
 ```lua
 
-ent.holdItem = my_item_ent
+ent.holdingItem = my_item_ent
 -- ent is now holding `my_item_ent`
 
 my_item_ent.itemOwner = ent
@@ -190,4 +190,12 @@ IDEA 2:
 Have `holder_ent.holdItem` be constantly polled over in an update function.
 Any changes to it should be noted, and updated immediately.
 
-This is a very clean way of doing things
+This is a very clean way of doing things, but it's not particularly efficient.
+
+```lua
+
+items.setHoldItem(ent, item_ent) -- `ent` is now holding `item_ent`
+items.setHoldItem(ent, nil)
+
+```
+
