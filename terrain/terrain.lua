@@ -4,6 +4,12 @@ local terrainIds = require("terrain_ids")
 
 local Terrain = base.Class("terrain_mod:terrain")
 
+
+local finalizeCallback = function(_) end
+local deleteCallback = function(_) end
+
+
+
 --[[
 
 
@@ -60,6 +66,8 @@ end
 
 local DEFAULT_CUTOFF_HEIGHT = 0.5
 
+local DEFAULT_WALL_HEIGHT = 48
+
 
 function Terrain:init(options)
     assert(options.stepX and options.stepY, "incorrect options table")
@@ -80,6 +88,8 @@ function Terrain:init(options)
     self.stepY = options.stepY
     self.sizeX = options.sizeX
     self.sizeY = options.sizeY
+
+    self.wallHeight = options.wallHeight or DEFAULT_WALL_HEIGHT
 
     self.w = math.ceil(self.sizeX / self.stepX)
     self.h = math.ceil(self.sizeY / self.stepY)
@@ -117,6 +127,11 @@ end
 function Terrain:getWorldPosition()
     assert(self.worldX and self.worldY, "terrain not given world position!")
     return self.worldX, self.worldY
+end
+
+
+function Terrain:getWallHeight()
+    return self.wallHeight
 end
 
 
@@ -561,6 +576,7 @@ end
 
 
 if client then
+
 function Terrain:draw()
     assert(self.quads and self.greedyQuads, "terrain not initialized")
     graphics.push("all")
@@ -609,8 +625,10 @@ function Terrain:sync()
 
     local quads, greedyQuadMap, vertexMap = generateQuads(self)
     local greedyQuads = greedyMesh(self, greedyQuadMap)
-    
+
     self.fixtures = generatePhysics(self, quads, greedyQuads)
+    
+    finalizeCallback(self)
 end
 
 else --============================================
@@ -639,8 +657,18 @@ client.on("terrainSync", function(tobj_id, syncOptions, map)
     end
     setMap(tobj, map)
     finalize(tobj)
+    finalizeCallback(tobj)
 end)
 
+end
+
+
+function Terrain:getGreedyQuads()
+    return self.greedyQuads
+end
+
+function Terrain:getQuads()
+    return self.quads
 end
 
 
@@ -656,6 +684,29 @@ function Terrain:generateFromHeightFunction(func)
         end
     end
 end
+
+
+
+function Terrain:delete()
+    terrainIds.deleteTerrain(self)
+    deleteCallback(self)
+end
+
+
+
+-- STATIC METHOD
+function Terrain.setDeleteCallback(cb)
+    assert(type(cb)=="function", "this method is static.")
+    deleteCallback = cb
+end
+
+-- STATIC METHOD
+function Terrain.setFinalizeCallback(cb)
+    assert(type(cb)=="function", "this method is static.")
+    finalizeCallback = cb
+end
+
+
 
 
 return Terrain

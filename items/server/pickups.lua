@@ -58,18 +58,6 @@ end
 
 
 
-local function canPickUpAnItem(ent)
-    if not ent.canPickUp then
-        return false
-    end
-    if ent.inventory then
-        return true
-    elseif ent:isRegular("holdItem") and (not exists(ent.holdItem)) then
-        return true
-    end
-end
-
-
 
 local function tryPickUpHold(ent, picked)
     --[[
@@ -162,18 +150,18 @@ on("gameUpdate", function(dt)
         ct = 0 -- else, we run function
     end
     -- ==========
+    currentTime = base.getGameTime()
 
     local picked = {}
     common.itemPartition:update(dt)
     for _, ent in ipairs(pickUpEntities) do
-        if canPickUpAnItem(ent) then
-            if ent:isRegular("inventory") then
-                tryPickUpInventory(ent, picked)
-            end 
-            if ent:isRegular("holdItem") then
-                tryPickUpHold(ent, picked)
-            end
+        if ent:isRegular("inventory") and ent.inventory then
+            tryPickUpInventory(ent, picked)
+        end 
+        if ent:isRegular("holdItem") then
+            tryPickUpHold(ent, picked)
         end
     end
 end)
+
 

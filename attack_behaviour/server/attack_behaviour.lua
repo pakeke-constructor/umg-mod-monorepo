@@ -143,12 +143,10 @@ local function tryAttack(ent, target, now)
 end
 
 
-local curTime = timer.getTime()
 
 local ct = 0
 on("gameUpdate", function(dt)
     -- Run the function every 5 game frames:
-    curTime = curTime + dt
     ct = ct + 1
     if ct < 5 then
         return
@@ -156,7 +154,7 @@ on("gameUpdate", function(dt)
         ct = 0 
     end
 
-    local now = curTime
+    local now = base.getGameTime()
     for _, ent in ipairs(attackGroup) do
         if ent.attackBehaviour then
             local target = ent.attackBehaviourTargetEntity

@@ -8,8 +8,3 @@ terrainGroup:onAdded(function(ent)
 end)
 
 
-
-export("terrain", {
-    Terrain = require("terrain")
-})
-

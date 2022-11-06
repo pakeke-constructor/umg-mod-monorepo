@@ -14,6 +14,8 @@ local max_terrain_id = 0
 local terrainIds = {}
 
 
+
+
 local terrainObjects = base.Set()
 
 local id_to_terrainObj = {}
