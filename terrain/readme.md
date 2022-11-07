@@ -29,6 +29,8 @@ local tobj = terrain.Terrain({
     chunkWidth = 6, chunkHeight = 6,
     x = 0, y = 0,
     noPhysics = false,
+    wallTexture = graphics.newImage("my_tex.png"),
+    topTexture = graphics.newImage("my_tex.png")
 })
 
 

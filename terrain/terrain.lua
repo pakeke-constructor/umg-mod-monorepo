@@ -82,12 +82,15 @@ function Terrain:init(options)
 
     self.syncOptions = options
     -- We need to keep this table as a reference if we want to sync
-    -- from clientside -> serverside
+    -- from clientside -> serverside for the first time
 
     self.stepX = options.stepX
     self.stepY = options.stepY
     self.sizeX = options.sizeX
     self.sizeY = options.sizeY
+
+    self.wallTexture = options.wallTexture
+    self.topTexture = options.topTexture
 
     self.wallHeight = options.wallHeight or DEFAULT_WALL_HEIGHT
 
@@ -133,6 +136,27 @@ end
 function Terrain:getWallHeight()
     return self.wallHeight
 end
+
+
+function Terrain:getTopTexture()
+    return self.topTexture
+end
+
+function Terrain:getWallTexture()
+    return self.wallTexture
+end
+
+function Terrain:setTopTexture(tex)
+    assert(tex.typeOf and tex:typeOf("Texture"), "Not a texture!")
+    self.topTexture = tex
+end
+
+function Terrain:setWallTexture(tex)
+    assert(tex.typeOf and tex:typeOf("Texture"), "Not a texture!")
+    self.wallTexture = tex
+end
+
+
 
 
 local function toWorldCoords(self, ix, iy)
