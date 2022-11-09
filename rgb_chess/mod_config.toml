@@ -2,6 +2,6 @@
 uses = [
         "base", "chat", "light", "items", "zoom", 
         "placement", "chests", "move_behaviour", 
-        "attack_behaviour", "proximity"
+        "attack_behaviour", "proximity", "ui"
 ]
 

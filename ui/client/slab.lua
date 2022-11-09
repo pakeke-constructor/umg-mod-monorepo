@@ -27,7 +27,7 @@ end)
 
 
 
-on("draw", function(dt)
+on("draw", function()
     Slab.Draw()
 end)
 

@@ -271,8 +271,6 @@ end)
 
 
 
-
-
 on("resize", function(w, h)
     camera.w = w
     camera.h = h
@@ -281,11 +279,31 @@ end)
 
 
 
+
+
+-- Oli's personal screen width and height (used in fudgeUIScale)
+local OLI_WIDTH, OLI_HEIGHT = 1536, 793
+local OLI_DISPLAY_SIZE = math.sqrt(OLI_WIDTH^2 + OLI_HEIGHT^2)
+
+
 local scaleUI = constants.DEFAULT_UI_SCALE
+
+
+local function fudgeUIScale(scale)
+    --[[
+        since different computers have different screen sizes,
+        we must scale the UI scale with the screensize.
+        bigger sized screens should get larger UI scales to compensate.
+    ]]
+    local w,h = graphics.getDimensions()
+    local screensize = math.sqrt(w^2 + h^2)
+    return math.round((scale / OLI_DISPLAY_SIZE) * screensize)
+end
+
 
 local function setUIScale(scale)
     assert(type(scale) == "number", "graphics.setUIScale(scale) requires a number")
-    scaleUI = scale
+    scaleUI = fudgeUIScale(scale)
 end
 
 local function getUIScale()

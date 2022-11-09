@@ -32,6 +32,11 @@ Fight players:
     Fight against other players.
 ```
 
+## Currencies:
+There should be 2 currencies:
+`MANA` and `MONEY`.
+Each card has a MANA cost, and a MONEY cost.
+
 
 
 # cards:

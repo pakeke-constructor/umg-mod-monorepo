@@ -109,6 +109,9 @@ local function setupPvPMatch(match)
     board:lockPlayerCamera(match.home)
     board:lockPlayerCamera(match.away)
 
+    server.unicast(match.home, "setupPvPMatch", match.away)
+    server.unicast(match.away, "setupPvPMatch", match.home)
+
     -- TODO: Maybe delay this for cool effect?
     board:setEnemyTeam(match.away)
     local allyArray = {}

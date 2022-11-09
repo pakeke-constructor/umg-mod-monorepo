@@ -17,26 +17,16 @@ local MOUSE_HOVER_OY = -15
 
 local currentTime = 0
 
-local BOB_PERIOD = 17
-local BOB_AMPL = 8
-local PI2 = math.pi * 2
-
 
 local fontScale = 1/3
 
 
-local function getBob(ent)
-    -- for cards bobbing up and down
-    local sin_bob_offset = (ent.id % 6) / BOB_PERIOD
-    local sinval = math.sin(PI2 * currentTime / BOB_PERIOD + sin_bob_offset)
-    return math.floor(sinval * BOB_AMPL)
-end
 
 
 
 
 local function drawUnitCard(ent)
-    local x, y = ent.x, ent.y + getBob(ent)
+    local x, y = ent.x, ent.y
     if base.isHovered(ent) then
         y = y + MOUSE_HOVER_OY
     end
@@ -89,6 +79,14 @@ local function drawUnitCard(ent)
     
     graphics.pop()
 end
+
+
+
+
+local function drawUnitInfo()
+    -- TODO: Redo the drawing of unit info.
+end
+
 
 
 

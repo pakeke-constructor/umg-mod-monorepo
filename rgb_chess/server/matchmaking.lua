@@ -32,15 +32,20 @@ end
 
 function matchmaking.makeMatches()
     --[[
+        (This is kinda crappy.)
+        For matchmaking, a list of player names is shuffled; 
+        player names next to each other are matched against each other.
+        If the list is of odd length, the last player gets a bye.
+
         match = {
-            board = Board(),
+            board = Board_obj,
             home = rgbTeam1,
             away = rgbTeam2
         }
 
         or, if there's a bye:
 
-        match = {board = Board(), bye = true}
+        match = {board = Board_obj, bye = true}
     ]]
     local len = #teams 
     

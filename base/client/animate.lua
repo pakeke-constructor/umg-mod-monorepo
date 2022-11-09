@@ -1,4 +1,13 @@
 
+
+--[[
+
+allows us to manually make calls to animate entities.
+
+
+]]
+
+
 local draw = require("client.draw")
 
 local drawImage = require("client.image_helpers.draw_image")

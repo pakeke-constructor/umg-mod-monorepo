@@ -16,7 +16,7 @@ _G.constants = {
 
     CARD_LIGHTNESS = 0.5,
 
-    REROLL_TIME = 0.25,
+    REROLL_TIME = 0.15,
     REROLL_COST = 1,
 
     WIN_INCOME = 10,

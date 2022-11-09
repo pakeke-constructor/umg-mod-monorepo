@@ -46,8 +46,8 @@ on("gameUpdate", function(dt)
                 end
             else
                 abp.target_ent = nil
-                abp.target_x = target_ent.x
-                abp.target_y = target_ent.y
+                abp.target_x = (target_ent and target_ent.x) or ent.x
+                abp.target_y = (target_ent and target_ent.y) or ent.y
                 if math.distance(abp.target_x-ent.x, abp.target_y-ent.x) < HIT_RANGE then
                     ent:delete()
                 else

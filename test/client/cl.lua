@@ -30,8 +30,8 @@ on("keypressed", function(k)
         client.send("spawn",base.getPlayer())
     end
     if k =="r" then
-        base.title("Title!")
-        base.title("subtitle!", {scale = 0.6, y=2/3})
+        base.title("Title!", {time = 2,fade=0.5})
+        base.title("subtitle!", {scale = 0.6, y=2/3, time=2.5, fade=0.5})
     end
     if k == "space" then
         local e = base.getPlayer()

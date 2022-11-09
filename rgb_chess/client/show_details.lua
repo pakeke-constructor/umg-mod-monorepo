@@ -32,6 +32,9 @@ local SAMECOL_OPACITY = 0.95
 
 
 local function drawSelectTarget(ent)
+    --[[
+        draws that cute little colored target around entities
+    ]]
     if select.isSelected(ent) then
         local t = timer.getTime()
         graphics.push("all")
@@ -113,9 +116,9 @@ end
 
 
 on("drawEntity", function(ent)
-    if ent.rgb and ent.squadron then
+    if ent.rgb then
         drawSelectTarget(ent)
-        if showDetails.showingDetails() then
+        if ent.squadron and showDetails.showingDetails() then
             drawUnitDetails(ent)
         end
     end

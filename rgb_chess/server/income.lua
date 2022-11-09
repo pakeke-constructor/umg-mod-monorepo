@@ -25,6 +25,14 @@ function income.doAllIncome()
 end
 
 
+function income.syncMoney()
+    for _, board in Board.iterBoards() do
+        -- this will just sync the player money counts.
+        board:setMoney(board:getMoney())
+    end
+end
+
+
 
 return income
 
