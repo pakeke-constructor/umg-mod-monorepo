@@ -11,8 +11,10 @@ else:
     PATH = "."
 
 
-IGNORE = ["binpack", "set", "sset", "sets", "Slab"]
-
+IGNORE = set()
+IGNORE_ = ["binpack", "set", "sset", "sets", "Slab"]
+for x in IGNORE_:
+    IGNORE.add(x.lower())
 
 
 

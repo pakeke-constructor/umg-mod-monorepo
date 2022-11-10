@@ -83,8 +83,13 @@ end
 
 
 
-local function drawUnitInfo()
-    -- TODO: Redo the drawing of unit info.
+
+local function drawUnitInfo(ent, x, y)
+    Slab.BeginWindow("unitInfo", {X=x, Y=y})
+    Slab.Text("testing 123")
+    Slab.Text("woops! This scale isn't quite right.")
+    Slab.Text("I think we need to add scale parameter to the Slab library.")
+    Slab.EndWindow()
 end
 
 
@@ -119,6 +124,25 @@ on("drawEntity", function(ent)
     if ent.cardBuyTarget then
         if rgb.state == rgb.STATES.TURN_STATE then
             drawCard(ent)
+        end
+    end
+end)
+
+
+
+
+local rgbGroup = group("rgb")
+
+
+on("mainDrawUI", function()
+    for _, ent in ipairs(rgbGroup) do
+        if ent.rgbTeam == username then
+            if base.isHovered(ent) then
+                local x, y = mouse.getPosition()
+                local uiscale = base.getUIScale()
+                x,y = x/uiscale, y/uiscale
+                drawUnitInfo(ent, x, y)
+            end
         end
     end
 end)
