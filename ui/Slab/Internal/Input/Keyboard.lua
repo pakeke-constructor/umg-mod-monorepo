@@ -32,6 +32,8 @@ local Utility = require(SLAB_PATH .. '.Internal.Core.Utility')
 
 local Keyboard = {}
 
+local KeyPressedFn = nil
+local KeyReleasedFn = nil
 local Events = {}
 local Keys = {}
 
@@ -46,13 +48,19 @@ local function PushEvent(Type, Key, Scancode, IsRepeat)
 end
 
 local function OnKeyPressed(Key, Scancode, IsRepeat)
-    -- PAKEKE MONKEYPATCH: Removed love callback mangling stuff
 	PushEvent(Common.Event.Pressed, Key, Scancode, IsRepeat)
+
+	if KeyPressedFn ~= nil then
+		KeyPressedFn(Key, Scancode, IsRepeat)
+	end
 end
 
 local function OnKeyReleased(Key, Scancode)
-    -- PAKEKE MONKEYPATCH: Removed love callback mangling stuff
 	PushEvent(Common.Event.Released, Key, Scancode, false)
+
+	if KeyReleasedFn ~= nil then
+		KeyReleasedFn(Key, Scancode)
+	end
 end
 
 local function ProcessEvents()
@@ -85,14 +93,17 @@ local function ProcessEvents()
 	Events = NextEvents
 end
 
+Keyboard.OnKeyPressed = OnKeyPressed;
+Keyboard.OnKeyReleased = OnKeyReleased;
 
-function Keyboard.Initialize(Args)
-    -- PAKEKE MONKEYPATCH START
-    on("keypressed", OnKeyPressed)
-	on("keyreleased", OnKeyReleased)
-    -- PAKEKE MONKEYPATCH END
+function Keyboard.Initialize(Args, dontInterceptEventHandlers)
+	if not dontInterceptEventHandlers then
+		KeyPressedFn = love.handlers['keypressed']
+		KeyReleasedFn = love.handlers['keyreleased']
+		love.handlers['keypressed'] = OnKeyPressed
+		love.handlers['keyreleased'] = OnKeyReleased
+	end
 end
-
 
 function Keyboard.Update()
 	ProcessEvents()

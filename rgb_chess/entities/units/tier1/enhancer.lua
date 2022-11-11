@@ -15,7 +15,7 @@ return extend("abstract_ranged", {
     ]]
     unitCardInfo = {
         name = "Enhancer",
-        description = "on ally summon:\nif ally is [color], give ally 1/1",
+        description = "On ally summon:\nIf ally is [color], give ally +1/1",
         cost = 1
     };
 

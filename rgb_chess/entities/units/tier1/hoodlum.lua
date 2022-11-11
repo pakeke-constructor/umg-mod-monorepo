@@ -15,7 +15,7 @@ return extend("abstract_melee", {
     ]]
     unitCardInfo = {
         name = "Hoodlum x 1",
-        description = "on turn start:\ngrant all ranged [color] allies +2 dmg",
+        description = "On turn start:\nGive all ranged [color] allies +2 damage",
         cost = 1
     };
 

@@ -29,6 +29,8 @@ local insert = table.insert
 local Common = require(SLAB_PATH .. '.Internal.Input.Common')
 local DrawCommands = require(SLAB_PATH .. '.Internal.Core.DrawCommands')
 local TablePool = require(SLAB_PATH .. '.Internal.Core.TablePool')
+local Scale = require(SLAB_PATH .. ".Internal.Core.Scale")
+
 
 local Mouse = {}
 
@@ -46,7 +48,8 @@ local State =
 local Cursors = nil
 local CurrentCursor = "arrow"
 local PendingCursor = ""
-
+local MouseMovedFn = nil
+local MousePressedFn = nil
 local MouseReleasedFn = nil
 local Events = {}
 local eventPool = TablePool()
@@ -56,17 +59,32 @@ local eventPool = TablePool()
 -- For more information, refer to the SetCustomCursor/ClearCustomCursor functions.
 local CustomCursors = {}
 
+local function ScaleMouseXY(X, Y)
+	local scale = Scale.GetScale()
+	return X / scale, Y / scale
+end
+
+local function ScaleMouseDXDY(Dx, Dy)
+	local scale = Scale.GetScale()
+	return Dx / scale, Dy / scale
+end
+
 local function TransformPoint(X,Y)
-	return X,Y
+	return ScaleMouseXY(X, Y)
 end
 
 local function OnMouseMoved(X, Y, DX, DY, IsTouch)
-    -- PAKEKE MONKEYPATCH: Removed love callback mangling
 	X, Y = TransformPoint(X, Y)
 	State.X = X
 	State.Y = Y
+
+	DX, DY = ScaleMouseDXDY(DX, DY)
 	State.AsyncDeltaX = State.AsyncDeltaX + DX
 	State.AsyncDeltaY = State.AsyncDeltaY + DY
+
+	if MouseMovedFn ~= nil then
+		MouseMovedFn(X, Y, DX, DY, IsTouch)
+	end
 end
 
 local function PushEvent(Type, X, Y, Button, IsTouch, Presses)
@@ -80,16 +98,22 @@ local function PushEvent(Type, X, Y, Button, IsTouch, Presses)
 	insert(Events, 1, ev)
 end
 
-local function OnMousePressed(X, Y, Button, IsTouch, Presses)    
-    -- PAKEKE MONKEYPATCH: Removed love callback mangling
+local function OnMousePressed(X, Y, Button, IsTouch, Presses)
 	X, Y = TransformPoint(X, Y)
 	PushEvent(Common.Event.Pressed, X, Y, Button, IsTouch, Presses)
+
+	if MousePressedFn ~= nil then
+		MousePressedFn(X, Y, Button, IsTouch, Presses)
+	end
 end
 
 local function OnMouseReleased(X, Y, Button, IsTouch, Presses)
-    -- PAKEKE MONKEYPATCH: Removed love callback mangling
 	X, Y = TransformPoint(X, Y)
 	PushEvent(Common.Event.Released, X, Y, Button, IsTouch, Presses)
+
+	if MouseReleasedFn ~= nil then
+		MouseReleasedFn(X, Y, Button, IsTouch, Presses)
+	end
 end
 
 local function ProcessEvents()
@@ -119,23 +143,21 @@ local function ProcessEvents()
 	end
 end
 
-function Mouse.Initialize(Args)
-    -- PAKEKE MONKEYPATCH START
+Mouse.OnMouseMoved = OnMouseMoved;
+Mouse.OnMousePressed = OnMousePressed;
+Mouse.OnMouseReleased = OnMouseReleased;
+
+function Mouse.Initialize(Args, dontInterceptEventHandlers)
 	TransformPoint = Args.TransformPointToSlab or TransformPoint
 
-    on("mousemoved", OnMouseMoved)
-    on("mousepressed", OnMousePressed)
-    on("mousereleased", OnMouseReleased)
-    --[[
-    --OLD CODE:
-	MouseMovedFn = love.handlers['mousemoved']
-	MousePressedFn = love.handlers['mousepressed']
-	MouseReleasedFn = love.handlers['mousereleased']
-	love.handlers['mousemoved'] = OnMouseMoved
-	love.handlers['mousepressed'] = OnMousePressed
-	love.handlers['mousereleased'] = OnMouseReleased
-    ]]
-    -- PAKEKE MONKEYPATCH END
+	if not dontInterceptEventHandlers then
+		MouseMovedFn = love.handlers['mousemoved']
+		MousePressedFn = love.handlers['mousepressed']
+		MouseReleasedFn = love.handlers['mousereleased']
+		love.handlers['mousemoved'] = OnMouseMoved
+		love.handlers['mousepressed'] = OnMousePressed
+		love.handlers['mousereleased'] = OnMouseReleased
+	end
 end
 
 function Mouse.Update()

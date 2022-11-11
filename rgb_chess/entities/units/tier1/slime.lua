@@ -14,7 +14,7 @@ return extend("abstract_melee", {
     ]]
     unitCardInfo = {
         name = "Slime x 1",
-        description = "turn start:\nIf theres 2 or more [color] allies, gain +3 gold",
+        description = "Turn start:\nIf theres 2 or more [color] allies, gain +3 gold",
         cost = 1,
     };
 

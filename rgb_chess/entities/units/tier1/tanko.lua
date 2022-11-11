@@ -14,7 +14,7 @@ return extend("abstract_melee", {
     ]]
     unitCardInfo = {
         name = "Tanko x 1",
-        description = "turn start:\nLose 3 max hp.",
+        description = "Turn start:\nThis unit loses 3 max hp",
         cost = 1,
     };
 

@@ -1,3 +1,4 @@
+
 --[[
 
 MIT License
@@ -25,19 +26,32 @@ SOFTWARE.
 --]]
 
 
--- PAKEKE MONKEYPATCH:
--- Adding love global.
-_G.love = {
-    graphics = graphics,
-    timer = timer,
-    keyboard = keyboard,
-    mouse = mouse,
-    math = math,
-    system = system
-}
+local CurrentScale = 1
 
-SLAB_PATH = "Slab"
 
-local Slab = require(SLAB_PATH .. '.API')
+local Scale = {}
 
-return Slab
+function Scale.SetScale(newScale)
+	assert(type(newScale) == "number", "Scale needs to be a number!")
+	CurrentScale = newScale
+end
+
+function Scale.GetScale()
+	return CurrentScale or 1
+end
+
+function Scale.GetScreenWidth()
+	return love.graphics.getWidth() / Scale.GetScale()
+end
+
+function Scale.GetScreenHeight()
+	return love.graphics.getHeight() / Scale.GetScale()
+end
+
+function Scale.GetScreenDimensions()
+	return Scale.GetScreenWidth(), Scale.GetScreenHeight()
+end
+
+
+return Scale
+

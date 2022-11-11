@@ -10,7 +10,7 @@ local DELTA_DMG = 1
 return extend("abstract_melee", {
     unitCardInfo = {
         name = "Brute x 1",
-        description = "on buy: give a random [color] ally +1/4",
+        description = "On buy: give a random [color] ally +1/4",
         cost = 1
     };
 

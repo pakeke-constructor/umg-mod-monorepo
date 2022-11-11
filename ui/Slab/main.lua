@@ -27,16 +27,22 @@ SOFTWARE.
 local Slab = require 'Slab'
 local SlabTest = require 'SlabTest'
 
+local dontInterceptEventHandlers = true;
+
 function love.load(args)
 	love.graphics.setBackgroundColor(0.07, 0.07, 0.07)
-	Slab.Initialize(args)
+	Slab.Initialize(args, dontInterceptEventHandlers)
+	if dontInterceptEventHandlers then setCustomHandlers() end
 end
 
-function love.update(dt)
-	Slab.Update(dt)
-	SlabTest.Begin()
-end
 
-function love.draw()
-	Slab.Draw()
+function setCustomHandlers()
+	love.handlers['quit'] = _quit;
+	love.handlers['keypressed'] = _keypressed;
+	love.handlers['keyreleased'] = _keyreleased;
+	love.handlers['textinput'] = _textinput;
+	love.handlers['mousemoved'] = _mousemoved;
+	love.handlers['mousepressed'] = _mousepressed;
+	love.handlers['mousereleased'] = _mousereleased;
+	love.handlers['wheelmoved'] = _wheelmoved;
 end

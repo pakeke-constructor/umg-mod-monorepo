@@ -26,6 +26,8 @@ SOFTWARE.
 
 local Config = require(SLAB_PATH .. '.Internal.Core.Config')
 local Cursor = require(SLAB_PATH .. '.Internal.Core.Cursor')
+local FileSystem -- = require(...)
+-- PAKEKE MONKEYPATCH: Removed require
 local Utility = require(SLAB_PATH .. '.Internal.Core.Utility')
 
 local API = {}
@@ -80,7 +82,6 @@ local Style =
 	API = API
 }
 
-
 function API.Initialize()
     -- PAKEKE MONKEYPATCH: Changed this function,
     -- removed a bunch of filesystem stuff.
@@ -89,12 +90,9 @@ function API.Initialize()
 	Cursor.SetNewLineSize(Style.Font:getHeight())
 end
 
-
-
 function API.LoadStyle(Path, Set, IsDefault)
 	error("PAKEKE MONKEYPATCH: Removed due to filesystem usage")
 end
-
 
 function API.SetStyle(Name)
 	if Name == nil then

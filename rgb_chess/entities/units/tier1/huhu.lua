@@ -15,7 +15,7 @@ return extend("abstract_melee", {
 
     unitCardInfo = {
         name = "Huhu x 3",
-        description = "on sell:\nDouble all [color] huhus x2 dmg and hp",
+        description = "On sell:\nDouble all [color] huhus damage and health",
         cost = 2,
         squadronSize = 3,
     };

@@ -24,20 +24,9 @@ SOFTWARE.
 
 --]]
 
-
--- PAKEKE MONKEYPATCH:
--- Adding love global.
-_G.love = {
-    graphics = graphics,
-    timer = timer,
-    keyboard = keyboard,
-    mouse = mouse,
-    math = math,
-    system = system
-}
-
-SLAB_PATH = "Slab"
-
-local Slab = require(SLAB_PATH .. '.API')
-
-return Slab
+function love.conf(t)
+	t.window.title = "Slab"
+	t.window.width = 1280
+	t.window.height = 720
+	t.console = true
+end

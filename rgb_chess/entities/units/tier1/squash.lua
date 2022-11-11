@@ -15,7 +15,7 @@ return extend("abstract_melee", {
     ]]
     unitCardInfo = {
         name = "Squash x 1",
-        description = "battle start:\nif no [color] allies exist, become a 9/50.",
+        description = "Battle start:\nIf no [color] allies exist, become a 9/50",
         cost = 1,
     };
 
