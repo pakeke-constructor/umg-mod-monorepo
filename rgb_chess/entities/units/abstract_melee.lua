@@ -33,7 +33,7 @@ return {
     onClick = function(ent, username, button)
         if client then
             if username == ent.rgbTeam and button == 1 then
-                select.select(username, ent)
+                select.select(ent)
             end
         end
     end;

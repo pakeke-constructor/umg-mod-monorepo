@@ -2,6 +2,11 @@
 
 local RANGE = 200
 
+local select
+if client then
+    select = require("client.select")
+end
+
 
 --[[
     abstract ranged entity
@@ -25,6 +30,14 @@ return {
 
     "cardType",
     "squadron",
+
+    onClick = function(ent, username, button)
+        if client then
+            if username == ent.rgbTeam and button == 1 then
+                select.select(ent)
+            end
+        end
+    end;
 
     attackBehaviour = {
         type = "ranged",

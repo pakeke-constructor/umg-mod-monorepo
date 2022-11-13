@@ -12,7 +12,7 @@ local selectedEnts = {
 }
 
 
-function select.select(_, ent)
+function select.select(ent)
     currentlySelected = nil
     currentlySelectedRGB = ent.rgb
     selectedEnts = {}
@@ -65,6 +65,15 @@ on("gameUpdate", function()
             select.deselect()
             break
         end
+    end
+end)
+
+
+
+on("gameMousepressed", function(x,y, button)
+    -- right click to deselect
+    if button == 2 then
+        select.deselect()
     end
 end)
 

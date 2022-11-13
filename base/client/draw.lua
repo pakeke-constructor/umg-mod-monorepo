@@ -271,7 +271,9 @@ end)
 
 
 
-on("resize", function(w, h)
+
+on("resize", function()
+    local w,h = graphics.getDimensions()
     camera.w = w
     camera.h = h
 end)

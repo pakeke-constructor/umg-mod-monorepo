@@ -71,7 +71,7 @@ on("sellUnit", function(sold_ent)
             e:onAllySold(sold_ent)
         end
     end
-    if sold_ent:onSell() then
+    if sold_ent.onSell then
         sold_ent:onSell()
     end
 end)

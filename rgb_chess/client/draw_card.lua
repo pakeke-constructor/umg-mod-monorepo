@@ -88,8 +88,12 @@ local healthTextArgs = {Color = {1,0.2,0.2}}
 local dmgTextArgs = {Color = {0.8,0.7,0.1}}
 local descTextArgs = {Color = {0.6,0.6,0.6}}
 
+local UNIT_INFO_WINDOW_X = 20
+local UNIT_INFO_WINDOW_Y = 20
+
+
 local function drawUnitInfo(ent)
-    Slab.BeginWindow("unitInfo", {X=90, Y=90})
+    Slab.BeginWindow("unitInfo", {X=UNIT_INFO_WINDOW_X, Y=UNIT_INFO_WINDOW_Y})
     local unitEType
     if ent.cardBuyTarget then
         unitEType = ent.cardBuyTarget
@@ -119,7 +123,7 @@ local function drawUnitInfo(ent)
     local description = unitCardInfo.description:gsub(constants.COLOR_SUB_TAG, color_str)
     local _, txt_table = f:getWrap(description, 600)
     for _, txt in ipairs(txt_table) do
-        Slab.Text(txt)
+        Slab.Text(txt, descTextArgs)
     end
 
     Slab.EndWindow()
@@ -167,7 +171,11 @@ end)
 local rgbGroup = group("rgb")
 
 
-on("mainDrawUI", function()
+local entBeingHovered = nil
+
+
+on("slabUpdate", function()
+    entBeingHovered = nil
     for _, ent in ipairs(rgbGroup) do
         if ent.rgbTeam == username then
             if base.isHovered(ent) then
@@ -177,8 +185,31 @@ on("mainDrawUI", function()
                 x,y = x/uiscale, y/uiscale
                 ]]
                 drawUnitInfo(ent)
+                entBeingHovered = ent
             end
         end
+    end
+end)
+
+
+
+
+on("preDrawUI", function()
+    if entBeingHovered then
+        graphics.push("all")
+        graphics.setColor(1,1,1,0.3)
+        graphics.setLineWidth(5)
+        
+        local x, y = base.camera:toCameraCoords(entBeingHovered.x, base.getDrawY(entBeingHovered.y, entBeingHovered.z))
+        local scale = base.getUIScale()
+        graphics.line(
+            UNIT_INFO_WINDOW_X, UNIT_INFO_WINDOW_Y,
+            x / scale, y / scale
+        )
+        
+        local circle_size = 3 * (2 + math.sin(base.getGameTime() * 3))
+        graphics.circle("line", x/scale, y/scale, circle_size)
+        graphics.pop()
     end
 end)
 

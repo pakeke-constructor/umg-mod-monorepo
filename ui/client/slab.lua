@@ -5,6 +5,9 @@ local Slab = require("Slab.Slab")
 local dontInterceptEventHandlers = true
 Slab.Initialize({}, dontInterceptEventHandlers)
 
+local font = graphics.getFont()
+Slab.GetStyle().API.PushFont(font)
+
 
 
 on("quit", function()
@@ -42,9 +45,10 @@ end)
 
 
 
+local SLAB_SCALE_RATIO = 1/3
 
 on("resize", function()
-    Slab.SetScale(base.getUIScale())
+    Slab.SetScale(base.getUIScale() * SLAB_SCALE_RATIO)
 end)
 
 
@@ -55,7 +59,7 @@ local docks = {
 
 on("update", function(dt)
     Slab.Update(dt)
-    Slab.SetScale(base.getUIScale() / 2)
+    Slab.SetScale(base.getUIScale() * SLAB_SCALE_RATIO)
     Slab.DisableDocks(docks)
 
     call("slabUpdate")

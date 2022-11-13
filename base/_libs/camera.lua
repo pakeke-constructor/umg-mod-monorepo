@@ -118,12 +118,24 @@ function Camera:move(dx, dy)
     self.x, self.y = self.x + dx, self.y + dy
 end
 
+
+--[[
+PAKEKE MONKEYPATCH: Old code:
 function Camera:toWorldCoords(x, y)
     local c, s = math.cos(self.rotation), math.sin(self.rotation)
     x, y = (x - self.w/2)/self.scale, (y - self.h/2)/self.scale
     x, y = c*x - s*y, s*x + c*y
     return x + self.x, y + self.y
 end
+]]
+function Camera:toWorldCoords(x, y)
+    -- PAKEKE MONKEYPATCH: New function:
+    local c, s = math.cos(self.rotation), math.sin(self.rotation)
+    x, y = (x - self.w/2)/self.scale, (y - self.h/2)/self.scale
+    x, y = c*x - s*y, s*x + c*y
+    return x + self.x, y + self.y
+end
+
 
 function Camera:toCameraCoords(x, y)
     local c, s = math.cos(self.rotation), math.sin(self.rotation)
