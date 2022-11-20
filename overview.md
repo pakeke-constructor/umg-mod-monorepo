@@ -47,13 +47,6 @@ config.toml  -- mod config
 ```
 **NOTE: All Files and folders starting with `_` are ignored.**
 
-## Mod naming and uploading:
-The name of the mod is determined by where it lives on github.     
-For example, `github.com/John/appleMod` will have a mod name of
-`John.appleMod`.      
-To upload a mod, simply put it on github.
-
-
 ----------------------------------------------------------
 
 # ECS Architecture:
@@ -75,10 +68,11 @@ return {
     color = {1.0, 1.0, 0} -- (think like Java static member)
 }
 ```
-The components will determine the behaviour/properties of the entity.    
-For example, under the `base` mod, entities with `x`,`y` and `image` will get drawn to the screen. 
+The components will determine the behaviour/properties of the entity.<br> 
+For example, under the `base` mod, entities with `x`,`y` and `image` will get drawn to the screen. <br>
+(To learn more about how this is accomplished, take a look at the `group` function)
 
-To create an instance, use the `entities` table:   
+To create an entity instance, use the `entities` table:   
 (Assume the filename was `entities/my_entity.lua`)
 ```lua
 local ent = entities.my_entity()
@@ -226,13 +220,12 @@ In UMG, there isn't automatic syncing; lots has to be done by mods.
 - joining / leaving of players
 
 **What ISN'T synced:**
-- entity components
+- entity component values
 - local events (`call` and `on` from above. Client and server have separate buses.)
 
 It's important to note, though, that a lot of syncing is done by base mods.
-For example, the `inventory` mod automatically syncs entity inventories.
-The `base` mod will automatically sync entity positions, entity velocities,
-entity health, and entity physics bodies.
+For example, the `inventory` mod automatically syncs entity inventories.<br>
+Likewise, the `base` mod will automatically sync entity positions, entity velocities, entity health, and entity physics bodies.
 
 
 Client-server communication also uses callbacks:
@@ -240,6 +233,7 @@ Client-server communication also uses callbacks:
 Server side:
 ```lua
 -- broadcasts `message1` to all clients.
+-- you can send any lua data you want, even tables!
 server.broadcast("message1",   1, 2, 3, "blah data")
 
 
@@ -257,7 +251,8 @@ end)
 
 Client side:
 ```lua
--- send a message to the server.
+-- send a message to the server.  
+-- (same as server.broadcast, but clientside)
 client.send("moveTo", x, y) 
 
 
@@ -270,10 +265,11 @@ end)
 
 Any data can be sent across the network, except for functions and userdata.
 If a table is sent across, all nested tables will be serialized and sent across.
-If an entity is sent across, it will be serialized by id.   
-Sending tables across is somewhat expensive. Try to only send numbers, strings, and entities across the network for best performance.
+If an entity is sent across, it will be efficiently serialized by id.
+Sending tables across is the most expensive. Try to only send numbers, strings, and entities across the network for best performance.
 
 If you need to send a metatable across, take a look at the `register` function.
+(Remember; functions can't be serialized!)
 
 ## General API reference
 These are all the functions/modules that can be used whilst modding:  
@@ -304,17 +300,24 @@ audio -- (love.audio module)
     audio.getMusicVolume()
 
 assets  -- ( holds image and sound assets )
-    assets.images   ( where quads are loaded )
-        ["modname:asset_name"] = love2d_quad,  OR
-        ["asset_name"] = love2d_quad
-    assets.sounds   ( where sounds are loaded )
-        ["modname:sound_name"] = love2d_src,  OR
-        ["sound_name"] = love2d_src
+    assets.images  -- ( where quads are loaded )
+        assets.images["modname:asset_name"] = love2d_quad, -- OR:
+        assets.images["asset_name"] = love2d_quad
+    assets.sounds  -- ( where sounds are loaded )
+        assets.sounds["modname:sound_name"] = love2d_source,  -- OR:
+        assets.sounds["sound_name"] = love2d_source
 
 physics -- (love.physics module)
 timer -- (love.timer module)
 
-local g = group("comp1", "comp2", ...)  -- gets an entity group.
+
+local mygroup = group("comp1", "comp2", ...)  -- gets an entity group.
+-- group methods:
+mygroup:onAdded(function(ent) print("ent has been spawned!") end)
+mygroup:onRemoved(function(ent) print("ent deleted :(") end)
+mygroup:has(ent) -- true/false, whether the group contains `ent`
+
+
 
 exists(ent) -- returns `true` if `ent` still exists as an entity, false otherwise
 
@@ -332,14 +335,15 @@ call(msg, ...) -- broadcasts a local event
 
 
 register(name, alias) -- registers a resource for serialization
-local data = serialize(obj) -- NOTE: If obj involves an entity, the id is set to nil.
+
+local data = serialize(obj) -- NOTE: If obj involves an entity, the entity id is set to nil.
 local obj, err = deserialize(data) -- deserializes data.
 
 save(name, data) -- saves data to string `name`, (relative to world)
 load(name) -- loads data from string `name` (relative to world)
 
 export("var", value) -- exports `var` to the global mod namespace.
--- Now, all other mods can access `value` in their global environment.
+-- Now, all other mods can access `value`.
 
 client  -- message sending/receiving for client
     client.send(event_name, ...) -- sends a message to server

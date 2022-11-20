@@ -52,16 +52,12 @@ local function attack(ent, target_ent)
     --[[
         TODO: Do particle effects here maybe?
     ]]
-    if not exists(ent) then
-        return
-    end
-    if not exists(target_ent) then
-        return
-    end
-
+    
     if ent.attackBehaviour.splash then
         doSplash(ent, target_ent)
     else
+        assert(exists(ent), "Ent didn't exist!! (TODO: Theres a bug here)")
+        assert(exists(target_ent), "Target ent didn't exist!! (TODO: Theres a bug here)")
         call("attack", ent, target_ent, ent.attackDamage)
         server.broadcast("attack", ent, target_ent, ent.attackDamage)
         target_ent.health = target_ent.health - ent.attackDamage

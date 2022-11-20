@@ -8,6 +8,9 @@ local DEFAULT_ZOOM_SPEED = 22
 local MAX_ZOOM = 10
 local MIN_ZOOM = 0.1
 
+local zoom_export = {}
+
+function zoom_export.setMaxZoom()
 
 on("gameWheelmoved", function(_, dy)
     local speed = zoom_speed or DEFAULT_ZOOM_SPEED
@@ -20,6 +23,9 @@ on("gameWheelmoved", function(_, dy)
     -- now clamp:
     base.camera.scale = math.min(math.max(base.camera.scale, MIN_ZOOM), MAX_ZOOM)
 end)
+
+
+
 
 
 local last_camx, last_camy = base.camera.x or 0, base.camera.y or 0

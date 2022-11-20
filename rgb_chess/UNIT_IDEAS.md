@@ -3,6 +3,10 @@
 ## Format:  name, ATCK/HEALTH
 
 
+COSTS:
+Each unit has different gold costs.
+However, each unit costs 1 mana.
+
 
 ### TIER 1 UNITS:::
 
@@ -42,10 +46,11 @@ if no [color] allies exist,
 become a 9/50.
 
 # tanko
-melee, 2/35
+melee, 2/20
 splash damage.
 start of turn:
-lose 3 max hp permanently
+If no [color] allies exist,
+give all allies +2 hp
 
 
 
