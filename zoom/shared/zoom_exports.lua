@@ -2,8 +2,8 @@
 
 
 local function loadClient(zoom)
-    local 
-    zoom.setMaxZoom = 
+    local zoom
+    -- TODO
 end
 
 

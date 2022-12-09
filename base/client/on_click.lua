@@ -38,7 +38,6 @@ on("gameMousepressed", function(mx, my, button, istouch, presses)
     -- this needs to be spatial partitioned probably.
 
     local worldX, worldY = base.camera:toWorldCoords(mx, my)
-    print("WX,WY:",worldX, worldY)
 
     base.shockwave(worldX, worldY, 0, 50, 4, 3)
 
@@ -56,9 +55,7 @@ on("gameMousepressed", function(mx, my, button, istouch, presses)
         end
     end
 
-    print("gameMousepressed")
     if bestEnt then
-        print("clickEntity")
         client.send("clickEntity", bestEnt, button, worldX, worldY)
     end
 end)

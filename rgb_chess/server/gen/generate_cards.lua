@@ -60,7 +60,8 @@ local earlyRGBSelection = base.weightedRandom({
     -- [result]    =  probability weight
     [rgb.COLS.RED] =    0.3,
     [rgb.COLS.BLU] =    0.3,
-    [rgb.COLS.GRN] =    0.3
+    [rgb.COLS.GRN] =    0.3,
+    [rgb.COLS.WHI] = 999999999999
 })
 
 

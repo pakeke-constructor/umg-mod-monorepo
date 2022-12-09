@@ -1,6 +1,5 @@
 
 
-
 local zoom_speed = nil
 
 local DEFAULT_ZOOM_SPEED = 22
@@ -10,7 +9,10 @@ local MIN_ZOOM = 0.1
 
 local zoom_export = {}
 
-function zoom_export.setMaxZoom()
+
+--  function zoom_export.setMaxZoom()
+
+
 
 on("gameWheelmoved", function(_, dy)
     local speed = zoom_speed or DEFAULT_ZOOM_SPEED

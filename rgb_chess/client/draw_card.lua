@@ -126,6 +126,17 @@ local function drawUnitInfo(ent)
         Slab.Text(txt, descTextArgs)
     end
 
+    Slab.Text(" ")
+    Slab.Separator()
+
+    Slab.Text("Contains:")
+    for colname, col in pairs(rgb.COLS) do
+        if rgb.areMatchingColors(col, ent.rgb) then
+            Slab.Text(colname .. "  ", {Color = col})
+            Slab.SameLine()
+        end
+    end
+
     Slab.EndWindow()
 end
 

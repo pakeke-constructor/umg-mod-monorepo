@@ -1,5 +1,13 @@
 
 
+
+MODDING OVERVIEW TODO:  (feedback from Turna)
+- Explain base mods a little bit.
+- In the Entity and Group section, link to bigger explanations.
+- Have a link at the top to the wiki.
+
+
+
 # Full modding overview.
 This overview is meant to be as concise as possible. 
 I'm not going to waste your time.     
@@ -9,12 +17,12 @@ Also, experience in [love2d](https://love2d.org) helps.
 # Table of Contents:
 - Basics:
     - [Folder structure](#mod-folder-structure)
-    - [Mod names / uploading](#mod-naming-and-uploading)
 - ECS Architecture:
     - [Entities](#entities)
     - [Groups](#groups)
     - [Callbacks](#callbacks)
     - [Client-server communication](#client-server-communication)
+- Cheatsheet:
     - [General API reference](#general-api-reference)
 
 
@@ -55,21 +63,37 @@ This project uses something that resembles an Entity Component System.
 
 ## Entities:
 
-To define an entity type, return a table from a file inside of `entities/`:
+An entity is just a glorified lua table, pretty much.<br>
+They contain "components", which are just key-values in the table.
+
+What a player entity might look like:
 ```lua
--- filename:
--- my_entity.lua
+{
+    x = 10, y = 10,
+    vx = 0, vy = 0,
+    controller = "bob_78",
+    image = "player_image",
+}
+```
+
+Before we create an entity though, we must define it's type!<br>
+(Think of this like a "class" in OOP)<br>
+To define an entity type, return a table from a file inside of `entities/`.<br>
+The ECS will automatically load the entity-type, and put a constructor inside of the global `entities` table.
+(Note that in lua, tables are both an array, AND a hashtable.)
+```lua
+-- entities/my_entity.lua
 
 return {
-    "x", "y",  -- these are "regular" components
-    "vx", "vy",
+    "x", "y",  -- these are "regular" components  (the array part)
+    "vx", "vy", 
     
-    image = "banana", -- these are "shared" components
+    image = "banana", -- these are "shared" components    (the hashtable part)
     color = {1.0, 1.0, 0} -- (think like Java static member)
 }
 ```
 The components will determine the behaviour/properties of the entity.<br> 
-For example, under the `base` mod, entities with `x`,`y` and `image` will get drawn to the screen. <br>
+For example, under the base mod, entities with "x", "y" and "image" components will get drawn to the screen. <br>
 (To learn more about how this is accomplished, take a look at the `group` function)
 
 To create an entity instance, use the `entities` table:   
@@ -86,8 +110,8 @@ print(ent)
 OUTPUT:
 
 [example_mod:my_entity] {
-    id = 15 -- all entities are assigned an id. 
-            -- This is the only "special" component
+    id = 15 -- all entities are assigned an id internally. 
+            -- IF YOU MODIFY THIS, STUFF WILL EXPLODE!!! YOU HAVE BEEN WARNED
     x = 69,
     y = 4001,
     vx = 0,
@@ -271,7 +295,7 @@ Sending tables across is the most expensive. Try to only send numbers, strings, 
 If you need to send a metatable across, take a look at the `register` function.
 (Remember; functions can't be serialized!)
 
-## General API reference
+## Cheatsheet:
 These are all the functions/modules that can be used whilst modding:  
 ```lua
 math  -- (lua math module)
