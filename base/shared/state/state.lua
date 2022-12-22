@@ -54,7 +54,7 @@ function state.setState(name)
     changeState(name)
 end
 
-on("playerJoin", function(username)
+umg.on("playerJoin", function(username)
     server.unicast(username, "baseModSetState", currentStateName)
 end)
 
@@ -94,7 +94,7 @@ end
 for _, cb in ipairs(CALLBACKS) do
     -- This kind of reflective, meta programming is kind of hacky..
     -- I'm not a fan of it, but oh well! :-)
-    on(cb, function(...)
+    umg.on(cb, function(...)
         local stateObj = stateTable[currentStateName]
         if stateObj and stateObj[cb] then
             stateObj[cb](...)

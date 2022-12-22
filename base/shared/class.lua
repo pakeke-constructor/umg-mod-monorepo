@@ -44,7 +44,7 @@ local function newClass(name, extends)
         setmetatable(class, default_class_mt)
     end
 
-    register(class, name)
+    umg.register(class, name)
     return class
 end
 

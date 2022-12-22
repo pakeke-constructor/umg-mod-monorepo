@@ -34,7 +34,7 @@ quad_to_oy = setmetatable({}, {
 return function(quad_or_name)
     local quad = quad_or_name
     if type(quad_or_name) == "string" then
-        quad = assets.images[quad_or_name]
+        quad = client.assets.images[quad_or_name]
     end
     assert(quad, "base.getQuadOffsets(quad) expects a valid quad (or name) as 1st arg")
     local ox = quad_to_ox[quad]

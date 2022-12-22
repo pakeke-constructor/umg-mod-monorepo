@@ -178,7 +178,7 @@ function rgb.changeRGB(ent, newRGB)
     else
         ent.rgb = newRGB
         server.broadcast("swapRGB", ent, newRGB)
-        call("swapRGB", ent, newRGB)
+        umg.call("swapRGB", ent, newRGB)
     end
 end
 else

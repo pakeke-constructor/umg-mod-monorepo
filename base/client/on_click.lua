@@ -2,7 +2,7 @@
 local getQuadOffsets = require("client.image_helpers.quad_offsets")
 
 
-local clickEnts = group("x", "y", "onClick")
+local clickEnts = umg.group("x", "y", "onClick")
 
 
 
@@ -33,7 +33,7 @@ end
 
 
 
-on("gameMousepressed", function(mx, my, button, istouch, presses)
+umg.on("gameMousepressed", function(mx, my, button, istouch, presses)
     -- TODO: This is kinda trash.
     -- this needs to be spatial partitioned probably.
 

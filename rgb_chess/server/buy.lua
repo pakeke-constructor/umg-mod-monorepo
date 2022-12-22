@@ -45,7 +45,7 @@ function buy.setCosts(rgbTeam)
     local board = Board.getBoard(rgbTeam)
     for i=1, #board.shop do
         local card = board.shop[i]
-        if exists(card) then
+        if umg.exists(card) then
             card.cost = buy.getCost(card, ct)
             server.broadcast("setRGBCardCost", card, card.cost)
         end
@@ -59,7 +59,7 @@ function buy.changeCosts(rgbTeam, dCost)
     local board = Board.getBoard(rgbTeam)
     for i=1, #board.shop do
         local card = board.shop[i]
-        if exists(card) then
+        if umg.exists(card) then
             card.cost = card.cost + dCost
             server.broadcast("setRGBCardCost", card, card.cost)
         end
@@ -82,7 +82,7 @@ local function buyUnitCard(card_ent)
         table.insert(squadron, ent)
     end
     for _, ent in ipairs(squadron) do
-        call("buyUnit", ent)
+        umg.call("buyUnit", ent)
     end
     -- TODO: Do feedback and stuff here.
 end
@@ -136,13 +136,13 @@ end
 
 
 local function sellUnit(ent)
-    call("sellUnit", ent)
+    umg.call("sellUnit", ent)
     ent:delete()
 end
 
 
 function buy.sellSquadron(ent)
-    call("sellSquadron", ent.squadron)
+    umg.call("sellSquadron", ent.squadron)
     local baseCost = ent.unitCardInfo.cost
     assert(ent.squadron,"?")
     local board = Board.getBoard(ent.rgbTeam)
@@ -154,7 +154,7 @@ end
 
 
 server.on("sellSquadron", function(sender, ent)
-    if not exists(ent) then
+    if not umg.exists(ent) then
         return
     end
     if not ent.squadron then

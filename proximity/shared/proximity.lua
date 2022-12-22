@@ -1,7 +1,7 @@
 
 
 
-local proximityEntities = group("proximity", "x", "y")
+local proximityGroup = umg.group("proximity", "x", "y")
 
 
 local function selectNew(ent, category, range)
@@ -58,7 +58,7 @@ local function updateEnt(ent)
     -- ent.proximity_inRange = true/false
 
     -- Special case, when we are looking for only one target ent
-    if exists(ent.proximityTargetEntity) then
+    if umg.exists(ent.proximityTargetEntity) then
         ent.proximity_targetEnt = ent.proximityTargetEntity
         local targ = ent.proximity_targetEnt
         doCalls(ent, targ, range)
@@ -67,7 +67,7 @@ local function updateEnt(ent)
 
     if ent.proximity_inRange then
         local targ = ent.proximity_targetEnt
-        if (not exists(targ)) or math.distance(ent, targ) > range then
+        if (not umg.exists(targ)) or math.distance(ent, targ) > range then
             callExit(ent, targ)
         end
     else
@@ -81,12 +81,12 @@ end
 
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     --[[
         TODO:
         This is O(n^2). I don't like this!
     ]]
-    for _, ent in ipairs(proximityEntities) do
+    for _, ent in ipairs(proximityGroup) do
         updateEnt(ent)
     end
 end)

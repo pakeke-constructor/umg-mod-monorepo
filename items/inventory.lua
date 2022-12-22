@@ -132,7 +132,7 @@ function Inventory:set(x, y, item_ent)
 
     if server then
         -- We update the stacksize with this too.
-        call("setInventoryItem", self, x, y, item_ent)
+        umg.call("setInventoryItem", self, x, y, item_ent)
     end
 end
 
@@ -151,7 +151,7 @@ function Inventory:count(item_or_itemName)
     for x=1, self.width do
         for y=1, self.height do
             local check_item = self:get(x,y)
-            if exists(check_item) then
+            if umg.exists(check_item) then
                 -- if its nil, there is no item there.
                 if itemName == check_item.itemName then
                     count = count + check_item.stackSize
@@ -167,7 +167,7 @@ function Inventory:contains(item_or_itemName)
     for x=1, self.width do
         for y=1, self.height do
             local check_item = self:get(x,y)
-            if exists(check_item) then
+            if umg.exists(check_item) then
                 -- if its nil, there is no item there.
                 if item_or_itemName == check_item.itemName or item_or_itemName == check_item then
                     return true, x, y
@@ -186,14 +186,14 @@ function Inventory:getFreeSpace()
     for i=1, self.width * self.height do
         x, y = self:getXY(i)
         if self:slotExists(x, y) then
-            if not exists(self.inventory[i]) then
+            if not umg.exists(self.inventory[i]) then
                 if self.inventory[i] then
                     -- delete non-existant entity
                     -- yeah... idk what happened here lol.
                     self.inventory[i] = nil
                 end
                 assert(self:getIndex(x,y) == i, "bug with inventory mod")--sanity check
-                assert(not exists(self:get(x,y)), "bug with inventory mod")
+                assert(not umg.exists(self:get(x,y)), "bug with inventory mod")
                 return x,y
             end
         end
@@ -208,7 +208,7 @@ function Inventory:getFreeSpaceFor(item)
         for i=1, self.width * self.height do
             x, y = self:getXY(i)
             if self:slotExists(x, y) then
-                local item_ent = exists(self.inventory[i]) and self.inventory[i]
+                local item_ent = umg.exists(self.inventory[i]) and self.inventory[i]
                 if item_ent then
                     if item_ent.itemName == item.itemName then
                         local remainingStackSize = (item_ent.maxStackSize or 1) - (item_ent.stackSize or 1)
@@ -226,7 +226,7 @@ end
 
 
 function Inventory:canOpen(ent)
-    assert(exists(ent), "Inventory:canOpen(ent) takes an entity as first argument. (Where the entity is the one opening the inventory)")
+    assert(umg.exists(ent), "Inventory:canOpen(ent) takes an entity as first argument. (Where the entity is the one opening the inventory)")
     local owner = self.owner
     if owner.controllable or owner.controller then
         if not (owner.publicInventory or (owner == ent)) then
@@ -246,14 +246,14 @@ end
 
 function Inventory:open()
     -- Should only be called on client-side
-    call("openInventory", self, self.owner)
+    umg.call("openInventory", self, self.owner)
     self.isOpen = true
 end
 
 
 function Inventory:close()
     -- Should only be called on client-side
-    call("closeInventory", self, self.owner)
+    umg.call("closeInventory", self, self.owner)
     self.isOpen = false
 end
 
@@ -330,33 +330,33 @@ end
 local WHITE = {1,1,1}
 
 function Inventory:drawItem(item_ent, x, y)
-    graphics.push()
-    graphics.setColor(item_ent.color or WHITE)
+    love.graphics.push()
+    love.graphics.setColor(item_ent.color or WHITE)
 
     local offset = (PACKED_SQUARE_SIZE - ITEM_SIZE) / 2
-    local quad = assets.images[item_ent.image]
+    local quad = client.assets.images[item_ent.image]
     local _,_, w,h = quad:getViewport()
     if (w ~= 16 or h ~= 16) then
         error("Image dimensions for items must be 16 by 16! Not the case for this entity:\n" .. tostring(item_ent))
     end
     local X = PACKED_SQUARE_SIZE * (x-1) + offset + self.draw_x
     local Y = PACKED_SQUARE_SIZE * (y-1) + offset + self.draw_y
-    graphics.atlas:draw(quad, X, Y)
+    client.atlas:draw(quad, X, Y)
 
     if item_ent.stackSize > 1 then
-        graphics.push()
-        graphics.translate(X-2,Y-2)
-        graphics.scale(0.5)
-        graphics.setColor(0,0,0,1)
-        graphics.print(item_ent.stackSize, -1,0)
-        graphics.print(item_ent.stackSize, 1,0)
-        graphics.print(item_ent.stackSize, 0,1)
-        graphics.print(item_ent.stackSize, 0,-1)
-        graphics.setColor(1,1,1,1)
-        graphics.print(item_ent.stackSize, 0,0)
-        graphics.pop()
+        love.graphics.push()
+        love.graphics.translate(X-2,Y-2)
+        love.graphics.scale(0.5)
+        love.graphics.setColor(0,0,0,1)
+        love.graphics.print(item_ent.stackSize, -1,0)
+        love.graphics.print(item_ent.stackSize, 1,0)
+        love.graphics.print(item_ent.stackSize, 0,1)
+        love.graphics.print(item_ent.stackSize, 0,-1)
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.print(item_ent.stackSize, 0,0)
+        love.graphics.pop()
     end
-    graphics.pop()
+    love.graphics.pop()
 end
 
 
@@ -364,7 +364,7 @@ end
 
 local function drawQuad(self, x, y, quadName)
     local offset = (PACKED_SQUARE_SIZE - ITEM_SIZE) / 2
-    local quad = assets.images[quadName]
+    local quad = client.assets.images[quadName]
     if not quad then error("unknown image: " .. tostring(quadName)) end
     local _,_, w,h = quad:getViewport()
     if (w ~= 16 or h ~= 16) then
@@ -372,7 +372,7 @@ local function drawQuad(self, x, y, quadName)
     end
     local X = PACKED_SQUARE_SIZE * (x-1) + offset + self.draw_x
     local Y = PACKED_SQUARE_SIZE * (y-1) + offset + self.draw_y
-    graphics.atlas:draw(quad, X, Y)
+    client.atlas:draw(quad, X, Y)
 end
 
 
@@ -399,40 +399,41 @@ function Inventory:drawUI()
         return
     end
 
-    graphics.push("all")
+    love.graphics.push("all")
     -- No need to scale for UI- this should be done by draw system.
 
     local col = self.color
     local W = self.width * PACKED_SQUARE_SIZE + BORDER_OFFSET * 2
     local H = self.height * PACKED_SQUARE_SIZE + BORDER_OFFSET * 2
     
-    graphics.setColor(col[1] / 2, col[2] / 2, col[3] / 2)
-    graphics.setLineWidth(4)
-    graphics.rectangle("line", self.draw_x - BORDER_OFFSET, self.draw_y - BORDER_OFFSET, W, H)
-    graphics.setColor(col)
-    graphics.rectangle("fill", self.draw_x - BORDER_OFFSET, self.draw_y - BORDER_OFFSET, W, H)
+    love.graphics.setColor(col[1] / 2, col[2] / 2, col[3] / 2)
+    love.graphics.setLineWidth(4)
+    love.graphics.rectangle("line", self.draw_x - BORDER_OFFSET, self.draw_y - BORDER_OFFSET, W, H)
+    love.graphics.setColor(col)
+    love.graphics.rectangle("fill", self.draw_x - BORDER_OFFSET, self.draw_y - BORDER_OFFSET, W, H)
 
     local offset = (PACKED_SQUARE_SIZE - SQUARE_SIZE) / 2
 
     for x = 0, self.width - 1 do
         for y = 0, self.height - 1 do
-            if self:slotExists(x+1, y+1) then
+            local inv_x, inv_y = x+1, y+1 -- inventory is 1-indexed
+            if self:slotExists(inv_x, inv_y) then
                 local X = self.draw_x + x * PACKED_SQUARE_SIZE + offset
                 local Y = self.draw_y + y * PACKED_SQUARE_SIZE + offset
-                graphics.setColor(col[1] / 1.5, col[2] / 1.5, col[3] / 1.5)
-                graphics.rectangle("fill", X, Y, SQUARE_SIZE, SQUARE_SIZE)
-                if self:get(x + 1, y + 1) then
-                    local item = self:get(x+1,y+1)
-                    if exists(item) then
+                love.graphics.setColor(col[1] / 1.5, col[2] / 1.5, col[3] / 1.5)
+                love.graphics.rectangle("fill", X, Y, SQUARE_SIZE, SQUARE_SIZE)
+                if self:get(inv_x, inv_y) then
+                    local item = self:get(inv_x, inv_y)
+                    if umg.exists(item) then
                         -- only draw the item if it exists.
-                        self:drawItem(item, x + 1, y + 1)
+                        self:drawItem(item, inv_x, inv_y)
                     else
-                        self:set(x+1, y+1, nil)
+                        self:set(inv_x, inv_y, nil)
                     end
                 end
-                if self.holding_x == x+1 and self.holding_y == y+1 then
-                    graphics.setColor(0,0,0, 0.5)
-                    graphics.rectangle("line", X, Y, SQUARE_SIZE, SQUARE_SIZE)
+                if self.holding_x == inv_x and self.holding_y == inv_y then
+                    love.graphics.setColor(0,0,0, 0.5)
+                    love.graphics.rectangle("line", X, Y, SQUARE_SIZE, SQUARE_SIZE)
                 end
             end
         end
@@ -447,26 +448,26 @@ function Inventory:drawUI()
         drawButtons(self)
     end
     
-    graphics.pop()
+    love.graphics.pop()
 end
 
 
 
 function Inventory:drawHoldWidget(x, y)
     local item = self:get(x, y)
-    if not exists(item) then return end
-    local mx, my = mouse.getPosition()
+    if not umg.exists(item) then return end
+    local mx, my = love.mouse.getPosition()
     local ui_scale = base.getUIScale()
     mx, my = mx / ui_scale, my / ui_scale
-    graphics.push("all")
-    graphics.setLineWidth(3)
-    graphics.setColor(1,1,1,0.7)
+    love.graphics.push("all")
+    love.graphics.setLineWidth(3)
+    love.graphics.setColor(1,1,1,0.7)
     local ix = (x-1) * PACKED_SQUARE_SIZE + self.draw_x + PACKED_SQUARE_SIZE/2
     local iy = (y-1) * PACKED_SQUARE_SIZE + self.draw_y + PACKED_SQUARE_SIZE/2
-    graphics.line(mx, my, ix, iy)
-    graphics.setColor(1,1,1)
-    graphics.circle("fill", mx,my, 2)
-    graphics.pop()
+    love.graphics.line(mx, my, ix, iy)
+    love.graphics.setColor(1,1,1)
+    love.graphics.circle("fill", mx,my, 2)
+    love.graphics.pop()
 end
 
 

@@ -6,7 +6,7 @@ local tick = 0
 
 local BIG = 0xffffff
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     tick = (tick + dt) % BIG
 end)
 

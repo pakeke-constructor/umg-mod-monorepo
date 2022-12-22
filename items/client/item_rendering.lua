@@ -33,7 +33,7 @@ end
 
 
 
-local holding_ents = group("inventory", "x", "y")
+local holding_ents = umg.group("inventory", "x", "y")
 
 local ent_to_pointDirectionX = {
     -- holding entity to point direction
@@ -50,7 +50,7 @@ end)
 
 
 client.on("setInventoryHoldItem", function(ent, item)
-    if ent.controller == username then
+    if ent.controller == client.getUsername() then
         -- Ignore broadcasts for our own entities;
         -- We will have more up to date data.
         return 
@@ -70,7 +70,7 @@ end)
 
 
 local function getPointDirection(ent)
-    if ent.controller == username then
+    if ent.controller == client.getUsername() then
         return normalize(getMouseDirection(ent))
     else
         local x,y = ent_to_pointDirectionX[ent], ent_to_pointDirectionY[ent]
@@ -134,15 +134,15 @@ local function getTurnDirection(ent)
 end
 
 
-local control_turn_ents = group(
+local control_turn_ents = umg.group(
     "faceDirection", "inventory", "controllable", "controller", "x", "y"
 )
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     for i=1, #control_turn_ents do
         local ent = control_turn_ents[i]
-        if ent.controller == username then
+        if ent.controller == client.getUsername() then
             ent.faceDirection = getTurnDirection(ent)
         end
     end
@@ -150,15 +150,19 @@ end)
 
 
 
-local control_inventory_ents = group("controllable", "controller", "inventory", "x", "y")
+local controlInventoryGroup = umg.group("controllable", "controller", "inventory", "x", "y")
 
-on("tick", function(dt)
-    for i=1, #control_inventory_ents do
-        local ent = control_inventory_ents[i]
-        if ent.controller == username then
+umg.on("tick", function(dt)
+    for i, ent in ipairs(controlInventoryGroup) do
+        if ent.controller == client.getUsername() then
             local inv = ent.inventory
-            local hold_x, hold_y = inv.holding_x, inv.holding_y
-            client.send("setInventoryHoldValues", ent, ent.faceDirection, hold_x, hold_y, getPointDirection(ent))
+            if inv then
+                local hold_x, hold_y = inv.holding_x, inv.holding_y
+                if hold_x and hold_y and inv:get(hold_x, hold_y) then
+                    local hold_item = inv:get(hold_x, hold_y)
+                    client.send("setInventoryHoldItemPosition", ent, ent.faceDirection, hold_x, hold_y, getPointDirection(ent))
+                end
+            end
         end
     end
 end)
@@ -198,13 +202,13 @@ rendering of held items.
 
 ]]
 
-local curTime = timer.getTime()
+local curTime = love.timer.getTime()
 
 local function onUseItem(item, holder_ent, ...)
     item.item_lastUseTime = curTime
 end
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     curTime = curTime + dt
 end)
 
@@ -214,14 +218,14 @@ local function renderHolder(ent, holder, rot, dist, sx, sy, oxx, oyy)
     oxx = oxx or 0
     oyy = oyy or 0
     local img = ent.itemHoldImage or ent.image
-    if not assets.images[img] then
+    if not client.assets.images[img] then
         error("Unknown image for holding item:  " .. tostring(img))
     end
     local dx, dy = getPointDirection(holder)
-    local quad = assets.images[img]
+    local quad = client.assets.images[img]
     local ox, oy = base.getQuadOffsets(quad)
 
-    graphics.atlas:draw(
+    client.atlas:draw(
         quad, 
         holder.x + dx*dist + oxx, 
         holder.y - (holder.z or 0)/2 + dy*dist + oyy,
@@ -281,8 +285,8 @@ end
 function holdRendering.place(item, holder)
     local img = item.itemHoldImage or item.image
     if img then
-        graphics.push("all")
-        graphics.setLineWidth(6)
+        love.graphics.push("all")
+        love.graphics.setLineWidth(6)
         
         local x, y = base.camera:getMousePosition()
         local modX, modY = 1,1
@@ -302,18 +306,18 @@ function holdRendering.place(item, holder)
         y = math.floor((y / modY) + 1/2) * modY
 
         if item:canUse(x, y) then
-            graphics.setColor(1,1,1,0.4)
+            love.graphics.setColor(1,1,1,0.4)
         else
-            graphics.setColor(1,0,0,0.4)
+            love.graphics.setColor(1,0,0,0.4)
         end
 
-        graphics.line(x,y, holder.x,holder.y)
-        local quad = assets.images[img]
+        love.graphics.line(x,y, holder.x,holder.y)
+        local quad = client.assets.images[img]
         local ox, oy = base.getQuadOffsets(quad)
-        graphics.atlas:draw(
+        client.atlas:draw(
             quad, x, y, 0, 1, 1, ox, oy
         )
-        graphics.pop()
+        love.graphics.pop()
     end
 end
 
@@ -324,7 +328,7 @@ function holdRendering.custom(item, holder)
 end
 
 
-on("drawEntity", function(ent)
+umg.on("drawEntity", function(ent)
     if ent.inventory then
         local h = ent.inventory:getHoldingItem()
         if h and h.itemHoldType then

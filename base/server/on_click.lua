@@ -13,7 +13,7 @@ end
 
 
 server.on("clickEntity", function(sender_uname, ent, button, worldX, worldY)
-    if not (exists(ent) and ent.onClick) then
+    if not (umg.exists(ent) and ent.onClick) then
         return
     end
     if button ~= 1 and button ~= 2 then

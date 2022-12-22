@@ -9,14 +9,14 @@ local base_lighting = DEFAULT
 
 local light = {}
 
-local lights = group("x","y","light")
+local lightGroup = umg.group("x","y","light")
 
 
 local light_image, W, H
 
 
 function light.setLightImage(imgName)
-    light_image = graphics.newImage(imgName)
+    light_image = love.graphics.newImage(imgName)
     W, H = light_image:getDimensions()
 end
 
@@ -27,17 +27,17 @@ light.setLightImage(DEFAULT_LIGHT_IMAGE)
 
 local LEIGH = 20
 
-local canvas = graphics.newCanvas(
-    graphics.getWidth() + LEIGH,
-    graphics.getHeight() + LEIGH
+local canvas = love.graphics.newCanvas(
+    love.graphics.getWidth() + LEIGH,
+    love.graphics.getHeight() + LEIGH
 )
 
 
 
-on("resize", function(w,h)
-    canvas = graphics.newCanvas(
-        graphics.getWidth() + LEIGH,
-        graphics.getHeight() + LEIGH
+umg.on("resize", function(w,h)
+    canvas = love.graphics.newCanvas(
+        love.graphics.getWidth() + LEIGH,
+        love.graphics.getHeight() + LEIGH
     )
 end)
 
@@ -48,38 +48,38 @@ local DEFAULT_COLOR = {1,1,1}
 
 
 local function setupCanvas()
-    graphics.push("all")
-    graphics.setCanvas(canvas)
-    graphics.clear(base_lighting)
-    --graphics.setBlendMode("add")
+    love.graphics.push("all")
+    love.graphics.setCanvas(canvas)
+    love.graphics.clear(base_lighting)
+    --love.graphics.setBlendMode("add")
 
-    for _, ent in ipairs(lights) do
+    for _, ent in ipairs(lightGroup) do
         -- TODO: Check if entity is on the screen
         local l = ent.light
         local radius = l.radius or DEFAULT_RADIUS
         local scale = (radius*2) / W
         -- times by 2, because W is twice as large as light image radius
-        graphics.setColor(l.color or DEFAULT_COLOR)
-        graphics.draw(light_image, ent.x, ent.y, 0, scale, scale, W/2, H/2)
+        love.graphics.setColor(l.color or DEFAULT_COLOR)
+        love.graphics.draw(light_image, ent.x, ent.y, 0, scale, scale, W/2, H/2)
     end
 
-    graphics.setCanvas()
-    graphics.pop()
+    love.graphics.setCanvas()
+    love.graphics.pop()
 end
 
 
 local function drawCanvas()
-    graphics.push("all")
-    graphics.origin()
-    graphics.setColor(1,1,1,1)
-    graphics.setCanvas()
-    graphics.setBlendMode("multiply", "premultiplied")
-    graphics.draw(canvas)
-    graphics.pop()
+    love.graphics.push("all")
+    love.graphics.origin()
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.setCanvas()
+    love.graphics.setBlendMode("multiply", "premultiplied")
+    love.graphics.draw(canvas)
+    love.graphics.pop()
 end
 
 
-on("postDraw", function()
+umg.on("postDraw", function()
     setupCanvas()
     drawCanvas()
 end)
@@ -93,7 +93,7 @@ function light.setBaseLighting(r,g,b)
         r=r[1]
     end
 
-    assert(type(r) == "number" and type(g) == "number" and type(b) == "number", "Bad usage of graphics.setBaseLighting")
+    assert(type(r) == "number" and type(g) == "number" and type(b) == "number", "Bad usage of love.graphics.setBaseLighting")
     base_lighting[1] = r
     base_lighting[2] = g
     base_lighting[3] = b
@@ -101,6 +101,6 @@ end
 
 
 
-export("light", light)
+umg.export("light", light)
 
 

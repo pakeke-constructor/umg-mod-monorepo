@@ -1,7 +1,7 @@
 
 local constants = require("shared.constants")
 
-on("tick", function()
+umg.on("tick", function()
     local player = base.getPlayer()
     if player then
         if player.z < constants.PLAYER_CATCH_THRESHOLD then

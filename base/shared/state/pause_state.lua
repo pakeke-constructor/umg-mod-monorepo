@@ -17,7 +17,7 @@ local pauseState = {
 function pauseState.draw(...)
     -- We just call gameDraw here, because draw function doesn't (or SHOULDNT) 
     -- mutate the state of the world.
-    call("gameDraw", ...)
+    umg.call("gameDraw", ...)
 end
 
 

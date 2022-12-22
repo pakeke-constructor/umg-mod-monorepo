@@ -1,7 +1,7 @@
 
 
 
-local inventoryGroup = group("inventory")
+local inventoryGroup = umg.group("inventory")
 -- group of all ents that have an `inventory` component.
 
 local invCtor = require("inventory")
@@ -41,7 +41,7 @@ inventoryGroup:onRemoved(function(ent)
     for x=1, inv.width do
         for y=1, inv.height do
             local item = inv:get(x, y)
-            if exists(item) then
+            if umg.exists(item) then
                 item:delete()
             end
         end
@@ -52,7 +52,7 @@ end)
 
 
 
-on("setInventoryItem", function(inventory, x, y, item_ent)
+umg.on("setInventoryItem", function(inventory, x, y, item_ent)
     server.broadcast("setInventoryItem", inventory.owner, x, y, item_ent)
 end)
 
@@ -151,7 +151,7 @@ function(username, ent, other_ent, x, y, x2, y2, count)
     local item = inv1:get(x,y)
     local targ = inv2:get(x2,y2)
 
-    if not exists(item) then
+    if not umg.exists(item) then
         return -- Nothing to move; exit early
     end
 
@@ -201,7 +201,7 @@ function(username, ent, other_ent, x, y, x2, y2, count)
         if count < stackSize then
             -- Damn, gotta create a new entity
             local typename = item:type()
-            local new = entities[typename]()
+            local new = server.entities[typename]()
             new.x = item.x
             new.y = item.y
             new.stackSize = count

@@ -39,5 +39,5 @@ function chat.handleCommand(commandName, func)
 end
 
 
-export("chat", chat)
+umg.export("chat", chat)
 

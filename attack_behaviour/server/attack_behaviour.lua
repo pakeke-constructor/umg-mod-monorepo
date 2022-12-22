@@ -2,7 +2,7 @@
 local attack = require("server.attack")
 
 
-local attackGroup = group("attackBehaviour")
+local attackGroup = umg.group("attackBehaviour")
 
 
 local ATTACK_TYPES = {
@@ -37,7 +37,7 @@ attackGroup:onAdded(function(ent)
     end
 
     if ab.type == "ranged" then
-        assert(ab.projectile and entities[ab.projectile], "invalid attackBehaviour.projectile value: " .. tostring(ab.projectile) .. " for ent: " .. ent:type())
+        assert(ab.projectile and server.entities[ab.projectile], "invalid attackBehaviour.projectile value: " .. tostring(ab.projectile) .. " for ent: " .. ent:type())
     end
 end)
 
@@ -56,8 +56,8 @@ local function attackRanged(ent, target_ent)
         This function spawns a projectile entity.
     ]]
     local etype = ent.attackBehaviour.projectile
-    assert(etype and entities[etype], "ranged attacker doesn't have a valid projectile")
-    local projectile_ent = entities[etype](ent.x, ent.y)
+    assert(etype and server.entities[etype], "ranged attacker doesn't have a valid projectile")
+    local projectile_ent = server.entities[etype](ent.x, ent.y)
     assert(projectile_ent:hasComponent("attackBehaviourProjectile"), "This entity is not a projectile! (projectiles require attackBehaviourProjectile component.)")
     if ent.fireProjectile then
         ent:fireProjectile(target_ent, projectile_ent)
@@ -117,7 +117,7 @@ local function findClosestEntity(src_ent, category)
         if ent ~= src_ent and ent:hasComponent("health") then
             -- we don't want to attack self, and we don't want to hit an entity without
             -- a health component (that wouldn't make sense.)
-            if not exists(ent) then
+            if not umg.exists(ent) then
                 error("what the fuck")
             end
             local dist = math.distance(ent, src_ent)
@@ -145,7 +145,7 @@ end
 
 
 local ct = 0
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     -- Run the function every 5 game frames:
     ct = ct + 1
     if ct < 5 then
@@ -158,7 +158,7 @@ on("gameUpdate", function(dt)
     for _, ent in ipairs(attackGroup) do
         if ent.attackBehaviour then
             local target = ent.attackBehaviourTargetEntity
-            if not exists(target) then
+            if not umg.exists(target) then
                 ent.attackBehaviourTargetEntity = nil
                 target = nil
             end
@@ -166,7 +166,7 @@ on("gameUpdate", function(dt)
             if targetCategory and (not target) then
                 target = findClosestEntity(ent, targetCategory)
             end
-            if exists(target) and math.distance(target, ent) < ent.attackBehaviour.range then
+            if umg.exists(target) and math.distance(target, ent) < ent.attackBehaviour.range then
                 ent.attackBehaviourTargetEntity = target -- we do a bit of cacheing
                 tryAttack(ent, target, now)
             end

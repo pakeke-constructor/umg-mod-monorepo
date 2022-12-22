@@ -8,7 +8,7 @@ local HEALTH_BUFF_AM = 1
 local DMG_BUFF_AM = 1
 
 
-return extend("abstract_ranged", {
+return umg.extend("abstract_ranged", {
     --[[
         on ally summoned:
         if ally is [color], give ally 1/1

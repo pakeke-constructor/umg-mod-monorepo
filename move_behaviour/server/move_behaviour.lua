@@ -1,6 +1,6 @@
 
 
-local moveBehaviourGroup = group("x", "y", "vx", "vy", "moveBehaviour", "speed")
+local moveBehaviourGroup = umg.group("x", "y", "vx", "vy", "moveBehaviour", "speed")
 
 local helper = require("server.helper")
 
@@ -13,7 +13,7 @@ local helper = require("server.helper")
 local follow = {}
 function follow.update(ent,dt)
     local targ = ent.moveBehaviourTargetEntity
-    if not exists(targ) then
+    if not umg.exists(targ) then
         ent.moveBehaviourTargetEntity = nil
         targ = nil
     else
@@ -33,12 +33,12 @@ local CIRCLE_DEFAULT_PERIOD = 2
 local CIRCLE_DEFAULT_RADIUS = 50
 function circle.update(ent,dt)
     local targ = ent.moveBehaviourTargetEntity
-    if not exists(targ) then
+    if not umg.exists(targ) then
         ent.moveBehaviourTargetEntity = nil
         targ = nil
     end
     if not targ then return end
-    local time = timer.getTime()
+    local time = love.timer.getTime()
     local offset = ((ent.id % 10) / 10) * pi2
     local period = ent.moveBehaviour.circlePeriod or CIRCLE_DEFAULT_PERIOD
     local radius = ent.moveBehaviour.circleRadius or CIRCLE_DEFAULT_RADIUS
@@ -116,7 +116,7 @@ local moveBehaviours = {
 
 local ct = 0
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     -- This function runes once every 50 frames:
     ct = ct + 1
     if ct < 50 then
@@ -136,7 +136,7 @@ end)
 
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     for _, ent in ipairs(moveBehaviourGroup) do
         local mb = ent.moveBehaviour
         if not (moveBehaviours[mb.type]) then 

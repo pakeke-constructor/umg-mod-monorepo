@@ -1,7 +1,7 @@
 
 
 
-# ITEM COMPONENTS:
+## ITEM ENTITY EXAMPLE:
 ```lua
 
 return {

@@ -8,7 +8,7 @@ end
 local BUFF_AMOUNT = 2
 
 
-return extend("abstract_melee", {
+return umg.extend("abstract_melee", {
     --[[
         on turn start:
         grant all ranged [color] allies +2 dmg

@@ -4,7 +4,7 @@
 local function craftOnClick(inv)
     assert(client, "this should only be called clientside")
     local ent = inv.owner
-    if not exists(ent) then
+    if not umg.exists(ent) then
         return -- ???? I guess we can't craft...?
     end
 

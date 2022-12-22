@@ -38,12 +38,12 @@ local function generateBoardDecor(board)
     -- Pines:
     for xx = x, x + w, PINE_STEP do
         local dx,dy = getRandXY(PINE_RANDOM)
-        entities.pine(xx + dx, y + dy)
+        server.entities.pine(xx + dx, y + dy)
     end
     for yy = y, y + h, PINE_STEP do
         local dx,dy = getRandXY(PINE_RANDOM)
-        entities.pine(x + dx, yy + dy)
-        entities.pine(x - dx + w, yy - dy)
+        server.entities.pine(x + dx, yy + dy)
+        server.entities.pine(x - dx + w, yy - dy)
     end
 
     -- Grass:
@@ -51,7 +51,7 @@ local function generateBoardDecor(board)
         for yy = y + 50, y + h - 160, GRASS_STEP do
             if math.random() < GRASS_SPAWN_CHANCE then
                 local dx, dy = getRandXY(GRASS_RANDOM)
-                entities.grass(xx + dx, yy + dy)
+                server.entities.grass(xx + dx, yy + dy)
             end
         end
     end
@@ -62,12 +62,12 @@ local function generateBoardDecor(board)
             local lx = x + (xi * w/2) - w/4
             local ly = y + (yi * h/2) - h/4
             local rx, ry = (math.random()-0.5) * LIGHT_RANDOM, (math.random()-0.5) * LIGHT_RANDOM
-            entities.light(lx+rx, ly+ry, 200)
+            server.entities.light(lx+rx, ly+ry, 200)
         end
     end
     local lx, ly = x + w/2, y + h/2
     local rx, ry = (math.random()-0.5) * LIGHT_RANDOM, (math.random()-0.5) * LIGHT_RANDOM
-    entities.light(lx+rx, ly+ry, 200)
+    server.entities.light(lx+rx, ly+ry, 200)
 end
 
 return generateBoardDecor

@@ -5,19 +5,6 @@ Only list things that are either
 or (B) of high importance.
 
 
---------------------------------------------------------------------------
-
-make it so group() objects can do ipairs directly:
-```lua
-for i,v in ipairs(mygroup) ... end
-```
-
-
-
-change username variable to a `getUsername()` func on clientside.
-likewise, make a `getHostUsername()` func on serverside and clientside.
-
-
 
 
 Refactor item holding entirely:

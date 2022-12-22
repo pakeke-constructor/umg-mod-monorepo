@@ -1,5 +1,5 @@
 
-local control_ents = group("controllable", "controller")
+local controllableGroup = umg.group("controllable", "controller")
 
 
 -- Mapping from username -> control ent.
@@ -20,14 +20,14 @@ local ent_to_username = {
 }
 
 
-control_ents:onAdded(function(ent)
+controllableGroup:onAdded(function(ent)
     local uname = ent.controller
     username_to_ent[uname] = ent
     ent_to_username[ent] = uname
 end)
 
 
-control_ents:onRemoved(function(ent)
+controllableGroup:onRemoved(function(ent)
     local uname = ent_to_username[ent]
     if username_to_ent[uname] == ent then
         username_to_ent[uname] = nil
@@ -40,7 +40,7 @@ end)
 local function findEnt(uname)
     -- I don't think we can do any better than a linear search
     -- (This should usually be fine, as it'll be cached)
-    for _, ent in ipairs(control_ents) do
+    for _, ent in ipairs(controllableGroup) do
         if ent.controller == uname then
             return ent
         end
@@ -54,7 +54,7 @@ local function getPlayer(uname)
         if server then
             error("getPlayer expects a username as first argument.")            
         else
-            uname = username -- `username` is the client's username. 
+            uname = client.getUsername()
         end
     end
 
@@ -69,8 +69,8 @@ local function getPlayer(uname)
 
     local ent = findEnt(uname)
     if ent then
-        username_to_ent[username] = ent
-        ent_to_username[ent] = username
+        username_to_ent[client.getUsername()] = ent
+        ent_to_username[ent] = client.getUsername()
         return ent
     end
 end

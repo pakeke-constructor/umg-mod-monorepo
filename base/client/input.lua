@@ -91,7 +91,7 @@ local function assertValid(inpMapping)
         if not validInputEnums[inputEnum] then
             error("invalid input enum: " .. inputEnum, 2)
         end
-        keyboard.getKeyFromScancode(scancode) -- this just assets that the scancode is valid.
+        love.keyboard.getKeyFromScancode(scancode) -- this just assets that the scancode is valid.
     end
 end
 
@@ -139,7 +139,7 @@ function input.isDown(inputEnum)
     end
 
     local scancode = inputMapping[inputEnum]
-    return keyboard.isScancodeDown(scancode)
+    return love.keyboard.isScancodeDown(scancode)
 end
 
 
@@ -149,18 +149,18 @@ end
 
 
 
-on("gameKeypressed", function(_, scancode, isrepeat)
+umg.on("gameKeypressed", function(_, scancode, isrepeat)
     if (not locked) and scancodeMapping[scancode] then
         local inputEnum = scancodeMapping[scancode]
-        call("inputPressed", inputEnum, isrepeat)
+        umg.call("inputPressed", inputEnum, isrepeat)
     end
 end)
 
 
-on("gameKeyreleased", function(_, scancode, isrepeat)
+umg.on("gameKeyreleased", function(_, scancode, isrepeat)
     if (not locked) and scancodeMapping[scancode] then
         local inputEnum = scancodeMapping[scancode]
-        call("inputReleased", inputEnum, isrepeat)
+        umg.call("inputReleased", inputEnum, isrepeat)
     end
 end)
 

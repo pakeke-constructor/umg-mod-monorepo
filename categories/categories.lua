@@ -8,7 +8,7 @@ local categories = setmetatable({}, {
 })
 
 
-local categoryEntities = group("x", "y", "category")
+local categoryEntities = umg.group("x", "y", "category")
 
 
 categoryEntities:onAdded(function(ent)

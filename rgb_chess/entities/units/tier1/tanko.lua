@@ -7,7 +7,7 @@ end
 local HP_LOST = 3
 
 
-return extend("abstract_melee", {
+return umg.extend("abstract_melee", {
     --[[
         on turn start:
         lose 3 health

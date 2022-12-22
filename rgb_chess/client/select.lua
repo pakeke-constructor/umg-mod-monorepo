@@ -37,7 +37,7 @@ end
 function select.getSelected()
     if currentlySelected then
         for _, ent in ipairs(currentlySelected) do
-            if not exists(ent)then
+            if not umg.exists(ent)then
                 select.deselect()
                 break
             end
@@ -59,9 +59,9 @@ function select.getSelectedRGB()
 end
 
 
-on("gameUpdate", function()
+umg.on("gameUpdate", function()
     for ent,_ in pairs(selectedEnts) do
-        if not exists(ent) then
+        if not umg.exists(ent) then
             select.deselect()
             break
         end
@@ -70,7 +70,7 @@ end)
 
 
 
-on("gameMousepressed", function(x,y, button)
+umg.on("gameMousepressed", function(x,y, button)
     -- right click to deselect
     if button == 2 then
         select.deselect()

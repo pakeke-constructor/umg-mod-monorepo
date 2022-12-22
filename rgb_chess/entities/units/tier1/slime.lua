@@ -6,7 +6,7 @@ end
 
 local GOLD_AMOUNT = 3
 
-return extend("abstract_melee", {
+return umg.extend("abstract_melee", {
     --[[
         turn start:
         if there are at least 2 [color] allies,

@@ -26,7 +26,7 @@ local WHITE = {1,1,1}
 
 
 -- the current time.
-local curTime = timer.getTime()
+local curTime = love.timer.getTime()
 
 
 local function animate(frames, time, x,y,z, color)
@@ -84,7 +84,7 @@ local function drawAnimObj(animObj)
 
     if animObj.follow_ent then
         local ent = animObj.follow_ent
-        if exists(ent) then
+        if umg.exists(ent) then
             add_x = ent.x or animObj.add_x
             add_y = ent.y or animObj.add_y
             add_z = ent.z or animObj.add_z or 0
@@ -95,11 +95,11 @@ local function drawAnimObj(animObj)
     end
     local i = math.floor(((curTime - animObj.startTime) / animObj.time) * (#animObj.frames)) + 1
     local quadName = animObj.frames[i]
-    local r,g,b,a = graphics.getColor()
-    graphics.setColor(animObj.color)
+    local r,g,b,a = love.graphics.getColor()
+    love.graphics.setColor(animObj.color)
     local y = draw.getDrawY(add_y, add_z) + draw.getDrawY(animObj.y, animObj.z)
     drawImage(quadName, animObj.x + add_x, y)
-    graphics.setColor(r,g,b,a)
+    love.graphics.setColor(r,g,b,a)
 end
 
 
@@ -112,14 +112,14 @@ end
 
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     curTime = curTime + dt
 end)
 
 
 
 
-on("preDraw", function()
+umg.on("preDraw", function()
     --[[
     Updates entity animations from `animateEntity(...)`
 
@@ -147,7 +147,7 @@ end)
 
 
 
-on("drawIndex", function(indx)
+umg.on("drawIndex", function(indx)
     if drawIndexToAnimObj[indx] then
         local arr = drawIndexToAnimObj[indx]
         local len = #arr

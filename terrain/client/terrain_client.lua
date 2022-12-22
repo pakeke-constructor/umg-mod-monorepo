@@ -76,7 +76,7 @@ end
 
 
 local function makeMesh(verts)
-    local mesh = graphics.newMesh(verts)
+    local mesh = love.graphics.newMesh(verts)
     mesh:setVertexMap(1, 2, 4, 2, 3, 4)
     return mesh
 end
@@ -87,13 +87,13 @@ end
 local defaultWallTexture, defaultTopTexture
 
 local function getDefaultTopTex()
-    defaultTopTexture = defaultTopTexture or graphics.newImage("assets/terrain_default_top_texture.png")
+    defaultTopTexture = defaultTopTexture or love.graphics.newImage("assets/terrain_default_top_texture.png")
     return defaultTopTexture
 end
 
 
 local function getDefaultWallTex()
-    defaultWallTexture = defaultWallTexture or graphics.newImage("assets/terrain_default_wall_texture.png")
+    defaultWallTexture = defaultWallTexture or love.graphics.newImage("assets/terrain_default_wall_texture.png")
     return defaultWallTexture
 end
 
@@ -138,16 +138,16 @@ end)
 
 
 
-on("drawIndex", function(drawIndex)
+umg.on("drawIndex", function(drawIndex)
     for _, terrain in ipairs(terrainIds.getTerrainObjects().objects) do
         local ditgm = terrain.drawIndexToGreedyMesh
         if ditgm and ditgm[drawIndex] then
-            graphics.draw(ditgm[drawIndex])
+            love.graphics.draw(ditgm[drawIndex])
         end
 
         local ditm = terrain.drawIndexToMesh
         if ditm and ditm[drawIndex] then
-            graphics.draw(ditgm[drawIndex])
+            love.graphics.draw(ditgm[drawIndex])
         end
     end
 end)

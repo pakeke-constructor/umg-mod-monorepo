@@ -12,7 +12,7 @@ local directions = {
 }
 
 server.filter("setInventoryHoldValues", function(sender, ent, faceDir, hold_x, hold_y, dx, dy)
-    if not exists(ent)
+    if not umg.exists(ent)
         or ent.controller ~= sender 
         or (not ent.inventory)
         or (not directions[faceDir])
@@ -33,7 +33,7 @@ end)
 local updateStackSize = require("server.update_stacksize")
 
 
-local itemGroup = group("itemName", "stackSize", "maxStackSize")
+local itemGroup = umg.group("itemName", "stackSize", "maxStackSize")
 
 
 itemGroup:onAdded(function(item_ent)
@@ -44,7 +44,7 @@ itemGroup:onAdded(function(item_ent)
 end)
 
 
-on("tick", function()
+umg.on("tick", function()
     for _, item_ent in ipairs(itemGroup) do
         updateStackSize(item_ent)
     end

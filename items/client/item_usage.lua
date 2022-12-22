@@ -1,6 +1,6 @@
 
 
-local usable_items = group("itemName", "useItem")
+local usable_items = umg.group("itemName", "useItem")
 
 local itemRendering = require("client.item_rendering")
 
@@ -20,7 +20,7 @@ end
 
 
 local function adminCanUse(item_ent, holder_ent)
-    return holder_ent and holder_ent.controller == username and 
+    return holder_ent and holder_ent.controller == client.getUsername() and 
             item_ent.ownerInventory == holder_ent.inventory
 end
 
@@ -62,7 +62,7 @@ end)
 
 
 client.on("useItem", function(sender, item, holder_ent, ...)
-    if sender == username then
+    if sender == client.getUsername() then
         return -- ignore; we have already called `useItem`, 
         -- since we are the ones who sent the event!
     end

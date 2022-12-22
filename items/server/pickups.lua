@@ -9,19 +9,19 @@ Entities that can pick up items off the ground have a `canPickUp` component.
 local common = require("shared.common")
 
 
-local pickUpEntities = group("x", "y", "canPickUp")
+local pickUpGroup = umg.group("x", "y", "canPickUp")
 
-local itemEntities = group("x", "y", "itemName")
-
-
-
-
-local currentTime = timer.getTime()
+local itemGroup = umg.group("x", "y", "itemName")
 
 
 
 
-itemEntities:onAdded(function(e)
+local currentTime = love.timer.getTime()
+
+
+
+
+itemGroup:onAdded(function(e)
     if not e:isRegular("hidden") then
         error("Item entities must have a `hidden` regular component.\nNot the case for " .. e:type())
     end
@@ -32,7 +32,7 @@ itemEntities:onAdded(function(e)
 end)
 
 
-itemEntities:onRemoved(function(e)
+itemGroup:onRemoved(function(e)
     common.itemPartition:remove(e)
 end)
 
@@ -63,7 +63,7 @@ local function tryPickUpHold(ent, picked)
     --[[
         tries to pick up an item via `ent.holdItem` component
     ]]
-    if exists(ent.holdItem) then
+    if umg.exists(ent.holdItem) then
         return
     end
 
@@ -141,7 +141,7 @@ end
 local ct = 0
 local LOOP_CT = 8
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     -- This function runes once every LOOP_CT frames:
     ct = ct + 1
     if ct < LOOP_CT then
@@ -154,7 +154,7 @@ on("gameUpdate", function(dt)
 
     local picked = {}
     common.itemPartition:update(dt)
-    for _, ent in ipairs(pickUpEntities) do
+    for _, ent in ipairs(pickUpGroup) do
         if ent:isRegular("inventory") and ent.inventory then
             tryPickUpInventory(ent, picked)
         end 

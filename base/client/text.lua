@@ -1,12 +1,12 @@
 
-local font = graphics.getFont()
+local font = love.graphics.getFont()
 
 
 local DCOL = 0.4
 local WHITE = {1,1,1}
 
 
-on("drawEntity", function(ent)
+umg.on("drawEntity", function(ent)
     --[[
         text = {
             value = "hello",
@@ -29,16 +29,16 @@ on("drawEntity", function(ent)
         local text_ox = text.ox or 0
         local text_oy = text.oy or 0
         
-        graphics.push("all")
+        love.graphics.push("all")
     
         local y = base.getDrawY(ent.y,ent.z)
 
         local color = text.color or ent.color or WHITE
 
         if text.overlay then
-            graphics.setColor(color[1]-DCOL,color[2]-DCOL,color[3]-DCOL)
+            love.graphics.setColor(color[1]-DCOL,color[2]-DCOL,color[3]-DCOL)
             
-            graphics.print(
+            love.graphics.print(
                 val, 
                 ent.x + text_ox - 1, 
                 y + text_oy - 1,
@@ -47,8 +47,8 @@ on("drawEntity", function(ent)
             )
         end
 
-        graphics.setColor(color)
-        graphics.print(
+        love.graphics.setColor(color)
+        love.graphics.print(
             val, 
             ent.x + text_ox, 
             y + text_oy,
@@ -56,7 +56,7 @@ on("drawEntity", function(ent)
             width/2, height/2
         )
 
-        graphics.pop()
+        love.graphics.pop()
     end
 end)
 

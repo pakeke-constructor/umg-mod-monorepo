@@ -1,10 +1,10 @@
 
 
 
-local currentGameTime = timer.getTime()
+local currentGameTime = love.timer.getTime()
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     currentGameTime = currentGameTime + dt
 end)
 

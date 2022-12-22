@@ -553,9 +553,9 @@ local function newPhysicsRectangle(x,y,w,h)
         w,h is width and height of the block.
     ]]
     local world = base.physics.getWorld()
-    local body = physics.newBody(world,x+w/2,y+h/2,"static")
-    local shape = physics.newRectangleShape(w,h)
-    local fixture = physics.newFixture(body,shape)
+    local body = love.physics.newBody(world,x+w/2,y+h/2,"static")
+    local shape = love.physics.newRectangleShape(w,h)
+    local fixture = love.physics.newFixture(body,shape)
     return fixture
 end
 
@@ -563,14 +563,14 @@ end
 local function newPhysicsPolygon(cX, cY, a,b,c,d)
     -- cX and cY are centerX and centerY
     local world = base.physics.getWorld()
-    local body = physics.newBody(world, cX, cY, "static") 
-    local shape = physics.newPolygonShape(
+    local body = love.physics.newBody(world, cX, cY, "static") 
+    local shape = love.physics.newPolygonShape(
         a.x-cX, a.y-cY, 
         b.x-cX, b.y-cY, 
         c.x-cX, c.y-cY, 
         d.x-cX, d.y-cY
     )
-    local fixture = physics.newFixture(body,shape)
+    local fixture = love.physics.newFixture(body,shape)
     return fixture
 end
 
@@ -603,20 +603,20 @@ if client then
 
 function Terrain:draw()
     assert(self.quads and self.greedyQuads, "terrain not initialized")
-    graphics.push("all")
-    graphics.setColor(1,0.5,0.5,0.4)
+    love.graphics.push("all")
+    love.graphics.setColor(1,0.5,0.5,0.4)
     for _,quad in ipairs(self.quads) do
         local a,b,c,d = quad.a,quad.b,quad.c,quad.d
-        graphics.setColor(1,0.5,0.5,0.4)
-        graphics.polygon(
+        love.graphics.setColor(1,0.5,0.5,0.4)
+        love.graphics.polygon(
             "fill",
             a.x,a.y,
             b.x,b.y,
             c.x,c.y,
             d.x,d.y
         )
-        graphics.setColor(1,0,0)
-        graphics.polygon(
+        love.graphics.setColor(1,0,0)
+        love.graphics.polygon(
             "line",
             a.x,a.y,
             b.x,b.y,
@@ -625,12 +625,12 @@ function Terrain:draw()
         )
     end
     for _, rect in ipairs(self.greedyQuads) do
-        graphics.setColor(0.5,0.5,1,0.4)
-        graphics.rectangle("fill", rect.x, rect.y, rect.width, rect.height)
-        graphics.setColor(0,0,1)
-        graphics.rectangle("line", rect.x, rect.y, rect.width, rect.height)
+        love.graphics.setColor(0.5,0.5,1,0.4)
+        love.graphics.rectangle("fill", rect.x, rect.y, rect.width, rect.height)
+        love.graphics.setColor(0,0,1)
+        love.graphics.rectangle("line", rect.x, rect.y, rect.width, rect.height)
     end
-    graphics.pop()
+    love.graphics.pop()
 end
 end
 

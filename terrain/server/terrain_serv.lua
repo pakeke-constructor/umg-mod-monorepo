@@ -1,5 +1,5 @@
 
-local terrainGroup = group("x","y","terrain")
+local terrainGroup = umg.group("x","y","terrain")
 
 
 terrainGroup:onAdded(function(ent)

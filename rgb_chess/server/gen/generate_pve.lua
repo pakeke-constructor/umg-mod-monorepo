@@ -20,7 +20,7 @@ local pve = {}
 function pve.generateEnemies(turn)
     local buffer = {}
     for i=1,2 do
-        local ent = entities.brute(0,0)
+        local ent = server.entities.brute(0,0)
         table.insert(buffer, ent)
         ent.color = DEFAULT_COLOR
     end

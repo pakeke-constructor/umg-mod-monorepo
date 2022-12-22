@@ -9,12 +9,12 @@ Handles player control
 local input = require("client.input")
 
 
-local controlEnts = group("controllable", "controller", "x", "y")
+local controllableGroup = umg.group("controllable", "controller", "x", "y")
 
 
-local function pollControlEnts(func_key, a,b,c)
-    for _, ent in ipairs(controlEnts) do
-        if ent.controller == username then
+local function pollControllableGroup(func_key, a,b,c)
+    for _, ent in ipairs(controllableGroup) do
+        if ent.controller == client.getUsername() then
             -- if this ent is being controlled by the player:
             if ent.controllable[func_key] then
                 -- and if the callback exists:
@@ -25,30 +25,30 @@ local function pollControlEnts(func_key, a,b,c)
 end
 
 
-on("inputPressed", function(inputEnum)
+umg.on("inputPressed", function(inputEnum)
     if inputEnum == input.BUTTON_LEFT then
-        pollControlEnts("onLeftButton")
+        pollControllableGroup("onLeftButton")
     elseif inputEnum == input.BUTTON_RIGHT then
-        pollControlEnts("onRightButton")
+        pollControllableGroup("onRightButton")
     elseif inputEnum == input.BUTTON_SPACE then
-        pollControlEnts("onSpaceButton")
+        pollControllableGroup("onSpaceButton")
     elseif inputEnum == input.BUTTON_1 then
-        pollControlEnts("onButton1")
+        pollControllableGroup("onButton1")
     elseif inputEnum == input.BUTTON_2 then
-        pollControlEnts("onButton2")    
+        pollControllableGroup("onButton2")    
     elseif inputEnum == input.BUTTON_3 then
-        pollControlEnts("onButton3")
+        pollControllableGroup("onButton3")
     elseif inputEnum == input.BUTTON_4 then
-        pollControlEnts("onButton4")
+        pollControllableGroup("onButton4")
     end
 end)
 
 
 
-on("gameMousepressed", function(butto, x, y)
+umg.on("gameMousepressed", function(butto, x, y)
     -- TODO: This aint working!!! Maybe it's mousedown??? idk 
     if butto == 1 then
-        pollControlEnts(nil, "onClick", x, y)
+        pollControllableGroup(nil, "onClick", x, y)
     end
 end)
 
@@ -95,14 +95,14 @@ local function follow_avg(sum_x, sum_y, len)
 end
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     local sum_x = 0
     local sum_y = 0
     local len = 0
     local has_follow = false
     
-    for _, ent in ipairs(controlEnts) do
-        if ent.controller == username and ent.x and ent.vx then
+    for _, ent in ipairs(controllableGroup) do
+        if ent.controller == client.getUsername() and ent.x and ent.vx then
             updateEnt(ent, dt)
             if ent.follow then
                 has_follow = true
@@ -126,10 +126,9 @@ end)
     (Note that the server can choose to deny our player position 
       if it thinks we are cheating!!!)
 ]]
-on("tick", function(dt)
-    for i=1, #controlEnts do
-        local ent = controlEnts[i]
-        if ent.controller == username then
+umg.on("tick", function(dt)
+    for i, ent in ipairs(controllableGroup) do
+        if ent.controller == client.getUsername() then
             client.send("setPlayerPosition", ent, ent.x, ent.y, ent.z)
             if ent.vx and ent.vy then
                 client.send("setPlayerVelocity", ent, ent.vx, ent.vy, ent.vz)

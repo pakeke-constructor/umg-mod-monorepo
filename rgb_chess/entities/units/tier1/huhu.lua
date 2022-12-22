@@ -6,7 +6,7 @@ if server then
 end
 
 
-return extend("abstract_melee", {
+return umg.extend("abstract_melee", {
     --[[
         on sell:
         grants all other [color] huhus x2 damage and x2 health

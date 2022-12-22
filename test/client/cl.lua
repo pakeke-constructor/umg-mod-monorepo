@@ -1,7 +1,7 @@
 
 
-on("preDraw", function()
-    graphics.clear(0.3,0.9,0.2)
+umg.on("preDraw", function()
+    love.graphics.clear(0.3,0.9,0.2)
 end)
 
 
@@ -17,7 +17,7 @@ base.particles.define("smoke", psys)
 
 
 
-on("keypressed", function(k)
+umg.on("keypressed", function(k)
     if k == "q" then
         local e = base.getPlayer()
         local x, y = base.camera:getMousePosition()
@@ -44,7 +44,7 @@ end)
 
 
 
-on("mousepressed", function(x, y, button, istouch, presses)
+umg.on("mousepressed", function(x, y, button, istouch, presses)
     if button == 1 then
         local p = base.getPlayer()
         if p and (not p.inventory.isOpen) then

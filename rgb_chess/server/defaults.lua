@@ -10,7 +10,7 @@ Setting defaults for this stuff:
 ]]
 
 
-local defaultHealthGroup = group("defaultHealth")
+local defaultHealthGroup = umg.group("defaultHealth")
 defaultHealthGroup:onAdded(function(ent)
     assert(ent:isRegular("health") and ent:isRegular("maxHealth"))
     ent.health = ent.health or ent.defaultHealth
@@ -19,21 +19,21 @@ end)
 
 
 
-local defaultSpeedGroup = group("defaultSpeed")
+local defaultSpeedGroup = umg.group("defaultSpeed")
 defaultSpeedGroup:onAdded(function(ent)
     assert(ent:isRegular("speed"))
     ent.speed = ent.speed or ent.defaultSpeed
 end)
 
 
-local defaultAttackDamageGroup = group("defaultAttackDamage")
+local defaultAttackDamageGroup = umg.group("defaultAttackDamage")
 defaultAttackDamageGroup:onAdded(function(ent)
     assert(ent:isRegular("attackDamage"))
     ent.attackDamage = ent.attackDamage or ent.defaultAttackDamage
 end)
 
 
-local defaultAttackSpeedGroup = group("defaultAttackSpeed")
+local defaultAttackSpeedGroup = umg.group("defaultAttackSpeed")
 defaultAttackSpeedGroup:onAdded(function(ent)
     assert(ent:isRegular("attackSpeed"))
     ent.attackSpeed = ent.attackSpeed or ent.defaultAttackSpeed

@@ -18,13 +18,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ]]--
 
--- PAKEKE-MONKEYPATCH START:
-local love = {
-    graphics = graphics;
-    timer = timer;
-    mouse = mouse
-}
--- PAKEKE-MONKEYPATCH END.
 
 local function lerp(a, b, x) return a + (b - a)*x end
 local function csnap(v, x) return math.ceil(v/x)*x - x/2 end

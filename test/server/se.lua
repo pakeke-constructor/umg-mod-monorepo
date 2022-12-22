@@ -1,12 +1,14 @@
 
 
+local ents = server.entities
+
 
 local uname_to_player = {
 
 }
 
 local function make_player(uname)
-    local ent = entities.player(0, 0, uname)
+    local ent = ents.player(0, 0, uname)
     ent.z = 0
     uname_to_player[uname] = ent
     return ent
@@ -18,11 +20,11 @@ end
 
 
 
-on("createWorld", function()
+umg.on("createWorld", function()
     for i=1, 30 do
         local MAG = 200
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
-        local e = entities.item()
+        local e = ents.item()
         e.stackSize = math.floor(math.random(1,5))
         e.x = x
         e.y = y
@@ -31,7 +33,7 @@ on("createWorld", function()
     for i=1, 4 do
         local MAG = 200
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
-        local e = entities.pickaxe()
+        local e = ents.pickaxe()
         e.stackSize = 1
         e.x = x
         e.y = y
@@ -40,7 +42,7 @@ on("createWorld", function()
     for i=1, 4 do
         local MAG = 200
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
-        local e = entities.musket()
+        local e = ents.musket()
         e.stackSize = 1
         e.x = x
         e.y = y
@@ -49,29 +51,29 @@ on("createWorld", function()
     for i=1, 30 do
         local MAG = 250
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
-        entities.block(x,y)
+        ents.block(x,y)
     end
 
     for i=1, 160 do
         local MAG = 150
-        entities.grass(math.random(-MAG, MAG), math.random(-MAG, MAG))
+        ents.grass(math.random(-MAG, MAG), math.random(-MAG, MAG))
     end
 
-    entities.crate()
-    entities.crate_button(100, 100)
-    entities.crafting_table(-100, 100)
+    ents.crate()
+    ents.crate_button(100, 100)
+    ents.crafting_table(-100, 100)
 end)
 
 
 local e1
 server.on("spawn", function(u, e)
     if e1 then e1:delete() end
-    e1 = entities.terrain(e.x,e.y + 20)
+    e1 = ents.terrain(e.x,e.y + 20)
 end)
 
 
 
-local control_ents = group("controllable", "x", "y")
+local control_ents = umg.group("controllable", "x", "y")
 server.on("CONGLOMERATE", function(username, ent)
     for _,e in ipairs(control_ents)do
         if e.controller == username then
@@ -82,7 +84,7 @@ server.on("CONGLOMERATE", function(username, ent)
 end)
 
 
-on("newPlayer", function(uname)
+umg.on("newPlayer", function(uname)
     make_player(uname)
 end)
 

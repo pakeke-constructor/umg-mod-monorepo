@@ -1,6 +1,6 @@
 
 
-local moneyCountGroup = group("moneyCount", "text")
+local moneyCountGroup = umg.group("moneyCount", "text")
 
 
 client.on("setMoney", function(rgbTeam, moneyCount)

@@ -12,7 +12,7 @@ local shockwaveSet = Set()
 
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     for _,sw in shockwaveSet:iter()do
         sw:update(dt)
         if sw.isFinished then
@@ -25,7 +25,7 @@ end)
 
 
 
-on("postDraw", function()
+umg.on("postDraw", function()
     for _,sw in shockwaveSet:iter() do
         sw:draw()
     end

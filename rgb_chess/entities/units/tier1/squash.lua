@@ -7,7 +7,7 @@ end
 local BUFFED_HP = 50
 local BUFFED_DMG = 9
 
-return extend("abstract_melee", {
+return umg.extend("abstract_melee", {
     --[[
         battle start:
         if no [color] allies exist,

@@ -34,8 +34,8 @@ end
 
 
 
-on("playerJoin", function(username)
-    local plyr_ent = entities.player(0, 0)
+umg.on("playerJoin", function(username)
+    local plyr_ent = server.entities.player(0, 0)
     plyr_ent.controller = username
 
     rgb.setState(rgb.getState()) -- this doesnt change the state,
@@ -44,7 +44,7 @@ end)
 
 
 
-on("playerLeave", function(username)
+umg.on("playerLeave", function(username)
     base.getPlayer(username):delete()
     local b = Board.getBoard(username)
     if b then
@@ -69,12 +69,12 @@ rgb.setState(rgb.STATES.LOBBY_STATE)
 
 
 
-local battleStartTime = timer.getTime()
+local battleStartTime = love.timer.getTime()
 
 local function setupBattle()
-    battleStartTime = timer.getTime()
-    call("endTurn")
-    call("startBattle")
+    battleStartTime = love.timer.getTime()
+    umg.call("endTurn")
+    umg.call("startBattle")
     rgb.setState(rgb.STATES.BATTLE_STATE)
     saveBoards()
 end
@@ -146,8 +146,8 @@ local inTurnTransition = false
 
 local function startTurn()
     inTurnTransition = false
-    call("endBattle")
-    call("startTurn")
+    umg.call("endBattle")
+    umg.call("startTurn")
     rgb.setState(rgb.STATES.TURN_STATE)
     for _, board in Board.iterBoards() do
         board:lockPlayerCamera(board:getTeam())
@@ -199,7 +199,7 @@ local MINIMUM_BATTLE_DURATION = 5
 local function updateBattle()
     -- check if all boards are done battle.
     -- If so, start turn.
-    local time = timer.getTime()
+    local time = love.timer.getTime()
 
     local isBattleOver = true and (time > battleStartTime + MINIMUM_BATTLE_DURATION)
     for _, board in Board.iterBoards()do
@@ -228,7 +228,7 @@ local updates = {
     [rgb.STATES.TURN_STATE] = updateTurn
 }
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     updates[rgb.state](dt)
 end)
 

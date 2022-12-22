@@ -17,37 +17,37 @@ local gameState = {
 
 
 function gameState.update(dt)
-    call("gameUpdate", dt)
+    umg.call("gameUpdate", dt)
 end
 function gameState.draw()
-    call("gameDraw")
+    umg.call("gameDraw")
 end
 function gameState.keypressed(key,sc,isrepeat)
-    call("gameKeypressed", key,sc,isrepeat)
+    umg.call("gameKeypressed", key,sc,isrepeat)
 end
 function gameState.keyreleased(key,sc,isrepeat)
-    call("gameKeyreleased", key,sc,isrepeat)
+    umg.call("gameKeyreleased", key,sc,isrepeat)
 end
 function gameState.textedited(...)
-    call("gameTextedited", ...)
+    umg.call("gameTextedited", ...)
 end
 function gameState.focus(...)
-    call("gameFocus", ...)
+    umg.call("gameFocus", ...)
 end
 function gameState.resize(...)
-    call("gameResize", ...)
+    umg.call("gameResize", ...)
 end
 function gameState.mousemoved(...)
-    call("gameMousemoved", ...)
+    umg.call("gameMousemoved", ...)
 end
 function gameState.mousepressed(...)
-    call("gameMousepressed", ...)
+    umg.call("gameMousepressed", ...)
 end
 function gameState.mousereleased(...)
-    call("gameMousereleased", ...)
+    umg.call("gameMousereleased", ...)
 end
 function gameState.wheelmoved(...)
-    call("gameWheelmoved", ...)
+    umg.call("gameWheelmoved", ...)
 end
 
 

@@ -11,7 +11,7 @@ to offset each entity animation
 ]]
 
 
-local anim_group = group("image", "animation")
+local anim_group = umg.group("image", "animation")
 
 
 
@@ -34,7 +34,7 @@ local function updateEnt(ent)
 end
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     tick = tick + dt
     for i=1, #anim_group do
         local ent = anim_group[i]

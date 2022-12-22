@@ -10,11 +10,11 @@ local draw = require("client.draw")
 local getDrawY = draw.getDrawY
 
 
-local images = assets.images
+local images = client.assets.images
 
 
 
-on("drawEntity", function(ent)
+umg.on("drawEntity", function(ent)
     local quad = images[ent.image]
     if not quad then
         if type(ent.image) ~= "string" then
@@ -35,7 +35,7 @@ on("drawEntity", function(ent)
 
     local ent_ox, ent_oy = ent.ox or 0, ent.oy or 0
 
-    graphics.atlas:draw(
+    client.atlas:draw(
         quad, 
         ent.x + ent_ox, getDrawY(ent.y + ent_oy,ent.z), ent.rot, 
         spin_sx * sx * scale, 

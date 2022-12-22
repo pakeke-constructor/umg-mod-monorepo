@@ -36,21 +36,21 @@ local function drawSelectTarget(ent)
         draws that cute little colored target around entities
     ]]
     if select.isSelected(ent) then
-        local t = timer.getTime()
-        graphics.push("all")
-        graphics.setColor(0,0,0)
+        local t = love.timer.getTime()
+        love.graphics.push("all")
+        love.graphics.setColor(0,0,0)
         base.drawImage("target", ent.x, ent.y, t, 1.1,1.1)
         base.drawImage("target", ent.x, ent.y, t, 0.9,0.9)
-        graphics.setColor(WHITE)
+        love.graphics.setColor(WHITE)
         base.drawImage("target", ent.x, ent.y, t)
-        graphics.pop("all")
+        love.graphics.pop("all")
     elseif rgb.areMatchingColors(ent.rgb, select.getSelectedRGB()) then
-        local t = timer.getTime()
-        graphics.push("all")
+        local t = love.timer.getTime()
+        love.graphics.push("all")
         local c = ent.color
-        graphics.setColor(c[1],c[2],c[3],SAMECOL_OPACITY)
+        love.graphics.setColor(c[1],c[2],c[3],SAMECOL_OPACITY)
         base.drawImage("target", ent.x, ent.y, t, 1.2,1.2)
-        graphics.pop("all")
+        love.graphics.pop("all")
     end
 end
 
@@ -61,23 +61,23 @@ local TEXT_OX = 10 -- distance between attack and health stats
 local SCALE = (3/4)
 local RECT_LEIGH = 4
 
-local TEXT_W = graphics.getFont():getWidth("0")
-local TEXT_H = graphics.getFont():getHeight("0")
+local TEXT_W = love.graphics.getFont():getWidth("0")
+local TEXT_H = love.graphics.getFont():getHeight("0")
 
 
 
 local function prettyPrint(str, x, y, color, scale)
-    graphics.setColor(color[1]/2,color[2]/2,color[3]/2)
-    graphics.print(str, (x-1)/scale, (y-1)/scale)
-    graphics.setColor(color)
-    graphics.print(str, x/scale, y/scale)
+    love.graphics.setColor(color[1]/2,color[2]/2,color[3]/2)
+    love.graphics.print(str, (x-1)/scale, (y-1)/scale)
+    love.graphics.setColor(color)
+    love.graphics.print(str, x/scale, y/scale)
 end
 
 
 local function drawUnitDetails(ent)
-    graphics.push("all")
-    graphics.scale(SCALE)
-    graphics.setColor(0,0,0,0.5)
+    love.graphics.push("all")
+    love.graphics.scale(SCALE)
+    love.graphics.setColor(0,0,0,0.5)
 
     local maxHealthStr = FORMAT:format(ent.maxHealth)
     local damageEstStr = FORMAT:format(rgb.getDamageEstimate(ent.attackDamage, ent.attackSpeed))
@@ -86,7 +86,7 @@ local function drawUnitDetails(ent)
 
     local strW = TEXT_W * (mhsLen + desLen)
 
-    graphics.rectangle("fill", 
+    love.graphics.rectangle("fill", 
         (ent.x - strW/2-RECT_LEIGH)/SCALE,
         (ent.y+TEXT_OY-RECT_LEIGH)/SCALE,
         (RECT_LEIGH + TEXT_OX + strW)/SCALE,
@@ -109,13 +109,13 @@ local function drawUnitDetails(ent)
         SCALE
     )
 
-    graphics.pop("all")
+    love.graphics.pop("all")
 end
 
 
 
 
-on("drawEntity", function(ent)
+umg.on("drawEntity", function(ent)
     if ent.rgb then
         drawSelectTarget(ent)
         if ent.squadron and showDetails.showingDetails() then

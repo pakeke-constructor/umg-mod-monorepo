@@ -145,7 +145,7 @@ end
 
 
 local function initializeItem(inventory, recipe, slotX, slotY)
-    local etype = entities[recipe.result.result]
+    local etype = server.entities[recipe.result.result]
     local item_entity = etype()
     local owner = inventory.owner
     if owner then
@@ -206,7 +206,7 @@ function Crafter:executeCraft(inventory, recipe, slotX, slotY)
             targItemName = targ.itemName
             slotsLeft = (targ.maxStackSize or 1) - (targ.stackSize or 1)
         end
-        etype = entities[recipe.result.result]
+        etype = server.entities[recipe.result.result]
         
         if etype then
             if (not targ) then 

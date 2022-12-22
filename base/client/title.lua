@@ -26,9 +26,9 @@ end
 local titleObjs = Heap(compare)
 
 
-local curTime = timer.getTime() -- current time
+local curTime = love.timer.getTime() -- current time
 
-on("gameUpdate",function(dt)
+umg.on("gameUpdate",function(dt)
     curTime = curTime + dt
     local obj = titleObjs:peek()
     while obj and obj.endTime <= curTime do
@@ -41,29 +41,29 @@ end)
 
 
 local function drawTitle(obj, time)
-    graphics.push("all")
-    local w,h = graphics.getWidth(), graphics.getHeight()
+    love.graphics.push("all")
+    local w,h = love.graphics.getWidth(), love.graphics.getHeight()
     local scale = base.getUIScale()
     local drawX, drawY = obj.x * w / scale, obj.y * h / scale
     local txtScale = obj.scale * INTERNAL_TEXT_SCALE
-    local font = graphics.getFont()
+    local font = love.graphics.getFont()
     local txtH = font:getHeight(obj.text)
     local txtW = font:getWidth(obj.text)
 
     local c = obj.color
     local fadeVal = math.max(0, (obj.endTime - time) / obj.fade)
     local bcs = BACKDROP_COLOR_SHIFT
-    graphics.setColor(c[1]-bcs,c[2]-bcs,c[3]-bcs,fadeVal)
-    graphics.print(obj.text, drawX-1, drawY-1, obj.rot or 0, txtScale, txtScale, txtW/2, txtH/2)
+    love.graphics.setColor(c[1]-bcs,c[2]-bcs,c[3]-bcs,fadeVal)
+    love.graphics.print(obj.text, drawX-1, drawY-1, obj.rot or 0, txtScale, txtScale, txtW/2, txtH/2)
     
-    graphics.setColor(c[1],c[2],c[3],fadeVal)
-    graphics.print(obj.text, drawX, drawY, obj.rot or 0, txtScale, txtScale, txtW/2, txtH/2)
-    graphics.pop()
+    love.graphics.setColor(c[1],c[2],c[3],fadeVal)
+    love.graphics.print(obj.text, drawX, drawY, obj.rot or 0, txtScale, txtScale, txtW/2, txtH/2)
+    love.graphics.pop()
 end
 
 
 
-on("mainDrawUI", function()
+umg.on("mainDrawUI", function()
     local time = curTime
     for i=1, #titleObjs do
         local obj = titleObjs[i]

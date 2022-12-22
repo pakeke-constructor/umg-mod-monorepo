@@ -1,6 +1,6 @@
 
 
-local physicsGroup = group("physics", "x", "y")
+local physicsGroup = umg.group("physics", "x", "y")
 
 --[[
 
@@ -39,7 +39,7 @@ local function newWorld()
     if world then
         world:destroy()
     end
-    world = physics.newWorld(0,0)
+    world = love.physics.newWorld(0,0)
     world:setCallbacks(beginContact, nil, nil, nil)
 end
 
@@ -48,7 +48,7 @@ newWorld() -- The box2d physics world used by entities
 
 
 
-on("newWorld", newWorld)
+umg.on("newWorld", newWorld)
 
 
 
@@ -88,7 +88,7 @@ end
 
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     for _, ent in ipairs(physicsGroup) do
         preUpdateEnt(ent)
     end
@@ -140,8 +140,8 @@ physicsGroup:onAdded(function(ent)
         error("Physics entities must be given x and y values upon creation.")
     end
     
-    local body = physics.newBody(world, ent.x, ent.y, getBodyType(ent))
-    local fixture = physics.newFixture(body, ent.physics.shape)
+    local body = love.physics.newBody(world, ent.x, ent.y, getBodyType(ent))
+    local fixture = love.physics.newFixture(body, ent.physics.shape)
 
     body:setLinearDamping(ent.physics.friction or DEFAULT_FRICTION)
 

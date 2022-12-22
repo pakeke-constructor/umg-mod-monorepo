@@ -7,7 +7,7 @@ end
 local DELTA_HEALTH = 4
 local DELTA_DMG = 1
 
-return extend("abstract_melee", {
+return umg.extend("abstract_melee", {
     unitCardInfo = {
         name = "Brute x 1",
         description = "On buy: give a random [color] ally +1/4",

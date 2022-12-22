@@ -30,7 +30,7 @@ local chatHistory = LinkedList.new()
 local function newMessageObject(msg)
     return {
         message = msg;
-        time = timer.getTime()
+        time = love.timer.getTime()
     }
 end
 
@@ -50,11 +50,11 @@ end)
 local HEIGHT_TEST_CHARS = "abc"
 
 
-local curFont = graphics.getFont()
-local curFontHeight = graphics.getFont():getHeight(HEIGHT_TEST_CHARS)
-local curTime = timer.getTime()
+local curFont = love.graphics.getFont()
+local curFontHeight = love.graphics.getFont():getHeight(HEIGHT_TEST_CHARS)
+local curTime = love.timer.getTime()
 local curHeight = CHATBOX_HEIGHT
-local curScreenHeight = graphics.getHeight() / base.getUIScale()
+local curScreenHeight = love.graphics.getHeight() / base.getUIScale()
 local curChatScale = TARGET_CHAT_HEIGHT / curFontHeight
 
 local currMessage = ""
@@ -63,11 +63,11 @@ local currMessage = ""
 local function drawCursor(opacity)
     local x = CHATBOX_START_X + curFont:getWidth(currMessage) * curChatScale
     local y = curScreenHeight - curHeight
-    graphics.push("all")
+    love.graphics.push("all")
     opacity = math.floor(opacity + 0.65)
-    graphics.setColor(0,0,0,opacity)
-    graphics.rectangle("fill", x, y, 4, 10)
-    graphics.pop()
+    love.graphics.setColor(0,0,0,opacity)
+    love.graphics.rectangle("fill", x, y, 4, 10)
+    love.graphics.pop()
 end
 
 
@@ -79,10 +79,10 @@ local function drawMessage(msg, opacity)
     local newlines = #wrappedtxt
     curHeight = curHeight + ((newlines * (curFontHeight)) + MESSAGE_SEP) * scale
     local y = curScreenHeight - curHeight
-    graphics.setColor(0.1,0.1,0.1,opacity)
-    graphics.printf(msg, CHATBOX_START_X - 1, y - 1, wrapWidth, "left", 0, scale,scale)    
-    graphics.setColor(1,1,1,opacity)
-    graphics.printf(msg, CHATBOX_START_X, y, wrapWidth, "left", 0, scale,scale)
+    love.graphics.setColor(0.1,0.1,0.1,opacity)
+    love.graphics.printf(msg, CHATBOX_START_X - 1, y - 1, wrapWidth, "left", 0, scale,scale)    
+    love.graphics.setColor(1,1,1,opacity)
+    love.graphics.printf(msg, CHATBOX_START_X, y, wrapWidth, "left", 0, scale,scale)
 end
 
 
@@ -107,18 +107,18 @@ end
 local isTyping = false
 
 
-on("mainDrawUI", function()
+umg.on("mainDrawUI", function()
     --[[
         draw the chat:
     ]]
-    curTime = timer.getTime()
-    curFont = graphics.getFont()
-    curFontHeight = graphics.getFont():getHeight(HEIGHT_TEST_CHARS)
+    curTime = love.timer.getTime()
+    curFont = love.graphics.getFont()
+    curFontHeight = love.graphics.getFont():getHeight(HEIGHT_TEST_CHARS)
     curHeight = CHATBOX_HEIGHT
-    curScreenHeight = graphics.getHeight() / base.getUIScale()
+    curScreenHeight = love.graphics.getHeight() / base.getUIScale()
     curChatScale = TARGET_CHAT_HEIGHT / curFontHeight
 
-    graphics.push("all")
+    love.graphics.push("all")
     if isTyping then
         local opacity = (math.sin(curTime * 12) + 1) / 2
         drawMessage(currMessage, 1)
@@ -126,17 +126,17 @@ on("mainDrawUI", function()
     end
 
     chatHistory:foreach(iterMessage)
-    graphics.pop()
+    love.graphics.pop()
 end)
 
 
 
 
 
-keyboard.setKeyRepeat(true)
+love.keyboard.setKeyRepeat(true)
 
 
-on("textinput", function(t)
+umg.on("textinput", function(t)
     if isTyping then
         currMessage = currMessage .. t
     end
@@ -157,7 +157,7 @@ local function doCommand(message)
 end
 
 
-on("keypressed", function(k)
+umg.on("keypressed", function(k)
     --[[
         TODO: Set keyboard blocking here!!!!
     ]]

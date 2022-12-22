@@ -35,7 +35,7 @@ local DEFAULT_BACKGROUND_COLOR = {0.4,0.4,0.4,0.4}
 
 
 
-on("drawEntity", function(ent)
+umg.on("drawEntity", function(ent)
     if ent.healthBar and ent.health then
         -- draw the healthbar!
         local hb = ent.healthBar
@@ -46,25 +46,25 @@ on("drawEntity", function(ent)
         local ocol = hb.outlineColor or DEFAULT_OUTLINE_COLOR
         local bgcol = hb.backgroundColor or DEFAULT_BACKGROUND_COLOR
         
-        graphics.push("all")
+        love.graphics.push("all")
 
-        graphics.setLineWidth(1)
+        love.graphics.setLineWidth(1)
         local x = ent.x - w/2
         local y = ent.y - h/2 - oy
 
-        graphics.setColor(bgcol) -- background
-        graphics.rectangle("fill", x, y, w, h)
+        love.graphics.setColor(bgcol) -- background
+        love.graphics.rectangle("fill", x, y, w, h)
         
         -- health bar:
         local ratio = ent.health / (ent.maxHealth or 0xfffffffff)
-        graphics.setColor(hcol)
-        graphics.rectangle("fill", x, y, w * ratio, h)
+        love.graphics.setColor(hcol)
+        love.graphics.rectangle("fill", x, y, w * ratio, h)
 
         -- outline of health bar:
-        graphics.setColor(ocol)
-        graphics.rectangle("line", x, y, w, h)
+        love.graphics.setColor(ocol)
+        love.graphics.rectangle("line", x, y, w, h)
 
-        graphics.pop()
+        love.graphics.pop()
     end
 end)
 

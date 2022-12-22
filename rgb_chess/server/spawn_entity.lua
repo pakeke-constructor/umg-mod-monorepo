@@ -34,7 +34,7 @@ function spawn.spawnUnitFromCard(card_ent, spawnX, spawnY)
     ent.speed = ent.defaultSpeed
     ent.category = card_ent.rgbTeam
 
-    call("summonUnit", ent)
+    umg.call("summonUnit", ent)
     return ent
 end
 

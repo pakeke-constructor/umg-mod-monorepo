@@ -45,9 +45,9 @@ end
 
 
 
-local setLineWidth = graphics.setLineWidth
-local c = graphics.circle
-local setColour = graphics.setColor
+local setLineWidth = love.graphics.setLineWidth
+local c = love.graphics.circle
+local setColour = love.graphics.setColor
 
 function ShockWave:draw()
     setColour(self.colour)

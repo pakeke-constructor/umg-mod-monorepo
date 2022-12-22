@@ -2,7 +2,6 @@
 
 
 local function loadClient(zoom)
-    local zoom
     -- TODO
 end
 

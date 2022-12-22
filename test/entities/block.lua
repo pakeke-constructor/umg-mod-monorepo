@@ -6,7 +6,7 @@ return {
     "image",
     bobbing = {},
     physics = {
-        shape = physics.newCircleShape(10)
+        shape = love.physics.newCircleShape(10)
     };
     color = {.6,.6,.6};
 

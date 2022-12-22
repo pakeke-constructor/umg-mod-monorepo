@@ -13,7 +13,7 @@ also its kinda a bad way of doing things.
 ]]
 
 
-local owners = group("owns")
+local owners = umg.group("owns")
 
 
 -- Need to make sure this is loaded; it may not be loaded yet
@@ -36,7 +36,7 @@ owners:onRemoved(function(ent)
     for i=1, set:size() do
         local owned_ent = set:get(i)
         owned_ent:delete()
-        call("ownedEntityDeleted", owned_ent)
+        umg.call("ownedEntityDeleted", owned_ent)
     end
 end)
 

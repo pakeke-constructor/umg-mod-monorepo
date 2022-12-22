@@ -3,7 +3,7 @@
 local attack = require("server.attack")
 
 
-local projectileEnts = group("attackBehaviourProjectile")
+local projectileEnts = umg.group("attackBehaviourProjectile")
 
 
 
@@ -31,12 +31,12 @@ local function move(ent, x, y, dt)
 end
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     for _, ent in ipairs(projectileEnts)do
         local abp = ent.attackBehaviourProjectile
         if abp then
             local target_ent = abp.target_ent
-            if exists(target_ent) then
+            if umg.exists(target_ent) then
                 if math.distance(target_ent, ent) < HIT_RANGE then
                     -- that's a hit!
                     attack(abp.projector_ent, target_ent)

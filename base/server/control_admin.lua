@@ -20,7 +20,7 @@ We need to make it so server has ultimate authority over player positions;
 or else the server won't be able to do anything fancy, like teleports.
 ]]
 
-local playerGroup = group("controllable", "controller", "x", "y", "vx", "vy")
+local playerGroup = umg.group("controllable", "controller", "x", "y", "vx", "vy")
 
 local playerToLastX = {} -- [player] -> last seen X position
 local playerToLastY = {} -- [player] -> last seen Y position
@@ -41,13 +41,13 @@ end
 local DELTA_THRESHOLD = 100 -- this number seems quite significant to force a sync.
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     --[[
         Explanation for this code:
         This code is quite scuffed. Basically, the issue here is that if
         the server tries to move the client,
     ]]
-    for _, player in ipairs(playerGroup)do
+    for _, player in ipairs(playerGroup) do
         -- `player` is a player entity.
 
         local x,y,z = player.x,player.y,player.z
@@ -70,7 +70,7 @@ end)
 
 
 server.on("lockMovementAck", function(sender_username, player_ent, ack_number)
-    if not exists(player_ent) then
+    if not umg.exists(player_ent) then
         return -- get outta here, u cant crash server 
     end
 
@@ -86,7 +86,7 @@ end)
 
 
 local function filterPlayerPosition(sender_username, ent, x,y,z)
-    if not exists(ent) then
+    if not umg.exists(ent) then
         return false -- DENY! Non existant entity
     end
     if type(x) ~= "number" or type(y) ~= "number" or (z and (type(z) ~= "number")) then
@@ -116,7 +116,7 @@ end
 
 
 local function filterPlayerVelocity(sender_username, ent, vx,vy,vz)
-    if not exists(ent) then
+    if not umg.exists(ent) then
         return false -- DENY! Non existant entity
     end
     if type(vx) ~= "number" or type(vy) ~= "number" or (vz and (type(vz) ~= "number")) then

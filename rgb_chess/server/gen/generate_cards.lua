@@ -38,7 +38,7 @@ function genCards.getBuyTarget()
     local turn = rgb.getTurn()
     local buf = table.copy(tiers[1])
     table.shuffle(buf)
-    local ret = entities[buf[1]]
+    local ret = server.entities[buf[1]]
     assert(ret,"??" .. buf[1])
     return ret
 end
@@ -95,7 +95,7 @@ function genCards.spawnCard(board, shopIndex)
     local etype_buyTarget = genCards.getBuyTarget()
     local x, y = board:getCardXY(shopIndex)
 
-    local card_ent = entities.card({
+    local card_ent = server.entities.card({
         x=x,
         y=y,
         rgbTeam = board:getTeam(),

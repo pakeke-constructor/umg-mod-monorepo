@@ -2,7 +2,7 @@
 local invCtor = require("inventory")
 
 
-local inv_ents = group("inventory")
+local inventoryGroup = umg.group("inventory")
 -- group of all entities that have an `inventory` component.
 
 
@@ -23,7 +23,7 @@ local function checkButtonFormat(etype, inventoryButtons)
         if type(button.onClick) ~= "function" then
             error("inventoryButtons values must be tables with a .onClick function. Not true for entity type: " .. etype)
         end
-        if button.image and (not assets.images[button.image]) then
+        if button.image and (not client.assets.images[button.image]) then
             error(("invalid button image %s for entity %s"):format(button.image, etype))
         end
     end
@@ -57,7 +57,7 @@ end
 
 
 
-inv_ents:onAdded(function(ent)
+inventoryGroup:onAdded(function(ent)
     if not ent.inventory then
         assert(ent.inventory, "Inventory component must be initialized either before entity creation, or inside a `.init` function!")
     end
@@ -117,7 +117,7 @@ local function table_remove(tabl, item)
 end
 
 
-inv_ents:onRemoved(function(ent)
+inventoryGroup:onRemoved(function(ent)
     local inv = ent.inventory
     if holding_inv == inv then
         holding_inv, holding_x, holding_y = nil, nil, nil
@@ -126,12 +126,12 @@ inv_ents:onRemoved(function(ent)
 end)
 
 
-on("openInventory", function(inv, owner_ent)
+umg.on("openInventory", function(inv, owner_ent)
     table.insert(open_inventories, inv)
 end)
 
 
-on("closeInventory", function(inv, owner_ent)
+umg.on("closeInventory", function(inv, owner_ent)
     table_remove(open_inventories, inv)
 
     if holding_inv == inv then
@@ -172,7 +172,7 @@ end
 local function executeFullPut(inv, x, y)
     -- Ok... so `holding` exists.
     local holding = holding_inv:get(holding_x, holding_y)
-    if not exists(holding) then
+    if not umg.exists(holding) then
         resetHoldingInv()
         return -- erm, okay? I guess we just ignore this
     end
@@ -253,7 +253,7 @@ local function executeAlphaInteraction(inv, x, y)
         "alpha" interactions are for stuff like placing full stacks
         of items, etc.
     ]]
-    if holding_inv and exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
+    if holding_inv and umg.exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
         executeFullPut(inv, x, y)
     else
         -- Else we just set the holding to a value, so long as there is an item
@@ -275,7 +275,7 @@ local function executeBetaInteraction(inv, x, y)
         "beta" interactions are for placing one item out of an entire stack,
         or splitting a stack.
     ]]
-    if holding_inv and exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
+    if holding_inv and umg.exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
         local holding_item = holding_inv:get(holding_x, holding_y)
         if not checkCallback(inv.owner, "canAdd", x, y, holding_item) then
             return
@@ -303,7 +303,7 @@ local ALPHA_BUTTON = 1
 local BETA_BUTTON = 2 -- right click is clearly insuperior 
 
 
-on("gameMousepressed", function(mx, my, button)
+umg.on("gameMousepressed", function(mx, my, button)
     local len = #open_inventories
     local loop_used = false
     for i=len, 1, -1 do
@@ -347,7 +347,7 @@ on("gameMousepressed", function(mx, my, button)
     if (not loop_used) and holding_inv then
         if button == ALPHA_BUTTON then    
             -- Then the player wants to drop an item on the floor:
-            if exists(holding_inv:get(holding_x, holding_y)) then
+            if umg.exists(holding_inv:get(holding_x, holding_y)) then
                 client.send("tryDropInventoryItem", holding_inv.owner, holding_x, holding_y)
             end
         elseif button == BETA_BUTTON then
@@ -356,7 +356,7 @@ on("gameMousepressed", function(mx, my, button)
     end
 end)
 
-on("gameMousemoved", function(mx,my, dx, dy)
+umg.on("gameMousemoved", function(mx,my, dx, dy)
     -- used for dragging inventories around
     if dragging_inv then
         local ui_scale = base.getUIScale()
@@ -367,13 +367,13 @@ on("gameMousemoved", function(mx,my, dx, dy)
 end)
 
 
-on("gameMousereleased", function(mx,my, button)
+umg.on("gameMousereleased", function(mx,my, button)
     dragging_inv = nil
 end)
 
 
 
-on("mainDrawUI", function()
+umg.on("mainDrawUI", function()
     for i, inv in ipairs(open_inventories) do
         inv:drawUI()
     end

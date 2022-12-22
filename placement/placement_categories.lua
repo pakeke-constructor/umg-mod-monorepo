@@ -9,12 +9,16 @@ local placementCategories = setmetatable({}, {
 })
 
 
-local placeEntities = group("x", "y", "placementCategory")
+--[[
+    entities that determine how other entities can be placed;
+    (e.g. to ensure objects can't be placed overlapping each other)
+]]
+local placementGroup = umg.group("x", "y", "placementCategory")
 
 
 
 
-placeEntities:onAdded(function(ent)
+placementGroup:onAdded(function(ent)
     local category = ent.placementCategory
     assert(category, "entity was not given a placementCategory: " .. tostring(ent))
     -- if ent.placementCategory is not constant, there will be issues.
@@ -30,7 +34,7 @@ placeEntities:onAdded(function(ent)
 end)
 
 
-placeEntities:onRemoved(function(ent)
+placementGroup:onRemoved(function(ent)
     local category = ent.placementCategory
     if type(category) == "table" then
         -- this entity has multiple categories.

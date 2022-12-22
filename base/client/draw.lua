@@ -11,7 +11,7 @@ local cameraLib = require("_libs.camera") -- HUMP Camera for love2d.
 local constants = require("shared.constants")
 
 
-local drawGroup = group("image", "x", "y")
+local drawGroup = umg.group("image", "x", "y")
 
 
 local floor = math.floor
@@ -29,7 +29,7 @@ local sortedMoveEnts = {} -- for ents that move
 
 
 
-local setColor = graphics.setColor
+local setColor = love.graphics.setColor
 
 local DEFAULT_ZOOM = constants.DEFAULT_ZOOM
 
@@ -87,7 +87,7 @@ local function entOnScreen(ent, leighway, w, h)
         of "leighway" we can give each object before it's counted as offscreen
     ]]
     leighway = leighway or DEFAULT_LEIGHWAY
-    w, h = w or graphics.getWidth(), h or graphics.getHeight()
+    w, h = w or love.graphics.getWidth(), h or love.graphics.getHeight()
     local screen_y = getDrawY(ent.y, ent.z)
     local x, y = camera:toCameraCoords(ent.x, screen_y)
 
@@ -106,7 +106,7 @@ local function isOnScreen(x, y, leighway, w, h)
         Assumes z = 0
     ]]
     leighway = leighway or DEFAULT_LEIGHWAY
-    w, h = w or graphics.getWidth(), h or graphics.getHeight()
+    w, h = w or love.graphics.getWidth(), h or love.graphics.getHeight()
     x, y = camera:toCameraCoords(x, y)
 
     return -leighway <= x and x <= w + leighway
@@ -123,7 +123,7 @@ local function cameraTopDepth()
 end
 
 local function cameraBotDepth()
-    local _, y = camera:toWorldCoords(0,graphics.getHeight() + CAMERA_DEPTH_LEIGHWAY)
+    local _, y = camera:toWorldCoords(0,love.graphics.getHeight() + CAMERA_DEPTH_LEIGHWAY)
     return getDrawDepth(y, 0)
 end
 
@@ -174,7 +174,7 @@ local function pollRemoveBuffer(array, buffer)
     end
 end
 
-on("update", function()
+umg.on("update", function()
     pollRemoveBuffer(sortedFrozenEnts, removeBufferFrozen)
     pollRemoveBuffer(sortedMoveEnts, removeBufferMove)
 end)
@@ -185,7 +185,7 @@ end)
 --[[
     main draw function
 ]]
-on("mainDraw", function()
+umg.on("mainDraw", function()
     --[[
         explanation:
         We have two sorted lists of entities:
@@ -195,7 +195,7 @@ on("mainDraw", function()
         When we go to draw them, we iterate through both lists at once,
         and take the entity with the biggest screen Y.
     ]]    
-    local w, h = graphics.getWidth(), graphics.getHeight()
+    local w, h = love.graphics.getWidth(), love.graphics.getHeight()
     
     local draw_dep
     local draw_ent
@@ -236,7 +236,7 @@ on("mainDraw", function()
                 if draw_ent.color then
                     setColor(draw_ent.color)
                 end
-                call("drawEntity", draw_ent)
+                umg.call("drawEntity", draw_ent)
                 if draw_ent.onDraw then
                     draw_ent:onDraw()
                 end
@@ -244,7 +244,7 @@ on("mainDraw", function()
         end
 
         for dep=last_draw_dep+1, draw_dep do
-            call("drawIndex", dep)
+            umg.call("drawIndex", dep)
         end
         last_draw_dep = draw_dep
 
@@ -266,14 +266,14 @@ on("mainDraw", function()
     
     end
 
-    graphics.atlas:flush()
+    client.atlas:flush()
 end)
 
 
 
 
-on("resize", function()
-    local w,h = graphics.getDimensions()
+umg.on("resize", function()
+    local w,h = love.graphics.getDimensions()
     camera.w = w
     camera.h = h
 end)
@@ -297,14 +297,14 @@ local function fudgeUIScale(scale)
         we must scale the UI scale with the screensize.
         bigger sized screens should get larger UI scales to compensate.
     ]]
-    local w,h = graphics.getDimensions()
+    local w,h = love.graphics.getDimensions()
     local screensize = math.sqrt(w^2 + h^2)
     return math.round((scale / OLI_DISPLAY_SIZE) * screensize)
 end
 
 
 local function setUIScale(scale)
-    assert(type(scale) == "number", "graphics.setUIScale(scale) requires a number")
+    assert(type(scale) == "number", "love.graphics.setUIScale(scale) requires a number")
     scaleUI = fudgeUIScale(scale)
 end
 
@@ -321,7 +321,7 @@ end
 
 local froz_ct = 0
 
-on("update", function(dt)
+umg.on("update", function(dt)
     -- This function runes once every 50 frames:
     froz_ct = froz_ct + 1
     if froz_ct < 50 then
@@ -336,20 +336,20 @@ on("update", function(dt)
 end)
 
 
-on("draw", function()
+umg.on("draw", function()
     table.sort(sortedMoveEnts, less)
 
     camera:draw()
     camera:attach()
-    call("preDraw")
-    call("mainDraw")
-    call("postDraw")    
+    umg.call("preDraw")
+    umg.call("mainDraw")
+    umg.call("postDraw")    
     camera:detach()
 
-    graphics.scale(scaleUI)
-    call("preDrawUI")
-    call("mainDrawUI")
-    call("postDrawUI")
+    love.graphics.scale(scaleUI)
+    umg.call("preDrawUI")
+    umg.call("mainDrawUI")
+    umg.call("postDrawUI")
 end)
 
 
@@ -358,7 +358,7 @@ end)
 
 
 
-on("update", function(_)    
+umg.on("update", function(_)    
     camera:update()
 end)
 

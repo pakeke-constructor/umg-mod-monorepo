@@ -1,7 +1,7 @@
 
 -- gravity module
 
-local gravityGroup = group("z", "vz")
+local gravityGroup = umg.group("z", "vz")
 
 local gravity = {}
 
@@ -25,12 +25,12 @@ end
 
 
 function gravity.isOnGround(ent)
-    assert(exists(ent), "entity doesnt exist")
+    assert(umg.exists(ent), "entity doesnt exist")
     return groundTest(ent)
 end
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     for _, ent in ipairs(gravityGroup) do
         if groundTest(ent) then
             -- force the entity to stop moving downwards.

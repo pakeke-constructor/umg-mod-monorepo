@@ -1,6 +1,6 @@
 
 
-local moveEnts = group("x", "y", "vx", "vy")
+local moveEnts = umg.group("x", "y", "vx", "vy")
 
 local constants = require("shared.constants")
 
@@ -36,7 +36,7 @@ end
 
 
 client.on("changePosition", function(ent, x,y,z)
-    if ent.controller == username then
+    if ent.controller == client.getUsername() then
         return
     end
     ent.x = x
@@ -46,7 +46,7 @@ end)
 
 
 client.on("changeVelocity", function(ent, vx,vy,vz)
-    if ent.controller == username then
+    if ent.controller == client.getUsername() then
         return
     end
     ent.vx = vx
@@ -56,9 +56,9 @@ end)
 
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     for _, ent in ipairs(moveEnts) do
-        if ent.controller == username then
+        if ent.controller == client.getUsername() then
             -- We only control the 
             updateEnt(ent, dt)
         end
@@ -75,7 +75,7 @@ moveEnts:onAdded(function(ent)
 end)
 
 
-local positionEnts = group("x","y")
+local positionEnts = umg.group("x","y")
 
 positionEnts:onAdded(function(ent)
     ent.x = ent.x or 0

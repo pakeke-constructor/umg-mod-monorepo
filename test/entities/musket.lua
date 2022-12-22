@@ -34,7 +34,7 @@ return {
             base.particles.emit("musket_smoke", x,y,nil,10)
         else
             if type(dx) == "number" and type(dy) == "number" then        
-                local e = entities.bullet()
+                local e = server.entities.bullet()
                 local mag = math.distance(dx,dy)
                 if mag ~= 0 then
                     dx = dx/mag; dy=dy/mag

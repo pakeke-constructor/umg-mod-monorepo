@@ -79,7 +79,7 @@ end
 
 
 
-on("update", function(dt)
+umg.on("update", function(dt)
     for _, partition in ipairs(partitions)do
         partition.updated_this_frame = false
     end
@@ -266,7 +266,7 @@ do
     
     function Partition:iter(obj_or_x ,y_)
         if not y_ then
-            assert(exists(obj_or_x), "Partition:iter(ent) requires an entity as an argument.\nThe partition will iterate objects surrounding the entity.")
+            assert(umg.exists(obj_or_x), "Partition:iter(ent) requires an entity as an argument.\nThe partition will iterate objects surrounding the entity.")
         else
             assert(type(obj_or_x) == "number" and type(y_) == "number", "Partition:iter(x,y) requires numbers as an iteration target area")
         end

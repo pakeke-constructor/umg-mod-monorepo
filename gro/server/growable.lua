@@ -1,14 +1,14 @@
 
 
-local growableEntities = group("x", "y", "growable")
+local growableGroup = umg.group("x", "y", "growable")
 
 
 
-local last_tick = timer.getTime()
+local last_tick = love.timer.getTime()
 
 
 
-growableEntities:onAdded(function(ent)
+growableGroup:onAdded(function(ent)
     if not ent:isRegular("growStage") then
         error("Growable entities require growStage component. Not the case for this ent: " .. tostring(ent:type()))
     end
@@ -33,14 +33,14 @@ growableEntities:onAdded(function(ent)
 end)
 
 
-local curTime = timer.getTime()
+local curTime = love.timer.getTime()
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     local time = curTime + dt
     local dtt = time - last_tick
     if dtt > 1 then
         last_tick = time + (dtt-1)
-        call("growStep")
+        umg.call("growStep")
         -- `growStep` is called once every second.
     end
 end)
@@ -72,8 +72,8 @@ local function grow(ent)
 end
 
 
-on("growStep", function()
-    for _, ent in ipairs(growableEntities)do
+umg.on("growStep", function()
+    for _, ent in ipairs(growableGroup)do
         grow(ent)
     end
 end)

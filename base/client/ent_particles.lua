@@ -11,7 +11,7 @@ it will emit particles as it moves.
 local particles = require("client.particles")
 
 
-local particleEntities = group("particles", "x", "y")
+local particleEntities = umg.group("particles", "x", "y")
 
 local DEFAULT_EMIT_RATE = 5
 
@@ -69,7 +69,7 @@ local function updateParticleTable(ent, ptable, dt)
 end
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     frameCount = frameCount + 1
     for _, ent in ipairs(particleEntities)do
         local ent_particles = ent.particles
@@ -100,16 +100,16 @@ local function drawParticleTable(ent, ptable)
             if ent.shouldEmitParticles and (not ent:shouldEmitParticles()) then
                 return
             end
-            graphics.draw(ptable.particleSystem, ent.x + ox, ent.y + oy)
+            love.graphics.draw(ptable.particleSystem, ent.x + ox, ent.y + oy)
         else
             ptable.particleSystem:setPosition(ent.x, ent.y)
-            graphics.draw(ptable.particleSystem, ox, oy)
+            love.graphics.draw(ptable.particleSystem, ox, oy)
         end
     end
 end
 
 
-on("drawEntity", function(ent)
+umg.on("drawEntity", function(ent)
     local ent_particles = ent.particles
     if ent.particles then
         if ent_particles.type then

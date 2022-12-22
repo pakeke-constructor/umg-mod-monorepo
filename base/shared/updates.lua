@@ -7,10 +7,10 @@ implements `onUpdate` component.
 ]]
 
 
-local updateGroup = group("onUpdate")
+local updateGroup = umg.group("onUpdate")
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     for _, ent in ipairs(updateGroup)do
         ent:onUpdate(dt)
     end

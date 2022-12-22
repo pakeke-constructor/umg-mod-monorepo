@@ -32,7 +32,7 @@ function common.dropItem(item, x, y)
     end
     item.x = (x or item.x) or 0
     item.y = (y or item.y) or 0
-    item._item_last_holdtime = timer.getTime() -- private component
+    item._item_last_holdtime = love.timer.getTime() -- private component
     -- (keeps track of the last time this item was held)
 
     item.hidden = false
@@ -72,7 +72,7 @@ function common.canBePickedUp(dist, best_dist, item)
     if not bool2 then return end
 
     if item._item_last_holdtime then
-        local time = timer.getTime() - item._item_last_holdtime
+        local time = love.timer.getTime() - item._item_last_holdtime
         if time < PICKUP_DELAY_TIME then
             return
         end

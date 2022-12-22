@@ -1,6 +1,6 @@
 
 
-local moveEnts = group("x", "y", "vx", "vy")
+local moveGroup = umg.group("x", "y", "vx", "vy")
 
 local constants = require("shared.constants")
 
@@ -14,7 +14,7 @@ local FRICTION_CONSTANT = constants.FRICTION_CONSTANT
 
 
 
-moveEnts:onAdded(function(ent)
+moveGroup:onAdded(function(ent)
     if not (ent.x and ent.y) then
         error("Entity wasn't provided x,y values: " .. tostring(ent:type()))
     end 
@@ -49,8 +49,8 @@ end
 
 
 
-on("gameUpdate", function(dt)
-    for _, ent in ipairs(moveEnts) do
+umg.on("gameUpdate", function(dt)
+    for _, ent in ipairs(moveGroup) do
         updateEnt(ent, dt)
     end
 end)
@@ -158,7 +158,7 @@ end
 
 
 
-local positionGroup = group("x", "y")
+local positionGroup = umg.group("x", "y")
 
 
 positionGroup:onAdded(function(ent)
@@ -171,8 +171,8 @@ end)
 
 
 
-on("tick", function()
-    for _, ent in ipairs(moveEnts) do
+umg.on("tick", function()
+    for _, ent in ipairs(moveGroup) do
         syncMover(ent)
     end
 

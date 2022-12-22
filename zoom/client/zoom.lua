@@ -14,7 +14,7 @@ local zoom_export = {}
 
 
 
-on("gameWheelmoved", function(_, dy)
+umg.on("gameWheelmoved", function(_, dy)
     local speed = zoom_speed or DEFAULT_ZOOM_SPEED
     if dy > 0 then
         base.camera.scale = base.camera.scale * (1+(1/speed))
@@ -42,8 +42,8 @@ local MOUSE_PAN_THRESHOLD = 50 -- X pixels from the screen border to move.
 
 local function moveCam(dt)
     local dx,dy = 0,0
-    local x, y = mouse.getPosition()
-    local w, h = graphics.getWidth(), graphics.getHeight()
+    local x, y = love.mouse.getPosition()
+    local w, h = love.graphics.getWidth(), love.graphics.getHeight()
     local speed = (DEFAULT_PAN_SPEED * dt) / base.camera.scale
 
     if x < MOUSE_PAN_THRESHOLD then
@@ -67,14 +67,14 @@ local IS_PAN_MODE = false
 
 
 
-local controlEnts = group("controllable", "controller", "x", "y")
+local controllableGroup = umg.group("controllable", "controller", "x", "y")
 
 
-on("inputPressed", function(inputEnum)
+umg.on("inputPressed", function(inputEnum)
     if inputEnum == base.input.BUTTON_SHIFT then
         -- unlock camera
         IS_PAN_MODE = true
-        for _, ent in ipairs(controlEnts)do
+        for _, ent in ipairs(controllableGroup)do
             -- we set follow to false for ALL ents, regardless of whether we
             -- are controlling them or not.
             -- This is so if control is changed dynamically, nothing will break.
@@ -87,18 +87,18 @@ end)
 
 
 
-on("inputReleased", function(inputEnum)
+umg.on("inputReleased", function(inputEnum)
     if inputEnum == base.input.BUTTON_SHIFT then
         -- lock camera.
         IS_PAN_MODE = false
-        for _, ent in ipairs(controlEnts) do
+        for _, ent in ipairs(controllableGroup) do
             ent.follow = true
         end
     end
 end)
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     if IS_PAN_MODE then
         base.camera.x = last_camx
         base.camera.y = last_camy
@@ -113,8 +113,8 @@ end)
 
 local MIDDLE_MOUSE_BUTTON = 3
 
-on("gameMousemoved", function(x,y, dx,dy)
-    if mouse.isDown(MIDDLE_MOUSE_BUTTON) then
+umg.on("gameMousemoved", function(x,y, dx,dy)
+    if love.mouse.isDown(MIDDLE_MOUSE_BUTTON) then
         local c = base.camera
         local wx1, wy1 = c:toWorldCoords(x-dx,y-dy)
         local wx2, wy2 = c:toWorldCoords(x,y)

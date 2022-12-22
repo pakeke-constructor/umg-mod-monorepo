@@ -2,7 +2,7 @@
 local Board = require("server.board")
 
 
-local readyUpButtonEnts = group("readyUpButton")
+local readyUpButtonEnts = umg.group("readyUpButton")
 
 
 local AUTO_START_TIME = math.huge -- battle will auto start after X seconds.
@@ -37,10 +37,10 @@ end
 
 
 
-local turnStartTime = timer.getTime()
+local turnStartTime = love.timer.getTime()
 
-on("startTurn", function()
-    turnStartTime = timer.getTime()
+umg.on("startTurn", function()
+    turnStartTime = love.timer.getTime()
 end)
 
 
@@ -55,7 +55,7 @@ end
 
 
 function readyUp.shouldStartBattle()
-    local time = timer.getTime()
+    local time = love.timer.getTime()
     if time > turnStartTime + AUTO_START_TIME then
         return true
     end

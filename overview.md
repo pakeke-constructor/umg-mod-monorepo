@@ -308,12 +308,6 @@ math  -- (lua math module)
     math.distance(x, y, [z]) -- z is optional argument. Gets euclidean distance
 
 graphics -- (love.graphics module)
-    -- extra stuff:
-    graphics.atlas -- access to global texture atlas
-    -- Images are automatically put in the texture atlas,
-    -- and are auto-batched.
-        graphics.atlas:draw(quad, x,y, r, sx,sy, ox,oy) -- draws quad.
-
 keyboard  -- ( love.keyboard module )
 mouse -- ( love.mouse module )
 
@@ -369,9 +363,17 @@ load(name) -- loads data from string `name` (relative to world)
 export("var", value) -- exports `var` to the global mod namespace.
 -- Now, all other mods can access `value`.
 
-client  -- message sending/receiving for client
+client  -- Client side functions
     client.send(event_name, ...) -- sends a message to server
     client.on(event_name, func) -- listens to a message from server
+
+    client.atlas -- access to global texture atlas
+    -- Images are automatically put in the texture atlas,
+    -- and are auto-batched.
+    client.atlas:draw(quad, x,y, r, sx,sy, ox,oy) -- draws quad.
+    
+    client.getUsername() -- gets client username
+
 
 server
     server.broadcast(event_name, ...) -- broadcasts an event to clients
@@ -383,7 +385,6 @@ server
     server.forceDelete(ent) -- forces an entity delete event for `ent`
     -- ITS NOT RECOMMENDED TO USE THESE TWO ^^^
 
-username -- The player's username.  (Available client side ONLY)
 ```
 
 Most lua functions can be used as well, such as `setmetatable`, `rawget`, `pairs`, `require`, etc etc.    

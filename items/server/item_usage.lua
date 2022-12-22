@@ -1,7 +1,7 @@
 
 
 
-local usable_items = group("itemName", "useItem")
+local usableItemGroup = umg.group("itemName", "useItem")
 
 
 local function useMethod(item, ...)
@@ -33,7 +33,7 @@ end
 
 
 
-usable_items:onAdded(function(ent)
+usableItemGroup:onAdded(function(ent)
     if (type(ent.useItem) ~= "function") then 
         error("ent.useItem needs to be a function. Instead, it was "..type(ent.useItem))
     end
@@ -46,7 +46,7 @@ end)
 
 
 server.filter("useItem", function(sender, item, holder_ent)
-    if not (exists(item) and exists(holder_ent)) then
+    if not (umg.exists(item) and umg.exists(holder_ent)) then
         return false
     end
     if sender ~= holder_ent.controller then

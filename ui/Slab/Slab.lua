@@ -25,16 +25,6 @@ SOFTWARE.
 --]]
 
 
--- PAKEKE MONKEYPATCH:
--- Adding love global.
-_G.love = {
-    graphics = graphics,
-    timer = timer,
-    keyboard = keyboard,
-    mouse = mouse,
-    math = math,
-    system = system
-}
 
 SLAB_PATH = "Slab"
 

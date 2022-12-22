@@ -48,7 +48,7 @@ local function makeIllegal(illegal_api, err_func)
         assert(type(name) == "string", "invalid format")
         local module = {}
         if not _G[name] then
-            export(name, module)
+            umg.export(name, module)
         end
         addErrorFuncsToModule(illegal_module, module, err_func)
     end
@@ -105,7 +105,7 @@ local needsClientExports = true
 serverSideOnlyExports = {}
 
 
-on("playerJoin", function(username)
+umg.on("playerJoin", function(username)
     server.unicast(username, "defineServerOnlyAPI", serverSideOnlyExports, needsClientExports)
 end)
 
@@ -213,11 +213,11 @@ local function defineExports(options)
     if client then
         local api = {}
         loadClient(options, api)
-        export(options.name, api)
+        umg.export(options.name, api)
     elseif server then
         local api = {}
         loadServer(options, api)
-        export(options.name, api)
+        umg.export(options.name, api)
     end
 end
 

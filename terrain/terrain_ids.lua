@@ -68,7 +68,7 @@ end
 
 
 
-local terrainGroup = group("terrain")
+local terrainGroup = umg.group("terrain")
 
 terrainGroup:onAdded(function(ent)
     if ent.terrain and server then

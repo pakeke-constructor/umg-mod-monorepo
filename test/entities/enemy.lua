@@ -34,7 +34,7 @@ return {
     bobbing = {},
     
     physics = {
-        shape = physics.newCircleShape(5);
+        shape = love.physics.newCircleShape(5);
         friction = 7
     };
 

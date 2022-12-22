@@ -15,7 +15,7 @@ return placement.newPlaceable({
 
     spawn = function(x,y)
         if server then
-            local e = entities.block()
+            local e = server.entities.block()
             e.x = x
             e.y = y
             e.image = "slant_block"

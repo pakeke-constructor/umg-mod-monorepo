@@ -60,15 +60,15 @@ end
 
 
 local function drawEmitter(emitter)
-    graphics.setColor(emitter.color)
+    love.graphics.setColor(emitter.color)
     local psys = emitter.psys
-    graphics.draw(psys) -- Under most recent love version, this breaks batching. 
+    love.graphics.draw(psys) -- Under most recent love version, this breaks batching. 
     -- Oh well :/
 end
 
 
 
-on("drawIndex", function( z_dep )
+umg.on("drawIndex", function( z_dep )
     for _, emtr in drawingPSyses[z_dep]:iter() do
         drawEmitter(emtr)
     end
@@ -84,7 +84,7 @@ local function isFinished(emitter)
     end
 end
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     for _, emitr in in_use:iter() do
         emitr.psys:update(dt)
         emitr.runtime = emitr.runtime + dt
@@ -123,11 +123,11 @@ function particles.newParticleSystem(images, buffer_size)
     if #images == 0 then
         error("Attempted to define a particleSystem with no particle images")
     end
-    local psys = graphics.newParticleSystem(graphics.atlas.image, buffer_size or DEFAULT_BUFFER_SIZE)
+    local psys = love.graphics.newParticleSystem(client.atlas.image, buffer_size or DEFAULT_BUFFER_SIZE)
     local buffer = Array()
     local _,pW,pH
     for _,img in ipairs(images) do
-        local quad = assets.images[img]
+        local quad = client.assets.images[img]
         _,_,pW,pH = quad:getViewport()
         assert(quad, "base.particles.newParticleSystem(): Non existant image: " .. tostring(img))
         buffer:add(quad)

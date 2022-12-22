@@ -12,6 +12,5 @@ end
 base.defineExports({
     name = "terrain",
     loadShared = loadShared,
-    
 })
 

@@ -8,7 +8,7 @@ catches the player if they fall off the map.
 
 local constants = require("shared.constants")
 
-local playerCatchGroup = group("controllable", "z", "vz")
+local playerCatchGroup = umg.group("controllable", "z", "vz")
 
 
 
@@ -29,7 +29,7 @@ server.on("i_fell_off", function(sender)
 end)
 
 
-on("tick", function()
+umg.on("tick", function()
     for _, ent in ipairs(playerCatchGroup)do
         if ent.z < constants.PLAYER_CATCH_THRESHOLD then
             -- catch player, bring em up

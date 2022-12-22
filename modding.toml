@@ -11,9 +11,6 @@ any = true
 [client]
 any = true
 
-[username]
-any = true
-
 [constants]
 any = true
 
@@ -21,63 +18,17 @@ any = true
 any = true
 
 
-[graphics]
+[love]
 any = true
-[timer]
+[umg]
 any = true
-[physics]
-any = true
-[keyboard]
-any = true
-[mouse]
-any = true
-[audio]
-any = true
-[image]
-any = true
-[system]
-any = true
+
+
 
 
 [utf8]
 any = true
 
-[assets]
-any = true
-
-[group]
-any = true
-[delay]
-any = true
-[array]
-any = true
-[exists]
-any = true
-[on]
-any = true
-[call]
-any = true
-[entities]
-any = true
-[inspect]
-any = true
-
-
-[register]
-any = true
-[save]
-any = true
-[load]
-any = true
-[serialize]
-any = true
-[deserialize]
-any = true
-
-[export]
-any = true
-[extend]
-any = true
 
 ## Standard library modifications
 [assert]

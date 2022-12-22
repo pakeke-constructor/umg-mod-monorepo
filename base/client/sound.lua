@@ -37,11 +37,11 @@ end
 
 
 local function sfxVol()
-    return audio.getSFXVolume() * audio.getMasterVolume()
+    return client.getSFXVolume() * client.getMasterVolume()
 end
 
 local function musicVol()
-    return audio.getMusicVolume() * audio.getMasterVolume()
+    return client.getMusicVolume() * client.getMasterVolume()
 end
 
 
@@ -55,7 +55,7 @@ local function playSound(src, vol, pitch, effect, vol_v, p_v)
     src:setVolume(vol)
     src:setPitch (pitch + p_v * math.sin(math.random() * 6.282))
     
-    audio.play( src )
+    love.audio.play( src )
 end
 
 
@@ -74,7 +74,7 @@ function sound.playSound(name, volume, pitch, effect, volume_variance,  pitch_va
     volume_variance = volume_variance or 0
     pitch_variance = pitch_variance or 0
 
-    playSound(assets.sounds[name], volume, pitch, effect, volume_variance, pitch_variance)
+    playSound(client.assets.sounds[name], volume, pitch, effect, volume_variance, pitch_variance)
 end
 
 
@@ -86,8 +86,8 @@ local current_music_volume_modifier = 1
 
 
 function sound.playMusic(name, start_time, music_volume_modifier)
-    assert(assets.sounds[name], "unknown music:  "..name)
-    local src = assets.sounds[name]
+    assert(client.assets.sounds[name], "unknown music:  "..name)
+    local src = client.assets.sounds[name]
     
     if current_music then
         current_music:stop()
@@ -99,11 +99,11 @@ function sound.playMusic(name, start_time, music_volume_modifier)
     src:setLooping(true)
     src:seek(start_time or 0)
     src:setVolume(musicVol())
-    audio.play(src)
+    love.audio.play(src)
 end
 
 
-on("update", function()
+umg.on("update", function()
     if current_music then
         current_music:setVolume(musicVol() * current_music_volume_modifier)
         if not current_music:isPlaying() then

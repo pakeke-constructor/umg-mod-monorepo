@@ -7,13 +7,13 @@ local skyColor = {0.5, 0.9, 1}
 -- We probably don't need it TBH
 
 
-on("preDraw", function()
-    graphics.clear(skyColor)
+umg.on("preDraw", function()
+    love.graphics.clear(skyColor)
 end)
 
 
 
-on("inputPressed", function(inputEnum)
+umg.on("inputPressed", function(inputEnum)
     if inputEnum == base.input.BUTTON_SPACE then
         local e = base.getPlayer()
         if base.gravity.isOnGround(e) then

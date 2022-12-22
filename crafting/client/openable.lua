@@ -1,5 +1,5 @@
 
-local openGroup = group("openable", "inventory", "x", "y")
+local openGroup = umg.group("openable", "inventory", "x", "y")
 
 
 
@@ -72,7 +72,7 @@ local function tryOpenInv(player, inv_ent)
 end
 
 
-on("gameUpdate", function(dt)
+umg.on("gameUpdate", function(dt)
     if openInv then
         local player = base.getPlayer()
         if math.distance(player, openInv.owner) > (DEFAULT_OPENABLE_DISTANCE + 1) then
@@ -90,7 +90,7 @@ end)
 
 
 
-on("gameMousepressed", function(mx, my, button)
+umg.on("gameMousepressed", function(mx, my, button)
     if button == OPEN_BUTTON then
         local player = base.getPlayer()
         if (not openInv) or (not openInv:withinBounds(mx,my)) then
@@ -107,7 +107,7 @@ end)
 
 
 
-on("inputPressed", function(inputEnum)
+umg.on("inputPressed", function(inputEnum)
     if inputEnum == base.input.BUTTON_2 then
         local player = base.getPlayer()
         if player.inventory then

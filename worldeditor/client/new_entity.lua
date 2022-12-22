@@ -49,7 +49,7 @@ local isOpen = true
 
 
 
-on("slabUpdate", function(dt)
+umg.on("slabUpdate", function(dt)
     if not isOpen then 
         return
     end
@@ -59,7 +59,8 @@ on("slabUpdate", function(dt)
 
     if selectedEType then
         if Slab.Button("Create " .. selectedEType) then
-            local e = entities[selectedEType](base.camera.x, base.camera.y)
+            -- todo: move to server etc
+            local e = server.entities[selectedEType](base.camera.x, base.camera.y)
 
         end
     end

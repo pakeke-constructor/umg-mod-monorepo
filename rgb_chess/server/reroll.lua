@@ -12,7 +12,7 @@ local function rerollSingle(rgbTeam, shopIndex, numSquadrons)
     local isLocked = board.shopLocks[shopIndex]
     if not isLocked then
         -- then we reroll
-        if exists(card) then
+        if umg.exists(card) then
             server.broadcast("rerollCard", card)
             card:delete()
         end
@@ -36,7 +36,7 @@ local function reroll(rgbTeam)
         base.delay(delay, function() rerollSingle(rgbTeam, i, squadronCount) end)
     end
 
-    call("reroll", rgb_team)
+    umg.call("reroll", rgb_team)
 end
 
 

@@ -21,7 +21,7 @@ function exp.changeEntityCategory(ent, newCategory)
         This MUST be called instead of doing `ent.category = X`
         If an entity's category is changed manually it will cause stuff to break.
     ]]
-    if not exists(ent) then
+    if not umg.exists(ent) then
         error("Entity doesn't exist!\n(If you just created this entity, then you must wait a frame. Entities are buffered and spawned inbetween frames..)")
     end
 
@@ -59,6 +59,6 @@ function exp.changeEntityCategory(ent, newCategory)
 end
 
 
-export("categories", exp)
+umg.export("categories", exp)
 
 

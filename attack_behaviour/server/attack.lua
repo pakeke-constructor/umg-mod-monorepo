@@ -33,7 +33,7 @@ local function doSplash(ent, target_ent)
                         e.x-hitx, e.y-hity,
                         splash.radius
                     )
-                    call("attack", ent, e, dmg)
+                    umg.call("attack", ent, e, dmg)
                     server.broadcast("attack", ent, e, dmg)
                     e.health = e.health - ent.attackDamage
                 end
@@ -56,9 +56,9 @@ local function attack(ent, target_ent)
     if ent.attackBehaviour.splash then
         doSplash(ent, target_ent)
     else
-        assert(exists(ent), "Ent didn't exist!! (TODO: Theres a bug here)")
-        assert(exists(target_ent), "Target ent didn't exist!! (TODO: Theres a bug here)")
-        call("attack", ent, target_ent, ent.attackDamage)
+        assert(umg.exists(ent), "Ent didn't exist!! (TODO: Theres a bug here)")
+        assert(umg.exists(target_ent), "Target ent didn't exist!! (TODO: Theres a bug here)")
+        umg.call("attack", ent, target_ent, ent.attackDamage)
         server.broadcast("attack", ent, target_ent, ent.attackDamage)
         target_ent.health = target_ent.health - ent.attackDamage
     end

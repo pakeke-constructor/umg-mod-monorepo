@@ -79,27 +79,27 @@ end
 
 function Board:spawnRerollButton()
     local x,y = self.x + (self.width * (1/6)), self.y + (self.height * (5/6))
-    entities.reroll_button(x, y, self:getTeam())
+    server.entities.reroll_button(x, y, self:getTeam())
 end
 
 function Board:spawnSellButton()
     local x,y = self.x + (self.width * (1/3)), self.y + self.height
-    entities.sell_button(x,y,self:getTeam())
+    server.entities.sell_button(x,y,self:getTeam())
 end
 
 function Board:spawnToggleDetailsButton()
     local x,y = self.x + (self.width * (1/2)), self.y + self.height
-    entities.show_details_button(x,y,self:getTeam())
+    server.entities.show_details_button(x,y,self:getTeam())
 end
 
 function Board:spawnMoneyText()
     local x, y = self.x + (self.width * (1/6)), self.y + (self.height * (11/12))
-    entities.money_text(x, y, self:getTeam())
+    server.entities.money_text(x, y, self:getTeam())
 end
 
 function Board:spawnBattleButton()
     local x,y = self.x + (self.width * (1/6)), self.y + (self.height)
-    entities.readyup_button(x, y, self:getTeam())
+    server.entities.readyup_button(x, y, self:getTeam())
 end
 
 function Board:spawnWidgets()
@@ -142,12 +142,12 @@ function Board:serialize()
     for _, ent in rgb.iterUnits(self:getTeam()) do
         table.insert(buffer, ent)
     end
-    self.serialized = serialize(buffer)
+    self.serialized = umg.serialize(buffer)
 end
 
 function Board:deserializeAllies()
     if self.serialized then
-        local arr, err = deserialize(self.serialized)
+        local arr, err = umg.deserialize(self.serialized)
         if (not arr) and err then
             print("[rgb_chess]: error in deserializing allies for board: ", err)
         end
