@@ -52,7 +52,7 @@ return {
 ```lua
 
 -- Component definition
-ent.inventory = {
+ent.inventory = items.Inventory({
     width = 6 -- width of inventory slots
     height = 3 -- height
     hotbar = true -- DST / minecraft like hotbar.
@@ -60,7 +60,7 @@ ent.inventory = {
 
     private = true/false -- This means that only the owner can open this
     -- inventory
-}
+})
 
 
 

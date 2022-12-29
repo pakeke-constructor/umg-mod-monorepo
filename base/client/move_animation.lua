@@ -54,17 +54,17 @@ local min = math.min
 local floor = math.floor
 
 
-local function getDirFromSpeed(ent)
-    if abs(ent.vx) > abs(ent.vy) then
+local function getDirFromDirection(dx, dy)
+    if abs(dx) > abs(dy) then
         -- Left or Right
-        if ent.vx < 0 then
+        if dx < 0 then
             return "left"
         else
             return "right"
         end
     else
         -- up or down
-        if ent.vy < 0 then
+        if dy < 0 then
             return "up"
         else
             return "down"
@@ -77,10 +77,12 @@ end
 local function getDirection(ent, entspeed)
     local manim = ent.moveAnimation
     if entspeed > manim.activation then
-        local dir = ent.faceDirection
-        if not dir then
-            dir = getDirFromSpeed(ent)
+        local dx, dy = ent.vx, ent.vy
+        if ent.lookX and ent.lookY then
+            dx = ent.lookX - ent.x
+            dy = ent.lookY - ent.y
         end
+        local dir = getDirFromDirection(dx, dy)
         ent_to_direction[ent] = dir
         return dir
     else

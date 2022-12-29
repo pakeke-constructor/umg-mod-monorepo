@@ -8,7 +8,7 @@ return {
     init = function(ent, x,y)
         ent.x = x
         ent.y = y
-        ent.inventory = {width=5;height=5}
+        ent.inventory = items.Inventory({width=5;height=5})
     end
 }
 

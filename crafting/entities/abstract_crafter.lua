@@ -55,10 +55,10 @@ local abstractCrafter = {
         end
         
         if not ent.inventory then
-            ent.inventory = {
+            ent.inventory = items.Inventory({
                 width = 6,
                 height = 3
-            }
+            })
         end
     end
 }

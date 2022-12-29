@@ -20,13 +20,21 @@ That way, it can be drawn normally though draw-system; and any special effects,
 like particles, light, outlines, etc etc will still be applied normally :)
 
 
+Also, change the `item_rendering` to include `lookX` and `lookY` components; should read off of these components.
+ALSO: Maybe put this code in a separate file?? Like `look_direction.lua`
+or something? It doesn't really make sense for it to be in `item_rendering.lua`.
+Basically just split up the files a bit and clean everything up.
+
+TODO: Should we put `lookX` and `lookY` in the base mod? -->
+make a `look_direction.lua` file.
+This way, we can tie it in with `faceDirection` too.
+
 
 
 
 Refactor terrain a bit:
 Terrain should always be an entity!!!
 None of this manual-generated-id rubbish; that's what entities are for
-
 
 
 

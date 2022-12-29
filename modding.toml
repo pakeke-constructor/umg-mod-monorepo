@@ -46,6 +46,9 @@ any = true
 [base]
 any = true
 
+[items]
+any = true
+
 ## placement mod:
 [placement]
 any = true

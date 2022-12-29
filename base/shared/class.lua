@@ -1,7 +1,5 @@
 
 
-
-
 local name_to_class = {
 --[[
     [class_name] = class

@@ -2,7 +2,7 @@
 
 local usable_items = umg.group("itemName", "useItem")
 
-local itemRendering = require("client.item_rendering")
+local itemHolding = require("client.item_holding")
 
 
 local function useMethod(item, ...)
@@ -12,7 +12,7 @@ local function useMethod(item, ...)
     if item:canUse(...) then
         client.send("useItem", item, holder_ent, ...)
         item:useItem(holder_ent, ...)
-        itemRendering.onUseItem(item, holder_ent, ...)
+        itemHolding.onUseItem(item, holder_ent, ...)
     elseif item.useItemDeny then
         item:useItemDeny(holder_ent, ...)
     end

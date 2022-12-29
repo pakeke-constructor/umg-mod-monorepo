@@ -4,7 +4,7 @@
 local inventoryGroup = umg.group("inventory")
 -- group of all ents that have an `inventory` component.
 
-local invCtor = require("inventory")
+local Inventory = require("inventory")
 local valid_callbacks = require("inventory_callbacks")
 
 local updateStackSize = require("server.update_stacksize")
@@ -26,11 +26,14 @@ inventoryGroup:onAdded(function(ent)
         assertValidCallbacks(ent.inventoryCallbacks)
     end
 
-    if not getmetatable(ent.inventory) then
-        -- Then the inventory hasn't been initialized and we should init it.
-        ent.inventory = invCtor(ent.inventory)
-        ent.inventory.owner = ent
+    if not ent:isRegular("inventory") then
+        error(".inventory component must be regular. Not the case for: " ..tostring(ent))
     end
+    if (getmetatable(ent.inventory) ~= Inventory) then
+        error("inventory was assigned incorrectly for ent: " .. tostring(ent))
+    end
+
+    ent.inventory.owner = ent
 end)
 
 

@@ -4,7 +4,6 @@
 ## ITEM ENTITY EXAMPLE:
 ```lua
 
-return {
     "stackSize", -- the current stack size of the item.
     -- if this reaches 0, the item is deleted.
 
@@ -66,7 +65,7 @@ return {
     end
 
 
-    -- How the player should hold the item.
+    -- How this item should be held.
     -- (If this value is nil, the item cannot be held)
     itemHoldType = 
     "place" -- shows an preview for placing an entity
@@ -74,11 +73,7 @@ return {
     "spin"  -- holds in direction of mouse, spins around when used
     "swing" -- holds in direction of mouse, swings when used (think sword)
     "recoil"-- holds in direction of mouse, recoils back when used (think shotgun)
-    "above" -- item is above player's head
-    
-    itemHoldImage = "custom_image"
-    -- an optional custom image for item holding
-
+    "above" -- item is above head of entity
 
     placeGridSize = 20 
     -- the size of the grid to snap to when using `place` itemHoldType
@@ -109,7 +104,7 @@ local chest = entities.chest()
 
 -- Upon creation, the `inventory` component should be set to a table,
 -- like the following:
-chest.inventory = {
+chest.inventory = Inventory({
     width = 6 -- width of inventory slots
     height = 3 -- height
     hotbar = true -- DST / minecraft like hotbar.
@@ -117,7 +112,7 @@ chest.inventory = {
 
     private = true/false -- This means that only the owner can open this
     -- inventory
-}
+})
 -- if this isn't done, the client will crash.
 
 ```
@@ -219,4 +214,28 @@ ent.inventoryButtons = {
 If an entity should change it's move animation to face in the direction of
 the tool, then simply add the `faceDirection` component to the entity.
 (This should be a regular component, don't make it shared!)
+
+
+For example, here's a basic entity that can hold a gun:
+```lua
+
+return {
+    "x", "y",
+    image = "blob",
+
+    "holdItem",
+
+    "lookX",
+    "lookY" -- the X and Y position that this entity is looking at.
+    -- (This will also determine the face direction, and the direction
+    --   that the tool is facing)
+
+
+}
+
+
+```
+Note that this entity doesn't have an `inventory` component.
+Entities don't need an inventory to be able to hold items.
+
 

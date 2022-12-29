@@ -1,5 +1,5 @@
 
-local invCtor = require("inventory")
+local Inventory = require("inventory")
 
 
 local inventoryGroup = umg.group("inventory")
@@ -58,26 +58,21 @@ end
 
 
 inventoryGroup:onAdded(function(ent)
-    if not ent.inventory then
-        assert(ent.inventory, "Inventory component must be initialized either before entity creation, or inside a `.init` function!")
+    if (not ent.inventory) or (getmetatable(ent.inventory) ~= Inventory) then
+        error("Inventory component must be initialized either before entity creation, or inside a `.init` function!")
     end
 
     if ent.inventoryButtons then
         parseInitialButtonFormat(ent)
     end
 
-    if not getmetatable(ent.inventory) then
-        -- Then the inventory hasn't been initialized and we should init it.
-        ent.inventory = invCtor(ent.inventory)
-        ent.inventory.owner = ent
-    else
-        local inv = ent.inventory
-        for w=1, inv.width do
-            for h=1, inv.height do
-                local item = inv:get(w,h)
-                if item then
-                    item.ownerInventory = inv
-                end
+    ent.inventory.owner = ent
+    local inv = ent.inventory
+    for w=1, inv.width do
+        for h=1, inv.height do
+            local item = inv:get(w,h)
+            if item then
+                item.ownerInventory = inv
             end
         end
     end

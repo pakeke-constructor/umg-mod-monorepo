@@ -1,14 +1,16 @@
 
 --[[
 
-Handles moving animation of entities holding items,
-item usage,
-and item facing direction.
+Handles world position of held items.
 
+I.e. stuff like rotation, distance from parent entity, etc.
+
+lookX and lookY components are also used here.
 
 
 ]]
 
+local itemHolding = {}
 
 
 
@@ -33,19 +35,22 @@ end
 
 
 
-local holding_ents = umg.group("inventory", "x", "y")
+local function getLookDirection(ent)
+    if ent.lookX and ent.lookY then
+        return ent.lookX - ent.x, ent.lookY - ent.y
+    elseif ent.controller == client.getUsername() then
+        return normalize(getMouseDirection(ent))
+    else
+        if ent.vx and ent.vy and math.distance(ent.vx,ent.vy) > 0 then
+            local dst = math.distance(ent.vx, ent.vy)
+            return ent.vx / dst, ent.vy / dst
+        end
+        return 0,0
+    end
+end
 
-local ent_to_pointDirectionX = {
-    -- holding entity to point direction
-}
-local ent_to_pointDirectionY = {
-    -- holding entity to point direction
-}
 
-holding_ents:onRemoved(function(ent)
-    ent_to_pointDirectionX[ent] = nil
-    ent_to_pointDirectionY[ent] = nil
-end)
+
 
 
 
@@ -60,51 +65,16 @@ client.on("setInventoryHoldItem", function(ent, item)
 end)
 
 
-client.on("setInventoryHoldDirection", function(ent, faceDir, dx, dy)
-    ent_to_pointDirectionX[ent] = dx
-    ent_to_pointDirectionY[ent] = dy
-    ent.faceDirection = faceDir
+
+-- ORIGINALLY:::   setInventoryHoldDirection
+client.on("setItemHoldValue", function(ent, itemEnt, lookX, lookY)
+    ent.lookX = lookX
+    ent.lookY = lookY
+    ent.holdItem = itemEnt
+    itemEnt.x = lookX
+    itemEnt.y = lookY
 end)
 
-
-
-
-local function getPointDirection(ent)
-    if ent.controller == client.getUsername() then
-        return normalize(getMouseDirection(ent))
-    else
-        local x,y = ent_to_pointDirectionX[ent], ent_to_pointDirectionY[ent]
-        if x and y then
-            return x,y
-        elseif ent.vx and ent.vy and math.distance(ent.vx,ent.vy) > 0 then
-            local dst = math.distance(ent.vx, ent.vy)
-            return ent.vx / dst, ent.vy / dst
-        end
-        return 0,0
-    end
-end
-
-
-
-
-local function getFaceDirection(ent)
-    local dx, dy = getPointDirection(ent)
-    if math.abs(dx) > math.abs(dy) then
-        -- facing left or right
-        if dx > 0 then
-            return "right"
-        else
-            return "left"
-        end
-    else
-        -- facing up or down
-        if dy > 0 then
-            return "down"
-        else
-            return "up"
-        end
-    end
-end
 
 
 
@@ -160,7 +130,7 @@ umg.on("tick", function(dt)
                 local hold_x, hold_y = inv.holding_x, inv.holding_y
                 if hold_x and hold_y and inv:get(hold_x, hold_y) then
                     local hold_item = inv:get(hold_x, hold_y)
-                    client.send("setInventoryHoldItemPosition", ent, ent.faceDirection, hold_x, hold_y, getPointDirection(ent))
+                    client.send("setInventoryHoldItemPosition", ent, ent.faceDirection, hold_x, hold_y, getLookDirection(ent))
                 end
             end
         end
@@ -172,60 +142,24 @@ end)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---[[
-
-===============================
-rendering of held items.
-===============================
-
-]]
-
-local curTime = love.timer.getTime()
-
-local function onUseItem(item, holder_ent, ...)
-    item.item_lastUseTime = curTime
+function itemHolding.onUseItem(item, holder_ent, ...)
+    item.item_lastUseTime = base.getGameTime()
 end
 
-umg.on("gameUpdate", function(dt)
-    curTime = curTime + dt
-end)
 
 
 
-local function renderHolder(ent, holder, rot, dist, sx, sy, oxx, oyy)
+local function setHoldPosition(ent, holder, rot, dist, sx, sy, oxx, oyy)
     oxx = oxx or 0
     oyy = oyy or 0
     local img = ent.itemHoldImage or ent.image
     if not client.assets.images[img] then
         error("Unknown image for holding item:  " .. tostring(img))
     end
-    local dx, dy = getPointDirection(holder)
+    local dx, dy = getLookDirection(holder)
     local quad = client.assets.images[img]
     local ox, oy = base.getQuadOffsets(quad)
 
-    client.atlas:draw(
         quad, 
         holder.x + dx*dist + oxx, 
         holder.y - (holder.z or 0)/2 + dy*dist + oyy,
@@ -235,14 +169,22 @@ local function renderHolder(ent, holder, rot, dist, sx, sy, oxx, oyy)
     )
 end
 
-local holdRendering = {}
+
+
+local itemHoldPositioning = {
+--[[
+    this table contains functions that return the position,
+    scaleX, scaleY, and rotation of a hold item, given a look direction.
+]]
+}
 
 
 local TOOL_HOLD_DISTANCE = 20
 
 local TOOL_USE_TIME = 0.3
-function holdRendering.tool(ent, holder)
-    local dx,dy = getPointDirection(holder)
+function itemHoldPositioning.tool(ent, holder)
+    local dx,dy = getLookDirection(holder)
+    local curTime = base.getGameTime()
     local t = math.max(0, ((ent.item_lastUseTime or curTime) - curTime) + TOOL_USE_TIME) / TOOL_USE_TIME
     local sinv = math.sin(t*6.282)
     local rot = -math.atan2(dx,dy) + math.pi/2 + sinv/3
@@ -252,23 +194,25 @@ end
 
 
 
-function holdRendering.spin(ent, holder)
-    local rot = curTime * 7
-    local dx,dy = getPointDirection(holder)
+function itemHoldPositioning.spin(ent, holder)
+    local rot = base.getGameTime() * 7
+    local dx,dy = getLookDirection(holder)
     local sign = dx>0 and 1 or -1
     renderHolder(ent, holder, rot, TOOL_HOLD_DISTANCE, 1, sign)
 end
 
 
 local SWING_TIME = 0.3
-function holdRendering.swing(ent, holder)
+
+function itemHoldPositioning.swing(ent, holder)
     error("nyi")
 end
 
 
 local RECOIL_TIME = 0.3
-function holdRendering.recoil(ent, holder)
-    local dx,dy = getPointDirection(holder)
+function itemHoldPositioning.recoil(ent, holder)
+    local dx,dy = getLookDirection(holder)
+    local curTime = base.getGameTime()
     local t = math.max(0, ((ent.item_lastUseTime or curTime) - curTime) + RECOIL_TIME) / RECOIL_TIME
     local sinv = math.sin(t*3.14)
     local rot = -math.atan2(dx,dy) + math.pi/2
@@ -277,12 +221,14 @@ function holdRendering.recoil(ent, holder)
 end
 
 
-function holdRendering.above(ent, holder)
+
+function itemHoldPositioning.above(ent, holder)
     local _,oy = base.getQuadOffsets(ent.image)
     renderHolder(ent, holder, 0, 0, 1, 1, 0, -oy*2)
 end
 
-function holdRendering.place(item, holder)
+
+function itemHoldPositioning.place(item, holder)
     local img = item.itemHoldImage or item.image
     if img then
         love.graphics.push("all")
@@ -322,28 +268,9 @@ function holdRendering.place(item, holder)
 end
 
 
-function holdRendering.custom(item, holder)
+function itemHoldPositioning.custom(item, holder)
+    error("nyi")
     assert(item.customHoldDraw, "when itemHoldType is 'custom', item.customHoldDraw must be set.")
     item:customHoldDraw(holder)
 end
-
-
-umg.on("drawEntity", function(ent)
-    if ent.inventory then
-        local h = ent.inventory:getHoldingItem()
-        if h and h.itemHoldType then
-            if not holdRendering[h.itemHoldType] then
-                error("Item entity had invalid itemHoldType value: " .. tostring(h.itemHoldType))
-            end
-            holdRendering[h.itemHoldType](h, ent)
-        end
-    end
-end)
-
-
-
-
-return {
-    onUseItem = onUseItem
-}
 
