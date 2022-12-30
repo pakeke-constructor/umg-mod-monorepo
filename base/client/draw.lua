@@ -6,7 +6,7 @@ Will emit draw calls based on position, and in correct order.
 
 ]]
 
-local cameraLib = require("_libs.camera") -- HUMP Camera for love2d.
+local camera = require("client.camera")
 
 local constants = require("shared.constants")
 
@@ -30,11 +30,6 @@ local sortedMoveEnts = {} -- for ents that move
 
 
 local setColor = love.graphics.setColor
-
-local DEFAULT_ZOOM = constants.DEFAULT_ZOOM
-
-local camera = cameraLib(0, 0, nil, nil, DEFAULT_ZOOM, 0)
-
 
 local DEFAULT_LEIGHWAY = constants.SCREEN_LEIGHWAY
 

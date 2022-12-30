@@ -15,6 +15,9 @@ ent.vy
 ent.vz -- velocity components
 
 
+ent.rot -- rotation (radians)
+
+
 ent.color = {1,0.5,0.2} -- color of entity (RGBA)
 -- (alpha channel is optional, defaults to 1.)
 

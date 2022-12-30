@@ -2,8 +2,6 @@
 local common = require("shared.common")
 
 
-local holdingItemGroup = umg.group("holdItem")
-
 
 local itemHolding = {}
 
@@ -29,16 +27,3 @@ function itemHolding.setHoldItem(ent, item_ent)
     item_ent.itemBeingHeld = true
 end
 
-
-
-
-holdingItemGroup:onAdded(function(ent)
-    if ent.holdItem then
-        local success = itemHolding.setHoldItem(ent, ent.holdItem)
-        assert(success, "Failed to setHoldItem for entity")
-    end
-end)
-
-
-
-return itemHolding

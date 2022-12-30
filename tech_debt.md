@@ -26,8 +26,22 @@ or something? It doesn't really make sense for it to be in `item_rendering.lua`.
 Basically just split up the files a bit and clean everything up.
 
 TODO: Should we put `lookX` and `lookY` in the base mod? -->
-make a `look_direction.lua` file.
-This way, we can tie it in with `faceDirection` too.
+Maybe make a `look_direction.lua` file.
+Implement auto-syncing for `lookX` and `lookY`.
+
+
+------------------------------
+PLANNING::::
+`lookX` and `lookY` are auto-synced on clientside-serverside.
+If an entity has `lookAtMouse = true`, then the `lookX` and `lookY` will face towards
+mouse. (useful for player entities)
+
+With item holding, each `itemHoldType` takes a holder `ent`, and the item `itemEnt`.
+It's position, rotation, and scale will be determined by the protocol inside of
+`item_holding.lua`.
+These values are computed on BOTH serverside and clientside; thus, they don't need
+to be sent over the network. only `lookX` and `lookY` need to be sent over.
+
 
 
 
