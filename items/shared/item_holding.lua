@@ -1,6 +1,6 @@
 
 
-local holdingItemGroup = group("holdItem", "x", "y")
+local holdingItemGroup = umg.group("holdItem", "x", "y")
 
 
 
@@ -119,6 +119,8 @@ umg.on("update", function()
                 error("unknown itemHoldType " .. tostring(item_ent.itemHoldType) .. " for entity " .. tostring(item_ent))
             end
             itemHoldPositioning[item_ent.itemHoldType](item_ent, ent)
+        else
+            ent.holdItem = nil -- could have been deleted 
         end
     end
 end)

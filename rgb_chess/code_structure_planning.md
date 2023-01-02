@@ -1,11 +1,8 @@
 
 
-
-
-
-
 # callbacks:
 ```lua
+
 startBattle() -- battle starts
 endBattle() -- battle ends
 
@@ -20,6 +17,4 @@ buff(unit, attackAmount, healthAmount, fromUnit, depth) -- buffing / debuffing
 debuff(unit, attackAmount, healthAmount, fromUnit, depth)
 
 
-
 ```
-

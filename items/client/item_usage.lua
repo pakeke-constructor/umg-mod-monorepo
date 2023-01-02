@@ -2,17 +2,17 @@
 
 local usable_items = umg.group("itemName", "useItem")
 
-local itemHolding = require("client.item_holding")
-
 
 local function useMethod(item, ...)
     -- item.ownerInventory is set by the inventory.
     -- If this item is not in any inventory, then it's nil
+    
+    -- TODO: There's a bug here!
     local holder_ent = item.ownerInventory and item.ownerInventory.owner
     if item:canUse(...) then
         client.send("useItem", item, holder_ent, ...)
         item:useItem(holder_ent, ...)
-        itemHolding.onUseItem(item, holder_ent, ...)
+        item.item_lastUseTime = base.getGameTime()
     elseif item.useItemDeny then
         item:useItemDeny(holder_ent, ...)
     end
