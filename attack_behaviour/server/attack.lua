@@ -12,11 +12,19 @@ local falloffs = {
 }
 
 
+
+
 local function applyAttack(attacker_ent, victim_ent, dmg)
+    -- TODO: Allow for damage reduction / damage bonuses here.
+    -- Perhaps tag into a callback? <--- this would be the most flexible way.
+    --  we should have two callbacks; 
+    -- one on the victim for damage reduction,
+    -- and one on the attacker for damage bonuses.
     umg.call("attack", attacker_ent, victim_ent, dmg)
     server.broadcast("attack", attacker_ent, victim_ent, dmg)
     victim_ent.health = victim_ent.health - dmg
 end
+
 
 
 local function doSplash(ent, target_ent)
@@ -33,7 +41,7 @@ local function doSplash(ent, target_ent)
         for _, e in categories.getSet(category):ipairs() do
             if math.distance(e, target_ent) <= splash.radius then
                 if e ~= ent then
-                    -- we dont want to entity hitting itself!
+                    -- we dont want the entity hitting itself!
                     local falloffType = splash.damageFalloff or "none"
                     local dmg = falloffs[falloffType](
                         ent.attackDamage, 

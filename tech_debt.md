@@ -53,11 +53,3 @@ It's kindof weird that an item can be picked up via `ent.holdItem`,
 AND be picked up via `ent.inventory`.
 Surely there's a more robust way to do it.
 
-
-
-
-# TECH_DEBT_4
-ent.inventoryCallbacks feels a bit "weird" to use.
-Take a look around there are see what there is to change;
-chances are, it's probably quite easy to change stuff.
-

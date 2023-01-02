@@ -32,7 +32,7 @@ function common.dropItem(item, x, y)
     end
     item.x = (x or item.x) or 0
     item.y = (y or item.y) or 0
-    item._item_last_holdtime = love.timer.getTime() -- private component
+    item._item_last_holdtime = love.timer.getTime() -- ephemeral component
     -- (keeps track of the last time this item was held)
 
     item.hidden = false
@@ -84,3 +84,4 @@ end
 
 
 return common
+
