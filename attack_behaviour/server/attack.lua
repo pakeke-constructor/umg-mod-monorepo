@@ -12,6 +12,13 @@ local falloffs = {
 }
 
 
+local function applyAttack(attacker_ent, victim_ent, dmg)
+    umg.call("attack", attacker_ent, victim_ent, dmg)
+    server.broadcast("attack", attacker_ent, victim_ent, dmg)
+    victim_ent.health = victim_ent.health - dmg
+end
+
+
 local function doSplash(ent, target_ent)
     --[[
         executes a splash damage attack.
@@ -33,9 +40,7 @@ local function doSplash(ent, target_ent)
                         e.x-hitx, e.y-hity,
                         splash.radius
                     )
-                    umg.call("attack", ent, e, dmg)
-                    server.broadcast("attack", ent, e, dmg)
-                    e.health = e.health - ent.attackDamage
+                    applyAttack(ent, target_ent, dmg)
                 end
             end
         end
@@ -58,9 +63,7 @@ local function attack(ent, target_ent)
     else
         assert(umg.exists(ent), "Ent didn't exist!! (TODO: Theres a bug here)")
         assert(umg.exists(target_ent), "Target ent didn't exist!! (TODO: Theres a bug here)")
-        umg.call("attack", ent, target_ent, ent.attackDamage)
-        server.broadcast("attack", ent, target_ent, ent.attackDamage)
-        target_ent.health = target_ent.health - ent.attackDamage
+        applyAttack(ent, target_ent, ent.attackDamage)
     end
 end
 

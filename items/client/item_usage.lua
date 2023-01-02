@@ -1,6 +1,6 @@
 
 
-local usable_items = umg.group("itemName", "useItem")
+local usableItemGroup = umg.group("itemName", "useItem")
 
 
 local function useMethod(item, ...)
@@ -13,6 +13,7 @@ local function useMethod(item, ...)
         client.send("useItem", item, holder_ent, ...)
         item:useItem(holder_ent, ...)
         item.item_lastUseTime = base.getGameTime()
+        -- TODO: I'm not happy with how this is used.
     elseif item.useItemDeny then
         item:useItemDeny(holder_ent, ...)
     end
@@ -47,7 +48,7 @@ end
 
 
 
-usable_items:onAdded(function(ent)
+usableItemGroup:onAdded(function(ent)
     if (type(ent.useItem) ~= "function") then 
         error("ent.useItem needs to be a function. Instead, it was "..type(ent.useItem))
     end

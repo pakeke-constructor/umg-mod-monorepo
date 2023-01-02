@@ -45,12 +45,6 @@ to be sent over the network. only `lookX` and `lookY` need to be sent over.
 
 
 
-# TECH_DEBT_2
-Refactor terrain a bit:
-Terrain should always be an entity!!!
-None of this manual-generated-id rubbish; that's what entities are for
-
-
 
 
 # TECH_DEBT_3

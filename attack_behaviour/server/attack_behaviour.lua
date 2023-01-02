@@ -75,10 +75,6 @@ end
 local function attackItem(ent, target_ent)
     error("not yet implemented.")
     -- TODO.
-    
-    -- will need a refactor of the items mod;
-    -- specifically, we need to add a `holding` component, and get rid of
-    -- the inventory:getHoldingItem() nonsense.
 end
 
 
