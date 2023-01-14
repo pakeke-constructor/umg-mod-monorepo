@@ -1,39 +1,32 @@
 
 
-local usableItemGroup = umg.group("itemName", "useItem")
+local itemUsage = {}
 
 
-local function useMethod(item, ...)
-    -- item.ownerInventory is set by the inventory.
-    -- If this item is not in any inventory, then it's nil
-    
-    -- TODO: There's a bug here!
-    local holder_ent = item.ownerInventory and item.ownerInventory.owner
-    if item:canUse(...) then
-        client.send("useItem", item, holder_ent, ...)
-        item:useItem(holder_ent, ...)
-        item.item_lastUseTime = base.getGameTime()
-        -- TODO: I'm not happy with how this is used.
-    elseif item.useItemDeny then
-        item:useItemDeny(holder_ent, ...)
+
+
+client.on("useItem", function(holder_ent, item, ...)
+    if holder_ent and holder_ent.controller == client.getUsername() then
+        return -- ignore; we have already called `useItem`, 
+        -- since we are the ones who sent the event!
     end
-end
+    item:useItem(holder_ent, ...)
+    item.item_lastUseTime = base.getGameTime()
+end)
 
 
-local function adminCanUse(item_ent, holder_ent)
-    return holder_ent and holder_ent.controller == client.getUsername() and 
-            item_ent.ownerInventory == holder_ent.inventory
-end
 
 
-local function canUseMethod(item, ...)
-    local holder_ent = item.ownerInventory and item.ownerInventory.owner
-    if not adminCanUse(item, holder_ent) then
-        -- if the client does not own the entity, then they obviously aren't
-        -- allowed to use it!
+
+function itemUsage.canUseHoldItem(holder_ent, ...)
+    if (not umg.exists(holder_ent)) or (not umg.exists(holder_ent.holdItem)) then
+        return false
+    end
+    if holder_ent.controller ~= client.getUsername() then
         return false
     end
 
+    local item = holder_ent.holdItem
     if item.canUseItem ~= nil then
         if type(item.canUseItem) == "function" then
             return item:canUseItem(holder_ent, ...) -- return callback value
@@ -43,31 +36,27 @@ local function canUseMethod(item, ...)
     end
 
     return true
-    -- no `canUseItem` component; assume that it can be used.
+    -- assume that it can be used.
 end
 
 
 
-usableItemGroup:onAdded(function(ent)
-    if (type(ent.useItem) ~= "function") then 
-        error("ent.useItem needs to be a function. Instead, it was "..type(ent.useItem))
+
+local asserter = base.typecheck.assert("entity")
+
+function itemUsage.useHoldItem(holder_ent, ...)
+    asserter(holder_ent)
+    local item = holder_ent.holdItem
+    if itemUsage.canUseHoldItem(holder_ent) then
+        asserter(holder_ent)
+        client.send("useItem", holder_ent, ...)
+        item:useItem(holder_ent, ...)
+        item.item_lastUseTime = base.getGameTime()
+    elseif item and item.useItemDeny then
+        item:useItemDeny(holder_ent, ...)
     end
-    if ent.itemBeingHeld then
-        ent.hidden = true
-    end
-    ent.use = useMethod
-    ent.canUse = canUseMethod
-end)
+end
 
 
-
-
-client.on("useItem", function(sender, item, holder_ent, ...)
-    if sender == client.getUsername() then
-        return -- ignore; we have already called `useItem`, 
-        -- since we are the ones who sent the event!
-    end
-
-    item:useItem(holder_ent, ...)
-end)
+return itemUsage
 

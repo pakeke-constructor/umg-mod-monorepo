@@ -50,8 +50,8 @@ function Inventory:init(options)
         self.color = DEFAULT_INVENTORY_COLOUR
     end
 
-    self.holding_x = 1 -- The current item that the player is hovering over.
-    self.holding_y = 1
+    self.hovering_x = 1 -- The current item that the player is hovering over.
+    self.hovering_y = 1
 
     self.isOpen = false
 
@@ -87,9 +87,9 @@ end
 
 
 
-function Inventory:getHoldingItem()
-    if self.holding_x and self.holding_y then
-        return self:get(self.holding_x, self.holding_y)
+function Inventory:getHoveringItem()
+    if self.hovering_x and self.hovering_y then
+        return self:get(self.hovering_x, self.hovering_y)
     end
 end
 
@@ -111,21 +111,12 @@ function Inventory:set(x, y, item_ent)
         return -- No slot.. can't do anything
     end
 
-    local existing_item_ent = self:get(x, y)
-    if existing_item_ent and existing_item_ent.ownerInventory == self then
-        -- The reason we need this check is because sometimes `existing_item_ent`
-        -- may have been moved already. (for example, during swapping.)
-        -- In that case, we don't want to make ownerInventory nil.
-        existing_item_ent.ownerInventory = nil
-    end
-
     local i = self:getIndex(x,y)
     if item_ent then
         assertItem(item_ent)
         item_ent.hidden = true
         item_ent.itemBeingHeld = true
         self.inventory[i] = item_ent
-        item_ent.ownerInventory = self
     else
         self.inventory[i] = nil
     end
@@ -431,7 +422,7 @@ function Inventory:drawUI()
                         self:set(inv_x, inv_y, nil)
                     end
                 end
-                if self.holding_x == inv_x and self.holding_y == inv_y then
+                if self.hovering_x == inv_x and self.hovering_y == inv_y then
                     love.graphics.setColor(0,0,0, 0.5)
                     love.graphics.rectangle("line", X, Y, SQUARE_SIZE, SQUARE_SIZE)
                 end
@@ -453,7 +444,7 @@ end
 
 
 
-function Inventory:drawHoldWidget(x, y)
+function Inventory:drawHoverWidget(x, y)
     local item = self:get(x, y)
     if not umg.exists(item) then return end
     local mx, my = love.mouse.getPosition()

@@ -1,4 +1,6 @@
 
+
+local constants = require("shared.constants")
 local cameraLib = require("_libs.camera") -- HUMP Camera for love2d.
 
 local DEFAULT_ZOOM = constants.DEFAULT_ZOOM

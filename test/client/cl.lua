@@ -27,7 +27,8 @@ umg.on("keypressed", function(k)
         base.particles.emit("smoke", x, y, 8, 10)
     end
     if k == "c" then
-        client.send("spawn",base.getPlayer())
+        local p = base.getPlayer()
+        print(p.holdItem)
     end
     if k =="r" then
         base.title("Title!", {time = 2,fade=0.5})
@@ -51,11 +52,7 @@ umg.on("mousepressed", function(x, y, button, istouch, presses)
             local item = p.inventory:getHoldingItem()
             if item and item.use then
                 local mx, my = base.camera:getMousePosition()
-                if item.itemHoldType == "place" then
-                    item:use(mx,my)
-                else
-                    item:use(mx-p.x,my-p.y)
-                end
+                p.lookX, p.lookY = mx, my
             end
         end
     end

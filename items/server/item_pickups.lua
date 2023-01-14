@@ -6,7 +6,7 @@ Entities that can pick up items off the ground have a `canPickUp` component.
 ]]
 
 
-local common = require("shared.common")
+local itemDrops = require("server.item_drops")
 
 
 local pickUpGroup = umg.group("x", "y", "canPickUp")
@@ -28,18 +28,18 @@ itemGroup:onAdded(function(e)
     if not e:isRegular("itemBeingHeld") then
         error("Item entities must have a `itemBeingHeld` regular component.\nNot the case for " .. e:type())
     end
-    common.itemPartition:add(e)
+    itemDrops.itemPartition:add(e)
 end)
 
 
 itemGroup:onRemoved(function(e)
-    common.itemPartition:remove(e)
+    itemDrops.itemPartition:remove(e)
 end)
 
 
 
 local function canBePickedUp(dist, best_dist, item)
-    if dist > common.PICKUP_DISTANCE or dist > best_dist then 
+    if dist > itemDrops.PICKUP_DISTANCE or dist > best_dist then 
         -- we want to try and pick up the closest item.
         -- if there is an item that is closer, ignore it
         return
@@ -47,7 +47,7 @@ local function canBePickedUp(dist, best_dist, item)
 
     if item._item_last_holdtime then
         local time = currentTime - item._item_last_holdtime
-        if time < common.PICKUP_DELAY_TIME then
+        if time < itemDrops.PICKUP_DELAY_TIME then
             return
         end
     end
@@ -70,7 +70,7 @@ local function tryPickUpHold(ent, picked)
     local best_item
     local best_dist = math.huge
 
-    for item in common.itemPartition:foreach(ent.x, ent.y) do
+    for item in itemDrops.itemPartition:foreach(ent.x, ent.y) do
         if item.itemHoldType and (not item.itemBeingHeld) and (not picked[item]) then 
             -- then the item is on the ground
             local d = math.distance(ent, item)
@@ -98,7 +98,7 @@ local function tryPickUpInventory(ent, picked)
     local best_dist = math.huge
 
     local free_ix, free_iy = ent.inventory:getFreeSpace()
-    for item in common.itemPartition:foreach(ent.x, ent.y) do
+    for item in itemDrops.itemPartition:foreach(ent.x, ent.y) do
         if (not item.itemBeingHeld) and (not picked[item]) then 
             -- then the item is on the ground
             local d = math.distance(ent, item)
@@ -131,7 +131,7 @@ local function tryPickUpInventory(ent, picked)
             ent.inventory:set(free_ix, free_iy, best_item)
         end
         picked[best_item] = true
-        common.pickupItem(best_item)
+        itemDrops.pickupItem(best_item)
     end
 end
 
@@ -153,7 +153,7 @@ umg.on("gameUpdate", function(dt)
     currentTime = base.getGameTime()
 
     local picked = {}
-    common.itemPartition:update(dt)
+    itemDrops.itemPartition:update(dt)
     for _, ent in ipairs(pickUpGroup) do
         if ent:isRegular("inventory") and ent.inventory then
             tryPickUpInventory(ent, picked)

@@ -5,13 +5,13 @@ Handles animations of entities.
 
 TODO:
 Currently, all animation entities have the exact same cycle.
-Change this by having a table that maps `[ent] --> current_cycle` 
-to offset each entity animation
+Change this by either (A) adding a manual frame offset, or
+(B) offset via entity id.
 
 ]]
 
 
-local anim_group = umg.group("image", "animation")
+local animationGroup = umg.group("image", "animation")
 
 
 
@@ -36,8 +36,8 @@ end
 
 umg.on("gameUpdate", function(dt)
     tick = tick + dt
-    for i=1, #anim_group do
-        local ent = anim_group[i]
+    for i=1, #animationGroup do
+        local ent = animationGroup[i]
         updateEnt(ent)
     end
 end)

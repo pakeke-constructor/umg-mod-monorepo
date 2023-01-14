@@ -1,5 +1,5 @@
 
-local common = require("shared.common")
+local itemDrops = require("server.item_drops")
 
 
 
@@ -10,7 +10,7 @@ function itemHolding.removeHoldItem(ent)
         local item_ent = ent.holdItem
         if not (ent.inventory and ent.inventory:contains(item_ent)) then
             -- then we drop item on the ground
-            common.dropItem(item_ent)
+            itemDrops.dropItem(item_ent)
         end
     end
     ent.holdItem = nil
@@ -23,7 +23,9 @@ function itemHolding.setHoldItem(ent, item_ent)
         itemHolding.removeHoldItem(ent)
     end
 
-    common.pickUpItem(item_ent)
+    itemDrops.pickUpItem(item_ent)
     item_ent.itemBeingHeld = true
 end
 
+
+return itemHolding

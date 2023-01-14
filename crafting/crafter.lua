@@ -96,7 +96,7 @@ end
 
 function Crafter:getResult(inventory)
     -- expects a flat array of ingredients.
-    assert(inventory.drawHoldWidget, "Crafter:getResult(inv) takes an inventory as first argument!")
+    assert(inventory.drawHoverWidget, "Crafter:getResult(inv) takes an inventory as first argument!")
     
     local ingredientsToCounts = getIngredientsToCounts(inventory)
 
@@ -188,7 +188,7 @@ end
 
 
 function Crafter:executeCraft(inventory, recipe, slotX, slotY)
-    assert(inventory.drawHoldWidget, "Crafter:getResult(inv) takes an inventory as first argument!")
+    assert(inventory.drawHoverWidget, "Crafter:getResult(inv) takes an inventory as first argument!")
     assert(slotX and slotY, "ur not using this properly")    
 
     if client then -- crafting should be handled by the server.

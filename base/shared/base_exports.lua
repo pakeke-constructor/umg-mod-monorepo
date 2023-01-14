@@ -73,6 +73,8 @@ local function loadShared(base)
     
     base.getPlayer = require("shared.get_player");
 
+    base.typecheck = require("shared.typecheck")
+
     base.defineExports = defineExports
 end
 

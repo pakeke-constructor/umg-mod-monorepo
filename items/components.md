@@ -65,6 +65,9 @@
     end
 
 
+    itemCooldown = 1 -- this item has a 1 second cooldown
+
+
     -- How this item should be held.
     -- (If this value is nil, the item cannot be held)
     itemHoldType = 
@@ -75,6 +78,8 @@
         "above" -- item is above head of entity
         "custom" -- custom positioning, defined by ent.itemHoldUpdate
 
+
+    -- ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING!
     itemHoldUpdate = function(item_ent, holder_ent)
         item_ent.x = holder_ent.x
         item_ent.y = holder_ent.y -- see item_holding.lua for examples
@@ -110,11 +115,14 @@ local chest = entities.chest()
 chest.inventory = Inventory({
     width = 6 -- width of inventory slots
     height = 3 -- height
+
+    -- OPTIONAL VALUES:
     hotbar = true -- DST / minecraft like hotbar.
         -- (Is always open if on a control entity.)
 
-    private = true/false -- This means that only the owner can open this
-    -- inventory
+    private = true/false -- This means that only the owner can open this inventory
+
+    hoverhold = true/false -- automatically hold the item that's being hovered
 })
 -- if this isn't done, the client will crash.
 

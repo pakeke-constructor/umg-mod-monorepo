@@ -9,7 +9,7 @@ local valid_callbacks = require("inventory_callbacks")
 
 local updateStackSize = require("server.update_stacksize")
 
-local common = require("shared.common")
+local itemDrops = require("server.item_drops")
 
 
 
@@ -248,7 +248,7 @@ function(username, ent, x, y)
         return -- exit early
     end
 
-    common.dropItem(item, ent.x, ent.y)
+    itemDrops.dropItem(item, ent.x, ent.y)
     
     inv:set(x, y, nil)
 end)

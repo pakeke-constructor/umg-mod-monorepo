@@ -67,15 +67,6 @@ inventoryGroup:onAdded(function(ent)
     end
 
     ent.inventory.owner = ent
-    local inv = ent.inventory
-    for w=1, inv.width do
-        for h=1, inv.height do
-            local item = inv:get(w,h)
-            if item then
-                item.ownerInventory = inv
-            end
-        end
-    end
 end)
 
 
@@ -374,7 +365,7 @@ umg.on("mainDrawUI", function()
     end
     
     if holding_inv then
-        holding_inv:drawHoldWidget(holding_x, holding_y)
+        holding_inv:drawHoverWidget(holding_x, holding_y)
     end
 end)
 

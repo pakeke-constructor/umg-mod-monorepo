@@ -1,70 +1,78 @@
 
 
+local itemUsage = {}
 
-local usableItemGroup = umg.group("itemName", "useItem")
+local DEFAULT_ITEM_COOLDOWN = 0.01
 
 
-local function useMethod(item, ...)
-    -- item.ownerInventory is set by the inventory.
-    -- If this item is not in any inventory, then it's nil
-    local holder_ent = item.ownerInventory and item.ownerInventory.owner
-    if item:canUse(...) then
-        server.broadcast("useItem", item, holder_ent, ...)
-        item:useItem(holder_ent, ...)
-    elseif item.useItemDeny then
+function itemUsage.canUseItem(holder_ent, ...)
+    if (not umg.exists(holder_ent)) or (not umg.exists(holder_ent.holdItem)) then
+        return false
+    end
+
+    local item = holder_ent.holdItem
+    if not item.canUseItem then
+        return false
+    end
+    
+    local cooldown_diff = base.getGameTime() - (item.item_lastUseTime or 0)
+    local cooldown = (item.itemCooldown or DEFAULT_ITEM_COOLDOWN)
+    if math.abs(cooldown_diff) > cooldown then
+        return false
+    end
+
+    if type(item.canUseItem) == "function" then
+        return item:canUseItem(holder_ent, ...) -- return callback value
+    else
+        return item.canUseItem -- it's probably a boolean
+    end
+    
+    return true
+    -- assume that it can be used.
+end
+
+
+
+
+local asserter = base.typecheck.assert("entity")
+
+function itemUsage.useItem(holder_ent, ...)
+    local item = holder_ent.holdItem
+    if itemUsage.canUseItem(holder_ent) then
+        asserter(holder_ent)
+        itemUsage.useItemDirectly(holder_ent, item, ...)
+    elseif item and item.useItemDeny then
         item:useItemDeny(holder_ent, ...)
     end
 end
 
 
-local function canUseMethod(item, ...)
-    if item.canUseItem ~= nil then
-        if type(item.canUseItem) == "function" then
-            local holder_ent = item.ownerInventory and item.ownerInventory.owner
-            return item:canUseItem(holder_ent, ...) -- return callback value
-        else
-            return item.canUseItem -- it's probably a boolean
-        end
-    end
 
-    return true
-    -- no `canUseItem` component; assume that it can be used.
+local asserterDirect = base.typecheck.assert("entity?", "entity")
+
+function itemUsage.useItemDirectly(holder_ent, item, ...)
+    asserterDirect(holder_ent, item)
+    -- holder_ent could be nil here
+    item:useItem(holder_ent or false, ...)
+    server.broadcast("useItem", holder_ent, item, ...)
+    item.item_lastUseTime = base.getGameTime()
+    -- TODO: crappy ephemeral component here!
 end
 
 
 
-usableItemGroup:onAdded(function(ent)
-    if (type(ent.useItem) ~= "function") then 
-        error("ent.useItem needs to be a function. Instead, it was "..type(ent.useItem))
-    end
-    ent.use = useMethod
-    ent.canUse = canUseMethod
-end)
 
+server.on("useItem", function(username, holder_ent, ...)
+    if not umg.exists(holder_ent) then return end
+    if holder_ent.controller ~= username then return end
 
-
-
-
-server.filter("useItem", function(sender, item, holder_ent)
-    if not (umg.exists(item) and umg.exists(holder_ent)) then
-        return false
-    end
-    if sender ~= holder_ent.controller then
-        return false
-    end
-    if item.ownerInventory ~= holder_ent.inventory then
-        return false
-    end
-    return true
-end)
-
-
-
-server.on("useItem", function(username, item, holder_ent, ...)
-    if item:canUse(...) then 
-        item:useItem(holder_ent, ...)
-        server.broadcast("useItem", username, item, holder_ent, ...)
+    if itemUsage.canUseItem(holder_ent, ...) then
+        itemUsage.useItem(holder_ent)
     end
 end)
 
+
+
+
+return itemUsage
 

@@ -23,7 +23,8 @@ return {
     image="musket";
     itemName = "musket";
 
-    useItem = function(self, holderEnt, dx, dy)
+    useItem = function(self, holderEnt)
+        local dx,dy = holderEnt.x - holderEnt.lookX, holderEnt.y - holderEnt.lookY
         if client then
             local mag = math.distance(dx,dy)
             if mag ~= 0 then

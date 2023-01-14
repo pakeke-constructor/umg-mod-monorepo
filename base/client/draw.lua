@@ -15,7 +15,6 @@ local drawGroup = umg.group("image", "x", "y")
 
 
 local floor = math.floor
-local min = math.min
 local max = math.max
 
 

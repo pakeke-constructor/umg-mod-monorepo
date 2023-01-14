@@ -75,7 +75,7 @@ return {
         e.y = y
         e.health = e.maxHealth
         e.controller = uname
-        e.inventory = {width=7, height = 4}
+        e.inventory = items.Inventory({width=7, height = 4})
     end
 }
 

@@ -191,3 +191,20 @@ items.setHoldItem(ent, nil)
 
 ```
 
+
+
+
+
+
+# planning for hold item verification:
+- Do items need to know what entity is holding them?
+
+What does NEED to be known:
+Server needs to know, given an item and ent, if ent holds item or not.
+
+
+IDEA: 
+Have the server check if `ent.holdItem = item`.
+If so, the item can be used.
+
+
