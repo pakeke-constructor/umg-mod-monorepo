@@ -13,8 +13,13 @@ return {
     "x", "y", "z",
     "vx", "vy","vz",
     "controller",
+
     "image",
+    
     "inventory",
+    "holdItem",
+
+    "lookX", "lookY",
 
     "color",
 
@@ -22,6 +27,8 @@ return {
 
     "health",
     maxHealth = 100,
+
+    lookAtMouse = true,
 
     healthBar = {
         offset = 20,
@@ -75,7 +82,7 @@ return {
         e.y = y
         e.health = e.maxHealth
         e.controller = uname
-        e.inventory = items.Inventory({width=7, height = 4})
+        e.inventory = items.Inventory({width=7, height = 4, autohold = true})
     end
 }
 

@@ -39,8 +39,6 @@ umg.on("gameMousepressed", function(mx, my, button, istouch, presses)
 
     local worldX, worldY = base.camera:toWorldCoords(mx, my)
 
-    base.shockwave(worldX, worldY, 0, 50, 4, 3)
-
     local bestDist = math.huge
     local bestEnt = nil
 

@@ -8,7 +8,7 @@ Inventory objects
 
 
 
-local Inventory = base.Class( "items_mod:inventory")
+local Inventory = base.Class("items_mod:inventory")
 
 
 
@@ -37,6 +37,8 @@ function Inventory:init(options)
     assert(options.height, "Inventories must have a .height member!")
     self.width = options.width
     self.height = options.height
+
+    self.autohold = options.autohold
 
     self.inventory = {}
     -- randomize initial draw position, to avoid overlap
@@ -379,6 +381,20 @@ local function drawButtons(self)
                     drawQuad(self, x, y, quadName)
                 end
             end
+        end
+    end
+end
+
+
+
+
+function Inventory:setHoverXY(x,y)
+    self.hovering_x = x
+    self.hovering_y = y
+    if client and self.autohold and umg.exists(self:get(x,y)) then
+        local owner_ent = umg.exists(self.owner) and self.owner
+        if owner_ent then
+            client.send("setInventoryHoldItem", owner_ent, x, y)
         end
     end
 end

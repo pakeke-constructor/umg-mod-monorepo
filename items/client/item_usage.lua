@@ -16,6 +16,7 @@ end)
 
 
 
+local DEFAULT_ITEM_COOLDOWN = 0.01
 
 
 function itemUsage.canUseHoldItem(holder_ent, ...)
@@ -27,6 +28,17 @@ function itemUsage.canUseHoldItem(holder_ent, ...)
     end
 
     local item = holder_ent.holdItem
+    if not item.useItem then
+        return false
+    end
+
+    local time = base.getGameTime()
+    local time_since_use = time - (item.item_lastUseTime or 0)
+    local cooldown = (item.itemCooldown or DEFAULT_ITEM_COOLDOWN)
+    if math.abs(time_since_use) < cooldown then
+        return false
+    end
+
     if item.canUseItem ~= nil then
         if type(item.canUseItem) == "function" then
             return item:canUseItem(holder_ent, ...) -- return callback value

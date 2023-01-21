@@ -87,7 +87,7 @@ function itemHoldPositioning.recoil(item_ent, holder_ent)
     hold_dist = hold_dist * recoil_amount
 
     item_ent.rot = -math.atan2(dx,dy) + math.pi/2 + sinv/3
-    item_ent.scaleX = dx>0 and 1 or -1
+    item_ent.scaleY = dx>0 and 1 or -1
     item_ent.x = holder_ent.x + dx * hold_dist
     item_ent.y = holder_ent.y + dy * hold_dist
 end
@@ -110,9 +110,10 @@ end
 
 
 
-umg.on("update", function()
+umg.on("gameUpdate", function()
     for _, ent in ipairs(holdingItemGroup) do
         if umg.exists(ent.holdItem) then
+            ent.holdItem.hidden = false
             local item_ent = ent.holdItem
             assert(item_ent.itemHoldType, "held items need holdType")
             if not itemHoldPositioning[item_ent.itemHoldType] then 

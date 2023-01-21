@@ -1,10 +1,14 @@
 
 
+
+
 umg.on("preDraw", function()
     love.graphics.clear(0.3,0.9,0.2)
 end)
 
 
+
+light.setBaseLighting(0.7,0.7,0.7)
 
 
 local psys = base.particles.newParticleSystem({
@@ -48,12 +52,8 @@ end)
 umg.on("mousepressed", function(x, y, button, istouch, presses)
     if button == 1 then
         local p = base.getPlayer()
-        if p and (not p.inventory.isOpen) then
-            local item = p.inventory:getHoldingItem()
-            if item and item.use then
-                local mx, my = base.camera:getMousePosition()
-                p.lookX, p.lookY = mx, my
-            end
+        if umg.exists(p) then
+            items.useHoldItem(p)
         end
     end
 end)

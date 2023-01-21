@@ -9,6 +9,11 @@ return {
         ent.x = x
         ent.y = y
         ent.inventory = items.Inventory({width=5;height=5})
-    end
+    end;
+
+    light = {
+        radius = 100;
+        color = {1,1,1}
+    };
 }
 

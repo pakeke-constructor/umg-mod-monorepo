@@ -11,6 +11,9 @@ local updateStackSize = require("server.update_stacksize")
 
 local itemDrops = require("server.item_drops")
 
+local itemHolding = require("server.item_holding")
+
+
 
 
 local function assertValidCallbacks(callbacks)
@@ -55,15 +58,6 @@ end)
 
 
 
-umg.on("setInventoryItem", function(inventory, x, y, item_ent)
-    server.broadcast("setInventoryItem", inventory.owner, x, y, item_ent)
-end)
-
-
-
-
-
-
 local function checkCallback(ent, callbackName, x, y, item)
     --[[
         returns true/false according to inventoryCallbacks component.
@@ -75,6 +69,35 @@ local function checkCallback(ent, callbackName, x, y, item)
     end
     return true -- return true otherwise (no callbacks)
 end
+
+
+
+
+
+umg.on("setInventoryItem", function(inventory, x, y, item_ent)
+    server.broadcast("setInventoryItem", inventory.owner, x, y, item_ent)
+end)
+
+
+
+do
+local asserter = base.typecheck.check("entity", "integer", "integer")
+
+server.on("setInventoryHoldItem", function(sender, ent, x, y)
+    if not asserter(ent, x, y) then return end
+    if ent.controller ~= sender then return end
+    if not ent.inventory then return end
+    
+    local inv = ent.inventory
+    if x <= inv.width and x >= 1 and y <= inv.height and y >= 1 then
+        if ent.inventoryCallbacks and checkCallback(ent, "slotExists", x, y) then
+            itemHolding.setHoldItem(ent, inv:get(x,y))
+        end
+    end
+end)
+
+end
+
 
 
 

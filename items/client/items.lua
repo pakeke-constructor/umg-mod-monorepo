@@ -79,7 +79,7 @@ local open_inventories = {}
     The inventory, along with the x and y of the item
     that the player is holding.
 ]]
-local holding_inv -- holding inventory
+local holding_inv -- The inventory that is currently being focused
 local holding_x -- X pos in holding inv
 local holding_y -- Y pos in holding inv
 local holding_half -- whether only half a stack is being held
@@ -247,7 +247,7 @@ local function executeAlphaInteraction(inv, x, y)
         holding_inv = inv
         holding_x = x
         holding_y = y
-        inv.holding_x, inv.holding_y = x, y
+        inv:setHoverXY(x,y)
         holding_half = false
         if not inv:get(x,y) then
             resetHoldingInv()

@@ -73,22 +73,24 @@ local function getDirFromDirection(dx, dy)
 end
 
 
-
-local function getDirection(ent, entspeed)
-    local manim = ent.moveAnimation
-    if entspeed > manim.activation then
-        local dx, dy = ent.vx, ent.vy
-        if ent.lookX and ent.lookY then
-            dx = ent.lookX - ent.x
-            dy = ent.lookY - ent.y
-        end
+local function getDirection(ent, speed)
+    local dx = ent.vx
+    local dy = ent.vy
+    if ent.lookX and ent.lookY then
+        dx = ent.lookX - ent.x
+        dy = ent.lookY - ent.y
+    end
+    
+    if speed > ent.moveAnimation.activation then
         local dir = getDirFromDirection(dx, dy)
         ent_to_direction[ent] = dir
         return dir
     else
-        -- The entity is not going fast enough;
-        -- return it's previous direction
-        return ent_to_direction[ent]
+        if ent.lookX and ent.lookY then
+            return getDirFromDirection(dx,dy)
+        else
+            return ent_to_direction[ent]
+        end
     end
 end
 

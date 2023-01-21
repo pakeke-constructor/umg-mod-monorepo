@@ -122,7 +122,8 @@ chest.inventory = Inventory({
 
     private = true/false -- This means that only the owner can open this inventory
 
-    hoverhold = true/false -- automatically hold the item that's being hovered
+    autohold = true/false
+    -- automatically hold the item that's being hovered
 })
 -- if this isn't done, the client will crash.
 

@@ -2,8 +2,10 @@
 local itemDrops = require("server.item_drops")
 
 
-
 local itemHolding = {}
+
+
+
 
 function itemHolding.removeHoldItem(ent)
     if ent.holdItem then
@@ -17,15 +19,21 @@ function itemHolding.removeHoldItem(ent)
 end
 
 
-function itemHolding.setHoldItem(ent, item_ent)
+function itemHolding.setHoldItem(ent, item_ent)    
+    server.broadcast("setInventoryHoldItem", ent, item_ent)
+
     if not item_ent then
         -- if it's nil, remove any hold item
         itemHolding.removeHoldItem(ent)
+        return
     end
 
-    itemDrops.pickUpItem(item_ent)
+    itemDrops.pickupItem(item_ent)
     item_ent.itemBeingHeld = true
+
+    ent.holdItem = item_ent
 end
 
 
 return itemHolding
+
