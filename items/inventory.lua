@@ -125,7 +125,7 @@ function Inventory:set(x, y, item_ent)
 
     if server then
         -- We update the stacksize with this too.
-        umg.call("setInventoryItem", self, x, y, item_ent)
+        server.broadcast("setInventoryItem", self.owner, x, y, item_ent)
     end
 end
 
@@ -239,14 +239,14 @@ end
 
 function Inventory:open()
     -- Should only be called on client-side
-    umg.call("openInventory", self, self.owner)
+    umg.call("openInventory", self.owner)
     self.isOpen = true
 end
 
 
 function Inventory:close()
     -- Should only be called on client-side
-    umg.call("closeInventory", self, self.owner)
+    umg.call("closeInventory", self.owner)
     self.isOpen = false
 end
 

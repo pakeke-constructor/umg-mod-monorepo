@@ -74,11 +74,6 @@ end
 
 
 
-umg.on("setInventoryItem", function(inventory, x, y, item_ent)
-    server.broadcast("setInventoryItem", inventory.owner, x, y, item_ent)
-end)
-
-
 
 do
 local asserter = base.typecheck.check("entity", "integer", "integer")
