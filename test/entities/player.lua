@@ -30,6 +30,8 @@ return {
 
     lookAtMouse = true,
 
+    rainbow = {},
+
     healthBar = {
         offset = 20,
         drawWidth = 60,

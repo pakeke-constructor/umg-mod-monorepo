@@ -7,6 +7,8 @@ local spinning = require("client.image_helpers.spinning")
 local swaying = require("client.image_helpers.swaying")
 
 local draw = require("client.draw")
+local drawImage = require("client.image_helpers.draw_image")
+
 local getDrawY = draw.getDrawY
 
 
@@ -14,6 +16,10 @@ local images = client.assets.images
 
 
 
+--[[
+    currently, any entity that is drawn will have an image
+    (may not stay this way!)
+]]
 umg.on("drawEntity", function(ent)
     local quad = images[ent.image]
     if not quad then
@@ -35,13 +41,14 @@ umg.on("drawEntity", function(ent)
 
     local ent_ox, ent_oy = ent.ox or 0, ent.oy or 0
 
-    client.atlas:draw(
-        quad, 
-        ent.x + ent_ox, getDrawY(ent.y + ent_oy,ent.z), ent.rot, 
+    drawImage(
+        ent.image, 
+        ent.x + ent_ox, getDrawY(ent.y + ent_oy,ent.z),
+        ent.rot, 
         spin_sx * sx * scale, 
         bob_sy * sy * scale, 
-        ox + sway_ox,
-        bob_oy + oy,
+        sway_ox,
+        bob_oy,
         sway_shearx
     )
 end)

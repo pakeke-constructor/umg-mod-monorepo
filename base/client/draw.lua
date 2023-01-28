@@ -267,6 +267,7 @@ end)
 
 
 umg.on("resize", function()
+    print()
     local w,h = love.graphics.getDimensions()
     camera.w = w
     camera.h = h

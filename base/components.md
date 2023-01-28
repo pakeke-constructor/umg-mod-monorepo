@@ -52,6 +52,11 @@ ent.shadow = {
 }
 
 
+ent.rainbow = {
+    period = 5, -- has a default value
+    brightness = 0.2 -- has a default value
+}
+
 
 ent.swaying = {
     magnitude = 1;

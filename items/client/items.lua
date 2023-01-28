@@ -112,12 +112,13 @@ inventoryGroup:onRemoved(function(ent)
 end)
 
 
-umg.on("openInventory", function(inv, owner_ent)
-    table.insert(open_inventories, inv)
+umg.on("openInventory", function(owner_ent)
+    table.insert(open_inventories, owner_ent.inventory)
 end)
 
 
-umg.on("closeInventory", function(inv, owner_ent)
+umg.on("closeInventory", function(owner_ent)
+    local inv = owner_ent.inventory
     table_remove(open_inventories, inv)
 
     if holding_inv == inv then

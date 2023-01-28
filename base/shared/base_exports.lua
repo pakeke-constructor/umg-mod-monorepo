@@ -36,6 +36,8 @@ local function loadClient(base)
 
     base.getQuadOffsets = require("client.image_helpers.quad_offsets");
     base.drawImage = require("client.image_helpers.draw_image");
+    
+    base.groundTexture = require("client.ground_texture")
 
     base.animate = animate.animate;
     base.animateEntity = animate.animateEntity;

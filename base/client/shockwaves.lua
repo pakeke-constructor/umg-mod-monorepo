@@ -5,6 +5,8 @@ local newShockWave = require("_libs.shockwave")
 
 -- Gotta make sure this is loaded:
 local Set = require("shared.set")
+local typecheck = require("shared.typecheck")
+
 
 
 -- a Set for all shockwave objects that are being drawn
@@ -33,8 +35,10 @@ end)
 
 
 
+local tc = typecheck.assert("number", "number", "number", "number", "number", "number", "table?")
 
 local function shockwave(x, y, start_size, end_size, thickness, time, colour)
+    tc(x, y, start_size, end_size, thickness, time, colour)
     local sw = newShockWave(x,y,start_size, end_size, thickness, time, colour or {1,1,1,1})
     shockwaveSet:add(sw)
 end

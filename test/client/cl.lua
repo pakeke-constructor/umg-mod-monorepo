@@ -1,14 +1,11 @@
 
 
-
-
-umg.on("preDraw", function()
-    love.graphics.clear(0.3,0.9,0.2)
-end)
-
-
-
 light.setBaseLighting(0.7,0.7,0.7)
+
+base.groundTexture.setColor(0.3,0.9,0.2)
+
+
+love.graphics.clear()
 
 
 local psys = base.particles.newParticleSystem({
@@ -19,6 +16,7 @@ local psys = base.particles.newParticleSystem({
 base.particles.define("smoke", psys)
 
 
+base.groundTexture.setTextureList({"ground_texture"})
 
 
 umg.on("keypressed", function(k)
@@ -32,7 +30,6 @@ umg.on("keypressed", function(k)
     end
     if k == "c" then
         local p = base.getPlayer()
-        print(p.holdItem)
     end
     if k =="r" then
         base.title("Title!", {time = 2,fade=0.5})
@@ -55,6 +52,8 @@ umg.on("mousepressed", function(x, y, button, istouch, presses)
         if umg.exists(p) then
             items.useHoldItem(p)
         end
+        local wx,wy = base.camera:toWorldCoords(x,y)
+        base.shockwave(wx,wy,1,30,7,0.35)
     end
 end)
 
