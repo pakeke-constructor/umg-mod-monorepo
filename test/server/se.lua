@@ -67,8 +67,7 @@ end)
 
 local e1
 server.on("spawn", function(u, e)
-    if e1 then e1:delete() end
-    e1 = ents.terrain(e.x,e.y + 20)
+    server.entities.everything(e.x,e.y)
 end)
 
 
@@ -82,6 +81,7 @@ server.on("CONGLOMERATE", function(username, ent)
         end
     end
 end)
+
 
 
 umg.on("newPlayer", function(uname)

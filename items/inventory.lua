@@ -391,10 +391,66 @@ end
 function Inventory:setHoverXY(x,y)
     self.hovering_x = x
     self.hovering_y = y
-    if client and self.autohold and umg.exists(self:get(x,y)) then
+    if client and self.autohold then
         local owner_ent = umg.exists(self.owner) and self.owner
         if owner_ent then
             client.send("setInventoryHoldItem", owner_ent, x, y)
+        end
+    end
+end
+
+
+
+local sqrt = math.sqrt
+
+
+
+local function drawHighlights(draw_x, draw_y, W, H, color, offset)
+    offset = offset or 2
+    local x = draw_x+offset
+    local y = draw_y+offset
+    local w,h = W-offset*2, H-offset*2
+
+    love.graphics.setColor(color[1]*color[1]-0.1, color[2]*color[2]-0.1, color[3]*color[3]-0.1)
+    love.graphics.line(x+w, y, x+w, y+h)
+    love.graphics.line(x, y+h, x+w, y+h)
+
+    love.graphics.setColor(sqrt(color[1])+0.1, sqrt(color[2])+0.1, sqrt(color[3])+0.1)
+    love.graphics.line(x, y, x+w+1, y)
+    love.graphics.line(x, y, x, y+h+1)
+end
+
+
+local function drawSlot(self, inv_x, inv_y, offset, color)
+    local x, y = inv_x - 1, inv_y - 1 -- inventory is 1 indexed
+    local X = self.draw_x + x * PACKED_SQUARE_SIZE + offset
+    local Y = self.draw_y + y * PACKED_SQUARE_SIZE + offset
+
+    love.graphics.setLineWidth(1)
+
+    local slotColor = {color[1] / 1.5, color[2] / 1.5, color[3] / 1.5}
+    love.graphics.setColor(slotColor)
+    love.graphics.rectangle("fill", X, Y, SQUARE_SIZE, SQUARE_SIZE)
+
+    drawHighlights(X, Y, SQUARE_SIZE, SQUARE_SIZE, slotColor, 1)
+
+    love.graphics.setColor(0,0,0)
+    love.graphics.rectangle("line", X, Y, SQUARE_SIZE, SQUARE_SIZE)
+
+    if self.hovering_x == inv_x and self.hovering_y == inv_y then
+        love.graphics.setLineWidth(4)
+        love.graphics.setColor(0,0,0, 0.65)
+        love.graphics.rectangle("line", X, Y, SQUARE_SIZE, SQUARE_SIZE)
+    end
+
+    if self:get(inv_x, inv_y) then
+        local item = self:get(inv_x, inv_y)
+        if umg.exists(item) then
+            -- only draw the item if it exists.
+            self:drawItem(item, inv_x, inv_y)
+        else
+            self:set(inv_x, inv_y, nil)
+            -- woops!!! dunno what happened here lol!
         end
     end
 end
@@ -409,42 +465,34 @@ function Inventory:drawUI()
     love.graphics.push("all")
     -- No need to scale for UI- this should be done by draw system.
 
-    local col = self.color
+    local col = self.color or WHITE
     local W = self.width * PACKED_SQUARE_SIZE + BORDER_OFFSET * 2
     local H = self.height * PACKED_SQUARE_SIZE + BORDER_OFFSET * 2
     
-    love.graphics.setColor(col[1] / 2, col[2] / 2, col[3] / 2)
-    love.graphics.setLineWidth(4)
-    love.graphics.rectangle("line", self.draw_x - BORDER_OFFSET, self.draw_y - BORDER_OFFSET, W, H)
-    love.graphics.setColor(col)
+    love.graphics.setLineWidth(2)
+    
+    -- Draw inventory body
+    love.graphics.setColor(col) 
     love.graphics.rectangle("fill", self.draw_x - BORDER_OFFSET, self.draw_y - BORDER_OFFSET, W, H)
 
     local offset = (PACKED_SQUARE_SIZE - SQUARE_SIZE) / 2
 
+    -- draw interior
     for x = 0, self.width - 1 do
         for y = 0, self.height - 1 do
             local inv_x, inv_y = x+1, y+1 -- inventory is 1-indexed
             if self:slotExists(inv_x, inv_y) then
-                local X = self.draw_x + x * PACKED_SQUARE_SIZE + offset
-                local Y = self.draw_y + y * PACKED_SQUARE_SIZE + offset
-                love.graphics.setColor(col[1] / 1.5, col[2] / 1.5, col[3] / 1.5)
-                love.graphics.rectangle("fill", X, Y, SQUARE_SIZE, SQUARE_SIZE)
-                if self:get(inv_x, inv_y) then
-                    local item = self:get(inv_x, inv_y)
-                    if umg.exists(item) then
-                        -- only draw the item if it exists.
-                        self:drawItem(item, inv_x, inv_y)
-                    else
-                        self:set(inv_x, inv_y, nil)
-                    end
-                end
-                if self.hovering_x == inv_x and self.hovering_y == inv_y then
-                    love.graphics.setColor(0,0,0, 0.5)
-                    love.graphics.rectangle("line", X, Y, SQUARE_SIZE, SQUARE_SIZE)
-                end
+                drawSlot(self, inv_x, inv_y, offset, col)
             end
         end
     end
+
+    love.graphics.setLineWidth(2)
+    drawHighlights(self.draw_x-BORDER_OFFSET, self.draw_y-BORDER_OFFSET, W, H, col)
+
+    -- Draw outline
+    love.graphics.setColor(0,0,0)
+    love.graphics.rectangle("line", self.draw_x - BORDER_OFFSET, self.draw_y - BORDER_OFFSET, W, H)
 
     local callbacks = self.owner.inventoryCallbacks
     if callbacks and callbacks.draw then

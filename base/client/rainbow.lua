@@ -17,7 +17,7 @@ end
 
 rainbowGroup:onAdded(function(ent)
     if ent:isShared("color") then
-        error("When entity has rainbow component, ")
+        error("When entity has rainbow component, color must not be shared")
     end
     if not ent.color then
         ent.color = {1,1,1}

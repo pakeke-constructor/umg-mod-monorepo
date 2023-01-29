@@ -12,7 +12,7 @@ client.on("dead", function(ent, health)
     if ent.onDeath then
         ent:onDeath()
     end
-    call("dead",ent)
+    umg.call("dead",ent)
 end)
 
 
@@ -24,6 +24,8 @@ drawing health bars:
 
 ]]
 
+local sqrt = math.sqrt
+
 local DEFAULT_DRAW_HEIGHT = 5
 local DEFAULT_DRAW_WIDTH = 20
 
@@ -32,7 +34,6 @@ local DEFAULT_OFFSET_Y = 10
 local DEFAULT_HEALTH_COLOR = {1,0.2,0.2}
 local DEFAULT_OUTLINE_COLOR = {0,0,0}
 local DEFAULT_BACKGROUND_COLOR = {0.4,0.4,0.4,0.4}
-
 
 
 umg.on("drawEntity", function(ent)
@@ -59,6 +60,11 @@ umg.on("drawEntity", function(ent)
         local ratio = ent.health / (ent.maxHealth or 0xfffffffff)
         love.graphics.setColor(hcol)
         love.graphics.rectangle("fill", x, y, w * ratio, h)
+
+        if hb.shiny then
+            love.graphics.setColor(sqrt(hcol[1])+0.1, sqrt(hcol[2])+0.1, sqrt(hcol[3])+0.1)
+            love.graphics.rectangle("fill", x, y, w * ratio, h/2)
+        end
 
         -- outline of health bar:
         love.graphics.setColor(ocol)

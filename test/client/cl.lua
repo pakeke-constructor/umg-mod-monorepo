@@ -16,7 +16,7 @@ local psys = base.particles.newParticleSystem({
 base.particles.define("smoke", psys)
 
 
-base.groundTexture.setTextureList({"ground_texture"})
+base.groundTexture.setTextureList({"ground_texture_final4"})
 
 
 umg.on("keypressed", function(k)
@@ -30,6 +30,7 @@ umg.on("keypressed", function(k)
     end
     if k == "c" then
         local p = base.getPlayer()
+        client.send("spawn", p)
     end
     if k =="r" then
         base.title("Title!", {time = 2,fade=0.5})
