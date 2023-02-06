@@ -7,7 +7,6 @@ return {
     image = "slant_block",
     rainbow = {},
     swaying = {},
-    spinning = {},
     bobbing = {},
     physics = {
         shape = love.physics.newCircleShape(10)

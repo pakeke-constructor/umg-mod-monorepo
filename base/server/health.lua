@@ -5,6 +5,13 @@ local hpGroup = umg.group("health", "maxHealth")
 
 
 
+hpGroup:onAdded(function(ent)
+    if not ent.health then
+        ent.health = ent.maxHealth
+    end
+end)
+
+
 
 umg.on("tick", function(dt)
     for _, ent in ipairs(hpGroup)do

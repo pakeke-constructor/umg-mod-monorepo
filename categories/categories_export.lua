@@ -59,6 +59,6 @@ function exp.changeEntityCategory(ent, newCategory)
 end
 
 
-umg.export("categories", exp)
+umg.expose("categories", exp)
 
 

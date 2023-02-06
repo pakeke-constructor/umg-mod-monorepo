@@ -1,6 +1,6 @@
 
 
-umg.export("crafting", {
+umg.expose("crafting", {
     Crafter = require("crafter")
 })
 

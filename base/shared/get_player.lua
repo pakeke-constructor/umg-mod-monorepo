@@ -22,15 +22,27 @@ local ent_to_username = {
 
 controllableGroup:onAdded(function(ent)
     local uname = ent.controller
-    username_to_ent[uname] = ent
-    ent_to_username[ent] = uname
+    if uname then
+        username_to_ent[uname] = ent
+        ent_to_username[ent] = uname
+    end
 end)
 
 
 controllableGroup:onRemoved(function(ent)
-    local uname = ent_to_username[ent]
-    if username_to_ent[uname] == ent then
-        username_to_ent[uname] = nil
+    local uname = ent_to_username[ent] or ent.controller
+    if uname then
+        if username_to_ent[uname] == ent then
+            username_to_ent[uname] = nil
+        else
+            -- well crap, looks like we gotta do a full search.
+            -- operation is only O(n) complexity, where `n` is number of players. (not too bad)
+            for uname2, ent2 in pairs(username_to_ent) do
+                if ent2 == ent then
+                    username_to_ent[uname2] = nil
+                end
+            end
+        end
     end
     ent_to_username[ent] = nil
 end)
@@ -69,8 +81,9 @@ local function getPlayer(uname)
 
     local ent = findEnt(uname)
     if ent then
-        username_to_ent[client.getUsername()] = ent
-        ent_to_username[ent] = client.getUsername()
+        local new_uname = ent.controller
+        username_to_ent[new_uname] = ent
+        ent_to_username[ent] = new_uname
         return ent
     end
 end

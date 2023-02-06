@@ -360,7 +360,7 @@ local obj, err = deserialize(data) -- deserializes data.
 save(name, data) -- saves data to string `name`, (relative to world)
 load(name) -- loads data from string `name` (relative to world)
 
-export("var", value) -- exports `var` to the global mod namespace.
+expose("var", value) -- exports `var` to the global mod namespace.
 -- Now, all other mods can access `value`.
 
 client  -- Client side functions

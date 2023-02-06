@@ -77,5 +77,5 @@ end)
 -- We violate the export naming conventions here, because Slab itself violates the
 -- naming conventions anyway.
 -- It's better to stay consistent to the Slab examples :)
-umg.export("Slab", Slab)
+umg.expose("Slab", Slab)
 

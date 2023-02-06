@@ -10,7 +10,7 @@ Handles all entities that require physics in the game.
 ]]
 
 
-local physics_API = {} -- little API
+local physics = {} -- little API
 
 
 
@@ -173,9 +173,9 @@ end)
 
 
 
-function physics_API.getWorld()
+function physics.getWorld()
     return world
 end
 
 
-return physics_API
+return physics

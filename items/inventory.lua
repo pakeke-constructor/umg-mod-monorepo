@@ -405,17 +405,25 @@ local sqrt = math.sqrt
 
 
 
-local function drawHighlights(draw_x, draw_y, W, H, color, offset)
+local function drawHighlights(draw_x, draw_y, W, H, r,g,b, offset, concave)
     offset = offset or 2
     local x = draw_x+offset
     local y = draw_y+offset
     local w,h = W-offset*2, H-offset*2
 
-    love.graphics.setColor(color[1]*color[1]-0.1, color[2]*color[2]-0.1, color[3]*color[3]-0.1)
+    if concave then
+        love.graphics.setColor(sqrt(r)+0.1, sqrt(g)+0.1, sqrt(b)+0.1)
+    else
+        love.graphics.setColor(r*r-0.1, g*g-0.1, b*b-0.1)
+    end
     love.graphics.line(x+w, y, x+w, y+h)
     love.graphics.line(x, y+h, x+w, y+h)
 
-    love.graphics.setColor(sqrt(color[1])+0.1, sqrt(color[2])+0.1, sqrt(color[3])+0.1)
+    if concave then
+        love.graphics.setColor(r*r-0.1, g*g-0.1, b*b-0.1)
+    else
+        love.graphics.setColor(sqrt(r)+0.1, sqrt(g)+0.1, sqrt(b)+0.1)
+    end
     love.graphics.line(x, y, x+w+1, y)
     love.graphics.line(x, y, x, y+h+1)
 end
@@ -428,11 +436,11 @@ local function drawSlot(self, inv_x, inv_y, offset, color)
 
     love.graphics.setLineWidth(1)
 
-    local slotColor = {color[1] / 1.5, color[2] / 1.5, color[3] / 1.5}
-    love.graphics.setColor(slotColor)
+    local r,g,b = color[1] / 1.5, color[2] / 1.5, color[3] / 1.5
+    love.graphics.setColor(r,g,b)
     love.graphics.rectangle("fill", X, Y, SQUARE_SIZE, SQUARE_SIZE)
 
-    drawHighlights(X, Y, SQUARE_SIZE, SQUARE_SIZE, slotColor, 1)
+    drawHighlights(X, Y, SQUARE_SIZE, SQUARE_SIZE, r,g,b, 1, true)
 
     love.graphics.setColor(0,0,0)
     love.graphics.rectangle("line", X, Y, SQUARE_SIZE, SQUARE_SIZE)
@@ -488,7 +496,7 @@ function Inventory:drawUI()
     end
 
     love.graphics.setLineWidth(2)
-    drawHighlights(self.draw_x-BORDER_OFFSET, self.draw_y-BORDER_OFFSET, W, H, col)
+    drawHighlights(self.draw_x-BORDER_OFFSET, self.draw_y-BORDER_OFFSET, W, H, col[1],col[2],col[3])
 
     -- Draw outline
     love.graphics.setColor(0,0,0)

@@ -2,7 +2,7 @@
 --[[
 
 What is this used for?
-Why can't we just use `export("my_module", module)` to export modules normally?
+Why can't we just use `expose("my_module", module)` to export modules normally?
 
 We *CAN* do that, sure.
 However, doing it this way will automatically generate nice errors if you 
@@ -48,7 +48,7 @@ local function makeIllegal(illegal_api, err_func)
         assert(type(name) == "string", "invalid format")
         local module = {}
         if not _G[name] then
-            umg.export(name, module)
+            umg.expose(name, module)
         end
         addErrorFuncsToModule(illegal_module, module, err_func)
     end
@@ -213,11 +213,11 @@ local function defineExports(options)
     if client then
         local api = {}
         loadClient(options, api)
-        umg.export(options.name, api)
+        umg.expose(options.name, api)
     elseif server then
         local api = {}
         loadServer(options, api)
-        umg.export(options.name, api)
+        umg.expose(options.name, api)
     end
 end
 

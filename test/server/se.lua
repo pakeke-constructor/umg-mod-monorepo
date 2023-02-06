@@ -17,6 +17,23 @@ end
 
 
 
+chat.handleCommand("spawn", function(sender, entType)
+    if entType and server.entities[entType] then
+        local p = base.getPlayer(sender)
+        local x,y = 0,0
+        if p then
+            x,y = p.x, p.y + 30
+        end
+        server.entities[entType](x,y)
+    else
+        chat.message("SPAWN FAILED: Unknown entity type " .. tostring(entType))
+    end
+end)
+
+chat.handleCommand("spin", function(sender)
+    server.broadcast("spin")
+end)
+
 
 
 
@@ -43,6 +60,15 @@ umg.on("createWorld", function()
         local MAG = 200
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
         local e = ents.musket()
+        e.stackSize = 1
+        e.x = x
+        e.y = y
+    end
+
+    for i=1, 1 do
+        local MAG = 200
+        local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
+        local e = ents.player_item()
         e.stackSize = 1
         e.x = x
         e.y = y

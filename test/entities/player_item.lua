@@ -1,18 +1,6 @@
 
-local BULLET_SPEED = 400
+
 local START_DIST = 30
-
-
-if client then
-    local psys = base.particles.newParticleSystem({"circ3", "circ2", "circ1"})
-    psys:setColors(
-        {0.6,0.6,0.6},
-        {0.2,0.2,0.2}
-    )
-    base.particles.define("musket_smoke", psys)
-end
-
-
 
 return {
     "x","y",
@@ -20,8 +8,12 @@ return {
     "hidden",
     "itemBeingHeld",
     maxStackSize = 1;
-    image="musket";
-    itemName = "musket";
+    image="red_player_down_1";
+    itemName = "player_item";
+    nametag = {
+        value = "max_23"
+    },
+    itemHoldType = "recoil",
 
     useItem = function(self, holderEnt)
         local dx,dy = holderEnt.lookX - holderEnt.x, holderEnt.lookY - holderEnt.y
@@ -36,15 +28,11 @@ return {
             base.particles.emit("musket_smoke", x,y,nil,10)
         else
             if type(dx) == "number" and type(dy) == "number" then        
-                local e = server.entities.player()
-                e.x = x
-                e.y = y
-                e.vx = dx*BULLET_SPEED
-                e.vy = dy*BULLET_SPEED     
+                local e = server.entities.player(x,y)
+                e.controller = holderEnt.controller
             end
         end
     end;
-    
-    itemHoldType = "recoil"
 }
+
 

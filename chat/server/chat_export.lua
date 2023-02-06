@@ -22,8 +22,12 @@ end)
 
 
 
-local chat = require("server.chat")
 
+local chat = {}
+
+function chat.message(message)
+    server.broadcast("chatMessage", message)
+end
 
 
 function chat.handleCommand(commandName, func)
@@ -39,5 +43,5 @@ function chat.handleCommand(commandName, func)
 end
 
 
-umg.export("chat", chat)
+umg.expose("chat", chat)
 

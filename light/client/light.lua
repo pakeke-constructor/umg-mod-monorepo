@@ -101,6 +101,6 @@ end
 
 
 
-umg.export("light", light)
+umg.expose("light", light)
 
 

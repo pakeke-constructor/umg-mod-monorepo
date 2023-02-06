@@ -143,6 +143,16 @@ umg.on("textinput", function(t)
 end)
 
 
+local function parseCommandArg(arg)
+    if arg:lower() == "true" then
+        return true
+    elseif arg:lower() == "false" then
+        return false
+    elseif tonumber(arg) then
+        return tonumber(arg)
+    end
+    return arg
+end
 
 local function doCommand(message)
     local buffer = {}
@@ -150,7 +160,7 @@ local function doCommand(message)
     local command = message:sub(2, f)
     if #message > 0 then
         for arg in message:sub(f+1):gmatch("%S+") do
-            table.insert(buffer, arg)
+            table.insert(buffer, parseCommandArg(arg))
         end
         client.send("commandMessage", command, unpack(buffer))
     end
