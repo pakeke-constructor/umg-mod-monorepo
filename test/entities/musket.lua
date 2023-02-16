@@ -15,10 +15,6 @@ end
 
 
 return {
-    "x","y",
-    "stackSize",
-    "hidden",
-    "itemBeingHeld",
     maxStackSize = 1;
     image="musket";
     itemName = "musket";
@@ -45,6 +41,8 @@ return {
         end
     end;
     
-    itemHoldType = "recoil"
+    itemHoldType = "recoil",
+
+    init = base.entityHelper.initPosition
 }
 

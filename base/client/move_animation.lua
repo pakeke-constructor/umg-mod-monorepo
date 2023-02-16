@@ -12,7 +12,7 @@ to offset each entity animation
 
 
 
-local anim_group = umg.group("image", "moveAnimation", "vx", "vy")
+local anim_group = umg.group("moveAnimation", "vx", "vy")
 
 
 

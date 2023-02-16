@@ -36,8 +36,6 @@ local defaultCraftButton = {
     abstract crafting entity.
 ]]
 local abstractCrafter = {
-    "inventory", "x", "y",
-
     craftItemLocation = {5,2},
     craftButtonLocation = {4,2},
 

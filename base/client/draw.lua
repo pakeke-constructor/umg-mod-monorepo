@@ -179,7 +179,7 @@ end)
 --[[
     main draw function
 ]]
-umg.on("mainDraw", function()
+umg.on("draw", function()
     --[[
         explanation:
         We have two sorted lists of entities:
@@ -266,8 +266,7 @@ end)
 
 
 
-umg.on("resize", function()
-    print()
+umg.on("@resize", function()
     local w,h = love.graphics.getDimensions()
     camera.w = w
     camera.h = h
@@ -331,19 +330,19 @@ umg.on("update", function(dt)
 end)
 
 
-umg.on("draw", function()
+umg.on("gameDraw", function()
     table.sort(sortedMoveEnts, less)
 
     camera:draw()
     camera:attach()
     umg.call("preDraw")
-    umg.call("mainDraw")
+    umg.call("draw")
     umg.call("postDraw")    
     camera:detach()
 
     love.graphics.scale(scaleUI)
     umg.call("preDrawUI")
-    umg.call("mainDrawUI")
+    umg.call("drawUI")
     umg.call("postDrawUI")
 end)
 

@@ -16,6 +16,8 @@ local DEFAULT_SWAY_MAGNITUDE = 0.3
 
 local PI2 = math.pi * 2
 
+local POSSIBLE_OFFSETS = 51 -- this is arbitrary
+
 return function(ent, ox)
     --[[
         returns the X offset, and the shear X value.
@@ -29,7 +31,7 @@ return function(ent, ox)
         -- divide magnitude by 2 to give amplitude of sine wave
         local mag = swaying.magnitude or DEFAULT_SWAY_MAGNITUDE / 2
 
-        local sin_offset = (ent.id % 13) / period
+        local sin_offset = (ent.id % POSSIBLE_OFFSETS) / period
 
         local sway_mult = mag * sin(tick * PI2 / period + sin_offset)
 

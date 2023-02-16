@@ -13,12 +13,6 @@ local camera = require("client.camera")
 
 
 
-lookGroup:onAdded(function(ent)
-    if not (ent:hasComponent("lookX") and ent:hasComponent("lookY")) then
-        error("Entity should have lookX and lookY components: " .. tostring(ent))
-    end
-end)
-
 
 client.on("setLookDirection", function(ent, lookX, lookY)
     if ent.controller == client.getUsername() then

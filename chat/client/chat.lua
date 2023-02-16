@@ -107,7 +107,7 @@ end
 local isTyping = false
 
 
-umg.on("mainDrawUI", function()
+umg.on("drawUI", function()
     --[[
         draw the chat:
     ]]
@@ -167,7 +167,7 @@ local function doCommand(message)
 end
 
 
-umg.on("keypressed", function(k)
+umg.on("@keypressed", function(k)
     --[[
         TODO: Set keyboard blocking here!!!!
     ]]

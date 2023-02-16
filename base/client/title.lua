@@ -63,7 +63,7 @@ end
 
 
 
-umg.on("mainDrawUI", function()
+umg.on("drawUI", function()
     local time = curTime
     for i=1, #titleObjs do
         local obj = titleObjs[i]

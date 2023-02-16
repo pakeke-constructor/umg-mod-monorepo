@@ -227,6 +227,12 @@ function(username, ent, other_ent, x, y, x2, y2, count)
             new.y = item.y
             new.stackSize = count
             item.stackSize = stackSize - count
+            --[[
+                TODO::: 
+                This is terrible.
+                A better thing to do would be to buffer the `inv:set()` manually,
+                instead of removing the buffering from the entity spawning
+            ]]
             server.forceSpawn(new)
             inv2:set(x2, y2, new)
             updateStackSize(item)

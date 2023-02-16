@@ -360,7 +360,7 @@ end)
 
 
 
-umg.on("mainDrawUI", function()
+umg.on("drawUI", function()
     for i, inv in ipairs(open_inventories) do
         inv:drawUI()
     end

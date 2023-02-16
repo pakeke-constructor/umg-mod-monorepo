@@ -3,10 +3,6 @@
 local START_DIST = 30
 
 return {
-    "x","y",
-    "stackSize",
-    "hidden",
-    "itemBeingHeld",
     maxStackSize = 1;
     image="red_player_down_1";
     itemName = "player_item";
@@ -33,6 +29,8 @@ return {
             end
         end
     end;
+
+    init = base.entityHelper.initPosition
 }
 
 

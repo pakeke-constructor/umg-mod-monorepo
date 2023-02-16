@@ -9,7 +9,6 @@ local PINES = {"pine4", "pine5", "pine6"}
 
 
 return {
-    "image", "x", "y",
     swaying = {},
 
     oy = -100,

@@ -1,0 +1,17 @@
+{
+    "uses": [
+      "base",
+      "chat",
+      "light",
+      "playersaves",
+      "items",
+      "test",
+      "zoom",
+      "placement",
+      "crafting",
+      "move_behaviour",
+      "attack_behaviour",
+      "terrain",
+      "worldeditor"
+    ]
+}

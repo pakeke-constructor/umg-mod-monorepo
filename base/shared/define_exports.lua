@@ -207,7 +207,7 @@ end
 
 
 local function defineExports(options)
-    assert(type(options) == "table", "defineOptions requires a table as first arg")
+    assert(type(options) == "table", "defineExports(options) requires a table as first arg")
     assert(options.name, "defineExports(options) requires a .name value")
 
     if client then

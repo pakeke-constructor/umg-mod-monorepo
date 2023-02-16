@@ -1,0 +1,7 @@
+{
+  "uses": [
+    "base",
+    "inventory"
+  ],
+  "baseMod": true
+}

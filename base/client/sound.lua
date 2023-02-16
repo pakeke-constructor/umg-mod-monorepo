@@ -103,7 +103,7 @@ function sound.playMusic(name, start_time, music_volume_modifier)
 end
 
 
-umg.on("update", function()
+umg.on("@update", function()
     if current_music then
         current_music:setVolume(musicVol() * current_music_volume_modifier)
         if not current_music:isPlaying() then

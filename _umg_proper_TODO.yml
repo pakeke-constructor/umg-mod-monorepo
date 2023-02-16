@@ -1,0 +1,73 @@
+---
+base: lua51
+name: umg
+
+globals:
+  umg.exists:
+    args:
+      - type: any
+      observes: read
+  umg.on:
+    args:
+      - type: string
+      - type: function
+  umg.call:
+    args:
+      - type: string
+      - type: ...
+  umg.group:
+    args:
+      - type: ...
+  umg.save:
+    args:
+      - type: string
+      - type: string
+  umg.load:
+    args:
+      - type: string
+  umg.serialize:
+    args:
+      - type: any
+  umg.deserialize:
+    args:
+      - type: string
+  umg.register:
+    args:
+      - type: any
+      - type: string
+  umg.inspect:
+    args:
+      - type: any
+  server.on:
+    args:
+      - type: string
+      - type: function
+  server.broadcast:
+    args:
+      - type: string
+      - type: ...
+  server.unicast:
+    args:
+      - type: string
+      - type: string
+      - type: ...
+  server.lazyBroadcast:
+    args:
+      - type: string
+      - type: ...
+  server.lazyUnicast:
+    args:
+      - type: string
+      - type: string
+      - type: ...
+  server.save:
+    args:
+      - type: string
+      - type: string
+  server.load:
+    args:
+      - type: string
+  client:
+    entities:
+      any: true
+    

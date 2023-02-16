@@ -5,11 +5,6 @@ local SPEED = 85
 
 
 return {
-    "x", "y", "z",
-    "vx", "vy","vz",
-    "testComponent",
-    "image",
-    "health",
     maxHealth = 100,
 
     healthBar = {
@@ -70,10 +65,10 @@ return {
         activation = 15
     };
 
-    init = base.entityHelper.initPosition,
-
     speed = SPEED;
-    agility = SPEED * 10
+    agility = SPEED * 10,
+
+    init = base.entityHelper.initPositionVelocity
 }
 
 

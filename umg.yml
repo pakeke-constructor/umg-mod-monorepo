@@ -1,0 +1,23 @@
+
+selene:
+  base: lua51
+  name: umg
+
+globals:
+  server:
+    any: true
+  client:
+    any: true
+  love:
+    any: true
+  umg:
+    any: true
+  utf8:
+    any: true
+  assert:
+    any: true
+  math:
+    any: true
+  table:
+    any: true
+

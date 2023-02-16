@@ -16,6 +16,8 @@ local DEFAULT_BOB_MAGNITUDE = 0.15
 
 local PI2 = math.pi * 2
 
+local POSSIBLE_OFFSETS = 52 -- this is arbitrary
+
 return function(ent, oy)
     --[[
         returns the Y offset, and the Y scale multiplier for bobbing component.
@@ -29,7 +31,7 @@ return function(ent, oy)
         -- divide magnitude by 2 to give amplitude of sine wave
         local mag = bobbing.magnitude or DEFAULT_BOB_MAGNITUDE / 2
 
-        local sin_offset = (ent.id % 52) / period
+        local sin_offset = (ent.id % POSSIBLE_OFFSETS) / period
 
         local scale_mult = mag * sin(tick * PI2 / period + sin_offset)
 

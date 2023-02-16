@@ -2,8 +2,6 @@
 
 
 return {
-    "inventory",
-    "x","y",
     image = "crate",
     openable = {distance = 100};
 

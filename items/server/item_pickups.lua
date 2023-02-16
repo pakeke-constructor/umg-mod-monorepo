@@ -22,12 +22,6 @@ local currentTime = love.timer.getTime()
 
 
 itemGroup:onAdded(function(e)
-    if not e:isRegular("hidden") then
-        error("Item entities must have a `hidden` regular component.\nNot the case for " .. e:type())
-    end
-    if not e:isRegular("itemBeingHeld") then
-        error("Item entities must have a `itemBeingHeld` regular component.\nNot the case for " .. e:type())
-    end
     itemDrops.itemPartition:add(e)
 end)
 

@@ -2,10 +2,6 @@
 
 
 return {
-    "x","y",
-    "stackSize",
-    "hidden",
-    "itemBeingHeld",
     maxStackSize = 1;
     image="pickaxe";
     itemName = "pickaxe";
@@ -14,6 +10,8 @@ return {
         -- TODO
     end;
     
-    itemHoldType = "tool"
+    itemHoldType = "tool",
+
+    init = base.entityHelper.initPosition
 }
 

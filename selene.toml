@@ -1,5 +1,5 @@
 
-std = "modding"
+std = "umg"
 
 [rules]
 multiple_statements = "allow"

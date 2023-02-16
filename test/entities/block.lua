@@ -1,12 +1,6 @@
 
 
 return {
-    "x", "y",
-    "vx", "vy",
-    "image",
-
-    "health",
-    "healthBar",
     maxHealth = 100,
     
     bobbing = {},
@@ -17,7 +11,7 @@ return {
     color = {.6,.6,.6};
 
     init = function(ent,x,y)
-        base.entityHelper.initPosition(ent,x,y)
+        base.entityHelper.initPositionVelocity(ent,x,y,0,0)
         ent.healthBar = {
             color = {math.random(), math.random(), math.random()};
             offset = 20

@@ -1,7 +1,7 @@
 
 
 
-local hpGroup = umg.group("health", "maxHealth")
+local hpGroup = umg.group("maxHealth")
 
 
 

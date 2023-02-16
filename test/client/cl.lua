@@ -36,7 +36,7 @@ client.on("spin", function()
     spinning = not spinning
 end)
 
-umg.on("update", function(dt)
+umg.on("gameUpdate", function(dt)
     if spinning then
         for _, ent in ipairs(imgGroup) do
             ent.rot = ent.rot or (math.random() * 6)
@@ -50,7 +50,7 @@ end)
 
 
 
-umg.on("keypressed", function(k)
+umg.on("@keypressed", function(k)
     if k == "q" then
         local e = base.getPlayer()
         local x, y = base.camera:getMousePosition()
@@ -74,7 +74,7 @@ end)
 
 
 
-umg.on("mousepressed", function(x, y, button, istouch, presses)
+umg.on("@mousepressed", function(x, y, button, istouch, presses)
     if button == 1 then
         local p = base.getPlayer()
         if umg.exists(p) then

@@ -69,11 +69,11 @@ end
 
 
 local CALLBACKS = {
-    "update", "draw",
-    "keypressed", "keyreleased",
-    "textedited",
-    "focus", "resize",
-    "mousemoved", "mousepressed", "mousereleased", "wheelmoved"
+    "@update", "@draw",
+    "@keypressed", "@keyreleased",
+    "@textedited",
+    "@focus", "@resize",
+    "@mousemoved", "@mousepressed", "@mousereleased", "@wheelmoved"
 }
 
 

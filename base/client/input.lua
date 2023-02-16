@@ -56,7 +56,6 @@ local inputEnums = {}
 -- { [inputEnum] -> inputEnum } used by input table.
 -- i.e.  base.input.BUTTON_1
 
-local inputList = {}
 
 
 
@@ -168,3 +167,4 @@ end)
 
 
 return input
+

@@ -2,10 +2,6 @@
 
 
 return {
-    "x","y",
-    "stackSize",
-    "hidden",
-    "itemBeingHeld",
     maxStackSize = 40;
     image="shroom_down_2";
     itemName = "item";
@@ -15,6 +11,8 @@ return {
         magnitude = 1.2
     };
 
-    itemHoldType = "above"
+    itemHoldType = "above",
+
+    init = base.entityHelper.initPosition
 }
 

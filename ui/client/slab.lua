@@ -15,11 +15,11 @@ umg.on("quit", function()
 end)
 
 
-umg.on("keypressed", function(key, scancode, isrepeat)
+umg.on("@keypressed", function(key, scancode, isrepeat)
 	Slab.OnKeyPressed(key, scancode, isrepeat)
 end)
 
-umg.on("keyreleased", function(key, scancode)
+umg.on("@keyreleased", function(key, scancode)
 	Slab.OnKeyReleased(key, scancode)
 end)
 
@@ -27,19 +27,19 @@ umg.on("textinput", function(text)
 	Slab.OnTextInput(text)
 end)
 
-umg.on("wheelmoved", function(x, y)
+umg.on("@wheelmoved", function(x, y)
 	Slab.OnWheelMoved(x, y)
 end)
 
-umg.on("mousemoved", function(x, y, dx, dy, istouch)
+umg.on("@mousemoved", function(x, y, dx, dy, istouch)
 	Slab.OnMouseMoved(x, y, dx, dy, istouch)
 end)
 
-umg.on("mousepressed", function( x, y, button, istouch, presses)
+umg.on("@mousepressed", function( x, y, button, istouch, presses)
 	Slab.OnMousePressed( x, y, button, istouch, presses)
 end)
 
-umg.on("mousereleased", function( x, y, button, istouch, presses)
+umg.on("@mousereleased", function( x, y, button, istouch, presses)
 	Slab.OnMouseReleased( x, y, button, istouch, presses)
 end)
 
@@ -47,7 +47,7 @@ end)
 
 local SLAB_SCALE_RATIO = 1/3
 
-umg.on("resize", function()
+umg.on("@resize", function()
     Slab.SetScale(base.getUIScale() * SLAB_SCALE_RATIO)
 end)
 
@@ -57,7 +57,7 @@ local docks = {
 }
 
 
-umg.on("update", function(dt)
+umg.on("@update", function(dt)
     Slab.Update(dt)
     Slab.SetScale(base.getUIScale() * SLAB_SCALE_RATIO)
     Slab.DisableDocks(docks)
@@ -67,8 +67,11 @@ end)
 
 
 
-umg.on("mainDrawUI", function()
+umg.on("drawUI", function()
+	love.graphics.push("all")
+	love.graphics.setLineWidth(1)
     Slab.Draw()
+	love.graphics.pop()
 end)
 
 

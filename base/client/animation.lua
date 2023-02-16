@@ -11,7 +11,7 @@ Change this by either (A) adding a manual frame offset, or
 ]]
 
 
-local animationGroup = umg.group("image", "animation")
+local animationGroup = umg.group("animation")
 
 
 

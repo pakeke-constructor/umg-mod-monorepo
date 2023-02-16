@@ -1,9 +1,6 @@
 
 
 return {
-    "x", "y",
-    "vx", "vy",
-    "color",
     image = "slant_block",
     rainbow = {},
     swaying = {},
@@ -15,10 +12,8 @@ return {
     health = 10,
     maxHealth = 15,
 
-    "healthBar",
-
     init = function(ent,x,y)
-        base.entityHelper.initPosition(ent,x,y)
+        base.entityHelper.initPositionVelocity(ent,x,y)
         ent.healthBar = {
             color = {math.random(), math.random(), math.random()};
             offset = 20

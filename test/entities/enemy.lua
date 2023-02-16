@@ -4,11 +4,6 @@ local SPEED = 160
 
 
 return {
-    "x", "y", "z",
-    "vx", "vy","vz",
-    "testComponent",
-    "image",
-
     color = {0.9,0.1,0.1},
 
     moveBehaviour = {
@@ -47,7 +42,7 @@ return {
         activation = 15
     };
 
-    init = base.entityHelper.initPosition,
+    init = base.entityHelper.initPositionVelocity,
 
     speed = SPEED;
     agility = SPEED * 10

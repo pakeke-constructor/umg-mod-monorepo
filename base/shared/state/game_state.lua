@@ -51,6 +51,11 @@ function gameState.wheelmoved(...)
 end
 
 
+for cbName, cbFunc in pairs(gameState) do
+    gameState["@" .. cbName] = cbFunc
+end
+
+
 
 
 -- define gamestate
