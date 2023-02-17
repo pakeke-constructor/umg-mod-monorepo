@@ -31,12 +31,17 @@ input.whenDown({
     end
 })
 
-input.onPress({
+input.onAction({
     priority = 5,
-    call = function(scancode, isrepeat)
+    onPress = function(scancode, isrepeat)
         textBuffer = textBuffer .. scancode
+        input.lockKey(scancode)
+    end,
+    onRelease = function(scancode)
+        input.unlockKey(scancode)
     end
 })
+
 
 
 

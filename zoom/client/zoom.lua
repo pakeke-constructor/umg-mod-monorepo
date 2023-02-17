@@ -153,3 +153,4 @@ umg.on("gameMousemoved", function(x,y, dx,dy)
 end)
 
 
+return zoom

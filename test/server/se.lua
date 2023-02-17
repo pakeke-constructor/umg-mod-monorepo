@@ -37,7 +37,7 @@ end)
 
 
 
-umg.on("createWorld", function()
+umg.on("@createWorld", function()
     for i=1, 30 do
         local MAG = 200
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
