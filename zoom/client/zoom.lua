@@ -7,10 +7,30 @@ local DEFAULT_ZOOM_SPEED = 22
 local MAX_ZOOM = 10
 local MIN_ZOOM = 0.1
 
-local zoom_export = {}
+local zoom = {}
 
 
---  function zoom_export.setMaxZoom()
+function zoom.setMaxZoom(max_zoom)
+    MAX_ZOOM = max_zoom
+end
+
+function zoom.setMinZoom(min_zoom)
+    MIN_ZOOM = min_zoom
+end
+
+function zoom.setZoomSpeed(speed)
+    zoom_speed = speed
+end
+
+function zoom.setZoom(zoomValue)
+    base.camera.scale = math.max(MIN_ZOOM, math.min(MAX_ZOOM, zoomValue))
+end
+
+function zoom.getZoom()
+    return base.camera.scale
+end
+
+
 
 
 
@@ -75,6 +95,10 @@ umg.on("inputPressed", function(inputEnum)
         -- unlock camera
         IS_PAN_MODE = true
         for _, ent in ipairs(controllableGroup)do
+            --[[
+                TODO: FUTURE OLI HERE.
+                WTF IS ALL THIS???? REMOVE ALL OF THIS, WTF
+            ]]
             -- we set follow to false for ALL ents, regardless of whether we
             -- are controlling them or not.
             -- This is so if control is changed dynamically, nothing will break.
@@ -92,6 +116,10 @@ umg.on("inputReleased", function(inputEnum)
         -- lock camera.
         IS_PAN_MODE = false
         for _, ent in ipairs(controllableGroup) do
+            --[[
+                TODO: FUTURE OLI HERE.
+                WTF IS ALL THIS???? REMOVE ALL OF THIS, WTF
+            ]]
             ent.follow = true
         end
     end
