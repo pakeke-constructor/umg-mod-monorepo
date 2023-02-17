@@ -1,0 +1,4 @@
+globals:
+  base:
+    any: true
+  

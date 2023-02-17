@@ -126,7 +126,7 @@ end)
     (Note that the server can choose to deny our player position 
       if it thinks we are cheating!!!)
 ]]
-umg.on("tick", function(dt)
+umg.on("@tick", function(dt)
     for i, ent in ipairs(controllableGroup) do
         if ent.controller == client.getUsername() then
             client.send("setPlayerPosition", ent, ent.x, ent.y, ent.z)

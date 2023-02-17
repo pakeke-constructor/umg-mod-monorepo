@@ -48,30 +48,30 @@ tick  :  when there is a server tick
 
 
 
-# update(dt)
+# @update(dt)
 Called every frame.
 `dt` is the time between the last frame and this frame.
 
 
 
-# tick
+# @tick
 Called on client side and server-side.
 Server ticks usually occur 20-60 times per second;
 but it depends on the configuration.
 
 
-# draw()
+# @draw()
 Called when everything should be rendered.
 
 
-# newWorld()
+# @createWorld()
 Called upon creation of a new world.  (Before entities spawn)
 
 
-# playerJoin(username)
+# @playerJoin(username)
 Called when a player joins the game
 
 
-# playerLeave(username)
+# @playerLeave(username)
 Called when a player leaves the game
 

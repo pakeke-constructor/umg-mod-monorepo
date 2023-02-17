@@ -58,6 +58,18 @@ local inputEnums = {}
 
 
 
+local lockedKeys = {}
+-- [key] -> true/false   whether the key is locked or not
+
+
+local wheelLocked = false 
+-- whether the scroll wheel is locked or not
+
+local lockedMouseButtons = {}
+-- [mouseButtonId] -> true/false   whether the mouse button is locked or not
+
+
+
 
 local input = setmetatable({}, {
     __index = function(t,k)
@@ -128,6 +140,12 @@ end
 
 
 
+function input.lockKey(key)
+
+end
+
+
+
 
 function input.isDown(inputEnum)
     if locked then
@@ -149,20 +167,20 @@ end
 
 
 
-umg.on("gameKeypressed", function(_, scancode, isrepeat)
+function input.keypressed(key, scancode, isrepeat)
     if (not locked) and scancodeMapping[scancode] then
         local inputEnum = scancodeMapping[scancode]
         umg.call("inputPressed", inputEnum, isrepeat)
     end
-end)
+end
 
 
-umg.on("gameKeyreleased", function(_, scancode, isrepeat)
+function input.keyreleased(key, scancode, isrepeat)
     if (not locked) and scancodeMapping[scancode] then
         local inputEnum = scancodeMapping[scancode]
         umg.call("inputReleased", inputEnum, isrepeat)
     end
-end)
+end
 
 
 

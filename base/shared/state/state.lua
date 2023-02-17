@@ -31,14 +31,16 @@ function state.getState()
 end
 
 
+local assertStringArg = typecheck.assert("string")
+
 local function changeState(name)
-    assert(name)
+    assertStringArg(name)
     if name ~= currentStateName then
         if currentStateName and stateTable[currentStateName].exit then
-            stateTable[currentStateName].exit()
+            stateTable[currentStateName]:exit()
         end
         if stateTable[name].enter then
-            stateTable[name].enter()
+            stateTable[name]:enter()
         end
     end
     currentStateName = name
@@ -57,7 +59,7 @@ function state.setState(name)
     changeState(name)
 end
 
-umg.on("playerJoin", function(username)
+umg.on("@playerJoin", function(username)
     server.unicast(username, "baseModSetState", currentStateName)
 end)
 
@@ -95,8 +97,8 @@ local function tryDefineNewListener(event_name)
     LISTENING_CALLBACKS[event_name] = true
     umg.on(event_name, function(...)
         local stateObj = stateTable[currentStateName]
-        if stateObj and stateObj[event_name] then
-            stateObj[event_name](...)
+        if stateObj then
+            stateObj:call(event_name, ...)
         end
     end)
 end
@@ -108,7 +110,6 @@ local State = Class("base:State")
 
 
 
-local assertStringArg = typecheck("string")
 function State:init(name)
     assertStringArg(name)
     stateTable[name] = self
@@ -116,12 +117,11 @@ function State:init(name)
     self.eventListeners = {
         -- [ev_name] --> function() end
     }
-    state.defineState(self)
 end
 
 
 
-local onAsserter = typecheck("string", "function")
+local onAsserter = typecheck.assert("string", "function")
 
 function State:on(event_name, func)
     onAsserter(event_name, func)
@@ -129,6 +129,14 @@ function State:on(event_name, func)
     
     self.eventListeners[event_name] = func
     tryDefineNewListener(event_name)
+end
+
+
+
+function State:call(event_name, ...)
+    if self.eventListeners[event_name] then
+        self.eventListeners[event_name](...)
+    end
 end
 
 
@@ -148,7 +156,8 @@ end
     State.setState("game")
 ]]
 function State.setState(name_or_nil)
-    assertStringArg(name_or_nil)    
+    assertStringArg(name_or_nil)
+    currentStateName = name_or_nil
 end
 
 

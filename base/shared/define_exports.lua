@@ -104,7 +104,7 @@ local needsClientExports = true
 serverSideOnlyExports = {}
 
 
-umg.on("playerJoin", function(username)
+umg.on("@playerJoin", function(username)
     server.unicast(username, "defineServerOnlyAPI", serverSideOnlyExports, needsClientExports)
 end)
 

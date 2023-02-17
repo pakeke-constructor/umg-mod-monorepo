@@ -17,8 +17,9 @@ local function loadClient(base)
     local sound = require("client.sound")
     local animate = require("client.animate")
     local input = require("client.input")
+    local camera = require("client.camera")
     
-    base.camera = draw.camera;
+    base.camera = camera;
 
     base.input = input
     

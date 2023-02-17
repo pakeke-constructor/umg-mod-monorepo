@@ -13,7 +13,7 @@ end)
 
 
 
-umg.on("tick", function(dt)
+umg.on("@tick", function(dt)
     for _, ent in ipairs(hpGroup)do
         if ent.regen then
             local amount = ent.regen * dt

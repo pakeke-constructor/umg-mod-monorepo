@@ -8,7 +8,9 @@ allows us to manually make calls to animate entities.
 ]]
 
 
-local draw = require("client.draw")
+local drawEntities = require("client.draw_entities")
+local getDrawY = drawEntities.getDrawY
+
 
 local drawImage = require("client.image_helpers.draw_image")
 
@@ -40,7 +42,7 @@ local function animate(frames, time, x,y,z, color)
         color = color or WHITE,
     }
 
-    local indx = math.floor(draw.getDrawY(obj.y, obj.z))
+    local indx = math.floor(getDrawY(obj.y, obj.z))
     drawIndexToAnimObj[indx] = drawIndexToAnimObj[indx] or {}
     table.insert(drawIndexToAnimObj[indx], obj)
 end
@@ -97,7 +99,7 @@ local function drawAnimObj(animObj)
     local quadName = animObj.frames[i]
     local r,g,b,a = love.graphics.getColor()
     love.graphics.setColor(animObj.color)
-    local y = draw.getDrawY(add_y, add_z) + draw.getDrawY(animObj.y, animObj.z)
+    local y = getDrawY(add_y, add_z) + getDrawY(animObj.y, animObj.z)
     drawImage(quadName, animObj.x + add_x, y)
     love.graphics.setColor(r,g,b,a)
 end

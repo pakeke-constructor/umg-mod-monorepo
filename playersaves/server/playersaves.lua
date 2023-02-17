@@ -14,7 +14,7 @@ end
 
 
 
-umg.on("playerJoin", function(username)
+umg.on("@playerJoin", function(username)
     local fname = get_filename(username)
     local entity_data = server.load(fname)
 
@@ -35,7 +35,7 @@ end)
 
 
 
-umg.on("playerLeave", function(username)
+umg.on("@playerLeave", function(username)
     local fname = get_filename(username)
 
     local buffer = {}

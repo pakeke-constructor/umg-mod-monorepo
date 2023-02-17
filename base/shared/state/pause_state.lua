@@ -1,6 +1,6 @@
 
 
-local state = require("shared.state.state")
+local State = require("shared.state.state")
 
 --[[
 
@@ -8,21 +8,13 @@ local state = require("shared.state.state")
 
 
 ]]
-local pauseState = {
-    name = "pause"
-}
+local pauseState = State("pause")
 
 
 
-function pauseState.draw(...)
-    -- We just call gameDraw here, because draw function doesn't (or SHOULDNT) 
-    -- mutate the state of the world.
-    umg.call("gameDraw", ...)
-end
-
-
--- define pauseState
-state.defineState(pauseState)
-
+pauseState:on("@draw", function(dt)
+    umg.call("drawWorld")
+    umg.call("drawUI")
+end)
 
 

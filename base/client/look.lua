@@ -25,7 +25,7 @@ end)
 
 
 
-umg.on("tick", function()
+umg.on("@tick", function()
     for _, ent in ipairs(lookGroup) do
         if ent.controller == client.getUsername() then
             if ent.lookAtMouse then

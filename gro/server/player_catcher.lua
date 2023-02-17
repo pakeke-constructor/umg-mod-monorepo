@@ -29,7 +29,7 @@ server.on("i_fell_off", function(sender)
 end)
 
 
-umg.on("tick", function()
+umg.on("@tick", function()
     for _, ent in ipairs(playerCatchGroup)do
         if ent.z < constants.PLAYER_CATCH_THRESHOLD then
             -- catch player, bring em up

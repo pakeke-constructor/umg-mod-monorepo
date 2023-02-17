@@ -171,7 +171,7 @@ end)
 
 
 
-umg.on("tick", function()
+umg.on("@tick", function()
     for _, ent in ipairs(moveGroup) do
         syncMover(ent)
     end

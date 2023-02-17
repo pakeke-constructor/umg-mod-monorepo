@@ -47,7 +47,7 @@ newWorld() -- The box2d physics world used by entities
 
 
 
-umg.on("newWorld", newWorld)
+umg.on("@createWorld", newWorld)
 
 
 

@@ -44,7 +44,7 @@ itemGroup:onAdded(function(item_ent)
 end)
 
 
-umg.on("tick", function()
+umg.on("@tick", function()
     for _, item_ent in ipairs(itemGroup) do
         updateStackSize(item_ent)
     end

@@ -158,12 +158,12 @@ drawGroup:onRemoved(function( ent )
 end)
 
 
-local function pollRemoveBuffer(array, buffer)
+local function pollRemoveBuffer(array, removeBuffer)
     for i=#array,1,-1 do
         local ent = array[i]
-        if buffer[ent] then
+        if removeBuffer[ent] then
             table.remove(array, i)
-            buffer[ent] = nil
+            removeBuffer[ent] = nil
         end
     end
 end

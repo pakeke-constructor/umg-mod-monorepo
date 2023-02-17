@@ -34,7 +34,7 @@ end
 
 
 
-umg.on("playerJoin", function(username)
+umg.on("@playerJoin", function(username)
     local plyr_ent = server.entities.player(0, 0)
     plyr_ent.controller = username
 
@@ -44,7 +44,7 @@ end)
 
 
 
-umg.on("playerLeave", function(username)
+umg.on("@playerLeave", function(username)
     base.getPlayer(username):delete()
     local b = Board.getBoard(username)
     if b then

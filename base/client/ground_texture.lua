@@ -62,7 +62,7 @@ local LEIGHWAY = 10
 local PRIME = 7
 
 
-umg.on("preDraw", function()
+umg.on("drawGround", function()
     love.graphics.push("all")
     love.graphics.setColor(color)
     if groundTiles then

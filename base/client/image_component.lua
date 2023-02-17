@@ -6,10 +6,10 @@ local bobbing = require("client.image_helpers.bobbing")
 local spinning = require("client.image_helpers.spinning")
 local swaying = require("client.image_helpers.swaying")
 
-local draw = require("client.draw")
+local drawEntities = require("client.draw_entities")
 local drawImage = require("client.image_helpers.draw_image")
 
-local getDrawY = draw.getDrawY
+local getDrawY = drawEntities.getDrawY
 
 
 local images = client.assets.images

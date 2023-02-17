@@ -3,7 +3,7 @@ local camera = require("client.camera")
 local constants = require("shared.constants")
 
 
-umg.on("drawWorld", function()    
+umg.on("drawWorld", function()
     camera:draw()
     camera:attach()
 

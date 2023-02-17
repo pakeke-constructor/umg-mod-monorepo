@@ -25,7 +25,7 @@ end)
 
 
 
-umg.on("tick", function()
+umg.on("@tick", function()
     for _, ent in ipairs(lookGroup) do
         -- TODO: delta compression
         server.broadcast("setLookDirection", ent, ent.lookX, ent.lookY)
