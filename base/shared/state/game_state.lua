@@ -1,5 +1,5 @@
 
-local state = require("shared.state.state")
+local State = require("shared.state.state")
 
 --[[
 
@@ -9,19 +9,27 @@ When the game is running, it should be in this state.
 
 
 ]]
-local gameState = {
-    name = "game"
-}
+
+
+local gameState = State("game")
 
 
 
 
-function gameState.update(dt)
+gameState:on("@update", function(dt)
+    umg.call("gamePreUpdate", dt)
     umg.call("gameUpdate", dt)
-end
-function gameState.draw()
-    umg.call("gameDraw")
-end
+    umg.call("gamePostUpdate", dt)
+end)
+
+gameState:on("@draw", function(dt)
+    umg.call("drawWorld")
+    umg.call("drawUI")
+end)
+
+
+
+--[[
 function gameState.keypressed(key,sc,isrepeat)
     umg.call("gameKeypressed", key,sc,isrepeat)
 end
@@ -49,22 +57,12 @@ end
 function gameState.wheelmoved(...)
     umg.call("gameWheelmoved", ...)
 end
-
-
-for cbName, cbFunc in pairs(gameState) do
-    gameState["@" .. cbName] = cbFunc
-end
-
-
-
-
--- define gamestate
-state.defineState(gameState)
+]]
 
 
 -- and set to gamestate if we are on serverside
 if server then
-    state.setState("game")
+    State.setState("game")
 end
 
 

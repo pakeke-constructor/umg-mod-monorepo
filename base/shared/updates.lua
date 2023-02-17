@@ -4,6 +4,8 @@
 
 implements `onUpdate` component.
 
+Also implements preUpdate and postUpdate
+
 ]]
 
 
@@ -15,4 +17,5 @@ umg.on("gameUpdate", function(dt)
         ent:onUpdate(dt)
     end
 end)
+
 

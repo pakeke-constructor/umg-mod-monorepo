@@ -79,7 +79,7 @@ end
 
 
 
-umg.on("update", function(dt)
+umg.on("@update", function(dt)
     for _, partition in ipairs(partitions)do
         partition.updated_this_frame = false
     end

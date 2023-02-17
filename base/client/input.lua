@@ -70,6 +70,7 @@ local input = setmetatable({}, {
 })
 
 
+local inputList
 
 local function updateTables(inpMapping)
     inputMapping = inpMapping

@@ -12,6 +12,7 @@ local defineExports = require("shared.define_exports")
 
 local function loadClient(base)
     local draw = require("client.draw")
+    local drawEntities = require("client.draw_entities")
     local shockwave = require("client.shockwaves")
     local sound = require("client.sound")
     local animate = require("client.animate")
@@ -28,11 +29,11 @@ local function loadClient(base)
     base.getUIScale = draw.getUIScale
     base.setUIScale = draw.setUIScale
 
-    base.isOnScreen = draw.isOnScreen
-    base.entOnScreen = draw.entOnScreen
+    base.isOnScreen = drawEntities.isOnScreen
+    base.entIsOnScreen = drawEntities.entIsOnScreen
 
-    base.getDrawY = draw.getDrawY;
-    base.getDrawDepth = draw.getDrawDepth;
+    base.getDrawY = drawEntities.getDrawY;
+    base.getDrawDepth = drawEntities.getDrawDepth;
 
     base.getQuadOffsets = require("client.image_helpers.quad_offsets");
     base.drawImage = require("client.image_helpers.draw_image");

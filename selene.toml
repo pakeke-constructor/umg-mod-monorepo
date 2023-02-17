@@ -1,5 +1,5 @@
 
-std = "umg"
+std = "umg+lua51+love"
 
 [rules]
 multiple_statements = "allow"

@@ -12,6 +12,9 @@ or when the game is in an alternative state,
 
 ]]
 
+local Class = require("shared.class")
+local typecheck = require("shared.typecheck")
+
 
 local state = {}
 
@@ -68,36 +71,32 @@ end)
 end
 
 
-local CALLBACKS = {
-    "@update", "@draw",
-    "@keypressed", "@keyreleased",
-    "@textedited",
-    "@focus", "@resize",
-    "@mousemoved", "@mousepressed", "@mousereleased", "@wheelmoved"
-}
+local LISTENING_CALLBACKS = {--[[
+    [eventName] --> true    
+    keeps track of what events are being listened to by the state handler
+]]}
 
 
-function state.defineState(stateObj)
-    local name = stateObj.name
-    assert(type(name) == "string", "state definitions require a .name string")
 
-    for _, cb in ipairs(CALLBACKS) do
-        if stateObj[cb] then
-            assert(type(stateObj[cb]) == "function", "state callbacks must be functions")
-        end
-    end
-    stateTable[name] = stateObj
+
+
+local function isListening(event_name)
+    return LISTENING_CALLBACKS[event_name]
 end
 
 
 
-for _, cb in ipairs(CALLBACKS) do
+local function tryDefineNewListener(event_name)
     -- This kind of reflective, meta programming is kind of hacky..
     -- I'm not a fan of it, but oh well! :-)
-    umg.on(cb, function(...)
+    if isListening(event_name) then
+        return
+    end
+    LISTENING_CALLBACKS[event_name] = true
+    umg.on(event_name, function(...)
         local stateObj = stateTable[currentStateName]
-        if stateObj and stateObj[cb] then
-            stateObj[cb](...)
+        if stateObj and stateObj[event_name] then
+            stateObj[event_name](...)
         end
     end)
 end
@@ -105,5 +104,54 @@ end
 
 
 
+local State = Class("base:State")
 
-return state
+
+
+local assertStringArg = typecheck("string")
+function State:init(name)
+    assertStringArg(name)
+    stateTable[name] = self
+    self.name = name
+    self.eventListeners = {
+        -- [ev_name] --> function() end
+    }
+    state.defineState(self)
+end
+
+
+
+local onAsserter = typecheck("string", "function")
+
+function State:on(event_name, func)
+    onAsserter(event_name, func)
+    assert(not self.eventListeners[event_name], "Not allowed to override")
+    
+    self.eventListeners[event_name] = func
+    tryDefineNewListener(event_name)
+end
+
+
+
+
+
+function State.getCurrentState()
+    return currentStateName
+end
+
+
+
+
+--[[
+    this function should be called from a static context
+    i.e.
+    State.setState("game")
+]]
+function State.setState(name_or_nil)
+    assertStringArg(name_or_nil)    
+end
+
+
+
+
+return State

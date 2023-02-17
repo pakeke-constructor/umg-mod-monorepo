@@ -67,7 +67,7 @@ end)
 
 
 
-umg.on("drawUI", function()
+umg.on("mainDrawUI", function()
 	love.graphics.push("all")
 	love.graphics.setLineWidth(1)
     Slab.Draw()

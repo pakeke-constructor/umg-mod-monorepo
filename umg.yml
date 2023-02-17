@@ -1,23 +1,78 @@
-
-selene:
-  base: lua51
-  name: umg
-
 globals:
-  server:
+  client.getUsername:
+    args: []
+  client.on:
+    args:
+    - type: string
+    - type: function
+  client.send:
+    args:
+    - type: string
+    - required: false
+      type: '...'
+  client.atlas:
     any: true
-  client:
-    any: true
-  love:
-    any: true
-  umg:
-    any: true
-  utf8:
-    any: true
-  assert:
-    any: true
-  math:
-    any: true
-  table:
-    any: true
-
+  server.broadcast:
+    args:
+    - type: string
+    - required: false
+      type: '...'
+  server.lazyBroadcast:
+    args:
+    - type: string
+    - required: false
+      type: '...'
+  server.lazyUnicast:
+    args:
+    - type: string
+    - type: string
+    - required: false
+      type: '...'
+  server.on:
+    args:
+    - type: string
+    - type: function
+  server.unicast:
+    args:
+    - type: string
+    - type: string
+    - required: false
+      type: '...'
+  umg.call:
+    args:
+    - type: string
+    - required: false
+      type: '...'
+  umg.deserialize:
+    args:
+    - type: string
+  umg.exists:
+    args:
+    - type: any
+  umg.expose:
+    args:
+    - type: string
+    - type: any
+  umg.extend:
+    args:
+    - type: string
+    - type: table
+  umg.group:
+    args:
+    - required: false
+      type: '...'
+  umg.load:
+    args:
+    - type: string
+  umg.on:
+    args:
+    - type: string
+    - required: false
+      type: '...'
+  umg.save:
+    args:
+    - type: string
+    - type: string
+  umg.serialize:
+    args:
+    - type: any

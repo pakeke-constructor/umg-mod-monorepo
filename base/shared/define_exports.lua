@@ -85,8 +85,7 @@ local serverSideOnlyExports, clientSideOnlyExports
 
 if server then
 
-local serverSideErrStr =
-[[
+local serverSideErrStr = [[
 This function works client-side only, but you called it on server-side.
 
 HINT:  Callbacks, like onUpdate or onClick, are called on BOTH server and client.
