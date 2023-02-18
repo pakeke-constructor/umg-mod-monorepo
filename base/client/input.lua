@@ -7,6 +7,9 @@ TODO: Allow for even more custom stuff, like joysticks
 
 ]]
 
+local Array = require("shared.array")
+
+
 
 -- The input mapping can be defined as anything,
 -- but the base mod uses these controls by default:::
@@ -57,16 +60,27 @@ local inputEnums = {}
 -- i.e.  base.input.BUTTON_1
 
 
+local scancodeToIsDown = {}
+-- { [scancode]  ->  true/false }  whether scancode is down or not
+local scancodeToLockingListener = {}
+-- { [scancode]  ->  Listener  }  the Listener that is currently locking this scancode (if any)
 
-local lockedKeys = {}
--- [key] -> true/false   whether the key is locked or not
+
+local scancodeToWhenListeners = {--[[
+    [scancode] -> sorted WhenListener list
+]]}
+local scancodeToActionListeners = {--[[
+    [scancode] -> sorted ActionListener list
+]]}
+local globalActionListeners = {}
 
 
-local wheelLocked = false 
--- whether the scroll wheel is locked or not
 
-local lockedMouseButtons = {}
--- [mouseButtonId] -> true/false   whether the mouse button is locked or not
+local keyboardIsLocked = false
+
+local mouseIsLocked = false
+
+local mouseWheelIsLocked = false
 
 
 
@@ -110,6 +124,15 @@ end
 
 
 
+function input.unlockEverything()
+    keyboardIsLocked = false
+    mouseIsLocked = false
+    mouseWheelIsLocked = false
+end
+
+
+
+
 function input.setControls(inpMapping)
     assertValid(inpMapping)
     updateTables(inpMapping)
@@ -121,65 +144,181 @@ input.setControls(DEFAULT_INPUT_MAPPING)
 
 
 
-
-
-local locked = false
-
-
-function input.lock()
-    locked = true
-end
-
-function input.unlock()
-    locked = false
-end
-
-function input.isLocked()
-    return locked
-end
-
-
-
-function input.lockKey(key)
-
+local function sortPrioKey(obj1, obj2)
+    -- sorts backwards; i.e. higher priority
+    -- comes first in the list 
+    
+    -- default priority is 0
+    return (obj1.priority or 0) > (obj2.priority or 0)
 end
 
 
 
 
-function input.isDown(inputEnum)
-    if locked then
-        return false
+local function isValidInputValue(value)
+    return value and inputMapping[value]  
+end
+
+
+
+function input.whenDown(listener)
+    --[[
+        An when listener is just a lua table:
+
+        listener = {
+            input = input.UP,
+            priority = 10, -- higher priority = called first
+            update = function(scancode, dt)
+                ... -- do something
+                input.lockKey(scancode)
+            end
+        }
+    ]]
+    assert(isValidInputValue(listener.input) or listener.scancode, "need valid input")
+    assert(type(listener.update) == "function", "need update function")
+    
+    local scancode = listener.scancode or scancodeMapping[listener.input]
+    scancodeToWhenListeners[scancode] = scancodeToWhenListeners[scancode] or {}
+
+    table.insert(scancodeToWhenListeners[scancode], listener)
+    table.sort(scancodeToWhenListeners[scancode], sortPrioKey)
+end
+
+
+
+function input.onAction(listener)
+    --[[
+        An action listener is just a lua table:
+
+        listener = {
+            priority = 5,
+            onPress = function(scancode, isrepeat)
+                if isTyping then
+                    textBuffer = textBuffer .. scancode
+                    return true -- lock
+                else
+                    return false -- no lock
+                end
+            end,
+            onRelease = function(scancode)
+            end
+        }
+    ]]
+    assert(isValidInputValue(listener.input) or listener.scancode, "need valid input")
+    assert(type(listener.onPress) == "function", "need onPress function")
+    assert(type(listener.onRelease) == "function", "need onRelease function")
+    
+    local scancode = listener.scancode or scancodeMapping[listener.input]
+    local arr
+    if scancode then
+        scancodeToActionListeners[scancode] = scancodeToActionListeners[scancode] or {}
+        arr = scancodeToActionListeners[scancode]
+    else
+        arr = globalActionListeners
     end
-    inputEnum = inputEnum or "nil" -- to ensure we dont get `table index nil`
-    if not validInputEnums[inputEnum] then
-        error("invalid input enum: " .. inputEnum, 2)
-    end
 
-    local scancode = inputMapping[inputEnum]
-    return love.keyboard.isScancodeDown(scancode)
+    table.insert(arr, listener)
+    table.sort(arr, sortPrioKey)
 end
 
 
 
+local function getScancodeLock(scancode)
+    return scancodeToLockingListener[scancode]
+end
 
 
 
+--[[
+    keypress and keyreleased events are buffered here
+]]
+local eventBuffer = Array()
+
+
+local EMPTY = {}
+
+
+local function pollPressEvent(event)
+    local scancode = event.scancode
+    local actionListeners = scancodeToActionListeners[scancode] or EMPTY
+
+    -- polling action Listeners
+    local global_i = 1
+    local loc_i = 1
+    local consumed = false
+    while not consumed and (globalActionListeners[global_i] or actionListeners[loc_i]) do
+        local globalAction = globalActionListeners[global_i]
+        local localAction = actionListeners[loc_i]
+        local action
+
+        local globalPrio = globalAction and globalAction.priority or -math.huge
+        local localPrio = localAction and localAction.priority or -math.huge
+
+        if localPrio >= globalPrio then
+            -- take local action listener
+            action = localAction
+            loc_i = loc_i + 1
+        else
+            -- take global action listener
+            action = globalAction
+            global_i = global_i + 1
+        end
+        consumed = action.onPress(scancode, event.isrepeat)
+        if consumed then
+            scancodeToLockingListener[scancode] = true
+            return
+        end
+    end
+
+    -- Polling whenDown listeners
+
+end
+
+
+local function pollReleaseEvent(event)
+
+end
+
+
+
+function input.update(dt)
+    -- should be called whenever we want to poll for input
+    for _, event in ipairs(eventBuffer) do
+        if event.type == "press" then
+            local listener = getScancodeLock(event.scancode)
+            if listener then
+                -- The scancode is locked by a listener!
+                -- Thus, we inform the listener that another keypress has occured
+                listener.onPress(event.scancode, event.isrepeat)
+            else
+                pollPressEvent(event)
+            end
+        else
+            pollReleaseEvent(event)
+        end
+    end
+    eventBuffer:clear()
+
+    input.unlockEverything()
+end
 
 
 function input.keypressed(key, scancode, isrepeat)
-    if (not locked) and scancodeMapping[scancode] then
-        local inputEnum = scancodeMapping[scancode]
-        umg.call("inputPressed", inputEnum, isrepeat)
-    end
+    eventBuffer:add({
+        key = key,
+        scancode = scancode,
+        type = "press",
+        isrepeat = isrepeat
+    })
 end
 
 
-function input.keyreleased(key, scancode, isrepeat)
-    if (not locked) and scancodeMapping[scancode] then
-        local inputEnum = scancodeMapping[scancode]
-        umg.call("inputReleased", inputEnum, isrepeat)
-    end
+function input.keyreleased(key, scancode)
+    eventBuffer:add({
+        key = key,
+        scancode = scancode,
+        type = "release"
+    })
 end
 
 
