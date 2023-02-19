@@ -5,7 +5,6 @@ local newShockWave = require("_libs.shockwave")
 
 -- Gotta make sure this is loaded:
 local Set = require("shared.set")
-local typecheck = require("shared.typecheck")
 
 
 
@@ -27,7 +26,7 @@ end)
 
 
 
-umg.on("postDraw", function()
+umg.on("drawEffects", function()
     for _,sw in shockwaveSet:iter() do
         sw:draw()
     end
@@ -35,11 +34,9 @@ end)
 
 
 
-local tc = typecheck.assert("number", "number", "number", "number", "number", "number", "table?")
 
-local function shockwave(x, y, start_size, end_size, thickness, time, colour)
-    tc(x, y, start_size, end_size, thickness, time, colour)
-    local sw = newShockWave(x,y,start_size, end_size, thickness, time, colour or {1,1,1,1})
+local function shockwave(options)
+    local sw = newShockWave(options)
     shockwaveSet:add(sw)
 end
 

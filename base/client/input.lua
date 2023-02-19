@@ -76,6 +76,14 @@ local globalActionListeners = {}
 
 
 
+
+local mouseButtonToActionListener = {--[[
+    [mouseButton] -> sorted ActionListenerList
+]]}
+
+
+
+
 local keyboardIsLocked = false
 
 local mouseIsLocked = false
@@ -130,6 +138,23 @@ function input.unlockEverything()
     mouseWheelIsLocked = false
 end
 
+function input.lockKeyboard()
+    keyboardIsLocked = true
+end
+
+function input.lockMouseButtons()
+    mouseIsLocked = true
+end
+
+function input.lockMouseWheel()
+    mouseWheelIsLocked = true
+end
+
+function input.lockMouse()
+    input.lockMouseButtons()
+    input.lockMouseWheel()
+end
+
 
 
 
@@ -161,7 +186,8 @@ end
 
 
 
-function input.whenDown(listener)
+
+function input.whenInputDown(listener)
     --[[
         An when listener is just a lua table:
 
@@ -186,7 +212,7 @@ end
 
 
 
-function input.onAction(listener)
+function input.onKeyboardAction(listener)
     --[[
         An action listener is just a lua table:
 
@@ -232,13 +258,22 @@ end
 --[[
     keypress and keyreleased events are buffered here
 ]]
-local eventBuffer = Array()
+local keyboardEventBuffer = Array()
+
+
+--[[
+    mouse events are buffered here (buttons and scroll wheel)
+]]
+local mouseEventBuffer = Array()
+
+
+
 
 
 local EMPTY = {}
 
 
-local function pollPressEvent(event)
+local function pollKeyPressEvent(event)
     local scancode = event.scancode
     local actionListeners = scancodeToActionListeners[scancode] or EMPTY
 
@@ -270,41 +305,98 @@ local function pollPressEvent(event)
         end
     end
 
-    -- Polling whenDown listeners
-
+    scancodeToIsDown[scancode] = true
 end
 
 
-local function pollReleaseEvent(event)
-
+local function pollKeyReleaseEvent(event)
+    local scancode = event.scancode
+    scancodeToLockingListener[scancode] = nil
+    scancodeToIsDown[scancode] = false
 end
 
 
 
-function input.update(dt)
-    -- should be called whenever we want to poll for input
-    for _, event in ipairs(eventBuffer) do
-        if event.type == "press" then
+
+local function pollWhenListeners(scancode, dt)
+    if scancodeToLockingListener[scancode] then
+        return -- it's already locked
+    end
+    local arr = scancodeToWhenListeners[scancode]
+    -- should be sorted by prio
+    for _, whenListener in ipairs(arr) do
+        local consumed = whenListener.update(dt, scancode)
+        if consumed then
+            return
+        end
+    end
+end
+
+
+local function updateWhenListeners(dt)
+    for scancode, isDown in pairs(scancodeToIsDown) do
+        if isDown then
+            pollWhenListeners(scancode, dt)
+        end
+    end
+end
+
+
+
+
+
+local function updateKeyboardEvents(dt)
+    for _, event in ipairs(keyboardEventBuffer) do
+        if keyboardIsLocked then
+            return
+        end
+        if event.type == "keypress" then
             local listener = getScancodeLock(event.scancode)
             if listener then
                 -- The scancode is locked by a listener!
                 -- Thus, we inform the listener that another keypress has occured
                 listener.onPress(event.scancode, event.isrepeat)
             else
-                pollPressEvent(event)
+                pollKeyPressEvent(event)
             end
+        elseif event.type == "keyrelease" then
+            pollKeyReleaseEvent(event)
+        elseif event.type == "textinput" then
+            
         else
-            pollReleaseEvent(event)
+            error("unknown event type: " .. tostring(event.type))
         end
     end
-    eventBuffer:clear()
+end
+
+
+
+function input.update(dt)
+    -- should be called whenever we want to poll for input
+    updateKeyboardEvents(dt)
+
+    for _, mouseEvent in ipairs(mouseEventBuffer) do
+        if event.type == "mousepressed" then
+
+        elseif event.type == "mousereleased" then
+
+        else
+            assert(event.type == "wheelmoved", "wat?")
+
+        end
+    end
+
+    updateWhenListeners(dt)
+
+    keyboardEventBuffer:clear()
+    mouseEventBuffer:clear()
 
     input.unlockEverything()
 end
 
 
 function input.keypressed(key, scancode, isrepeat)
-    eventBuffer:add({
+    keyboardEventBuffer:add({
         key = key,
         scancode = scancode,
         type = "press",
@@ -314,13 +406,49 @@ end
 
 
 function input.keyreleased(key, scancode)
-    eventBuffer:add({
+    keyboardEventBuffer:add({
         key = key,
         scancode = scancode,
         type = "release"
     })
 end
 
+
+function input.wheelmoved(dx, dy)
+    mouseEventBuffer:add({
+        dx = dx,
+        dy = dy,
+        type = "wheelmoved"
+    })
+end
+
+function input.mousepressed(x, y, button, istouch, presses)
+    mouseEventBuffer:add({
+        x = x,
+        y = y,
+        button = button,
+        istouch = istouch,
+        presses = presses,
+        type = "mousepressed"
+    })
+end
+
+
+function input.mousereleased(x, y, button, istouch, presses)
+    mouseEventBuffer:add({
+        x = x,
+        y = y,
+        button = button,
+        istouch = istouch,
+        presses = presses,
+        type = "mousereleased"
+    })
+end
+
+
+function input.textinput()
+
+end
 
 
 

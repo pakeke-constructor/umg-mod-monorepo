@@ -42,8 +42,18 @@ base.title("I'm a title!", {
     x = 1/2, y = 1/2, scale=1, color = {1,1,1},   
 })
 
--- emits a shockwave at (x,y)
-base.shockwave(x, y, start_size, end_size, thickness, time, colour={1,1,1,1})
+-- emits a shockwave at (x,y) with properties
+base.shockwave({
+    x=x, 
+    y=y, 
+    -- optional values
+    startRadius = 10, 
+    endRadius = 200,
+    thickness = 4, 
+    duration = 0.4,
+    fadeRings = 3,
+    color={1,1,1,1}
+})
 
 base.shake(duration, dx, dy, freq) -- Shakes the screen
 

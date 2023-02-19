@@ -79,7 +79,7 @@ local function drawCanvas()
 end
 
 
-umg.on("postDraw", function()
+umg.on("postDrawWorld", function()
     setupCanvas()
     drawCanvas()
 end)

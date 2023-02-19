@@ -20,7 +20,7 @@ Create custom input listeners:
 
 ```lua
 
-input.whenDown({
+input.whenInputDown({
     input = input.UP,
     priority = 10, -- higher priority = called first
     update = function(scancode, dt)
@@ -29,7 +29,7 @@ input.whenDown({
     end
 })
 
-input.onAction({
+input.onKeyboardAction({
     priority = 5,
     onPress = function(scancode, isrepeat)
         if isTyping then
@@ -42,6 +42,20 @@ input.onAction({
     onRelease = function(scancode)
     end
 })
+
+
+
+input.onMouseAction({
+    priority = 2,
+    onPress = function(button, x, y, isTouch, presses)
+        return true -- lock
+    end,
+    onWheelMoved = function(dx, dy)
+        return true -- lock
+    end,
+    onRelease
+})
+
 
 
 input.lockKeyboard()
@@ -75,6 +89,48 @@ keypress!
 - Search through Actions; if any actions apply, lock that keypress.
 - Push keypress event to the "isOn" array.
 
+
+
+
+
+
+
+
+
+
+
+
+
+# Another solution:
+```lua
+
+input.listen({
+    priority = X,
+
+
+    keypressed = function(...)
+        input.lockKeyboard()
+    end,
+
+    textinput = function(...)
+        if isTyping then
+            input.lockKeyboard()
+        end
+    end,
+
+    mousepressed = function(...)
+        if isHover then
+            input.lockMouseButtons()
+        end
+    end,
+
+    update = function(dt)
+        if input.isDown(input.UP) then
+            moveUp()
+        end
+        input.lockKeyboard()
+    end
+})
 
 
 
