@@ -143,6 +143,8 @@ client.on("lockMovement", function(player, x, y, z, vx, vz, vy, ack_number)
     player.x = x
     player.y = y
     player.z = z
+    -- TODO: We are ignoring the velocity values here...
+    -- Is this correct?
     client.send("lockMovementAck", player, ack_number)
 end)
 

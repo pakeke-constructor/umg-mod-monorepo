@@ -69,7 +69,8 @@ function ShockWave:draw()
         local fade = i/self.fadeRings
         setColour(self.color[1], self.color[2], self.color[3], self.color[4]*fade)
         setLineWidth(lineThickness)
-        love.graphics.circle("line", self.x, self.y, self.rad - (self.fadeRings-i)*dSign*lineThickness)
+        local rad = math.max(0, self.rad - (self.fadeRings-i)*dSign*lineThickness)
+        love.graphics.circle("line", self.x, self.y, rad)
     end
 end
 
