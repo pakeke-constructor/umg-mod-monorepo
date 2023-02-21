@@ -101,6 +101,24 @@ local input = setmetatable({}, {
 
 
 
+local lockChecks = {}
+function lockChecks.keypressed(key, scancode, isrepeat)
+    return keyboardIsLocked or lockedScancodes[scancode]
+end
+function lockChecks.keyreleased()
+    return keyboardIsLocked
+end
+function lockChecks.mousepressed(x, y, button, istouch, presses)
+    return mouseButtonsAreLocked or lockedMouseButtons[button]
+end
+function lockChecks.textinput()
+    return keyboardIsLocked
+end
+function lockChecks.wheelmoved()
+    return mouseWheelIsLocked
+end
+
+
 
 
 
@@ -176,6 +194,10 @@ end
 function Listener:isControlDown(inputEnum)
     assert(isValidInputEnum(inputEnum), "Invalid input enum: " .. inputEnum)
     local scancode = self:getKey(inputEnum)
+    return self:isKeyDown(scancode)
+end
+
+function Listener:isKeyDown(scancode)
     if self:isKeyLocked(scancode) then
         return false
     end
@@ -186,21 +208,33 @@ function Listener:isControlDown(inputEnum)
 end
 
 
-function Listener:lockKeyboard()
+--[[
+    blocks keyboard events for the rest of the frame
+]]
+function Listener:haltKeyboardEvents()
     keyboardIsLocked = true
 end
 
-function Listener:lockMouseButtons()
+--[[
+    blocks mouse button events for the rest of the frame
+]]
+function Listener:haltMouseButtonEvents()
     mouseButtonsAreLocked = true
 end
 
-function Listener:lockMouseWheel()
+--[[
+    blocks mouse wheel events for the rest of the frame
+]]
+function Listener:haltMouseWheelEvents()
     mouseWheelIsLocked = true
 end
 
-function Listener:lockMouse()
-    input.lockMouseButtons()
-    input.lockMouseWheel()
+--[[
+    blocks all mouse events for the rest of the frame
+]]
+function Listener:haltMouseEvents()
+    self:lockMouseButtons()
+    self:lockMouseWheel()
 end
 
 
@@ -242,6 +276,13 @@ function input.unlockEverything()
     keyboardIsLocked = false
     mouseButtonsAreLocked = false
     mouseWheelIsLocked = false
+
+    for sc,_ in pairs(lockedScancodes) do
+        lockedScancodes[sc] = nil
+    end
+    for button,_ in pairs(lockedMouseButtons) do
+        lockedMouseButtons[button] = nil
+    end
 end
 
 
@@ -265,23 +306,6 @@ local eventBuffer = Array()
 
 
 
-
-local lockChecks = {}
-function lockChecks.keypressed(key, scancode, isrepeat)
-    return keyboardIsLocked and (not lockedScancodes[scancode])
-end
-function lockChecks.keyreleased()
-    return keyboardIsLocked
-end
-function lockChecks.mousepressed(x, y, button, istouch, presses)
-    return mouseButtonsAreLocked and (not lockedMouseButtons[button])
-end
-function lockChecks.textinput()
-    return keyboardIsLocked
-end
-function lockChecks.wheelmoved()
-    return mouseWheelIsLocked
-end
 
 
 
