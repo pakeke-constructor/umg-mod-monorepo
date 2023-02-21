@@ -111,11 +111,14 @@ end
 function lockChecks.mousepressed(x, y, button, istouch, presses)
     return mouseButtonsAreLocked or lockedMouseButtons[button]
 end
-function lockChecks.textinput()
-    return keyboardIsLocked
+function lockChecks.textinput(txt)
+    return keyboardIsLocked or lockedScancodes[txt]
 end
 function lockChecks.wheelmoved()
     return mouseWheelIsLocked
+end
+function lockChecks.mousereleased()
+    return mouseButtonsAreLocked
 end
 
 
@@ -211,28 +214,28 @@ end
 --[[
     blocks keyboard events for the rest of the frame
 ]]
-function Listener:haltKeyboardEvents()
+function Listener:lockKeyboard()
     keyboardIsLocked = true
 end
 
 --[[
     blocks mouse button events for the rest of the frame
 ]]
-function Listener:haltMouseButtonEvents()
+function Listener:lockMouseButtons()
     mouseButtonsAreLocked = true
 end
 
 --[[
     blocks mouse wheel events for the rest of the frame
 ]]
-function Listener:haltMouseWheelEvents()
+function Listener:lockMouseWheel()
     mouseWheelIsLocked = true
 end
 
 --[[
     blocks all mouse events for the rest of the frame
 ]]
-function Listener:haltMouseEvents()
+function Listener:lockMouse()
     self:lockMouseButtons()
     self:lockMouseWheel()
 end
@@ -387,6 +390,7 @@ function input.mousereleased(x, y, button, istouch, presses)
         args = {x, y, button, istouch, presses},
         type = "mousereleased"
     })
+    lockedMouseButtons[button] = false
 end
 
 

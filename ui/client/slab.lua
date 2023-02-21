@@ -10,7 +10,7 @@ Slab.GetStyle().API.PushFont(font)
 
 
 
-umg.on("quit", function()
+umg.on("@quit", function()
 	Slab.OnQuit()
 end)
 
@@ -42,6 +42,25 @@ end)
 umg.on("@mousereleased", function( x, y, button, istouch, presses)
 	Slab.OnMouseReleased( x, y, button, istouch, presses)
 end)
+
+
+
+
+local slabListener = input.Listener({priority = 20})
+
+function slabListener:update(dt)
+    Slab.Update(dt)
+    Slab.SetScale(base.getUIScale() * SLAB_SCALE_RATIO)
+    Slab.DisableDocks(docks)
+
+    umg.call("slabUpdate", self)
+
+    if not Slab.IsVoidHovered() then
+        self:lockMouseButtons()
+        self:lockMouseWheel()
+    end
+end
+
 
 
 

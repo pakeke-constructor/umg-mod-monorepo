@@ -136,13 +136,6 @@ end)
 love.keyboard.setKeyRepeat(true)
 
 
-umg.on("textinput", function(t)
-    if isTyping then
-        currMessage = currMessage .. t
-    end
-end)
-
-
 local function parseCommandArg(arg)
     if arg:lower() == "true" then
         return true
@@ -167,11 +160,23 @@ local function doCommand(message)
 end
 
 
-umg.on("@keypressed", function(k)
+
+local listener = base.input.Listener({priority = 5})
+
+
+
+function listener:textinput(t)
+    if isTyping then
+        currMessage = currMessage .. t
+    end
+end
+
+
+function listener:keypressed(_, scancode, _)
     --[[
         TODO: Set keyboard blocking here!!!!
     ]]
-    if k=="backspace" then
+    if scancode == "backspace" then
         -- get the byte offset to the last UTF-8 character in the string.
         local byteoffset = utf8.offset(currMessage, -1)
         if byteoffset then
@@ -179,7 +184,7 @@ umg.on("@keypressed", function(k)
             -- string.sub operates on bytes rather than UTF-8 characters, so we couldn't do string.sub(text, 1, -2).
             currMessage = string.sub(currMessage, 1, byteoffset - 1)
         end
-    elseif k == "return" then
+    elseif scancode == "return" then
         if isTyping then
             if #currMessage>0 then
                 local startChar = currMessage:sub(1,1)
@@ -192,8 +197,17 @@ umg.on("@keypressed", function(k)
             end
         end
         isTyping = not isTyping
-    elseif k == "escape" then
+    elseif scancode == "escape" then
         isTyping = false
     end
-end)
+end
+
+
+function listener:update()
+    if isTyping then
+        self:lockKeyboard()
+    end
+end
+
+
 

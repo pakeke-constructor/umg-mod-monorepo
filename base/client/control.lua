@@ -7,25 +7,41 @@ Handles player control
 ]]
 
 local input = require("client.input")
+local State = require("shared.state")
 
 
 local controllableGroup = umg.group("controllable", "controller", "x", "y")
 
 
-local function pollControllableGroup(func_key, a,b,c)
+
+local listener = input.Listener({priority = -1})
+
+
+
+local function pollControllableGroup(func_key,a,b,c)
     for _, ent in ipairs(controllableGroup) do
         if ent.controller == client.getUsername() then
             -- if this ent is being controlled by the player:
             if ent.controllable[func_key] then
                 -- and if the callback exists:
-                ent.controllable[func_key](ent, a,b,c)
+                ent.controllable[func_key](ent, a,b,c)        
             end
         end
     end
 end
 
 
-umg.on("inputPressed", function(inputEnum)
+
+
+
+
+function listener:keypressed(key, scancode, isrepeat)
+    if State.getState() ~= "game" then
+        return
+    end
+
+    local inputEnum = self:getInputEnum(scancode)
+
     if inputEnum == input.BUTTON_LEFT then
         pollControllableGroup("onLeftButton")
     elseif inputEnum == input.BUTTON_RIGHT then
@@ -41,16 +57,25 @@ umg.on("inputPressed", function(inputEnum)
     elseif inputEnum == input.BUTTON_4 then
         pollControllableGroup("onButton4")
     end
-end)
+end
 
 
 
-umg.on("gameMousepressed", function(butto, x, y)
-    -- TODO: This aint working!!! Maybe it's mousedown??? idk 
-    if butto == 1 then
-        pollControllableGroup(nil, "onClick", x, y)
+function listener:mousepressed(button, x, y)
+    if State.getState() ~= "game" then
+        return
     end
-end)
+
+    -- TODO: This aint working!!! Maybe it's mousedown??? idk 
+    if button == 1 then
+        pollControllableGroup("onClick", x, y)
+    end
+
+    listener:lockMouseButtons()
+end
+
+
+
 
 
 local DEFAULT_SPEED = 200
@@ -60,21 +85,22 @@ local SPEED_AGILITY_SCALE = 12
 
 local max, min = math.max, math.min
 
+
 local function updateEnt(ent, dt)
     local speed = ent.speed or DEFAULT_SPEED
     local agility = ent.agility or (speed * SPEED_AGILITY_SCALE)
     local delta = agility * dt
 
-    if input.isDown(input.UP) then
+    if listener:isControlDown(input.UP) then
         ent.vy = max(-speed, ent.vy - delta)
     end
-    if input.isDown(input.DOWN) then
+    if listener:isControlDown(input.DOWN) then
         ent.vy = min(speed, ent.vy + delta)
     end
-    if input.isDown(input.LEFT) then
+    if listener:isControlDown(input.LEFT) then
         ent.vx = max(-speed, ent.vx - delta)
     end
-    if input.isDown(input.RIGHT) then
+    if listener:isControlDown(input.RIGHT) then
         ent.vx = min(speed, ent.vx + delta)
     end
 end
@@ -95,7 +121,10 @@ local function follow_avg(sum_x, sum_y, len)
 end
 
 
-umg.on("gameUpdate", function(dt)
+
+
+
+function listener:update(dt)
     local sum_x = 0
     local sum_y = 0
     local len = 0
@@ -112,11 +141,11 @@ umg.on("gameUpdate", function(dt)
             end
         end
     end
-
+    
     if has_follow then
         follow_avg(sum_x, sum_y, len)
     end
-end)
+end
 
 
 
@@ -127,6 +156,10 @@ end)
       if it thinks we are cheating!!!)
 ]]
 umg.on("@tick", function(dt)
+    if State.getState() ~= "game" then
+        return
+    end
+
     for i, ent in ipairs(controllableGroup) do
         if ent.controller == client.getUsername() then
             client.send("setPlayerPosition", ent, ent.x, ent.y, ent.z)
