@@ -8,6 +8,7 @@ TODO: Allow for even more custom stuff, like joysticks
 ]]
 
 local Array = require("shared.array")
+local Class = require("shared.class")
 
 
 
@@ -51,6 +52,8 @@ local function invert(mapping)
 end
 
 
+
+
 local inputMapping = DEFAULT_INPUT_MAPPING 
 -- { [inputEnum] -> scancode }
 local scancodeMapping = invert(inputMapping)
@@ -60,33 +63,26 @@ local inputEnums = {}
 -- i.e.  base.input.BUTTON_1
 
 
-local scancodeToIsDown = {}
--- { [scancode]  ->  true/false }  whether scancode is down or not
-local scancodeToLockingListener = {}
--- { [scancode]  ->  Listener  }  the Listener that is currently locking this scancode (if any)
 
-
-local scancodeToWhenListeners = {--[[
-    [scancode] -> sorted WhenListener list
+local lockedScancodes = {--[[
+    keeps track of the scancodes that are currently locked by a listener
+    [scancode] --> listener
 ]]}
-local scancodeToActionListeners = {--[[
-    [scancode] -> sorted ActionListener list
-]]}
-local globalActionListeners = {}
 
-
-
-
-local mouseButtonToActionListener = {--[[
-    [mouseButton] -> sorted ActionListenerList
+local lockedMouseButtons = {--[[
+    keeps track of what mouse buttons are locked by what listener
+    [mouseButton] -> listener
 ]]}
 
 
+
+
+local sortedListeners = {}
 
 
 local keyboardIsLocked = false
 
-local mouseIsLocked = false
+local mouseButtonsAreLocked = false
 
 local mouseWheelIsLocked = false
 
@@ -102,6 +98,117 @@ local input = setmetatable({}, {
         end
     end
 })
+
+
+
+
+
+
+
+local Listener = Class("base:Listener")
+input.Listener = Listener
+
+local DEFAULT_LISTENER_PRIORITY = 0
+
+
+
+local function sortPrioKey(obj1, obj2)
+    -- sorts backwards; i.e. higher priority
+    -- comes first in the list 
+    
+    -- default priority is 0
+    return (obj1.priority or 0) > (obj2.priority or 0)
+end
+
+
+
+function Listener:init(options)
+    for k,v in pairs(options)do
+        self[k] = v
+    end
+    
+    self.priority = self.priority or DEFAULT_LISTENER_PRIORITY
+    table.insert(sortedListeners, self)
+    table.sort(sortedListeners, sortPrioKey)
+end
+
+
+function Listener:lockKey(scancode)
+    if lockedScancodes[scancode] and lockedScancodes[scancode] ~= self then
+        error("scancode was already locked")
+    end
+    lockedScancodes[scancode] = self
+end
+
+
+function Listener:lockMouseButton(mousebutton)
+    if lockedMouseButtons[mousebutton] and lockedMouseButtons[mousebutton] ~= self then
+        error("scancode was already locked")
+    end
+    lockedMouseButtons[mousebutton] = self
+end
+
+
+
+function Listener:getKey(inputEnum)
+    return inputMapping[inputEnum]
+end
+
+function Listener:getInputEnum(scancode)
+    return scancodeMapping[scancode]
+end
+
+
+function Listener:isKeyLocked(scancode)
+    return lockedScancodes[scancode] ~= self
+end
+
+function Listener:isMouseButtonLocked(mousebutton)
+    return lockedMouseButtons[mousebutton] ~= self
+end
+
+
+local function isValidInputEnum(value)
+    return value and inputMapping[value]  
+end
+
+
+function Listener:isControlDown(inputEnum)
+    assert(isValidInputEnum(inputEnum), "Invalid input enum: " .. inputEnum)
+    local scancode = self:getKey(inputEnum)
+    if self:isKeyLocked(scancode) then
+        return false
+    end
+    if keyboardIsLocked then
+        return false
+    end
+    return love.keyboard.isScancodeDown(scancode)
+end
+
+
+function Listener:lockKeyboard()
+    keyboardIsLocked = true
+end
+
+function Listener:lockMouseButtons()
+    mouseButtonsAreLocked = true
+end
+
+function Listener:lockMouseWheel()
+    mouseWheelIsLocked = true
+end
+
+function Listener:lockMouse()
+    input.lockMouseButtons()
+    input.lockMouseWheel()
+end
+
+
+
+
+
+
+
 
 
 local inputList
@@ -131,30 +238,11 @@ end
 
 
 
-
 function input.unlockEverything()
     keyboardIsLocked = false
-    mouseIsLocked = false
+    mouseButtonsAreLocked = false
     mouseWheelIsLocked = false
 end
-
-function input.lockKeyboard()
-    keyboardIsLocked = true
-end
-
-function input.lockMouseButtons()
-    mouseIsLocked = true
-end
-
-function input.lockMouseWheel()
-    mouseWheelIsLocked = true
-end
-
-function input.lockMouse()
-    input.lockMouseButtons()
-    input.lockMouseWheel()
-end
-
 
 
 
@@ -169,285 +257,120 @@ input.setControls(DEFAULT_INPUT_MAPPING)
 
 
 
-local function sortPrioKey(obj1, obj2)
-    -- sorts backwards; i.e. higher priority
-    -- comes first in the list 
-    
-    -- default priority is 0
-    return (obj1.priority or 0) > (obj2.priority or 0)
+
+
+
+
+local eventBuffer = Array()
+
+
+
+
+local lockChecks = {}
+function lockChecks.keypressed(key, scancode, isrepeat)
+    return keyboardIsLocked and (not lockedScancodes[scancode])
+end
+function lockChecks.keyreleased()
+    return keyboardIsLocked
+end
+function lockChecks.mousepressed(x, y, button, istouch, presses)
+    return mouseButtonsAreLocked and (not lockedMouseButtons[button])
+end
+function lockChecks.textinput()
+    return keyboardIsLocked
+end
+function lockChecks.wheelmoved()
+    return mouseWheelIsLocked
 end
 
 
 
 
-local function isValidInputValue(value)
-    return value and inputMapping[value]  
-end
-
-
-
-
-function input.whenInputDown(listener)
+local function pollListeners(event)
     --[[
-        An when listener is just a lua table:
-
-        listener = {
-            input = input.UP,
-            priority = 10, -- higher priority = called first
-            update = function(scancode, dt)
-                ... -- do something
-                input.lockKey(scancode)
-            end
-        }
+        todo; could be made more efficient by keeping listeners
+        hashed by event, but prolly doesnt matter at all
     ]]
-    assert(isValidInputValue(listener.input) or listener.scancode, "need valid input")
-    assert(type(listener.update) == "function", "need update function")
-    
-    local scancode = listener.scancode or scancodeMapping[listener.input]
-    scancodeToWhenListeners[scancode] = scancodeToWhenListeners[scancode] or {}
-
-    table.insert(scancodeToWhenListeners[scancode], listener)
-    table.sort(scancodeToWhenListeners[scancode], sortPrioKey)
-end
-
-
-
-function input.onKeyboardAction(listener)
-    --[[
-        An action listener is just a lua table:
-
-        listener = {
-            priority = 5,
-            onPress = function(scancode, isrepeat)
-                if isTyping then
-                    textBuffer = textBuffer .. scancode
-                    return true -- lock
-                else
-                    return false -- no lock
-                end
-            end,
-            onRelease = function(scancode)
-            end
-        }
-    ]]
-    assert(isValidInputValue(listener.input) or listener.scancode, "need valid input")
-    assert(type(listener.onPress) == "function", "need onPress function")
-    assert(type(listener.onRelease) == "function", "need onRelease function")
-    
-    local scancode = listener.scancode or scancodeMapping[listener.input]
-    local arr
-    if scancode then
-        scancodeToActionListeners[scancode] = scancodeToActionListeners[scancode] or {}
-        arr = scancodeToActionListeners[scancode]
-    else
-        arr = globalActionListeners
-    end
-
-    table.insert(arr, listener)
-    table.sort(arr, sortPrioKey)
-end
-
-
-
-local function getScancodeLock(scancode)
-    return scancodeToLockingListener[scancode]
-end
-
-
-
---[[
-    keypress and keyreleased events are buffered here
-]]
-local keyboardEventBuffer = Array()
-
-
---[[
-    mouse events are buffered here (buttons and scroll wheel)
-]]
-local mouseEventBuffer = Array()
-
-
-
-
-
-local EMPTY = {}
-
-
-local function pollKeyPressEvent(event)
-    local scancode = event.scancode
-    local actionListeners = scancodeToActionListeners[scancode] or EMPTY
-
-    -- polling action Listeners
-    local global_i = 1
-    local loc_i = 1
-    local consumed = false
-    while not consumed and (globalActionListeners[global_i] or actionListeners[loc_i]) do
-        local globalAction = globalActionListeners[global_i]
-        local localAction = actionListeners[loc_i]
-        local action
-
-        local globalPrio = globalAction and globalAction.priority or -math.huge
-        local localPrio = localAction and localAction.priority or -math.huge
-
-        if localPrio >= globalPrio then
-            -- take local action listener
-            action = localAction
-            loc_i = loc_i + 1
-        else
-            -- take global action listener
-            action = globalAction
-            global_i = global_i + 1
-        end
-        consumed = action.onPress(scancode, event.isrepeat)
-        if consumed then
-            scancodeToLockingListener[scancode] = true
+    for _, listener in ipairs(sortedListeners) do
+        local isLocked = lockChecks[event.type](unpack(event.args))
+        if isLocked then
             return
         end
-    end
-
-    scancodeToIsDown[scancode] = true
-end
-
-
-local function pollKeyReleaseEvent(event)
-    local scancode = event.scancode
-    scancodeToLockingListener[scancode] = nil
-    scancodeToIsDown[scancode] = false
-end
-
-
-
-
-local function pollWhenListeners(scancode, dt)
-    if scancodeToLockingListener[scancode] then
-        return -- it's already locked
-    end
-    local arr = scancodeToWhenListeners[scancode]
-    -- should be sorted by prio
-    for _, whenListener in ipairs(arr) do
-        local consumed = whenListener.update(dt, scancode)
-        if consumed then
-            return
+        
+        if listener[event.type] then
+            local func = listener[event.type]
+            assert(type(func) == "function", "listeners must be functions")
+            func(unpack(event.args))
         end
     end
 end
-
-
-local function updateWhenListeners(dt)
-    for scancode, isDown in pairs(scancodeToIsDown) do
-        if isDown then
-            pollWhenListeners(scancode, dt)
-        end
-    end
-end
-
-
-
-
-
-local function updateKeyboardEvents(dt)
-    for _, event in ipairs(keyboardEventBuffer) do
-        if keyboardIsLocked then
-            return
-        end
-        if event.type == "keypress" then
-            local listener = getScancodeLock(event.scancode)
-            if listener then
-                -- The scancode is locked by a listener!
-                -- Thus, we inform the listener that another keypress has occured
-                listener.onPress(event.scancode, event.isrepeat)
-            else
-                pollKeyPressEvent(event)
-            end
-        elseif event.type == "keyrelease" then
-            pollKeyReleaseEvent(event)
-        elseif event.type == "textinput" then
-            
-        else
-            error("unknown event type: " .. tostring(event.type))
-        end
-    end
-end
-
-
 
 function input.update(dt)
     -- should be called whenever we want to poll for input
-    updateKeyboardEvents(dt)
-
-    for _, mouseEvent in ipairs(mouseEventBuffer) do
-        if event.type == "mousepressed" then
-
-        elseif event.type == "mousereleased" then
-
-        else
-            assert(event.type == "wheelmoved", "wat?")
-
+    for _, event in ipairs(eventBuffer) do
+        local isLocked = lockChecks[event.type]()
+        if not isLocked then
+            pollListeners(event)
         end
     end
 
-    updateWhenListeners(dt)
+    for _, listener in ipairs(sortedListeners)do
+        if listener.update then
+            listener.update(dt)
+        end
+    end
 
-    keyboardEventBuffer:clear()
-    mouseEventBuffer:clear()
-
+    eventBuffer:clear()
     input.unlockEverything()
 end
 
 
+
 function input.keypressed(key, scancode, isrepeat)
-    keyboardEventBuffer:add({
-        key = key,
-        scancode = scancode,
-        type = "press",
-        isrepeat = isrepeat
+    eventBuffer:add({
+        args = {key, scancode, isrepeat},
+        type = "keypressed"
     })
 end
 
 
 function input.keyreleased(key, scancode)
-    keyboardEventBuffer:add({
-        key = key,
-        scancode = scancode,
-        type = "release"
+    eventBuffer:add({
+        args = {key, scancode},
+        type = "keyreleased"
     })
+    lockedScancodes[scancode] = nil
 end
 
 
 function input.wheelmoved(dx, dy)
-    mouseEventBuffer:add({
-        dx = dx,
-        dy = dy,
+    eventBuffer:add({
+        args = {dx, dy},
         type = "wheelmoved"
     })
 end
 
 function input.mousepressed(x, y, button, istouch, presses)
-    mouseEventBuffer:add({
-        x = x,
-        y = y,
-        button = button,
-        istouch = istouch,
-        presses = presses,
+    eventBuffer:add({
+        args = {x, y, button, istouch, presses},
         type = "mousepressed"
     })
 end
 
 
 function input.mousereleased(x, y, button, istouch, presses)
-    mouseEventBuffer:add({
-        x = x,
-        y = y,
-        button = button,
-        istouch = istouch,
-        presses = presses,
+    eventBuffer:add({
+        args = {x, y, button, istouch, presses},
         type = "mousereleased"
     })
 end
 
 
-function input.textinput()
-
+function input.textinput(txt)
+    eventBuffer:add({
+        args = {txt},
+        type = "textinput"
+    })
 end
 
 
