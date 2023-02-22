@@ -81,7 +81,9 @@ umg.on("@mousepressed", function(x, y, button, istouch, presses)
             items.useHoldItem(p)
         end
         local wx,wy = base.camera:toWorldCoords(x,y)
-        base.shockwave(wx,wy,1,30,7,0.35)
+        base.shockwave({
+            x = wx, y = wy, startRadius = 1, endRadius = 30, thickness = 7, duration = 0.35
+        })
     end
 end)
 

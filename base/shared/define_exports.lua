@@ -67,6 +67,7 @@ local function mergeExportDefinition(sideOnlyExports, module, module_name, seen)
     sideOnlyExports[module_name] = sideOnlyExports[module_name] or {}
     for key, value in pairs(module) do
         if not seen[value] then
+            seen[value] = true
             if type(value) == "table" then
                 -- we merge nested
                 mergeExportDefinition(sideOnlyExports[module_name], value, key, seen)
@@ -74,7 +75,6 @@ local function mergeExportDefinition(sideOnlyExports, module, module_name, seen)
                 -- usually, `value` will be a function; but we can't guarantee it.
                 table.insert(sideOnlyExports[module_name], key)
             end
-            seen[value] = true
         end
     end
 end

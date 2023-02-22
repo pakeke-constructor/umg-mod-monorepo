@@ -16,7 +16,11 @@ local Class = require("shared.class")
 local typecheck = require("shared.typecheck")
 
 
-local state = {}
+
+
+
+local State = Class("base:State")
+
 
 
 
@@ -25,10 +29,6 @@ local stateTable = {}
 local currentStateName = nil
 
 
-
-function state.getState()
-    return currentStateName
-end
 
 
 local assertStringArg = typecheck.assert("string")
@@ -51,7 +51,7 @@ end
 
 if server then
 
-function state.setState(name)
+function State.setState(name)
     if (not name) or (not stateTable[name]) then
         error("Invalid state: " .. tostring(name))
     end
@@ -102,11 +102,6 @@ local function tryDefineNewListener(event_name)
         end
     end)
 end
-
-
-
-
-local State = Class("base:State")
 
 
 

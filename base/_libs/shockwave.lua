@@ -42,7 +42,7 @@ end
 function ShockWave:update(dt)
     self.radius = self.radius + (self.dr * dt)
     local opacity = 1-(self.radius-self.startRadius)/(self.endRadius-self.startRadius)
-    self.colour[4] = opacity
+    self.color[4] = opacity
     if self.dr < 0 then
         -- then the radius is running backwards
         if self.radius < self.endRadius then
@@ -69,7 +69,7 @@ function ShockWave:draw()
         local fade = i/self.fadeRings
         setColour(self.color[1], self.color[2], self.color[3], self.color[4]*fade)
         setLineWidth(lineThickness)
-        local rad = math.max(0, self.rad - (self.fadeRings-i)*dSign*lineThickness)
+        local rad = math.max(0, self.radius - (self.fadeRings-i)*dSign*lineThickness)
         love.graphics.circle("line", self.x, self.y, rad)
     end
 end

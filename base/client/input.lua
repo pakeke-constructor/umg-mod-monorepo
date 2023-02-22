@@ -82,9 +82,10 @@ local sortedListeners = {}
 
 local keyboardIsLocked = false
 
-local mouseButtonsAreLocked = false
 
+local mouseButtonsAreLocked = false
 local mouseWheelIsLocked = false
+local mouseMovementIsLocked = false
 
 
 
@@ -119,6 +120,9 @@ function lockChecks.wheelmoved()
 end
 function lockChecks.mousereleased()
     return mouseButtonsAreLocked
+end
+function lockChecks.mousemoved()
+    return mouseMovementIsLocked
 end
 
 
@@ -233,11 +237,20 @@ function Listener:lockMouseWheel()
 end
 
 --[[
+    blocks mouse movement events for the rest of the frame
+]]
+function Listener:lockMouseMovement()
+    mouseMovementIsLocked = true
+end
+
+
+--[[
     blocks all mouse events for the rest of the frame
 ]]
 function Listener:lockMouse()
     self:lockMouseButtons()
     self:lockMouseWheel()
+    self:lockMouseMovement()
 end
 
 
@@ -279,13 +292,7 @@ function input.unlockEverything()
     keyboardIsLocked = false
     mouseButtonsAreLocked = false
     mouseWheelIsLocked = false
-
-    for sc,_ in pairs(lockedScancodes) do
-        lockedScancodes[sc] = nil
-    end
-    for button,_ in pairs(lockedMouseButtons) do
-        lockedMouseButtons[button] = nil
-    end
+    mouseMovementIsLocked = false
 end
 
 
@@ -377,13 +384,19 @@ function input.wheelmoved(dx, dy)
     })
 end
 
+function input:mousemoved(x, y, dx, dy, istouch)
+    eventBuffer:add({
+        args = {x, y, dx, dy, istouch},
+        type = "mousemoved"
+    })
+end
+
 function input.mousepressed(x, y, button, istouch, presses)
     eventBuffer:add({
         args = {x, y, button, istouch, presses},
         type = "mousepressed"
     })
 end
-
 
 function input.mousereleased(x, y, button, istouch, presses)
     eventBuffer:add({
