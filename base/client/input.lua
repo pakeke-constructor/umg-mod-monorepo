@@ -185,7 +185,7 @@ end
 
 
 function Listener:isKeyLocked(scancode)
-    return lockedScancodes[scancode] ~= self
+    return lockedScancodes[scancode] and (lockedScancodes[scancode] ~= self)
 end
 
 function Listener:isMouseButtonLocked(mousebutton)
@@ -320,6 +320,20 @@ local eventBuffer = Array()
 
 
 
+local function pollEvents(listener)
+    for _, event in ipairs(eventBuffer) do
+        local isLocked = lockChecks[event.type](unpack(event.args))
+        if not isLocked then
+            local func = listener[event.type]
+            assert(type(func) == "function", "listeners must be functions")
+            func(listener, unpack(event.args))
+            -- ensure to pass self as first arg 
+        end
+    end
+end
+
+
+
 local function pollListeners(event)
     --[[
         todo; could be made more efficient by keeping listeners
@@ -330,16 +344,11 @@ local function pollListeners(event)
         if isLocked then
             return
         end
-        
-        if listener[event.type] then
-            local func = listener[event.type]
-            assert(type(func) == "function", "listeners must be functions")
-            func(unpack(event.args))
-        end
     end
 end
 
 function input.update(dt)
+    -- This must be called manually.
     -- should be called whenever we want to poll for input
     for _, event in ipairs(eventBuffer) do
         local isLocked = lockChecks[event.type]()
@@ -350,7 +359,7 @@ function input.update(dt)
 
     for _, listener in ipairs(sortedListeners)do
         if listener.update then
-            listener.update(dt)
+            listener:update(dt)
         end
     end
 
@@ -360,59 +369,58 @@ end
 
 
 
-function input.keypressed(key, scancode, isrepeat)
+umg.on("@keypressed", function(key, scancode, isrepeat)
     eventBuffer:add({
         args = {key, scancode, isrepeat},
         type = "keypressed"
     })
-end
+end)
 
 
-function input.keyreleased(key, scancode)
+umg.on("@keyreleased", function(key, scancode)
     eventBuffer:add({
         args = {key, scancode},
         type = "keyreleased"
     })
     lockedScancodes[scancode] = nil
-end
+end)
 
 
-function input.wheelmoved(dx, dy)
+umg.on("@wheelmoved", function(dx, dy)
     eventBuffer:add({
         args = {dx, dy},
         type = "wheelmoved"
     })
-end
+end)
 
-function input:mousemoved(x, y, dx, dy, istouch)
+umg.on("mousemoved", function (x, y, dx, dy, istouch)
     eventBuffer:add({
         args = {x, y, dx, dy, istouch},
         type = "mousemoved"
     })
-end
+end)
 
-function input.mousepressed(x, y, button, istouch, presses)
+umg.on("@mousepressed", function (x, y, button, istouch, presses)
     eventBuffer:add({
         args = {x, y, button, istouch, presses},
         type = "mousepressed"
     })
-end
+end)
 
-function input.mousereleased(x, y, button, istouch, presses)
+umg.on("@mousereleased", function(x, y, button, istouch, presses)
     eventBuffer:add({
         args = {x, y, button, istouch, presses},
         type = "mousereleased"
     })
     lockedMouseButtons[button] = false
-end
+end)
 
-
-function input.textinput(txt)
+umg.on("@textinput", function(txt)
     eventBuffer:add({
         args = {txt},
         type = "textinput"
     })
-end
+end)
 
 
 

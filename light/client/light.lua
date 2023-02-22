@@ -34,7 +34,7 @@ local canvas = love.graphics.newCanvas(
 
 
 
-umg.on("resize", function(w,h)
+umg.on("@resize", function(w,h)
     canvas = love.graphics.newCanvas(
         love.graphics.getWidth() + LEIGH,
         love.graphics.getHeight() + LEIGH

@@ -33,8 +33,10 @@ end
 
 
 
+local listener = base.input.Listener({priority = 0})
 
-umg.on("gameWheelmoved", function(_, dy)
+
+function listener:wheelmoved(dx,dy)
     local speed = zoom_speed or DEFAULT_ZOOM_SPEED
     if dy > 0 then
         base.camera.scale = base.camera.scale * (1+(1/speed))
@@ -44,7 +46,9 @@ umg.on("gameWheelmoved", function(_, dy)
 
     -- now clamp:
     base.camera.scale = math.min(math.max(base.camera.scale, MIN_ZOOM), MAX_ZOOM)
-end)
+
+    self:lockMouseWheel()
+end
 
 
 
@@ -90,7 +94,9 @@ local IS_PAN_MODE = false
 local controllableGroup = umg.group("controllable", "controller", "x", "y")
 
 
-umg.on("inputPressed", function(inputEnum)
+
+function listener:keypressed(key, scancode, isrepeat)
+    local inputEnum = self:getInputEnum(scancode)
     if inputEnum == base.input.BUTTON_SHIFT then
         -- unlock camera
         IS_PAN_MODE = true
@@ -106,12 +112,15 @@ umg.on("inputPressed", function(inputEnum)
             --  because .follow is only used on clientside.)
             ent.follow = false
         end
+
+        self:lockKey(scancode)
     end
-end)
+end
 
 
 
-umg.on("inputReleased", function(inputEnum)
+function listener:keypressed(key, scancode, isrepeat)
+    local inputEnum = self:getInputEnum(scancode)
     if inputEnum == base.input.BUTTON_SHIFT then
         -- lock camera.
         IS_PAN_MODE = false
@@ -123,10 +132,10 @@ umg.on("inputReleased", function(inputEnum)
             ent.follow = true
         end
     end
-end)
+end
 
 
-umg.on("gameUpdate", function(dt)
+function listener:update(dt)
     if IS_PAN_MODE then
         base.camera.x = last_camx
         base.camera.y = last_camy
@@ -135,13 +144,13 @@ umg.on("gameUpdate", function(dt)
 
     last_camx = base.camera.x
     last_camy = base.camera.y
-end)
+end
 
 
 
 local MIDDLE_MOUSE_BUTTON = 3
 
-umg.on("gameMousemoved", function(x,y, dx,dy)
+function listener:mousemoved(x,y,dx,dy)
     if love.mouse.isDown(MIDDLE_MOUSE_BUTTON) then
         local c = base.camera
         local wx1, wy1 = c:toWorldCoords(x-dx,y-dy)
@@ -149,8 +158,10 @@ umg.on("gameMousemoved", function(x,y, dx,dy)
         local wdx, wdy = wx2-wx1, wy1-wy2
         last_camx = last_camx - wdx
         last_camy = last_camy + wdy
+
+        self:lockMouseButton(MIDDLE_MOUSE_BUTTON)
     end
-end)
+end
 
 
 return zoom

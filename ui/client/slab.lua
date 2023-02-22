@@ -8,26 +8,30 @@ Slab.Initialize({}, dontInterceptEventHandlers)
 local font = love.graphics.getFont()
 Slab.GetStyle().API.PushFont(font)
 
---[[
 
-
-
-TODO:::::::
-
-
-all of this needs changing to fit with
-the new input Listener API
-
-
-
-
-
-
-]]
 
 umg.on("@quit", function()
 	Slab.OnQuit()
 end)
+
+
+
+
+local SLAB_SCALE_RATIO = 1/3
+
+
+umg.on("@resize", function()
+    Slab.SetScale(base.getUIScale() * SLAB_SCALE_RATIO)
+end)
+
+
+local docks = {
+    "Left", "Bottom", "Right"
+}
+
+
+
+local slabListener = base.input.Listener({priority = 20})
 
 
 umg.on("@keypressed", function(key, scancode, isrepeat)
@@ -58,25 +62,6 @@ umg.on("@mousereleased", function( x, y, button, istouch, presses)
 	Slab.OnMouseReleased( x, y, button, istouch, presses)
 end)
 
-
-
-
-
-local SLAB_SCALE_RATIO = 1/3
-
-
-umg.on("@resize", function()
-    Slab.SetScale(base.getUIScale() * SLAB_SCALE_RATIO)
-end)
-
-
-local docks = {
-    "Left", "Bottom", "Right"
-}
-
-
-
-local slabListener = base.input.Listener({priority = 20})
 
 function slabListener:update(dt)
     Slab.Update(dt)

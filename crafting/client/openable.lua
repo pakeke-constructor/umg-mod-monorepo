@@ -90,7 +90,10 @@ end)
 
 
 
-umg.on("gameMousepressed", function(mx, my, button)
+local listener = base.input.Listener({priority = 0})
+
+
+function listener:mousepressed(mx, my, button)
     if button == OPEN_BUTTON then
         local player = base.getPlayer()
         if (not openInv) or (not openInv:withinBounds(mx,my)) then
@@ -102,12 +105,11 @@ umg.on("gameMousepressed", function(mx, my, button)
             end
         end
     end
-end)
+end
 
 
-
-
-umg.on("inputPressed", function(inputEnum)
+function listener:keypressed(key, scancode, isrepeat)
+    local inputEnum = self:getInputEnum(scancode)
     if inputEnum == base.input.BUTTON_2 then
         local player = base.getPlayer()
         if player.inventory then
@@ -121,6 +123,6 @@ umg.on("inputPressed", function(inputEnum)
             end
         end
     end
-end)
+end
 
 
