@@ -189,7 +189,7 @@ function Listener:isKeyLocked(scancode)
 end
 
 function Listener:isMouseButtonLocked(mousebutton)
-    return lockedMouseButtons[mousebutton] ~= self
+    return lockedMouseButtons[mousebutton] and lockedMouseButtons[mousebutton] ~= self
 end
 
 
@@ -323,7 +323,7 @@ local eventBuffer = Array()
 local function pollEvents(listener)
     for _, event in ipairs(eventBuffer) do
         local isLocked = lockChecks[event.type](unpack(event.args))
-        if not isLocked then
+        if (not isLocked) and (listener[event.type]) then
             local func = listener[event.type]
             assert(type(func) == "function", "listeners must be functions")
             func(listener, unpack(event.args))
@@ -334,30 +334,11 @@ end
 
 
 
-local function pollListeners(event)
-    --[[
-        todo; could be made more efficient by keeping listeners
-        hashed by event, but prolly doesnt matter at all
-    ]]
-    for _, listener in ipairs(sortedListeners) do
-        local isLocked = lockChecks[event.type](unpack(event.args))
-        if isLocked then
-            return
-        end
-    end
-end
-
 function input.update(dt)
     -- This must be called manually.
     -- should be called whenever we want to poll for input
-    for _, event in ipairs(eventBuffer) do
-        local isLocked = lockChecks[event.type]()
-        if not isLocked then
-            pollListeners(event)
-        end
-    end
-
-    for _, listener in ipairs(sortedListeners)do
+    for _, listener in ipairs(sortedListeners) do
+        pollEvents(listener)
         if listener.update then
             listener:update(dt)
         end
@@ -368,6 +349,18 @@ function input.update(dt)
 end
 
 
+
+
+
+--[[
+
+TODO: Big big issue here!!!!
+
+If `input.update(dt)` isn't called every frame,
+then the eventBuffer gets bigger and bigger,
+reating a memory leak. (Since it's never cleared.)
+
+]]
 
 umg.on("@keypressed", function(key, scancode, isrepeat)
     eventBuffer:add({

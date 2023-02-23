@@ -1,72 +1,45 @@
 
+# TODO:
 
 
 
-# PLANNING:
+Slab integration for inventories
 
 
-
-
-
-
-# Last solution:
-
+ideation:
 ```lua
 
+ent.inventoryUI = {
+    -- inventories can have multiple places where you can render UI to
+    -- Here's an example of one:
+    {
+        render = function(ent)
+            -- Note that we don't need to generate a Slab window here!
+            -- We can use Slab directly which is cool :)
+            if Slab.Button(...) then
+                ent.crafter:craft(...) -- etc
+            end
+        end,
 
-local listener = input.Listener({
-    priority = 10 -- the priority of the listener.
-    -- Higher priority --> called first.
-})
-
-
-function listener:keypressed(key, scancode, isrepeat)
-    ...
-end
-function listener:textinput(txt)
-    ...
-end
-function listener:mousepressed(x, y, button, istouch, presses)
-    ...
-end
-function listener:update(dt)
-    ...
-end
-
-
+        -- here's the viewport of the inventory UI widget
+        width = 100,
+        height = 100,
+        x = 10,
+        y = 10,
+        color = {...}
+    },
 
 
+    {
+        ... -- another place where UI could be rendered,
+        -- same as the above.
+    }
+}
 
-local slabListener = input.Listener({priority = 20})
 
-function slabListener:update(dt)
-    Slab.Update(dt)
-    Slab.SetScale(base.getUIScale() * SLAB_SCALE_RATIO)
-    Slab.DisableDocks(docks)
 
-    umg.call("slabUpdate", self)
 
-    if not Slab.IsVoidHovered() then
-        self:lockMouseButtons()
-        self:lockMouseWheel()
-    end
-end
 
 ```
-
-
-
-
-
-
-```lua
-
-```
-
-We need a way to:
-- Lock scancodes per keypress
-- Lock mousebuttons per mousepress
-And:
-- Lock keyboard, mouse, mousewheel per frame
 
 

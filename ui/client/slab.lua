@@ -31,39 +31,39 @@ local docks = {
 
 
 
-local slabListener = base.input.Listener({priority = 20})
+local listener = base.input.Listener({priority = 20})
 
 
-umg.on("@keypressed", function(key, scancode, isrepeat)
+function listener:keypressed(key, scancode, isrepeat)
 	Slab.OnKeyPressed(key, scancode, isrepeat)
-end)
+end
 
-umg.on("@keyreleased", function(key, scancode)
+function listener:keyreleased(key, scancode)
 	Slab.OnKeyReleased(key, scancode)
-end)
+end
 
-umg.on("textinput", function(text)
+function listener:textinput(text)
 	Slab.OnTextInput(text)
-end)
+end
 
-umg.on("@wheelmoved", function(x, y)
+function listener:wheelmoved(x, y)
 	Slab.OnWheelMoved(x, y)
-end)
+end
 
-umg.on("@mousemoved", function(x, y, dx, dy, istouch)
+function listener:mousemoved(x, y, dx, dy, istouch)
 	Slab.OnMouseMoved(x, y, dx, dy, istouch)
-end)
+end
 
-umg.on("@mousepressed", function( x, y, button, istouch, presses)
+function listener:mousepressed( x, y, button, istouch, presses)
 	Slab.OnMousePressed( x, y, button, istouch, presses)
-end)
+end
 
-umg.on("@mousereleased", function( x, y, button, istouch, presses)
+function listener:mousereleased( x, y, button, istouch, presses)
 	Slab.OnMouseReleased( x, y, button, istouch, presses)
-end)
+end
 
 
-function slabListener:update(dt)
+function listener:update(dt)
     Slab.Update(dt)
     Slab.SetScale(base.getUIScale() * SLAB_SCALE_RATIO)
     Slab.DisableDocks(docks)

@@ -9,6 +9,9 @@ local inventoryGroup = umg.group("inventory")
 
 
 local function checkButtonFormat(etype, inventoryButtons)
+    --[[
+        TODO: Remove all code for this stuff
+    ]]
     for coord, button in pairs(inventoryButtons) do
         if type(coord) ~= "table" then
             error("bad inventoryButtons table format for entity: " .. etype)

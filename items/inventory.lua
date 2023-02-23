@@ -98,7 +98,7 @@ end
 
 
 local function assertItem(item_ent)
-    assert(item_ent.itemName)
+    assert(item_ent.itemName, "items need an itemName component")
     assert((not item_ent.description) or type(item_ent.description) == "string", "item entity descriptions must be strings")
     assert((not item_ent.stackSize) or type(item_ent.stackSize) == "number", "item entity stackSize must be a number")
     assert((not item_ent.maxStackSize) or type(item_ent.maxStackSize) == "number", "item entity maxStackSize must be a number")
@@ -369,19 +369,25 @@ local function drawQuad(self, x, y, quadName)
 end
 
 
-local function drawButtons(self)
+
+local function drawInventoryUI(self)   
     local ent = self.owner
-    if ent.inventoryButtons then
-        local mapping = ent.inventoryButtons.buttonMapping
-        for x=1, self.width do
-            for y=1, self.height do
-                if mapping[x] and mapping[x][y] then
-                    local button = mapping[x][y]
-                    local quadName = button.image or "default_button"
-                    drawQuad(self, x, y, quadName)
-                end
-            end
-        end
+    for i, ui in ipairs(ent.inventoryUI) do
+        local ent_id = ent.id
+        local windowName = tostring(ent_id) .. "_" .. tostring(i)
+        -- we must generate a unique string identifier due to Slab
+        local winX = self.draw_x + ui.x
+        local winY = self.draw_y + ui.y
+        Slab.BeginWindow(windowName, {
+            X = winX, Y = winY,
+            W = ui.width, H = ui.height,
+            BgColor = ui.color,
+            AutoSizeWindow = false,
+            AllowResize = false,
+            AllowMove = false
+        })
+        ui.render(ent)
+        Slab.EndWindow(windowName)
     end
 end
 
@@ -507,8 +513,8 @@ function Inventory:drawUI()
         callbacks.draw(self)
     end
 
-    if self.owner.inventoryButtons then
-        drawButtons(self)
+    if self.owner.inventoryUI then
+        drawInventoryUI(self)
     end
     
     love.graphics.pop()
