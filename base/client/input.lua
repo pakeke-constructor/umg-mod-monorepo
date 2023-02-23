@@ -339,6 +339,7 @@ function input.update(dt)
     -- should be called whenever we want to poll for input
     for _, listener in ipairs(sortedListeners) do
         pollEvents(listener)
+        
         if listener.update then
             listener:update(dt)
         end

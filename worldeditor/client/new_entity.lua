@@ -49,7 +49,8 @@ local isOpen = true
 
 
 
-umg.on("slabUpdate", function(dt)
+
+umg.on("slabUpdate", function(listener)
     if not isOpen then 
         return
     end
