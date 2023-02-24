@@ -311,25 +311,32 @@ function listener:mousepressed(mx, my, button)
             if bx then
                 if inv:slotExists(bx,by) then
                     if button == ALPHA_BUTTON then
+                        self:lockMouseButton(ALPHA_BUTTON)
                         executeAlphaInteraction(inv, bx, by)
                     elseif button == BETA_BUTTON then
+                        self:lockMouseButton(BETA_BUTTON)
                         executeBetaInteraction(inv, bx, by)
                     end
                 elseif button == ALPHA_BUTTON then
+                    --[[
+                        TODO: Make sure to block input here!
+                    ]]
                     local ent = inv.owner
                     if ent.inventoryButtons then
                         local buttonPressed = tryPressButton(ent, inv, bx, by)
                         if buttonPressed then
                             -- button pressed means we can't do anything else with it.
-                            resetHoldingInv()            
+                            resetHoldingInv()         
                             return
                         end
                     end
+                    self:lockMouseButton(ALPHA_BUTTON)
                     dragging_inv = inv
                     resetHoldingInv()
                 end
                 break -- done; only 1 interaction should be done per click.
             elseif button == ALPHA_BUTTON then
+                self:lockMouseButton(ALPHA_BUTTON)
                 dragging_inv = inv
                 resetHoldingInv()
                 break

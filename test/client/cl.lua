@@ -47,11 +47,10 @@ end)
 
 
 
+local listener = base.input.Listener({priority = 0})
 
-
-
-umg.on("@keypressed", function(k)
-    if k == "q" then
+function listener:keypressed(key, scancode, isrepeat)
+    if scancode == "q" then
         local e = base.getPlayer()
         local x, y = base.camera:getMousePosition()
         base.particles.emit("smoke", e.x, e.y, 8, 10, {0.2,0.8,0.9})
@@ -59,22 +58,22 @@ umg.on("@keypressed", function(k)
         e.y = y
         base.particles.emit("smoke", x, y, 8, 10)
     end
-    if k =="r" and love.keyboard.isDown("lshift") then
+    if scancode =="r" and love.keyboard.isDown("lshift") then
         base.title("Thanks for watching!", {time = 2,fade=0.5})
         base.title("I hope you enjoyed it", {scale = 0.6, y=2/3, time=2.5, fade=0.5})
     end
-    if k == "space" then
+    if scancode == "space" then
         local e = base.getPlayer()
         if base.gravity.isOnGround(e) then
             e.vz = 400
         end
     end
-end)
+end
 
 
 
 
-umg.on("@mousepressed", function(x, y, button, istouch, presses)
+function listener:mousepressed(x, y, button, istouch, presses)
     if button == 1 then
         local p = base.getPlayer()
         if umg.exists(p) then
@@ -85,6 +84,6 @@ umg.on("@mousepressed", function(x, y, button, istouch, presses)
             x = wx, y = wy, startRadius = 1, endRadius = 60, thickness = 20, duration = 0.55
         })
     end
-end)
+end
 
 

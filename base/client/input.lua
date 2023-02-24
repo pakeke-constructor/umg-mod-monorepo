@@ -168,7 +168,7 @@ end
 
 function Listener:lockMouseButton(mousebutton)
     if lockedMouseButtons[mousebutton] and lockedMouseButtons[mousebutton] ~= self then
-        error("scancode was already locked")
+        error("mouse button was already locked")
     end
     lockedMouseButtons[mousebutton] = self
 end
