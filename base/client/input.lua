@@ -322,46 +322,37 @@ local eventBuffer = Array()
 
 local function pollEvents(listener)
     for _, event in ipairs(eventBuffer) do
-        local isLocked = lockChecks[event.type](unpack(event.args))
-        if (not isLocked) and (listener[event.type]) then
-            local func = listener[event.type]
-            assert(type(func) == "function", "listeners must be functions")
-            func(listener, unpack(event.args))
-            -- ensure to pass self as first arg 
+        if listener[event.type] then
+            local isLocked = lockChecks[event.type](unpack(event.args))
+            if (not isLocked) then
+                local func = listener[event.type]
+                assert(type(func) == "function", "listeners must be functions")
+                func(listener, unpack(event.args))
+                -- ensure to pass self as first arg 
+            end
         end
     end
 end
 
 
 
-function input.update(dt)
-    -- This must be called manually.
-    -- should be called whenever we want to poll for input
-    for _, listener in ipairs(sortedListeners) do
-        pollEvents(listener)
-        
-        if listener.update then
-            listener:update(dt)
+umg.on("@update", function(dt)
+    if not client.isPaused() then
+        for _, listener in ipairs(sortedListeners) do
+            pollEvents(listener)
+            
+            if listener.update then
+                listener:update(dt)
+            end
         end
     end
 
     eventBuffer:clear()
     input.unlockEverything()
-end
+end)
 
 
 
-
-
---[[
-
-TODO: Big big issue here!!!!
-
-If `input.update(dt)` isn't called every frame,
-then the eventBuffer gets bigger and bigger,
-reating a memory leak. (Since it's never cleared.)
-
-]]
 
 umg.on("@keypressed", function(key, scancode, isrepeat)
     eventBuffer:add({
@@ -387,7 +378,7 @@ umg.on("@wheelmoved", function(dx, dy)
     })
 end)
 
-umg.on("mousemoved", function (x, y, dx, dy, istouch)
+umg.on("@mousemoved", function (x, y, dx, dy, istouch)
     eventBuffer:add({
         args = {x, y, dx, dy, istouch},
         type = "mousemoved"

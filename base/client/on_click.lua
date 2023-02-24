@@ -1,4 +1,5 @@
 
+local input = require("client.input")
 local getQuadOffsets = require("client.image_helpers.quad_offsets")
 
 
@@ -33,10 +34,14 @@ end
 
 
 
-umg.on("gameMousepressed", function(mx, my, button, istouch, presses)
+
+local listener = input.Listener({priority = 0})
+
+
+
+function listener:mousepressed(mx, my, button, istouch, presses)
     -- TODO: This is kinda trash.
     -- this needs to be spatial partitioned probably.
-
     local worldX, worldY = base.camera:toWorldCoords(mx, my)
 
     local bestDist = math.huge
@@ -55,8 +60,9 @@ umg.on("gameMousepressed", function(mx, my, button, istouch, presses)
 
     if bestEnt then
         client.send("clickEntity", bestEnt, button, worldX, worldY)
+        self:lockMouseButton(button)
     end
-end)
+end
 
 
 

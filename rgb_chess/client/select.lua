@@ -70,7 +70,7 @@ end)
 
 
 
-umg.on("gameMousepressed", function(x,y, button)
+umg.on("@mousepressed", function(x,y, button)
     -- right click to deselect
     if button == 2 then
         select.deselect()

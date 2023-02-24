@@ -293,7 +293,10 @@ local ALPHA_BUTTON = 1
 local BETA_BUTTON = 2 -- right click is clearly insuperior 
 
 
-umg.on("gameMousepressed", function(mx, my, button)
+local listener = base.input.Listener({priority = 5})
+
+
+function listener:mousepressed(mx, my, button)
     local len = #open_inventories
     local loop_used = false
     for i=len, 1, -1 do
@@ -340,13 +343,16 @@ umg.on("gameMousepressed", function(mx, my, button)
             if umg.exists(holding_inv:get(holding_x, holding_y)) then
                 client.send("tryDropInventoryItem", holding_inv.owner, holding_x, holding_y)
             end
+            self:lockMouseButton(ALPHA_BUTTON)
         elseif button == BETA_BUTTON then
             resetHoldingInv()
+            self:lockMouseButton(BETA_BUTTON)
         end
     end
-end)
+end
 
-umg.on("gameMousemoved", function(mx,my, dx, dy)
+
+function listener:mousemoved(mx,my, dx, dy)
     -- used for dragging inventories around
     if dragging_inv then
         local ui_scale = base.getUIScale()
@@ -354,16 +360,17 @@ umg.on("gameMousemoved", function(mx,my, dx, dy)
         dragging_inv.draw_x = dragging_inv.draw_x + dx
         dragging_inv.draw_y = dragging_inv.draw_y + dy
     end
-end)
+end
 
 
-umg.on("gameMousereleased", function(mx,my, button)
+function listener:mousereleased(mx,my, button)
     dragging_inv = nil
-end)
+end
 
 
 
-umg.on("drawMainUI", function()
+
+umg.on("mainDrawUI", function()
     for i, inv in ipairs(open_inventories) do
         inv:drawUI()
     end

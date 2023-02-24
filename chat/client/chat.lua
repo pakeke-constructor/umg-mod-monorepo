@@ -107,7 +107,7 @@ end
 local isTyping = false
 
 
-umg.on("drawMainUI", function()
+umg.on("mainDrawUI", function()
     --[[
         draw the chat:
     ]]

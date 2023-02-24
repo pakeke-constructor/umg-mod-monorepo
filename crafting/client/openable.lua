@@ -90,7 +90,7 @@ end)
 
 
 
-local listener = base.input.Listener({priority = 0})
+local listener = base.input.Listener({priority = 2})
 
 
 function listener:mousepressed(mx, my, button)
@@ -122,6 +122,7 @@ function listener:keypressed(key, scancode, isrepeat)
                 player.inventory:open()
             end
         end
+        self:lockKey(scancode)
     end
 end
 

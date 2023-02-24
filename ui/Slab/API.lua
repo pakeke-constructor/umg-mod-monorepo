@@ -1988,7 +1988,7 @@ function Slab.IsVoidHovered()
 		return false
 	end
 
-	return Region.GetHotInstanceId() == '' and not Region.IsScrolling()
+	return Region.GetHotInstanceId() == '' --and (not Region.IsScrolling())
 end
 
 --[[
