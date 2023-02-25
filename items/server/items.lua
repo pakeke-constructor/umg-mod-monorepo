@@ -85,7 +85,7 @@ server.on("setInventoryHoldItem", function(sender, ent, x, y)
     
     local inv = ent.inventory
     if x <= inv.width and x >= 1 and y <= inv.height and y >= 1 then
-        if ent.inventoryCallbacks and checkCallback(ent, "slotExists", x, y) then
+        if inv:slotExists(x,y) then
             itemHolding.setHoldItem(ent, inv:get(x,y))
         end
     end
@@ -120,6 +120,12 @@ function(username, ent, other_ent, x, y, x2, y2)
     ]]
     local inv1 = ent.inventory
     local inv2 = other_ent.inventory
+    if (not inv1) or (not inv2) then
+        return
+    end
+    if (not inv1:slotExists(x,y)) or (not inv2:slotExists(x2,y2)) then
+        return
+    end
     
     local item1 = inv1:get(x,y)
     local item2 = inv2:get(x2,y2)
@@ -141,12 +147,6 @@ function(username, ent, other_ent, x, y, x2, y2)
     if not checkCallback(other_ent, "canAdd", x2, y2, item1) then
         return -- exit early
     end
-    if not checkCallback(ent, "slotExists", x, y) then
-        return -- exit early
-    end
-    if not checkCallback(other_ent, "slotExists", x2, y2) then
-        return -- exit early
-    end
 
     inv1:set(x, y, item2)
     inv2:set(x2, y2, item1)
@@ -163,6 +163,12 @@ function(username, ent, other_ent, x, y, x2, y2, count)
     ]]
     local inv1 = ent.inventory
     local inv2 = other_ent.inventory
+    if (not inv1) or (not inv2) then
+        return
+    end
+    if (not inv1:slotExists(x,y)) or (not inv2:slotExists(x2,y2)) then
+        return
+    end
     -- moving `item` from `inv1` to `inv2`
 
     if inv1 == inv2 and (x==x2) and (y==y2) then
@@ -174,10 +180,6 @@ function(username, ent, other_ent, x, y, x2, y2, count)
 
     if not umg.exists(item) then
         return -- Nothing to move; exit early
-    end
-
-    if not (inv1:slotExists(x,y) and inv2:slotExists(x2,y2)) then
-        return  -- One of the slots doesn't exist
     end
 
     local stackSize = item.stackSize or 1
@@ -273,7 +275,6 @@ function(username, ent, x, y)
     end
 
     itemDrops.dropItem(item, ent.x, ent.y)
-    
     inv:set(x, y, nil)
 end)
 

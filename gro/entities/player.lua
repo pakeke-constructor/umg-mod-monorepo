@@ -37,12 +37,6 @@ return {
         activation = 15
     };
 
-    inventoryCallbacks = {
-        slotExists = function(inv,x,y)
-            return x>1 and y>1
-        end
-    };
-
     speed = PLAYER_SPEED;
     agility = PLAYER_SPEED * 20;
 

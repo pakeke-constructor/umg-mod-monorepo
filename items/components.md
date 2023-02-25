@@ -169,17 +169,6 @@ function invCbs:canOpen(ent)
 end
 
 
-function invCbs:slotExists(x, y)
-    -- `self` is the inventory object
-    -- returns `true` if the slot at x,y exists, false if it doesn't exist.
-    -- This is useful for implementing special interfaces, such as crafting.
-    
-    -- If an (x,y) slot doesn't exist, it isn't drawn, and is not able to contain items.
-    -- (If this callback isn't specified, then it's assumed that all slots exist.)
-end
-
-
-
 function invCbs:onAdd(item, x, y)
     -- `self` is the inventory object
     ...
@@ -199,23 +188,45 @@ end
 ```
 
 
-#### Inventory buttons:
+#### Inventory UI:
 ```lua
 
 
-ent.inventoryButtons = {
-    -- This is a button at position (1,2) in the inventory
-    [{1, 2}] = {
-        onClick = function(self)
-            -- `self` is the inventory object
-            -- This is only called on the client-side.
-        end;
-        image = "button_image1" -- image of the button
-    };
+ent.inventoryUI = {
+    {
+        render = function(ent)
+            Slab.Text("we can put UI here!")
+            if Slab.Button("enchant") then
+                ent:enchantItem()
+            end
+        end,
+        x = 1, -- starts at slot (1,1)
+        y = 1,
 
-    [{3, 4}] = {
-        ... -- another button at position (3,4)
+        width = 3, -- 3 slots wide
+        height = 2, -- 2 slots tall
+
+        color = {1,1,1} -- white background color
+    },
+    {
+        ... -- we can render multiple UI components per inventory
     }
+}
+
+
+
+
+
+--[[
+    having inventories with custom slot positions:
+    we can use the `inventorySlots` component to enable/disable slots.
+]]
+
+-- A 3x3 inventory, with only the central slot enabled:
+ent.inventorySlots = {
+    {false, false, false},
+    {false, true,  false},
+    {false, false, false}
 }
 
 

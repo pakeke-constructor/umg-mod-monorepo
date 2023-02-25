@@ -8,55 +8,15 @@ local inventoryGroup = umg.group("inventory")
 
 
 
-local function checkButtonFormat(etype, inventoryButtons)
-    --[[
-        TODO: Remove all code for this stuff
-    ]]
-    for coord, button in pairs(inventoryButtons) do
-        if type(coord) ~= "table" then
-            error("bad inventoryButtons table format for entity: " .. etype)
-        end
-        local x,y = coord[1], coord[2]
-        if (type(x) ~= "number" or type(y) ~= "number") then
-            error("bad inventoryButtons table format for entity: " .. etype)
-        end
-        if type(button) ~= "table" then
-            error("inventoryButtons values must be tables with a .onClick function. Not true for entity type: " .. etype)
-        end
-        if type(button.onClick) ~= "function" then
-            error("inventoryButtons values must be tables with a .onClick function. Not true for entity type: " .. etype)
-        end
-        if button.image and (not client.assets.images[button.image]) then
-            error(("invalid button image %s for entity %s"):format(button.image, etype))
-        end
+local INVSLOTS_ERR = "inventorySlots size must match dimensions of inventory"
+local function assertInventorySlotsValid(ent)
+    local inventory = ent.inventory
+    local inventorySlots = ent.inventorySlots
+    assert(#inventorySlots == inventory.height, INVSLOTS_ERR)
+    for _, ar in ipairs(inventorySlots) do
+        assert(#ar == inventory.width, INVSLOTS_ERR)
     end
 end
-
-
-
-
-local function parseInitialButtonFormat(ent)
-    --[[
-        maps ent.inventoryButtons into a more easy-to-work with
-        format, and puts it in the inventorycallbacks._buttonMapping table
-    ]]
-    if ent.inventoryButtons.buttonMapping then
-        return  -- already done.
-        -- this will usually mean that the inventoryButtons component is shared;
-        -- which is fine.
-    end
-    local buttonMapping = {}
-    local buttons = ent.inventoryButtons
-    local etype = ent:type()
-    checkButtonFormat(etype, ent.inventoryButtons)
-    for coord, button in pairs(buttons) do
-        local x,y = coord[1], coord[2]
-        buttonMapping[x] = buttonMapping[x] or {}
-        buttonMapping[x][y] = button
-    end
-    ent.inventoryButtons.buttonMapping = buttonMapping
-end
-
 
 
 
@@ -64,11 +24,9 @@ inventoryGroup:onAdded(function(ent)
     if (not ent.inventory) or (getmetatable(ent.inventory) ~= Inventory) then
         error("Inventory component must be initialized either before entity creation, or inside a `.init` function!")
     end
-
-    if ent.inventoryButtons then
-        parseInitialButtonFormat(ent)
+    if ent.inventorySlots then
+        assertInventorySlotsValid(ent)
     end
-
     ent.inventory.owner = ent
 end)
 
@@ -219,25 +177,6 @@ end
 
 
 
-local function tryPressButton(ent, inv, x, y)
-    --[[
-        tries to press a button at (x,y)
-    ]]
-    assert(ent.inventoryButtons, "?")
-    local buttonMapping = ent.inventoryButtons.buttonMapping
-    if not buttonMapping then
-        -- then we need to create it:
-        parseInitialButtonFormat(ent)
-        buttonMapping = ent.inventoryButtons.buttonMapping
-    end
-    if buttonMapping[x] and buttonMapping[x][y] then
-        buttonMapping[x][y].onClick(inv)
-        return true
-    end
-    return false
-end
-
-
 local function executeAlphaInteraction(inv, x, y)
     --[[
         "alpha" interactions are for stuff like placing full stacks
@@ -318,18 +257,6 @@ function listener:mousepressed(mx, my, button)
                         executeBetaInteraction(inv, bx, by)
                     end
                 elseif button == ALPHA_BUTTON then
-                    --[[
-                        TODO: Make sure to block input here!
-                    ]]
-                    local ent = inv.owner
-                    if ent.inventoryButtons then
-                        local buttonPressed = tryPressButton(ent, inv, bx, by)
-                        if buttonPressed then
-                            -- button pressed means we can't do anything else with it.
-                            resetHoldingInv()         
-                            return
-                        end
-                    end
                     self:lockMouseButton(ALPHA_BUTTON)
                     dragging_inv = inv
                     resetHoldingInv()
@@ -375,10 +302,18 @@ function listener:mousereleased(mx,my, button)
 end
 
 
+umg.on("slabUpdate", function()
+    for _, inv in ipairs(open_inventories) do
+        local owner = inv.owner
+        if owner.inventoryUI and inv.isOpen then
+            inv:updateSlabUI()
+        end
+    end
+end)
 
 
 umg.on("mainDrawUI", function()
-    for i, inv in ipairs(open_inventories) do
+    for _, inv in ipairs(open_inventories) do
         inv:drawUI()
     end
     

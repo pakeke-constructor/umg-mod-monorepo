@@ -3,33 +3,23 @@
 local PLAYER_SPEED = 160
 
 
-local function player_slotExists(_, x, y)
-    return (x > 1) and (y > 1)
-end
-
-
 
 return {
     maxHealth = 100,
 
     lookAtMouse = true,
 
-    --[[
     healthBar = {
         offset = 20,
         drawWidth = 60,
         color = {0,1,0}
-    },
-    ]]
+    },    
 
     category = "player",
 
     follow = true;
 
     canPickUp = true,
-    inventoryCallbacks = {
-        slotExists = player_slotExists
-    };
 
     shadow = {
         size=6

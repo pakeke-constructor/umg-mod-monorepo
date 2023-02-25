@@ -14,38 +14,14 @@ local function craftOnClick(inv)
 end
 
 
-local function defaultSlotExists(_, x,y)
-    if x <= 3 or (x==5 and y==2) then
-        return true
-    else
-        return false
-    end
-end
-
-
-local defaultCraftButton = {
-    onClick = craftOnClick;
-    image = "craft_icon"
-}
-
-
-
-
 
 --[[
     abstract crafting entity.
 ]]
 local abstractCrafter = {
-    craftItemLocation = {5,2},
-    craftButtonLocation = {4,2},
-
-    inventoryButtons = {
-        [{4,2}] = defaultCraftButton
-    },
-
-    inventoryCallbacks = {
-        slotExists = defaultSlotExists
-    },
+    --[[
+        TODO: all this is broken
+    ]]
 
     super = function(ent)
         if (type(ent.crafter) ~= "table") or (not ent.crafter.executeCraft) then

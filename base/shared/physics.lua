@@ -9,8 +9,7 @@ Handles all entities that require physics in the game.
 
 ]]
 
-
-local physics = {} -- little API
+local physics = {}
 
 
 
@@ -139,7 +138,7 @@ physicsGroup:onAdded(function(ent)
     if (not ent.x) or (not ent.y) then
         error("Physics entities must be given x and y values upon creation.")
     end
-    
+
     local body = love.physics.newBody(world, ent.x, ent.y, getBodyType(ent))
     local fixture = love.physics.newFixture(body, ent.physics.shape)
 
@@ -169,6 +168,7 @@ physicsGroup:onRemoved(function(ent)
     -- Dont need to destroy the shape, 
     -- as it is shared between all ent instances.
 end)
+
 
 
 

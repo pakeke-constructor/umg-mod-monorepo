@@ -85,7 +85,7 @@ umg.on("@createWorld", function()
         ents.grass(math.random(-MAG, MAG), math.random(-MAG, MAG))
     end
 
-    ents.crate()
+    ents.crate(0,-100)
     ents.crate_button(100, 100)
     ents.crafting_table(-100, 100)
 end)

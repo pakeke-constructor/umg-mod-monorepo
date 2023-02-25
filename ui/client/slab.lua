@@ -2,6 +2,9 @@
 
 local Slab = require("Slab.Slab")
 
+
+
+
 local dontInterceptEventHandlers = true
 Slab.Initialize({}, dontInterceptEventHandlers)
 
@@ -17,12 +20,6 @@ end)
 
 
 
-local SLAB_SCALE_RATIO = 1/3
-
-
-umg.on("@resize", function()
-    Slab.SetScale(base.getUIScale() * SLAB_SCALE_RATIO)
-end)
 
 
 local docks = {
@@ -64,6 +61,8 @@ function listener:mousereleased( x, y, button, istouch, presses)
 end
 
 
+local SLAB_SCALE_RATIO = 1/3
+
 function listener:update(dt)
     Slab.Update(dt)
     Slab.SetScale(base.getUIScale() * SLAB_SCALE_RATIO)
@@ -80,7 +79,7 @@ end
 
 
 
-umg.on("mainDrawUI", function()
+umg.on("postDrawUI", function()
 	love.graphics.push("all")
 	love.graphics.setLineWidth(1)
     Slab.Draw()

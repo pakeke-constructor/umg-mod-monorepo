@@ -30,6 +30,9 @@ end
 
 
 
+local DEFAULT_BORDER_WIDTH = 10
+local DEFAULT_SLOT_SIZE = 12
+local DEFAULT_SLOT_SEPARATION = 2
 
 
 function Inventory:init(options)
@@ -37,6 +40,15 @@ function Inventory:init(options)
     assert(options.height, "Inventories must have a .height member!")
     self.width = options.width
     self.height = options.height
+
+    -- size of inventory slots
+    self.slotSize = options.slotSize or DEFAULT_SLOT_SIZE
+    -- separation between inventory slots
+    self.slotSeparation = options.slotSeparation or DEFAULT_SLOT_SEPARATION
+    -- border offset from inventory edge
+    self.borderWidth = options.borderWidth or DEFAULT_BORDER_WIDTH
+
+    self.totalSlotSize = self.slotSize + self.slotSeparation
 
     self.autohold = options.autohold
 
@@ -65,8 +77,8 @@ end
 
 function Inventory:slotExists(x, y)
     local ent = self.owner
-    if ent.inventoryCallbacks and ent.inventoryCallbacks.slotExists then
-        return ent.inventoryCallbacks.slotExists(self, x, y)
+    if ent.inventorySlots then
+        return ent.inventorySlots[y] and ent.inventorySlots[y][x]
     end
     return true
 end
@@ -276,25 +288,14 @@ Yucky, bad rendering code below this point!!!
 Read at your own risk!  :-)
 ]]
 
-local ITEM_SIZE = 16 -- item sizes are 16 by 16 pixels
-local SQUARE_SIZE = 18 -- the size of inventory "pockets"
-local PACKED_SQUARE_SIZE = 20 -- The size of packed inventory grid pockets
-
-local BORDER_OFFSET = 6 -- border offset from inventory edge
-
-
 
 function Inventory:withinBounds(mouse_x, mouse_y)
     -- returns true/false, depending on whether mouse_x or mouse_y is
     -- within the inventory interface
-    if not (base and base.getUIScale) then
-        error("Inventory mod requires base mod to be loaded!")
-    end
-
     local ui_scale = base.getUIScale()
     local x, y = mouse_x / ui_scale, mouse_y / ui_scale
-    local x_valid = (self.draw_x - BORDER_OFFSET <= x) and (x <= self.draw_x + (self.width * PACKED_SQUARE_SIZE) + BORDER_OFFSET)
-    local y_valid = (self.draw_y - BORDER_OFFSET <= y) and (y <= self.draw_y + (self.height * PACKED_SQUARE_SIZE) + BORDER_OFFSET)
+    local x_valid = (self.draw_x - self.borderWidth <= x) and (x <= self.draw_x + (self.width * self.totalSlotSize) + self.borderWidth)
+    local y_valid = (self.draw_y - self.borderWidth <= y) and (y <= self.draw_y + (self.height * self.totalSlotSize) + self.borderWidth)
     return x_valid and y_valid
 end
 
@@ -308,11 +309,11 @@ function Inventory:getBucket(mouse_x, mouse_y)
     local norm_x = x - self.draw_x 
     local norm_y = y - self.draw_y
 
-    local bx, by = norm_x % PACKED_SQUARE_SIZE, norm_y % PACKED_SQUARE_SIZE
-    local bo = (PACKED_SQUARE_SIZE - SQUARE_SIZE) / 2
-    if bx > bo and bx < (PACKED_SQUARE_SIZE - bo) and by > bo and by < (PACKED_SQUARE_SIZE - bo) then
-        local ix = floor(norm_x / PACKED_SQUARE_SIZE) + 1
-        local iy = floor(norm_y / PACKED_SQUARE_SIZE) + 1
+    local bx, by = norm_x % self.totalSlotSize, norm_y % self.totalSlotSize
+    local bo = (self.totalSlotSize - self.slotSize) / 2
+    if bx > bo and bx < (self.totalSlotSize - bo) and by > bo and by < (self.totalSlotSize - bo) then
+        local ix = floor(norm_x / self.totalSlotSize) + 1
+        local iy = floor(norm_y / self.totalSlotSize) + 1
         if ix >= 1 and ix <= self.width and iy >= 1 and iy <= self.height then
             return ix, iy
         end
@@ -326,17 +327,20 @@ function Inventory:drawItem(item_ent, x, y)
     love.graphics.push()
     love.graphics.setColor(item_ent.color or WHITE)
 
-    local offset = (PACKED_SQUARE_SIZE - ITEM_SIZE) / 2
     local quad = client.assets.images[item_ent.image]
     local _,_, w,h = quad:getViewport()
-    if (w ~= 16 or h ~= 16) then
-        error("Image dimensions for items must be 16 by 16! Not the case for this entity:\n" .. tostring(item_ent))
+    if (w ~= h) then
+        error("Image width-height for items must be equal! Not the case for this entity:\n" .. tostring(item_ent))
     end
-    local X = PACKED_SQUARE_SIZE * (x-1) + offset + self.draw_x
-    local Y = PACKED_SQUARE_SIZE * (y-1) + offset + self.draw_y
-    client.atlas:draw(quad, X, Y)
+    local offset = (self.totalSlotSize - w) / 2
+    local X = self.totalSlotSize * (x-1) + offset + self.draw_x
+    local Y = self.totalSlotSize * (y-1) + offset + self.draw_y
+
+    local scale = self.slotSize / w
+    base.drawImage(quad, X + w/2, Y + w/2, 0, scale, scale)
 
     if item_ent.stackSize > 1 then
+        -- Draw stack number
         love.graphics.push()
         love.graphics.translate(X-2,Y-2)
         love.graphics.scale(0.5)
@@ -355,32 +359,21 @@ end
 
 
 
-local function drawQuad(self, x, y, quadName)
-    local offset = (PACKED_SQUARE_SIZE - ITEM_SIZE) / 2
-    local quad = client.assets.images[quadName]
-    if not quad then error("unknown image: " .. tostring(quadName)) end
-    local _,_, w,h = quad:getViewport()
-    if (w ~= 16 or h ~= 16) then
-        error("Image dimensions for items must be 16 by 16! Not the case for this quad:\n" .. tostring(quadName))
-    end
-    local X = PACKED_SQUARE_SIZE * (x-1) + offset + self.draw_x
-    local Y = PACKED_SQUARE_SIZE * (y-1) + offset + self.draw_y
-    client.atlas:draw(quad, X, Y)
-end
 
-
-
-local function drawInventoryUI(self)   
+function Inventory:updateSlabUI()   
     local ent = self.owner
     for i, ui in ipairs(ent.inventoryUI) do
         local ent_id = ent.id
         local windowName = tostring(ent_id) .. "_" .. tostring(i)
         -- we must generate a unique string identifier due to Slab
-        local winX = self.draw_x + ui.x
-        local winY = self.draw_y + ui.y
+        local scale = Slab.GetScale() / base.getUIScale()
+        local winX = (self.draw_x + (ui.x-1) * self.totalSlotSize) / scale
+        local winY = (self.draw_y + (ui.y-1) * self.totalSlotSize) / scale
+        local winWidth = (self.totalSlotSize * ui.width) / scale
+        local winHeight = (self.totalSlotSize * ui.height) / scale
         Slab.BeginWindow(windowName, {
             X = winX, Y = winY,
-            W = ui.width, H = ui.height,
+            W = winWidth, H = winHeight,
             BgColor = ui.color,
             AutoSizeWindow = false,
             AllowResize = false,
@@ -437,24 +430,24 @@ end
 
 local function drawSlot(self, inv_x, inv_y, offset, color)
     local x, y = inv_x - 1, inv_y - 1 -- inventory is 1 indexed
-    local X = self.draw_x + x * PACKED_SQUARE_SIZE + offset
-    local Y = self.draw_y + y * PACKED_SQUARE_SIZE + offset
+    local X = math.floor(self.draw_x + x * self.totalSlotSize + offset)
+    local Y = math.floor(self.draw_y + y * self.totalSlotSize + offset)
 
     love.graphics.setLineWidth(1)
 
     local r,g,b = color[1] / 1.5, color[2] / 1.5, color[3] / 1.5
     love.graphics.setColor(r,g,b)
-    love.graphics.rectangle("fill", X, Y, SQUARE_SIZE, SQUARE_SIZE)
+    love.graphics.rectangle("fill", X, Y, self.slotSize, self.slotSize)
 
-    drawHighlights(X, Y, SQUARE_SIZE, SQUARE_SIZE, r,g,b, 1, true)
+    drawHighlights(X, Y, self.slotSize, self.slotSize, r,g,b, 1, true)
 
-    love.graphics.setColor(0,0,0)
-    love.graphics.rectangle("line", X, Y, SQUARE_SIZE, SQUARE_SIZE)
+    -- love.graphics.setColor(0,0,0)
+    -- love.graphics.rectangle("line", X, Y, self.slotSize, self.slotSize)
 
     if self.hovering_x == inv_x and self.hovering_y == inv_y then
         love.graphics.setLineWidth(4)
         love.graphics.setColor(0,0,0, 0.65)
-        love.graphics.rectangle("line", X, Y, SQUARE_SIZE, SQUARE_SIZE)
+        love.graphics.rectangle("line", X, Y, self.slotSize, self.slotSize)
     end
 
     if self:get(inv_x, inv_y) then
@@ -480,16 +473,16 @@ function Inventory:drawUI()
     -- No need to scale for UI- this should be done by draw system.
 
     local col = self.color or WHITE
-    local W = self.width * PACKED_SQUARE_SIZE + BORDER_OFFSET * 2
-    local H = self.height * PACKED_SQUARE_SIZE + BORDER_OFFSET * 2
+    local W = self.width * self.totalSlotSize + self.borderWidth * 2
+    local H = self.height * self.totalSlotSize + self.borderWidth * 2
     
     love.graphics.setLineWidth(2)
     
     -- Draw inventory body
     love.graphics.setColor(col) 
-    love.graphics.rectangle("fill", self.draw_x - BORDER_OFFSET, self.draw_y - BORDER_OFFSET, W, H)
+    love.graphics.rectangle("fill", self.draw_x - self.borderWidth, self.draw_y - self.borderWidth, W, H)
 
-    local offset = (PACKED_SQUARE_SIZE - SQUARE_SIZE) / 2
+    local offset = self.slotSeparation / 2
 
     -- draw interior
     for x = 0, self.width - 1 do
@@ -502,19 +495,15 @@ function Inventory:drawUI()
     end
 
     love.graphics.setLineWidth(2)
-    drawHighlights(self.draw_x-BORDER_OFFSET, self.draw_y-BORDER_OFFSET, W, H, col[1],col[2],col[3])
+    drawHighlights(self.draw_x-self.borderWidth, self.draw_y-self.borderWidth, W, H, col[1],col[2],col[3])
 
     -- Draw outline
     love.graphics.setColor(0,0,0)
-    love.graphics.rectangle("line", self.draw_x - BORDER_OFFSET, self.draw_y - BORDER_OFFSET, W, H)
+    love.graphics.rectangle("line", self.draw_x - self.borderWidth, self.draw_y - self.borderWidth, W, H)
 
     local callbacks = self.owner.inventoryCallbacks
     if callbacks and callbacks.draw then
         callbacks.draw(self)
-    end
-
-    if self.owner.inventoryUI then
-        drawInventoryUI(self)
     end
     
     love.graphics.pop()
@@ -531,8 +520,8 @@ function Inventory:drawHoverWidget(x, y)
     love.graphics.push("all")
     love.graphics.setLineWidth(3)
     love.graphics.setColor(1,1,1,0.7)
-    local ix = (x-1) * PACKED_SQUARE_SIZE + self.draw_x + PACKED_SQUARE_SIZE/2
-    local iy = (y-1) * PACKED_SQUARE_SIZE + self.draw_y + PACKED_SQUARE_SIZE/2
+    local ix = (x-1) * self.totalSlotSize + self.draw_x + self.totalSlotSize/2
+    local iy = (y-1) * self.totalSlotSize + self.draw_y + self.totalSlotSize/2
     love.graphics.line(mx, my, ix, iy)
     love.graphics.setColor(1,1,1)
     love.graphics.circle("fill", mx,my, 2)
