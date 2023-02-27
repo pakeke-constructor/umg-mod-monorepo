@@ -26,8 +26,7 @@ SOFTWARE.
 
 local Config = require(SLAB_PATH .. '.Internal.Core.Config')
 local Cursor = require(SLAB_PATH .. '.Internal.Core.Cursor')
-local FileSystem -- = require(...)
--- PAKEKE MONKEYPATCH: Removed require
+local FileSystem = require(SLAB_PATH .. '.Internal.Core.FileSystem')
 local Utility = require(SLAB_PATH .. '.Internal.Core.Utility')
 
 local API = {}
@@ -83,15 +82,54 @@ local Style =
 }
 
 function API.Initialize()
-    -- PAKEKE MONKEYPATCH: Changed this function,
-    -- removed a bunch of filesystem stuff.
+	local StylePath = "/Internal/Resources/Styles/"
+	local Path = SLAB_FILE_PATH .. StylePath
+	-- Use love's filesystem functions to support both packaged and unpackaged builds
+	local Items = love.filesystem.getDirectoryItems(Path)
+
+	local StyleName = nil
+	for I, V in ipairs(Items) do
+		if string.find(V, Path, 1, true) == nil then
+			V = Path .. V
+		end
+
+		local LoadedStyle = API.LoadStyle(V, false, true)
+
+		if LoadedStyle ~= nil then
+			local Name = FileSystem.GetBaseName(V, true)
+
+			if StyleName == nil then
+				StyleName = Name
+			end
+		end
+	end
+
+	if not API.SetStyle("Dark") then
+		API.SetStyle(StyleName)
+	end
+
 	Style.Font = love.graphics.newFont(Style.FontSize)
 	API.PushFont(Style.Font)
 	Cursor.SetNewLineSize(Style.Font:getHeight())
 end
 
 function API.LoadStyle(Path, Set, IsDefault)
-	error("PAKEKE MONKEYPATCH: Removed due to filesystem usage")
+	local Contents, Error = Config.LoadFile(Path, IsDefault)
+	if Contents ~= nil then
+		local Name = FileSystem.GetBaseName(Path, true)
+		Styles[Name] = Contents
+		StylePaths[Name] = Path
+		if IsDefault then
+			table.insert(DefaultStyles, Name)
+		end
+
+		if Set then
+			API.SetStyle(Name)
+		end
+	else
+		print("Failed to load style '" .. Path .. "'.\n" .. Error)
+	end
+	return Contents
 end
 
 function API.SetStyle(Name)
@@ -136,7 +174,17 @@ function API.GetCurrentStyleName()
 end
 
 function API.CopyCurrentStyle(Path)
-    error("PAKEKE MONKEYPATCH: Removed due to filesystem usage")
+	local NewStyle = Utility.Copy(Styles[CurrentStyle])
+	local Result, Error = Config.Save(Path, NewStyle)
+
+	if Result then
+		local NewStyleName = FileSystem.GetBaseName(Path, true)
+		Styles[NewStyleName] = NewStyle
+		StylePaths[NewStyleName] = Path
+		API.SetStyle(NewStyleName)
+	else
+		print("Failed to create new style at path '" .. Path "'. " .. Error)
+	end
 end
 
 function API.SaveCurrentStyle()

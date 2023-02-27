@@ -35,6 +35,47 @@ function love.load(args)
 	if dontInterceptEventHandlers then setCustomHandlers() end
 end
 
+function love.update(dt)
+	Slab.SetScale(1.5)
+	Slab.Update(dt)
+	SlabTest.Begin()
+end
+
+function love.draw()
+	Slab.Draw()
+end
+
+function _quit()
+	Slab.OnQuit()
+end
+
+function _keypressed(key, scancode, isrepeat)
+	Slab.OnKeyPressed(key, scancode, isrepeat)
+end
+
+function _keyreleased(key, scancode)
+	Slab.OnKeyReleased(key, scancode)
+end
+
+function _textinput(text)
+	Slab.OnTextInput(text)
+end
+
+function _wheelmoved(x, y)
+	Slab.OnWheelMoved(x, y)
+end
+
+function _mousemoved(x, y, dx, dy, istouch)
+	Slab.OnMouseMoved(x, y, dx, dy, istouch)
+end
+
+function _mousepressed( x, y, button, istouch, presses)
+	Slab.OnMousePressed( x, y, button, istouch, presses)
+end
+
+function _mousereleased( x, y, button, istouch, presses)
+	Slab.OnMouseReleased( x, y, button, istouch, presses)
+end
 
 function setCustomHandlers()
 	love.handlers['quit'] = _quit;

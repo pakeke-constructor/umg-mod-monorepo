@@ -39,8 +39,7 @@ local find = string.find
 
 local Cursor = require(SLAB_PATH .. '.Internal.Core.Cursor')
 local DrawCommands = require(SLAB_PATH .. '.Internal.Core.DrawCommands')
--- PAKEKE MONKEYPATCH: Removed FileSystem
-local FileSystem --= require(SLAB_PATH .. '.Internal.Core.FileSystem')
+local FileSystem = require(SLAB_PATH .. '.Internal.Core.FileSystem')
 local Keyboard = require(SLAB_PATH .. '.Internal.Input.Keyboard')
 local LayoutManager = require(SLAB_PATH .. '.Internal.UI.LayoutManager')
 local Mouse = require(SLAB_PATH .. '.Internal.Input.Mouse')
@@ -49,7 +48,7 @@ local Stats = require(SLAB_PATH .. '.Internal.Core.Stats')
 local Style = require(SLAB_PATH .. '.Style')
 local Text = require(SLAB_PATH .. '.Internal.UI.Text')
 local Tooltip = require(SLAB_PATH .. '.Internal.UI.Tooltip')
-local UTF8 = utf8 -- PAKEKE MONKEYPATCH
+local UTF8 = require('utf8')
 local Utility = require(SLAB_PATH .. '.Internal.Core.Utility')
 local Window = require(SLAB_PATH .. '.Internal.UI.Window')
 

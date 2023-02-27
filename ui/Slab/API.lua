@@ -28,7 +28,8 @@ if SLAB_PATH == nil then
 	SLAB_PATH = (...):match("(.-)[^%.]+$")
 end
 
-
+SLAB_FILE_PATH = debug.getinfo(1, 'S').source:match("^@(.+)/")
+SLAB_FILE_PATH = SLAB_FILE_PATH == nil and "" or SLAB_FILE_PATH
 local StatsData = {}
 local PrevStatsData = {}
 
@@ -248,11 +249,32 @@ local Initialized = false
 
 
 local function LoadState()
-	-- PAKEKE MONKEYPATCH: Removed due to filesystem usage
+	if INIStatePath == nil then return end
+
+	local Result, Error = Config.LoadFile(INIStatePath, IsDefault)
+	if Result ~= nil then
+		Dock.Load(Result)
+		Tree.Load(Result)
+		Window.Load(Result)
+	end
+
+	if Verbose then
+		print("Load INI file:", INIStatePath, "Error:", Error)
+	end
 end
 
 local function SaveState()
-	-- PAKEKE MONKEYPATCH: Removed due to filesystem usage
+	if INIStatePath == nil then return end
+
+	local Table = {}
+	Dock.Save(Table)
+	Tree.Save(Table)
+	Window.Save(Table)
+	local Result, Error = Config.Save(INIStatePath, Table, IsDefault)
+
+	if Verbose then
+		print("Save INI file:", INIStatePath, "Error:", Error)
+	end
 end
 
 local function TextInput(Ch)
@@ -1988,7 +2010,7 @@ function Slab.IsVoidHovered()
 		return false
 	end
 
-	return Region.GetHotInstanceId() == '' --and (not Region.IsScrolling())
+	return Region.GetHotInstanceId() == '' and not Region.IsScrolling()
 end
 
 --[[
@@ -2307,7 +2329,9 @@ end
 
 function Slab.CalculateStats(LoveStats)
 	for k, v in pairs(LoveStats) do
-		LoveStats[k] = v - StatsData[k]
+		if StatsData[k] then
+			LoveStats[k] = v - StatsData[k]
+		end
 	end
 	return LoveStats
 end

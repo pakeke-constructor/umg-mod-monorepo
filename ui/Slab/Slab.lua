@@ -24,12 +24,12 @@ SOFTWARE.
 
 --]]
 
-
-
-SLAB_PATH = "Slab"
+-- This file is for running a project within the Slab folder. This file
+-- should not be used when using the Slab folder within another project.
+if SLAB_PATH == nil then
+	SLAB_PATH = (...):match("(.-)[^%.]+$") 
+end
 
 local Slab = require(SLAB_PATH .. '.API')
 
 return Slab
-
-
