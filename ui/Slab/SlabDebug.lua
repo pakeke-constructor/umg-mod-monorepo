@@ -314,25 +314,6 @@ local function DrawStyleEditor()
 
 	if Style_FileDialog ~= nil then
 		local Type = Style_FileDialog == 'new' and 'savefile' or Style_FileDialog == 'load' and 'openfile' or nil
-
-		if Type ~= nil then
-			local Path = love.filesystem.getRealDirectory(SLAB_FILE_PATH) .. "/" .. SLAB_FILE_PATH .. "Internal/Resources/Styles"
-			local Result = Slab.FileDialog({AllowMultiSelect = false, Directory = Path, Type = Type, Filters = {{"*.style", "Styles"}}})
-
-			if Result.Button ~= "" then
-				if Result.Button == "OK" then
-					if Style_FileDialog == 'new' then
-						Style.API.CopyCurrentStyle(Result.Files[1])
-					else
-						Style.API.LoadStyle(Result.Files[1], true)
-					end
-				end
-
-				Style_FileDialog = nil
-			end
-		else
-			Style_FileDialog = nil
-		end
 	end
 end
 

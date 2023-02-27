@@ -39,7 +39,6 @@ local find = string.find
 
 local Cursor = require(SLAB_PATH .. '.Internal.Core.Cursor')
 local DrawCommands = require(SLAB_PATH .. '.Internal.Core.DrawCommands')
-local FileSystem = require(SLAB_PATH .. '.Internal.Core.FileSystem')
 local Keyboard = require(SLAB_PATH .. '.Internal.Input.Keyboard')
 local LayoutManager = require(SLAB_PATH .. '.Internal.UI.LayoutManager')
 local Mouse = require(SLAB_PATH .. '.Internal.Input.Mouse')
@@ -48,7 +47,7 @@ local Stats = require(SLAB_PATH .. '.Internal.Core.Stats')
 local Style = require(SLAB_PATH .. '.Style')
 local Text = require(SLAB_PATH .. '.Internal.UI.Text')
 local Tooltip = require(SLAB_PATH .. '.Internal.UI.Tooltip')
-local UTF8 = require('utf8')
+local UTF8 = utf8
 local Utility = require(SLAB_PATH .. '.Internal.Core.Utility')
 local Window = require(SLAB_PATH .. '.Internal.UI.Window')
 
@@ -1129,22 +1128,6 @@ function Input.Begin(Id, Options)
 		local ShouldDelete = false
 		local ShouldUpdateTransform = false
 		local PreviousTextCursorPos = TextCursorPos
-
-		if IsCommandKeyDown() then
-			if Keyboard.IsPressed('x') or Keyboard.IsPressed('c') then
-				local Selected = GetSelection(Instance)
-				if Selected ~= "" then
-					love.system.setClipboardText(Selected)
-					ShouldDelete = Keyboard.IsPressed('x')
-				end
-			end
-
-			if Keyboard.IsPressed('v') then
-				local Text = FileSystem.GetClipboard()
-				Input.Text(Text)
-				TextCursorPos = min(TextCursorPos + #Text - 1, #Instance.Text)
-			end
-		end
 
 		if Keyboard.IsPressed('tab') then
 			if Options.MultiLine then

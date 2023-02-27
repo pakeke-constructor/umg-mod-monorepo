@@ -30,30 +30,7 @@ local SlabDebug = require(SLAB_PATH .. '.SlabDebug')
 local SlabTest = {}
 
 local function DrawOverview()
-	Slab.Textf(
-		"Slab is an immediate mode GUI toolkit for the LÖVE 2D framework. This library " ..
-		"is designed to allow users to easily add this library to their existing LÖVE 2D projects and " ..
-		"quickly create tools to enable them to iterate on their ideas quickly. The user should be able " ..
-		"to utilize this library with minimal integration steps and is completely written in Lua and utilizes " ..
-		"the LÖVE 2D API. No compiled binaries are required and the user will have access to the source so " ..
-		"that they may make adjustments that meet the needs of their own projects and tools. Refer to main.lua " ..
-		"and SlabTest.lua for example usage of this library.\n\n" ..
-		"This window will demonstrate the usage of the Slab library and give an overview of all the supported controls " ..
-		"and features.")
 
-	Slab.NewLine()
-
-	Slab.Text("The current version of Slab is: ")
-	Slab.SameLine()
-	Slab.Text(Slab.GetVersion(), {Color = {0, 1, 0, 1}})
-
-	Slab.Text("The current version of LÖVE is: ")
-	Slab.SameLine()
-	Slab.Text(Slab.GetLoveVersion(), {Color = {0, 1, 0, 1}})
-
-	Slab.Text("The current OS is: ")
-	Slab.SameLine()
-	Slab.Text(love.system.getOS(), {Color = {0, 1, 0, 1}})
 end
 
 local DrawButtons_NumClicked = 0

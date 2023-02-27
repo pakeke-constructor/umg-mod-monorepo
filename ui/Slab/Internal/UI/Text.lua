@@ -88,10 +88,6 @@ function Text.Begin(label, options)
 
 	if hovered and options.URL ~= nil then
 		Mouse.SetCursor('hand')
-
-		if Mouse.IsClicked(1) then
-			love.system.openURL(options.URL)
-		end
 	end
 
 	DrawCommands.Print(label, floor(x + pad * 0.5), floor(y), color, Style.Font)

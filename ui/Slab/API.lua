@@ -28,7 +28,7 @@ if SLAB_PATH == nil then
 	SLAB_PATH = (...):match("(.-)[^%.]+$")
 end
 
-SLAB_FILE_PATH = debug.getinfo(1, 'S').source:match("^@(.+)/")
+SLAB_FILE_PATH = ""
 SLAB_FILE_PATH = SLAB_FILE_PATH == nil and "" or SLAB_FILE_PATH
 local StatsData = {}
 local PrevStatsData = {}
@@ -40,7 +40,6 @@ local ComboBox = require(SLAB_PATH .. '.Internal.UI.ComboBox')
 local Config = require(SLAB_PATH .. '.Internal.Core.Config')
 local Cursor = require(SLAB_PATH .. '.Internal.Core.Cursor')
 local Scale = require(SLAB_PATH .. ".Internal.Core.Scale")
-local Dialog = require(SLAB_PATH .. '.Internal.UI.Dialog')
 local Dock = require(SLAB_PATH .. '.Internal.UI.Dock')
 local DrawCommands = require(SLAB_PATH .. '.Internal.Core.DrawCommands')
 local Image = require(SLAB_PATH .. '.Internal.UI.Image')

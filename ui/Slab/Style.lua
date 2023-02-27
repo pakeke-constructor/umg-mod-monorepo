@@ -26,7 +26,6 @@ SOFTWARE.
 
 local Config = require(SLAB_PATH .. '.Internal.Core.Config')
 local Cursor = require(SLAB_PATH .. '.Internal.Core.Cursor')
-local FileSystem = require(SLAB_PATH .. '.Internal.Core.FileSystem')
 local Utility = require(SLAB_PATH .. '.Internal.Core.Utility')
 
 local API = {}
@@ -85,7 +84,7 @@ function API.Initialize()
 	local StylePath = "/Internal/Resources/Styles/"
 	local Path = SLAB_FILE_PATH .. StylePath
 	-- Use love's filesystem functions to support both packaged and unpackaged builds
-	local Items = love.filesystem.getDirectoryItems(Path)
+	local Items = {}
 
 	local StyleName = nil
 	for I, V in ipairs(Items) do
@@ -116,7 +115,7 @@ end
 function API.LoadStyle(Path, Set, IsDefault)
 	local Contents, Error = Config.LoadFile(Path, IsDefault)
 	if Contents ~= nil then
-		local Name = FileSystem.GetBaseName(Path, true)
+		local Name = ""
 		Styles[Name] = Contents
 		StylePaths[Name] = Path
 		if IsDefault then

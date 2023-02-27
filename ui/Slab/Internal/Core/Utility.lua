@@ -176,6 +176,12 @@ function Utility.TableCount(Table)
 	return Result
 end
 
+
+function Utility.Clamp(Value, Min, Max)
+	return Value < Min and Min or (Value > Max and Max or Value)
+end
+
+
 function Utility.IsWindows()
 	return love.system.getOS() == "Windows"
 end
@@ -185,11 +191,12 @@ function Utility.IsOSX()
 end
 
 function Utility.IsMobile()
-	return love.system.getOS() == "Android" or love.system.getOS() == "iOS"
+	return false
 end
 
 function Utility.Clamp(Value, Min, Max)
 	return Value < Min and Min or (Value > Max and Max or Value)
 end
+
 
 return Utility

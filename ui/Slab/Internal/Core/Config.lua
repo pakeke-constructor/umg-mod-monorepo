@@ -24,7 +24,6 @@ SOFTWARE.
 
 --]]
 
-local FileSystem = require(SLAB_PATH .. '.Internal.Core.FileSystem')
 
 local Config = {}
 local DecodeValueFn = nil
@@ -293,7 +292,6 @@ end
 
 function Config.LoadFile(Path, IsDefault)
 	local Result = nil
-	local Contents, Error = FileSystem.ReadContents(Path, nil, IsDefault)
 	if Contents ~= nil then
 		Result, Error = Config.Decode(Contents)
 	end
@@ -305,7 +303,6 @@ function Config.Save(Path, Table, IsDefault)
 	local Result, Error = false
 	if Table ~= nil then
 		local Contents = Config.Encode(Table)
-		Result, Error = FileSystem.SaveContents(Path, Contents, IsDefault)
 	else
 		Error = "Invalid table given to Config.Save!"
 	end
