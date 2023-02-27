@@ -106,10 +106,12 @@ end)
 local allowedTypes = {
     kinematic = true; dynamic = true; static=true
 }
+
 local er1 = [[
 Illegal physics.type value: %s
 Must be one of the following:  "kinematic", "dynamic", or "static"
 ]]
+
 
 local function getBodyType(ent)
     if ent.physics.type then

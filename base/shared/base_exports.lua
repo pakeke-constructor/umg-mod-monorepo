@@ -25,8 +25,6 @@ local function loadClient(base)
     
     base.isHovered = require("client.mouse_hover")
     
-    base.physics = require("client.physics")
-
     base.getUIScale = draw.getUIScale
     base.setUIScale = draw.setUIScale
 
@@ -79,13 +77,14 @@ local function loadShared(base)
 
     base.typecheck = require("shared.typecheck")
 
+    base.physics = require("shared.physics")
+
     base.defineExports = defineExports
 end
 
 
 
 local function loadServer(base)
-    base.physics = require("server.physics");
 end
 
 
