@@ -7,16 +7,6 @@ client.on("changeEntHealth",function(ent, health, maxHealth)
 end)
 
 
-client.on("dead", function(ent, health)
-    ent.health = health
-    if ent.onDeath then
-        ent:onDeath()
-    end
-    umg.call("dead",ent)
-end)
-
-
-
 
 --[[
 

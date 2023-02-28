@@ -1,8 +1,5 @@
 
 
-local worldborder = {}
-
-
 
 local Border = base.Class("worldborder:Border")
 
@@ -79,7 +76,10 @@ if server then
 local borderGroup = umg.group("border")
 
 
-local moveGroup = umg.group("x", "y", "vx", "vy")
+borderGroup:onAdded(function(ent)
+    local border = ent.border
+    assert(type(border) == "table" and getmetatable(border) == Border, "border component must be border object")
+end)
 
 
 local function borderOrder(b1, b2)
@@ -95,50 +95,75 @@ local function moveEntToBorder(border, ent)
 end
 
 
+local function dealWithEntity(borderBuffer, ent)
+    -- border buffer is a 
+    local EPSILON = 0.01
+    local entWithin = false
+    local closestBorder = nil
+    local closestBorderDistance = math.huge
+
+    for i=1, #borderBuffer do
+        local border = borderBuffer[i]
+        local distance = border:distanceFromBorderEdge(ent.x, ent.y)
+        if distance < EPSILON then
+            -- we're inside the border, this entity is fine.
+            entWithin = true
+            break 
+        else
+            if distance < closestBorderDistance then
+                closestBorderDistance = distance
+                closestBorder = border
+            end
+        end
+    end
+
+    if not entWithin then
+        -- entity is outside our borders... lets see what we can do
+        if closestBorder then
+            if closestBorderDistance <= BORDER_LEIGHWAY then
+                moveEntToBorder(closestBorder, ent)
+            else
+                -- too far out, just kill it
+                base.kill(ent)
+            end
+        end
+    end
+end
+
+
+
+local moveGroup = umg.group("x", "y", "vx", "vy")
+
+
+local positionGroup = umg.group("x","y")
+
+positionGroup:onAdded(function(ent)
+    -- its fine to pass in the group here, since groups are just arrays internally
+    dealWithEntity(borderGroup, ent)
+end)
+
+
+
 umg.on("tick", function()
     if #borderGroup == 0 then
         return -- No world borders? No problem
     end
 
-    local EPSILON = 0.01
-
     -- sort orders by size, its more efficient to check biggest borders first.
     local borderBuffer = base.Array()
-    for _, border in ipairs(borderGroup) do
-        borderBuffer:add(border)
+    for _, ent in ipairs(borderGroup) do
+        borderBuffer:add(ent.border)
     end
     table.sort(borderBuffer, borderOrder)
 
     for _, ent in ipairs(moveGroup) do
-        local entWithin = false
-        local closestBorder = nil
-        local closestBorderDistance = math.huge
-
-        for i=1, #borderBuffer do
-            local border = borderBuffer[i]
-            local distance = border:distanceFromBorderEdge(ent.x, ent.y)
-            if distance < EPSILON then
-                -- we're inside the border, this entity is fine.
-                entWithin = true
-                break 
-            else
-                if distance < closestBorderDistance then
-                    closestBorderDistance = distance
-                    closestBorder = border
-                end
-            end
-        end
-
-        if not entWithin then
-            if closestBorder then
-                moveEntToBorder(closestBorder, ent)
-            end
-        end
+        dealWithEntity(borderBuffer, ent)
     end
 end)
 
 
-end
+
+end -- if server then
 
 
 

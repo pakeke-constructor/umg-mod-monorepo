@@ -76,7 +76,7 @@ umg.on("sellUnit", function(sold_ent)
     end
 end)
 
-umg.on("dead", function(dead_ent)
+umg.on("entityDeath", function(dead_ent)
     for _, e in ipairs(allyDeathEnts) do
         if e.rgbTeam == dead_ent.rgbTeam and dead_ent ~= e then
             e:onAllyDeath(dead_ent)

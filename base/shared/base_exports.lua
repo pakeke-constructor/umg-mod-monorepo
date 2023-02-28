@@ -85,6 +85,7 @@ end
 
 
 local function loadServer(base)
+    base.kill = require("shared.death")
 end
 
 

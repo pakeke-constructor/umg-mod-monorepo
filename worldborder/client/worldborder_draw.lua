@@ -1,8 +1,5 @@
 
 
-local worldborder = require("shared.worldborder")
-
-
 local canvas = love.graphics.newCanvas()
 
 

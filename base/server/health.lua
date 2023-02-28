@@ -3,12 +3,26 @@
 
 local hpGroup = umg.group("maxHealth")
 
+local kill = require("shared.death")
+
 
 
 hpGroup:onAdded(function(ent)
     if not ent.health then
         ent.health = ent.maxHealth
     end
+end)
+
+
+
+local entToPreviousHealth = {
+    -- [ent]  =  previous health value that was synced
+    -- for delta compression
+}
+
+
+hpGroup:onRemoved(function(ent)
+    entToPreviousHealth[ent] = nil
 end)
 
 
@@ -21,18 +35,14 @@ umg.on("@tick", function(dt)
         end
 
         -- delta compression, syncing health values:
-        if ent._previousHealth ~= ent.health then
+        local previousHealth = entToPreviousHealth[ent]
+        if previousHealth ~= ent.health then
             server.broadcast("changeEntHealth", ent, ent.health, ent.maxHealth)
-            ent._previousHealth = ent.health
+            entToPreviousHealth[ent] = ent.health
         end
 
         if ent.health <= 0 then
-            server.broadcast("dead", ent, ent.health)
-            umg.call("dead", ent)
-            if ent.onDeath then
-                ent:onDeath()
-            end
-            ent:delete()
+            kill(ent)
         end
     end
 end)
