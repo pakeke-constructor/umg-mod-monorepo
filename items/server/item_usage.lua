@@ -5,6 +5,9 @@ local itemUsage = {}
 local DEFAULT_ITEM_COOLDOWN = 0.01
 
 
+local itemLastUseTime = {}
+
+
 function itemUsage.canUseHoldItem(holder_ent, ...)
     if (not umg.exists(holder_ent)) or (not umg.exists(holder_ent.holdItem)) then
         return false
@@ -56,10 +59,12 @@ local asserterDirect = base.typecheck.assert("entity?", "entity")
 function itemUsage.useItemDirectly(holder_ent, item, ...)
     asserterDirect(holder_ent, item)
     -- holder_ent could be nil here
-    item:useItem(holder_ent or false, ...)
+    if type(item.useItem) == "function" then
+        item:useItem(holder_ent or false, ...)
+    end
+    umg.call("useItem", holder_ent, item, ...)
     server.broadcast("useItem", holder_ent, item, ...)
     item.item_lastUseTime = base.getGameTime()
-    -- TODO: crappy ephemeral component here!
 end
 
 

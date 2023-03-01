@@ -1,7 +1,7 @@
 
 --[[
 
-Main drawing system.
+Main drawing system for entities.
 Will emit draw calls based on position, and in correct order.
 
 ]]
