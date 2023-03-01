@@ -15,10 +15,10 @@ function Border:init(options)
     assert(options.centerY, "borders need centerY")
     assert(options.width, "borders need width")
     assert(options.height, "borders need height")
-    assert(options.entity, "borders need an entity")
 
-    self.entity = options.entity
     self.color = WHITE
+    self.centerX = options.centerX
+    self.centerY = options.centerY
     self.x = options.centerX - options.width / 2
     self.y = options.centerY - options.height / 2
     self.width = options.width
@@ -53,8 +53,8 @@ end
 function Border:distanceFromBorderEdge(x,y)
     -- Uses manhattan distance  
     -- (pretty much the same as euclidean in this scenario)
-    local dx = math.max(0, math.abs(x - self.centerX) - self.width)
-    local dy = math.max(0, math.abs(y - self.centerY) - self.height)
+    local dx = math.max(0, math.abs(x - self.centerX) - self.width/2)
+    local dy = math.max(0, math.abs(y - self.centerY) - self.height/2)
     return dx + dy
 end
 
@@ -124,6 +124,7 @@ local function dealWithEntity(borderBuffer, ent)
                 moveEntToBorder(closestBorder, ent)
             else
                 -- too far out, just kill it
+                print("killing: ", ent)
                 base.kill(ent)
             end
         end
@@ -137,24 +138,37 @@ local moveGroup = umg.group("x", "y", "vx", "vy")
 
 local positionGroup = umg.group("x","y")
 
-positionGroup:onAdded(function(ent)
-    -- its fine to pass in the group here, since groups are just arrays internally
-    dealWithEntity(borderGroup, ent)
-end)
 
 
 
-umg.on("tick", function()
-    if #borderGroup == 0 then
-        return -- No world borders? No problem
-    end
 
+local sortedBorderBuffer = base.Array()
+
+
+local function getBorderBuffer()
     -- sort orders by size, its more efficient to check biggest borders first.
     local borderBuffer = base.Array()
     for _, ent in ipairs(borderGroup) do
         borderBuffer:add(ent.border)
     end
     table.sort(borderBuffer, borderOrder)
+    return borderBuffer
+end
+
+
+positionGroup:onAdded(function(ent)
+    dealWithEntity(sortedBorderBuffer, ent)
+end)
+
+
+
+umg.on("@tick", function()
+    if #borderGroup <= 0 then
+        return -- No world borders? No problem
+    end
+
+    local borderBuffer = getBorderBuffer()
+    sortedBorderBuffer = borderBuffer
 
     for _, ent in ipairs(moveGroup) do
         dealWithEntity(borderBuffer, ent)
@@ -166,4 +180,9 @@ end)
 end -- if server then
 
 
+
+local worldborder = {}
+worldborder.Border = Border
+
+umg.expose("worldborder", worldborder)
 

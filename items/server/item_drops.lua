@@ -29,14 +29,17 @@ function itemDrops.dropItem(item, x, y)
     ]]
     item.x = (x or item.x) or 0
     item.y = (y or item.y) or 0
-    item._item_last_holdtime = love.timer.getTime() -- ephemeral component
+
+    -- TODO: 
+    -- Remove shitty ephemeral component usage here
+    item._item_last_holdtime = love.timer.getTime() -- ephemeral component,
     -- (keeps track of the last time this item was held)
 
     item.hidden = false
     item.itemBeingHeld = false
     itemDrops.itemPartition:add(item)
 
-    server.broadcast("dropInventoryItem", item, x, y)
+    server.broadcast("dropInventoryItem", item, item.x, item.y)
 end
 
 

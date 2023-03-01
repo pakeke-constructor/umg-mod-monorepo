@@ -30,6 +30,22 @@ chat.handleCommand("spawn", function(sender, entType)
     end
 end)
 
+chat.handleCommand("border", function()
+    local ent = server.entities.empty()
+    ent.border = worldborder.Border({
+        centerX = 0, centerY = 0,
+        width = 500, height = 500
+    })
+end)
+
+chat.handleCommand("border", function()
+    local ent = server.entities.empty()
+    ent.border = worldborder.Border({
+        centerX = -300, centerY = 300,
+        width = 500, height = 500
+    })
+end)
+
 chat.handleCommand("spin", function(sender)
     server.broadcast("spin")
 end)

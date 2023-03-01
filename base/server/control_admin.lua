@@ -38,7 +38,24 @@ local function shouldAccept(player)
     return not blockingPlayers[player] 
 end
 
-local DELTA_THRESHOLD = 100 -- this number seems quite significant to force a sync.
+local FORCE_SYNC_THRESHOLD = 100 -- this number seems quite significant to force a sync.
+
+
+local function forceSyncPlayerPosition(player_ent, x, y, z)
+    if blockingPlayers[player_ent] then
+        return -- we are already waiting on a response
+    end
+    local ack_number = math.random(1,100000) -- we also send a random number so the client can't lie.
+    blockingPlayersAckNumber[player_ent] = ack_number
+    blockingPlayers[player_ent] = true
+    playerToLastX[player_ent] = x
+    playerToLastY[player_ent] = y
+    if z then
+        playerToLastZ[player_ent] = z
+    end
+    server.unicast(player_ent.controller, "lockMovement", player_ent, x, y, z, ack_number)
+end
+
 
 
 umg.on("gameUpdate", function(dt)
@@ -53,17 +70,9 @@ umg.on("gameUpdate", function(dt)
         local x,y,z = player.x,player.y,player.z
         local lx,ly,lz = playerToLastX[player] or x, playerToLastY[player] or y, playerToLastZ[player] or z
 
-        if math.distance(x-lx,y-ly,(z or 0)-(lz or 0)) > DELTA_THRESHOLD then
+        if math.distance(x-lx,y-ly,(z or 0)-(lz or 0)) > FORCE_SYNC_THRESHOLD then
             -- Distance is too large: we warrant server forced sync.
-            local ack_number = math.random(1,100000) -- we also send a random number so the client can't lie.
-            blockingPlayersAckNumber[player] = ack_number
-            blockingPlayers[player] = true
-            playerToLastX[player] = x
-            playerToLastY[player] = y
-            if z then
-                playerToLastZ[player] = z
-            end
-            server.unicast(player.controller, "lockMovement", player, x, y, z, player.vx, player.vy, player.vz, ack_number)
+            forceSyncPlayerPosition(player, x, y, z)
         end
     end
 end)
@@ -71,14 +80,16 @@ end)
 
 server.on("lockMovementAck", function(sender_username, player_ent, ack_number)
     if not umg.exists(player_ent) then
-        return -- get outta here, u cant crash server 
+        return
     end
-
+    if sender_username ~= player_ent.controller then
+        return
+    end
     if ack_number ~= blockingPlayersAckNumber[player_ent] then
         return -- nope, need verification, no spamming
     end
 
-    blockingPlayers[player_ent] = false -- no longer blocking.
+    blockingPlayers[player_ent] = nil -- no longer blocking.
     blockingPlayersAckNumber[player_ent] = nil
 end)
 
@@ -103,7 +114,12 @@ local function filterPlayerPosition(sender_username, ent, x,y,z)
     end
 
     local dist = math.distance(ent.x-x, ent.y-y, ent.z-z)
-    if dist > DELTA_THRESHOLD then
+    if dist > FORCE_SYNC_THRESHOLD then
+        -- TODO: This forceSync call is bad, ddos opportunity here.
+        -- Perhaps we should instead mark this entity as "should force sync"
+        -- and then sync once on the next tick?
+        -- with this setup, hacked clients could send multiple position packets per frame and ddos the server
+        forceSyncPlayerPosition(ent, ent.x, ent.y, ent.z)
         return false -- ent moving too fast!
     end
 
@@ -120,6 +136,9 @@ local function filterPlayerVelocity(sender_username, ent, vx,vy,vz)
     if not umg.exists(ent) then
         return false -- DENY! Non existant entity
     end
+    if not shouldAccept(ent) then
+        return false
+    end
     if type(vx) ~= "number" or type(vy) ~= "number" or (vz and (type(vz) ~= "number")) then
         return false
     end
@@ -131,9 +150,6 @@ local function filterPlayerVelocity(sender_username, ent, vx,vy,vz)
     return ent.controllable and sender_username == ent.controller
         and ent.vx and ent.vy
 end
-
-server.filter("setPlayerVelocity", filterPlayerVelocity)
-
 
 
 
@@ -158,7 +174,7 @@ end)
 
 
 server.on("setPlayerVelocity", function(sender_username, ent, vx,vy,vz)
-    if not shouldAccept(ent) then
+    if not filterPlayerVelocity(sender_username, ent, vx,vy,vz) then
         return
     end
     local max_spd = (ent.speed or constants.DEFAULT_SPEED) 

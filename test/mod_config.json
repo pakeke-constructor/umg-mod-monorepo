@@ -12,6 +12,7 @@
       "move_behaviour",
       "attack_behaviour",
       "terrain",
-      "worldeditor"
+      "worldeditor",
+      "worldborder"
     ]
 }

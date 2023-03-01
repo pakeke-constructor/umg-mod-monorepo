@@ -340,8 +340,10 @@ end)
 
 
 client.on("dropInventoryItem", function(item, x, y)
+    assert(x and y, "?")
     item.x = x
     item.y = y
+    item.itemBeingHeld = false
     item.hidden = false
 end)
 
