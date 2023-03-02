@@ -8,13 +8,20 @@ Ok: We want to be able to-
 - have entities pick their image based on surrounding entities (auto-tiling)
 
 
+
 Tile component:
 ```lua
 
 ent.grid = {
     width = 16,
-    height = 16 -- locks entity instances to a 16x16 grid
+    height = 16, -- locks entity instances to a 16x16 grid
+    
+    type = "building" -- OPTIONAL: the name of the grid this entity is bound to.
+    -- by default, type = entity:type()
 }
+
+
+
 
 
 
@@ -50,21 +57,4 @@ ent.imageTiling = {
 }
 ```
 
-
-
-
-Grid component:
-
-We want to create a unique grid per entity type.
-We should specify:
-    - width, height of grid squares
-    - unique identifier for grid
-    - whether multiple entities can exist at the same grid position
-
-Hmm. do some more thinking about this.
-We should be able to reuse this in an easy fashion.
-```lua
-
-
-```
 

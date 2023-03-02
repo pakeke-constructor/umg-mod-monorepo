@@ -1,7 +1,8 @@
 
 
-local tileGroup = umg.group("imageTiling")
+local grid = require("shared.grid")
 
+local tileGroup = umg.group("imageTiling", "x", "y")
 
 
 
@@ -82,9 +83,9 @@ the `bottom` tile will be filled via a 90 degree rotation of the left tile.
 ]]
 local function fillTilePossibilities(imageTiling, rotationMap)
     local confirmedTileType
-    for jtype, _ in pairs(rotationMap) do
-        if imageTiling[jtype] then
-            confirmedTileType = jtype
+    for ttype, _ in pairs(rotationMap) do
+        if imageTiling[ttype] then
+            confirmedTileType = ttype
             break
         end
     end
@@ -97,17 +98,17 @@ local function fillTilePossibilities(imageTiling, rotationMap)
         error("Missing a required tile type.\nNeed one or more of the following: " .. table.concat(buffer, " "))
     end
 
-    for jtype, _ in pairs(rotationMap) do
-        if not imageTiling[jtype] then
+    for ttype, _ in pairs(rotationMap) do
+        if not imageTiling[ttype] then
             -- then we gotta fill in this tile
-            local drot = rotationMap[confirmedTileType] - rotationMap[jtype]
-            imageTiling[jtype] = {
+            local drot = rotationMap[confirmedTileType] - rotationMap[ttype]
+            imageTiling[ttype] = {
                 image = imageTiling[confirmedTileType],
                 rot = drot
             }
         else
-            imageTiling[jtype] = {
-                image = imageTiling[jtype],
+            imageTiling[ttype] = {
+                image = imageTiling[ttype],
                 rot = nil
             }
         end
@@ -119,21 +120,37 @@ end
 local MANGLED = {} -- unique identifier table
 -- ensures we don't mangle twice
 
+
+
 local function mangleComponent(imageTiling)
     if imageTiling[MANGLED] then
         return  -- already completed
     end
+    
     assertComponent(imageTiling)
     fillTilePossibilities(imageTiling, DIAGONAL_ROTATIONS)
     fillTilePossibilities(imageTiling, DIRECTIONAL_ROTATIONS)
+
     imageTiling[MANGLED] = true
 end
 
 
 
 
-local function selectImage(imageTiling)
-    
+local function randomChoice(arr)
+    return arr[math.random(1, #arr)]
+end
+
+
+
+
+local function selectImage(ent)
+    local imageTiling = ent.imageTiling
+    local x,y = ent.x, ent.y
+    local grid_ = grid.getGrid(ent)
+    for  in grid_:getAdjacent() do
+        
+    end
 end
 
 
@@ -141,11 +158,15 @@ end
 tileGroup:onAdded(function(ent)
     assert(ent:isShared("imageTiling"), "imageTiling component must be shared")
     mangleComponent(ent.imageTiling)
-    local image = selectImage(ent.imageTiling)
+    local image = selectImage(ent)
     ent.image = image
 end)
 
-tileGroup:onRemoved()
+
+
+tileGroup:onRemoved(function(ent)
+    for _, 
+end)
 
 
 

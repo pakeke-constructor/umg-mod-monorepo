@@ -13,6 +13,16 @@ end
 
 
 
+function categories.ipairs(category)
+    return categoryMap[category]:iter()
+end
+
+function categories.iter(category)
+    return categoryMap[category]:iter()
+end
+
+
+
 
 
 function categories.changeEntityCategory(ent, newCategory)
