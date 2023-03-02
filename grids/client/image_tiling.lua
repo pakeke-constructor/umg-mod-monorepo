@@ -144,13 +144,21 @@ end
 
 
 
+local IMAGE_SELECTION = {
+
+}
+
+
+
 local function selectImage(ent)
     local imageTiling = ent.imageTiling
     local x,y = ent.x, ent.y
-    local grid_ = grid.getGrid(ent)
-    for  in grid_:getAdjacent() do
-        
+    local grid = grids.getGrid(ent)
+    if grid then
+        local gridX,gridY = grid.getGridPosition(ent)
     end
+    
+    --[[ todo: select grid position from here and return image ]]
 end
 
 

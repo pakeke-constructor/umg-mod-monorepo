@@ -62,6 +62,26 @@ function Grid:get(x,y)
 end
 
 
+local getPositionAsserter = base.typecheck.asserter("table", "number", "number")
+
+function Grid:getPosition(entity_or_x, y_or_nil)
+    local x, y
+    if entity_or_x.x then
+        local ent = entity_or_x
+        x, y = ent.x, ent.y
+    else
+        x, y = entity_or_x, y_or_nil        
+    end
+    getPositionAsserter(self, x, y)
+
+    return math.floor(x / self.width), math.floor(y / self.height)
+end
+
+
+function Grid:
+
+
+
 
 
 local function assertGridComponentValid(ent)
@@ -105,20 +125,15 @@ end)
 local asserter = base.typecheck.asserter("string")
 
 function grids.getGrid(name_or_entity)
-    local grid_
-    if name_or_entity.grid then
-        grid_ = grids[]
+    local g
+    if name_or_entity.type then
+        return gridMap[name_or_entity:type()]
     else
-
+        asserter(name_or_entity)
+        return gridMap[name_or_entity]
     end
-    return grid_
 end
 
-
-function grids.Grid(name, width, height)
-    gridInitAsserter(name, width, height)
-    return Grid(name, width, height)
-end
 
 
 

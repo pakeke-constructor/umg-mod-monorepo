@@ -56,18 +56,45 @@ end
 
 
 
+local parseToFunction -- need to define here for mutual recursion
 
 
-local function parseToFunction(str)
-    if str:find("%?") then
+local function parseUnion(str)
+    local s = str:find("|")
+    local type1 = str:sub(1,s-1)
+    local type2 = str:sub(s+1)
+    local f1 = parseToFunction(type1)
+    local f2 = parseToFunction(type2)
+    return function(x)
+        local ok1, er1 = f1(x)
+        local ok2, er2 = f2(x)
+        if ok1 or ok2 then
+            return true
+        else
+            return false, er1 .. " or " .. er2
+        end
+    end
+
+end
+
+
+function parseToFunction(str)
+    str = str:gsub(" ","")
+
+    if str:find("|") then
+        return parseUnion(str)
+    elseif str:find("%?") then
         -- if string contains question mark, treat the argument as optional.
         str = str:gsub("%?","")
         if typecheck[str] then
             return typecheck.optional(typecheck[str])
+        else
+            error("malformed typecheck string: " .. str)
         end
     elseif typecheck[str] then
         return typecheck[str]
     end
+    error("malformed typecheck string: " .. tostring(str))
 end
 
 
@@ -91,8 +118,8 @@ function typecheck.assert(...)
             local arg = select(i, ...)
             local ok, err = check_fns[i](arg)
             if not ok then
-                local estring = "Bad argument #" .. tostring(i) .. ":\n"
-                local err_data = tostring(arg) .. " was given, but " .. tostring(err) 
+                local estring = "Bad argument " .. tostring(i) .. ":\n"
+                local err_data = tostring(type(arg)) .. " was given, but " .. tostring(err) 
                 error(estring .. err_data, 3)
             end
         end
@@ -115,6 +142,8 @@ function typecheck.check(...)
         return true
     end
 end
+
+
 
 
 return typecheck
