@@ -44,7 +44,7 @@ local function binarySearch(arr, targ_draw_dep, keyfunc)
 	while low <= high do
 		local mid = floor((low + high) / 2)
 		local mid_val = arr[mid]
-		if targ_draw_dep < keyfunc(mid_val.y, mid_val.z) then
+		if targ_draw_dep < keyfunc(mid_val) then
 			high = mid - 1
 		else
 			low = mid + 1
@@ -63,6 +63,12 @@ end
 
 local function getDrawDepth(y,z)
     return floor(y + (z or 0))
+end
+
+
+local function getEntityDrawDepth(ent)
+    local depth = ent.drawDepth or 0
+    return getDrawDepth(ent.y + depth, ent.z)
 end
 
 
@@ -132,11 +138,11 @@ drawGroup:onAdded(function( ent )
     -- Callback for entity addition
     if ent:hasComponent("vy") or ent:hasComponent("vz") then
         -- then the entity moves, add it to move array
-        local i = binarySearch(sortedMoveEnts, getDrawDepth(ent.y,ent.z), getDrawDepth)
+        local i = binarySearch(sortedMoveEnts, getEntityDrawDepth(ent), getEntityDrawDepth)
         table.insert(sortedMoveEnts, i, ent)
     else
         -- the entity doesn't move, add it to frozen array
-        local i = binarySearch(sortedFrozenEnts, getDrawDepth(ent.y,ent.z), getDrawDepth)
+        local i = binarySearch(sortedFrozenEnts, getEntityDrawDepth(ent), getEntityDrawDepth)
         table.insert(sortedFrozenEnts, i, ent)
     end
 end)
@@ -181,7 +187,7 @@ end)
 
 
 local function less(ent_a, ent_b)
-    return getDrawDepth(ent_a.y, ent_a.z) < getDrawDepth(ent_b.y, ent_b.z)
+    return getEntityDrawDepth(ent_a) < getEntityDrawDepth(ent_b)
 end
 
 
@@ -240,15 +246,15 @@ umg.on("drawEntities", function()
     local max_depth = cameraBotDepth() -- bot depth is bigger screenY
 
     -- we start at the bottom of the screen, and work up.
-    local frozen_i = max(1, binarySearch(sortedFrozenEnts, min_depth, getDrawDepth))
-    local moving_i = max(1, binarySearch(sortedMoveEnts, min_depth, getDrawDepth))
+    local frozen_i = max(1, binarySearch(sortedFrozenEnts, min_depth, getEntityDrawDepth))
+    local moving_i = max(1, binarySearch(sortedMoveEnts, min_depth, getEntityDrawDepth))
     local frozen_ent = sortedFrozenEnts[frozen_i]
     local moving_ent = sortedMoveEnts[moving_i]
     local frozen_dep
     local moving_dep
 
-    frozen_dep = frozen_ent and getDrawDepth(frozen_ent.y,frozen_ent.z) or 0xffffffffff
-    moving_dep = moving_ent and getDrawDepth(moving_ent.y,moving_ent.z) or 0xffffffffff
+    frozen_dep = frozen_ent and getEntityDrawDepth(frozen_ent) or 0xffffffffff
+    moving_dep = moving_ent and getEntityDrawDepth(moving_ent) or 0xffffffffff
     
     if frozen_dep < moving_dep then
         -- then we draw entity from frozen list
@@ -285,8 +291,8 @@ umg.on("drawEntities", function()
         last_draw_dep = draw_dep
 
         -- select next draw entity:
-        frozen_dep = frozen_ent and getDrawDepth(frozen_ent.y,frozen_ent.z) or 0xffffffffff
-        moving_dep = moving_ent and getDrawDepth(moving_ent.y,moving_ent.z) or 0xffffffffff
+        frozen_dep = frozen_ent and getEntityDrawDepth(frozen_ent) or 0xffffffffff
+        moving_dep = moving_ent and getEntityDrawDepth(moving_ent) or 0xffffffffff
         if frozen_dep < moving_dep then
             -- then we draw entity from frozen list
             frozen_i = frozen_i + 1
@@ -315,6 +321,7 @@ return {
 
     getDrawY = getDrawY;
     getDrawDepth = getDrawDepth;
+    getEntityDrawDepth = getEntityDrawDepth;
 
     isOnScreen = isOnScreen;
     entIsOnScreen = entIsOnScreen

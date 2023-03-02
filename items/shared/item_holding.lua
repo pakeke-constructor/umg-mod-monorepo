@@ -29,11 +29,9 @@ end
 
 
 
-local itemHoldPositioning = {
---[[
+local itemHoldPositioning = {--[[
     this table contains functions that act on the different hold types
-]]
-}
+]]}
 
 
 local TOOL_USE_TIME = 0.3

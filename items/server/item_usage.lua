@@ -5,8 +5,6 @@ local itemUsage = {}
 local DEFAULT_ITEM_COOLDOWN = 0.01
 
 
-local itemLastUseTime = {}
-
 
 function itemUsage.canUseHoldItem(holder_ent, ...)
     if (not umg.exists(holder_ent)) or (not umg.exists(holder_ent.holdItem)) then

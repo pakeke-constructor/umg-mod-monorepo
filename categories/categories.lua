@@ -1,6 +1,6 @@
 
 
-local categories = setmetatable({}, {
+local categoryMap = setmetatable({}, {
     __index = function(t,k)
         t[k] = base.Set()
         return t[k]
@@ -21,11 +21,11 @@ categoryEntities:onAdded(function(ent)
     if type(category) == "table" then
         -- this entity has multiple categories.
         for _, c in ipairs(category) do
-            categories[c]:add(ent)
+            categoryMap[c]:add(ent)
         end
     else
         assert(type(category) == "string", ".category value must be string or list of strings: " .. tostring(ent))
-        categories[category]:add(ent)
+        categoryMap[category]:add(ent)
     end
 end)
 
@@ -38,14 +38,14 @@ categoryEntities:onRemoved(function(ent)
     if type(category) == "table" then
         -- this entity has multiple categories.
         for _, c in ipairs(category) do
-            categories[c]:remove(ent)
+            categoryMap[c]:remove(ent)
         end
     else
-        categories[category]:remove(ent)
+        categoryMap[category]:remove(ent)
     end
 end)
 
 
 
-return categories
+return categoryMap
 

@@ -1,21 +1,21 @@
 
-local categories = require("categories")
+local categoryMap = require("categories")
 
-local exp = {}
-
-
+local categories = {}
 
 
-function exp.getSet(category)
+
+
+function categories.getSet(category)
     assert(category, "categories.getEntities(category) requires a valid category as first argument.")
-    return categories[category]
+    return categoryMap[category]
 end
 
 
 
 
 
-function exp.changeEntityCategory(ent, newCategory)
+function categories.changeEntityCategory(ent, newCategory)
     --[[
         changes an entities category/s.
         This MUST be called instead of doing `ent.category = X`
@@ -30,14 +30,14 @@ function exp.changeEntityCategory(ent, newCategory)
             -- its a list of categories:
             for i=1, #ent.category do
                 local c = ent.category[i]
-                if rawget(categories, c) then
-                    categories[c]:remove(ent)
+                if rawget(categoryMap, c) then
+                    categoryMap[c]:remove(ent)
                 end
             end
         else -- its just a category string:
             local c = ent.category
-            if rawget(categories, c) then
-                categories[c]:remove(ent)
+            if rawget(categoryMap, c) then
+                categoryMap[c]:remove(ent)
             end
         end
     end
@@ -47,18 +47,18 @@ function exp.changeEntityCategory(ent, newCategory)
     if type(newCategory) == "table" then
         -- this entity has multiple categories.
         for _, c in ipairs(newCategory) do
-            categories[c]:add(ent)
+            categoryMap[c]:add(ent)
         end
     else
         if type(newCategory) ~= "string" then 
             error("newCategory value must be string or list of strings: " .. tostring(ent))
         end
-        categories[newCategory]:add(ent)
+        categoryMap[newCategory]:add(ent)
     end
     ent.category = newCategory
 end
 
 
-umg.expose("categories", exp)
+umg.expose("categories", categories)
 
 
