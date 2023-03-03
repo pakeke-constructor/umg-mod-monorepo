@@ -143,10 +143,119 @@ end
 
 
 
+--[[
 
-local IMAGE_SELECTION = {
 
+TODO: Refactor all of this
+We are missing a terrain tile type.
+(Concave corner tiles)
+
+
+Also, we want our system to support fences!
+Make it more robust:
+Do some more planning.
+
+
+
+
+]]
+
+
+
+-- TODO: All this should be refactored
+local TILE_REQUIREMENTS = {
+    [{
+        true, true, true,
+        true,       true,
+        true, true, true
+    }] = "fill",
+    [{
+        true, true, true,
+        true,       true,
+       false,false,false
+    }] = "bottom",
+    [{
+        false,false,false,
+        true,       true,
+        true, true, true
+    }] = "top",
+    [{
+        false, true, true,
+        false,       true,
+        false, true, true
+    }] = "left",
+    [{
+        true, true, false,
+        true,       false,
+        true, true, false
+    }] = "right",
+    [{
+       false,false,false,
+       false,       true,
+       false, true, true
+    }] = "topRight",
+    [{
+        false,true,true,
+        false,       true,
+        false,false,false
+    }] = "bottomLeft",
+    [{
+        true, true,false,
+        true,       false,
+        false,false,false
+    }] = "bottomRight",
+    [{
+        false,false,false,
+        true,       false,
+        true,true,false
+    }] = "topLeft",
 }
+
+--[[
+
+https://twitter.com/OskSta/status/1448248658865049605/photo/3
+https://twitter.com/OskSta/status/1448248658865049605/photo/3
+https://twitter.com/OskSta/status/1448248658865049605/photo/3
+https://twitter.com/OskSta/status/1448248658865049605/photo/3
+https://twitter.com/OskSta/status/1448248658865049605/photo/3
+https://twitter.com/OskSta/status/1448248658865049605/photo/3
+
+Take a look at this blog
+
+]]
+
+
+local function convertToBitKey(bufKey)
+    --[[
+        converts a buffer of booleans to bitwise integer
+        eg:  {true, false, true} 
+        -->   1 0 1
+        -->   5
+    ]]
+    local n = 1
+    local ret = 0
+    for i, bool in ipairs(bufKey) do
+        if bool then
+            ret = ret + n
+        end
+        n = n * 2
+    end
+    return ret
+end
+
+
+local tileRequirementTypes = {}
+
+
+for bufKey, tileType in pairs(TILE_REQUIREMENTS) do
+    table.insert(tileRequirementTypes, {
+        bitKey = convertToBitKey(bufKey),
+        tileType = tileType
+    })
+end
+
+
+
 
 
 
@@ -154,9 +263,23 @@ local function selectImage(ent)
     local imageTiling = ent.imageTiling
     local x,y = ent.x, ent.y
     local grid = grids.getGrid(ent)
-    if grid then
-        local gridX,gridY = grid.getGridPosition(ent)
+    local gridX,gridY = grid.getGridPosition(ent)
+    
+    local bufKey = {}
+    for y=-1,1 do
+        for dy=-1,1 do
+            if (dx ~= 0) or (dy ~= 0) then
+                local ent = grid:get(gridX + dx, gridY + dy)
+                table.insert(bufKey, ent and true or false)
+            end
+        end
     end
+    local bitKey = convertToBitKey(bufKey)
+
+    for _, tileRequirement in ipairs(tileRequirementTypes) do
+        if bitKey == bit.band(tileRequirement.bitKey
+    end
+
     
     --[[ todo: select grid position from here and return image ]]
 end

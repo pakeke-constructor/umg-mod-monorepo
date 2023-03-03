@@ -74,7 +74,6 @@ local function parseUnion(str)
             return false, er1 .. " or " .. er2
         end
     end
-
 end
 
 
