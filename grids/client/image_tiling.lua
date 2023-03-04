@@ -1,43 +1,73 @@
 
 
-local grid = require("shared.grid")
+local grids = require("shared.grid")
+
 
 local tileGroup = umg.group("imageTiling", "x", "y")
 
 
 
 
+local function matches(tiling, bufKey)
+    for y=1, 3 do
+        for x = 1, 3 do
+            if (y ~= 2) and (x ~= 2) then
+                local tileExists = bufKey[y][x]
+                local char = tiling.layout[y]:sub(x,y)
+                if char == "#" and (not tileExists) then
+                    return false
+                elseif char == "." and tileExists then
+                    return false
+                end
+            end
+        end
+    end
+    return true
+end
 
 
-local VALID_TILE_TYPES = {
-    fill = true,
+
+
+
+
+
+local function randomChoice(arr)
+    return arr[math.random(1, #arr)]
+end
+
+
+
+local function selectImage(ent)
+    local imageTiling = ent.imageTiling
+    local grid = grids.getGrid(ent)
+    local gridX,gridY = grid.getGridPosition(ent)
     
-    topLeft = true,
-    bottomLeft = true,
-    topRight = true,
-    bottomRight = true,
+    local bufKey = {}
+    for dy=-1,1 do
+        local ybuf = {}
+        for dx=-1,1 do
+            local e = grid:get(gridX + dx, gridY + dy)
+            if e then
+                table.insert(ybuf, true)
+            else
+                table.insert(ybuf, false)
+            end
+            table.insert(bufKey, ybuf)
+        end
+    end
 
-    left = true,
-    right = true,
-    bottom = true,
-    top = true
-}
+    for _, tiling in ipairs(imageTiling) do
+        if matches(tiling, bufKey) then
+            if tiling.images then
+                return randomChoice(tiling.images)
+            else
+                return tiling.image
+            end
+        end
+    end
 
-
-
-local DIAGONAL_ROTATIONS = {
-    topLeft = 0,
-    topRight = -math.pi/2,
-    bottomLeft = math.pi/2,
-    bottomRight = math.pi
-}
-
-local DIRECTIONAL_ROTATIONS = {
-    left = 0,
-    right = math.pi,
-    bottom = math.pi/2,
-    top = -math.pi/2
-}
+    return nil -- no image found?
+end
 
 
 
@@ -56,17 +86,36 @@ local function assertDimensionsSame(imageStr, width, height)
 end
 
 
-local function assertComponent(tile)
-    local w, h 
-    for tiletype, arr_or_string in pairs(tile) do
-        if not VALID_TILE_TYPES[tiletype] then
-            error("invalid tile type: " .. tostring(tiletype))
+local VALID_CHARS = {
+    ["?"] = true, ["#"] = true, ["."] = true
+}
+
+
+local function assertFor(bool, entType)
+    if not bool then
+        error("imageTiling component invalid for entity: " .. entType)
+    end
+end
+
+
+local function assertLayout(layout, entType)
+    assert(type(layout) == "table" and #layout == 3, "imageTiling layout invalid")
+    for _, v in ipairs(layout) do
+        assert(type(v) == "table" and #v == 3, "imageTiling layout invalid")
+        for i=1, #v do
+            local ch = v[i]
+            assertFor(VALID_CHARS[ch], entType)
         end
-        if type(arr_or_string) == "string" then
-            w,h = assertDimensionsSame(arr_or_string, w, h)
-        else
-            assert(type(arr_or_string) == "table", "Must be a string or a table")
-        end
+    end
+end
+
+
+local function assertComponent(imageTiling, entType)
+    local w,h
+    for _, tiling in ipairs(imageTiling) do
+        assertLayout(tiling.layout, entType)
+        assertFor(tiling.image, entType)
+        w,h = assertDimensionsSame(tiling.image, w, h)        
     end
 end
 
@@ -74,46 +123,76 @@ end
 
 
 
---[[
-This function will take possible rotations of tiles,
-and fill in the gaps when we have an undefined tile.
 
-So for example if we have tiles: {`left`, `right`, `top`,} and no bottom,
-the `bottom` tile will be filled via a 90 degree rotation of the left tile.
-]]
-local function fillTilePossibilities(imageTiling, rotationMap)
-    local confirmedTileType
-    for ttype, _ in pairs(rotationMap) do
-        if imageTiling[ttype] then
-            confirmedTileType = ttype
-            break
+
+local function layoutEquals(layout1, layout2)
+    for i=1, #layout1 do
+        if layout1[i] ~= layout2[i] then
+            return false
         end
     end
+    return true
+end
 
-    if not confirmedTileType then
-        local buffer = base.Array()
-        for tiletype,_ in pairs(rotationMap) do
-            buffer:add(tiletype)
+local function tryAddLayout(tiling, layout)
+    for _, layout2 in ipairs(tiling.allLayouts) do
+        if layoutEquals(layout, layout2) then
+            return
         end
-        error("Missing a required tile type.\nNeed one or more of the following: " .. table.concat(buffer, " "))
+    end
+    table.insert(tiling.allLayouts, layout)
+end
+
+
+
+local function reverse(t)
+    local ret = {}
+    for i=#t, 1, -1 do
+        table.insert(ret, t[i])
+    end
+    return ret
+end
+
+
+local function addFlips(tiling)
+    if tiling.canFlipHorizontal then
+        local newLayout = table.copy(tiling.layout)
+        newLayout[1] = reverse(newLayout[1])
+        newLayout[2] = reverse(newLayout[2])
+        newLayout[3] = reverse(newLayout[3])
+        tryAddLayout(tiling, newLayout)
     end
 
-    for ttype, _ in pairs(rotationMap) do
-        if not imageTiling[ttype] then
-            -- then we gotta fill in this tile
-            local drot = rotationMap[confirmedTileType] - rotationMap[ttype]
-            imageTiling[ttype] = {
-                image = imageTiling[confirmedTileType],
-                rot = drot
-            }
-        else
-            imageTiling[ttype] = {
-                image = imageTiling[ttype],
-                rot = nil
-            }
-        end
+    if tiling.canFlipVertical then
+        local newLayout = table.copy(tiling.layout)
+        newLayout[1], newLayout[3] = newLayout[3], newLayout[1]
+        tryAddLayout(tiling, newLayout)
     end
 end
+
+
+
+local function addRotations(tiling)
+    if not tiling.canRotate then
+        return
+    end
+    --[[
+        rotates a tiling layout 4 times, 90 degree rotations
+    ]]
+    local l = tiling.layout
+    for _=1,3 do
+        -- rotate clockwise
+        local layout = {
+            --  l[y][x]
+            {l[3][1],l[2][1],l[1][1]},
+            {l[3][2],l[2][2],l[1][2]},
+            {l[3][3],l[2][3],l[1][3]}
+        }
+        l = layout
+        tryAddLayout(tiling, layout)
+    end
+end
+
 
 
 
@@ -121,182 +200,69 @@ local MANGLED = {} -- unique identifier table
 -- ensures we don't mangle twice
 
 
-
-local function mangleComponent(imageTiling)
+local function mangleComponent(ent)
+    local imageTiling = ent.imageTiling
     if imageTiling[MANGLED] then
-        return  -- already completed
+        return  -- already mangled
     end
     
-    assertComponent(imageTiling)
-    fillTilePossibilities(imageTiling, DIAGONAL_ROTATIONS)
-    fillTilePossibilities(imageTiling, DIRECTIONAL_ROTATIONS)
+    assertComponent(imageTiling, ent:type())
+    for _, tiling in ipairs(imageTiling) do
+        tiling.allLayouts = {}
+        addFlips(tiling)
+        addRotations(tiling)
+    end
 
     imageTiling[MANGLED] = true
 end
 
 
 
-
-local function randomChoice(arr)
-    return arr[math.random(1, #arr)]
+local function updateTile(ent)
+    local image = selectImage(ent)
+    ent.image = image
 end
 
 
-
---[[
-
-
-TODO: Refactor all of this
-We are missing a terrain tile type.
-(Concave corner tiles)
-
-
-Also, we want our system to support fences!
-Make it more robust:
-Do some more planning.
-
-
-
-
-]]
-
-
-
--- TODO: All this should be refactored
-local TILE_REQUIREMENTS = {
-    [{
-        true, true, true,
-        true,       true,
-        true, true, true
-    }] = "fill",
-    [{
-        true, true, true,
-        true,       true,
-       false,false,false
-    }] = "bottom",
-    [{
-        false,false,false,
-        true,       true,
-        true, true, true
-    }] = "top",
-    [{
-        false, true, true,
-        false,       true,
-        false, true, true
-    }] = "left",
-    [{
-        true, true, false,
-        true,       false,
-        true, true, false
-    }] = "right",
-    [{
-       false,false,false,
-       false,       true,
-       false, true, true
-    }] = "topRight",
-    [{
-        false,true,true,
-        false,       true,
-        false,false,false
-    }] = "bottomLeft",
-    [{
-        true, true,false,
-        true,       false,
-        false,false,false
-    }] = "bottomRight",
-    [{
-        false,false,false,
-        true,       false,
-        true,true,false
-    }] = "topLeft",
-}
-
---[[
-
-https://twitter.com/OskSta/status/1448248658865049605/photo/3
-https://twitter.com/OskSta/status/1448248658865049605/photo/3
-https://twitter.com/OskSta/status/1448248658865049605/photo/3
-https://twitter.com/OskSta/status/1448248658865049605/photo/3
-https://twitter.com/OskSta/status/1448248658865049605/photo/3
-https://twitter.com/OskSta/status/1448248658865049605/photo/3
-
-Take a look at this blog
-
-]]
-
-
-local function convertToBitKey(bufKey)
-    --[[
-        converts a buffer of booleans to bitwise integer
-        eg:  {true, false, true} 
-        -->   1 0 1
-        -->   5
-    ]]
-    local n = 1
-    local ret = 0
-    for i, bool in ipairs(bufKey) do
-        if bool then
-            ret = ret + n
-        end
-        n = n * 2
-    end
-    return ret
-end
-
-
-local tileRequirementTypes = {}
-
-
-for bufKey, tileType in pairs(TILE_REQUIREMENTS) do
-    table.insert(tileRequirementTypes, {
-        bitKey = convertToBitKey(bufKey),
-        tileType = tileType
-    })
-end
-
-
-
-
-
-
-local function selectImage(ent)
-    local imageTiling = ent.imageTiling
-    local x,y = ent.x, ent.y
+local function updateSurroundingTiles(ent)
     local grid = grids.getGrid(ent)
     local gridX,gridY = grid.getGridPosition(ent)
     
-    local bufKey = {}
-    for y=-1,1 do
-        for dy=-1,1 do
-            if (dx ~= 0) or (dy ~= 0) then
-                local ent = grid:get(gridX + dx, gridY + dy)
-                table.insert(bufKey, ent and true or false)
+    for dy=-1,1 do
+        for dx=-1,1 do
+            if (dx ~= 1) or (dy ~= 1) then
+                local e = grid:get(gridX + dx, gridY + dy)
+                if umg.exists(e) then
+                    updateTile(e)
+                end
             end
         end
     end
-    local bitKey = convertToBitKey(bufKey)
-
-    for _, tileRequirement in ipairs(tileRequirementTypes) do
-        if bitKey == bit.band(tileRequirement.bitKey
-    end
-
-    
-    --[[ todo: select grid position from here and return image ]]
 end
 
 
 
+
+
+--[[
+    yikes.. this code is a bit fragile.
+    This assumes that the grid onRemoved()/onAdded() is called 
+    before these callbacks. 
+    It should be fine, because file load order is deterministic...
+    but still! yikes!!
+]]
+
 tileGroup:onAdded(function(ent)
     assert(ent:isShared("imageTiling"), "imageTiling component must be shared")
-    mangleComponent(ent.imageTiling)
-    local image = selectImage(ent)
-    ent.image = image
+    mangleComponent(ent)
+    updateTile(ent)
+    updateSurroundingTiles(ent)
 end)
 
 
 
 tileGroup:onRemoved(function(ent)
-    for _, 
+    updateSurroundingTiles(ent)
 end)
 
 
