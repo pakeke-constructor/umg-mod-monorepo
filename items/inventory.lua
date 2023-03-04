@@ -339,7 +339,7 @@ function Inventory:drawItem(item_ent, x, y)
     local scale = self.slotSize / w
     base.drawImage(quad, X + w/2, Y + w/2, 0, scale, scale)
 
-    if item_ent.stackSize > 1 then
+    if (item_ent.stackSize or 1) > 1 then
         -- Draw stack number
         love.graphics.push()
         love.graphics.translate(X-2,Y-2)

@@ -9,7 +9,7 @@ local newEntity = {}
 local etypes = {}
 local etypeList = {}
 
-client.on("worldeditorSetETypes", function(etypes_)
+client.on("worldeditorSetEntityTypes", function(etypes_)
     etypes = etypes_
     for etypeName, _ in pairs(etypes) do
         table.insert(etypeList, etypeName)
@@ -61,8 +61,7 @@ umg.on("slabUpdate", function(listener)
     if selectedEType then
         if Slab.Button("Create " .. selectedEType) then
             -- todo: move to server etc
-            local e = server.entities[selectedEType](base.camera.x, base.camera.y)
-
+            client.send("worldeditorSpawnEntity", selectedEType, base.camera.x, base.camera.y)
         end
     end
 

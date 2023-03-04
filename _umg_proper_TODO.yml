@@ -9,7 +9,7 @@ globals:
       observes: read
   umg.on:
     args:
-      - type: string
+      - type: stringw
       - type: function
   umg.call:
     args:
