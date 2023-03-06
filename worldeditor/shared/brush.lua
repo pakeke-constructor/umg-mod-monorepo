@@ -4,7 +4,7 @@
 brush objects
 
 All table keys with `_` are temporary, and specific to the runtime.
-When brushes are exported, keys starting with _ are ignored
+
 
 ]]
 
