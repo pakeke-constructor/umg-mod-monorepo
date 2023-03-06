@@ -8,9 +8,6 @@ When brushes are exported, keys starting with _ are ignored
 
 ]]
 
-local actions = require("shared.action")
-
-
 
 local brushes = {}
 

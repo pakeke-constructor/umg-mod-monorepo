@@ -8,8 +8,8 @@ local PointAction = base.Class("worldeditor:PointAction")
 
 
 
-local PointSpawn = base.Class("worldeditor:PointScriptAction", PointAction)
-
+local PointSpawn = base.Class("worldeditor:PointSpawnAction", PointAction)
+local PointScript = base.Class("worldeditor:PointScriptAction", PointAction)
 
 
 
@@ -26,7 +26,7 @@ function PointSpawn:apply(x, y)
     if not ctor then
         print("[worldeditor] tried to spawn invalid entityType: " .. self.entityType)
     end
-    ctor(math.floor(x), math.floor(y))
+    ctor(x, y)
 end
 
 

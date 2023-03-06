@@ -26,6 +26,8 @@ local function applyPointAction(pointBuffer, pointAction, excludeArea)
         local ex, ew, ey, eh = excludeArea.x, excludeArea.w, excludeArea.y, excludeArea.h
         local withinExclusion = ex<x and ex+ew>x and ey<y and ey+eh>y
         if not withinExclusion then
+            x = math.floor(x)
+            y = math.floor(y)
             pointAction:apply(x,y)
         end
     end
@@ -99,6 +101,12 @@ function AreaRandomPointAction:apply(area, excludeArea)
     end
     applyPointAction(pointBuffer, self.pointAction, excludeArea)
 end
+
+AreaRandomPointAction.name = "Area Random Point Action"
+AreaRandomPointAction.description =
+[[Generates random points in an area,
+then applies an action to the points.
+]]
 -- AreaRandomPointAction END
 
 
@@ -112,7 +120,7 @@ end
 
 
 
--- AreaUniformPointAction START
+-- AreaGridPointAction START
 
 local assertNumbers = base.typecheck.assert("number","number")
 
@@ -129,14 +137,19 @@ function AreaGridPointAction:apply(area, excludeArea)
     assertNumbers4(x,y,w,h)
 
     local pointBuffer = base.Array()
-    for xx = x, w, self.pointGapX do
-        for yy = y, h, self.pointGapY do
+    for xx = x, w, math.max(1, self.pointGapX) do
+        for yy = y, h, math.max(1, self.pointGapY) do
             pointBuffer:add({xx,yy})
         end
     end
     applyPointAction(pointBuffer, self.pointAction, excludeArea)
 end
--- AreaUniformPointAction END
+
+AreaGridPointAction.name = "Area Grid Point Action"
+AreaGridPointAction.description =
+[[Generates points in a uniform grid,
+then applies an action to the points ]]
+-- AreaGridPointAction END
 
 
 

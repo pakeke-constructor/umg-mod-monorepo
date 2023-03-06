@@ -29,20 +29,26 @@ Undo / Redo  (<-- THIS IS HARD. Do through Actions perhaps?)
 
 ALL OF THE FOLLOWING SHOULD BE ABLE TO BE IMPORTED / EXPORTED:
 
-# FILTERS:
+# ENTITY_FILTERS:
 Allows to filter entities based on one (or more) rules
 FUNCS:
 `filter:filter(ent)  -->  true/false`
 
 ## TypeFilter 
-params: `entityType`
+params: `entityType`, `invert = nil` 
 Filter entities by type
-## FilterScript 
-params: `luaScript`
+## ScriptFilter 
+params: `luaScript`, `invert = nil`
 Takes an entity, and returns boolean if the entity matches the filter
 ## ComponentFilter
-params: `component`
+params: `component`, `invert = nil`
 Filter entities by component ownership
+## AndFilter
+params: `FilterList[]`, `invert = nil`
+Ands a list of filters
+## OrFilter
+params: `FilterList[]`, `invert = nil`
+Ors a list of filters
 
 
 
@@ -58,9 +64,6 @@ pointBrush only acts on one point
 ## SquareBrush
 params: `AreaAction`
 SquareBrush acts on an area
-## ClusterBrush (TODO, DO THIS LATER ON)
-ClusterBrush acts on multiple square areas
-
 
 
 
