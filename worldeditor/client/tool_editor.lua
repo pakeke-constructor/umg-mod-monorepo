@@ -145,14 +145,11 @@ function CustomNode:display()
         Slab.Separator()
     end
 
-    if self:isDone() and (not self.value) then
-        local params = self:pullParamsFromChildren()
-        self.value = self.toolConstructor(params) 
-    end
-
-    if self:isDone() and Slab.Button("Apply", {Color = buttonReadyColor}) then
-        local params = self:pullParamsFromChildren()
-        self.value = self.toolConstructor(params) 
+    if self:isDone() then
+        if (not self.value) or Slab.Button("Apply", {Color = buttonReadyColor}) then
+            local params = self:pullParamsFromChildren()
+            self.value = self.class(params) 
+        end
     end
 end
 
@@ -175,9 +172,9 @@ end
 
 function CustomNodeGroup:display()
     Slab.Text(self.param)
-    assert(self.customNodeConstructors, "not given customNodeConstructors")
+    assert(self.customNodes, "not given customNodes")
     if Slab.BeginComboBox(tostring(self.id), {Selected = self.value}) then
-        for opt, nodeCtor in pairs(self.customNodeConstructors) do
+        for opt, nodeCtor in pairs(self.customNodes) do
             if Slab.TextSelectable(opt) then
                 self.value = opt
                 self.customNode = nodeCtor(self.id + 1)
@@ -224,9 +221,9 @@ local nodeGenAsserter = base.typecheck.assert("number", "table", "string", "stri
 local function customNodeGenerator(args)
     --[[
         args : {
-            name = "name",
+            param = "paramName",
             description = "description",
-            toolConstructor = toolConstructor,
+            class = class,
 
             params = {
                 {
@@ -245,7 +242,7 @@ local function customNodeGenerator(args)
         assert(param.param, "param has no name")
         assert(param.type, "param has no type")
     end
-    assert(args.toolConstructor, "Not given tool constructor")
+    assert(args.class, "Not given tool constructor")
 
     return function(id)
         nodeGenAsserter(id, args.arguments, args.name, args.description)
@@ -260,8 +257,8 @@ local function customNodeGenerator(args)
             })
         end
         return CustomNode({
-            name = args.name,
-            toolConstructor = args.toolConstructor,
+            param = args.param,
+            class = args.class,
             description = args.description,
             children = children,
             id = id
@@ -272,30 +269,31 @@ end
 
 
 
-local function defineCustomNodeGroup(groupName, classes)
+local function defineCustomNodeGroup(classes)
     local toolType = classes[1].toolType
+    assert(toolType, "not given toolType: " .. tostring(classes[1]))
     for _, cls in ipairs(classes) do
-        assert(cls.toolType == toolType, "not a valid grouping")
+        assert(cls.toolType == toolType, "invalid grouping")
     end
 
-    local customNodeConstructors = {}
+    local customNodes = {}
     for _, cls in ipairs(classes) do
         local ctor = customNodeGenerator({
             params = cls.params,
             name = cls.name,
             description = cls.description,
-            toolConstructor = cls
+            class = cls
         })
-        customNodeConstructors[cls.name] = ctor
+        customNodes[cls.name] = ctor
     end
-
-    return function(id)
+    local customNodeGroupCtor = function(id)
         return CustomNodeGroup({
             id = id,
-            customNodeConstructors = customNodeConstructors,
+            customNodes = customNodes,
             
         })
     end
+    typeMapping[toolType] = customNodeGroupCtor
 end
 
 
@@ -306,31 +304,26 @@ local pointActions = require("shared.actions.point_actions")
 
 
 
+defineCustomNodeGroup({
+    brushes.SquareBrush,
+    brushes.PointBrush
+})
+
+defineCustomNodeGroup({
+    areaActions.AreaRandomPointAction,
+    areaActions.AreaGridPointAction
+})
+
+defineCustomNodeGroup({
+    pointActions.PointSpawn
+})
 
 
 
-function toolEditor.createNode(args)
-    --[[
-        args = {
-            {
-                type = "number",
-                optional = true/false, 
-                ...  -- extra args can be added
-            }
-        }
-    ]]
-    local children = base.Array()
-    for _, arg in ipairs(args) do
-        assert(arg.type and typeMapping[arg.type], "invalid")
-        -- TODO: we need to add an ID here somehow...
-        children:add({
 
-            node = typeMapping[arg.type](arg)
-        })
-    end
+function toolEditor.createBrushNode(id)
+    return typeMapping.Brush(id)
 end
-
-
 
 return toolEditor
 

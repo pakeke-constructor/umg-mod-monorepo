@@ -238,7 +238,7 @@ chat.handleCommand("start", function(sender)
     startGame()
 end)
 
-chat.handleCommand("setMoney", function(sender, money)
+chat.handleAdminCommand("setMoney", function(sender, money)
     local board = Board.getBoard(sender)
     if board then
         local num = tonumber(money,10)

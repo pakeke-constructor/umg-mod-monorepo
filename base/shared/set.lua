@@ -106,6 +106,8 @@ function Set:has(obj)
    return self.pointers[obj] and true
 end
 
+Set.contains = Set.has -- alias
+
 
 
 return Set

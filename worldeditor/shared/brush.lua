@@ -13,8 +13,11 @@ local brushes = {}
 
 
 
-local PointBrush = base.Class("wordeditor:PointBrush")
-local SquareBrush = base.Class("worldeditor:SquareBrush")
+local Brush = base.Class("worldeditor:Brush")
+Brush.toolType = "Brush"
+
+local PointBrush = base.Class("wordeditor:PointBrush", Brush)
+local SquareBrush = base.Class("worldeditor:SquareBrush", Brush)
 
 
 

@@ -14,3 +14,20 @@ server.on("worldeditorSpawnEntity", function(username, etypeName, x, y)
 end)
 
 
+
+
+
+
+local function handleAdminCommand(sender, a,b,c,d)
+    if a == true then
+        -- turn worldedit mode on for this client
+    else
+        -- turn it off
+    end
+end
+
+
+
+chat.handleAdminCommand("worldeditor", handleAdminCommand)
+chat.handleAdminCommand("worldedit", handleAdminCommand)
+

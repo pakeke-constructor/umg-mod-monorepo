@@ -1,5 +1,6 @@
 
 
+
 --[[  POINT ACTIONS  ]]
 
 
@@ -13,7 +14,9 @@ PointAction.toolType = "PointAction"
 local PointSpawn = base.Class("worldeditor:PointSpawnAction", PointAction)
 local PointScript = base.Class("worldeditor:PointScriptAction", PointAction)
 
-
+local pointActions = {
+    PointSpawn = PointSpawn
+}
 
 
 function PointSpawn:init(params)
@@ -42,3 +45,4 @@ PointSpawn.params = {
 }
 
 
+return pointActions

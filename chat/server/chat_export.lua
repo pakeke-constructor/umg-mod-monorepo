@@ -3,6 +3,54 @@
 
 local commandToCallback = {}
 
+local commandToAdminCallback = {}
+
+
+
+
+local ADMINS = base.Set()
+ADMINS:add(server.getHostUsername())
+
+
+
+
+
+local chat = {}
+
+
+function chat.isAdmin(username)
+    return ADMINS:has(username)
+end
+
+
+function chat.message(message)
+    server.broadcast("chatMessage", message)
+end
+
+
+function chat.privateMessage(username, message)
+    server.unicast( username, "chatMessage", message)
+end
+
+
+
+local handleCommandTypecheck = base.typecheck.assert("string", "function")
+
+function chat.handleCommand(commandName, func)
+    handleCommandTypecheck(commandName, func)
+    commandToCallback[commandName] = func
+end
+
+
+function chat.handleAdminCommand(commandName, func)
+    handleCommandTypecheck(commandName, func)
+    commandToAdminCallback[commandName] = func
+end
+
+
+
+
+
 server.on("commandMessage", function(sender_uname, commandName, ...)
     --[[
         this is for when the player does any of the following:
@@ -13,34 +61,39 @@ server.on("commandMessage", function(sender_uname, commandName, ...)
         $commandName ...
     ]]
     if commandToCallback[commandName] then
-        local ar = commandToCallback[commandName]
-        for i=1, #ar do
-            ar[i](sender_uname, ...)
+        local func = commandToCallback[commandName]
+        func(sender_uname, ...)
+    end
+    if commandToAdminCallback[commandName] then
+        if chat.isAdmin(sender_uname) then
+            local func = commandToCallback[commandName]
+            func(sender_uname, ...)
+        else
+            chat.privateMessage(sender_uname, "insufficient permissions to execute: " .. commandName)
         end
     end
+    chat.privateMessage(sender_uname, "unknown command: " .. commandName)
 end)
 
 
 
 
-local chat = {}
-
-function chat.message(message)
-    server.broadcast("chatMessage", message)
-end
 
 
-function chat.handleCommand(commandName, func)
-    local ar = commandToCallback[commandName] or {}
-    if #ar > 500 then
-        error("Too many command handles have been defined. Command handles should only be defined once.")
+chat.handleCommand("promote", function(sender, user)
+    if sender == server.getHostUsername() then
+        ADMINS:add(user)
     end
-    if type(func) ~="function" then
-        error("chat.handleCommand(cmdName, func) expects a function as second argument. Instead, got: " .. type(func))
+end)
+
+
+chat.handleCommand("demote", function(sender, user)
+    if sender == server.getHostUsername() and ADMINS:has(user) then
+        ADMINS:remove(user)
     end
-    table.insert(ar, func)
-    commandToCallback[commandName] = ar
-end
+end)
+
+
 
 
 umg.expose("chat", chat)
