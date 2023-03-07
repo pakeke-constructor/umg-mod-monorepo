@@ -16,14 +16,22 @@ end)
 
 
 
-
+local BOOL_ALIASES = {
+    on = true,
+    off = false
+}
 
 local function handleAdminCommand(sender, a,b,c,d)
-    if a == true then
-        -- turn worldedit mode on for this client
-    else
-        -- turn it off
+    if BOOL_ALIASES[a] then
+        a = BOOL_ALIASES[a]
     end
+    if a == true or a == false then
+        server.unicast(sender, "worldeditorSetMode", a)
+    end
+    -- TODO:
+    -- Can do other stuff here.
+    -- perhaps fudge with settings and whatnot?
+    -- eg    /worldeditor settings.xyz foo
 end
 
 
