@@ -29,7 +29,18 @@ end
 PointBrush.name = "Point brush"
 PointBrush.description = "Apply an action to a single point"
 
+PointBrush.params = {
+    {param = "pointAction", type = "PointAction"}
+}
+
+
 brushes.PointBrush = PointBrush
+
+
+
+
+
+
 
 
 
@@ -46,6 +57,13 @@ end
 
 SquareBrush.name = "Square brush"
 SquareBrush.description = "Apply an action to a square area"
+
+SquareBrush.params = {
+    {param = "width", type = "number", optional = false},
+    {param = "height", type = "number", optional = false},
+    {param = "areaAction", type = "AreaAction", optional = false}
+}
+
 
 brushes.SquareBrush = SquareBrush
 

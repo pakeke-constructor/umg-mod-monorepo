@@ -6,6 +6,8 @@
 -- ABSTRACT BASE CLASS
 local PointAction = base.Class("worldeditor:PointAction")
 
+PointAction.toolType = "PointAction"
+
 
 
 local PointSpawn = base.Class("worldeditor:PointSpawnAction", PointAction)
@@ -26,9 +28,17 @@ function PointSpawn:apply(x, y)
     if not ctor then
         print("[worldeditor] tried to spawn invalid entityType: " .. self.entityType)
     end
-    ctor(x, y)
+    
+    local ent = ctor(x, y)
+    if self.entityAction then
+        error("nyi.")
+        self.entityAction:apply(ent)
+    end
 end
 
-
+PointSpawn.params = {
+    {param = "entityType", type = "etype"},
+    {param = "pointAction", type = "PointAction", optional = true}
+}
 
 

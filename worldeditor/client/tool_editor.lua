@@ -43,7 +43,7 @@ local CustomNode = base.Class("worldeditor:CustomNode", ToolNode)
 
 -- These represent a class of similar tools.
 -- (this is what customNodes are contained inside)
-local ToolClassNode = base.Class("worldeditor:ToolClassNode", ToolNode)
+local CustomNodeGroup = base.Class("worldeditor:CustomNodeGroup", ToolNode)
 
 
 
@@ -51,7 +51,7 @@ local ToolClassNode = base.Class("worldeditor:ToolClassNode", ToolNode)
 
 
 function NumberNode:display()
-    Slab.Text(self.key)
+    Slab.Text(self.param)
     Slab.SameLine()
     if Slab.Input(tostring(self.id), {Text = tostring(self.value), ReturnOnText = false, NumbersOnly = true}) then
         local value = Slab.GetInputNumber()
@@ -66,7 +66,7 @@ function NumberNode:display()
 end
 
 function StringNode:display()
-    Slab.Text(self.key)
+    Slab.Text(self.param)
     Slab.SameLine()
     if Slab.Input(tostring(self.id), {Text = tostring(self.value)}) then
         self.value = Slab.GetInputString()
@@ -80,7 +80,7 @@ end
 
 function SelectionNode:display()
     assert(self.options, "must require options field for SelectionNode")
-    Slab.Text(self.key)
+    Slab.Text(self.param)
     Slab.SameLine()
     if Slab.BeginComboBox(tostring(self.id), {Selected = self.value}) then
         for _, opt in ipairs(self.options) do
@@ -97,7 +97,7 @@ end
 local ALL_ETYPES = {} --  actually put the etypes in here
 
 function ETypeNode:display()
-    Slab.Text(self.key)
+    Slab.Text(self.param)
     Slab.SameLine()
     if Slab.BeginComboBox(tostring(self.id), {Selected = self.value}) then
         for _, opt in ipairs(ALL_ETYPES) do
@@ -125,14 +125,14 @@ function CustomNode:pullParamsFromChildren()
     local params = {}
     assert(self:isDone(), "wat?")
     for _, child in ipairs(self.children) do
-        params[child.key] = child.node:getValue()
+        params[child.param] = child.node:getValue()
     end
     return params
 end
 
 
 function CustomNode:display()
-    Slab.Text(self.name, {Color = customColor})
+    Slab.Text(self.param, {Color = customColor})
     if _G.settings.showDescription and self.description then
         Slab.Text(self.description)
     end
@@ -145,11 +145,14 @@ function CustomNode:display()
         Slab.Separator()
     end
 
-    if self:isDone() then
-        if Slab.Button("Done", {Color = buttonReadyColor}) then
-            local params = self:pullParamsFromChildren()
-            self.value = self.toolConstructor(params)
-        end
+    if self:isDone() and (not self.value) then
+        local params = self:pullParamsFromChildren()
+        self.value = self.toolConstructor(params) 
+    end
+
+    if self:isDone() and Slab.Button("Apply", {Color = buttonReadyColor}) then
+        local params = self:pullParamsFromChildren()
+        self.value = self.toolConstructor(params) 
     end
 end
 
@@ -170,6 +173,38 @@ end
 
 
 
+function CustomNodeGroup:display()
+    Slab.Text(self.param)
+    assert(self.customNodeConstructors, "not given customNodeConstructors")
+    if Slab.BeginComboBox(tostring(self.id), {Selected = self.value}) then
+        for opt, nodeCtor in pairs(self.customNodeConstructors) do
+            if Slab.TextSelectable(opt) then
+                self.value = opt
+                self.customNode = nodeCtor(self.id + 1)
+            end
+        end
+        Slab.EndComboBox()
+    end
+
+    if self.toolNode then
+        self.toolNode:display()
+    end
+end
+
+
+function CustomNodeGroup:getValue()
+    return self.customNode:getValue()
+end
+
+
+function CustomNodeGroup:isDone()
+    return self.customNode and self.customNode:isDone()
+end
+
+
+
+
+
 --[[
     maps selection types to ui Nodes.
     Everything in here maps to a function (or class) that generates a Node.
@@ -181,22 +216,34 @@ local typeMapping = {
     selection = SelectionNode
 }
 
---[[
-TODO:
-We need to somehow handle groupings within the typeMapping.
-
-]]
-
-
-
 
 
 local nodeGenAsserter = base.typecheck.assert("number", "table", "string", "string")
 
 
 local function customNodeGenerator(args)
-    for _, arg in ipairs(args.arguments) do
-        assert(arg.key, "arg not given a key")
+    --[[
+        args : {
+            name = "name",
+            description = "description",
+            toolConstructor = toolConstructor,
+
+            params = {
+                {
+                    param = "myParam"
+                    type = "number",
+                    optional = true/false,
+
+                },
+                {
+                    ...
+                }
+            }
+        }
+    ]]
+    for _, param in ipairs(args.params) do
+        assert(param.param, "param has no name")
+        assert(param.type, "param has no type")
     end
     assert(args.toolConstructor, "Not given tool constructor")
 
@@ -225,8 +272,30 @@ end
 
 
 
-local function defineCustomNodeGroup(groupName, argsList)
+local function defineCustomNodeGroup(groupName, classes)
+    local toolType = classes[1].toolType
+    for _, cls in ipairs(classes) do
+        assert(cls.toolType == toolType, "not a valid grouping")
+    end
 
+    local customNodeConstructors = {}
+    for _, cls in ipairs(classes) do
+        local ctor = customNodeGenerator({
+            params = cls.params,
+            name = cls.name,
+            description = cls.description,
+            toolConstructor = cls
+        })
+        customNodeConstructors[cls.name] = ctor
+    end
+
+    return function(id)
+        return CustomNodeGroup({
+            id = id,
+            customNodeConstructors = customNodeConstructors,
+            
+        })
+    end
 end
 
 

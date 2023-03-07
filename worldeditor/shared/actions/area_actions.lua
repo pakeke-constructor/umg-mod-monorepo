@@ -47,10 +47,18 @@ function AreaRandomPointAction:init(params)
     self.numPoints = params.numPoints
     assert(self.type and randomTypes[self.type], "bad AreaRandomPointAction params")
     self.type = params.type
-    self.minDistance = DEFAULT_MIN_POINT_DISTANCE
+    self.minDistance = params.minDistance or DEFAULT_MIN_POINT_DISTANCE
     self.pointAction = params.pointAction
     assert(params.pointAction, "?")
 end
+
+
+AreaRandomPointAction.params = {
+    {param = "numPoints", type = "number"},
+    {param = "pointAction", type = "PointAction"},
+    {param = "type", type = "selection", options = {randomTypes.NORMAL, randomTypes.UNIFORM}},
+    {param = "minDistance", type = "number", optional = true},
+}
 
 
 local function generateRandomPoint(self, x, y, w, h)
@@ -150,6 +158,13 @@ AreaGridPointAction.description =
 [[Generates points in a uniform grid,
 then applies an action to the points ]]
 -- AreaGridPointAction END
+
+AreaGridPointAction.params = {
+    {param = "pointGapX", type = "number"},
+    {param = "pointGapY", type = "number"},
+    {param = "pointAction", type = "PointAction"},
+}
+
 
 
 
