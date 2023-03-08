@@ -46,12 +46,17 @@ local CustomNode = base.Class("worldeditor:CustomNode", ToolNode)
 local CustomNodeGroup = base.Class("worldeditor:CustomNodeGroup", ToolNode)
 
 
+local paramColor = {0.6,0.6,1}
+
+local buttonReadyColor = {0.2,0.8,0.3}
+
+
 
 
 
 
 function NumberNode:display()
-    Slab.Text(self.param)
+    Slab.Text(self.param, {Color = paramColor})
     Slab.SameLine()
     if Slab.Input(tostring(self.id), {Text = tostring(self.value), ReturnOnText = false, NumbersOnly = true}) then
         local value = Slab.GetInputNumber()
@@ -66,7 +71,7 @@ function NumberNode:display()
 end
 
 function StringNode:display()
-    Slab.Text(self.param)
+    Slab.Text(self.param, {Color = paramColor})
     Slab.SameLine()
     if Slab.Input(tostring(self.id), {Text = tostring(self.value)}) then
         self.value = Slab.GetInputString()
@@ -80,7 +85,7 @@ end
 
 function SelectionNode:display()
     assert(self.options, "must require options field for SelectionNode")
-    Slab.Text(self.param)
+    Slab.Text(self.param, {Color = paramColor})
     Slab.SameLine()
     if Slab.BeginComboBox(tostring(self.id), {Selected = self.value}) then
         for _, opt in ipairs(self.options) do
@@ -96,8 +101,8 @@ end
 
 local ALL_ETYPES = {} --  actually put the etypes in here
 
-function ETypeNode:display()
-    Slab.Text(self.param)
+function ETypeNode:display()        
+    Slab.Text(self.param, {Color = paramColor})
     Slab.SameLine()
     if Slab.BeginComboBox(tostring(self.id), {Selected = self.value}) then
         for _, opt in ipairs(ALL_ETYPES) do
@@ -115,11 +120,6 @@ end
 
 
 
-local customColor = {0.5,0.5,1}
-
-local buttonReadyColor = {0.2,0.8,0.3}
-
-
 
 function CustomNode:pullParamsFromChildren()
     local params = {}
@@ -133,8 +133,9 @@ end
 
 function CustomNode:display()
     if self.param then
-        Slab.Text(self.param, {Color = customColor})
+        Slab.Text(self.param, {Color = paramColor})
     end
+
     if _G.settings.showDescription and self.description then
         Slab.Text(self.description)
     end
@@ -142,6 +143,7 @@ function CustomNode:display()
     Slab.Separator()
 
     if Slab.BeginTree("Params_" .. tostring(self.id), {Label = "Params:"}) then
+        Slab.Indent()
         for _, child in ipairs(self.children) do
             local node = child.node
             node:display()
@@ -154,8 +156,11 @@ function CustomNode:display()
                 self.value = self.class(params) 
             end
         end
+        Slab.Unindent()
         Slab.EndTree()
     end
+
+    Slab.NewLine()
 end
 
 
@@ -177,7 +182,8 @@ end
 
 function CustomNodeGroup:display()
     if self.param then
-        Slab.Text(self.param)
+        Slab.Text(self.param, {Color = paramColor})
+        Slab.SameLine()
     end
     assert(self.customNodes, "not given customNodes")
     if Slab.BeginComboBox(tostring(self.id), {Selected = self.value}) then
@@ -195,6 +201,8 @@ function CustomNodeGroup:display()
     if self.customNode then
         self.customNode:display()
     end
+
+    Slab.NewLine()
 end
 
 
@@ -224,7 +232,7 @@ local typeMapping = {
 
 
 
-local nodeGenAsserter = base.typecheck.assert("table", "string", "string")
+local nodeGenAsserter = base.typecheck.assert("table", "string")
 
 local function customNodeGenerator(args)
     --[[
@@ -251,7 +259,7 @@ local function customNodeGenerator(args)
         assert(param.type, "param has no type")
     end
     assert(args.class, "Not given tool constructor")
-    nodeGenAsserter(args.params, args.name, args.description)
+    nodeGenAsserter(args.params, args.description)
 
     return function(options)
         local id = options.id
@@ -272,7 +280,7 @@ local function customNodeGenerator(args)
             })
         end
         return CustomNode({
-            param = args.param,
+            param = options.param,
             class = args.class,
             description = args.description,
             children = children,
@@ -295,7 +303,6 @@ local function defineCustomNodeGroup(classes)
     for _, cls in ipairs(classes) do
         local ctor = customNodeGenerator({
             params = cls.params,
-            name = cls.name,
             description = cls.description,
             class = cls
         })
@@ -308,7 +315,8 @@ local function defineCustomNodeGroup(classes)
         assert(type(options.id) == "number", "?")
         return CustomNodeGroup({
             id = options.id,
-            customNodes = customNodes
+            customNodes = customNodes,
+            param = options.param
         })
     end
     typeMapping[toolType] = customNodeGroupCtor
