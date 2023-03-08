@@ -39,6 +39,10 @@ function PointSpawn:apply(x, y)
     end
 end
 
+PointSpawn.name = "Point spawn"
+
+PointSpawn.description = "Spawns an entity at point (x,y)"
+
 PointSpawn.params = {
     {param = "entityType", type = "etype"},
     {param = "pointAction", type = "PointAction", optional = true}

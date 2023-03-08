@@ -28,7 +28,7 @@ if SLAB_PATH == nil then
 	SLAB_PATH = (...):match("(.-)[^%.]+$")
 end
 
-SLAB_FILE_PATH = ""
+SLAB_FILE_PATH = "Slab" -- pakeke monkeypatch
 SLAB_FILE_PATH = SLAB_FILE_PATH == nil and "" or SLAB_FILE_PATH
 local StatsData = {}
 local PrevStatsData = {}

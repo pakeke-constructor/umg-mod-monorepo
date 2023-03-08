@@ -3,6 +3,9 @@
 -- ABSTRACT BASE CLASS
 local AreaAction = base.Class("worldeditor:AreaAction")
 
+AreaAction.toolType = "AreaAction"
+
+
 local AreaScriptAction = base.Class("worldeditor:AreaScriptAction", AreaAction)
 local AreaEntityAction = base.Class("worldeditor:AreaEntityAction", AreaAction)
 local AreaRandomPointAction = base.Class("worldeditor:AreaRandomPointAction", AreaAction)
@@ -110,11 +113,8 @@ function AreaRandomPointAction:apply(area, excludeArea)
     applyPointAction(pointBuffer, self.pointAction, excludeArea)
 end
 
-AreaRandomPointAction.name = "Area Random Point Action"
-AreaRandomPointAction.description =
-[[Generates random points in an area,
-then applies an action to the points.
-]]
+AreaRandomPointAction.name = "Area Random PointAction"
+AreaRandomPointAction.description ="Generates random points, then applies action to them"
 -- AreaRandomPointAction END
 
 
@@ -153,11 +153,10 @@ function AreaGridPointAction:apply(area, excludeArea)
     applyPointAction(pointBuffer, self.pointAction, excludeArea)
 end
 
-AreaGridPointAction.name = "Area Grid Point Action"
-AreaGridPointAction.description =
-[[Generates points in a uniform grid,
-then applies an action to the points ]]
+AreaGridPointAction.name = "Area Grid PointAction"
+AreaGridPointAction.description = "Generates grid points, then applies action to them"
 -- AreaGridPointAction END
+
 
 AreaGridPointAction.params = {
     {param = "pointGapX", type = "number"},

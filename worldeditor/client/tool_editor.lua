@@ -132,24 +132,29 @@ end
 
 
 function CustomNode:display()
-    Slab.Text(self.param, {Color = customColor})
+    if self.param then
+        Slab.Text(self.param, {Color = customColor})
+    end
     if _G.settings.showDescription and self.description then
         Slab.Text(self.description)
     end
 
     Slab.Separator()
 
-    for _, child in ipairs(self.children) do
-        local node = child.node
-        node:display()
-        Slab.Separator()
-    end
-
-    if self:isDone() then
-        if (not self.value) or Slab.Button("Apply", {Color = buttonReadyColor}) then
-            local params = self:pullParamsFromChildren()
-            self.value = self.class(params) 
+    if Slab.BeginTree("Params_" .. tostring(self.id), {Label = "Params:"}) then
+        for _, child in ipairs(self.children) do
+            local node = child.node
+            node:display()
+            Slab.Separator()
         end
+
+        if self:isDone() then
+            if (not self.value) or Slab.Button("Apply", {Color = buttonReadyColor}) then
+                local params = self:pullParamsFromChildren()
+                self.value = self.class(params) 
+            end
+        end
+        Slab.EndTree()
     end
 end
 
@@ -171,20 +176,24 @@ end
 
 
 function CustomNodeGroup:display()
-    Slab.Text(self.param)
+    if self.param then
+        Slab.Text(self.param)
+    end
     assert(self.customNodes, "not given customNodes")
     if Slab.BeginComboBox(tostring(self.id), {Selected = self.value}) then
         for opt, nodeCtor in pairs(self.customNodes) do
             if Slab.TextSelectable(opt) then
                 self.value = opt
-                self.customNode = nodeCtor(self.id + 1)
+                self.customNode = nodeCtor({
+                    id = self.id + 1
+                })
             end
         end
         Slab.EndComboBox()
     end
 
-    if self.toolNode then
-        self.toolNode:display()
+    if self.customNode then
+        self.customNode:display()
     end
 end
 
@@ -215,8 +224,7 @@ local typeMapping = {
 
 
 
-local nodeGenAsserter = base.typecheck.assert("number", "table", "string", "string")
-
+local nodeGenAsserter = base.typecheck.assert("table", "string", "string")
 
 local function customNodeGenerator(args)
     --[[
@@ -243,17 +251,24 @@ local function customNodeGenerator(args)
         assert(param.type, "param has no type")
     end
     assert(args.class, "Not given tool constructor")
+    nodeGenAsserter(args.params, args.name, args.description)
 
-    return function(id)
-        nodeGenAsserter(id, args.arguments, args.name, args.description)
+    return function(options)
+        local id = options.id
+        assert(type(id) == "number", "?")
         local children = base.Array()
-        for _, arg in ipairs(args.arguments) do
+        for _, arg in ipairs(args.params) do
             id = id + 1
-            assert(typeMapping[args.type], "invalid type")
+            assert(typeMapping[arg.type], "invalid type: " .. tostring(arg.type))
+            local argCopy = {}
+            for k,v in pairs(arg) do
+                argCopy[k] = v
+            end
+            argCopy.id = id
             children:add({
                 id = id,
                 optional = arg.optional,
-                node = typeMapping[args.type](arg)
+                node = typeMapping[arg.type](argCopy)
             })
         end
         return CustomNode({
@@ -284,13 +299,16 @@ local function defineCustomNodeGroup(classes)
             description = cls.description,
             class = cls
         })
+        if not cls.name then
+            error("no name for a class w/ toolType: " .. tostring(classes[1].toolType))
+        end
         customNodes[cls.name] = ctor
     end
-    local customNodeGroupCtor = function(id)
+    local customNodeGroupCtor = function(options)
+        assert(type(options.id) == "number", "?")
         return CustomNodeGroup({
-            id = id,
-            customNodes = customNodes,
-            
+            id = options.id,
+            customNodes = customNodes
         })
     end
     typeMapping[toolType] = customNodeGroupCtor
@@ -322,7 +340,7 @@ defineCustomNodeGroup({
 
 
 function toolEditor.createBrushNode(id)
-    return typeMapping.Brush(id)
+    return typeMapping.Brush({id = id})
 end
 
 return toolEditor

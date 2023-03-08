@@ -7,7 +7,6 @@ local name_to_class = {
 }
 
 
-
 local function newObj(class, ...)
     local obj = {}
     setmetatable(obj, class)

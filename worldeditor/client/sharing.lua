@@ -10,11 +10,6 @@ local packageTypes = {
 }
 
 
-local function invalid(reason)
-    print("[worldeditor sharing.lua]: invalid import: " .. reason)
-end
-
-
 
 --[[
     imports an object type from clipboard
@@ -32,12 +27,10 @@ function sharing.import(base64_string)
     local packge, err = umg.deserialize(data)
     if packge then
         local type = packge.type
-        if (not type) or (not packageTypes[type]) then
+        if (not type) or (not packge.object) or (not packageTypes[type]) then
             return nil, "Unrecognized package type"
         end
-        local object = packge.object
-        -- TODO: do something with the object here???
-        -- This will require more work on where tools actually lie.
+        return package
     else
         return nil, "couldn't deserialize data: " .. err
     end
