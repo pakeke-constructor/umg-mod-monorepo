@@ -12,17 +12,40 @@
 local toolEditor = require("client.tool_editor")
 
 
-local currentEditNode
 
 
 
-
-local brushes = {--[[
-    [id] --> brush
+local toolCache = {--[[
+    keeps track of what brushes the server knows about
+    [tool] --> toolName
 ]]}
 
 
+
+local assertESKT = base.typecheck.asserter("table", "string")
+
+local function ensureServerKnowsTool(tool, toolName)
+    assertESKT(tool,toolName)
+    if not toolCache[tool] then
+        client.send("worldeditorSetTool", tool, toolName)
+    end
+end
+
+
+
+local toolHotkeys = {--[[
+    [hotkey] --> tool
+]]}
+
+
+
+local currentEditNode
+local toolName
+
+
 local currentBrush
+
+
 
 
 umg.on("slabUpdate", function()
@@ -34,12 +57,15 @@ umg.on("slabUpdate", function()
     end
 
     if currentEditNode then
+        if Slab.Input('Tool name: ', {Text = toolName}) then
+            toolName = Slab.GetInputText()
+        end
         currentEditNode:display()
     end
 
-    if currentEditNode and currentEditNode:isDone() then
-        local newBrush = currentEditNode:getValue()
-        client.send("")
+    if toolName and #toolName > 0 and currentEditNode and currentEditNode:isDone() then
+        local newTool = currentEditNode:getValue()
+        ensureServerKnowsTool(newTool, toolName)
     end
 
     Slab.Text(" ")
@@ -83,10 +109,11 @@ end
 function listener:mousepressed(x,y,button)
     if _G.settings.active then
         local worldX, worldY = base.camera.toWorldCoords(x,y)
-        client.send("worldeditorMouseAction", worldX, worldY, button)
+        if currentBrush then
+            ensureServerKnowsTool(currentBrush)
+            client.send("worldeditorUseBrush", currentBrush, worldX, worldY, button)
+        end
     end
 end
-
-
 
 

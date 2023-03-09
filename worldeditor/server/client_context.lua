@@ -1,8 +1,5 @@
 
-
-
 local ClientContext = base.Class("worldeditor:ClientContext")
-
 
 
 function ClientContext:init(username)    
@@ -13,10 +10,11 @@ function ClientContext:init(username)
 end
 
 
-
-
-
-function ClientContext:setTool(tool, hotkey)
-
+function ClientContext:getTool(id)
+    return self.tools[id]
 end
 
+
+function ClientContext:setTool(id, tool)
+    self.tools[id] = tool
+end

@@ -9,18 +9,6 @@ end)
 
 
 
-local function mouseAction(sender,x,y,button)
-
-end
-
-
-server.on("worldeditorMouseAction", function(sender, x,y,button)
-    if chat.isAdmin(sender) then
-        mouseAction(sender,x,y,button)
-    end
-end)
-
-
 
 
 local BOOL_ALIASES = {
