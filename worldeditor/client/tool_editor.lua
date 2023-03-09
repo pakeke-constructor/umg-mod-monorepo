@@ -48,7 +48,6 @@ local CustomNodeGroup = base.Class("worldeditor:CustomNodeGroup", ToolNode)
 
 local paramColor = {0.6,0.6,1}
 
-local buttonReadyColor = {0.2,0.8,0.3}
 
 
 
@@ -151,12 +150,6 @@ function CustomNode:display()
             Slab.Separator()
         end
 
-        if self:isDone() then
-            if (not self.value) or Slab.Button("Apply", {Color = buttonReadyColor}) then
-                local params = self:pullParamsFromChildren()
-                self.value = self.class(params) 
-            end
-        end
         Slab.Unindent()
         Slab.EndTree()
     end
@@ -172,6 +165,15 @@ function CustomNode:isDone()
     return true
 end
 
+
+function CustomNode:getValue()
+    if self:isDone() then
+        local params = self:pullParamsFromChildren()
+        self.value = self.class(params)
+        return self.value
+    end
+    return nil
+end
 
 
 

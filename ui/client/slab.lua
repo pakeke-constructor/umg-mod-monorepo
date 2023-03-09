@@ -28,7 +28,7 @@ local docks = {
 
 
 
-local listener = base.input.Listener({priority = 20})
+local listener = base.input.Listener({priority = 100})
 
 
 function listener:keypressed(key, scancode, isrepeat)
@@ -73,6 +73,7 @@ function listener:update(dt)
     if not Slab.IsVoidHovered() then
         self:lockMouseButtons()
         self:lockMouseWheel()
+		self:lockKeyboard()
     end
 end
 

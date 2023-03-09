@@ -18,10 +18,12 @@ local function loadClient(base)
     local animate = require("client.animate")
     local input = require("client.input")
     local camera = require("client.camera")
+    local control = require("client.control")
     
     base.camera = camera;
 
     base.input = input
+    base.control = control
     
     base.isHovered = require("client.mouse_hover")
     

@@ -68,6 +68,14 @@ function SquareBrush:apply(x, y)
     self.lastUseArea = area
 end
 
+function SquareBrush:draw(x, y)
+    assert(client, "?")
+    love.graphics.setColor(1,1,1)
+    local botX, botY = x-self.width/2, y-self.height/2
+    love.graphics.rectangle("line", botX, botY, self.width, self.height)
+end
+
+
 SquareBrush.name = "Square brush"
 SquareBrush.description = "Apply an action to a square area"
 

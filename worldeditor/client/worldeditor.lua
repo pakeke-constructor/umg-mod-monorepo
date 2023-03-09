@@ -16,6 +16,7 @@ local toolEditor = require("client.tool_editor")
 
 client.on("worldeditorSetMode", function(a)
     _G.settings.editing = a
+    base.control.setFollowActive(not a)
 end)
 
 
@@ -62,6 +63,9 @@ local currentToolName
 
 
 
+local buttonApplyColor = {0.2,0.8,0.3}
+local toolNameColor = {0.8,0.8,0.2}
+
 
 
 umg.on("slabUpdate", function()
@@ -74,19 +78,35 @@ umg.on("slabUpdate", function()
         end
 
         if currentEditNode then
-            if Slab.Input('Tool name: ', {Text = currentToolName}) then
+            Slab.Text("Tool name: ", {Color = toolNameColor})
+            Slab.SameLine()
+            if Slab.Input('worldeditor : toolName', {Text = currentToolName}) then
                 currentToolName = Slab.GetInputText()
             end
             currentEditNode:display()
         end
 
         if currentToolName and #currentToolName > 0 and currentEditNode and currentEditNode:isDone() then
-            currentTool = currentEditNode:getValue()
-            syncTool(currentTool, currentToolName)
+            if Slab.Button("Apply", {Color = buttonApplyColor}) then
+                currentTool = currentEditNode:getValue()            
+                syncTool(currentTool, currentToolName)
+            end
         end
-
         Slab.Text(" ")
         Slab.EndWindow()
+    end
+end)
+
+
+umg.on("postDrawWorld", function()
+    if _G.settings.active then
+        love.graphics.push("all")
+        love.graphics.setLineWidth(3)
+        if currentTool and currentTool.draw then
+            local x, y = base.camera:getMousePosition()
+            currentTool:draw(x,y)
+        end
+        love.graphics.pop()
     end
 end)
 
@@ -96,10 +116,12 @@ end)
 local listener = base.input.Listener({priority = 1})
 
 
+local CAMERA_SPEED = 800
+
 local function moveCamera(dt)
     local dx = 0
     local dy = 0
-    local delta = base.camera.scale * dt
+    local delta = CAMERA_SPEED * dt / base.camera.scale
 
     if listener:isControlDown(base.input.UP) then
         dy = dy - delta
@@ -113,8 +135,9 @@ local function moveCamera(dt)
     if listener:isControlDown(base.input.RIGHT) then
         dx = dx + delta
     end
-    base.camera.x = base.camera.x + dx
-    base.camera.y = base.camera.y + dy
+
+    local x,y = base.camera.x + dx, base.camera.y + dy
+    base.camera:follow(x,y)
 end
 
 

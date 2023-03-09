@@ -6,6 +6,10 @@ Handles player control
 
 ]]
 
+local control = {}
+
+
+
 local input = require("client.input")
 local State = require("shared.state.state")
 
@@ -108,7 +112,7 @@ end
 
 
 
-local function follow_avg(sum_x, sum_y, len)
+local function followAverage(sum_x, sum_y, len)
     --[[
         follows the camera based on average positions
     ]]
@@ -122,6 +126,8 @@ end
 
 
 
+local followActive = true 
+-- whether or not the camera is following players or not.
 
 
 function listener:update(dt)
@@ -142,8 +148,8 @@ function listener:update(dt)
         end
     end
     
-    if has_follow then
-        follow_avg(sum_x, sum_y, len)
+    if has_follow and followActive then
+        followAverage(sum_x, sum_y, len)
     end
 end
 
@@ -179,3 +185,15 @@ client.on("lockMovement", function(player, x, y, z, ack_number)
     client.send("lockMovementAck", player, ack_number)
 end)
 
+
+
+
+function control.setFollowActive(active)
+    followActive = active
+end
+
+
+
+
+
+return control
