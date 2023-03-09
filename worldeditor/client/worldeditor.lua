@@ -12,8 +12,15 @@
 local toolEditor = require("client.tool_editor")
 
 
-
 local currentEditNode
+
+
+
+
+local brushes = {--[[
+    [id] --> brush
+]]}
+
 
 local currentBrush
 
@@ -31,8 +38,11 @@ umg.on("slabUpdate", function()
     end
 
     if currentEditNode and currentEditNode:isDone() then
-        currentBrush = currentEditNode:getValue()
+        local newBrush = currentEditNode:getValue()
+        client.send("")
     end
+
+    Slab.Text(" ")
     Slab.EndWindow()
 end)
 
@@ -67,5 +77,16 @@ function listener:update(dt)
         listener:lockMouseButtons()
     end
 end
+
+
+
+function listener:mousepressed(x,y,button)
+    if _G.settings.active then
+        local worldX, worldY = base.camera.toWorldCoords(x,y)
+        client.send("worldeditorMouseAction", worldX, worldY, button)
+    end
+end
+
+
 
 

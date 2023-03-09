@@ -8,9 +8,16 @@ end)
 
 
 
-server.on("worldeditorSpawnEntity", function(username, etypeName, x, y)
-    local etype = server.entities[etypeName]
-    etype(x, y)
+
+local function mouseAction(sender,x,y,button)
+
+end
+
+
+server.on("worldeditorMouseAction", function(sender, x,y,button)
+    if chat.isAdmin(sender) then
+        mouseAction(sender,x,y,button)
+    end
 end)
 
 

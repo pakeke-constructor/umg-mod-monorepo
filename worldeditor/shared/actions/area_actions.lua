@@ -97,6 +97,7 @@ end
 local assertNumbers4 = base.typecheck.assert("number","number","number","number")
 
 function AreaRandomPointAction:apply(area, excludeArea)
+    assert(server, "?")
     local x,y,w,h = area.x, area.y, area.w, area.h
     assertNumbers4(x,y,w,h)
     local pointBuffer = base.Array()

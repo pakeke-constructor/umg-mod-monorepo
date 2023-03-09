@@ -45,7 +45,9 @@ PointSpawn.description = "Spawns an entity at point (x,y)"
 
 PointSpawn.params = {
     {param = "entityType", type = "etype"},
-    {param = "pointAction", type = "PointAction", optional = true}
+
+    -- TODO: Actually handle EntityActions properly
+    {param = "entityAction", type = "PointAction", optional = true}
 }
 
 

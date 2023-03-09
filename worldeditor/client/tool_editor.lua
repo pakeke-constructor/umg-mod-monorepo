@@ -99,13 +99,14 @@ function SelectionNode:display()
 end
 
 
-local ALL_ETYPES = {} --  actually put the etypes in here
+local etypes = require("client.etypes")
+
 
 function ETypeNode:display()        
     Slab.Text(self.param, {Color = paramColor})
     Slab.SameLine()
     if Slab.BeginComboBox(tostring(self.id), {Selected = self.value}) then
-        for _, opt in ipairs(ALL_ETYPES) do
+        for _, opt in ipairs(etypes.etypeList) do
             -- TODO:
             -- An image should be shown of the entity. We should have a more
             -- detaled looking entity selection thing!!! Shouldnt just be names
@@ -159,8 +160,6 @@ function CustomNode:display()
         Slab.Unindent()
         Slab.EndTree()
     end
-
-    Slab.NewLine()
 end
 
 
@@ -201,8 +200,6 @@ function CustomNodeGroup:display()
     if self.customNode then
         self.customNode:display()
     end
-
-    Slab.NewLine()
 end
 
 

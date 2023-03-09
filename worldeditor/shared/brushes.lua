@@ -26,6 +26,7 @@ function PointBrush:init(params)
 end
 
 function PointBrush:apply(x, y)
+    assert(server, "?")
     self.pointAction:apply(x, y)
 end
 
@@ -54,6 +55,7 @@ function SquareBrush:init(params)
 end
 
 function SquareBrush:apply(x, y)
+    assert(server, "?")
     local bottomX, bottomY = x-self.width/2, y-self.height/2
     self.areaAction:apply(bottomX, bottomY, self.width, self.height)
 end
