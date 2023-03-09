@@ -126,7 +126,7 @@ function CustomNode:pullParamsFromChildren()
     local params = {}
     assert(self:isDone(), "wat?")
     for _, child in ipairs(self.children) do
-        params[child.param] = child.node:getValue()
+        params[child.node.param] = child.node:getValue()
     end
     return params
 end
@@ -204,7 +204,9 @@ end
 
 
 function CustomNodeGroup:getValue()
-    return self.customNode:getValue()
+    if self.customNode then
+        return self.customNode:getValue()
+    end
 end
 
 

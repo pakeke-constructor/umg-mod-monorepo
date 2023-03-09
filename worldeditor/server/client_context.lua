@@ -5,16 +5,28 @@ local ClientContext = base.Class("worldeditor:ClientContext")
 function ClientContext:init(username)    
     self.username = username
     self.tools = {--[[
-        [number] --> Brush
+        [toolName] --> Brush
     ]]}
+    self.currentTool = "toolName"
 end
 
 
-function ClientContext:getTool(id)
-    return self.tools[id]
+
+function ClientContext:getCurrentTool()
+    return self.tools[self.currentTool]
 end
 
 
-function ClientContext:setTool(id, tool)
-    self.tools[id] = tool
+
+function ClientContext:defineTool(tool, toolName)
+    self.tools[toolName] = tool
 end
+
+
+function ClientContext:setCurrentTool(toolName)
+    self.currentTool = toolName
+end
+
+
+
+return ClientContext

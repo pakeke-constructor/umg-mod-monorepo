@@ -52,12 +52,20 @@ function SquareBrush:init(params)
     self.width = params.width
     self.height = params.height
     self.areaAction = params.areaAction
+    self.lastUseArea = {
+        x=0,y=0, w=0,h=0
+    }
 end
 
 function SquareBrush:apply(x, y)
     assert(server, "?")
     local bottomX, bottomY = x-self.width/2, y-self.height/2
-    self.areaAction:apply(bottomX, bottomY, self.width, self.height)
+    local area = {
+        x = bottomX, y = bottomY,
+        w = self.width, h = self.height
+    }
+    self.areaAction:apply(area, self.lastUseArea)
+    self.lastUseArea = area
 end
 
 SquareBrush.name = "Square brush"

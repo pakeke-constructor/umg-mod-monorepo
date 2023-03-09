@@ -63,14 +63,16 @@ server.on("commandMessage", function(sender_uname, commandName, ...)
     if commandToCallback[commandName] then
         local func = commandToCallback[commandName]
         func(sender_uname, ...)
+        return
     end
     if commandToAdminCallback[commandName] then
         if chat.isAdmin(sender_uname) then
-            local func = commandToCallback[commandName]
+            local func = commandToAdminCallback[commandName]
             func(sender_uname, ...)
         else
             chat.privateMessage(sender_uname, "insufficient permissions to execute: " .. commandName)
         end
+        return
     end
     chat.privateMessage(sender_uname, "unknown command: " .. commandName)
 end)

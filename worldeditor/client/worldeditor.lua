@@ -14,6 +14,12 @@ local toolEditor = require("client.tool_editor")
 
 
 
+client.on("worldeditorSetMode", function(a)
+    _G.settings.editing = a
+end)
+
+
+
 
 local toolCache = {--[[
     keeps track of what brushes the server knows about
@@ -22,14 +28,22 @@ local toolCache = {--[[
 
 
 
-local assertESKT = base.typecheck.asserter("table", "string")
+local assertESKT = base.typecheck.assert("table", "string")
+
+
+local function syncTool(tool, toolName)
+    client.send("worldeditorDefineTool", tool, toolName)
+end
 
 local function ensureServerKnowsTool(tool, toolName)
     assertESKT(tool,toolName)
     if not toolCache[tool] then
-        client.send("worldeditorSetTool", tool, toolName)
+        syncTool(tool, toolName)
     end
 end
+
+
+
 
 
 
@@ -40,36 +54,40 @@ local toolHotkeys = {--[[
 
 
 local currentEditNode
-local toolName
 
 
-local currentBrush
+
+local currentTool
+local currentToolName
+
 
 
 
 
 umg.on("slabUpdate", function()
-    Slab.BeginWindow("worldeditor", {Title = "World editor"})
-    if Slab.Button("new brush") then
-        local id = 1
-         -- id of 1 for now is fine.
-        currentEditNode = toolEditor.createBrushNode(id)
-    end
-
-    if currentEditNode then
-        if Slab.Input('Tool name: ', {Text = toolName}) then
-            toolName = Slab.GetInputText()
+    if _G.settings.editing then
+        Slab.BeginWindow("worldeditor", {Title = "World editor"})
+        if Slab.Button("new brush") then
+            local id = 1
+            -- id of 1 for now is fine.
+            currentEditNode = toolEditor.createBrushNode(id)
         end
-        currentEditNode:display()
-    end
 
-    if toolName and #toolName > 0 and currentEditNode and currentEditNode:isDone() then
-        local newTool = currentEditNode:getValue()
-        ensureServerKnowsTool(newTool, toolName)
-    end
+        if currentEditNode then
+            if Slab.Input('Tool name: ', {Text = currentToolName}) then
+                currentToolName = Slab.GetInputText()
+            end
+            currentEditNode:display()
+        end
 
-    Slab.Text(" ")
-    Slab.EndWindow()
+        if currentToolName and #currentToolName > 0 and currentEditNode and currentEditNode:isDone() then
+            currentTool = currentEditNode:getValue()
+            syncTool(currentTool, currentToolName)
+        end
+
+        Slab.Text(" ")
+        Slab.EndWindow()
+    end
 end)
 
 
@@ -78,42 +96,59 @@ end)
 local listener = base.input.Listener({priority = 1})
 
 
-function listener:update(dt)
-    if _G.settings.active then
-        local dx = 0
-        local dy = 0
-        local delta = base.camera.scale * dt
+local function moveCamera(dt)
+    local dx = 0
+    local dy = 0
+    local delta = base.camera.scale * dt
 
-        if listener:isControlDown(base.input.UP) then
-            dy = dy - delta
+    if listener:isControlDown(base.input.UP) then
+        dy = dy - delta
+    end
+    if listener:isControlDown(base.input.DOWN) then
+        dy = dy + delta
+    end
+    if listener:isControlDown(base.input.LEFT) then
+        dx = dx - delta
+    end
+    if listener:isControlDown(base.input.RIGHT) then
+        dx = dx + delta
+    end
+    base.camera.x = base.camera.x + dx
+    base.camera.y = base.camera.y + dy
+end
+
+
+
+
+local BUTTON_1 = 1
+
+
+local DONE_THIS_TICK = false
+
+umg.on("@tick", function()
+    DONE_THIS_TICK = true
+end)
+
+
+local function applyTool()
+    if (not DONE_THIS_TICK) and listener:isMouseButtonDown(BUTTON_1) then
+        local worldX, worldY = base.camera:getMousePosition()
+        if currentTool and currentToolName then
+            ensureServerKnowsTool(currentTool, currentToolName)
+            client.send("worldeditorSetTool", currentToolName)
+            client.send("worldeditorUseTool", currentToolName, worldX, worldY, BUTTON_1)
+            DONE_THIS_TICK = true
         end
-        if listener:isControlDown(base.input.DOWN) then
-            dy = dy + delta
-        end
-        if listener:isControlDown(base.input.LEFT) then
-            dx = dx - delta
-        end
-        if listener:isControlDown(base.input.RIGHT) then
-            dx = dx + delta
-        end
-        base.camera.x = base.camera.x + dx
-        base.camera.y = base.camera.y + dy
-       
+    end
+end
+
+
+function listener:update(dt)
+    if _G.settings.editing then
+        moveCamera(dt)
+        applyTool()
         listener:lockKeyboard()
         listener:lockMouseButtons()
     end
 end
-
-
-
-function listener:mousepressed(x,y,button)
-    if _G.settings.active then
-        local worldX, worldY = base.camera.toWorldCoords(x,y)
-        if currentBrush then
-            ensureServerKnowsTool(currentBrush)
-            client.send("worldeditorUseBrush", currentBrush, worldX, worldY, button)
-        end
-    end
-end
-
 

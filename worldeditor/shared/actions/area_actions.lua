@@ -48,8 +48,8 @@ local DEFAULT_MIN_POINT_DISTANCE = 10
 
 function AreaRandomPointAction:init(params)
     self.numPoints = params.numPoints
-    assert(self.type and randomTypes[self.type], "bad AreaRandomPointAction params")
     self.type = params.type
+    assert(self.type and randomTypes[self.type], "Invalid distribution type: " .. tostring(self.type))
     self.minDistance = params.minDistance or DEFAULT_MIN_POINT_DISTANCE
     self.pointAction = params.pointAction
     assert(params.pointAction, "?")
@@ -103,7 +103,7 @@ function AreaRandomPointAction:apply(area, excludeArea)
     local pointBuffer = base.Array()
     for _=1, self.numPoints do
         for _=1, MAX_TRIES do
-            local px, py = generateRandomPoint(self, x, y)
+            local px, py = generateRandomPoint(self, x, y, w, h)
 
             if not hasPointWithinRange(pointBuffer, self.minDistance, px, py) then
                 pointBuffer:add({px,py})

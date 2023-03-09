@@ -214,6 +214,16 @@ function Listener:isKeyDown(scancode)
     return love.keyboard.isScancodeDown(scancode)
 end
 
+function Listener:isMouseButtonDown(mousebutton)
+    if mouseButtonsAreLocked then
+        return false
+    end
+    if self:isMouseButtonLocked(mousebutton) then
+        return false
+    end
+    return love.mouse.isDown(mousebutton)
+end
+
 
 --[[
     blocks keyboard events for the rest of the frame
