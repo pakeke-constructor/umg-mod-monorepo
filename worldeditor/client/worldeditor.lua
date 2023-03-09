@@ -65,7 +65,7 @@ local currentToolName
 
 local buttonApplyColor = {0.2,0.8,0.3}
 local toolNameColor = {0.8,0.8,0.2}
-
+local toolTypeColor = {0.1,0.9,0.9}
 
 
 umg.on("slabUpdate", function()
@@ -83,6 +83,7 @@ umg.on("slabUpdate", function()
             if Slab.Input('worldeditor : toolName', {Text = currentToolName}) then
                 currentToolName = Slab.GetInputText()
             end
+            Slab.Text("tool: ", {Color = toolTypeColor})
             currentEditNode:display()
         end
 
@@ -98,8 +99,9 @@ umg.on("slabUpdate", function()
 end)
 
 
+
 umg.on("postDrawWorld", function()
-    if _G.settings.active then
+    if _G.settings.editing then
         love.graphics.push("all")
         love.graphics.setLineWidth(3)
         if currentTool and currentTool.draw then
@@ -149,7 +151,7 @@ local BUTTON_1 = 1
 local DONE_THIS_TICK = false
 
 umg.on("@tick", function()
-    DONE_THIS_TICK = true
+    DONE_THIS_TICK = false
 end)
 
 
