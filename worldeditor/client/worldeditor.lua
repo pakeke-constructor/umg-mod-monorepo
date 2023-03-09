@@ -39,6 +39,7 @@ end
 local function ensureServerKnowsTool(tool, toolName)
     assertESKT(tool,toolName)
     if not toolCache[tool] then
+        toolCache[tool] = toolName
         syncTool(tool, toolName)
     end
 end
@@ -175,5 +176,10 @@ function listener:update(dt)
         listener:lockKeyboard()
         listener:lockMouseButtons()
     end
+end
+
+
+function listener:mousepressed(dt)
+
 end
 
