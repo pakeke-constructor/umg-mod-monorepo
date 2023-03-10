@@ -26,17 +26,3 @@ Perhaps it's a desync between physics bodies and entities
 instead of position values on server/client?
 
 
-
-
-
-Memory leak for entities moving upwards:
-If an entity moves up for an infinite amount of time, it will cause a memory leak.
-This is because the DrawIndex data structure repeatedly creates new sparse sets.
-
-Replace it with a regular list data structure.
-Then, create a custom sorting function that removes (and adds) entities in place
-whilst sorting.
-(This allows entity removal and addition to be O(1). )
-
-
-

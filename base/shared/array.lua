@@ -6,16 +6,16 @@ local Array = Class("base_mod:Array")
 
 
 -- Initializes array
-function Array:init(arr_initial)
+function Array:init(initial)
     self.len = 0
 
-    if arr_initial then
-        if (type(arr_initial) ~= "table") then
+    if initial then
+        if (type(initial) ~= "table") then
             error("Bad argument #1 to Array().\nexpected table, got: " .. tostring(type(arr_initial)))
         end
 
-        for i=1, #arr_initial do
-            self:add(arr_initial[i])
+        for i=1, #initial do
+            self:add(initial[i])
         end
     end
 end
@@ -58,6 +58,17 @@ function Array:pop(i)
     table.remove(self, i)
     self.len = self.len - 1
 end
+
+
+-- Pops item from array by swapping it with the last item
+-- this operation is O(1)
+-- WARNING: This operation DOES NOT preserve array order!!!
+function Array:quickPop(i)
+    local obj = self[self.len]
+    self[i], self[self.len] = obj, nil
+    self.len = self.len - 1
+end
+
 
 
 
