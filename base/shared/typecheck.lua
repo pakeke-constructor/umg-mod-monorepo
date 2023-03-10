@@ -39,6 +39,12 @@ typecheck["function"] = typecheck.func
 typecheck.fn = typecheck.func
 
 
+function typecheck.boolean(x)
+    return type(x) == "boolean", "expected boolean"
+end
+typecheck.bool = typecheck.boolean
+
+
 
 function typecheck.entity(x)
     return umg.exists(x), "expected entity"
@@ -108,6 +114,13 @@ end
 
 
 
+local function makeError(arg, err, i)
+    local estring = "Bad argument " .. tostring(i) .. ":\n"
+    local err_data = tostring(type(arg)) .. " was given, but " .. tostring(err) 
+    return estring .. err_data
+end
+
+
 function typecheck.assert(...)
     local check_fns = {...}
     parseArgCheckers(check_fns)
@@ -117,9 +130,7 @@ function typecheck.assert(...)
             local arg = select(i, ...)
             local ok, err = check_fns[i](arg)
             if not ok then
-                local estring = "Bad argument " .. tostring(i) .. ":\n"
-                local err_data = tostring(type(arg)) .. " was given, but " .. tostring(err) 
-                error(estring .. err_data, 3)
+                error(makeError(arg, err, i), 3)
             end
         end
     end
@@ -135,7 +146,7 @@ function typecheck.check(...)
             local arg = select(i, ...)
             local ok, err = check_fns[i](arg)
             if not ok then
-                return false, err
+                return false, makeError(arg, err, i)
             end
         end
         return true

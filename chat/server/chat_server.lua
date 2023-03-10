@@ -9,9 +9,9 @@ local commandToHandler = {}
 local DEFAULT_ADMIN_LEVEL = 0
 
 
-local ADMINS = {}
+local ADMIN_LEVELS = {}
 
-ADMINS[server.getHostUsername()] = math.huge
+ADMIN_LEVELS[server.getHostUsername()] = math.huge
 
 
 
@@ -21,13 +21,13 @@ local chat = {}
 
 
 function chat.getAdminLevel(username)
-    return ADMINS[username] or DEFAULT_ADMIN_LEVEL
+    return ADMIN_LEVELS[username] or DEFAULT_ADMIN_LEVEL
 end
 
-local setAdminLevelAssert = base.typecheck.asserter("string", "number")
+local setAdminLevelAssert = base.typecheck.assert("string", "number")
 function chat.setAdminLevel(username, level)
     setAdminLevelAssert(username, level)
-    ADMINS[username] = level
+    ADMIN_LEVELS[username] = level
 end
 
 
@@ -114,11 +114,13 @@ server.on("commandMessage", function(sender_uname, commandName, ...)
     local ok, err = handler.typechecker(...)
     if not ok then
         chat.privateMessage(sender_uname, "/" .. commandName .. ": " .. err)
+        return
     end
 
     local adminLevel = chat.getAdminLevel(sender_uname)
     if handler.adminLevel > adminLevel then 
         chat.privateMessage(sender_uname, "/" .. commandName .. ": Admin level " .. tostring(handler.adminLevel) .. " required.")
+        return
     end
 
     handler.handler(sender_uname, ...)
@@ -165,8 +167,6 @@ chat.handleCommand("demote", {
         end
     end
 })
-
-
 
 
 

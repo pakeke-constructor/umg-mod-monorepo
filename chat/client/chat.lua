@@ -17,6 +17,7 @@ local CHAT_WRAP_WIDTH = 300
 local TARGET_CHAT_HEIGHT = 6 -- This number is actually quite arbitrary
 
 
+
 local IS_COMMAND_CHAR = {}
 for _,char in ipairs(constants.COMMAND_CHARS) do
     IS_COMMAND_CHAR[char] = true
@@ -146,6 +147,8 @@ local function parseCommandArg(arg)
     end
     return arg
 end
+
+
 
 local function doCommand(message)
     local buffer = {}

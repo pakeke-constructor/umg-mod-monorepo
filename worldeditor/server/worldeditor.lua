@@ -69,6 +69,10 @@ local commandHandler = {
 
     handler = function(sender, bool)
         server.unicast(sender, "worldeditorSetMode", bool)
+        -- TODO:
+        -- Can do other stuff here.
+        -- perhaps fudge with settings and whatnot?
+        -- eg    /worldeditor settings.xyz foo
     end
 }
 
