@@ -17,9 +17,14 @@ local editors = {--[[
 
 
 
+local REQUIRED_ADMIN_LEVEL = 100
+
+local function isAdmin(sender)
+    return chat.getAdminLevel(sender) > REQUIRED_ADMIN_LEVEL
+end
 
 server.on("worldeditorDefineTool", function(sender, tool, toolName)
-    if not chat.isAdmin(sender) then
+    if not isAdmin(sender) then
         return
     end
 
@@ -30,7 +35,7 @@ end)
 
 
 server.on("worldeditorSetTool", function(sender, toolName)
-    if not chat.isAdmin(sender) then
+    if not isAdmin(sender) then
         return
     end
 
@@ -41,7 +46,7 @@ end)
 
 
 server.on("worldeditorUseTool", function(sender, toolName, ...)
-    if not chat.isAdmin(sender) then
+    if not isAdmin(sender) then
         return
     end
 
@@ -57,26 +62,16 @@ end)
 
 
 
-local BOOL_ALIASES = {
-    on = true,
-    off = false
+
+local commandHandler = {
+    adminLevel = 100,
+    arguments = {{type = "boolean", name = "mode"}},
+
+    handler = function(sender, bool)
+        server.unicast(sender, "worldeditorSetMode", bool)
+    end
 }
 
-local function handleAdminCommand(sender, a,b,c,d)
-    if BOOL_ALIASES[a] then
-        a = BOOL_ALIASES[a]
-    end
-    if a == true or a == false then
-        server.unicast(sender, "worldeditorSetMode", a)
-    end
-    -- TODO:
-    -- Can do other stuff here.
-    -- perhaps fudge with settings and whatnot?
-    -- eg    /worldeditor settings.xyz foo
-end
-
-
-
-chat.handleAdminCommand("worldeditor", handleAdminCommand)
-chat.handleAdminCommand("worldedit", handleAdminCommand)
+chat.handleCommand("worldeditor", commandHandler)
+chat.handleCommand("worldedit", commandHandler)
 

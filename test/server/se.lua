@@ -17,38 +17,25 @@ end
 
 
 
-chat.handleCommand("spawn", function(sender, entType)
-    if entType and server.entities[entType] then
-        local p = base.getPlayer(sender)
-        local x,y = 0,0
-        if p then
-            x,y = p.x, p.y + 30
+chat.handleCommand("spawn", {
+    arguments = {
+        {name = "entType", type = "string"}
+    },
+    adminLevel = 1,
+
+    handler = function(sender, entType)
+        if entType and server.entities[entType] then
+            local p = base.getPlayer(sender)
+            local x,y = 0,0
+            if p then
+                x,y = p.x, p.y + 30
+            end
+            server.entities[entType](x,y)
+        else
+            chat.message("SPAWN FAILED: Unknown entity type " .. tostring(entType))
         end
-        server.entities[entType](x,y)
-    else
-        chat.message("SPAWN FAILED: Unknown entity type " .. tostring(entType))
     end
-end)
-
-chat.handleCommand("border", function()
-    local ent = server.entities.empty()
-    ent.border = worldborder.Border({
-        centerX = 0, centerY = 0,
-        width = 500, height = 500
-    })
-end)
-
-chat.handleCommand("border", function()
-    local ent = server.entities.empty()
-    ent.border = worldborder.Border({
-        centerX = -300, centerY = 300,
-        width = 500, height = 500
-    })
-end)
-
-chat.handleCommand("spin", function(sender)
-    server.broadcast("spin")
-end)
+})
 
 
 

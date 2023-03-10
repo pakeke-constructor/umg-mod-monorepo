@@ -234,15 +234,25 @@ end)
 
 
 
-chat.handleCommand("start", function(sender)
-    startGame()
-end)
+chat.handleCommand("start", {
+    adminLevel = 1,
+    arguments = {},
 
-chat.handleAdminCommand("setMoney", function(sender, money)
-    local board = Board.getBoard(sender)
-    if board then
-        local num = tonumber(money,10)
-        if num then board:setMoney(num) end
+    handler = function(sender)
+        startGame()
     end
-end)
+})
+
+chat.handleCommand("setMoney", {
+    adminLevel = 10,
+    arguments = {{name = "money", type = "number"}},
+
+    handler = function(sender, money)
+        local board = Board.getBoard(sender)
+        if board then
+            local num = tonumber(money,10)
+            if num then board:setMoney(num) end
+        end
+    end
+})
 

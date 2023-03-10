@@ -15,19 +15,28 @@ Example:
 ```lua
 -- server code:
 
-chat.handleCommand("startGame", function(sender, ...)
-    print("command from ", sender)
-    print("with content: " ,...)
-end)
+chat.handleCommand("startGame",  {
+    handler = function(sender, x, y)
+        print("command from: ", sender)
+        print("with position: ", x, y)
+    end,
+
+    adminLevel = 5, -- minimum level required to execute this command
+
+    arguments = {
+        {type = "number", name = "x"},
+        {type = "number", name = "y"}
+    }
+})
 
 --[[
-/startGame 1 2 3 4
+/startGame 1 2
 
 OUTPUT:
 
 
 message from player1
-1 2 3 4
+1 2
 
 ]]
 

@@ -1,15 +1,17 @@
 
 
 
-local commandToCallback = {}
-
-local commandToAdminCallback = {}
+local commandToHandler = {}
 
 
 
 
-local ADMINS = base.Set()
-ADMINS:add(server.getHostUsername())
+local DEFAULT_ADMIN_LEVEL = 0
+
+
+local ADMINS = {}
+
+ADMINS[server.getHostUsername()] = math.huge
 
 
 
@@ -18,9 +20,16 @@ ADMINS:add(server.getHostUsername())
 local chat = {}
 
 
-function chat.isAdmin(username)
-    return ADMINS:has(username)
+function chat.getAdminLevel(username)
+    return ADMINS[username] or DEFAULT_ADMIN_LEVEL
 end
+
+local setAdminLevelAssert = base.typecheck.asserter("string", "number")
+function chat.setAdminLevel(username, level)
+    setAdminLevelAssert(username, level)
+    ADMINS[username] = level
+end
+
 
 
 function chat.message(message)
@@ -34,20 +43,56 @@ end
 
 
 
-local handleCommandTypecheck = base.typecheck.assert("string", "function")
+local VALID_TYPES = {
+    string = true,
+    number = true,
+    entity = true,
+    boolean = true
+}
 
-function chat.handleCommand(commandName, func)
-    handleCommandTypecheck(commandName, func)
-    commandToCallback[commandName] = func
+local function getArgsTypechecker(arguments)
+    local typeBuffer = base.Array()
+    for _, arg in ipairs(arguments) do
+        assert(VALID_TYPES[arg.type], "arg type invalid: " .. tostring(arg.type))
+        assert(type(arg.name) == "string", "arg.name needs to be string")
+        typeBuffer:add(arg.type)
+    end
+    return base.typecheck.check(unpack(typeBuffer))
 end
 
 
-function chat.handleAdminCommand(commandName, func)
-    handleCommandTypecheck(commandName, func)
-    commandToAdminCallback[commandName] = func
+
+local handleCommandTypecheck = base.typecheck.assert("string", "table")
+
+
+function chat.handleCommand(commandName, handler)
+    --[[
+        {
+            handler = function(sender, etype, x, y)
+                if not server.entities[etype] then
+                return nil, "couldn't find entity"
+                end
+
+                server.entities[etype](x,y)
+                return true
+            end,
+
+            adminLevel = 5, -- minimum level required to execute this command
+
+            args = {
+                {type = "string", name = "etype"},
+                {type = "number", name = "x"},
+                {type = "number", name = "y"}
+            }
+        }
+    ]]
+    handleCommandTypecheck(commandName, handler)
+    assert(type(handler.handler) == "function", "not given .handler function")
+    assert(type(handler.arguments) == "table", "not given .arguments table")
+    assert(handler.adminLevel, "not given .adminLevel number")
+    handler.typechecker = getArgsTypechecker(handler.arguments)
+    commandToHandler[commandName] = handler
 end
-
-
 
 
 
@@ -60,40 +105,67 @@ server.on("commandMessage", function(sender_uname, commandName, ...)
         ?commandName ...
         $commandName ...
     ]]
-    if commandToCallback[commandName] then
-        local func = commandToCallback[commandName]
-        func(sender_uname, ...)
+    local handler = commandToHandler[commandName]
+    if not handler then
+        chat.privateMessage(sender_uname, "unknown command: " .. commandName)
         return
     end
-    if commandToAdminCallback[commandName] then
-        if chat.isAdmin(sender_uname) then
-            local func = commandToAdminCallback[commandName]
-            func(sender_uname, ...)
-        else
-            chat.privateMessage(sender_uname, "insufficient permissions to execute: " .. commandName)
+
+    local ok, err = handler.typechecker(...)
+    if not ok then
+        chat.privateMessage(sender_uname, "/" .. commandName .. ": " .. err)
+    end
+
+    local adminLevel = chat.getAdminLevel(sender_uname)
+    if handler.adminLevel > adminLevel then 
+        chat.privateMessage(sender_uname, "/" .. commandName .. ": Admin level " .. tostring(handler.adminLevel) .. " required.")
+    end
+
+    handler.handler(sender_uname, ...)
+end)
+
+
+
+
+
+
+chat.handleCommand("promote", {
+    arguments = {
+        {name = "user", type = "string"}, {name = "level", type = "number"}
+    },
+
+    adminLevel = 1,
+
+    handler = function(sender, user, level)
+        local adminLv = chat.getAdminLevel(sender)
+        local targetAdminLv = chat.getAdminLevel(user)
+        level = math.max(targetAdminLv, level)
+        if adminLv > level and adminLv > targetAdminLv then
+            chat.setAdminLevel(user, level)
         end
-        return
     end
-    chat.privateMessage(sender_uname, "unknown command: " .. commandName)
-end)
+})
 
 
 
 
+chat.handleCommand("demote", {
+    arguments = {
+        {name = "user", type = "string"}, {name = "level", type = "number"}
+    },
 
+    adminLevel = 1,
 
-chat.handleCommand("promote", function(sender, user)
-    if sender == server.getHostUsername() then
-        ADMINS:add(user)
+    handler = function(sender, user, level)
+        local adminLv = chat.getAdminLevel(sender)
+        local targetAdminLv = chat.getAdminLevel(user)
+        level = math.min(targetAdminLv, level)
+        if adminLv > level and adminLv > targetAdminLv then
+            chat.setAdminLevel(user, level)
+        end
     end
-end)
+})
 
-
-chat.handleCommand("demote", function(sender, user)
-    if sender == server.getHostUsername() and ADMINS:has(user) then
-        ADMINS:remove(user)
-    end
-end)
 
 
 
