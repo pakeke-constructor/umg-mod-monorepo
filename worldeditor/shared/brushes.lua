@@ -9,7 +9,6 @@ All table keys with `_` are temporary, and specific to the runtime.
 ]]
 
 
-local brushes = {}
 
 
 
@@ -18,6 +17,13 @@ Brush.toolType = "Brush"
 
 local PointBrush = base.Class("wordeditor:PointBrush", Brush)
 local SquareBrush = base.Class("worldeditor:SquareBrush", Brush)
+
+local brushes = {
+    SquareBrush, PointBrush
+}
+
+
+
 
 
 
@@ -37,8 +43,6 @@ PointBrush.params = {
     {param = "pointAction", type = "PointAction"}
 }
 
-
-brushes.PointBrush = PointBrush
 
 
 
@@ -86,12 +90,6 @@ SquareBrush.params = {
 }
 
 
-brushes.SquareBrush = SquareBrush
-
-
-
-
 
 
 return brushes
-

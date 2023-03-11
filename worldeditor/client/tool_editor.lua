@@ -328,22 +328,16 @@ end
 local brushes = require("shared.brushes")
 local areaActions = require("shared.actions.area_actions")
 local pointActions = require("shared.actions.point_actions")
+local entityActions = require("shared.actions.entity_actions")
 
 
+defineCustomNodeGroup(brushes)
 
-defineCustomNodeGroup({
-    brushes.SquareBrush,
-    brushes.PointBrush
-})
+defineCustomNodeGroup(areaActions)
 
-defineCustomNodeGroup({
-    areaActions.AreaRandomPointAction,
-    areaActions.AreaGridPointAction
-})
+defineCustomNodeGroup(pointActions)
 
-defineCustomNodeGroup({
-    pointActions.PointSpawn
-})
+defineCustomNodeGroup(entityActions)
 
 
 

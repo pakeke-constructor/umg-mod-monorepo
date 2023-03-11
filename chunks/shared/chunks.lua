@@ -38,11 +38,6 @@ end)
 
 
 
---[[
-
-TODO: Do some more thinking of this API!
-
-]]
 
 local chunks = {}
 
@@ -55,3 +50,4 @@ function chunks.forEach(x, y, func)
 end
 
 return chunks
+

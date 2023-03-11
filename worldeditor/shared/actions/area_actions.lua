@@ -15,20 +15,28 @@ local AreaCommand = base.Class("worldeditor:AreaCommand", AreaAction)
 
 
 local areaActions = {
-    AreaRandomPointAction = AreaRandomPointAction,
-    AreaGridPointAction = AreaGridPointAction
+    AreaRandomPointAction,
+    AreaGridPointAction,
+    AreaEntityAction
 }
 
 
+
+local inAreaAssert = base.typecheck.assert("number", "number", "table")
+
+local function inArea(x,y, area)
+    inAreaAssert(x,y,area)
+    local ex, ew, ey, eh = area.x, area.w, area.y, area.h
+    local withinExclusion = ex<x and ex+ew>x and ey<y and ey+eh>y
+    return withinExclusion
+end
 
 
 
 local function applyPointAction(pointBuffer, pointAction, excludeArea)
     for _, point in ipairs(pointBuffer) do
         local x,y = point[1], point[2]
-        local ex, ew, ey, eh = excludeArea.x, excludeArea.w, excludeArea.y, excludeArea.h
-        local withinExclusion = ex<x and ex+ew>x and ey<y and ey+eh>y
-        if not withinExclusion then
+        if not inArea(x,y, excludeArea) then
             x = math.floor(x)
             y = math.floor(y)
             pointAction:apply(x,y)
@@ -156,16 +164,51 @@ end
 
 AreaGridPointAction.name = "Area Grid PointAction"
 AreaGridPointAction.description = "Generates grid points, then applies action to them"
--- AreaGridPointAction END
-
 
 AreaGridPointAction.params = {
     {param = "pointGapX", type = "number"},
     {param = "pointGapY", type = "number"},
     {param = "pointAction", type = "PointAction"},
 }
+-- AreaGridPointAction END
 
 
+
+
+
+
+
+
+
+
+
+
+
+-- AreaEntityAction START
+
+function AreaEntityAction:init(params)
+    assert(params.entityAction, "?")
+    self.entityAction = params.entityAction
+end
+
+function AreaEntityAction:apply(area, excludeArea)
+    local x,y,w,h = area.x, area.y, area.w, area.h
+    assertNumbers4(x,y,w,h)
+
+    chunks.forEach(x, y, function(ent)
+        if inArea(ent.x,ent.y, area) and (not inArea(ent.x, ent.y, excludeArea)) then
+            self.entityAction:apply(ent)
+        end
+    end)
+end
+
+AreaEntityAction.name = "Area Entity Action"
+AreaEntityAction.description = "Applies action to entities in an area"
+
+AreaEntityAction.params = {
+    {param = "entityAction", type = "EntityAction"}
+}
+-- AreaEntityAction END
 
 
 

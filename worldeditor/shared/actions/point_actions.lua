@@ -15,7 +15,7 @@ local PointSpawn = base.Class("worldeditor:PointSpawnAction", PointAction)
 local PointScript = base.Class("worldeditor:PointScriptAction", PointAction)
 
 local pointActions = {
-    PointSpawn = PointSpawn
+    PointSpawn
 }
 
 
