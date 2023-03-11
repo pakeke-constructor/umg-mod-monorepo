@@ -1,5 +1,5 @@
 
-local categoryMap = require("categories")
+local categoryMap = require("shared.categories")
 
 local categories = {}
 
