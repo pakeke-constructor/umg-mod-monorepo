@@ -19,10 +19,10 @@ function ChunkRegistry:init(chunkSize)
         __index = function(t,x)
             t[x] = setmetatable({}, {
                 __index = function(t2, y)
-                    local chunk = base.Set(self.chunkSize)
+                    local chunk = base.Set()
                     t2[y] = chunk
                     self.chunkList:add(chunk)
-                    return t[y]
+                    return t2[y]
                 end
             })
             return t[x]
@@ -97,7 +97,7 @@ end
 
 function ChunkRegistry:removeEntity(ent)
     local lastx, lasty = self:getLastXY()
-    local ix, iy = self:getChunkIndexes(lastx, lasty)
+    local ix, iy = self:getChunkIndexes(lastx or 0, lasty or 0)
     self.chunks[ix][iy]:remove(ent)
     self.entityToLastX[ent] = nil
     self.entityToLastY[ent] = nil
@@ -109,8 +109,8 @@ local forEachAssert = base.typecheck.assert("number", "number", "function")
 
 function ChunkRegistry:forEach(x, y, func)
     forEachAssert(x,y,func)
+    
     local ix, iy = self:getChunkIndexes(x, y)
-
     for xx = ix-1, ix+1, 1 do
         for yy = iy-1, iy+1, 1 do
             if rawget(self.chunks, xx) and rawget(self.chunks[xx], yy) then
@@ -124,4 +124,41 @@ function ChunkRegistry:forEach(x, y, func)
 end
 
 
+--[[
+
+-- TODO:
+-- Implement iter for loop use.
+
+
+local iterAssert = base.typecheck.assert("number", "number")
+
+
+function ChunkRegistry:iter(x, y)
+    iterAssert(x,y)
+    
+    local ix, iy = self:getChunkIndexes(x, y)
+    ix = ix - 1
+    iy = iy - 1
+
+    local chunkI = 1
+
+    local currentChunk, currentEnt
+
+    if rawget(self.chunks, ix) and rawget(self.chunks[ix], iy) then
+        currentChunk = self.chunks[ix][iy]
+    end
+
+    return function()
+        if chunkI > currentChunk.size then
+
+        else
+
+        end
+    end
+end
+
+]]
+
+
 return ChunkRegistry
+

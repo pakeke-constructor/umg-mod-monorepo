@@ -38,11 +38,20 @@ end)
 
 
 
+--[[
+
+TODO: Do some more thinking of this API!
+
+]]
+
 local chunks = {}
 
+
+chunks.ChunkRegistry = ChunkRegistry
 
 
 function chunks.forEach(x, y, func)
     return globalChunkRegistry:forEach(x,y,func)
 end
 
+return chunks

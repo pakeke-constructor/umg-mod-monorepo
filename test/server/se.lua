@@ -38,6 +38,19 @@ chat.handleCommand("spawn", {
 })
 
 
+chat.handleCommand("chunkTest", {
+    arguments = {{name="x", type="number"}, {name="y", type="number"}},
+    adminLevel = 0,
+
+    handler = function(sender,x,y)
+        local ct = 0
+        chunks.forEach(x,y,function(ent)
+            ct = ct + 1
+        end)
+        print("count: ", ct)
+    end,
+})
+
 
 
 umg.on("@createWorld", function()

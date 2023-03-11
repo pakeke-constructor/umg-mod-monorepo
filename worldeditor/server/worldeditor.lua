@@ -79,3 +79,5 @@ local commandHandler = {
 chat.handleCommand("worldeditor", commandHandler)
 chat.handleCommand("worldedit", commandHandler)
 
+
+
