@@ -8,12 +8,13 @@ local tileGroup = umg.group("imageTiling", "x", "y")
 
 
 
-local function matches(tiling, bufKey)
+local function matches(layout, bufKey)
+    print("tiling,bkey",umg.inspect(layout), umg.inspect(bufKey))
     for y=1, 3 do
         for x = 1, 3 do
-            if (y ~= 2) and (x ~= 2) then
+            if (y ~= 2) or (x ~= 2) then
                 local tileExists = bufKey[y][x]
-                local char = tiling.layout[y][x]
+                local char = layout[y][x]
                 if char == "#" and (not tileExists) then
                     return false
                 elseif char == "." and tileExists then
@@ -22,6 +23,7 @@ local function matches(tiling, bufKey)
             end
         end
     end
+    print("SUCCEEDED")
     return true
 end
 
@@ -37,7 +39,7 @@ end
 
 
 
-local function selectImage(ent)
+local function updateTile(ent)
     local imageTiling = ent.imageTiling
     local grid = grids.getGrid(ent)
     local gridX,gridY = grid:getPosition(ent)
@@ -46,27 +48,36 @@ local function selectImage(ent)
     for dy=-1,1 do
         local ybuf = {}
         for dx=-1,1 do
-            local e = grid:get(gridX + dx, gridY + dy)
+            local e = grid:get(gridX+dx, gridY+dy)
             if e then
                 table.insert(ybuf, true)
             else
                 table.insert(ybuf, false)
             end
-            table.insert(bufKey, ybuf)
         end
+        table.insert(bufKey, ybuf)
     end
 
     for _, tiling in ipairs(imageTiling) do
-        if matches(tiling, bufKey) then
-            if tiling.images then
-                return randomChoice(tiling.images)
-            else
-                return tiling.image
+        for _, layout in ipairs(tiling.allLayouts) do
+            if matches(layout, bufKey) then
+                local image = (tiling.images and randomChoice(tiling.images)) or tiling.image
+                ent.image = image
+                if layout.scaleX then
+                    ent.scaleX = layout.scaleX
+                end
+                if layout.scaleY then
+                    ent.scaleY = layout.scaleY
+                end
+                if layout.rot then
+                    ent.rot = layout.rot
+                end
+                return
             end
         end
     end
 
-    return nil -- no image found?
+    -- no image found.. I guess we just leave it?
 end
 
 
@@ -162,12 +173,14 @@ local function addFlips(tiling)
         newLayout[1] = reverse(newLayout[1])
         newLayout[2] = reverse(newLayout[2])
         newLayout[3] = reverse(newLayout[3])
+        newLayout.scaleX = -1
         tryAddLayout(tiling, newLayout)
     end
 
     if tiling.canFlipVertical then
         local newLayout = table.copy(tiling.layout)
         newLayout[1], newLayout[3] = newLayout[3], newLayout[1]
+        newLayout.scaleY = -1
         tryAddLayout(tiling, newLayout)
     end
 end
@@ -182,13 +195,14 @@ local function addRotations(tiling)
         rotates a tiling layout 4 times, 90 degree rotations
     ]]
     local l = tiling.layout
-    for _=1,3 do
+    for i=1,3 do
         -- rotate clockwise
         local layout = {
             --  l[y][x]
             {l[3][1],l[2][1],l[1][1]},
             {l[3][2],l[2][2],l[1][2]},
-            {l[3][3],l[2][3],l[1][3]}
+            {l[3][3],l[2][3],l[1][3]},
+            rot = i * (math.pi/2)
         }
         l = layout
         tryAddLayout(tiling, layout)
@@ -202,15 +216,22 @@ local MANGLED = {} -- unique identifier table
 -- ensures we don't mangle twice
 
 
+local sortKey = function(a,b)
+    return (a.priority or 0) > (b.priority or 0)
+end
+
+
 local function mangleComponent(ent)
     local imageTiling = ent.imageTiling
     if imageTiling[MANGLED] then
         return  -- already mangled
     end
     
+    table.sort(imageTiling, sortKey)
+
     assertComponent(imageTiling, ent:type())
     for _, tiling in ipairs(imageTiling) do
-        tiling.allLayouts = {}
+        tiling.allLayouts = {tiling.layout}
         addFlips(tiling)
         addRotations(tiling)
     end
@@ -220,13 +241,6 @@ end
 
 
 
-local function updateTile(ent)
-    local image = selectImage(ent)
-    if image then
-        ent.image = image
-    end
-end
-
 
 local function updateSurroundingTiles(ent)
     local grid = grids.getGrid(ent)
@@ -234,7 +248,7 @@ local function updateSurroundingTiles(ent)
     
     for dy=-1,1 do
         for dx=-1,1 do
-            if (dx ~= 1) or (dy ~= 1) then
+            if (dx ~= 0) or (dy ~= 0) then
                 local e = grid:get(gridX + dx, gridY + dy)
                 if umg.exists(e) then
                     updateTile(e)

@@ -52,14 +52,19 @@ end
 
 local gridXYAsserter = base.typecheck.assert("table", "number", "number")
 
-function Grid:get(x,y)
-    gridXYAsserter(self,x,y)
-    x = math.floor(x / self.width)
-    y = math.floor(y / self.height)
+function Grid:get(gridX, gridY)
+    gridXYAsserter(self,gridX,gridY)
     -- short circuit so we don't generate a new table thru __index
-    return rawget(self.array, x) and self.array[x][y]
+    return rawget(self.array, gridX) and self.array[gridX][gridY]
 end
 
+
+function Grid:_set(x,y,ent)
+    --[[
+        this ideally shouldn't be used outside of this file
+    ]]
+    self.array[x][y] = ent
+end
 
 
 function Grid:getPosition(entity_or_x, y_or_nil)
@@ -101,15 +106,16 @@ gridGroup:onAdded(function(ent)
     assertGridComponentValid(ent)
     local gridType = ent.grid.type or ent:type()
 
-    local x = math.floor(ent.x / ent.grid.width)
-    local y = math.floor(ent.y / ent.grid.height)
-    local grd = getGrid(gridType, ent.grid.width, ent.grid.height)
+    local w,h = ent.grid.width, ent.grid.height
+    local x = math.floor(ent.x / w)
+    local y = math.floor(ent.y / h)
+    local grd = getGrid(gridType, w, h)
     if umg.exists(grd:get(x,y)) and server then
         base.kill(grd:get(x,y)) -- kill old entity
     end
-    grd.array[x][y] = ent
-    ent.x = math.floor(x)
-    ent.y = math.floor(y)
+    grd:_set(x,y,ent)
+    ent.x = math.floor(x) * w
+    ent.y = math.floor(y) * h
 end)
 
 
@@ -120,7 +126,7 @@ gridGroup:onRemoved(function(ent)
     local y = math.floor(ent.y / ent.grid.height)
     local grd = gridMap[gridType]
     if grd and ent == grd:get(x,y) then
-        grd.array[x][y] = nil
+        grd:_set(x,y,nil)
     end
 end)
 
@@ -129,15 +135,21 @@ end)
 
 
 
-local asserter = base.typecheck.assert("string")
+local asserter = base.typecheck.assert("string | table")
 
 function grids.getGrid(name_or_entity)
-    if name_or_entity.type then
-        return gridMap[name_or_entity:type()]
+    asserter(name_or_entity)
+    local typ
+    if type(name_or_entity) == "string" then
+        typ = name_or_entity
     else
-        asserter(name_or_entity)
-        return gridMap[name_or_entity]
+        local ent = name_or_entity
+        if not ent.type then
+            error("expected an entity as an argument")
+        end
+        typ = (ent.grids and ent.grids.type) or ent:type()
     end
+    return gridMap[typ]
 end
 
 

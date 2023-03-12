@@ -108,8 +108,8 @@ end)
 
 
 local e1
-server.on("spawn", function(u, e)
-    server.entities.grasspatch(e.x,e.y)
+server.on("spawn", function(u, x,y)
+    server.entities.grasspatch(x,y)
 end)
 
 

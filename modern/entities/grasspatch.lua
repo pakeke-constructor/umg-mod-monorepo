@@ -7,6 +7,8 @@ return {
         height = 16
     },
 
+    drawDepth = -1000,
+
     --[[
         TODO:
         There should be a function to generate this.
@@ -15,9 +17,9 @@ return {
         {
             image = "grasspatch_solo",
             layout = {
-                {".",".","."},
-                {".","X","."},
-                {".",".","."},
+                {"?","?","?"},
+                {"?","X","?"},
+                {"?","?","?"},
             },
             priority = -5
         },

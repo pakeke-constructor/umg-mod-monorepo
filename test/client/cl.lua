@@ -58,9 +58,6 @@ function listener:keypressed(key, scancode, isrepeat)
         e.y = y
         base.particles.emit("smoke", x, y, 8, 10)
     end
-    if scancode == "r" then
-        client.send("spawn", base.getPlayer())
-    end
     if scancode == "space" then
         local e = base.getPlayer()
         if base.gravity.isOnGround(e) then
@@ -82,6 +79,8 @@ function listener:mousepressed(x, y, button, istouch, presses)
         base.shockwave({
             x = wx, y = wy, startRadius = 1, endRadius = 60, thickness = 20, duration = 0.55
         })
+    elseif button == 2 then
+        client.send("spawn",base.camera:toWorldCoords(x,y))
     end
 end
 
