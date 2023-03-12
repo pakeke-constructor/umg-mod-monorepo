@@ -80,7 +80,8 @@ function listener:mousepressed(x, y, button, istouch, presses)
             x = wx, y = wy, startRadius = 1, endRadius = 60, thickness = 20, duration = 0.55
         })
     elseif button == 2 then
-        client.send("spawn",base.camera:toWorldCoords(x,y))
+        local wx,wy = base.camera:toWorldCoords(x,y)
+        client.send("spawn",wx,wy)
     end
 end
 

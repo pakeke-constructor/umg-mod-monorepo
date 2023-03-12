@@ -34,15 +34,12 @@ function PointSpawn:apply(x, y)
     
     local ent = ctor(x, y)
     if self.entityAction then
-        error("nyi.")
         self.entityAction:apply(ent)
     end
 end
 
 PointSpawn.name = "Point spawn"
-
 PointSpawn.description = "Spawns an entity at point (x,y)"
-
 PointSpawn.params = {
     {param = "entityType", type = "etype"},
 

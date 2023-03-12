@@ -145,7 +145,7 @@ function AreaGridPointAction:init(params)
     assertNumbers(params.pointGapX, params.pointGapY)
     assert(params.pointAction, "?")
     self.pointGapX = params.pointGapX
-    self.pointGapX = params.pointGapX
+    self.pointGapY = params.pointGapY
     self.pointAction = params.pointAction
 end
 
@@ -154,8 +154,8 @@ function AreaGridPointAction:apply(area, excludeArea)
     assertNumbers4(x,y,w,h)
 
     local pointBuffer = base.Array()
-    for xx = x, w, math.max(1, self.pointGapX) do
-        for yy = y, h, math.max(1, self.pointGapY) do
+    for xx = x, x+w, math.max(1, self.pointGapX) do
+        for yy = y, y+h, math.max(1, self.pointGapY) do
             pointBuffer:add({xx,yy})
         end
     end

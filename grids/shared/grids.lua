@@ -69,7 +69,7 @@ end
 
 function Grid:getPosition(entity_or_x, y_or_nil)
     local x, y
-    if entity_or_x.x then
+    if type(entity_or_x) == "table" then
         local ent = entity_or_x
         x, y = ent.x, ent.y
     else
@@ -110,7 +110,7 @@ gridGroup:onAdded(function(ent)
     local x = math.floor(ent.x / w)
     local y = math.floor(ent.y / h)
     local grd = getGrid(gridType, w, h)
-    if umg.exists(grd:get(x,y)) and server then
+    if grd:get(x,y) and server then
         base.kill(grd:get(x,y)) -- kill old entity
     end
     grd:_set(x,y,ent)

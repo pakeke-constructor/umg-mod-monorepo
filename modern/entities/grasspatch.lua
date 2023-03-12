@@ -3,11 +3,11 @@
 
 return {
     grid = {
-        width = 16,
-        height = 16
+        width = 15,
+        height = 15
     },
 
-    drawDepth = -1000,
+    drawDepth = -400,
 
     --[[
         TODO:
@@ -33,28 +33,40 @@ return {
             priority = 5
         },
         {
+            image = "grasspatch_fill",
+            layout = {
+                {"#","#","?"},
+                {"#","X","#"},
+                {"?","#","#"},
+            },
+            priority = 0,
+            canFlipHorizontal = true
+        },
+        {
             image = "grasspatch_topleft_fill",
             layout = {
                 {".","#","#"},
                 {"#","X","#"},
                 {"#","#","#"},
             },
+            priority = 4,
             canRotate = true
         },
         {
             image = "grasspatch_topleft_empty",
             layout = {
-                {".",".","?"},
-                {".","X","#"},
+                {"?","?","?"},
+                {"?","X","#"},
                 {"?","#","#"},
             },
+            priority = -1,
             canRotate = true
         },
         {
             image = "grasspatch_right",
             layout = {
                 {"#","#","?"},
-                {"#","X","."},
+                {"#","X","?"},
                 {"#","#","?"},
             },
             priority = 1,
@@ -63,10 +75,11 @@ return {
         {
             image = "grasspatch_top",
             layout = {
-                {"?",".","?"},
+                {"?","?","?"},
                 {"#","X","#"},
                 {"#","#","#"},
             },
+            priority = 1,
             canFlipVertical = true
         }
     },

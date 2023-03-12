@@ -65,6 +65,8 @@ function NumberNode:display()
                 self.done = true
                 self.value = value
             end
+        else
+            self.done = false
         end
     end
 end

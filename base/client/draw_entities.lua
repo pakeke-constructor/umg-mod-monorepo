@@ -9,6 +9,8 @@ Will emit draw calls based on position, and in correct order.
 local camera = require("client.camera")
 
 local constants = require("shared.constants")
+local sort = require("_libs.sort")
+
 
 
 local drawGroup = umg.group("image", "x", "y")
@@ -115,16 +117,16 @@ end
 
 
 
-local CAMERA_DEPTH_LEIGHWAY = 300
+local CAMERA_DEPTH_LEIGHWAY = 600
 
 local function cameraTopDepth()
     local _, y = camera:toWorldCoords(0,-CAMERA_DEPTH_LEIGHWAY)
-    return getDrawDepth(y, 0)
+    return getDrawDepth(y - CAMERA_DEPTH_LEIGHWAY, 0)
 end
 
 local function cameraBotDepth()
     local _, y = camera:toWorldCoords(0,love.graphics.getHeight() + CAMERA_DEPTH_LEIGHWAY)
-    return getDrawDepth(y, 0)
+    return getDrawDepth(y + CAMERA_DEPTH_LEIGHWAY, 0)
 end
 
 
@@ -205,7 +207,7 @@ local function sortFrozenEnts()
     -- ==========
     -- The reason we don't need to sort every frame is because these entities
     -- dont have velocity components, so they probably aren't moving.
-    table.sort(sortedFrozenEnts, less)
+    sort.stable_sort(sortedFrozenEnts, less)
 end
 
 
@@ -214,7 +216,7 @@ local function update()
     pollRemoveBuffer(sortedFrozenEnts, removeBufferFrozen)
     pollRemoveBuffer(sortedMoveEnts, removeBufferMove)
 
-    table.sort(sortedMoveEnts, less)
+    sort.stable_sort(sortedMoveEnts, less)
     sortFrozenEnts()
     camera:update()
 end
