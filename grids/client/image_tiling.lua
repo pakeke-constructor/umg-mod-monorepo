@@ -1,6 +1,6 @@
 
 
-local grids = require("shared.grid")
+local grids = require("shared.grids")
 
 
 local tileGroup = umg.group("imageTiling", "x", "y")
@@ -13,7 +13,7 @@ local function matches(tiling, bufKey)
         for x = 1, 3 do
             if (y ~= 2) and (x ~= 2) then
                 local tileExists = bufKey[y][x]
-                local char = tiling.layout[y]:sub(x,y)
+                local char = tiling.layout[y][x]
                 if char == "#" and (not tileExists) then
                     return false
                 elseif char == "." and tileExists then
@@ -40,7 +40,7 @@ end
 local function selectImage(ent)
     local imageTiling = ent.imageTiling
     local grid = grids.getGrid(ent)
-    local gridX,gridY = grid.getGridPosition(ent)
+    local gridX,gridY = grid:getPosition(ent)
     
     local bufKey = {}
     for dy=-1,1 do
@@ -74,10 +74,12 @@ end
 
 local function assertDimensionsSame(imageStr, width, height)
     local quad = client.assets.images[imageStr]
+    if not quad then
+        error("unknown image: " .. tostring(imageStr))
+    end
     local _,_,w,h = quad:getViewport()
 
     if not width then
-        assert(height,"ey?")
         return w,h
     end
 
@@ -87,7 +89,7 @@ end
 
 
 local VALID_CHARS = {
-    ["?"] = true, ["#"] = true, ["."] = true
+    ["?"]=true, ["#"]=true, ["."]=true, ["X"]=true
 }
 
 
@@ -220,13 +222,15 @@ end
 
 local function updateTile(ent)
     local image = selectImage(ent)
-    ent.image = image
+    if image then
+        ent.image = image
+    end
 end
 
 
 local function updateSurroundingTiles(ent)
     local grid = grids.getGrid(ent)
-    local gridX,gridY = grid.getGridPosition(ent)
+    local gridX,gridY = grid:getPosition(ent)
     
     for dy=-1,1 do
         for dx=-1,1 do

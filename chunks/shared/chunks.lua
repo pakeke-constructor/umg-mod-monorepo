@@ -49,5 +49,11 @@ function chunks.forEach(x, y, func)
     return globalChunkRegistry:forEach(x,y,func)
 end
 
-return chunks
+function chunks.iter(x,y)
+    return globalChunkRegistry:iter(x,y)
+end
+
+
+
+umg.expose("chunks", chunks)
 

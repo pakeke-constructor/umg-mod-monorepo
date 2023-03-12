@@ -5,8 +5,14 @@
 
 
 
-chat.handleCommand("script", function(sender)
-end)
+chat.handleCommand("script", {
+    handler = function(sender)
+        server.unicast(sender, "chatCommandsOpenScript")
+    end,
+
+    adminLevel = 100,
+    arguments = {}
+})
 
 
 
@@ -28,7 +34,8 @@ chat.handleCommand("run", {
         end
     end,
 
-
+    adminLevel = 100,
+    arguments = {{name = "script", type = "string"}}
 })
 
 

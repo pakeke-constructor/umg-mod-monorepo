@@ -109,7 +109,7 @@ end)
 
 local e1
 server.on("spawn", function(u, e)
-    server.entities.everything(e.x,e.y)
+    server.entities.grasspatch(e.x,e.y)
 end)
 
 

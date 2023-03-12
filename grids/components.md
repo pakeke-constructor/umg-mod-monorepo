@@ -1,6 +1,24 @@
 
 # components
 
+
+Grid component:
+```lua
+
+ent.grid = {
+    width = 16,
+    height = 16,
+
+    type = "my_grid" -- the grid this ent belongs to
+    -- (This value is optional, and will default to ent:type() )
+}
+
+
+
+
+```
+
+
 imageTiling component:
 
 ```lua

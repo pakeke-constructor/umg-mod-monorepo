@@ -2,7 +2,7 @@
 local ehelp = {}
 
 
-function ehelp.initPosition(e, x, y, ...)
+function ehelp.initPosition(e, x, y)
     -- if this is set as the ent.init method, you can do entities.my_entity(x,y)
     e.x = x
     e.y = y

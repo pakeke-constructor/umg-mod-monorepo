@@ -124,40 +124,49 @@ function ChunkRegistry:forEach(x, y, func)
 end
 
 
---[[
 
--- TODO:
--- Implement iter for loop use.
+
+
+
+local function tryGetChunk(self,ix,iy)
+    return rawget(self.chunks, ix) and rawget(self.chunks[ix], iy)
+end
 
 
 local iterAssert = base.typecheck.assert("number", "number")
 
-
 function ChunkRegistry:iter(x, y)
     iterAssert(x,y)
-    
     local ix, iy = self:getChunkIndexes(x, y)
-    ix = ix - 1
-    iy = iy - 1
+    local dx = -1
+    local dy = -1
 
     local chunkI = 1
-
-    local currentChunk, currentEnt
-
-    if rawget(self.chunks, ix) and rawget(self.chunks[ix], iy) then
-        currentChunk = self.chunks[ix][iy]
-    end
+    local currentChunk = tryGetChunk(self,ix+dx, iy+dy)
 
     return function()
-        if chunkI > currentChunk.size then
-
-        else
-
+        if (not currentChunk) or chunkI > currentChunk.size then
+            currentChunk = nil
+            while (not currentChunk) do
+                if dx < 1 then
+                    dx = dx + 1
+                elseif dy < 1 then
+                    dy = dy + 1
+                    dx = -1
+                else
+                    return nil -- done iteration. Searched all chunks.
+                end
+                currentChunk = tryGetChunk(self,ix+dx, iy+dy)
+                chunkI = 1
+            end
         end
+
+        local ent = currentChunk:get(chunkI)
+        chunkI = chunkI + 1
+        return ent
     end
 end
 
-]]
 
 
 return ChunkRegistry

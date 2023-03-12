@@ -47,7 +47,7 @@ end)
 
 
 
-local listener = base.input.Listener({priority = 0})
+local listener = base.input.Listener({priority = 2})
 
 function listener:keypressed(key, scancode, isrepeat)
     if scancode == "q" then
@@ -58,9 +58,8 @@ function listener:keypressed(key, scancode, isrepeat)
         e.y = y
         base.particles.emit("smoke", x, y, 8, 10)
     end
-    if scancode =="r" and love.keyboard.isDown("lshift") then
-        base.title("Thanks for watching!", {time = 2,fade=0.5})
-        base.title("I hope you enjoyed it", {scale = 0.6, y=2/3, time=2.5, fade=0.5})
+    if scancode == "r" then
+        client.send("spawn", base.getPlayer())
     end
     if scancode == "space" then
         local e = base.getPlayer()

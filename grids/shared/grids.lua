@@ -12,14 +12,9 @@ local Grid = base.Class("grid:Grid")
 
 
 
-local gridMap = setmetatable({--[[
+local gridMap = {--[[
     [gridType] => Grid
-]]}, {
-    __index = function(t,k)
-        t[k] = Grid()
-        return t[k]
-    end
-})
+]]}
 
 
 
@@ -32,8 +27,8 @@ local gridMap = setmetatable({--[[
     local ar2d = make2dArray()
     ar2d[x][y] = "foobar"
 ]]
-local function make2dArray(init)
-    return setmetatable(init, {
+local function make2dArray()
+    return setmetatable({}, {
         __index = function(t,k)
             t[k] = {}
             return t[k]
@@ -44,9 +39,10 @@ end
 
 
 
-local gridInitAsserter = base.typecheck.asserter("string", "number", "number")
+local gridInitAsserter = base.typecheck.assert("string", "number", "number")
 
 function Grid:init(name, width, height)
+    gridInitAsserter(name, width, height)
     self.array = make2dArray()
     self.name = name
     self.width = width
@@ -54,7 +50,10 @@ function Grid:init(name, width, height)
 end
 
 
+local gridXYAsserter = base.typecheck.assert("table", "number", "number")
+
 function Grid:get(x,y)
+    gridXYAsserter(self,x,y)
     x = math.floor(x / self.width)
     y = math.floor(y / self.height)
     -- short circuit so we don't generate a new table thru __index
@@ -62,7 +61,6 @@ function Grid:get(x,y)
 end
 
 
-local getPositionAsserter = base.typecheck.asserter("table", "number", "number")
 
 function Grid:getPosition(entity_or_x, y_or_nil)
     local x, y
@@ -72,14 +70,10 @@ function Grid:getPosition(entity_or_x, y_or_nil)
     else
         x, y = entity_or_x, y_or_nil        
     end
-    getPositionAsserter(self, x, y)
+    gridXYAsserter(self, x, y)
 
     return math.floor(x / self.width), math.floor(y / self.height)
 end
-
-
-function Grid:
-
 
 
 
@@ -91,18 +85,31 @@ end
 
 
 
+local function getGrid(gridType, width, height)
+    if not gridMap[gridType] then
+        gridMap[gridType] = Grid(gridType, width, height)
+    end
+    return gridMap[gridType]
+end
+
+
+
 gridGroup:onAdded(function(ent)
+    assert(type(ent.grid) == "table", "grid component must be a table")
     assert(ent.x and ent.y, "grid entities must have x,y components")
     assert(not (ent.vx or ent.vy), "grid entities must stay still")
-    assertGridComponentValid(ent.grid)
+    assertGridComponentValid(ent)
     local gridType = ent.grid.type or ent:type()
 
     local x = math.floor(ent.x / ent.grid.width)
     local y = math.floor(ent.y / ent.grid.height)
-    local grd = gridMap[gridType]
-    if not umg.exists(grd[x][y]) then
-        grd[x][y] = ent
+    local grd = getGrid(gridType, ent.grid.width, ent.grid.height)
+    if umg.exists(grd:get(x,y)) and server then
+        base.kill(grd:get(x,y)) -- kill old entity
     end
+    grd.array[x][y] = ent
+    ent.x = math.floor(x)
+    ent.y = math.floor(y)
 end)
 
 
@@ -112,8 +119,8 @@ gridGroup:onRemoved(function(ent)
     local x = math.floor(ent.x / ent.grid.width)
     local y = math.floor(ent.y / ent.grid.height)
     local grd = gridMap[gridType]
-    if ent == grd[x][y] then
-        grd[x][y] = nil
+    if grd and ent == grd:get(x,y) then
+        grd.array[x][y] = nil
     end
 end)
 
@@ -122,10 +129,9 @@ end)
 
 
 
-local asserter = base.typecheck.asserter("string")
+local asserter = base.typecheck.assert("string")
 
 function grids.getGrid(name_or_entity)
-    local g
     if name_or_entity.type then
         return gridMap[name_or_entity:type()]
     else

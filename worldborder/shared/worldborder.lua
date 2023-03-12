@@ -96,7 +96,6 @@ end
 
 
 local function dealWithEntity(borderBuffer, ent)
-    -- border buffer is a 
     local EPSILON = 0.01
     local entWithin = false
     local closestBorder = nil
