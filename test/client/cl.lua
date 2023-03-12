@@ -1,11 +1,16 @@
 
 
-light.setBaseLighting(0.7,0.7,0.7)
+light.setBaseLighting(0.,0.,0.)
 
 
 base.groundTexture.setColor(0.3,0.9,0.2)
 base.groundTexture.setTextureList({"ground_texture_final4"})
 
+
+rain.setOptions({
+    rainRate = 1500,
+    rainDrift = 0.11
+})
 
 
 

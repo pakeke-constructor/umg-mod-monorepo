@@ -24,6 +24,11 @@ function gravity.setGravity(dy)
 end
 
 
+function gravity.getGravity()
+    return gravityValue
+end
+
+
 function gravity.isOnGround(ent)
     assert(umg.exists(ent), "entity doesnt exist")
     return groundTest(ent)

@@ -15,6 +15,7 @@
       "worldeditor",
       "worldborder",
       "commandutil",
-      "modern"
+      "modern",
+      "weather"
     ]
 }

@@ -71,6 +71,7 @@ end
 local function drawCanvas()
     love.graphics.push("all")
     love.graphics.origin()
+
     love.graphics.setColor(1,1,1,1)
     love.graphics.setCanvas()
     love.graphics.setBlendMode("multiply", "premultiplied")
@@ -81,7 +82,9 @@ end
 
 umg.on("postDrawWorld", function()
     setupCanvas()
+    local mode, alphamode = love.graphics.getBlendMode( )
     drawCanvas()
+    love.graphics.setBlendMode(mode, alphamode)
 end)
 
 

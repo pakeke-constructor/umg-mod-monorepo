@@ -37,13 +37,13 @@ local in_use = Set()
 
 local floor = math.floor
 
-local function get_z_index(y,z)
+local function getZIndex(y,z)
     return floor((y+z)/2)
 end
 
 
 
-local function get_emitter(name)
+local function getEmitter(name)
     --[[
         gets emitter of certain type from the queue of that type.
         (also removes from queue)
@@ -176,7 +176,7 @@ function particles.emit(name, x, y, z, num_particles, color)
         error("Unrecognised particle name: "..tostring(name) .. ".\nMake sure to register particles with `base.defineParticles()!`")
     end
 
-    local emitter = get_emitter(name)
+    local emitter = getEmitter(name)
 
     if not emitter then
         -- No available emitters in the pool; create a clone.
@@ -186,7 +186,7 @@ function particles.emit(name, x, y, z, num_particles, color)
         }
     end
 
-    local z_dep = get_z_index(y,z)
+    local z_dep = getZIndex(y,z)
     emitter.z_dep = z_dep
     emitter.y = y
     emitter.z = z

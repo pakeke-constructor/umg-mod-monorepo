@@ -71,11 +71,11 @@ end
 
 
 local function drawCanvas()
+    love.graphics.setBlendMode("multiply", "premultiplied")
     love.graphics.push("all")
     love.graphics.origin()
     love.graphics.setColor(1,1,1,1)
     love.graphics.setCanvas()
-    love.graphics.setBlendMode("multiply", "premultiplied")
     love.graphics.draw(canvas)
     love.graphics.pop()
 end
@@ -84,7 +84,11 @@ end
 umg.on("postDrawWorld", function()
     if #borderGroup > 0 then
         setupCanvas()
+
+        local mode, alphamode = love.graphics.getBlendMode( )
         drawCanvas()
+        love.graphics.setBlendMode(mode, alphamode)
+    
 
         for _, ent in ipairs(borderGroup) do
             local border = ent.border

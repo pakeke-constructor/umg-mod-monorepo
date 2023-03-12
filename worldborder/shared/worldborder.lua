@@ -16,7 +16,7 @@ function Border:init(options)
     assert(options.width, "borders need width")
     assert(options.height, "borders need height")
 
-    self.color = WHITE
+    self.color = options.color or WHITE
     self.centerX = options.centerX
     self.centerY = options.centerY
     self.x = options.centerX - options.width / 2
@@ -71,7 +71,7 @@ end
 
 if server then
 
-    
+
 -- list of active world borders
 local borderGroup = umg.group("border")
 

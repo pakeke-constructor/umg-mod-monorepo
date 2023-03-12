@@ -109,9 +109,14 @@ end)
 
 local e1
 server.on("spawn", function(u, x,y)
-    server.entities.grasspatch(x,y)
+    local e = server.entities.empty(x,y)
+    e.border = worldborder.Border({
+        centerX = 10,
+        centerY = 10,
+        width = 1000,
+        height = 1000
+    })
 end)
-
 
 
 local control_ents = umg.group("controllable", "x", "y")
