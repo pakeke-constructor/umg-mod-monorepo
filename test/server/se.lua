@@ -109,13 +109,7 @@ end)
 
 local e1
 server.on("spawn", function(u, x,y)
-    local e = server.entities.empty(x,y)
-    e.border = worldborder.Border({
-        centerX = 10,
-        centerY = 10,
-        width = 1000,
-        height = 1000
-    })
+    server.entities.opacity_test(x,y)
 end)
 
 

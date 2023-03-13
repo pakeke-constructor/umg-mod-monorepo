@@ -1,6 +1,6 @@
 
 
-light.setBaseLighting(0.,0.,0.)
+light.setBaseLighting(0,0,0)
 
 
 base.groundTexture.setColor(0.3,0.9,0.2)

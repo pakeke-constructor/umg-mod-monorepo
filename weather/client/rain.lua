@@ -27,7 +27,7 @@ local rainSpeed = 800
 
 -- size of rain tail
 local minTailSize = 20
-local maxTailSize = 40
+local maxTailSize = 24
 
 
 
