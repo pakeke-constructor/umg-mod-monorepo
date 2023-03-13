@@ -145,5 +145,4 @@ function rain.getOptions()
 end
 
 
-umg.expose("rain", rain)
-
+return rain

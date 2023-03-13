@@ -3,6 +3,11 @@
 
 local function weightedRandom(tabl)
     --[[
+        Creates a weighted random function, given weights
+            and values.
+        
+        Example input:
+        
         tab : {
             ["foo"] = 0.1;  20% chance to pick "foo"
             ["bar"] = 0.4;  80% chance to pick "bar"

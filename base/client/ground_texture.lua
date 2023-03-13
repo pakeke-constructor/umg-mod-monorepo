@@ -69,7 +69,7 @@ umg.on("drawGround", function()
         local w,h = love.graphics.getDimensions()
 
         local start_x, start_y = camera:toWorldCoords(0,0)
-        local endx, endy = camera:toWorldCoords(w*3,h*3)
+        local endx, endy = camera:toWorldCoords(w,h)
 
         start_x = start_x - LEIGHWAY
         start_y = start_y - LEIGHWAY
@@ -80,8 +80,8 @@ umg.on("drawGround", function()
         local dx = camera.x % tw
         local dy = camera.y % th
 
-        for x = start_x - dx, endx, tw do
-            for y = start_y - dy, endy, th do
+        for x = start_x - dx, endx+tw, tw do
+            for y = start_y - dy, endy+th, th do
                 local normx, normy = math.floor(x/tw), math.floor(y/th) 
                 local index = ((PRIME*normx+normy) % groundTiles:size()) + 1
                 local tile = groundTiles[index]

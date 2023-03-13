@@ -7,11 +7,6 @@ base.groundTexture.setColor(0.3,0.9,0.2)
 base.groundTexture.setTextureList({"ground_texture_final4"})
 
 
-rain.setOptions({
-    rainRate = 1500,
-    rainDrift = 0.11
-})
-
 
 
 
