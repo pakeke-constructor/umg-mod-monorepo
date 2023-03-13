@@ -16,6 +16,7 @@
       "worldborder",
       "commandutil",
       "modern",
-      "weather"
+      "weather",
+      "vignette"
     ]
 }

@@ -10,7 +10,7 @@ return {
     init = function(e,x,y, rad)
         e.light = {
             color = LIGHT_COLOR,
-            radius = rad or DEFAULT_RADIUS
+            size = rad or DEFAULT_RADIUS
         }
         base.entityHelper.initPosition(e,x,y)
     end

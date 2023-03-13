@@ -32,7 +32,7 @@ return {
     },
 
     light = {
-        radius = 100;
+        size = 240;
         color = {1,1,1}
     };
 }

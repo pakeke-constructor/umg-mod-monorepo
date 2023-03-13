@@ -2,7 +2,15 @@
 
 local DEFAULT = {0.55,0.55,0.7,1} --{0.85,0.85,0.85}
 
+
+
+--[[
+    important note:
+    This image is stored OUTSIDE of assets/images,
+    which means that it won't be loaded by the texture atlas.
+]]
 local DEFAULT_LIGHT_IMAGE = "default_light.png"
+
 
 local base_lighting = DEFAULT
 
@@ -43,7 +51,7 @@ end)
 
 
 
-local DEFAULT_RADIUS = 50
+local DEFAULT_SIZE = 50
 local DEFAULT_COLOR = {1,1,1}
 
 
@@ -56,9 +64,8 @@ local function setupCanvas()
     for _, ent in ipairs(lightGroup) do
         -- TODO: Check if entity is on the screen
         local l = ent.light
-        local radius = l.radius or DEFAULT_RADIUS
-        local scale = (radius*2) / W
-        -- times by 2, because W is twice as large as light image radius
+        local size = l.size or DEFAULT_SIZE
+        local scale = size / W
         love.graphics.setColor(l.color or DEFAULT_COLOR)
         love.graphics.draw(light_image, ent.x, ent.y, 0, scale, scale, W/2, H/2)
     end

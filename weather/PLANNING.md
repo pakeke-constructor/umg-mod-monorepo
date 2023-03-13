@@ -23,13 +23,16 @@ And here are the calculations for how
 the weather should be determined:
 ```
 Fog  =  +Cloudyness  +Wetness  -abs(Windiness)  -Sunniness/2
-
 CloudShadow  =  +Cloudyness +Sunniness
-
 Rain  =  +Cloudiness  +Raininess  +Wetness  -Sunniness
-
 WindEffect  =  +abs(Windiness)  +Sunniness
-
 SunBeam  =  +Sunniness
 ```
+
+
+## TODO:
+Keep emergence in mind!!!
+
+Entities should react to weather events, and change 
+their behaviour appropriately.
 

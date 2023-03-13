@@ -25,7 +25,7 @@ return {
     };
 
     light = {
-        radius = 120
+        size = 300
     };
 
     moveAnimation = {
