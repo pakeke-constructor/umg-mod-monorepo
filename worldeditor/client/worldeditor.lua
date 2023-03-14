@@ -1,12 +1,5 @@
 
 
---[[
-    TODO:
-    Write the API here.
-
-    We should be able to programmatically add our own tools and features
-    to the worldeditor.
-]]
 
 local constants = require("shared.constants")
 
@@ -22,31 +15,15 @@ end)
 
 
 
+local ToolInfo = base.Class("worldeditor:ClientSideToolInfo")
 
-local toolCache = {--[[
-    keeps track of what brushes the server knows about
-    [tool] --> toolName
-]]}
-
-
-
-local assertESKT = base.typecheck.assert("table", "string")
-
-
-local function syncTool(tool, toolName)
-    client.send("worldeditorDefineTool", tool, toolName)
+function ToolInfo:init(options)
+    self.tool = options.tool
+    self.editNode = options.editNode
+    self.name = options.name
+    self.serverUpdated = false
+    assert(self.tool and self.editNode and self.name, "?")
 end
-
-local function ensureServerKnowsTool(tool, toolName)
-    assertESKT(tool,toolName)
-    if not toolCache[tool] then
-        toolCache[tool] = toolName
-        syncTool(tool, toolName)
-    end
-end
-
-
-
 
 
 
@@ -56,10 +33,27 @@ local toolHotkeys = {--[[
 
 
 
+
+local function syncTool(tool, toolName)
+    client.send("worldeditorDefineTool", tool, toolName)
+end
+
+local function ensureServerKnowsTool(toolInfo)
+    if not toolInfo.serverUpdated then
+        toolInfo.serverUpdated = true
+        syncTool(toolInfo.tool, toolInfo.name)
+    end
+end
+
+
+
+
+
+
 local currentEditNode
 
 
-
+-- the current tool that's in use, and it's name.
 local currentTool
 local currentToolName
 
@@ -68,35 +62,113 @@ local currentToolName
 local buttonApplyColor = {0.2,0.8,0.3}
 local toolNameColor = {0.8,0.8,0.2}
 local toolTypeColor = {0.1,0.9,0.9}
+local buttonCancelColor = {0.8,0.25,0.25}
+
+
+local function renderToolEditor()
+    Slab.BeginWindow("Tool Editor", {Title = "Tool Editor"})
+
+    if currentEditNode then
+        Slab.Text("Tool name: ", {Color = toolNameColor})
+        Slab.SameLine()
+        if Slab.Input('worldeditor : toolName', {Text = currentToolName}) then
+            currentToolName = Slab.GetInputText()
+        end
+        Slab.Text("tool: ", {Color = toolTypeColor})
+        currentEditNode:display()
+    end
+
+    if currentToolName and #currentToolName > 0 and currentEditNode and currentEditNode:isDone() then
+        if Slab.Button("Apply", {Color = buttonApplyColor}) then
+            currentTool = currentEditNode:getValue()            
+            syncTool(currentTool, currentToolName)
+        end
+    end
+    Slab.Text(" ")
+    Slab.EndWindow()
+end
+
+
+
+
+local renderHotkeyEditor
+do
+
+local validHotKeys = {
+    q = true,
+    e = true,
+    r = true,
+    f = true
+}
+for i=0,9 do
+    validHotKeys[tostring(i)] = true
+end
+
+
+local makingNewHotKey = false
+local newHotKey = nil
+
+function renderHotkeyEditor()
+    Slab.Text("Hotkey    Tool")
+    if Slab.BeginTree("hotkeyEdit", {Label = "Hotkeys: "}) then
+        Slab.Indent()
+        for hotKey, toolInfo in pairs(toolHotkeys) do
+            Slab.Text(hotKey)
+            Slab.SameLine()
+            if Slab.Button(toolInfo.name) then
+                currentEditNode = toolInfo.editNode
+            end
+        end
+
+        if makingNewHotKey then
+            if Slab.BeginComboBox('hotkey chooser', {Selected = newHotKey}) then
+                for hk, _ in pairs(validHotKeys) do
+                    if (not toolHotkeys[hk]) and Slab.TextSelectable(hk) then
+                        newHotKey = hk
+                    end
+                end
+                Slab.EndComboBox()
+            end
+            if Slab.Button("Cancel", {Color = buttonCancelColor}) then
+                makingNewHotKey = false
+                newHotKey = nil
+            end
+            Slab.SameLine()
+        else
+            if Slab.Button("New Hotkey", {Color = buttonApplyColor}) then
+                makingNewHotKey = true
+            end
+        end
+
+        Slab.Unindent()
+        Slab.EndTree()
+    end
+end
+
+end
+
 
 
 umg.on("slabUpdate", function()
     if _G.settings.editing then
-        Slab.BeginWindow("worldeditor", {Title = "World editor"})
-        if Slab.Button("new brush") then
+        Slab.Text("Current tool: TODO", {Color = {0.3,0.3,0.9}})
+
+        if Slab.Button("Import hotkeys") then
+            -- open import txt box
+        end
+
+        if Slab.Button("Export hotkeys") then
+            -- open export txt box
+        end
+
+        --[[
             local id = 1
             -- id of 1 for now is fine.
             currentEditNode = toolEditor.createBrushNode(id)
-        end
-
-        if currentEditNode then
-            Slab.Text("Tool name: ", {Color = toolNameColor})
-            Slab.SameLine()
-            if Slab.Input('worldeditor : toolName', {Text = currentToolName}) then
-                currentToolName = Slab.GetInputText()
-            end
-            Slab.Text("tool: ", {Color = toolTypeColor})
-            currentEditNode:display()
-        end
-
-        if currentToolName and #currentToolName > 0 and currentEditNode and currentEditNode:isDone() then
-            if Slab.Button("Apply", {Color = buttonApplyColor}) then
-                currentTool = currentEditNode:getValue()            
-                syncTool(currentTool, currentToolName)
-            end
-        end
-        Slab.Text(" ")
-        Slab.EndWindow()
+            Slab.EndTree()
+        ]]
+    
+        renderHotkeyEditor()
     end
 end)
 

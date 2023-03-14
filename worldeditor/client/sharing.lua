@@ -6,7 +6,8 @@ local sharing = {}
 
 local packageTypes = {
     BRUSH = "BRUSH",
-    SCHEMATIC = "SCHEMATIC"
+    SCHEMATIC = "SCHEMATIC",
+    HOTKEYS = "HOTKEYS"
 }
 
 
@@ -16,6 +17,7 @@ local packageTypes = {
 ]]
 function sharing.import(base64_string)
     if base64_string:find("\n") then
+        -- we remove the first \n to remove the header
         local i = base64_string:find("\n[^\n]*$")
         base64_string = base64_string:sub(i+1)
     end

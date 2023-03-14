@@ -80,8 +80,9 @@ umg.on("drawGround", function()
         local dx = camera.x % tw
         local dy = camera.y % th
 
-        for x = start_x - dx, endx+tw, tw do
-            for y = start_y - dy, endy+th, th do
+        -- add tw*4 and th*4 onto the ground so it doesn't "leak"
+        for x = start_x - dx, endx+tw*4, tw do
+            for y = start_y - dy, endy+th*4, th do
                 local normx, normy = math.floor(x/tw), math.floor(y/th) 
                 local index = ((PRIME*normx+normy) % groundTiles:size()) + 1
                 local tile = groundTiles[index]
