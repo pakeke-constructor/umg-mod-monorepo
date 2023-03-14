@@ -15,6 +15,20 @@ end)
 
 
 
+
+local knownTools = {--[[
+    [name] --> toolInfo
+]]}
+
+local hotkeyToToolInfo = {--[[
+    [hotkey] --> toolInfo
+]]}
+
+
+local currentHotKey = "1"
+
+
+
 local ToolInfo = base.Class("worldeditor:ClientSideToolInfo")
 
 function ToolInfo:init(options)
@@ -27,9 +41,7 @@ end
 
 
 
-local toolHotkeys = {--[[
-    [hotkey] --> tool
-]]}
+
 
 
 
@@ -46,16 +58,15 @@ local function ensureServerKnowsTool(toolInfo)
 end
 
 
+local function getCurrentToolInfo()
+    return hotkeyToToolInfo[currentHotKey or ""]
+end
 
 
 
+local currentEditToolInfo
 
-local currentEditNode
 
-
--- the current tool that's in use, and it's name.
-local currentTool
-local currentToolName
 
 
 
@@ -65,7 +76,14 @@ local toolTypeColor = {0.1,0.9,0.9}
 local buttonCancelColor = {0.8,0.25,0.25}
 
 
-local function renderToolEditor()
+local renderToolEditor
+do
+
+local currentTool
+local currentToolName
+
+
+function renderToolEditor()
     Slab.BeginWindow("Tool Editor", {Title = "Tool Editor"})
 
     if currentEditNode then
@@ -88,6 +106,7 @@ local function renderToolEditor()
     Slab.EndWindow()
 end
 
+end
 
 
 
@@ -116,7 +135,7 @@ function renderHotkeyEditor()
             Slab.Text(hotKey)
             Slab.SameLine()
             if Slab.Button(toolInfo.name) then
-                currentEditNode = toolInfo.editNode
+                currentEditToolInfo = toolInfo
             end
         end
 
@@ -178,6 +197,7 @@ umg.on("postDrawWorld", function()
     if _G.settings.editing then
         love.graphics.push("all")
         love.graphics.setLineWidth(3)
+        local currentTool = getCurrentToolInfo()
         if currentTool and currentTool.draw then
             local x, y = base.camera:getMousePosition()
             currentTool:draw(x,y)
@@ -231,12 +251,12 @@ umg.on("@tick", function()
 end)
 
 
-local function applyTool()
+local function applyTool(toolInfo)
     if (not DONE_THIS_TICK) and listener:isMouseButtonDown(BUTTON_1) then
         local worldX, worldY = base.camera:getMousePosition()
-        ensureServerKnowsTool(currentTool, currentToolName)
-        client.send("worldeditorSetTool", currentToolName)
-        client.send("worldeditorUseTool", currentToolName, worldX, worldY, BUTTON_1)
+        ensureServerKnowsTool(toolInfo)
+        client.send("worldeditorSetTool", toolInfo.name)
+        client.send("worldeditorUseTool", toolInfo.name, worldX, worldY, BUTTON_1)
         DONE_THIS_TICK = true
     end
 end
