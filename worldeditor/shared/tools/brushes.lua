@@ -8,12 +8,16 @@ All table keys with `_` are temporary, and specific to the runtime.
 
 ]]
 
+local constants = require("shared.constants")
 
 
 
 
 local Brush = base.Class("worldeditor:Brush")
 Brush.toolType = "Brush"
+
+Brush.useButton = constants.USE_BUTTON.MOUSE_1
+
 
 local PointBrush = base.Class("wordeditor:PointBrush", Brush)
 local SquareBrush = base.Class("worldeditor:SquareBrush", Brush)
@@ -38,6 +42,8 @@ end
 
 PointBrush.name = "Point brush"
 PointBrush.description = "Apply an action to a single point"
+PointBrush.useType = constants.USE_TYPE.DISCRETE
+
 
 PointBrush.params = {
     {param = "pointAction", type = "PointAction"}
@@ -82,6 +88,8 @@ end
 
 SquareBrush.name = "Square brush"
 SquareBrush.description = "Apply an action to a square area"
+SquareBrush.useType = constants.USE_TYPE.CONTINUOUS
+
 
 SquareBrush.params = {
     {param = "width", type = "number", optional = false},

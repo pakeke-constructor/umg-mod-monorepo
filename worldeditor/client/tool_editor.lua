@@ -327,10 +327,10 @@ end
 
 
 
-local brushes = require("shared.brushes")
-local areaActions = require("shared.actions.area_actions")
-local pointActions = require("shared.actions.point_actions")
-local entityActions = require("shared.actions.entity_actions")
+local brushes = require("shared.tools.brushes")
+local areaActions = require("shared.tools.actions.area_actions")
+local pointActions = require("shared.tools.actions.point_actions")
+local entityActions = require("shared.tools.actions.entity_actions")
 
 
 defineCustomNodeGroup(brushes)
