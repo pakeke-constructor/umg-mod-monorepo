@@ -5,7 +5,7 @@ local sharing = {}
 
 
 local packageTypes = {
-    BRUSH = "BRUSH",
+    TOOL = "TOOL",
     SCHEMATIC = "SCHEMATIC",
     HOTKEYS = "HOTKEYS"
 }
@@ -27,7 +27,7 @@ function sharing.import(base64_string)
         return nil, "couldn't decode base64"
     end
     local packge, err = umg.deserialize(data)
-    if packge then
+    if packge and type(packge) == "table" then
         local type = packge.type
         if (not type) or (not packge.object) or (not packageTypes[type]) then
             return nil, "Unrecognized package type"
@@ -49,6 +49,7 @@ local assertExport = base.typecheck.assert("string", "table", "string")
 ]]
 function sharing.export(name, object, type)
     assertExport(name,object,type)
+    assert(packageTypes[type], "unkknown type")
     local packge = {
         object = object,
         type = type
@@ -61,7 +62,12 @@ function sharing.export(name, object, type)
     is so that users can read what the tool actually is before
     importing it.   (i.e. name will show up in discord, for example)   ]]
     str = name .. "\n" .. str
-    love.system.setClipboardText(str)
+    return str
+end
+
+
+function sharing.exportToClipboard(name, object, type)
+    love.system.setClipboardText(sharing.export(name, object, type))
 end
 
 

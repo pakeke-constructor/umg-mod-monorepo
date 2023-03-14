@@ -2,6 +2,7 @@
 
 local constants = require("shared.constants")
 
+local sharing = require("client.sharing")
 local toolEditor = require("client.tool_editor")
 
 
@@ -96,12 +97,16 @@ local buttonApplyColor = {0.2,0.8,0.3}
 local nameColor = {0.8,0.8,0.2}
 local typeColor = {0.1,0.9,0.9}
 local buttonCancelColor = {0.8,0.25,0.25}
+local buttonOtherColor = {0.85,0.85,0.4}
 
 
 local renderToolEditor
 do
 
 local name
+local lastExportTime = -10000
+
+local EXPORT_HOVER_TIME = 5 -- seconds to hover export message
 
 
 function renderToolEditor()
@@ -125,6 +130,13 @@ function renderToolEditor()
                 syncTool(toolInfo)
                 toolInfo.serverUpdated = true
                 defineNewToolInfo(toolInfo)
+            end
+            if Slab.Button("Export to clipboard", {Color = buttonOtherColor}) then
+                sharing.exportToClipboard(name, toolInfo, "TOOL")
+                lastExportTime = love.timer.getTime()
+            end
+            if lastExportTime+EXPORT_HOVER_TIME > love.timer.getTime() then
+                Slab.Text("Tool copied to clipboard!")
             end
         end
     end
