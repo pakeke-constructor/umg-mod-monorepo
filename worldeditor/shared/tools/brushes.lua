@@ -16,8 +16,6 @@ local constants = require("shared.constants")
 local Brush = base.Class("worldeditor:Brush")
 Brush.toolType = "Brush"
 
-Brush.useButton = constants.USE_BUTTON.MOUSE_1
-
 
 local PointBrush = base.Class("wordeditor:PointBrush", Brush)
 local SquareBrush = base.Class("worldeditor:SquareBrush", Brush)

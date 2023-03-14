@@ -1,18 +1,13 @@
 
-local ENUM_MT = {__index=function(_,k) error("undefined enum: " .. k) end}
-
-
 local constants = {
 
     --[[
         TODO: Do some more planning about thos.
     ]]
-    USE_TYPE = setmetatable({
-        
+    USE_TYPE = base.Enum({
         CONTINUOUS = "CONTINUOUS", -- i.e. hold mouse to draw
         DISCRETE = "DISCRETE" -- i.e. press mouse once to draw
-
-    }, ENUM_MT)
+    })
 
 }
 

@@ -8,6 +8,7 @@
     to the worldeditor.
 ]]
 
+local constants = require("shared.constants")
 
 local toolEditor = require("client.tool_editor")
 
@@ -149,7 +150,9 @@ end
 local BUTTON_1 = 1
 
 
+-- to ensure we only send one event across per tick
 local DONE_THIS_TICK = false
+
 
 umg.on("@tick", function()
     DONE_THIS_TICK = false
@@ -159,27 +162,35 @@ end)
 local function applyTool()
     if (not DONE_THIS_TICK) and listener:isMouseButtonDown(BUTTON_1) then
         local worldX, worldY = base.camera:getMousePosition()
-        if currentTool and currentToolName then
-            ensureServerKnowsTool(currentTool, currentToolName)
-            client.send("worldeditorSetTool", currentToolName)
-            client.send("worldeditorUseTool", currentToolName, worldX, worldY, BUTTON_1)
-            DONE_THIS_TICK = true
-        end
+        ensureServerKnowsTool(currentTool, currentToolName)
+        client.send("worldeditorSetTool", currentToolName)
+        client.send("worldeditorUseTool", currentToolName, worldX, worldY, BUTTON_1)
+        DONE_THIS_TICK = true
     end
 end
+
+
 
 
 function listener:update(dt)
     if _G.settings.editing then
         moveCamera(dt)
-        applyTool()
+        if currentTool and currentToolName and currentTool.useType == constants.USE_TYPE.CONTINUOUS then
+            applyTool()
+        end
         listener:lockKeyboard()
         listener:lockMouseButtons()
     end
 end
 
 
-function listener:mousepressed(dt)
 
+function listener:mousepressed()
+    if _G.settings.editing then
+        if currentTool and currentToolName and currentTool.useType == constants.USE_TYPE.DISCRETE then
+            applyTool()
+        end
+        DONE_THIS_TICK = true
+    end
 end
 
