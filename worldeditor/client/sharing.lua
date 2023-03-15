@@ -26,7 +26,14 @@ function sharing.import(base64_string)
     if not success then
         return nil, "couldn't decode base64"
     end
+
+    success, data = pcall(love.data.decompress, "string", base64_string)
+    if not success then
+        return nil, "couldn't decompress data"
+    end
+    
     local packge, err = umg.deserialize(data)
+
     if packge and type(packge) == "table" then
         local type = packge.type
         if (not type) or (not packge.object) or (not packageTypes[type]) then
@@ -55,6 +62,7 @@ function sharing.export(name, object, type)
         type = type
     }
     local data = umg.serialize(packge)
+    data = love.data.compress("string","zlib",data)
     local str = love.data.encode("string","base64",data)
 
 --[[ The reason we add the name to the string, 

@@ -14,7 +14,7 @@ local toolEditor = {}
 
 
 
-local ToolNode = base.Class("worldedit:ToolNode")
+local ToolNode = base.Class("worldeditor:ToolNode")
 
 function ToolNode:init(params)
     for k,v in pairs(params) do
@@ -33,17 +33,17 @@ end
 
 
 
-local NumberNode = base.Class("worldedit:NumberNode", ToolNode)
-local StringNode = base.Class("worldedit:StringNode", ToolNode)
-local SelectionNode = base.Class("worldedit:SelectionNode", ToolNode)
-local ETypeNode = base.Class("worldedit:ETypeNode", ToolNode)
+local NumberNode = base.Class("worldeditor:NumberNode", ToolNode)
+local StringNode = base.Class("worldeditor:StringNode", ToolNode)
+local SelectionNode = base.Class("worldeditor:SelectionNode", ToolNode)
+local ETypeNode = base.Class("worldeditor:ETypeNode", ToolNode)
 
 -- this is what all the tools use:
-local CustomNode = base.Class("worldedit:CustomNode", ToolNode)
+local CustomNode = base.Class("worldeditor:CustomNode", ToolNode)
 
 -- These represent a class of similar tools.
 -- (this is what customNodes are contained inside)
-local CustomNodeGroup = base.Class("worldedit:CustomNodeGroup", ToolNode)
+local CustomNodeGroup = base.Class("worldeditor:CustomNodeGroup", ToolNode)
 
 
 local paramColor = {0.6,0.6,1}
@@ -316,11 +316,10 @@ local function defineCustomNodeGroup(classes)
         customNodes[cls.name] = ctor
     end
     
-    
     -- This is only registered on the clientside, because the server does not
     -- deserialize editNodes.  Similar to how the editNode classes are only defined
     -- on clientside too.  (If we don't register, we get func ser error.)
-    umg.register(customNodes, "worldedit:CNG:CNS:" .. toolType)
+    umg.register(customNodes, "worldedit:CNG:" .. toolType)
     
     local customNodeGroupCtor = function(options)
         assert(type(options.id) == "number", "?")

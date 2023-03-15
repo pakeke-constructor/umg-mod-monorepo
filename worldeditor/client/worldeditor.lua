@@ -97,14 +97,13 @@ local buttonApplyColor = {0.2,0.8,0.3}
 local nameColor = {0.8,0.8,0.2}
 local typeColor = {0.1,0.9,0.9}
 local buttonCancelColor = {0.8,0.25,0.25}
-local buttonOtherColor = {0.85,0.85,0.4}
+local buttonOtherColor = {0.65,0.65,0.2}
 
 
 local renderToolEditor
 do
 
-local name
-local lastExportTime = -10000
+    local lastExportTime = -10000
 
 local EXPORT_HOVER_TIME = 5 -- seconds to hover export message
 
@@ -115,24 +114,30 @@ function renderToolEditor()
 
     if toolInfo then
         local editNode = toolInfo.editNode
+        
         Slab.Text("Tool name: ", {Color = nameColor})
         Slab.SameLine()
-        if Slab.Input('worldeditor : toolName', {Text = name}) then
-            name = Slab.GetInputText()
+        -- Don't allow for changing a tool's name after it's been created.
+        if not toolInfo:allReady() then
+            if Slab.Input('worldeditor : toolName', {Text = toolInfo.name}) then
+                toolInfo.name = Slab.GetInputText()
+            end
+        else
+            Slab.Text(toolInfo.name)
         end
+
         Slab.Text("tool: ", {Color = typeColor})
         editNode:display()
 
-        if name and editNode:isDone() then
+        if toolInfo.name and editNode:isDone() then
             if Slab.Button("Apply", {Color = buttonApplyColor}) then
                 toolInfo.tool = editNode:getValue()
-                toolInfo.name = name
                 syncTool(toolInfo)
                 toolInfo.serverUpdated = true
                 defineNewToolInfo(toolInfo)
             end
             if Slab.Button("Export to clipboard", {Color = buttonOtherColor}) then
-                sharing.exportToClipboard(name, toolInfo, "TOOL")
+                sharing.exportToClipboard(toolInfo.name, toolInfo, "TOOL")
                 lastExportTime = love.timer.getTime()
             end
             if lastExportTime+EXPORT_HOVER_TIME > love.timer.getTime() then
@@ -171,16 +176,6 @@ local function resetHotKeyEditState()
 end
 
 
---[[
-
-    if currentToolInfoEditing then
-        if currentToolInfoEditing:allReady() then
-            local tinfo = currentToolInfoEditing
-            nameToToolInfo[tinfo.name] = tinfo
-        end
-    else
-
-]]
 
 --[[
     This function is responsible for rendering
@@ -242,7 +237,18 @@ function renderHotkeyEditor()
             for hotKey, toolInfo in pairs(hotkeyToToolInfo) do
                 Slab.Text(hotKey)
                 Slab.SameLine()
-                if Slab.Button(toolInfo.name) then
+
+                if Slab.BeginComboBox("hk tool chooser", {Selected = toolInfo.name}) then
+                    for name,tinfo in pairs(nameToToolInfo) do
+                        if Slab.TextSelectable(name) then
+                            defineHotKey(hotKey, tinfo)
+                            break
+                        end
+                    end
+                    Slab.EndComboBox()
+                end
+                Slab.SameLine()
+                if Slab.Button("Edit tool", {Color = buttonOtherColor}) then
                     currentToolInfoEditing = toolInfo
                 end
             end
