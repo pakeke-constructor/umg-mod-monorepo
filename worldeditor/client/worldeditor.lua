@@ -76,9 +76,14 @@ local function getCurrentToolInfo()
     return hotkeyToToolInfo[currentHotKey or ""]
 end
 
-local function defineHotKey(hotkey, toolInfo)
+local function setHotKey(hotkey, toolInfo)
     hotkeyToToolInfo[hotkey] = toolInfo
 end
+
+local function deleteHotKey(hotkey)
+    setHotKey(hotkey, nil)
+end
+
 
 local function defineNewToolInfo(toolInfo)
     assert(toolInfo:allReady(), "?")
@@ -86,10 +91,27 @@ local function defineNewToolInfo(toolInfo)
 end
 
 
+local function deleteToolInfo(toolInfo)
+    nameToToolInfo[toolInfo.name] = nil
+    for hk, tinfo in pairs(hotkeyToToolInfo)do
+        if tinfo == toolInfo then
+            -- if the tool info is being used by a hotkey, delete it.
+            deleteHotKey(hk)
+        end
+    end
+end
+
+
 
 local currentToolInfoEditing
 
+local function openToolEditor(toolInfo)
+    currentToolInfoEditing = toolInfo
+end
 
+local function closeToolEditor()
+    currentToolInfoEditing = nil
+end
 
 
 
@@ -98,13 +120,13 @@ local nameColor = {0.8,0.8,0.2}
 local typeColor = {0.1,0.9,0.9}
 local buttonCancelColor = {0.8,0.25,0.25}
 local buttonOtherColor = {0.65,0.65,0.2}
+local buttonEditColor = {0.21,0.21,0.9}
 
 
 local renderToolEditor
 do
 
-    local lastExportTime = -10000
-
+local lastExportTime = -10000
 local EXPORT_HOVER_TIME = 5 -- seconds to hover export message
 
 
@@ -146,9 +168,16 @@ function renderToolEditor()
         end
     end
 
+    Slab.SameLine()
+    Slab.Text("   ")
+    if Slab.Button("Delete", {Color = buttonCancelColor}) then
+        deleteToolInfo(toolInfo)
+        closeToolEditor()
+    end
+
     Slab.Text(" ")
     if Slab.Button("Exit", {Color = buttonCancelColor}) then
-        currentToolInfoEditing = nil
+        closeToolEditor()
     end
     Slab.EndWindow()
 end
@@ -157,11 +186,8 @@ end
 
 
 
-local renderHotkeyEditor
+local renderHotkeyDropDown
 do
-
-
-
 
 local makingNewHotKey = false
 local newHotKey = nil
@@ -174,7 +200,6 @@ local function resetHotKeyEditState()
     newHotKey = nil
     selectedToolInfo = nil
 end
-
 
 
 --[[
@@ -210,7 +235,7 @@ local function renderSingleHotKeyMaker()
         Slab.EndComboBox()
     end
     if newHotKey and curSel and Slab.Button("Create HotKey", {Color = buttonApplyColor}) then
-        defineHotKey(newHotKey, selectedToolInfo)
+        setHotKey(newHotKey, selectedToolInfo)
         resetHotKeyEditState()
     end
 
@@ -226,13 +251,19 @@ end
 
 
 --[[
-    This the the "big cheese" so to speak.
-    It's responsible for rendering the full hotkey editor.
+    Responsible for rendering the full hotkey dropdown.
 ]]
-function renderHotkeyEditor()
-    Slab.Text("Hotkey    Tool")
+function renderHotkeyDropDown()
     if Slab.BeginTree("hotkeyEdit", {Label = "Hotkeys: "}) then
         Slab.Indent()
+        if Slab.Button("Import", {Color = buttonOtherColor}) then
+            -- open import txt box, allow to paste stuff in
+        end
+        Slab.SameLine()
+        if Slab.Button("Export", {Color = buttonOtherColor}) then
+            -- Copy hotkeys to clipboard
+        end
+
         if next(hotkeyToToolInfo) then
             for hotKey, toolInfo in pairs(hotkeyToToolInfo) do
                 Slab.Text(hotKey)
@@ -241,15 +272,15 @@ function renderHotkeyEditor()
                 if Slab.BeginComboBox("hk tool chooser", {Selected = toolInfo.name}) then
                     for name,tinfo in pairs(nameToToolInfo) do
                         if Slab.TextSelectable(name) then
-                            defineHotKey(hotKey, tinfo)
+                            setHotKey(hotKey, tinfo)
                             break
                         end
                     end
                     Slab.EndComboBox()
                 end
                 Slab.SameLine()
-                if Slab.Button("Edit tool", {Color = buttonOtherColor}) then
-                    currentToolInfoEditing = toolInfo
+                if Slab.Button("Edit tool", {Color = buttonEditColor}) then
+                    openToolEditor(toolInfo)
                 end
             end
         end
@@ -272,46 +303,58 @@ end
 
 
 
+local renderToolDropDown
+do
+
+function renderToolDropDown()
+    if Slab.BeginTree("tool list", {Label = "Tools: "}) then     
+        if Slab.Button("Define New Tool", {Color = buttonApplyColor}) then
+            -- give the editNode an id of one here. This assumes that two different 
+            -- tools can't be edited simultaneously.
+            local editNode = toolEditor.createBrushNode(1)
+            -- create new tool info, and open it in the editor
+            local toolInfo = ToolInfo({
+                editNode = editNode,
+            })
+            openToolEditor(toolInfo)
+        end
+
+        for tname, tinfo in pairs(nameToToolInfo) do
+            Slab.Text(tname)
+            Slab.SameLine()
+            if Slab.Button("Edit", {Color = buttonEditColor}) then
+                openToolEditor(tinfo)
+                break
+            end
+        end
+        Slab.EndTree()
+    end
+end
+
+end
+
+
+
+
 
 
 do
-
--- The id that is given to editNodes.
-local idCount = 1 -- This is kinda shit. 
--- Slab requires UI ids to be unique... but we are just generating numbers here.
--- We need to be careful of imported tools having duplicate IDs.
--- I think it's "fine" for now, since you can only edit one node at once.
--- Also you will never render multiple tools in one window context, so its probs fine
-
-local idIncrement = 200 -- assumes that editNodes won't have more than this many children
 
 
 umg.on("slabUpdate", function()
     if _G.settings.editing then
         Slab.BeginWindow("worldedit main win", {Title = "worldeditor"})
+
+        do -- render current tool
         local tinfo = getCurrentToolInfo()
         local tname = tinfo and tinfo.name or "none"
         Slab.Text("Current tool: " .. tname, {Color = {0.7,0.7,1}})
         Slab.Text(" ")
-
-        if Slab.Button("Import hotkeys") then
-            -- open import txt box
         end
 
-        if Slab.Button("Export hotkeys") then
-            -- open export txt box
-        end
+        renderToolDropDown()
+        renderHotkeyDropDown()
 
-        if Slab.Button("Define New Tool") then
-            local editNode = toolEditor.createBrushNode(idCount)
-            currentToolInfoEditing = ToolInfo({
-                editNode = editNode,
-            })
-            idCount = idCount + idIncrement
-        end
-        
-        Slab.Text(" ") --same as newline
-        renderHotkeyEditor()
         Slab.EndWindow()
 
         if currentToolInfoEditing then

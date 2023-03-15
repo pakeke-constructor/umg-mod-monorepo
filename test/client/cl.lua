@@ -3,6 +3,11 @@
 light.setBaseLighting(1,1,1)
 
 
+weather.rain.setOptions({
+    rainRate = 300
+})
+
+
 base.groundTexture.setColor(0.3,0.9,0.2)
 base.groundTexture.setTextureList({"ground_texture_final4"})
 

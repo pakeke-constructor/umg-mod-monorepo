@@ -79,3 +79,5 @@ end
 
 weather.rain = rain
 
+
+umg.expose("weather", weather)
