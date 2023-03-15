@@ -1,9 +1,15 @@
 
 
+local worldeditUI = require("client.worldeditor_ui")
+
 local constants = require("shared.constants")
 
-local sharing = require("client.sharing")
-local toolEditor = require("client.tool_editor")
+
+
+--  API that's used by the UI.
+-- THIS IS ONLY USED INTERNALLY!
+local we = {}
+setmetatable(we, {__index = error})
 
 
 
@@ -12,6 +18,7 @@ client.on("worldeditorSetMode", function(a)
     _G.settings.editing = a
     base.control.setFollowActive(not a)
 end)
+
 
 
 
@@ -27,7 +34,15 @@ for i=0,9 do
 end
 
 
+local hotkeyList = base.Array()
+for hk, _ in pairs(validHotKeys) do
+    hotkeyList:add(hk)
+end
+table.sort(hotkeyList)
 
+
+
+--  keeps track of all the tools that currently exist.
 local nameToToolInfo = {--[[
     [name] --> toolInfo
 ]]}
@@ -42,336 +57,71 @@ local currentHotKey = "1"
 
 
 
-local ToolInfo = base.Class("worldeditor:ClientSideToolInfo")
-
-function ToolInfo:init(options)
-    self.editNode = options.editNode
-    self.tool = options.tool or nil
-    self.name = options.name or nil
-    self.serverUpdated = false
+function we.getHotkeys()
+    return hotkeyList
 end
 
-function ToolInfo:allReady()
-    return self.name and self.editNode and self.tool
+function we.getNameToToolInfoMap()
+    return nameToToolInfo
+end
+
+function we.getHotkeyToToolInfoMap()
+    return hotkeyToToolInfo
 end
 
 
-
-
-
-
-local function syncTool(toolInfo)
+function we.syncTool(toolInfo)
     client.send("worldeditorDefineTool", toolInfo.tool, toolInfo.name)
 end
 
-local function ensureServerKnowsTool(toolInfo)
-    if not toolInfo.serverUpdated then
-        toolInfo.serverUpdated = true
-        syncTool(toolInfo)
-    end
-end
 
-
-local function getCurrentToolInfo()
+function we.getCurrentToolInfo()
     return hotkeyToToolInfo[currentHotKey or ""]
 end
 
-local function setHotKey(hotkey, toolInfo)
+
+function we.defineHotKey(hotkey, toolInfo)
     hotkeyToToolInfo[hotkey] = toolInfo
 end
 
-local function deleteHotKey(hotkey)
-    setHotKey(hotkey, nil)
+function we.deleteHotKey(hotkey)
+    hotkeyToToolInfo[hotkey] = nil
 end
 
 
-local function defineNewToolInfo(toolInfo)
+function we.defineNewToolInfo(toolInfo)
     assert(toolInfo:allReady(), "?")
     nameToToolInfo[toolInfo.name] = toolInfo
 end
 
 
-local function deleteToolInfo(toolInfo)
-    nameToToolInfo[toolInfo.name] = nil
+function we.deleteToolInfo(toolInfo)
+    if toolInfo.name then
+        nameToToolInfo[toolInfo.name] = nil
+    end
     for hk, tinfo in pairs(hotkeyToToolInfo)do
+        -- if the tool info is being used by a hotkey, delete it.
         if tinfo == toolInfo then
-            -- if the tool info is being used by a hotkey, delete it.
-            deleteHotKey(hk)
+            we.deleteHotKey(hk)
         end
     end
 end
 
 
-
-local currentToolInfoEditing
-
-local function openToolEditor(toolInfo)
-    currentToolInfoEditing = toolInfo
-end
-
-local function closeToolEditor()
-    currentToolInfoEditing = nil
-end
-
-
-
-local buttonApplyColor = {0.2,0.8,0.3}
-local nameColor = {0.8,0.8,0.2}
-local typeColor = {0.1,0.9,0.9}
-local buttonCancelColor = {0.8,0.25,0.25}
-local buttonOtherColor = {0.65,0.65,0.2}
-local buttonEditColor = {0.21,0.21,0.9}
-
-
-local renderToolEditor
-do
-
-local lastExportTime = -10000
-local EXPORT_HOVER_TIME = 5 -- seconds to hover export message
-
-
-function renderToolEditor()
-    local toolInfo = currentToolInfoEditing
-    Slab.BeginWindow("Tool Editor", {Title = "Tool Editor"})
-
-    if toolInfo then
-        local editNode = toolInfo.editNode
-        
-        Slab.Text("Tool name: ", {Color = nameColor})
-        Slab.SameLine()
-        -- Don't allow for changing a tool's name after it's been created.
-        if not toolInfo:allReady() then
-            if Slab.Input('worldeditor : toolName', {Text = toolInfo.name}) then
-                toolInfo.name = Slab.GetInputText()
-            end
-        else
-            Slab.Text(toolInfo.name)
-        end
-
-        Slab.Text("tool: ", {Color = typeColor})
-        editNode:display()
-
-        if toolInfo.name and editNode:isDone() then
-            if Slab.Button("Apply", {Color = buttonApplyColor}) then
-                toolInfo.tool = editNode:getValue()
-                syncTool(toolInfo)
-                toolInfo.serverUpdated = true
-                defineNewToolInfo(toolInfo)
-            end
-            if Slab.Button("Export to clipboard", {Color = buttonOtherColor}) then
-                sharing.exportToClipboard(toolInfo.name, toolInfo, "TOOL")
-                lastExportTime = love.timer.getTime()
-            end
-            if lastExportTime+EXPORT_HOVER_TIME > love.timer.getTime() then
-                Slab.Text("Tool copied to clipboard!")
-            end
-        end
-    end
-
-    Slab.SameLine()
-    Slab.Text("   ")
-    if Slab.Button("Delete", {Color = buttonCancelColor}) then
-        deleteToolInfo(toolInfo)
-        closeToolEditor()
-    end
-
-    Slab.Text(" ")
-    if Slab.Button("Exit", {Color = buttonCancelColor}) then
-        closeToolEditor()
-    end
-    Slab.EndWindow()
-end
-
-end
-
-
-
-local renderHotkeyDropDown
-do
-
-local makingNewHotKey = false
-local newHotKey = nil
-
-local selectedToolInfo = nil
-
-
-local function resetHotKeyEditState()
-    makingNewHotKey = false
-    newHotKey = nil
-    selectedToolInfo = nil
-end
-
-
---[[
-    This function is responsible for rendering
-    a single hotkey editor
-]]
-local function renderSingleHotKeyMaker()
-    if not Slab.BeginTree("hotkey maker", {Label = "Hotkeys: "}) then
-        return
-    end
-    Slab.Indent()
-
-    Slab.Text("hotKey: ", {Color = typeColor})
-    Slab.SameLine()
-    if Slab.BeginComboBox('hotkey chooser', {Selected = newHotKey}) then
-        for hk, _ in pairs(validHotKeys) do
-            if (not hotkeyToToolInfo[hk]) and Slab.TextSelectable(hk) then
-                newHotKey = hk
-            end
-        end
-        Slab.EndComboBox()
-    end
-
-    Slab.Text("tool: ", {Color = typeColor})
-    Slab.SameLine()
-    local curSel = selectedToolInfo and selectedToolInfo.name or nil
-    if newHotKey and Slab.BeginComboBox("tool chooser", {Selected = curSel}) then
-        for name,tinfo in pairs(nameToToolInfo) do
-            if Slab.TextSelectable(name) then
-                selectedToolInfo = tinfo
-            end
-        end
-        Slab.EndComboBox()
-    end
-    if newHotKey and curSel and Slab.Button("Create HotKey", {Color = buttonApplyColor}) then
-        setHotKey(newHotKey, selectedToolInfo)
-        resetHotKeyEditState()
-    end
-
-    Slab.Text(" ")
-
-    if Slab.Button("Cancel", {Color = buttonCancelColor}) then
-        resetHotKeyEditState()
-    end
-
-    Slab.Unindent()
-    Slab.EndTree()
-end
-
-
---[[
-    Responsible for rendering the full hotkey dropdown.
-]]
-function renderHotkeyDropDown()
-    if Slab.BeginTree("hotkeyEdit", {Label = "Hotkeys: "}) then
-        Slab.Indent()
-        if Slab.Button("Import", {Color = buttonOtherColor}) then
-            -- open import txt box, allow to paste stuff in
-        end
-        Slab.SameLine()
-        if Slab.Button("Export", {Color = buttonOtherColor}) then
-            -- Copy hotkeys to clipboard
-        end
-
-        if next(hotkeyToToolInfo) then
-            for hotKey, toolInfo in pairs(hotkeyToToolInfo) do
-                Slab.Text(hotKey)
-                Slab.SameLine()
-
-                if Slab.BeginComboBox("hk tool chooser", {Selected = toolInfo.name}) then
-                    for name,tinfo in pairs(nameToToolInfo) do
-                        if Slab.TextSelectable(name) then
-                            setHotKey(hotKey, tinfo)
-                            break
-                        end
-                    end
-                    Slab.EndComboBox()
-                end
-                Slab.SameLine()
-                if Slab.Button("Edit tool", {Color = buttonEditColor}) then
-                    openToolEditor(toolInfo)
-                end
-            end
-        end
-
-        if makingNewHotKey then
-            renderSingleHotKeyMaker()
-        else
-            if Slab.Button("New Hotkey", {Color = buttonApplyColor}) then
-                makingNewHotKey = true
-            end
-        end
-
-        Slab.Unindent()
-        Slab.EndTree()
+local function ensureServerKnowsTool(toolInfo)
+    if not toolInfo.serverUpdated then
+        toolInfo.serverUpdated = true
+        we.syncTool(toolInfo)
     end
 end
 
-end
-
-
-
-
-local renderToolDropDown
-do
-
-function renderToolDropDown()
-    if Slab.BeginTree("tool list", {Label = "Tools: "}) then     
-        if Slab.Button("Define New Tool", {Color = buttonApplyColor}) then
-            -- give the editNode an id of one here. This assumes that two different 
-            -- tools can't be edited simultaneously.
-            local editNode = toolEditor.createBrushNode(1)
-            -- create new tool info, and open it in the editor
-            local toolInfo = ToolInfo({
-                editNode = editNode,
-            })
-            openToolEditor(toolInfo)
-        end
-
-        for tname, tinfo in pairs(nameToToolInfo) do
-            Slab.Text(tname)
-            Slab.SameLine()
-            if Slab.Button("Edit", {Color = buttonEditColor}) then
-                openToolEditor(tinfo)
-                break
-            end
-        end
-        Slab.EndTree()
-    end
-end
-
-end
-
-
-
-
-
-
-do
-
-
-umg.on("slabUpdate", function()
-    if _G.settings.editing then
-        Slab.BeginWindow("worldedit main win", {Title = "worldeditor"})
-
-        do -- render current tool
-        local tinfo = getCurrentToolInfo()
-        local tname = tinfo and tinfo.name or "none"
-        Slab.Text("Current tool: " .. tname, {Color = {0.7,0.7,1}})
-        Slab.Text(" ")
-        end
-
-        renderToolDropDown()
-        renderHotkeyDropDown()
-
-        Slab.EndWindow()
-
-        if currentToolInfoEditing then
-            renderToolEditor()
-        end
-    end
-end)
-
-
-end
 
 
 umg.on("postDrawWorld", function()
     if _G.settings.editing then
         love.graphics.push("all")
         love.graphics.setLineWidth(3)
-        local currentTool = getCurrentToolInfo()
+        local currentTool = we.getCurrentToolInfo()
         if currentTool and currentTool.draw then
             local x, y = base.camera:getMousePosition()
             currentTool:draw(x,y)
@@ -441,7 +191,7 @@ end
 function listener:update(dt)
     if _G.settings.editing then
         moveCamera(dt)
-        local tinfo = getCurrentToolInfo()
+        local tinfo = we.getCurrentToolInfo()
         if tinfo and tinfo.tool.useType == constants.USE_TYPE.CONTINUOUS then
             if listener:isMouseButtonDown(BUTTON_1) then
                 applyTool(tinfo)
@@ -462,10 +212,17 @@ end
 
 function listener:mousepressed()
     if _G.settings.editing then
-        local tinfo = getCurrentToolInfo()
+        local tinfo = we.getCurrentToolInfo()
         if tinfo and tinfo.tool.useType == constants.USE_TYPE.DISCRETE then
             applyTool(tinfo)
         end
     end
 end
+
+
+worldeditUI.init(we)
+
+umg.on("slabUpdate", function()
+    worldeditUI.render()
+end)
 
