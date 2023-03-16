@@ -29,16 +29,16 @@ function sharing.import(base64_string)
         return nil, "couldn't decode base64"
     end
 
-    success, data = pcall(love.data.decompress, "string", base64_string)
+    success, data = pcall(love.data.decompress, "string","zlib", data)
     if not success then
         return nil, "couldn't decompress data"
     end
     
-    local packge, err = umg.deserialize(data)
+    local package, err = umg.deserialize(data)
 
-    if packge and type(packge) == "table" then
-        local type = packge.type
-        if (not type) or (not packge.object) or (not packageTypes[type]) then
+    if package and type(package) == "table" then
+        local type = package.type
+        if (not type) or (not package.object) or (not packageTypes[type]) then
             return nil, "Unrecognized package type"
         end
         return package
@@ -59,11 +59,11 @@ local assertExport = base.typecheck.assert("string", "table", "string")
 function sharing.export(name, object, type)
     assertExport(name,object,type)
     assert(packageTypes[type], "unkknown type")
-    local packge = {
+    local package = {
         object = object,
         type = type
     }
-    local data = umg.serialize(packge)
+    local data = umg.serialize(package)
     data = love.data.compress("string","zlib",data)
     local str = love.data.encode("string","base64",data)
 
