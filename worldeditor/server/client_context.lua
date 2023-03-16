@@ -5,7 +5,7 @@ local ClientContext = base.Class("worldeditor:ClientContext")
 function ClientContext:init(username)    
     self.username = username
     self.tools = {--[[
-        [toolName] --> Brush
+        [toolName] --> Tool
     ]]}
     self.currentTool = "toolName"
 end

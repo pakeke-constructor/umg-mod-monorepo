@@ -155,7 +155,5 @@ end
 
 
 
-umg.expose("grids", grids)
-
 return grids
 
