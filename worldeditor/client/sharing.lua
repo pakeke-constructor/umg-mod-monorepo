@@ -11,6 +11,8 @@ local packageTypes = {
 }
 
 
+sharing.packageTypes = packageTypes
+
 
 --[[
     imports an object type from clipboard

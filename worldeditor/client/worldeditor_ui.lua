@@ -40,6 +40,70 @@ local buttonOtherColor = {0.65,0.65,0.2}
 local buttonEditColor = {0.21,0.21,0.9}
 
 
+
+
+
+--[[
+    ImportStates are defined as so:
+
+    importState = {
+        text = text,  -- input text
+        expectedType = sharing.packageTypes.TOOL
+
+        result = nil,  (may be nil)
+        error = nil (may be nil)
+    }
+]]
+local newImportStateTC = base.typecheck.assert("string")
+local function newImportState(expectedType)
+    newImportStateTC(expectedType)
+    return {
+        text = "",
+        expectedType = expectedType
+    }
+end
+
+
+local function renderImportUI(importState)
+    if Slab.Input("importTextBox", {Text = tostring(importState.text), H = 70, W = 200}) then
+        importState.text = Slab.GetInputText()
+    end
+    if Slab.Button("Import", {Color = buttonOtherColor}) then
+        local package
+        package, importState.error = sharing.import(importState.text)
+        if package and package.type ~= importState.expectedType then
+            importState.error = "Bad import type, expected: " .. importState.expectedType
+            importState.result = nil
+        else
+            importState.result = package.object
+        end
+    end
+    if importState.error then
+        Slab.Text("Error on import: ")
+        Slab.Text(tostring(importState.error), {Color = buttonCancelColor})
+    end
+    return importState
+end
+
+
+
+local renderExportUITC = base.typecheck.assert("string", )
+local function renderExportUI(objectName, )
+    if Slab.Button("Export " .. objectName, {Color = buttonOtherColor}) then
+        sharing.exportToClipboard(toolInfo.name, toolInfo, "TOOL")
+        lastExportTime = love.timer.getTime()
+    end
+    if lastExportTime+EXPORT_HOVER_TIME > love.timer.getTime() then
+        Slab.Text("Tool copied to clipboard!")
+    end
+
+end
+
+
+
+
+
+
 local renderToolEditor
 do
 
@@ -132,11 +196,17 @@ local newHotKey = nil
 
 local selectedToolInfo = nil
 
+local lastExportTime = -10000
+local EXPORT_HOVER_TIME = 4
+
+local importHotKeyState = nil
+
 
 local function resetHotKeyEditState()
     makingNewHotKey = false
     newHotKey = nil
     selectedToolInfo = nil
+    importHotKeyState = nil
 end
 
 
@@ -201,11 +271,28 @@ function renderHotkeyDropDown()
     if Slab.BeginTree("hotkeyEdit", {Label = "Hotkeys: "}) then
         Slab.Indent()
         if Slab.Button("Import", {Color = buttonOtherColor}) then
-            -- open import txt box, allow to paste stuff in
+            importHotKeyState = newImportState("HOTKEY")
         end
         Slab.SameLine()
-        if Slab.Button("Export", {Color = buttonOtherColor}) then
-            -- Copy hotkeys to clipboard
+        if Slab.Button("Export tool", {Color = buttonOtherColor}) then
+            sharing.exportToClipboard(toolInfo.name, toolInfo, "TOOL")
+            lastExportTime = love.timer.getTime()
+        end
+        if lastExportTime+EXPORT_HOVER_TIME > love.timer.getTime() then
+            Slab.Text("Tool copied to clipboard!")
+        end
+        
+        if importHotKeyState then
+            renderImportUI(importHotKeyState)
+            if importHotKeyState.result then
+                if Slab.Button("Finalize (overwrite)", {Color = buttonApplyColor}) then
+                    local hotKeys = importHotKeyState.result
+                    for hotkey, tinfo in pairs(hotKeys)do
+                        we.defineHotKey(hotkey, tinfo)
+                    end
+                    importHotKeyState = nil
+                end
+            end
         end
 
         if next(hotkeyToToolInfo) then
