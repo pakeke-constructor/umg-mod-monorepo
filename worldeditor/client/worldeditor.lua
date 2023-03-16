@@ -109,8 +109,8 @@ end
 
 
 local function ensureServerKnowsTool(toolInfo)
-    if not toolInfo.serverUpdated then
-        toolInfo.serverUpdated = true
+    if not toolInfo:isSynced() then
+        toolInfo:setIsSynced(true)
         we.syncTool(toolInfo)
     end
 end

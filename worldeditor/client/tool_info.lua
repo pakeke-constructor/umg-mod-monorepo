@@ -22,5 +22,13 @@ function ToolInfo:allReady()
     return self.name and self.editNode and self.tool
 end
 
+function ToolInfo:setIsSynced(boolean)
+    self.serverUpdated = boolean
+end
+
+function ToolInfo:isSynced()
+    return self.serverUpdated
+end
+
 
 return ToolInfo

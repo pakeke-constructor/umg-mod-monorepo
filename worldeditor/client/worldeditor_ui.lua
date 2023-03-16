@@ -63,14 +63,17 @@ local buttonEditColor = {0.21,0.21,0.9}
 
 -- this function assumes that the package is valid
 local function importPackage(package)
-    print("Hello?")
     if package.type == HOTKEYS then
         -- package.object is a hotkey map
         for hk, tinfo in pairs(package.object) do
+            tinfo:setIsSynced(false)
+            we.defineNewToolInfo(tinfo)
             we.defineHotKey(hk, tinfo)
         end
     elseif package.type == TOOL then
-        we.defineNewToolInfo(package.object)
+        local tinfo = package.object
+        tinfo:setIsSynced(false)
+        we.defineNewToolInfo(tinfo)
     end
 end
 
