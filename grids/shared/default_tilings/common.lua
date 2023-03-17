@@ -34,7 +34,7 @@ function common.add(args, argName, array, tiling)
         -- then it's a random list of images
         assert(isImageArray(img, argName))
         tiling.images = img
-    elseif isImage(img) then
+    elseif isImage(img, argName) then
         assert(isImage(img, argName))
         tiling.image = img
     else

@@ -6,13 +6,14 @@ local function loadShared(grids)
         grids[k] = v
     end
 
-    grids.generateFloorTiling = require("shared.default_tiling.floor")
-    grids.generateFenceTiling = require("shared.default_tiling.fence")
-    grids.generateRoadTiling = require("shared.default_tiling.path")
+    grids.generateFloorTiling = require("shared.default_tilings.floor")
+    grids.generateFenceTiling = require("shared.default_tilings.fence")
+    grids.generateRoadTiling = require("shared.default_tilings.path")
 end
 
 
-base.defineExports("grids", {
+base.defineExports({
+    name = "grids",
     loadShared = loadShared
 })
 

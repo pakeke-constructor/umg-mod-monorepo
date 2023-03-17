@@ -9,80 +9,14 @@ return {
 
     drawDepth = -400,
 
-    --[[
-        TODO:
-        There should be a function to generate this.
-    ]]
-    imageTiling = {
-        {
-            image = "grasspatch_solo",
-            layout = {
-                {"?","?","?"},
-                {"?","X","?"},
-                {"?","?","?"},
-            },
-            priority = -5
-        },
-        {
-            image = "grasspatch_fill",
-            layout = {
-                {"#","#","#"},
-                {"#","X","#"},
-                {"#","#","#"},
-            },
-            priority = 5
-        },
-        {
-            image = "grasspatch_fill",
-            layout = {
-                {"#","#","?"},
-                {"#","X","#"},
-                {"?","#","#"},
-            },
-            priority = 0,
-            canFlipHorizontal = true
-        },
-        {
-            image = "grasspatch_topleft_fill",
-            layout = {
-                {".","#","#"},
-                {"#","X","#"},
-                {"#","#","#"},
-            },
-            priority = 4,
-            canRotate = true
-        },
-        {
-            image = "grasspatch_topleft_empty",
-            layout = {
-                {"?","?","?"},
-                {"?","X","#"},
-                {"?","#","#"},
-            },
-            priority = -1,
-            canRotate = true
-        },
-        {
-            image = "grasspatch_right",
-            layout = {
-                {"#","#","?"},
-                {"#","X","?"},
-                {"#","#","?"},
-            },
-            priority = 1,
-            canFlipHorizontal = true
-        },
-        {
-            image = "grasspatch_top",
-            layout = {
-                {"?","?","?"},
-                {"#","X","#"},
-                {"#","#","#"},
-            },
-            priority = 1,
-            canFlipVertical = true
-        }
-    },
+    imageTiling = grids.generateFloorTiling({
+        isolated = "grasspatch_solo",
+        fill = "grasspatch_fill",
+        topleftFill = "grasspatch_topleft_fill",
+        topleftEmpty = "grasspatch_topleft_empty",
+        left = "grasspatch_left",
+        top = "grasspatch_top",
+    }),
 
     init = base.entityHelper.initPosition
 }

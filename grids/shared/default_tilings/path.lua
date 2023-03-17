@@ -5,7 +5,11 @@ local common = require("shared.default_tilings.common")
 
 
 
-local function newFenceTiling(args)
+local function generatePathTiling(args)
+    if not client then
+        return {} -- server doesn't care about this component
+    end
+    
     local imageTiling = {}
 
     local it = imageTiling --alias
@@ -51,5 +55,5 @@ local function newFenceTiling(args)
 end
 
 
-return newFenceTiling
+return generatePathTiling
 

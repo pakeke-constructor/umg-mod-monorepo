@@ -3,7 +3,7 @@
 return {
     image = "fogmask",
     bobbing = {
-        period = 14,
+        period = 31,
         magnitude = 0.3
     },
     drawDepth = 400, -- draw in front of other stuff

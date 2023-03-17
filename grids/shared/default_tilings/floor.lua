@@ -3,7 +3,11 @@ local common = require("shared.default_tilings.common")
 
 
 
-local function newFloorTiling(args)
+local function generateFloorTiling(args)
+    if not client then
+        return {} -- server doesn't care about this component
+    end
+    
     local imageTiling = {}
 
     local it = imageTiling --alias
@@ -59,9 +63,9 @@ local function newFloorTiling(args)
     common.add(args, "left", it, {
         image = args.left,
         layout = {
-            {"#","#","?"},
-            {"#","X","?"},
-            {"#","#","?"},
+            {"?","#","#"},
+            {"?","X","#"},
+            {"?","#","#"},
         },
         priority = 1,
         canFlipHorizontal = true
@@ -82,5 +86,5 @@ local function newFloorTiling(args)
 end
 
 
-return newFloorTiling
+return generateFloorTiling
 
