@@ -1,6 +1,6 @@
 
 
-local PLAYER_SPEED = 160
+local PLAYER_SPEED = 120
 
 
 

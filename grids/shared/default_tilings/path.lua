@@ -25,27 +25,27 @@ local function generatePathTiling(args)
 
     common.add(args, "vertical", it, {
         layout = {
-            {".","#","."},
+            {"?","#","?"},
             {".","X","."},
-            {".","#","."},
+            {"?","#","?"},
         },
         priority = 1
     })
 
     common.add(args, "horizontal", it,{
         layout = {
-            {".",".","."},
+            {"?",".","?"},
             {"#","X","#"},
-            {".",".","."},
+            {"?",".","?"},
         },
         priority = 1,
     })
 
     common.add(args, "diagonal", it, {
         layout = {
-            {".",".","."},
+            {"?",".","?"},
             {".","X","#"},
-            {".","#","."},
+            {"?","#","?"},
         },
         priority = 1,
         canRotate = true

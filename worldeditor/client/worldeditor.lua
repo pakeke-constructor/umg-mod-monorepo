@@ -121,10 +121,11 @@ umg.on("postDrawWorld", function()
     if _G.settings.editing then
         love.graphics.push("all")
         love.graphics.setLineWidth(3)
-        local currentTool = we.getCurrentToolInfo()
-        if currentTool and currentTool.draw then
+        local tinfo = we.getCurrentToolInfo()
+        if tinfo and tinfo.tool and tinfo.tool.draw then
+            local tool = tinfo.tool
             local x, y = base.camera:getMousePosition()
-            currentTool:draw(x,y)
+            tool:draw(x,y)
         end
         love.graphics.pop()
     end

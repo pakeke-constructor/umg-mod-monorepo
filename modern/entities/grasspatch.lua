@@ -3,8 +3,8 @@
 
 return {
     grid = {
-        width = 15,
-        height = 15
+        width = 15, -- we are 16 pixels -1,
+        height = 15 -- so we dont get weird leaky artefacts when scaling.
     },
 
     drawDepth = -400,

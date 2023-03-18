@@ -8,7 +8,7 @@ local function loadShared(grids)
 
     grids.generateFloorTiling = require("shared.default_tilings.floor")
     grids.generateFenceTiling = require("shared.default_tilings.fence")
-    grids.generateRoadTiling = require("shared.default_tilings.path")
+    grids.generatePathTiling = require("shared.default_tilings.path")
 end
 
 
