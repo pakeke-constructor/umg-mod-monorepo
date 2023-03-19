@@ -7,7 +7,7 @@ local IMGS = {
 
 
 return {
-    swaying = {magnitude = 0.07},
+    swaying = {magnitude = 0.03},
 
     physics = {
         shape = love.physics.newCircleShape(8),

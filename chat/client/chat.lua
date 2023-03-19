@@ -200,6 +200,11 @@ function listener:keypressed(_, scancode, _)
             end
         end
         isTyping = not isTyping
+    elseif IS_COMMAND_CHAR[scancode] then
+        -- shorthand for typing commands
+        if not isTyping then
+            isTyping = true
+        end
     elseif scancode == "escape" then
         isTyping = false
     end

@@ -8,7 +8,8 @@ weather.rain.setOptions({
 })
 
 
-base.groundTexture.setColor(0.3,0.9,0.2)
+
+base.groundTexture.setColor(199/255, 140/255, 89/255)
 base.groundTexture.setTextureList({"ground_texture_final4"})
 
 

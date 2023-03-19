@@ -6,7 +6,7 @@ local PINES = {
 
 
 return {
-    swaying = {magnitude = 0.15},
+    swaying = {magnitude = 0.1},
 
     physics = {
         shape = love.physics.newCircleShape(8),
