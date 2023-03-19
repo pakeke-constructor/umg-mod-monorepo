@@ -38,6 +38,13 @@ function PointBrush:apply(x, y)
     self.pointAction:apply(x, y)
 end
 
+function PointBrush:draw(x, y)
+    assert(client, "?")
+    love.graphics.setLineWidth(3)
+    love.graphics.setColor(1,1,1)
+    love.graphics.circle("line", x, y, 6)
+end
+
 PointBrush.name = "Point brush"
 PointBrush.description = "Apply an action to a single point"
 PointBrush.useType = constants.USE_TYPE.DISCRETE
