@@ -11,6 +11,7 @@ end
     Unit card entity
 ]]
 return {
+    --[[
     "x","y",
     "rgbTeam",
     "rgb",
@@ -19,6 +20,7 @@ return {
     "cardBuyTarget",
     "shopIndex",
     "cardType",
+    ]]
 
     image = "invisible_card",
 

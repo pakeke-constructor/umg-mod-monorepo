@@ -76,13 +76,6 @@ Each card spawns with a color. Here are the chances:
 
 
 
-## card upgrading:
-Cards of the same type can be "combined" to buff the stats. 
-(Similar to super auto pets.)
-You can only combine cards that share a common color and are same type.
-
-
-
 ### units
 Tanks - not much dmg, big hp
 Fighters - decent dmg, decent hp

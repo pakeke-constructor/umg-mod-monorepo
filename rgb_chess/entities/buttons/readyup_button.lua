@@ -10,7 +10,7 @@ local READY_NAMETAG = "READY UP"
 local CANCEL_READY_NAMETAG = "CANCEL READY"
 
 
-return extend("abstract_button", {
+return umg.extend("abstract_button", {
     "nametag",
     "rgb_is_ready",
 

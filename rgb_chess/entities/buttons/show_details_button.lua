@@ -10,7 +10,7 @@ local SHOWING_TAG = "HIDE STATS"
 local NOT_SHOWING_TAG = "SHOW STATS"
 
 
-return extend("abstract_button", {
+return umg.extend("abstract_button", {
     "nametag",
 
     onClickClient = function(ent)

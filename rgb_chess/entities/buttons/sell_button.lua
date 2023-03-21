@@ -7,7 +7,7 @@ end
 
 
 
-return extend("abstract_button", {
+return umg.extend("abstract_button", {
     "nametag",
     "rerollCost",
     
