@@ -1,15 +1,15 @@
 
-local ehelp = {}
+local entityHelper = {}
 
 
-function ehelp.initPosition(e, x, y)
+function entityHelper.initPosition(e, x, y)
     -- if this is set as the ent.init method, you can do entities.my_entity(x,y)
     e.x = x
     e.y = y
 end
 
 
-function ehelp.initPositionVelocity(e, x, y, vx, vy)
+function entityHelper.initPositionVelocity(e, x, y, vx, vy)
     -- if this is set as the ent.init method, you can do entities.my_entity(x,y, vx,vy)
     e.x = x
     e.y = y
@@ -18,5 +18,5 @@ function ehelp.initPositionVelocity(e, x, y, vx, vy)
 end
 
 
-return ehelp
+return entityHelper
 

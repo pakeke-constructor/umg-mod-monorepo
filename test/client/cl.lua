@@ -4,7 +4,8 @@ light.setBaseLighting(1,1,1)
 
 
 weather.rain.setOptions({
-    rainRate = 300
+    rainRate = 800,
+    rainDrift = 0.1
 })
 
 
