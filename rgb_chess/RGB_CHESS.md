@@ -103,23 +103,6 @@ NOTE: Applying an upgrade to a summoner SHOULD NOT buff the units inside!
 Cards that provide a permanent upgrade to one or more units.
 Each upgrade card has a `color`, which determines which other cards it works on.
 
-#### List of upgrades:
-- Ground slam: For all [x] colored melee units on the board, gain AOE attack
-- Shopper: increases shop size by 1
-- Ranger token: All [x] colored ranged units have their DMG doubled
-- Flat DMG: All [x] colored units on the board gain (a flat amount of) HP
-- flat HP: All [x] colored units on the board gain (a flat amount of) DMG
-- Damage bully: Increased an [x] colored unit's DMG based on it's health
-- Pop buff: Your board gains 1 unit slot
-- Universal-color: Converts a card to White color
-- Aqua card: Converts an [x] colored card to Aqua color
-- Magenta card: Converts an [x] colored card to Magenta color
-- Yellow card: Converts an [x] colored card to Yellow color
-- Reroll card: Reroll the color of all [X] colored units
-- Unishop: Converts all unfrozen shop cards to [x] color
-- Swappity: Swaps HP and DMG of an [x] colored unit
-
-
 
 ## EMERGENT FEATURES:::::
 Super Auto Pets is a great example of a game that does Emergence really well.

@@ -17,4 +17,22 @@ buff(unit, attackAmount, healthAmount, fromUnit, depth) -- buffing / debuffing
 debuff(unit, attackAmount, healthAmount, fromUnit, depth)
 
 
+-- THE FOLLOW CALLBACKS
+-- ARE NOT YET IMPLEMENTED:
+shield(unit, shieldAmount)
+breakShield(unit)
+
+stun(unit)
+
+buy(unit)
+sell(unit)
+
+levelUp(unit)
+--  ==============
+
+
+
+
 ```
+
+
