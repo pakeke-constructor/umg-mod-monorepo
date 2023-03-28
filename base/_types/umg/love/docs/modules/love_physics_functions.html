@@ -1,0 +1,2323 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>love.physics/functions | love-typescript-definitions</title>
+	<meta name="description" content="Documentation for love-typescript-definitions">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">love-typescript-definitions</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">love-typescript-definitions</a>
+				</li>
+				<li>
+					<a href="love_physics_functions.html">love.physics/functions</a>
+				</li>
+			</ul>
+			<h1>Module love.physics/functions</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>References</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#Body" class="tsd-kind-icon">Body</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#BodyType" class="tsd-kind-icon">Body<wbr>Type</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#ChainShape" class="tsd-kind-icon">Chain<wbr>Shape</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#CircleShape" class="tsd-kind-icon">Circle<wbr>Shape</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#Contact" class="tsd-kind-icon">Contact</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#DistanceJoint" class="tsd-kind-icon">Distance<wbr>Joint</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#EdgeShape" class="tsd-kind-icon">Edge<wbr>Shape</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#Fixture" class="tsd-kind-icon">Fixture</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#FrictionJoint" class="tsd-kind-icon">Friction<wbr>Joint</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#GearJoint" class="tsd-kind-icon">Gear<wbr>Joint</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#Joint" class="tsd-kind-icon">Joint</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#JointType" class="tsd-kind-icon">Joint<wbr>Type</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#JointTypes" class="tsd-kind-icon">Joint<wbr>Types</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#MotorJoint" class="tsd-kind-icon">Motor<wbr>Joint</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#MouseJoint" class="tsd-kind-icon">Mouse<wbr>Joint</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#PolygonShape" class="tsd-kind-icon">Polygon<wbr>Shape</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#PrismaticJoint" class="tsd-kind-icon">Prismatic<wbr>Joint</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#PulleyJoint" class="tsd-kind-icon">Pulley<wbr>Joint</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#RevoluteJoint" class="tsd-kind-icon">Revolute<wbr>Joint</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#RopeJoint" class="tsd-kind-icon">Rope<wbr>Joint</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#Shape" class="tsd-kind-icon">Shape</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#ShapeType" class="tsd-kind-icon">Shape<wbr>Type</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#ShapeTypes" class="tsd-kind-icon">Shape<wbr>Types</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#WeldJoint" class="tsd-kind-icon">Weld<wbr>Joint</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#WheelJoint" class="tsd-kind-icon">Wheel<wbr>Joint</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_physics_functions.html#World" class="tsd-kind-icon">World</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#getDistance" class="tsd-kind-icon">get<wbr>Distance</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#getMeter" class="tsd-kind-icon">get<wbr>Meter</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newBody" class="tsd-kind-icon">new<wbr>Body</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newChainShape" class="tsd-kind-icon">new<wbr>Chain<wbr>Shape</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newCircleShape" class="tsd-kind-icon">new<wbr>Circle<wbr>Shape</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newDistanceJoint" class="tsd-kind-icon">new<wbr>Distance<wbr>Joint</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newEdgeShape" class="tsd-kind-icon">new<wbr>Edge<wbr>Shape</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newFixture" class="tsd-kind-icon">new<wbr>Fixture</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newFrictionJoint" class="tsd-kind-icon">new<wbr>Friction<wbr>Joint</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newGearJoint" class="tsd-kind-icon">new<wbr>Gear<wbr>Joint</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newMotorJoint" class="tsd-kind-icon">new<wbr>Motor<wbr>Joint</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newMouseJoint" class="tsd-kind-icon">new<wbr>Mouse<wbr>Joint</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newPolygonShape" class="tsd-kind-icon">new<wbr>Polygon<wbr>Shape</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newPrismaticJoint" class="tsd-kind-icon">new<wbr>Prismatic<wbr>Joint</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newPulleyJoint" class="tsd-kind-icon">new<wbr>Pulley<wbr>Joint</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newRectangleShape" class="tsd-kind-icon">new<wbr>Rectangle<wbr>Shape</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newRevoluteJoint" class="tsd-kind-icon">new<wbr>Revolute<wbr>Joint</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newRopeJoint" class="tsd-kind-icon">new<wbr>Rope<wbr>Joint</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newWeldJoint" class="tsd-kind-icon">new<wbr>Weld<wbr>Joint</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newWheelJoint" class="tsd-kind-icon">new<wbr>Wheel<wbr>Joint</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#newWorld" class="tsd-kind-icon">new<wbr>World</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="love_physics_functions.html#setMeter" class="tsd-kind-icon">set<wbr>Meter</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>References</h2>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="Body" class="tsd-anchor"></a>
+					<h3>Body</h3>
+					Re-exports <a href="../interfaces/love_physics_types_Body.Body.html">Body</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="BodyType" class="tsd-anchor"></a>
+					<h3>Body<wbr>Type</h3>
+					Re-exports <a href="love_physics_enums_BodyType.html#BodyType">BodyType</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="ChainShape" class="tsd-anchor"></a>
+					<h3>Chain<wbr>Shape</h3>
+					Re-exports <a href="../interfaces/love_physics_types_ChainShape.ChainShape.html">ChainShape</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="CircleShape" class="tsd-anchor"></a>
+					<h3>Circle<wbr>Shape</h3>
+					Re-exports <a href="../interfaces/love_physics_types_CircleShape.CircleShape.html">CircleShape</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="Contact" class="tsd-anchor"></a>
+					<h3>Contact</h3>
+					Re-exports <a href="../interfaces/love_physics_types_Contact.Contact.html">Contact</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="DistanceJoint" class="tsd-anchor"></a>
+					<h3>Distance<wbr>Joint</h3>
+					Re-exports <a href="../interfaces/love_physics_types_DistanceJoint.DistanceJoint.html">DistanceJoint</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="EdgeShape" class="tsd-anchor"></a>
+					<h3>Edge<wbr>Shape</h3>
+					Re-exports <a href="../interfaces/love_physics_types_EdgeShape.EdgeShape.html">EdgeShape</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="Fixture" class="tsd-anchor"></a>
+					<h3>Fixture</h3>
+					Re-exports <a href="../interfaces/love_physics_types_Fixture.Fixture.html">Fixture</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="FrictionJoint" class="tsd-anchor"></a>
+					<h3>Friction<wbr>Joint</h3>
+					Re-exports <a href="../interfaces/love_physics_types_FrictionJoint.FrictionJoint.html">FrictionJoint</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="GearJoint" class="tsd-anchor"></a>
+					<h3>Gear<wbr>Joint</h3>
+					Re-exports <a href="../interfaces/love_physics_types_GearJoint.GearJoint.html">GearJoint</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="Joint" class="tsd-anchor"></a>
+					<h3>Joint</h3>
+					Re-exports <a href="../interfaces/love_physics_types_Joint.Joint.html">Joint</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="JointType" class="tsd-anchor"></a>
+					<h3>Joint<wbr>Type</h3>
+					Re-exports <a href="love_physics_enums_JointType.html#JointType">JointType</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="JointTypes" class="tsd-anchor"></a>
+					<h3>Joint<wbr>Types</h3>
+					Re-exports <a href="love_physics_types_Joint.html#JointTypes">JointTypes</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="MotorJoint" class="tsd-anchor"></a>
+					<h3>Motor<wbr>Joint</h3>
+					Re-exports <a href="../interfaces/love_physics_types_MotorJoint.MotorJoint.html">MotorJoint</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="MouseJoint" class="tsd-anchor"></a>
+					<h3>Mouse<wbr>Joint</h3>
+					Re-exports <a href="../interfaces/love_physics_types_MouseJoint.MouseJoint.html">MouseJoint</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="PolygonShape" class="tsd-anchor"></a>
+					<h3>Polygon<wbr>Shape</h3>
+					Re-exports <a href="../interfaces/love_physics_types_PolygonShape.PolygonShape.html">PolygonShape</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="PrismaticJoint" class="tsd-anchor"></a>
+					<h3>Prismatic<wbr>Joint</h3>
+					Re-exports <a href="../interfaces/love_physics_types_PrismaticJoint.PrismaticJoint.html">PrismaticJoint</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="PulleyJoint" class="tsd-anchor"></a>
+					<h3>Pulley<wbr>Joint</h3>
+					Re-exports <a href="../interfaces/love_physics_types_PulleyJoint.PulleyJoint.html">PulleyJoint</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="RevoluteJoint" class="tsd-anchor"></a>
+					<h3>Revolute<wbr>Joint</h3>
+					Re-exports <a href="../interfaces/love_physics_types_RevoluteJoint.RevoluteJoint.html">RevoluteJoint</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="RopeJoint" class="tsd-anchor"></a>
+					<h3>Rope<wbr>Joint</h3>
+					Re-exports <a href="../interfaces/love_physics_types_RopeJoint.RopeJoint.html">RopeJoint</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="Shape" class="tsd-anchor"></a>
+					<h3>Shape</h3>
+					Re-exports <a href="../interfaces/love_physics_types_Shape.Shape.html">Shape</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="ShapeType" class="tsd-anchor"></a>
+					<h3>Shape<wbr>Type</h3>
+					Re-exports <a href="love_physics_enums_ShapeType.html#ShapeType">ShapeType</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="ShapeTypes" class="tsd-anchor"></a>
+					<h3>Shape<wbr>Types</h3>
+					Re-exports <a href="love_physics_types_Shape.html#ShapeTypes">ShapeTypes</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="WeldJoint" class="tsd-anchor"></a>
+					<h3>Weld<wbr>Joint</h3>
+					Re-exports <a href="../interfaces/love_physics_types_WeldJoint.WeldJoint.html">WeldJoint</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="WheelJoint" class="tsd-anchor"></a>
+					<h3>Wheel<wbr>Joint</h3>
+					Re-exports <a href="../interfaces/love_physics_types_WheelJoint.WheelJoint.html">WheelJoint</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="World" class="tsd-anchor"></a>
+					<h3>World</h3>
+					Re-exports <a href="../interfaces/love_physics_types_World.World.html">World</a>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="getDistance" class="tsd-anchor"></a>
+					<h3>get<wbr>Distance</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Distance<span class="tsd-signature-symbol">(</span>fixture1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Fixture.Fixture.html" class="tsd-signature-type" data-tsd-kind="Interface">Fixture</a>, fixture2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Fixture.Fixture.html" class="tsd-signature-type" data-tsd-kind="Interface">Fixture</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LuaMultiReturn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span>distance<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>x1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>y1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>x2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>y2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L22">love.physics/functions.d.ts:22</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the two closest points between two fixtures and their distance.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.getDistance">love.physics.getDistance</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>fixture1: <a href="../interfaces/love_physics_types_Fixture.Fixture.html" class="tsd-signature-type" data-tsd-kind="Interface">Fixture</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first fixture.</p>
+									</div>
+								</li>
+								<li>
+									<h5>fixture2: <a href="../interfaces/love_physics_types_Fixture.Fixture.html" class="tsd-signature-type" data-tsd-kind="Interface">Fixture</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second fixture.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">LuaMultiReturn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span>distance<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>x1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>y1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>x2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span>y2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>distance, The distance of the two points.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="getMeter" class="tsd-anchor"></a>
+					<h3>get<wbr>Meter</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Meter<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L40">love.physics/functions.d.ts:40</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the scale of the world.</p>
+								</div>
+								<p>The world scale is the number of pixels per meter. Try to keep your shape sizes
+								less than 10 times this scale.</p>
+								<p>This is important because the physics in Box2D is tuned to work well for
+									objects of size 0.1m up to 10m. All physics coordinates are divided by this
+								number for the physics calculations.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.getMeter">love.physics.getMeter</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<p>scale, The size of 1 meter in pixels.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newBody" class="tsd-anchor"></a>
+					<h3>new<wbr>Body</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Body<span class="tsd-signature-symbol">(</span>world<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_World.World.html" class="tsd-signature-type" data-tsd-kind="Interface">World</a>, x<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, type<span class="tsd-signature-symbol">?: </span><a href="love_physics_enums_BodyType.html#BodyType" class="tsd-signature-type" data-tsd-kind="Type alias">BodyType</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L60">love.physics/functions.d.ts:60</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a new body.</p>
+								</div>
+								<p>There are three types of bodies. Static bodies do not move, have a infinite
+									mass, and can be used for level boundaries. Dynamic bodies are the main actors
+									in the simulation, they collide with everything. Kinematic bodies do not react
+								to forces and only collide with dynamic bodies.</p>
+								<p>The mass of the body gets calculated when a Fixture is attached or removed, but
+								can be changed at any time with Body:setMass or Body:resetMassData.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newBody">love.physics.newBody</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>world: <a href="../interfaces/love_physics_types_World.World.html" class="tsd-signature-type" data-tsd-kind="Interface">World</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The world to create the body in.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> x: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the body.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> y: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the body.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> type: <a href="love_physics_enums_BodyType.html#BodyType" class="tsd-signature-type" data-tsd-kind="Type alias">BodyType</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The type of the body.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h4>
+							<p>body, A new body.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newChainShape" class="tsd-anchor"></a>
+					<h3>new<wbr>Chain<wbr>Shape</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Chain<wbr>Shape<span class="tsd-signature-symbol">(</span>loop<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, <span class="tsd-signature-symbol">...</span>xys<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_ChainShape.ChainShape.html" class="tsd-signature-type" data-tsd-kind="Interface">ChainShape</a></li>
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Chain<wbr>Shape<span class="tsd-signature-symbol">(</span>loop<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, points<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_ChainShape.ChainShape.html" class="tsd-signature-type" data-tsd-kind="Interface">ChainShape</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L70">love.physics/functions.d.ts:70</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a new ChainShape.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newChainShape">love.physics.newChainShape</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>loop: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>If the chain should loop back to the first point.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>xys: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x and y positions of each point.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_ChainShape.ChainShape.html" class="tsd-signature-type" data-tsd-kind="Interface">ChainShape</a></h4>
+							<p>shape, The new shape.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L80">love.physics/functions.d.ts:80</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a new ChainShape.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newChainShape">love.physics.newChainShape</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>loop: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>If the chain should loop back to the first point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>points: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A list of points to construct the ChainShape, in the form of {x1, y1, x2, y2, ...}.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_ChainShape.ChainShape.html" class="tsd-signature-type" data-tsd-kind="Interface">ChainShape</a></h4>
+							<p>shape, The new shape.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newCircleShape" class="tsd-anchor"></a>
+					<h3>new<wbr>Circle<wbr>Shape</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Circle<wbr>Shape<span class="tsd-signature-symbol">(</span>radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_CircleShape.CircleShape.html" class="tsd-signature-type" data-tsd-kind="Interface">CircleShape</a></li>
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Circle<wbr>Shape<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_CircleShape.CircleShape.html" class="tsd-signature-type" data-tsd-kind="Interface">CircleShape</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L89">love.physics/functions.d.ts:89</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a new CircleShape.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newCircleShape">love.physics.newCircleShape</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The radius of the circle.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_CircleShape.CircleShape.html" class="tsd-signature-type" data-tsd-kind="Interface">CircleShape</a></h4>
+							<p>shape, The new shape.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L100">love.physics/functions.d.ts:100</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a new CircleShape.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newCircleShape">love.physics.newCircleShape</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>x: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x offset of the circle.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y offset of the circle.</p>
+									</div>
+								</li>
+								<li>
+									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The radius of the circle.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_CircleShape.CircleShape.html" class="tsd-signature-type" data-tsd-kind="Interface">CircleShape</a></h4>
+							<p>shape, The new shape.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newDistanceJoint" class="tsd-anchor"></a>
+					<h3>new<wbr>Distance<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Distance<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, x2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_DistanceJoint.DistanceJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">DistanceJoint</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L121">love.physics/functions.d.ts:121</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a distance joint between two bodies.</p>
+								</div>
+								<p>This joint constrains the distance between two points on two bodies to be
+									constant. These two points are specified in world coordinates and the two
+									bodies are assumed to be in place when this joint is created. The first anchor
+									point is connected to the first body and the second to the second body, and the
+								points define the length of the distance joint.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newDistanceJoint">love.physics.newDistanceJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the first anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5>y1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the first anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5>x2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the second anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5>y2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the second anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_DistanceJoint.DistanceJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">DistanceJoint</a></h4>
+							<p>joint, The new distance joint.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newEdgeShape" class="tsd-anchor"></a>
+					<h3>new<wbr>Edge<wbr>Shape</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Edge<wbr>Shape<span class="tsd-signature-symbol">(</span>x1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, x2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_EdgeShape.EdgeShape.html" class="tsd-signature-type" data-tsd-kind="Interface">EdgeShape</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L141">love.physics/functions.d.ts:141</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a edge shape.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newEdgeShape">love.physics.newEdgeShape</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>x1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the first point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the first point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the second point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the second point.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_EdgeShape.EdgeShape.html" class="tsd-signature-type" data-tsd-kind="Interface">EdgeShape</a></h4>
+							<p>shape, The new shape.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newFixture" class="tsd-anchor"></a>
+					<h3>new<wbr>Fixture</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Fixture<span class="tsd-signature-symbol">(</span>body<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, shape<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Shape.Shape.html" class="tsd-signature-type" data-tsd-kind="Interface">Shape</a>, density<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Fixture.Fixture.html" class="tsd-signature-type" data-tsd-kind="Interface">Fixture</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L152">love.physics/functions.d.ts:152</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates and attaches a Fixture to a body.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newFixture">love.physics.newFixture</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The body which gets the fixture attached.</p>
+									</div>
+								</li>
+								<li>
+									<h5>shape: <a href="../interfaces/love_physics_types_Shape.Shape.html" class="tsd-signature-type" data-tsd-kind="Interface">Shape</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The shape of the fixture.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> density: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The density of the fixture.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_Fixture.Fixture.html" class="tsd-signature-type" data-tsd-kind="Interface">Fixture</a></h4>
+							<p>fixture, The new fixture.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newFrictionJoint" class="tsd-anchor"></a>
+					<h3>new<wbr>Friction<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Friction<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_FrictionJoint.FrictionJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">FrictionJoint</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L166">love.physics/functions.d.ts:166</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a friction joint between two bodies. A FrictionJoint applies friction to
+									a body.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newFrictionJoint">love.physics.newFrictionJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with eachother.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_FrictionJoint.FrictionJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">FrictionJoint</a></h4>
+							<p>joint, The new FrictionJoint.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newGearJoint" class="tsd-anchor"></a>
+					<h3>new<wbr>Gear<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Gear<wbr>Joint<span class="tsd-signature-symbol">(</span>joint1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Joint.Joint.html" class="tsd-signature-type" data-tsd-kind="Interface">Joint</a>, joint2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Joint.Joint.html" class="tsd-signature-type" data-tsd-kind="Interface">Joint</a>, ratio<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_GearJoint.GearJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">GearJoint</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L195">love.physics/functions.d.ts:195</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a gear joint connecting two joints.</p>
+								</div>
+								<p>The gear joint connects two joints that must be either prismatic or revolute
+									joints. Using this joint requires that the joints it uses connect their
+									respective bodies to the ground and have the ground as the first body. When
+									destroying the bodies and joints you must make sure you destroy the gear joint
+								before the other joints.</p>
+								<p>The gear joint has a ratio the determines how the angular or distance values of
+									the connected joints relate to each other. The formula coordinate1 + ratio *
+									coordinate2 always has a constant value that is set when the gear joint is
+								created.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newGearJoint">love.physics.newGearJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>joint1: <a href="../interfaces/love_physics_types_Joint.Joint.html" class="tsd-signature-type" data-tsd-kind="Interface">Joint</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first joint to connect with a gear joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>joint2: <a href="../interfaces/love_physics_types_Joint.Joint.html" class="tsd-signature-type" data-tsd-kind="Interface">Joint</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second joint to connect with a gear joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> ratio: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The gear ratio.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_GearJoint.GearJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">GearJoint</a></h4>
+							<p>joint, The new gear joint.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newMotorJoint" class="tsd-anchor"></a>
+					<h3>new<wbr>Motor<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Motor<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, correctionFactor<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_MotorJoint.MotorJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">MotorJoint</a></li>
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Motor<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, correctionFactor<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_MotorJoint.MotorJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">MotorJoint</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L211">love.physics/functions.d.ts:211</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a joint between two bodies which controls the relative motion between
+									them.</p>
+								</div>
+								<p>Position and rotation offsets can be specified once the MotorJoint has been
+									created, as well as the maximum motor force and torque that will be be applied
+								to reach the target offsets.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newMotorJoint">love.physics.newMotorJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> correctionFactor: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The joint&#39;s initial position correction factor, in the range of [0, 1].</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_MotorJoint.MotorJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">MotorJoint</a></h4>
+							<p>joint, The new MotorJoint.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L228">love.physics/functions.d.ts:228</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a joint between two bodies which controls the relative motion between
+									them.</p>
+								</div>
+								<p>Position and rotation offsets can be specified once the MotorJoint has been
+									created, as well as the maximum motor force and torque that will be be applied
+								to reach the target offsets.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newMotorJoint">love.physics.newMotorJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> correctionFactor: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The joint&#39;s initial position correction factor, in the range of [0, 1].</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_MotorJoint.MotorJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">MotorJoint</a></h4>
+							<p>joint, The new MotorJoint.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newMouseJoint" class="tsd-anchor"></a>
+					<h3>new<wbr>Mouse<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Mouse<wbr>Joint<span class="tsd-signature-symbol">(</span>body<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_MouseJoint.MouseJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">MouseJoint</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L247">love.physics/functions.d.ts:247</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a joint between a body and the mouse.</p>
+								</div>
+								<p>This joint actually connects the body to a fixed point in the world. To make it
+									follow the mouse, the fixed point must be updated every timestep (example
+								below).</p>
+								<p>The advantage of using a MouseJoint instead of just changing a body position
+									directly is that collisions and reactions to other joints are handled by the
+								physics engine.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newMouseJoint">love.physics.newMouseJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The body to attach to the mouse.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the connecting point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the connecting point.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_MouseJoint.MouseJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">MouseJoint</a></h4>
+							<p>joint, The new mouse joint.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newPolygonShape" class="tsd-anchor"></a>
+					<h3>new<wbr>Polygon<wbr>Shape</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Polygon<wbr>Shape<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>xys<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_PolygonShape.PolygonShape.html" class="tsd-signature-type" data-tsd-kind="Interface">PolygonShape</a></li>
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Polygon<wbr>Shape<span class="tsd-signature-symbol">(</span>vertices<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_PolygonShape.PolygonShape.html" class="tsd-signature-type" data-tsd-kind="Interface">PolygonShape</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L258">love.physics/functions.d.ts:258</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a new PolygonShape.</p>
+								</div>
+								<p>This shape can have 8 vertices at most, and must form a convex shape.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newPolygonShape">love.physics.newPolygonShape</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>xys: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x and y positions of the points to create the polygon shape.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_PolygonShape.PolygonShape.html" class="tsd-signature-type" data-tsd-kind="Interface">PolygonShape</a></h4>
+							<p>shape, A new PolygonShape.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L269">love.physics/functions.d.ts:269</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a new PolygonShape.</p>
+								</div>
+								<p>This shape can have 8 vertices at most, and must form a convex shape.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newPolygonShape">love.physics.newPolygonShape</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>vertices: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A list of vertices to construct the polygon, in the form of {x1, y1, x2, y2, x3, y3, ...}.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_PolygonShape.PolygonShape.html" class="tsd-signature-type" data-tsd-kind="Interface">PolygonShape</a></h4>
+							<p>shape, A new PolygonShape.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newPrismaticJoint" class="tsd-anchor"></a>
+					<h3>new<wbr>Prismatic<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Prismatic<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, ax<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, ay<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_PrismaticJoint.PrismaticJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">PrismaticJoint</a></li>
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Prismatic<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, x2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, ax<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, ay<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_PrismaticJoint.PrismaticJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">PrismaticJoint</a></li>
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Prismatic<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, x2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, ax<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, ay<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, referenceAngle<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_PrismaticJoint.PrismaticJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">PrismaticJoint</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L289">love.physics/functions.d.ts:289</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a prismatic joints between two bodies.</p>
+								</div>
+								<p>A prismatic joint constrains two bodies to move relatively to each other on a
+									specified axis. It does not allow for relative rotation. Its definition and
+									operation are similar to a revolute joint, but with translation and force
+								substituted for angle and torque.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newPrismaticJoint">love.physics.newPrismaticJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body to connect with a prismatic joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body to connect with a prismatic joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x coordinate of the anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y coordinate of the anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>ax: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x coordinate of the axis unit vector.</p>
+									</div>
+								</li>
+								<li>
+									<h5>ay: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y coordinate of the axis unit vector.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_PrismaticJoint.PrismaticJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">PrismaticJoint</a></h4>
+							<p>joint, The new prismatic joint.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L319">love.physics/functions.d.ts:319</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a prismatic joints between two bodies.</p>
+								</div>
+								<p>A prismatic joint constrains two bodies to move relatively to each other on a
+									specified axis. It does not allow for relative rotation. Its definition and
+									operation are similar to a revolute joint, but with translation and force
+								substituted for angle and torque.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newPrismaticJoint">love.physics.newPrismaticJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body to connect with a prismatic joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body to connect with a prismatic joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x coordinate of the first anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y coordinate of the first anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x coordinate of the second anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y coordinate of the second anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>ax: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x coordinate of the axis unit vector.</p>
+									</div>
+								</li>
+								<li>
+									<h5>ay: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y coordinate of the axis unit vector.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_PrismaticJoint.PrismaticJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">PrismaticJoint</a></h4>
+							<p>joint, The new prismatic joint.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L352">love.physics/functions.d.ts:352</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a prismatic joints between two bodies.</p>
+								</div>
+								<p>A prismatic joint constrains two bodies to move relatively to each other on a
+									specified axis. It does not allow for relative rotation. Its definition and
+									operation are similar to a revolute joint, but with translation and force
+								substituted for angle and torque.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newPrismaticJoint">love.physics.newPrismaticJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body to connect with a prismatic joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body to connect with a prismatic joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x coordinate of the first anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y coordinate of the first anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x coordinate of the second anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y coordinate of the second anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>ax: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x coordinate of the axis unit vector.</p>
+									</div>
+								</li>
+								<li>
+									<h5>ay: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y coordinate of the axis unit vector.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> referenceAngle: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The reference angle between body1 and body2, in radians.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_PrismaticJoint.PrismaticJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">PrismaticJoint</a></h4>
+							<p>joint, The new prismatic joint.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newPulleyJoint" class="tsd-anchor"></a>
+					<h3>new<wbr>Pulley<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Pulley<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, gx1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, gy1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, gx2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, gy2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, x1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, x2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, ratio<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_PulleyJoint.PulleyJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">PulleyJoint</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L393">love.physics/functions.d.ts:393</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a pulley joint to join two bodies to each other and the ground.</p>
+								</div>
+								<p>The pulley joint simulates a pulley with an optional block and tackle. If the
+									ratio parameter has a value different from one, then the simulated rope extends
+									faster on one side than the other. In a pulley joint the total length of the
+									simulated rope is the constant length1 + ratio * length2, which is set when the
+								pulley joint is created.</p>
+								<p>Pulley joints can behave unpredictably if one side is fully extended. It is
+									recommended that the method setMaxLengths be used to constrain the maximum
+								lengths each side can attain.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newPulleyJoint">love.physics.newPulleyJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body to connect with a pulley joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body to connect with a pulley joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>gx1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x coordinate of the first body&#39;s ground anchor.</p>
+									</div>
+								</li>
+								<li>
+									<h5>gy1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y coordinate of the first body&#39;s ground anchor.</p>
+									</div>
+								</li>
+								<li>
+									<h5>gx2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x coordinate of the second body&#39;s ground anchor.</p>
+									</div>
+								</li>
+								<li>
+									<h5>gy2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y coordinate of the second body&#39;s ground anchor.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x coordinate of the pulley joint anchor in the first body.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y coordinate of the pulley joint anchor in the first body.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x coordinate of the pulley joint anchor in the second body.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y coordinate of the pulley joint anchor in the second body.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> ratio: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The joint ratio.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_PulleyJoint.PulleyJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">PulleyJoint</a></h4>
+							<p>joint, The new pulley joint.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newRectangleShape" class="tsd-anchor"></a>
+					<h3>new<wbr>Rectangle<wbr>Shape</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Rectangle<wbr>Shape<span class="tsd-signature-symbol">(</span>width<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_PolygonShape.PolygonShape.html" class="tsd-signature-type" data-tsd-kind="Interface">PolygonShape</a></li>
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Rectangle<wbr>Shape<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, width<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, angle<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_PolygonShape.PolygonShape.html" class="tsd-signature-type" data-tsd-kind="Interface">PolygonShape</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L419">love.physics/functions.d.ts:419</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Shorthand for creating rectangular PolygonShapes.</p>
+								</div>
+								<p>By default, the local origin is located at the center of the rectangle as
+								opposed to the top left for graphics.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newRectangleShape">love.physics.newRectangleShape</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>width: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The width of the rectangle.</p>
+									</div>
+								</li>
+								<li>
+									<h5>height: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The height of the rectangle.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_PolygonShape.PolygonShape.html" class="tsd-signature-type" data-tsd-kind="Interface">PolygonShape</a></h4>
+							<p>shape, A new PolygonShape.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L435">love.physics/functions.d.ts:435</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Shorthand for creating rectangular PolygonShapes.</p>
+								</div>
+								<p>By default, the local origin is located at the center of the rectangle as
+								opposed to the top left for graphics.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newRectangleShape">love.physics.newRectangleShape</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>x: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The offset along the x-axis.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The offset along the y-axis.</p>
+									</div>
+								</li>
+								<li>
+									<h5>width: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The width of the rectangle.</p>
+									</div>
+								</li>
+								<li>
+									<h5>height: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The height of the rectangle.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> angle: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The initial angle of the rectangle.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_PolygonShape.PolygonShape.html" class="tsd-signature-type" data-tsd-kind="Interface">PolygonShape</a></h4>
+							<p>shape, A new PolygonShape.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newRevoluteJoint" class="tsd-anchor"></a>
+					<h3>new<wbr>Revolute<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Revolute<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_RevoluteJoint.RevoluteJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">RevoluteJoint</a></li>
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Revolute<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, x2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, referenceAngle<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_RevoluteJoint.RevoluteJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">RevoluteJoint</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L450">love.physics/functions.d.ts:450</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a pivot joint between two bodies.</p>
+								</div>
+								<p>This joint connects two bodies to a point around which they can pivot.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newRevoluteJoint">love.physics.newRevoluteJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the connecting point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the connecting point.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_RevoluteJoint.RevoluteJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">RevoluteJoint</a></h4>
+							<p>joint, The new revolute joint.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L474">love.physics/functions.d.ts:474</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a pivot joint between two bodies.</p>
+								</div>
+								<p>This joint connects two bodies to a point around which they can pivot.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newRevoluteJoint">love.physics.newRevoluteJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the first connecting point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the first connecting point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the second connecting point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the second connecting point.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> referenceAngle: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_RevoluteJoint.RevoluteJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">RevoluteJoint</a></h4>
+							<p>joint, The new revolute joint.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newRopeJoint" class="tsd-anchor"></a>
+					<h3>new<wbr>Rope<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Rope<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, x2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, maxLength<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_RopeJoint.RopeJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">RopeJoint</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L500">love.physics/functions.d.ts:500</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a joint between two bodies. Its only function is enforcing a max
+									distance between these bodies.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newRopeJoint">love.physics.newRopeJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the first anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the first anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the second anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the second anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>maxLength: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The maximum distance for the bodies.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_RopeJoint.RopeJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">RopeJoint</a></h4>
+							<p>joint, The new RopeJoint.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newWeldJoint" class="tsd-anchor"></a>
+					<h3>new<wbr>Weld<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Weld<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_WeldJoint.WeldJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">WeldJoint</a></li>
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Weld<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, x2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_WeldJoint.WeldJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">WeldJoint</a></li>
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Weld<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, x2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, referenceAngle<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_WeldJoint.WeldJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">WeldJoint</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L524">love.physics/functions.d.ts:524</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a constraint joint between two bodies. A WeldJoint essentially glues
+										two bodies together. The constraint is a bit soft, however, due to Box2D&#39;s
+									iterative solver.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newWeldJoint">love.physics.newWeldJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_WeldJoint.WeldJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">WeldJoint</a></h4>
+							<p>joint, The new WeldJoint.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L541">love.physics/functions.d.ts:541</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a constraint joint between two bodies. A WeldJoint essentially glues
+										two bodies together. The constraint is a bit soft, however, due to Box2D&#39;s
+									iterative solver.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newWeldJoint">love.physics.newWeldJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the first anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5>y1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the first anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5>x2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the second anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5>y2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the second anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_WeldJoint.WeldJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">WeldJoint</a></h4>
+							<p>joint, The new WeldJoint.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L567">love.physics/functions.d.ts:567</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a constraint joint between two bodies. A WeldJoint essentially glues
+										two bodies together. The constraint is a bit soft, however, due to Box2D&#39;s
+									iterative solver.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newWeldJoint">love.physics.newWeldJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body to attach to the joint.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the first anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5>y1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the first anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5>x2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the second anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5>y2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the second anchor point (world space).</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> referenceAngle: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The reference angle between body1 and body2, in radians.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_WeldJoint.WeldJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">WeldJoint</a></h4>
+							<p>joint, The new WeldJoint.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newWheelJoint" class="tsd-anchor"></a>
+					<h3>new<wbr>Wheel<wbr>Joint</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Wheel<wbr>Joint<span class="tsd-signature-symbol">(</span>body1<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, body2<span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a>, x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, ax<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, ay<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, collideConnected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_WheelJoint.WheelJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">WheelJoint</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L591">love.physics/functions.d.ts:591</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a wheel joint.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newWheelJoint">love.physics.newWheelJoint</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body1: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The first body.</p>
+									</div>
+								</li>
+								<li>
+									<h5>body2: <a href="../interfaces/love_physics_types_Body.Body.html" class="tsd-signature-type" data-tsd-kind="Interface">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The second body.</p>
+									</div>
+								</li>
+								<li>
+									<h5>x: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the anchor point.</p>
+									</div>
+								</li>
+								<li>
+									<h5>ax: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x position of the axis unit vector.</p>
+									</div>
+								</li>
+								<li>
+									<h5>ay: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y position of the axis unit vector.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> collideConnected: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Specifies whether the two bodies should collide with each other.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_WheelJoint.WheelJoint.html" class="tsd-signature-type" data-tsd-kind="Interface">WheelJoint</a></h4>
+							<p>joint, The new WheelJoint.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="newWorld" class="tsd-anchor"></a>
+					<h3>new<wbr>World</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>World<span class="tsd-signature-symbol">(</span>xg<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, yg<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, sleep<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/love_physics_types_World.World.html" class="tsd-signature-type" data-tsd-kind="Interface">World</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L610">love.physics/functions.d.ts:610</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a new World.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.newWorld">love.physics.newWorld</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> xg: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The x component of gravity.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> yg: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y component of gravity.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> sleep: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Whether the bodies in this world are allowed to sleep.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/love_physics_types_World.World.html" class="tsd-signature-type" data-tsd-kind="Interface">World</a></h4>
+							<p>world, A brave new World.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="setMeter" class="tsd-anchor"></a>
+					<h3>set<wbr>Meter</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Meter<span class="tsd-signature-symbol">(</span>scale<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.physics/functions.d.ts#L630">love.physics/functions.d.ts:630</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets the pixels to meter scale factor.</p>
+								</div>
+								<p>All coordinates in the physics module are divided by this number and converted
+									to meters, and it creates a convenient way to draw the objects directly to the
+								screen without the need for graphics transformations.</p>
+								<p>It is recommended to create shapes no larger than 10 times the scale. This is
+									important because Box2D is tuned to work well with shape sizes from 0.1 to 10
+								meters. The default meter scale is 30.</p>
+								<p>love.physics.setMeter does not apply retroactively to created objects. Created
+									objects retain their meter coordinates but the scale factor will affect their
+								pixel coordinates.</p>
+								<dl class="tsd-comment-tags">
+									<dt>link</dt>
+									<dd><p><a href="https://love2d.org/wiki/love.physics.setMeter">love.physics.setMeter</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>scale: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The scale factor as an integer.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Modules</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="love_physics_functions.html">love.physics/functions</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#Body" class="tsd-kind-icon">Body</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#BodyType" class="tsd-kind-icon">Body<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#ChainShape" class="tsd-kind-icon">Chain<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#CircleShape" class="tsd-kind-icon">Circle<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#Contact" class="tsd-kind-icon">Contact</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#DistanceJoint" class="tsd-kind-icon">Distance<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#EdgeShape" class="tsd-kind-icon">Edge<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#Fixture" class="tsd-kind-icon">Fixture</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#FrictionJoint" class="tsd-kind-icon">Friction<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#GearJoint" class="tsd-kind-icon">Gear<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#Joint" class="tsd-kind-icon">Joint</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#JointType" class="tsd-kind-icon">Joint<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#JointTypes" class="tsd-kind-icon">Joint<wbr>Types</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#MotorJoint" class="tsd-kind-icon">Motor<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#MouseJoint" class="tsd-kind-icon">Mouse<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#PolygonShape" class="tsd-kind-icon">Polygon<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#PrismaticJoint" class="tsd-kind-icon">Prismatic<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#PulleyJoint" class="tsd-kind-icon">Pulley<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#RevoluteJoint" class="tsd-kind-icon">Revolute<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#RopeJoint" class="tsd-kind-icon">Rope<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#Shape" class="tsd-kind-icon">Shape</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#ShapeType" class="tsd-kind-icon">Shape<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#ShapeTypes" class="tsd-kind-icon">Shape<wbr>Types</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#WeldJoint" class="tsd-kind-icon">Weld<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#WheelJoint" class="tsd-kind-icon">Wheel<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_physics_functions.html#World" class="tsd-kind-icon">World</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#getDistance" class="tsd-kind-icon">get<wbr>Distance</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#getMeter" class="tsd-kind-icon">get<wbr>Meter</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newBody" class="tsd-kind-icon">new<wbr>Body</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newChainShape" class="tsd-kind-icon">new<wbr>Chain<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newCircleShape" class="tsd-kind-icon">new<wbr>Circle<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newDistanceJoint" class="tsd-kind-icon">new<wbr>Distance<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newEdgeShape" class="tsd-kind-icon">new<wbr>Edge<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newFixture" class="tsd-kind-icon">new<wbr>Fixture</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newFrictionJoint" class="tsd-kind-icon">new<wbr>Friction<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newGearJoint" class="tsd-kind-icon">new<wbr>Gear<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newMotorJoint" class="tsd-kind-icon">new<wbr>Motor<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newMouseJoint" class="tsd-kind-icon">new<wbr>Mouse<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newPolygonShape" class="tsd-kind-icon">new<wbr>Polygon<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newPrismaticJoint" class="tsd-kind-icon">new<wbr>Prismatic<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newPulleyJoint" class="tsd-kind-icon">new<wbr>Pulley<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newRectangleShape" class="tsd-kind-icon">new<wbr>Rectangle<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newRevoluteJoint" class="tsd-kind-icon">new<wbr>Revolute<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newRopeJoint" class="tsd-kind-icon">new<wbr>Rope<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newWeldJoint" class="tsd-kind-icon">new<wbr>Weld<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newWheelJoint" class="tsd-kind-icon">new<wbr>Wheel<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#newWorld" class="tsd-kind-icon">new<wbr>World</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="love_physics_functions.html#setMeter" class="tsd-kind-icon">set<wbr>Meter</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

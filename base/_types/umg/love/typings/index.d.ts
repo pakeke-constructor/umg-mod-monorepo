@@ -1,0 +1,45 @@
+//import "./love.arg";
+import "./love.audio";
+import "./love.data";
+//import "./love.event";
+//import "./love.filesystem";
+//import "./love.font";
+import "./love.graphics";
+import "./love.image";
+import "./love.joystick";
+import "./love.keyboard";
+import "./love.math";
+import "./love.mouse";
+//import "./love.path";
+import "./love.physics";
+import "./love.sound";
+import "./love.system";
+import "./love.thread";
+import "./love.timer";
+import "./love.touch";
+import "./love.video";
+import "./love.window";
+import "./love";
+
+declare module "love" {
+    const audio: typeof import("love.audio");
+    const data: typeof import("love.data");
+    //const event: typeof import("love.event");
+    //const filesystem: typeof import("love.filesystem");
+    //const font: typeof import("love.font");
+    const graphics: typeof import("love.graphics");
+    const image: typeof import("love.image");
+    const joystick: typeof import("love.joystick");
+    const keyboard: typeof import("love.keyboard");
+    const math: typeof import("love.math");
+    const mouse: typeof import("love.mouse");
+    const physics: typeof import("love.physics");
+    const sound: typeof import("love.sound");
+    const system: typeof import("love.system");
+    //const thread: typeof import("love.thread");
+    const timer: typeof import("love.timer");
+    //const touch: typeof import("love.touch");
+    const video: typeof import("love.video");
+    const window: typeof import("love.window");
+    //const handlers: import("./love/handlers").Handlers;
+}

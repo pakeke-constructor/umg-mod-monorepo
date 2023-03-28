@@ -1,0 +1,606 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>love-typescript-definitions</title>
+	<meta name="description" content="Documentation for love-typescript-definitions">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">love-typescript-definitions</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>love-typescript-definitions</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<div align="center">
+					<img src="./media/love-typescript-definitions.png?raw=true" alt="TypeScriptToLua + LÖVE 2D" width="512" />
+					<h1>
+						LÖVE 2D TypeScript Definitions
+						<p></p>
+						<a href="http://love2d.org/"><img alt="LÖVE 2D" src="https://img.shields.io/badge/L%C3%96VE-11.3-EA316E.svg?style=for-the-badge" /></a>
+						<a href="https://github.com/TypescriptToLua/TypeScriptToLua"><img alt="TypeScriptToLua" src="https://img.shields.io/badge/TypeScriptToLua-0.31.0-blue.svg?style=for-the-badge" /></a>
+						<a href="https://www.npmjs.com/package/love-typescript-definitions"><img alt="npm" src="https://img.shields.io/npm/v/love-typescript-definitions.svg?style=for-the-badge" /></a>
+						<a href="https://travis-ci.org/hazzard993/love-typescript-definitions"><img alt="Build status" src="https://img.shields.io/travis/hazzard993/love-typescript-definitions/master.svg?style=for-the-badge" /></a>
+					</h1>
+				</div>
+				<p>Contains declaration files to build <a href="https://love2d.org/">LÖVE 2D</a> projects with TypeScript!</p>
+				<p>Built for use with <a href="https://github.com/TypeScriptToLua/TypeScriptToLua">TypeScriptToLua</a>. Check out <a href="https://github.com/hazzard993/love-typescript-template">love-typescript-template</a> to get a sample project to build off.</p>
+				<p>Or run the following in a terminal to try it out:</p>
+				<pre><code class="language-sh"><span style="color: #008000"># Requires NPX, Yarn, and Love2D to be available via cli</span>
+<span style="color: #000000">yarn init -y</span>
+<span style="color: #000000">yarn add -D typescript-to-lua love-typescript-definitions</span>
+<span style="color: #795E26">echo</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;{ &quot;compilerOptions&quot;: { &quot;lib&quot;: [&quot;ESNext&quot;], &quot;types&quot;: [&quot;love-typescript-definitions&quot;, &quot;typescript-to-lua/language-extensions&quot;] }}&#039;</span><span style="color: #000000"> &gt; tsconfig.json</span>
+<span style="color: #795E26">echo</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;love.draw = () =&gt; { love.graphics.print(&#039;Hello World&#039;) };&quot;</span><span style="color: #000000"> &gt; main.ts</span>
+<span style="color: #000000">npx tstl -p tsconfig.json</span>
+<span style="color: #000000">love </span><span style="color: #795E26">.</span>
+</code></pre>
+				<blockquote>
+					<p>TIP: Use <em>tstl</em>&#39;s watch mode (<code>--watch</code>) if you&#39;re after fast and automatic transpilation as files are updated.</p>
+				</blockquote>
+				<p>Available on NPM.</p>
+				<pre><code class="language-sh"><span style="color: #000000">yarn add love-typescript-definitions</span>
+<span style="color: #008000"># or</span>
+<span style="color: #000000">npm install love-typescript-definitions</span>
+</code></pre>
+				<p>This version comes with documentation (<code>node_modules/love-typescript-definitions/docs/index.html</code>).</p>
+				<p>See the <a href="https://github.com/hazzard993/love-typescript-definitions/wiki">wiki</a> for information on getting started building a project and <a href="CHANGELOG.md">CHANGELOG.md</a> for recent changes.</p>
+				<a href="#other-definitions--tools-to-help" id="other-definitions--tools-to-help" style="color: inherit; text-decoration: none;">
+					<h2>Other Definitions / Tools to Help</h2>
+				</a>
+				<ul>
+					<li><a href="https://github.com/ark120202/lua-types">lua-types</a> declarations for the various Lua environments. Allows LuaJIT specific functions to be used.</li>
+					<li><a href="https://github.com/hazzard993/peachy-types">peachy-types</a> for using <a href="https://github.com/josh-perry/peachy">peachy</a>, a parser/renderer for Aseprite animations in LÖVE.</li>
+					<li><a href="https://encompass-ecs.github.io/">encompass-ecs</a>, a powerful engine-agnostic framework to help you code games, or other kinds of simulations.</li>
+					<li><a href="https://marketplace.visualstudio.com/items?itemName=ark120202.vscode-typescript-to-lua">vscode-typescript-to-lua</a> plugin for VSCode. Highlights errors you&#39;d encounter with TypeScriptToLua and gives <em>tsconfig.json</em> information all within the editor.</li>
+					<li><a href="https://github.com/tomblind/local-lua-debugger-vscode">local-lua-debugger-vscode</a>, a simple Lua debugger which requires no additional dependencies. Works with TypeScriptToLua and LÖVE.</li>
+					<li><a href="https://github.com/yancouto/simple-stuff/tree/master/TypeScriptGame">TypeScriptGame</a>, an example game made with these declarations by <a href="https://github.com/yancouto">@yancouto</a></li>
+					<li><a href="https://github.com/hazzard993/tstl-lurker">tstl-lurker</a> declarations for <a href="https://github.com/rxi/lurker">lurker</a>. Allows code TypeScript code to be hotswapped with a running Lua game.</li>
+					<li><a href="https://github.com/hazzard993/tstl-utf8">UTF-8</a> the utf8 module included with LÖVE 2D.</li>
+					<li><a href="https://github.com/maxiy01/tstl-anim8">tstl-anim8</a> declarations for anim8, a small animation library for LÖVE.</li>
+					<li><a href="https://github.com/maxiy01/tstl-flux">tstl-flux</a> declarations for flux, a fast, lightweight tweening library for Lua.</li>
+					<li><a href="https://github.com/maxiy01/tstl-roomy">tstl-roomy</a> declarations for roomy, a small screen-management lua module.</li>
+					<li><a href="https://github.com/Nyaacinth/bump-types">bump-types</a> declarations for bump.lua, a collision detection library for Lua.</li>
+					<li><a href="https://github.com/Nyaacinth/lovebird-types">lovebird-types</a> declarations for lovebird, a browser-based debug console for the LÖVE framework.</li>
+					<li><a href="https://github.com/Nyaacinth/bitser-types">bitser-types</a> declarations for bitser, a library helps (de)serialization of Lua values with LuaJIT</li>
+					<li><a href="https://github.com/Nyaacinth/cartographer-types">cartographer-types</a> declarations for cartographer, a small library for loading, reading, and drawing Tiled maps in LÖVE</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Modules</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_arg_functions.html">love.arg/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_audio_enums_DistanceModel.html">love.audio/enums/<wbr>Distance<wbr>Model</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_audio_enums_EffectType.html">love.audio/enums/<wbr>Effect<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_audio_enums_EffectWaveform.html">love.audio/enums/<wbr>Effect<wbr>Waveform</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_audio_enums_FilterType.html">love.audio/enums/<wbr>Filter<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_audio_enums_SourceType.html">love.audio/enums/<wbr>Source<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_audio_enums_TimeUnit.html">love.audio/enums/<wbr>Time<wbr>Unit</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_audio_functions.html">love.audio/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_audio_structs_EffectSettings.html">love.audio/structs/<wbr>Effect<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_audio_structs_FilterSettings.html">love.audio/structs/<wbr>Filter<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_audio_types_RecordingDevice.html">love.audio/types/<wbr>Recording<wbr>Device</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_audio_types_Source.html">love.audio/types/<wbr>Source</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_data_enums_CompressedDataFormat.html">love.data/enums/<wbr>Compressed<wbr>Data<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_data_enums_ContainerType.html">love.data/enums/<wbr>Container<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_data_enums_EncodeFormat.html">love.data/enums/<wbr>Encode<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_data_enums_HashFunction.html">love.data/enums/<wbr>Hash<wbr>Function</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_data_functions.html">love.data/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_data_types_ByteData.html">love.data/types/<wbr>Byte<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_data_types_CompressedData.html">love.data/types/<wbr>Compressed<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_data_types_Data.html">love.data/types/<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_event_enums_Event.html">love.event/enums/<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_event_functions.html">love.event/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_filesystem_enums_BufferMode.html">love.filesystem/enums/<wbr>Buffer<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_filesystem_enums_FileDecoder.html">love.filesystem/enums/<wbr>File<wbr>Decoder</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_filesystem_enums_FileMode.html">love.filesystem/enums/<wbr>File<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_filesystem_enums_FileType.html">love.filesystem/enums/<wbr>File<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_filesystem_functions.html">love.filesystem/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_filesystem_types_File.html">love.filesystem/types/<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_filesystem_types_FileData.html">love.filesystem/types/<wbr>File<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_font_enums_HintingMode.html">love.font/enums/<wbr>Hinting<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_font_functions.html">love.font/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_font_types_GlyphData.html">love.font/types/<wbr>Glyph<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_font_types_Rasterizer.html">love.font/types/<wbr>Rasterizer</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_AlignMode.html">love.graphics/enums/<wbr>Align<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_ArcType.html">love.graphics/enums/<wbr>Arc<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_AreaSpreadDistribution.html">love.graphics/enums/<wbr>Area<wbr>Spread<wbr>Distribution</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_BlendAlphaMode.html">love.graphics/enums/<wbr>Blend<wbr>Alpha<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_BlendMode.html">love.graphics/enums/<wbr>Blend<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_CompareMode.html">love.graphics/enums/<wbr>Compare<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_CullMode.html">love.graphics/enums/<wbr>Cull<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_DrawMode.html">love.graphics/enums/<wbr>Draw<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_FilterMode.html">love.graphics/enums/<wbr>Filter<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_GraphicsFeature.html">love.graphics/enums/<wbr>Graphics<wbr>Feature</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_GraphicsLimit.html">love.graphics/enums/<wbr>Graphics<wbr>Limit</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_IndexDataType.html">love.graphics/enums/<wbr>Index<wbr>Data<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_LineJoin.html">love.graphics/enums/<wbr>Line<wbr>Join</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_LineStyle.html">love.graphics/enums/<wbr>Line<wbr>Style</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_MatrixLayout.html">love.graphics/enums/<wbr>Matrix<wbr>Layout</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_MeshDrawMode.html">love.graphics/enums/<wbr>Mesh<wbr>Draw<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_MipmapMode.html">love.graphics/enums/<wbr>Mipmap<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_ParticleInsertMode.html">love.graphics/enums/<wbr>Particle<wbr>Insert<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_ShaderVariableType.html">love.graphics/enums/<wbr>Shader<wbr>Variable<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_SpriteBatchUsage.html">love.graphics/enums/<wbr>Sprite<wbr>Batch<wbr>Usage</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_StackType.html">love.graphics/enums/<wbr>Stack<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_StencilAction.html">love.graphics/enums/<wbr>Stencil<wbr>Action</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_TextureType.html">love.graphics/enums/<wbr>Texture<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_VertexAttributeStep.html">love.graphics/enums/<wbr>Vertex<wbr>Attribute<wbr>Step</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_VertexWinding.html">love.graphics/enums/<wbr>Vertex<wbr>Winding</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_enums_WrapMode.html">love.graphics/enums/<wbr>Wrap<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_functions.html">love.graphics/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_structs_DisplayFlags.html">love.graphics/structs/<wbr>Display<wbr>Flags</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_structs_ImageInformation.html">love.graphics/structs/<wbr>Image<wbr>Information</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_structs_ImageSettings.html">love.graphics/structs/<wbr>Image<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_structs_MeshVertexDataType.html">love.graphics/structs/<wbr>Mesh<wbr>Vertex<wbr>Data<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_structs_VertexAttribute.html">love.graphics/structs/<wbr>Vertex<wbr>Attribute</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_structs_VertexInformation.html">love.graphics/structs/<wbr>Vertex<wbr>Information</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_types_Canvas.html">love.graphics/types/<wbr>Canvas</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_types_Drawable.html">love.graphics/types/<wbr>Drawable</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_types_Font.html">love.graphics/types/<wbr>Font</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_types_Image.html">love.graphics/types/<wbr>Image</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_types_Mesh.html">love.graphics/types/<wbr>Mesh</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_types_ParticleSystem.html">love.graphics/types/<wbr>Particle<wbr>System</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_types_Quad.html">love.graphics/types/<wbr>Quad</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_types_Shader.html">love.graphics/types/<wbr>Shader</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_types_SpriteBatch.html">love.graphics/types/<wbr>Sprite<wbr>Batch</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_types_Text.html">love.graphics/types/<wbr>Text</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_types_Texture.html">love.graphics/types/<wbr>Texture</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_graphics_types_Video.html">love.graphics/types/<wbr>Video</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_image_enums_CanvasFormat.html">love.image/enums/<wbr>Canvas<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_image_enums_CompressedImageFormat.html">love.image/enums/<wbr>Compressed<wbr>Image<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_image_enums_ImageFormat.html">love.image/enums/<wbr>Image<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_image_enums_PixelFormat.html">love.image/enums/<wbr>Pixel<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_image_functions.html">love.image/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_image_types_CompressedImageData.html">love.image/types/<wbr>Compressed<wbr>Image<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_image_types_ImageData.html">love.image/types/<wbr>Image<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_joystick_enums_GamepadAxis.html">love.joystick/enums/<wbr>Gamepad<wbr>Axis</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_joystick_enums_GamepadButton.html">love.joystick/enums/<wbr>Gamepad<wbr>Button</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_joystick_enums_JoystickHat.html">love.joystick/enums/<wbr>Joystick<wbr>Hat</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_joystick_enums_JoystickInputType.html">love.joystick/enums/<wbr>Joystick<wbr>Input<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_joystick_functions.html">love.joystick/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_joystick_types_Joystick.html">love.joystick/types/<wbr>Joystick</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_keyboard_enums_KeyConstant.html">love.keyboard/enums/<wbr>Key<wbr>Constant</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_keyboard_enums_ScanCode.html">love.keyboard/enums/<wbr>Scan<wbr>Code</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_keyboard_functions.html">love.keyboard/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_math_functions.html">love.math/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_math_types_BezierCurve.html">love.math/types/<wbr>Bezier<wbr>Curve</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_math_types_RandomGenerator.html">love.math/types/<wbr>Random<wbr>Generator</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_math_types_Transform.html">love.math/types/<wbr>Transform</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_mouse_enums_CursorType.html">love.mouse/enums/<wbr>Cursor<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_mouse_functions.html">love.mouse/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_mouse_types_Cursor.html">love.mouse/types/<wbr>Cursor</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_path_functions.html">love.path/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_enums_BodyType.html">love.physics/enums/<wbr>Body<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_enums_JointType.html">love.physics/enums/<wbr>Joint<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_enums_ShapeType.html">love.physics/enums/<wbr>Shape<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_functions.html">love.physics/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_Body.html">love.physics/types/<wbr>Body</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_ChainShape.html">love.physics/types/<wbr>Chain<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_CircleShape.html">love.physics/types/<wbr>Circle<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_Contact.html">love.physics/types/<wbr>Contact</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_DistanceJoint.html">love.physics/types/<wbr>Distance<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_EdgeShape.html">love.physics/types/<wbr>Edge<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_Fixture.html">love.physics/types/<wbr>Fixture</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_FrictionJoint.html">love.physics/types/<wbr>Friction<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_GearJoint.html">love.physics/types/<wbr>Gear<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_Joint.html">love.physics/types/<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_MotorJoint.html">love.physics/types/<wbr>Motor<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_MouseJoint.html">love.physics/types/<wbr>Mouse<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_PolygonShape.html">love.physics/types/<wbr>Polygon<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_PrismaticJoint.html">love.physics/types/<wbr>Prismatic<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_PulleyJoint.html">love.physics/types/<wbr>Pulley<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_RevoluteJoint.html">love.physics/types/<wbr>Revolute<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_RopeJoint.html">love.physics/types/<wbr>Rope<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_Shape.html">love.physics/types/<wbr>Shape</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_WeldJoint.html">love.physics/types/<wbr>Weld<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_WheelJoint.html">love.physics/types/<wbr>Wheel<wbr>Joint</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_physics_types_World.html">love.physics/types/<wbr>World</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_sound_functions.html">love.sound/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_sound_types_Decoder.html">love.sound/types/<wbr>Decoder</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_sound_types_SoundData.html">love.sound/types/<wbr>Sound<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_system_enums_PowerState.html">love.system/enums/<wbr>Power<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_system_functions.html">love.system/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_thread_functions.html">love.thread/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_thread_types_Channel.html">love.thread/types/<wbr>Channel</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_thread_types_Thread.html">love.thread/types/<wbr>Thread</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_timer_functions.html">love.timer/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_touch_functions.html">love.touch/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_video_functions.html">love.video/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_video_types_VideoStream.html">love.video/types/<wbr>Video<wbr>Stream</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_window_enums_FullscreenType.html">love.window/enums/<wbr>Fullscreen<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_window_enums_MessageBoxType.html">love.window/enums/<wbr>Message<wbr>Box<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_window_functions.html">love.window/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_window_structs_ButtonList.html">love.window/structs/<wbr>Button<wbr>List</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_window_structs_DisplayOrientation.html">love.window/structs/<wbr>Display<wbr>Orientation</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_functions.html">love/functions</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_handlers.html">love/handlers</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_types_Config.html">love/types/<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_types_LightUserData.html">love/types/<wbr>Light<wbr>User<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_types_Type.html">love/types/<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_types_Types.html">love/types/<wbr>Types</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/love_types_Version.html">love/types/<wbr>Version</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

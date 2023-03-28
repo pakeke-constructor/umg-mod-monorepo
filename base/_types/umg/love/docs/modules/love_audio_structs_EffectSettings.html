@@ -1,0 +1,839 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>love.audio/structs/EffectSettings | love-typescript-definitions</title>
+	<meta name="description" content="Documentation for love-typescript-definitions">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">love-typescript-definitions</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">love-typescript-definitions</a>
+				</li>
+				<li>
+					<a href="love_audio_structs_EffectSettings.html">love.audio/structs/EffectSettings</a>
+				</li>
+			</ul>
+			<h1>Module love.audio/structs/EffectSettings</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>References</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#DistanceModel" class="tsd-kind-icon">Distance<wbr>Model</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#EffectType" class="tsd-kind-icon">Effect<wbr>Type</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#EffectWaveform" class="tsd-kind-icon">Effect<wbr>Waveform</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#FilterSettings" class="tsd-kind-icon">Filter<wbr>Settings</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#FilterType" class="tsd-kind-icon">Filter<wbr>Type</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#RecordingDevice" class="tsd-kind-icon">Recording<wbr>Device</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#Source" class="tsd-kind-icon">Source</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#SourceType" class="tsd-kind-icon">Source<wbr>Type</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#TimeUnit" class="tsd-kind-icon">Time<wbr>Unit</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#getActiveEffects" class="tsd-kind-icon">get<wbr>Active<wbr>Effects</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#getActiveSourceCount" class="tsd-kind-icon">get<wbr>Active<wbr>Source<wbr>Count</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#getDistanceModel" class="tsd-kind-icon">get<wbr>Distance<wbr>Model</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#getDopplerScale" class="tsd-kind-icon">get<wbr>Doppler<wbr>Scale</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#getEffect" class="tsd-kind-icon">get<wbr>Effect</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#getMaxSceneEffects" class="tsd-kind-icon">get<wbr>Max<wbr>Scene<wbr>Effects</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#getMaxSourceEffects" class="tsd-kind-icon">get<wbr>Max<wbr>Source<wbr>Effects</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#getOrientation" class="tsd-kind-icon">get<wbr>Orientation</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#getPosition" class="tsd-kind-icon">get<wbr>Position</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#getRecordingDevices" class="tsd-kind-icon">get<wbr>Recording<wbr>Devices</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#getVelocity" class="tsd-kind-icon">get<wbr>Velocity</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#getVolume" class="tsd-kind-icon">get<wbr>Volume</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#isEffectsSupported" class="tsd-kind-icon">is<wbr>Effects<wbr>Supported</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#newQueueableSource" class="tsd-kind-icon">new<wbr>Queueable<wbr>Source</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#newSource" class="tsd-kind-icon">new<wbr>Source</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#pause" class="tsd-kind-icon">pause</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#play" class="tsd-kind-icon">play</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#setDistanceModel" class="tsd-kind-icon">set<wbr>Distance<wbr>Model</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#setDopplerScale" class="tsd-kind-icon">set<wbr>Doppler<wbr>Scale</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#setEffect" class="tsd-kind-icon">set<wbr>Effect</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#setMixWithSystem" class="tsd-kind-icon">set<wbr>Mix<wbr>With<wbr>System</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#setOrientation" class="tsd-kind-icon">set<wbr>Orientation</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#setPosition" class="tsd-kind-icon">set<wbr>Position</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#setVelocity" class="tsd-kind-icon">set<wbr>Velocity</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#setVolume" class="tsd-kind-icon">set<wbr>Volume</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#stop" class="tsd-kind-icon">stop</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#ChorusEffectSettings" class="tsd-kind-icon">Chorus<wbr>Effect<wbr>Settings</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#CompressorEffectSettings" class="tsd-kind-icon">Compressor<wbr>Effect<wbr>Settings</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#DistortionEffectSettings" class="tsd-kind-icon">Distortion<wbr>Effect<wbr>Settings</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#EchoEffectSettings" class="tsd-kind-icon">Echo<wbr>Effect<wbr>Settings</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#EffectSettings" class="tsd-kind-icon">Effect<wbr>Settings</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#EqualizerEffectSettings" class="tsd-kind-icon">Equalizer<wbr>Effect<wbr>Settings</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#FlangerEffectSettings" class="tsd-kind-icon">Flanger<wbr>Effect<wbr>Settings</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#ReverbEffectSettings" class="tsd-kind-icon">Reverb<wbr>Effect<wbr>Settings</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="love_audio_structs_EffectSettings.html#RingModulatorEffectSettings" class="tsd-kind-icon">Ring<wbr>Modulator<wbr>Effect<wbr>Settings</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>References</h2>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="DistanceModel" class="tsd-anchor"></a>
+					<h3>Distance<wbr>Model</h3>
+					Re-exports <a href="love_audio_enums_DistanceModel.html#DistanceModel">DistanceModel</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="EffectType" class="tsd-anchor"></a>
+					<h3>Effect<wbr>Type</h3>
+					Re-exports <a href="love_audio_enums_EffectType.html#EffectType">EffectType</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="EffectWaveform" class="tsd-anchor"></a>
+					<h3>Effect<wbr>Waveform</h3>
+					Re-exports <a href="love_audio_enums_EffectWaveform.html#EffectWaveform">EffectWaveform</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="FilterSettings" class="tsd-anchor"></a>
+					<h3>Filter<wbr>Settings</h3>
+					Re-exports <a href="love_audio_structs_FilterSettings.html#FilterSettings">FilterSettings</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="FilterType" class="tsd-anchor"></a>
+					<h3>Filter<wbr>Type</h3>
+					Re-exports <a href="love_audio_enums_FilterType.html#FilterType">FilterType</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="RecordingDevice" class="tsd-anchor"></a>
+					<h3>Recording<wbr>Device</h3>
+					Re-exports <a href="../interfaces/love_audio_types_RecordingDevice.RecordingDevice.html">RecordingDevice</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="Source" class="tsd-anchor"></a>
+					<h3>Source</h3>
+					Re-exports <a href="../interfaces/love_audio_types_Source.Source.html">Source</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="SourceType" class="tsd-anchor"></a>
+					<h3>Source<wbr>Type</h3>
+					Re-exports <a href="love_audio_enums_SourceType.html#SourceType">SourceType</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="TimeUnit" class="tsd-anchor"></a>
+					<h3>Time<wbr>Unit</h3>
+					Re-exports <a href="love_audio_enums_TimeUnit.html#TimeUnit">TimeUnit</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getActiveEffects" class="tsd-anchor"></a>
+					<h3>get<wbr>Active<wbr>Effects</h3>
+					Re-exports <a href="love_audio_functions.html#getActiveEffects">getActiveEffects</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getActiveSourceCount" class="tsd-anchor"></a>
+					<h3>get<wbr>Active<wbr>Source<wbr>Count</h3>
+					Re-exports <a href="love_audio_functions.html#getActiveSourceCount">getActiveSourceCount</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getDistanceModel" class="tsd-anchor"></a>
+					<h3>get<wbr>Distance<wbr>Model</h3>
+					Re-exports <a href="love_audio_functions.html#getDistanceModel">getDistanceModel</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getDopplerScale" class="tsd-anchor"></a>
+					<h3>get<wbr>Doppler<wbr>Scale</h3>
+					Re-exports <a href="love_audio_functions.html#getDopplerScale">getDopplerScale</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getEffect" class="tsd-anchor"></a>
+					<h3>get<wbr>Effect</h3>
+					Re-exports <a href="love_audio_functions.html#getEffect">getEffect</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getMaxSceneEffects" class="tsd-anchor"></a>
+					<h3>get<wbr>Max<wbr>Scene<wbr>Effects</h3>
+					Re-exports <a href="love_audio_functions.html#getMaxSceneEffects">getMaxSceneEffects</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getMaxSourceEffects" class="tsd-anchor"></a>
+					<h3>get<wbr>Max<wbr>Source<wbr>Effects</h3>
+					Re-exports <a href="love_audio_functions.html#getMaxSourceEffects">getMaxSourceEffects</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getOrientation" class="tsd-anchor"></a>
+					<h3>get<wbr>Orientation</h3>
+					Re-exports <a href="love_audio_functions.html#getOrientation">getOrientation</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getPosition" class="tsd-anchor"></a>
+					<h3>get<wbr>Position</h3>
+					Re-exports <a href="love_audio_functions.html#getPosition">getPosition</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getRecordingDevices" class="tsd-anchor"></a>
+					<h3>get<wbr>Recording<wbr>Devices</h3>
+					Re-exports <a href="love_audio_functions.html#getRecordingDevices">getRecordingDevices</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getVelocity" class="tsd-anchor"></a>
+					<h3>get<wbr>Velocity</h3>
+					Re-exports <a href="love_audio_functions.html#getVelocity">getVelocity</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getVolume" class="tsd-anchor"></a>
+					<h3>get<wbr>Volume</h3>
+					Re-exports <a href="love_audio_functions.html#getVolume">getVolume</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="isEffectsSupported" class="tsd-anchor"></a>
+					<h3>is<wbr>Effects<wbr>Supported</h3>
+					Re-exports <a href="love_audio_functions.html#isEffectsSupported">isEffectsSupported</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="newQueueableSource" class="tsd-anchor"></a>
+					<h3>new<wbr>Queueable<wbr>Source</h3>
+					Re-exports <a href="love_audio_functions.html#newQueueableSource">newQueueableSource</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="newSource" class="tsd-anchor"></a>
+					<h3>new<wbr>Source</h3>
+					Re-exports <a href="love_audio_functions.html#newSource">newSource</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="pause" class="tsd-anchor"></a>
+					<h3>pause</h3>
+					Re-exports <a href="love_audio_functions.html#pause">pause</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="play" class="tsd-anchor"></a>
+					<h3>play</h3>
+					Re-exports <a href="love_audio_functions.html#play">play</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="setDistanceModel" class="tsd-anchor"></a>
+					<h3>set<wbr>Distance<wbr>Model</h3>
+					Re-exports <a href="love_audio_functions.html#setDistanceModel">setDistanceModel</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="setDopplerScale" class="tsd-anchor"></a>
+					<h3>set<wbr>Doppler<wbr>Scale</h3>
+					Re-exports <a href="love_audio_functions.html#setDopplerScale">setDopplerScale</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="setEffect" class="tsd-anchor"></a>
+					<h3>set<wbr>Effect</h3>
+					Re-exports <a href="love_audio_functions.html#setEffect">setEffect</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="setMixWithSystem" class="tsd-anchor"></a>
+					<h3>set<wbr>Mix<wbr>With<wbr>System</h3>
+					Re-exports <a href="love_audio_functions.html#setMixWithSystem">setMixWithSystem</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="setOrientation" class="tsd-anchor"></a>
+					<h3>set<wbr>Orientation</h3>
+					Re-exports <a href="love_audio_functions.html#setOrientation">setOrientation</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="setPosition" class="tsd-anchor"></a>
+					<h3>set<wbr>Position</h3>
+					Re-exports <a href="love_audio_functions.html#setPosition">setPosition</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="setVelocity" class="tsd-anchor"></a>
+					<h3>set<wbr>Velocity</h3>
+					Re-exports <a href="love_audio_functions.html#setVelocity">setVelocity</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="setVolume" class="tsd-anchor"></a>
+					<h3>set<wbr>Volume</h3>
+					Re-exports <a href="love_audio_functions.html#setVolume">setVolume</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="stop" class="tsd-anchor"></a>
+					<h3>stop</h3>
+					Re-exports <a href="love_audio_functions.html#stop">stop</a>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="ChorusEffectSettings" class="tsd-anchor"></a>
+					<h3>Chorus<wbr>Effect<wbr>Settings</h3>
+					<div class="tsd-signature tsd-kind-icon">Chorus<wbr>Effect<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>delay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>depth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>feedback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>phase<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>rate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;chorus&quot;</span><span class="tsd-signature-symbol">; </span>waveform<span class="tsd-signature-symbol">?: </span><a href="love_audio_enums_EffectWaveform.html#EffectWaveform" class="tsd-signature-type" data-tsd-kind="Type alias">EffectWaveform</a><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.audio/structs/EffectSettings.d.ts#L24">love.audio/structs/EffectSettings.d.ts:24</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Plays multiple copies of the sound with slight pitch and time variation.</p>
+						</div>
+						<p>Used to make sounds sound &quot;fuller&quot; or &quot;thicker&quot;.</p>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> delay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> depth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> feedback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> phase<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> rate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;chorus&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> waveform<span class="tsd-signature-symbol">?: </span><a href="love_audio_enums_EffectWaveform.html#EffectWaveform" class="tsd-signature-type" data-tsd-kind="Type alias">EffectWaveform</a></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="CompressorEffectSettings" class="tsd-anchor"></a>
+					<h3>Compressor<wbr>Effect<wbr>Settings</h3>
+					<div class="tsd-signature tsd-kind-icon">Compressor<wbr>Effect<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>enable<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;compressor&quot;</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.audio/structs/EffectSettings.d.ts#L37">love.audio/structs/EffectSettings.d.ts:37</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Decreases the dynamic range of the sound, making the loud and quiet parts closer in volume, producing a more uniform amplitude throughout time.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> enable<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;compressor&quot;</span></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="DistortionEffectSettings" class="tsd-anchor"></a>
+					<h3>Distortion<wbr>Effect<wbr>Settings</h3>
+					<div class="tsd-signature tsd-kind-icon">Distortion<wbr>Effect<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>bandwidth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>center<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>edge<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>gain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>lowcut<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;distortion&quot;</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.audio/structs/EffectSettings.d.ts#L45">love.audio/structs/EffectSettings.d.ts:45</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Alters the sound by amplifying it until it clips, shearing off parts of the signal, leading to a compressed and distorted sound.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> bandwidth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> center<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> edge<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> gain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> lowcut<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;distortion&quot;</span></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="EchoEffectSettings" class="tsd-anchor"></a>
+					<h3>Echo<wbr>Effect<wbr>Settings</h3>
+					<div class="tsd-signature tsd-kind-icon">Echo<wbr>Effect<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>damping<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>delay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>feedback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>spread<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>tapdelay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;echo&quot;</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.audio/structs/EffectSettings.d.ts#L59">love.audio/structs/EffectSettings.d.ts:59</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Decaying feedback based effect, on the order of seconds.</p>
+						</div>
+						<p>Also known as delay; causes the sound to repeat at regular intervals at a decreasing volume.</p>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> damping<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> delay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> feedback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> spread<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> tapdelay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;echo&quot;</span></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="EffectSettings" class="tsd-anchor"></a>
+					<h3>Effect<wbr>Settings</h3>
+					<div class="tsd-signature tsd-kind-icon">Effect<wbr>Settings<span class="tsd-signature-symbol">:</span> <a href="love_audio_structs_EffectSettings.html#ChorusEffectSettings" class="tsd-signature-type" data-tsd-kind="Type alias">ChorusEffectSettings</a><span class="tsd-signature-symbol"> | </span><a href="love_audio_structs_EffectSettings.html#CompressorEffectSettings" class="tsd-signature-type" data-tsd-kind="Type alias">CompressorEffectSettings</a><span class="tsd-signature-symbol"> | </span><a href="love_audio_structs_EffectSettings.html#DistortionEffectSettings" class="tsd-signature-type" data-tsd-kind="Type alias">DistortionEffectSettings</a><span class="tsd-signature-symbol"> | </span><a href="love_audio_structs_EffectSettings.html#EchoEffectSettings" class="tsd-signature-type" data-tsd-kind="Type alias">EchoEffectSettings</a><span class="tsd-signature-symbol"> | </span><a href="love_audio_structs_EffectSettings.html#EqualizerEffectSettings" class="tsd-signature-type" data-tsd-kind="Type alias">EqualizerEffectSettings</a><span class="tsd-signature-symbol"> | </span><a href="love_audio_structs_EffectSettings.html#FlangerEffectSettings" class="tsd-signature-type" data-tsd-kind="Type alias">FlangerEffectSettings</a><span class="tsd-signature-symbol"> | </span><a href="love_audio_structs_EffectSettings.html#ReverbEffectSettings" class="tsd-signature-type" data-tsd-kind="Type alias">ReverbEffectSettings</a><span class="tsd-signature-symbol"> | </span><a href="love_audio_structs_EffectSettings.html#RingModulatorEffectSettings" class="tsd-signature-type" data-tsd-kind="Type alias">RingModulatorEffectSettings</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.audio/structs/EffectSettings.d.ts#L9">love.audio/structs/EffectSettings.d.ts:9</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Structure used with <a href="https://love2d.org/wiki/love.audio.setEffect">love.audio.setEffect</a> and <a href="https://love2d.org/wiki/love.audio.getEffect">love.audio.getEffect</a>.</p>
+						</div>
+						<p>Documented <a href="https://love2d.org/wiki/EffectType">here</a>.</p>
+						<dl class="tsd-comment-tags">
+							<dt>link</dt>
+							<dd><p><a href="https://love2d.org/wiki/love.audio.setEffect">love.audio.setEffect</a></p>
+							</dd>
+							<dt>link</dt>
+							<dd><p><a href="https://love2d.org/wiki/love.audio.getEffect">love.audio.getEffect</a></p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="EqualizerEffectSettings" class="tsd-anchor"></a>
+					<h3>Equalizer<wbr>Effect<wbr>Settings</h3>
+					<div class="tsd-signature tsd-kind-icon">Equalizer<wbr>Effect<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>highcut<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>highgain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>highmidbandwidth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>highmidfrequency<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>highmidgain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>lowcut<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>lowgain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>lowmidbandwidth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>lowmidfrequency<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>lowmidgain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;equalizer&quot;</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.audio/structs/EffectSettings.d.ts#L71">love.audio/structs/EffectSettings.d.ts:71</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Adjust the frequency components of the sound using a 4-band (low-shelf, two band-pass and a high-shelf) equalizer.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> highcut<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> highgain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> highmidbandwidth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> highmidfrequency<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> highmidgain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> lowcut<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> lowgain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> lowmidbandwidth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> lowmidfrequency<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> lowmidgain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;equalizer&quot;</span></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="FlangerEffectSettings" class="tsd-anchor"></a>
+					<h3>Flanger<wbr>Effect<wbr>Settings</h3>
+					<div class="tsd-signature tsd-kind-icon">Flanger<wbr>Effect<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>delay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>depth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>feedback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>phase<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>rate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;flanger&quot;</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.audio/structs/EffectSettings.d.ts#L88">love.audio/structs/EffectSettings.d.ts:88</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Plays two copies of the sound; while varying the phase, or equivalently delaying one of them, by amounts on the order of milliseconds, resulting in phasing sounds.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> delay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> depth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> feedback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> phase<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> rate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;flanger&quot;</span></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="ReverbEffectSettings" class="tsd-anchor"></a>
+					<h3>Reverb<wbr>Effect<wbr>Settings</h3>
+					<div class="tsd-signature tsd-kind-icon">Reverb<wbr>Effect<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>airabsorption<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>decayhighratio<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>decaytime<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>density<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>diffusion<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>earlydelay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>earlygain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>gain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>highgain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>highlimiit<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>latedelay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>lategain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>roomrolloff<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;reverb&quot;</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.audio/structs/EffectSettings.d.ts#L102">love.audio/structs/EffectSettings.d.ts:102</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Decaying feedback based effect, on the order of milliseconds.</p>
+						</div>
+						<p>Used to simulate the reflection off of the surroundings.</p>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> airabsorption<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> decayhighratio<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> decaytime<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> density<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> diffusion<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> earlydelay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> earlygain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> gain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> highgain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> highlimiit<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> latedelay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> lategain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> roomrolloff<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;reverb&quot;</span></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="RingModulatorEffectSettings" class="tsd-anchor"></a>
+					<h3>Ring<wbr>Modulator<wbr>Effect<wbr>Settings</h3>
+					<div class="tsd-signature tsd-kind-icon">Ring<wbr>Modulator<wbr>Effect<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>frequency<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>highcut<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;ringmodulator&quot;</span><span class="tsd-signature-symbol">; </span>waveform<span class="tsd-signature-symbol">?: </span><a href="love_audio_enums_EffectWaveform.html#EffectWaveform" class="tsd-signature-type" data-tsd-kind="Type alias">EffectWaveform</a><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hazzard993/love-typescript-definitions/blob/a159c6f/typings/love.audio/structs/EffectSettings.d.ts#L122">love.audio/structs/EffectSettings.d.ts:122</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>An implementation of amplitude modulation; multiplies the source signal with a simple waveform, to produce either volume changes, or inharmonic overtones.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> frequency<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> highcut<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;ringmodulator&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> waveform<span class="tsd-signature-symbol">?: </span><a href="love_audio_enums_EffectWaveform.html#EffectWaveform" class="tsd-signature-type" data-tsd-kind="Type alias">EffectWaveform</a></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Modules</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="love_audio_structs_EffectSettings.html">love.audio/structs/<wbr>Effect<wbr>Settings</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#DistanceModel" class="tsd-kind-icon">Distance<wbr>Model</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#EffectType" class="tsd-kind-icon">Effect<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#EffectWaveform" class="tsd-kind-icon">Effect<wbr>Waveform</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#FilterSettings" class="tsd-kind-icon">Filter<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#FilterType" class="tsd-kind-icon">Filter<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#RecordingDevice" class="tsd-kind-icon">Recording<wbr>Device</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#Source" class="tsd-kind-icon">Source</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#SourceType" class="tsd-kind-icon">Source<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#TimeUnit" class="tsd-kind-icon">Time<wbr>Unit</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#getActiveEffects" class="tsd-kind-icon">get<wbr>Active<wbr>Effects</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#getActiveSourceCount" class="tsd-kind-icon">get<wbr>Active<wbr>Source<wbr>Count</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#getDistanceModel" class="tsd-kind-icon">get<wbr>Distance<wbr>Model</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#getDopplerScale" class="tsd-kind-icon">get<wbr>Doppler<wbr>Scale</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#getEffect" class="tsd-kind-icon">get<wbr>Effect</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#getMaxSceneEffects" class="tsd-kind-icon">get<wbr>Max<wbr>Scene<wbr>Effects</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#getMaxSourceEffects" class="tsd-kind-icon">get<wbr>Max<wbr>Source<wbr>Effects</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#getOrientation" class="tsd-kind-icon">get<wbr>Orientation</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#getPosition" class="tsd-kind-icon">get<wbr>Position</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#getRecordingDevices" class="tsd-kind-icon">get<wbr>Recording<wbr>Devices</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#getVelocity" class="tsd-kind-icon">get<wbr>Velocity</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#getVolume" class="tsd-kind-icon">get<wbr>Volume</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#isEffectsSupported" class="tsd-kind-icon">is<wbr>Effects<wbr>Supported</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#newQueueableSource" class="tsd-kind-icon">new<wbr>Queueable<wbr>Source</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#newSource" class="tsd-kind-icon">new<wbr>Source</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#pause" class="tsd-kind-icon">pause</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#play" class="tsd-kind-icon">play</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#setDistanceModel" class="tsd-kind-icon">set<wbr>Distance<wbr>Model</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#setDopplerScale" class="tsd-kind-icon">set<wbr>Doppler<wbr>Scale</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#setEffect" class="tsd-kind-icon">set<wbr>Effect</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#setMixWithSystem" class="tsd-kind-icon">set<wbr>Mix<wbr>With<wbr>System</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#setOrientation" class="tsd-kind-icon">set<wbr>Orientation</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#setPosition" class="tsd-kind-icon">set<wbr>Position</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#setVelocity" class="tsd-kind-icon">set<wbr>Velocity</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#setVolume" class="tsd-kind-icon">set<wbr>Volume</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#stop" class="tsd-kind-icon">stop</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#ChorusEffectSettings" class="tsd-kind-icon">Chorus<wbr>Effect<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#CompressorEffectSettings" class="tsd-kind-icon">Compressor<wbr>Effect<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#DistortionEffectSettings" class="tsd-kind-icon">Distortion<wbr>Effect<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#EchoEffectSettings" class="tsd-kind-icon">Echo<wbr>Effect<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#EffectSettings" class="tsd-kind-icon">Effect<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#EqualizerEffectSettings" class="tsd-kind-icon">Equalizer<wbr>Effect<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#FlangerEffectSettings" class="tsd-kind-icon">Flanger<wbr>Effect<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#ReverbEffectSettings" class="tsd-kind-icon">Reverb<wbr>Effect<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="love_audio_structs_EffectSettings.html#RingModulatorEffectSettings" class="tsd-kind-icon">Ring<wbr>Modulator<wbr>Effect<wbr>Settings</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

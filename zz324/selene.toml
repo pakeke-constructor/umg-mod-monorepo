@@ -1,7 +1,0 @@
-std = "umg.yml"
-[rules]
-multiple_statements = "allow"
-parenthese_conditions = "allow"
-global_usage = "allow"
-comments_count = "allow"
-    

@@ -1,0 +1,11 @@
+{
+    "name": "umg",
+    "license": "MIT",
+    "version": "1.0.0",
+    "types": "index.d.ts",
+    "files": [
+        "**.d.ts",
+        "**/**.d.ts"
+    ],
+    "main": ""
+}
