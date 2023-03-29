@@ -1,5 +1,7 @@
+import { Scancode } from "love.keyboard";
 
 export {};
+
 
 
 declare module "base" {
@@ -26,13 +28,46 @@ declare module "base" {
     export const camera: Camera;
 
 
-    interface Listener {
+    type InputEnum = 'UP'|'LEFT'|'DOWN'|'RIGHT'|'BUTTON_SPACE'|'BUTTON_SHIFT'|'BUTTON_CONTROL'|'BUTTON_LEFT'|'BUTTON_RIGHT'|'BUTTON_1'|'BUTTON_2'|'BUTTON_3'|'BUTTON_4';
+    type MouseButton = 1 | 2 | 3 | 4 | 5 
 
+    interface Listener {
+        lockKey(scancode: Scancode): void;
+        lockMouseButton(button: MouseButton): void;
+        getKey(inputEnum: InputEnum): Scancode | undefined;
+        getInputEnum(scancode: Scancode): InputEnum | undefined;
+        isKeyLocked(scancode: Scancode): boolean;
+        isMouseButtonLocked(button: MouseButton): boolean;
+        isControlDown(inputEnum: InputEnum): boolean;
+        isKeyDown(scancode: Scancode): boolean;
+        isMouseButtonDown(button: MouseButton): boolean;
+        lockKeyboard(): void;
+        lockMouseButtons(): void;
+        lockMouseWheel(): void;
+        lockMouseMovement(): void;
+        lockMouse(): void;
     }
 
     namespace input {
+        function Listener(options: LuaTable): Listener;
+        function unlockEverything(): void;
+        function setControls(inputMapping: LuaTable<InputEnum, Scancode>): void;
+    }
+
+    namespace control {
+        function setFollowActive(active: boolean): void;
     }
 
     function isHovered(ent: Entity): boolean;
 
+    function getUIScale(): number;
+    function setUIScale(uiScale: number): void;
+
+    function isOnScreen(x: number, y: number): boolean;
+    function entIsOnScreen(ent: Entity): boolean;
+    
+    function getDrawY(y: number, z: number | undefined): number;
+    function getDrawDepth(y: number, z: number | undefined): number;
+
+    function getQuadOffsets()
 }
