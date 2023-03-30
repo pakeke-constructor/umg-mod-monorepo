@@ -7,7 +7,7 @@ local DEFAULT_SIZE = 10
 
 
 local function isHovered(ent)
-    local mx, my = base.camera:getMousePosition()
+    local mx, my = base.client.camera:getMousePosition()
     
     local dx, dy = abs(ent.x - mx), abs(ent.y - my)
 

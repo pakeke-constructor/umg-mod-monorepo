@@ -11,6 +11,8 @@ local defineExports = require("shared.define_exports")
 
 
 local function loadClient(base)
+    base.client = {}
+
     local draw = require("client.draw")
     local drawEntities = require("client.draw_entities")
     local shockwave = require("client.shockwaves")
@@ -20,38 +22,38 @@ local function loadClient(base)
     local camera = require("client.camera")
     local control = require("client.control")
     
-    base.camera = camera;
+    base.client.camera = camera;
 
-    base.input = input
-    base.control = control
+    base.client.input = input
+    base.client.control = control
     
-    base.isHovered = require("client.mouse_hover")
+    base.client.isHovered = require("client.mouse_hover")
     
-    base.getUIScale = draw.getUIScale
-    base.setUIScale = draw.setUIScale
+    base.client.getUIScale = draw.getUIScale
+    base.client.setUIScale = draw.setUIScale
 
-    base.isOnScreen = drawEntities.isOnScreen
-    base.entIsOnScreen = drawEntities.entIsOnScreen
+    base.client.isOnScreen = drawEntities.isOnScreen
+    base.client.entIsOnScreen = drawEntities.entIsOnScreen
 
-    base.getDrawY = drawEntities.getDrawY;
-    base.getDrawDepth = drawEntities.getDrawDepth;
+    base.client.getDrawY = drawEntities.getDrawY;
+    base.client.getDrawDepth = drawEntities.getDrawDepth;
 
-    base.getQuadOffsets = require("client.image_helpers.quad_offsets");
-    base.drawImage = require("client.image_helpers.draw_image");
+    base.client.getQuadOffsets = require("client.image_helpers.quad_offsets");
+    base.client.drawImage = require("client.image_helpers.draw_image");
     
-    base.groundTexture = require("client.ground_texture")
+    base.client.groundTexture = require("client.ground_texture")
 
-    base.animate = animate.animate;
-    base.animateEntity = animate.animateEntity;
+    base.client.animate = animate.animate;
+    base.client.animateEntity = animate.animateEntity;
 
-    base.shockwave = shockwave;
+    base.client.shockwave = shockwave;
 
-    base.particles = require("client.particles");
+    base.client.particles = require("client.particles");
 
-    base.playSound = sound.playSound;
-    base.playMusic = sound.playMusic;
+    base.client.playSound = sound.playSound;
+    base.client.playMusic = sound.playMusic;
 
-    base.title = require("client.title");
+    base.client.title = require("client.title");
 end
 
 
@@ -88,7 +90,8 @@ end
 
 
 local function loadServer(base)
-    base.kill = require("shared.death")
+    base.server = {}
+    base.server.kill = require("shared.death")
 end
 
 

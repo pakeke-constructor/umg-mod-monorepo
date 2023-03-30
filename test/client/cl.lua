@@ -59,7 +59,7 @@ local listener = base.input.Listener({priority = 2})
 function listener:keypressed(key, scancode, isrepeat)
     if scancode == "q" then
         local e = base.getPlayer()
-        local x, y = base.camera:getMousePosition()
+        local x, y = base.client.camera:getMousePosition()
         base.particles.emit("smoke", e.x, e.y, 8, 10, {0.2,0.8,0.9})
         e.x = x
         e.y = y
@@ -82,12 +82,12 @@ function listener:mousepressed(x, y, button, istouch, presses)
         if umg.exists(p) then
             items.useHoldItem(p)
         end
-        local wx,wy = base.camera:toWorldCoords(x,y)
+        local wx,wy = base.client.camera:toWorldCoords(x,y)
         base.shockwave({
             x = wx, y = wy, startRadius = 1, endRadius = 60, thickness = 20, duration = 0.55
         })
     elseif button == 2 then
-        local wx,wy = base.camera:toWorldCoords(x,y)
+        local wx,wy = base.client.camera:toWorldCoords(x,y)
         client.send("spawn",wx,wy)
     end
 end

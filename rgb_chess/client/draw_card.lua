@@ -211,7 +211,7 @@ umg.on("preDrawUI", function()
         love.graphics.setColor(1,1,1,0.3)
         love.graphics.setLineWidth(5)
         
-        local x, y = base.camera:toCameraCoords(entBeingHovered.x, base.getDrawY(entBeingHovered.y, entBeingHovered.z))
+        local x, y = base.client.camera:toCameraCoords(entBeingHovered.x, base.getDrawY(entBeingHovered.y, entBeingHovered.z))
         local scale = base.getUIScale()
         love.graphics.line(
             UNIT_INFO_WINDOW_X, UNIT_INFO_WINDOW_Y,

@@ -7,6 +7,9 @@ local DEFAULT_ZOOM_SPEED = 22
 local MAX_ZOOM = 10
 local MIN_ZOOM = 0.1
 
+
+local camera = base.client.camera
+
 local zoom = {}
 
 
@@ -23,11 +26,11 @@ function zoom.setZoomSpeed(speed)
 end
 
 function zoom.setZoom(zoomValue)
-    base.camera.scale = math.max(MIN_ZOOM, math.min(MAX_ZOOM, zoomValue))
+    camera.scale = math.max(MIN_ZOOM, math.min(MAX_ZOOM, zoomValue))
 end
 
 function zoom.getZoom()
-    return base.camera.scale
+    return camera.scale
 end
 
 
@@ -39,13 +42,13 @@ local listener = base.input.Listener({priority = 0})
 function listener:wheelmoved(dx,dy)
     local speed = zoom_speed or DEFAULT_ZOOM_SPEED
     if dy > 0 then
-        base.camera.scale = base.camera.scale * (1+(1/speed))
+        camera.scale = camera.scale * (1+(1/speed))
     else
-        base.camera.scale = base.camera.scale * (1-(1/speed))
+        camera.scale = camera.scale * (1-(1/speed))
     end
 
     -- now clamp:
-    base.camera.scale = math.min(math.max(base.camera.scale, MIN_ZOOM), MAX_ZOOM)
+    camera.scale = math.min(math.max(camera.scale, MIN_ZOOM), MAX_ZOOM)
 
     self:lockMouseWheel()
 end
@@ -54,7 +57,7 @@ end
 
 
 
-local last_camx, last_camy = base.camera.x or 0, base.camera.y or 0
+local last_camx, last_camy = camera.x or 0, camera.y or 0
 
 
 
@@ -68,7 +71,7 @@ local function moveCam(dt)
     local dx,dy = 0,0
     local x, y = love.mouse.getPosition()
     local w, h = love.graphics.getWidth(), love.graphics.getHeight()
-    local speed = (DEFAULT_PAN_SPEED * dt) / base.camera.scale
+    local speed = (DEFAULT_PAN_SPEED * dt) / camera.scale
 
     if x < MOUSE_PAN_THRESHOLD then
         dx = -speed
@@ -82,8 +85,8 @@ local function moveCam(dt)
         dy = speed
     end
 
-    base.camera.x = base.camera.x + dx
-    base.camera.y = base.camera.y + dy 
+    camera.x = camera.x + dx
+    camera.y = camera.y + dy 
 end
 
 
@@ -137,13 +140,13 @@ end
 
 function listener:update(dt)
     if IS_PAN_MODE then
-        base.camera.x = last_camx
-        base.camera.y = last_camy
+        camera.x = last_camx
+        camera.y = last_camy
         moveCam(dt)
     end
 
-    last_camx = base.camera.x
-    last_camy = base.camera.y
+    last_camx = camera.x
+    last_camy = camera.y
 end
 
 
@@ -152,9 +155,8 @@ local MIDDLE_MOUSE_BUTTON = 3
 
 function listener:mousemoved(x,y,dx,dy)
     if love.mouse.isDown(MIDDLE_MOUSE_BUTTON) then
-        local c = base.camera
-        local wx1, wy1 = c:toWorldCoords(x-dx,y-dy)
-        local wx2, wy2 = c:toWorldCoords(x,y)
+        local wx1, wy1 = camera:toWorldCoords(x-dx,y-dy)
+        local wx2, wy2 = camera:toWorldCoords(x,y)
         local wdx, wdy = wx2-wx1, wy1-wy2
         last_camx = last_camx - wdx
         last_camy = last_camy + wdy

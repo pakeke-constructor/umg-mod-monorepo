@@ -13,7 +13,7 @@ local MOUSE_INTERACTION_DIST = 30
 local function searchForOpenable(player, mouse_x, mouse_y)
     local best_dist = math.huge
     local best_inv_ent = nil
-    local x, y = base.camera:toWorldCoords(mouse_x, mouse_y)
+    local x, y = base.client.camera:toWorldCoords(mouse_x, mouse_y)
     for _, inv in ipairs(openGroup) do
         -- todo; spatial partition this.
         local dist = math.distance(inv, player)

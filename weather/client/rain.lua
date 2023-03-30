@@ -32,8 +32,8 @@ local maxTailSize = 24
 
 
 local function newRainDrop()
-    local x1, y1 = base.camera:toWorldCoords(0,0)
-    local x2, y2 = base.camera:toWorldCoords(love.graphics.getDimensions())
+    local x1, y1 = base.client.camera:toWorldCoords(0,0)
+    local x2, y2 = base.client.camera:toWorldCoords(love.graphics.getDimensions())
     local w,  h  = x2-x1, y2-y1
 
     local rainDrop = {
@@ -86,8 +86,8 @@ end
 
 
 local function spawnRainDrops(dt)
-    local x1 = base.camera:toWorldCoords(0,0)
-    local x2 = base.camera:toWorldCoords(love.graphics.getWidth(),0)
+    local x1 = base.client.camera:toWorldCoords(0,0)
+    local x2 = base.client.camera:toWorldCoords(love.graphics.getWidth(),0)
     local cameraSpan = x2 - x1
 
     local numDrops = rainRate * dt * (cameraSpan/1000)
