@@ -43,7 +43,7 @@ end)
 local function drawTitle(obj, time)
     love.graphics.push("all")
     local w,h = love.graphics.getWidth(), love.graphics.getHeight()
-    local scale = base.getUIScale()
+    local scale = base.client.getUIScale()
     local drawX, drawY = obj.x * w / scale, obj.y * h / scale
     local txtScale = obj.scale * INTERNAL_TEXT_SCALE
     local font = love.graphics.getFont()

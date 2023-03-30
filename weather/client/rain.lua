@@ -81,7 +81,7 @@ local function killRainDrop(rainDrop)
         TODO: Make particles here,
         perhaps play a "splash" sound?
     ]]
-    base.animate(frames, 0.3, rainDrop.x, rainDrop.y, 0, rainColor)
+    base.client.animate(frames, 0.3, rainDrop.x, rainDrop.y, 0, rainColor)
 end
 
 

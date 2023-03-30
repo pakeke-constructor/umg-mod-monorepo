@@ -60,7 +60,7 @@ local scancodeMapping = invert(inputMapping)
 -- { [scancode] -> inputEnum }
 local inputEnums = {}
 -- { [inputEnum] -> inputEnum } used by input table.
--- i.e.  base.input.BUTTON_1
+-- i.e.  input.BUTTON_1
 
 
 

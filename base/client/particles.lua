@@ -129,7 +129,7 @@ function particles.newParticleSystem(images, buffer_size)
     for _,img in ipairs(images) do
         local quad = client.assets.images[img]
         _,_,pW,pH = quad:getViewport()
-        assert(quad, "base.particles.newParticleSystem(): Non existant image: " .. tostring(img))
+        assert(quad, "base.client.particles.newParticleSystem(): Non existant image: " .. tostring(img))
         buffer:add(quad)
     end
 

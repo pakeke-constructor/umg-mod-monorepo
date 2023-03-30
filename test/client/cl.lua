@@ -10,8 +10,8 @@ weather.rain.setOptions({
 
 
 
-base.groundTexture.setColor(199/255, 140/255, 89/255)
-base.groundTexture.setTextureList({"ground_texture_final4"})
+base.client.groundTexture.setColor(199/255, 140/255, 89/255)
+base.client.groundTexture.setTextureList({"ground_texture_final4"})
 
 
 
@@ -20,12 +20,12 @@ base.groundTexture.setTextureList({"ground_texture_final4"})
 love.graphics.clear()
 
 
-local psys = base.particles.newParticleSystem({
+local psys = base.client.particles.newParticleSystem({
     "circ4", "circ3", "circ2", "circ1"
 })
 
 
-base.particles.define("smoke", psys)
+base.client.particles.define("smoke", psys)
 
 
 --[[
@@ -54,16 +54,16 @@ end)
 
 
 
-local listener = base.input.Listener({priority = 2})
+local listener = base.client.input.Listener({priority = 2})
 
 function listener:keypressed(key, scancode, isrepeat)
     if scancode == "q" then
         local e = base.getPlayer()
         local x, y = base.client.camera:getMousePosition()
-        base.particles.emit("smoke", e.x, e.y, 8, 10, {0.2,0.8,0.9})
+        base.client.particles.emit("smoke", e.x, e.y, 8, 10, {0.2,0.8,0.9})
         e.x = x
         e.y = y
-        base.particles.emit("smoke", x, y, 8, 10)
+        base.client.particles.emit("smoke", x, y, 8, 10)
     end
     if scancode == "space" then
         local e = base.getPlayer()
@@ -83,7 +83,7 @@ function listener:mousepressed(x, y, button, istouch, presses)
             items.useHoldItem(p)
         end
         local wx,wy = base.client.camera:toWorldCoords(x,y)
-        base.shockwave({
+        base.client.shockwave({
             x = wx, y = wy, startRadius = 1, endRadius = 60, thickness = 20, duration = 0.55
         })
     elseif button == 2 then

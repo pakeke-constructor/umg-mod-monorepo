@@ -16,7 +16,7 @@ return {
 
     onUpdate = function(ent)
         if client then
-            if base.isHovered(ent) then
+            if base.client.isHovered(ent) then
                 ent.color = ent.hoverColor or GRAY
             else
                 ent.color = ent.normalColor or WHITE
@@ -28,7 +28,7 @@ return {
         if button == 1 and username == ent.rgbTeam then
             if client then
                 -- TODO: play sound here
-                base.animateEntity(ent, frames, 0.15)
+                base.client.animateEntity(ent, frames, 0.15)
                 if ent.onClickClient then
                     ent:onClickClient()
                 end

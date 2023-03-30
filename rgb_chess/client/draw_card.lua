@@ -27,7 +27,7 @@ local fontScale = 1/3
 
 local function drawUnitCard(ent)
     local x, y = ent.x, ent.y
-    if base.isHovered(ent) then
+    if base.client.isHovered(ent) then
         y = y + MOUSE_HOVER_OY
     end
     local unitEType = ent.cardBuyTarget
@@ -35,7 +35,7 @@ local function drawUnitCard(ent)
 
     love.graphics.push("all")
     love.graphics.setColor(ent.color)
-    base.drawImage("unit_card", x, y)
+    base.client.drawImage("unit_card", x, y)
     
     love.graphics.setColor(0.2,0.2,0.2)
     love.graphics.print(
@@ -146,7 +146,7 @@ end
 
 local function drawSpellCard(ent)
     love.graphics.push("all")
-    base.drawImage("spell_card", ent.x, ent.y)
+    base.client.drawImage("spell_card", ent.x, ent.y)
     love.graphics.pop()
 end
 
@@ -189,10 +189,10 @@ umg.on("slabUpdate", function()
     entBeingHovered = nil
     for _, ent in ipairs(rgbGroup) do
         if ent.rgbTeam == client.getUsername() then
-            if base.isHovered(ent) then
+            if base.client.isHovered(ent) then
                 --[[
                 local x, y = mouse.getPosition()
-                local uiscale = base.getUIScale()
+                local uiscale = base.client.getUIScale()
                 x,y = x/uiscale, y/uiscale
                 ]]
                 drawUnitInfo(ent)
@@ -211,8 +211,8 @@ umg.on("preDrawUI", function()
         love.graphics.setColor(1,1,1,0.3)
         love.graphics.setLineWidth(5)
         
-        local x, y = base.client.camera:toCameraCoords(entBeingHovered.x, base.getDrawY(entBeingHovered.y, entBeingHovered.z))
-        local scale = base.getUIScale()
+        local x, y = base.client.camera:toCameraCoords(entBeingHovered.x, base.client.getDrawY(entBeingHovered.y, entBeingHovered.z))
+        local scale = base.client.getUIScale()
         love.graphics.line(
             UNIT_INFO_WINDOW_X, UNIT_INFO_WINDOW_Y,
             x / scale, y / scale

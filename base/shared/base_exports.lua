@@ -25,7 +25,7 @@ local function loadClient(base)
     base.client.camera = camera;
 
     base.client.input = input
-    base.client.control = control
+    base.client.control = control -- TODO: Should we remove this API? It's kinda weird.
     
     base.client.isHovered = require("client.mouse_hover")
     

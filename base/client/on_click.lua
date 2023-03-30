@@ -48,7 +48,7 @@ function listener:mousepressed(mx, my, button, istouch, presses)
     local bestEnt = nil
 
     for _, ent in ipairs(clickEnts) do
-        local x, y = ent.x, base.getDrawY(ent.y, ent.z)
+        local x, y = ent.x, base.client.getDrawY(ent.y, ent.z)
         local dist = math.distance(x-worldX, y-worldY)
         if dist < bestDist then
             if isInRange(ent, worldX, worldY, dist) then

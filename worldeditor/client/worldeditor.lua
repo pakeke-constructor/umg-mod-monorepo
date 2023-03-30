@@ -16,7 +16,7 @@ setmetatable(we, {__index = error})
 
 client.on("worldeditorSetMode", function(a)
     _G.settings.editing = a
-    base.control.setFollowActive(not a)
+    base.client.control.setFollowActive(not a)
 end)
 
 
@@ -134,26 +134,27 @@ end)
 
 
 
-local listener = base.input.Listener({priority = 1})
+local listener = base.client.input.Listener({priority = 1})
 
 
 local CAMERA_SPEED = 800
+local input = base.client.input
 
 local function moveCamera(dt)
     local dx = 0
     local dy = 0
     local delta = CAMERA_SPEED * dt / base.client.camera.scale
 
-    if listener:isControlDown(base.input.UP) then
+    if listener:isControlDown(input.UP) then
         dy = dy - delta
     end
-    if listener:isControlDown(base.input.DOWN) then
+    if listener:isControlDown(input.DOWN) then
         dy = dy + delta
     end
-    if listener:isControlDown(base.input.LEFT) then
+    if listener:isControlDown(input.LEFT) then
         dx = dx - delta
     end
-    if listener:isControlDown(base.input.RIGHT) then
+    if listener:isControlDown(input.RIGHT) then
         dx = dx + delta
     end
 

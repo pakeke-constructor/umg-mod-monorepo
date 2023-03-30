@@ -39,17 +39,17 @@ local function drawSelectTarget(ent)
         local t = love.timer.getTime()
         love.graphics.push("all")
         love.graphics.setColor(0,0,0)
-        base.drawImage("target", ent.x, ent.y, t, 1.1,1.1)
-        base.drawImage("target", ent.x, ent.y, t, 0.9,0.9)
+        base.client.drawImage("target", ent.x, ent.y, t, 1.1,1.1)
+        base.client.drawImage("target", ent.x, ent.y, t, 0.9,0.9)
         love.graphics.setColor(WHITE)
-        base.drawImage("target", ent.x, ent.y, t)
+        base.client.drawImage("target", ent.x, ent.y, t)
         love.graphics.pop("all")
     elseif rgb.areMatchingColors(ent.rgb, select.getSelectedRGB()) then
         local t = love.timer.getTime()
         love.graphics.push("all")
         local c = ent.color
         love.graphics.setColor(c[1],c[2],c[3],SAMECOL_OPACITY)
-        base.drawImage("target", ent.x, ent.y, t, 1.2,1.2)
+        base.client.drawImage("target", ent.x, ent.y, t, 1.2,1.2)
         love.graphics.pop("all")
     end
 end

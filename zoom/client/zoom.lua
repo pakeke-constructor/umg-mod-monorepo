@@ -36,7 +36,7 @@ end
 
 
 
-local listener = base.input.Listener({priority = 0})
+local listener = base.client.input.Listener({priority = 0})
 
 
 function listener:wheelmoved(dx,dy)
@@ -95,12 +95,12 @@ local IS_PAN_MODE = false
 
 
 local controllableGroup = umg.group("controllable", "controller", "x", "y")
-
+local input = base.client.input
 
 
 function listener:keypressed(key, scancode, isrepeat)
     local inputEnum = self:getInputEnum(scancode)
-    if inputEnum == base.input.BUTTON_SHIFT then
+    if inputEnum == input.BUTTON_SHIFT then
         -- unlock camera
         IS_PAN_MODE = true
         for _, ent in ipairs(controllableGroup)do
@@ -124,7 +124,7 @@ end
 
 function listener:keypressed(key, scancode, isrepeat)
     local inputEnum = self:getInputEnum(scancode)
-    if inputEnum == base.input.BUTTON_SHIFT then
+    if inputEnum == input.BUTTON_SHIFT then
         -- lock camera.
         IS_PAN_MODE = false
         for _, ent in ipairs(controllableGroup) do

@@ -38,7 +38,7 @@ umg.on("drawEntity", function(ent)
         
         love.graphics.setColor(0.2,0.2,0.2, 0.5)
 
-        local y = base.getDrawY(ent.y,ent.z)
+        local y = base.client.getDrawY(ent.y,ent.z)
 
         love.graphics.rectangle(
             "fill", 

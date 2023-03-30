@@ -54,7 +54,7 @@ local function doSplash(ent, target_ent)
         end
 
         if splash.shockwave then
-            base.shockwave(hitx, hity, 0, splash.radius, 2, 0.4)
+            base.client.shockwave(hitx, hity, 0, splash.radius, 2, 0.4)
         end
     end
 end

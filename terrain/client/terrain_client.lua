@@ -13,7 +13,7 @@ local function pushQuads(quad, indexToQuads, indexToWallQuads, height)
         and group top quads together
     ]]
     assert(quad.centerX and quad.centerY, "???")
-    local i = base.getDrawDepth(quad.centerY, 0)
+    local i = base.client.getDrawDepth(quad.centerY, 0)
     indexToQuads[i] = indexToQuads[i] or base.Array()
     local verts = {
         {quad.a.x, quad.a.y}, {quad.b.x, quad.b.y}, 
@@ -27,7 +27,7 @@ local function pushQuads(quad, indexToQuads, indexToWallQuads, height)
         {quad.c.x, quad.c.y - height}, {quad.d.x, quad.d.y - height}, 
         {quad.c.x, quad.c.y}, {quad.d.x, quad.d.y}
     }
-    local iwall = base.getDrawDepth(quad.centerY, -height)
+    local iwall = base.client.getDrawDepth(quad.centerY, -height)
     indexToWallQuads[iwall] = indexToWallQuads[i] or base.Array()
     for _, v in ipairs(verts_wall) do
         indexToWallQuads[iwall]:add(v)
@@ -48,7 +48,7 @@ local function pushGreedyQuads(gquad, indexToGreedyQuads, height)
         {gquad.x, gquad.y + gquad.height}
     }
 
-    local i = base.getDrawDepth(gquad.y + gquad.height, height)
+    local i = base.client.getDrawDepth(gquad.y + gquad.height, height)
     indexToGreedyQuads[i] = indexToGreedyQuads[i] or base.Array()
     for _, v in ipairs(verts) do
         indexToGreedyQuads[i]:add(v)

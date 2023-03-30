@@ -55,7 +55,7 @@ local curFont = love.graphics.getFont()
 local curFontHeight = love.graphics.getFont():getHeight(HEIGHT_TEST_CHARS)
 local curTime = love.timer.getTime()
 local curHeight = CHATBOX_HEIGHT
-local curScreenHeight = love.graphics.getHeight() / base.getUIScale()
+local curScreenHeight = love.graphics.getHeight() / base.client.getUIScale()
 local curChatScale = TARGET_CHAT_HEIGHT / curFontHeight
 
 local currMessage = ""
@@ -116,7 +116,7 @@ umg.on("mainDrawUI", function()
     curFont = love.graphics.getFont()
     curFontHeight = love.graphics.getFont():getHeight(HEIGHT_TEST_CHARS)
     curHeight = CHATBOX_HEIGHT
-    curScreenHeight = love.graphics.getHeight() / base.getUIScale()
+    curScreenHeight = love.graphics.getHeight() / base.client.getUIScale()
     curChatScale = TARGET_CHAT_HEIGHT / curFontHeight
 
     love.graphics.push("all")
@@ -164,7 +164,7 @@ end
 
 
 
-local listener = base.input.Listener({priority = 5})
+local listener = base.client.input.Listener({priority = 5})
 
 
 

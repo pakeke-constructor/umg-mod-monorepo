@@ -93,6 +93,8 @@ end
 
 
 local floor = math.floor
+local getUIScale = base.client.getUIScale
+
 
 function Inventory:getXY(index)
     local yy = (index-1) % self.height + 1
@@ -292,7 +294,7 @@ Read at your own risk!  :-)
 function Inventory:withinBounds(mouse_x, mouse_y)
     -- returns true/false, depending on whether mouse_x or mouse_y is
     -- within the inventory interface
-    local ui_scale = base.getUIScale()
+    local ui_scale = getUIScale()
     local x, y = mouse_x / ui_scale, mouse_y / ui_scale
     local x_valid = (self.draw_x - self.borderWidth <= x) and (x <= self.draw_x + (self.width * self.totalSlotSize) + self.borderWidth)
     local y_valid = (self.draw_y - self.borderWidth <= y) and (y <= self.draw_y + (self.height * self.totalSlotSize) + self.borderWidth)
@@ -301,10 +303,10 @@ end
 
 
 function Inventory:getBucket(mouse_x, mouse_y)
-    if not (base and base.getUIScale)  then
+    if not (base and getUIScale)  then
         error("Inventory mod requires base mod to be loaded!")
     end
-    local ui_scale = base.getUIScale()
+    local ui_scale = getUIScale()
     local x, y = mouse_x / ui_scale, mouse_y / ui_scale
     local norm_x = x - self.draw_x 
     local norm_y = y - self.draw_y
@@ -337,7 +339,7 @@ function Inventory:drawItem(item_ent, x, y)
     local Y = self.totalSlotSize * (y-1) + offset + self.draw_y
 
     local scale = self.slotSize / w
-    base.drawImage(quad, X + w/2, Y + w/2, 0, scale, scale)
+    base.client.drawImage(quad, X + w/2, Y + w/2, 0, scale, scale)
 
     if (item_ent.stackSize or 1) > 1 then
         -- Draw stack number
@@ -366,7 +368,7 @@ function Inventory:updateSlabUI()
         local ent_id = ent.id
         local windowName = tostring(ent_id) .. "_" .. tostring(i)
         -- we must generate a unique string identifier due to Slab
-        local scale = Slab.GetScale() / base.getUIScale()
+        local scale = Slab.GetScale() / getUIScale()
         local winX = (self.draw_x + (ui.x-1) * self.totalSlotSize) / scale
         local winY = (self.draw_y + (ui.y-1) * self.totalSlotSize) / scale
         local winWidth = (self.totalSlotSize * ui.width) / scale
@@ -515,7 +517,7 @@ function Inventory:drawHoverWidget(x, y)
     local item = self:get(x, y)
     if not umg.exists(item) then return end
     local mx, my = love.mouse.getPosition()
-    local ui_scale = base.getUIScale()
+    local ui_scale = getUIScale()
     mx, my = mx / ui_scale, my / ui_scale
     love.graphics.push("all")
     love.graphics.setLineWidth(3)

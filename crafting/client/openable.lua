@@ -39,7 +39,7 @@ local DEFAULT_CLOSE_SOUND = "chestCloseSound"
 local function close(inv)
     local opn = inv.owner.openable
     local sound = opn.closeSound or DEFAULT_CLOSE_SOUND
-    base.playSound(sound, 1, 0.7, nil, 0, 0.3)
+    base.client.playSound(sound, 1, 0.7, nil, 0, 0.3)
     inv:close()
     openInv = nil
 end
@@ -48,7 +48,7 @@ end
 local function open(inv)
     local opn = inv.owner.openable
     local sound = opn.openSound or DEFAULT_OPEN_SOUND
-    base.playSound(sound, 1, 1.4, nil, 0, 0.3)
+    base.client.playSound(sound, 1, 1.4, nil, 0, 0.3)
     if openInv then
         close(openInv)
     end
@@ -67,7 +67,7 @@ local function tryOpenInv(player, inv_ent)
         open(inv)
     else
         local sound = opn.closeSound or DEFAULT_CLOSE_SOUND
-        base.playSound(sound, 1, 0.7, nil, 0, 0.15)
+        base.client.playSound(sound, 1, 0.7, nil, 0, 0.15)
     end
 end
 
@@ -82,7 +82,7 @@ umg.on("gameUpdate", function(dt)
             if player.inventory then
                 player.inventory:close()
             end
-            base.playSound(sound, 1, 0.7, nil, 0, 0.15)    
+            base.client.playSound(sound, 1, 0.7, nil, 0, 0.15)    
             openInv = nil
         end
     end
@@ -90,7 +90,7 @@ end)
 
 
 
-local listener = base.input.Listener({priority = 2})
+local listener = base.client.input.Listener({priority = 2})
 
 
 function listener:mousepressed(mx, my, button)
@@ -110,7 +110,7 @@ end
 
 function listener:keypressed(key, scancode, isrepeat)
     local inputEnum = self:getInputEnum(scancode)
-    if inputEnum == base.input.BUTTON_2 then
+    if inputEnum == base.client.input.BUTTON_2 then
         local player = base.getPlayer()
         if player.inventory then
             if player.inventory.isOpen then

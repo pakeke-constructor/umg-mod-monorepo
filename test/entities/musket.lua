@@ -4,12 +4,12 @@ local START_DIST = 30
 
 
 if client then
-    local psys = base.particles.newParticleSystem({"circ3", "circ2", "circ1"})
+    local psys = base.client.particles.newParticleSystem({"circ3", "circ2", "circ1"})
     psys:setColors(
         {0.6,0.6,0.6},
         {0.2,0.2,0.2}
     )
-    base.particles.define("musket_smoke", psys)
+    base.client.particles.define("musket_smoke", psys)
 end
 
 
@@ -28,8 +28,8 @@ return {
         local x,y = holderEnt.x + dx*START_DIST, holderEnt.y + dy*START_DIST
 
         if client then
-            base.playSound("boom_main1")
-            base.particles.emit("musket_smoke", x,y,nil,10)
+            base.client.playSound("boom_main1")
+            base.client.particles.emit("musket_smoke", x,y,nil,10)
         else
             if type(dx) == "number" and type(dy) == "number" then        
                 local e = server.entities.player()

@@ -14,7 +14,7 @@ end)
 
 
 umg.on("inputPressed", function(inputEnum)
-    if inputEnum == base.input.BUTTON_SPACE then
+    if inputEnum == base.client.input.BUTTON_SPACE then
         local e = base.getPlayer()
         if base.gravity.isOnGround(e) then
             e.vz = 400

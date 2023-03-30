@@ -123,7 +123,7 @@ ent.text = {
 -- please note that entities with particles break auto batching.
 -- Don't use particles EVERYWHERE; it'll be slow
 ent.particles = {
-    type = "dust", -- `dust` is defined by base.particles.define()
+    type = "dust", -- `dust` is defined by base.client.particles.define()
     
     -- OPTIONAL FIELDS:
     rate = 5, -- emits 5 particles per second (default = 5)
@@ -168,7 +168,7 @@ ent.controllable = {
     onLeftButton = function(ent) end; -- `Q` by default
     onRightButton = function(ent) end;-- `E` by default
     onSpaceButton = function(ent) end;-- `space bar` by default
-    ... -- same callbacks for all stuff defined with base.input
+    ... -- same callbacks for all stuff defined with b.c.input
 
     onClick = function(ent, x, y) end;
 }

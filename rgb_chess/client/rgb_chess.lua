@@ -14,10 +14,10 @@ client.on("setupPvPMatch", function(opponent)
 
     local p = base.getPlayer()
     if p then
-        base.shockwave(p.x, p.y, 10, 600, 10, 0.6)
+        base.client.shockwave(p.x, p.y, 10, 600, 10, 0.6)
     end
 
-    base.title("PvP Start", {
+    base.client.title("PvP Start", {
         x = 1/2, y = 1/2,
         color = {1,1,1},
         fade = 0.6,
@@ -25,7 +25,7 @@ client.on("setupPvPMatch", function(opponent)
         scale = 2
     })
 
-    base.title("Opponent: " .. opponent, {
+    base.client.title("Opponent: " .. opponent, {
         x = 1/2, y = 2/3,
         color = {1,0.2,0.2},
         fade = 0.5,
