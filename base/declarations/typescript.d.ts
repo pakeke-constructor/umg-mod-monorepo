@@ -146,6 +146,4 @@ declare module "base" {
         x?: number, y?: number,
         scale?: number
     }): void;
-
-    
 }
