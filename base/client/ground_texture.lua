@@ -19,16 +19,9 @@ local color = {1,1,1}
 
 
 
-local tcSetColor = typecheck.assert("number", "number", "number")
 
-function groundTexture.setColor(color_or_r, g,b)
-    if type(color_or_r) == "table" then
-        color = color_or_r
-    else
-        local r = color_or_r
-        tcSetColor(r,g,b)
-        color = {r,g,b}
-    end
+function groundTexture.setColor(newcolor)
+    color = newcolor;
 end
 
 

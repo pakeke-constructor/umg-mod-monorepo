@@ -51,9 +51,9 @@ local function playSound(src, vol, pitch, effect, vol_v, p_v)
     if effect then
         src:setEffect(effect)
     end
-    vol = math.min(1, vol + vol_v * math.sin(math.random() * 6.282)) * sfxVol()
+    vol = math.min(1, vol) * sfxVol()
     src:setVolume(vol)
-    src:setPitch (pitch + p_v * math.sin(math.random() * 6.282))
+    src:setPitch(pitch)
     
     love.audio.play( src )
 end
@@ -62,7 +62,7 @@ end
 
 
 
-function sound.playSound(name, volume, pitch, effect, volume_variance,  pitch_variance)
+function sound.playSound(name, volume, pitch, effect)
     --[[
         name : string
         volume : 0 no sound   ->   1 max vol
@@ -71,10 +71,8 @@ function sound.playSound(name, volume, pitch, effect, volume_variance,  pitch_va
     ]]
     volume = volume or 1
     pitch = pitch or 1
-    volume_variance = volume_variance or 0
-    pitch_variance = pitch_variance or 0
 
-    playSound(client.assets.sounds[name], volume, pitch, effect, volume_variance, pitch_variance)
+    playSound(client.assets.sounds[name], volume, pitch, effect)
 end
 
 

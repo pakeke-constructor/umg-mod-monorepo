@@ -1,3 +1,4 @@
+import { ParticleSystem, Quad } from "love.graphics";
 import { Scancode } from "love.keyboard";
 
 export {};
@@ -69,5 +70,82 @@ declare module "base" {
     function getDrawY(y: number, z: number | undefined): number;
     function getDrawDepth(y: number, z: number | undefined): number;
 
-    function getQuadOffsets()
+    interface Color {
+        (r?: number, g?: number, b?: number, a?:number): Color;
+        hex: string;
+        
+        r: number, g: number, b: number, a: number,
+        red: number, green: number, blue: number, alpha: number,
+
+        h: number, hue: number,
+        s: number, saturation: number,
+        l: number, lightness: number,
+
+        ss: number, ssaturation: number,
+        v: number, value: number
+
+        add(other: Color): Color;
+        subtract(other: Color): Color;
+        multiplying(other: Color): Color;
+        divide(other: Color): Color;
+        invert(other: Color): Color;
+        shiftHue(degrees: number): Color;
+
+        setHSV(h: number, s: number, v: number): Color;
+        getHSV(): LuaMultiReturn<[number, number, number]>;
+        
+        setHSL(h: number, s: number, v: number): Color;
+        getHSL(): LuaMultiReturn<[number, number, number]>;
+       
+        setRGBA(r?: number, g?: number, b?: number, a?: number): Color;
+        getRGBA(): LuaMultiReturn<[number, number, number, number]>;
+
+        setByteRGBA(r?: number, g?: number, b?: number, a?: number): Color;
+        getByteRGBA(): LuaMultiReturn<[number, number, number, number]>;
+
+        clone(): Color;
+
+        /** @NoSelf */
+        lerp(from: Color, to: Color, progress: number): Color;
+        /** @NoSelf */
+        distance(a: Color, b: Color): number;
+    }
+
+    type BaseImage = Quad | string;
+    function getQuadOffsets(image: BaseImage): LuaMultiReturn<[number, number]>;
+    function drawImage(image: BaseImage, x: number, y: number, rot?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): void;
+
+    namespace groundTexture {
+        function setColor(color: Color): void;
+        function setTextureList(textures: string[]): void;
+    }
+
+    function animate(frames: string[], time: number, x: number, y: number, z?: number, color?: Color): void;
+    function animateEntity(ent: Entity, frames: string[], time: number): void;
+
+    function shockwave(options: {
+        x: number, y: number,
+        color?: Color, thickness?: number,
+        startRadius?: number, endRadius?: number,
+        duration?: number, fadeRings?: number,
+        radius?: number
+    }): void;
+
+    /** @Noself */
+    namespace particles {
+        function emit(name: string, x: number, y: number, z?: number, numParticles?: number, color?: Color): void;
+        function getParticleSystem(name: string): ParticleSystem | undefined;
+    }
+
+    function playSound(name: string, volume?: number, pitch?: number, effect?: any): void;
+    function playMusic(name: string, startTime?: number, volume?: number): void;
+
+    function title(text: string, options?: {
+        fade?: number,
+        color?: Color,
+        x?: number, y?: number,
+        scale?: number
+    }): void;
+
+    
 }
