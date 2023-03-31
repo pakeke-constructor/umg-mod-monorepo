@@ -1,0 +1,11 @@
+
+# selene config file
+
+
+# Define your mod's API in this file.
+#  https://kampfkarren.github.io/selene/
+
+
+# Example for lua 5.1:
+# https://github.com/Kampfkarren/selene/blob/main/selene-lib/default_std/lua51.yml
+

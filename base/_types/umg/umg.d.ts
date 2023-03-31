@@ -23,7 +23,7 @@ declare global {
 
         export function extend(parentEntityName: string, definition: LuaTable<String, unknown>): any;
 
-        export function group<T>(...args: string[]): Group<T>;
+        export function group<T>(...args: (keyof T)[]): Group<T>;
 
         export function exists(ent: unknown): ent is Entity;
 
@@ -42,7 +42,7 @@ declare global {
         readonly id: number;
         isRegular(componentName: string): boolean;
         isShared(componentName: string): boolean;
-        hasComponent<T>(componentName: string): this is T;
+        hasComponent<T>(componentName: keyof T): this is T;
         type(): string;
     }
     

@@ -22,7 +22,7 @@ interface Listener {
     lockMouse(): void;
 }
 
-
+/** @NoSelf */
 export namespace input {
     function Listener(options: LuaTable): Listener;
     function unlockEverything(): void;

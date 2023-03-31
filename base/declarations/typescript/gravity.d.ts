@@ -1,0 +1,6 @@
+
+/** @NoSelf */
+export namespace gravity {
+
+}
+
