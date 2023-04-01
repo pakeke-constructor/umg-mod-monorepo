@@ -1,5 +1,9 @@
-/** @NoSelfInFile */
+/** @noSelfInFile */
 
-export namespace baseShared {
-    function hi():void;
+import { gravity } from "./gravity";
+
+/** @noSelf */
+export interface baseShared {
+    readonly gravity: gravity;
+
 }

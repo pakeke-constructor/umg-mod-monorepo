@@ -4,35 +4,39 @@ import { input as inputAPI } from "./input";
 import { control as controlAPI } from "./control";
 
 
-/** @NoSelf */
-export namespace baseClient {
-    export const camera: Camera;
-    export const input: typeof inputAPI;
-    export const control: typeof controlAPI;
+type BaseImage = Quad | string;
 
-    function isHovered(ent: Entity): boolean;
 
-    function getUIScale(): number;
-    function setUIScale(uiScale: number): void;
+/**
+ * @NoSelf 
+ */
+export interface baseClient {
+    readonly camera: Camera;
+    readonly input: inputAPI;
+    readonly control: controlAPI;
 
-    function isOnScreen(x: number, y: number): boolean;
-    function entIsOnScreen(ent: Entity): boolean;
+    isHovered(ent: Entity): boolean;
+
+    getUIScale(): number;
+    setUIScale(uiScale: number): void;
+
+    isOnScreen(x: number, y: number): boolean;
+    entIsOnScreen(ent: Entity): boolean;
     
-    function getDrawY(y: number, z: number | undefined): number;
-    function getDrawDepth(y: number, z: number | undefined): number;
-    type BaseImage = Quad | string;
-    function getQuadOffsets(image: BaseImage): LuaMultiReturn<[number, number]>;
-    function drawImage(image: BaseImage, x: number, y: number, rot?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): void;
+    getDrawY(y: number, z: number | undefined): number;
+    getDrawDepth(y: number, z: number | undefined): number;
+    getQuadOffsets(image: BaseImage): LuaMultiReturn<[number, number]>;
+    drawImage(image: BaseImage, x: number, y: number, rot?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): void;
 
-    namespace groundTexture {
-        function setColor(color: Color): void;
-        function setTextureList(textures: string[]): void;
+    readonly groundTexture: {
+        setColor(color: Color): void;
+        setTextureList(textures: string[]): void;
     }
 
-    function animate(frames: string[], time: number, x: number, y: number, z?: number, color?: Color): void;
-    function animateEntity(ent: Entity, frames: string[], time: number): void;
+    animate(frames: string[], time: number, x: number, y: number, z?: number, color?: Color): void;
+    animateEntity(ent: Entity, frames: string[], time: number): void;
 
-    function shockwave(options: {
+    shockwave(options: {
         x: number, y: number,
         color?: Color, thickness?: number,
         startRadius?: number, endRadius?: number,
@@ -40,15 +44,15 @@ export namespace baseClient {
         radius?: number
     }): void;
 
-    namespace particles {
-        function emit(name: string, x: number, y: number, z?: number, numParticles?: number, color?: Color): void;
-        function getParticleSystem(name: string): ParticleSystem | undefined;
+    readonly particles: {
+        emit(name: string, x: number, y: number, z?: number, numParticles?: number, color?: Color): void;
+        getParticleSystem(name: string): ParticleSystem | undefined;
     }
 
-    function playSound(name: string, volume?: number, pitch?: number, effect?: any): void;
-    function playMusic(name: string, startTime?: number, volume?: number): void;
+    playSound(name: string, volume?: number, pitch?: number, effect?: any): void;
+    playMusic(name: string, startTime?: number, volume?: number): void;
 
-    function title(text: string, options?: {
+    title(text: string, options?: {
         fade?: number,
         color?: Color,
         x?: number, y?: number,

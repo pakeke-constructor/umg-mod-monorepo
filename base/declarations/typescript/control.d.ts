@@ -1,5 +1,5 @@
 
 /** @NoSelf */
-export namespace control {
-    function setFollowActive(active: boolean): void;
+export interface control {
+    setFollowActive(active: boolean): void;
 }

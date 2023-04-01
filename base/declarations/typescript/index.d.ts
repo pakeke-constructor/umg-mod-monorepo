@@ -8,7 +8,7 @@ export {};
 /** @NoSelf */
 declare global {
     const base: {
-        client: typeof baseClient;
-        server: typeof baseServer;
-    } & typeof baseShared;
+        client: baseClient | undefined;
+        server: baseServer | undefined;
+    } & baseShared;
 }

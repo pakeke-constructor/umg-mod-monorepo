@@ -1,1 +1,0 @@
-{"tstl":{"luaTarget":"JIT","noImplicitGlobalVariables":true},"compilerOptions":{"target":"esnext","moduleResolution":"node","types":["@typescript-to-lua/language-extensions","/_types/base"],"lib":["esnext"],"strict":true}}

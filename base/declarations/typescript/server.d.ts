@@ -1,6 +1,6 @@
-/** @NoSelfInFile */
+/** @noSelfInFile */
 
-export namespace baseServer {
-    function kill(ent: Entity): void;
+export interface baseServer {
+    kill(ent: Entity): void;
 }
 

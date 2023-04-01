@@ -23,9 +23,9 @@ interface Listener {
 }
 
 /** @NoSelf */
-export namespace input {
-    function Listener(options: LuaTable): Listener;
-    function unlockEverything(): void;
-    function setControls(inputMapping: LuaTable<InputEnum, Scancode>): void;
+export interface input {
+    Listener(options: LuaTable): Listener;
+    unlockEverything(): void;
+    setControls(inputMapping: LuaTable<InputEnum, Scancode>): void;
 }
 

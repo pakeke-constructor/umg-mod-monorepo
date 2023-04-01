@@ -1,8 +1,11 @@
+import {Color as ColorObject} from "./color";
 
 export {};
 
-
-export namespace components {
+/**
+ * @noSelf
+ */
+declare module "components" {
     interface X {
         x: number;
     }
@@ -17,13 +20,12 @@ export namespace components {
     type XY = X & Y;
     type XYZ = XY & Z;
 
-
     interface Image {
         image: string;
     }
 
-    interface Color2 {
-        color: Color
+    interface Color {
+        color: ColorObject
     }
 }
 
