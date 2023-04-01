@@ -25,7 +25,7 @@ return umg.extend("abstract_button", {
 
     init = function(ent, x, y, rgbTeam)
         assert(rgbTeam, "need to pass in rgbTeam")
-        base.entityHelper.initPosition(ent,x,y)
+        base.initializers.initXY(ent,x,y)
         ent.rgbTeam = rgbTeam
         ent.rerollCost = constants.REROLL_COST
         ent.nametag = {

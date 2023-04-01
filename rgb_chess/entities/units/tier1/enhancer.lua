@@ -42,6 +42,6 @@ return umg.extend("abstract_ranged", {
         activation = 15
     };
 
-    init = base.entityHelper.initPosition
+    init = base.initializers.initXY
 })
 

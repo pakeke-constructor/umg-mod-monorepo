@@ -12,7 +12,7 @@ return {
             color = LIGHT_COLOR,
             size = rad or DEFAULT_RADIUS
         }
-        base.entityHelper.initPosition(e,x,y)
+        base.initializers.initXY(e,x,y)
     end
 }
 

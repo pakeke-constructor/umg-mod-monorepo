@@ -60,7 +60,7 @@ end
 local function loadShared(base)
     base.gravity = require("shared.gravity");
 
-    base.entityHelper = require("shared.entity_helper")
+    base.initializers = require("shared.initializers")
     
     base.getGameTime = require("shared.get_game_time")
 

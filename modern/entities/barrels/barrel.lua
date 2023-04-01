@@ -17,7 +17,7 @@ return {
     };
 
     init = function(ent,x,y)
-        base.entityHelper.initPositionVelocity(ent,x,y,0,0)
+        base.initializers.initVxVy(ent,x,y)
         ent.image = table.pick_random(IMGS)
     end
 }

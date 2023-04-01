@@ -54,7 +54,7 @@ return {
     agility = PLAYER_SPEED * 20;
 
     init = function(e, x, y, uname)
-        base.entityHelper.initPositionVelocity(e,x,y)
+        base.initializers.initXY(e,x,y)
         e.health = e.maxHealth
         e.controller = uname
         e.inventory = items.Inventory({width=7, height = 4, autohold = true})

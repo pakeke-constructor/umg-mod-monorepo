@@ -41,7 +41,7 @@ return {
 
         e.cardBuyTarget = fields.cardBuyTarget
         e.rgbTeam = fields.rgbTeam
-        base.entityHelper.initPosition(e,fields.x,fields.y)
+        base.initializers.initXY(e,fields.x,fields.y)
     end
 }
 

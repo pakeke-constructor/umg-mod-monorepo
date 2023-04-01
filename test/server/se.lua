@@ -24,13 +24,14 @@ chat.handleCommand("spawn", {
     adminLevel = 1,
 
     handler = function(sender, entType)
-        if entType and server.entities[entType] then
+        if server.entities[entType] then
             local p = base.getPlayer(sender)
             local x,y = 0,0
             if p then
                 x,y = p.x, p.y + 30
             end
-            server.entities[entType](x,y)
+            local e = server.entities[entType](x,y)
+            e:delete()
         else
             chat.message("SPAWN FAILED: Unknown entity type " .. tostring(entType))
         end

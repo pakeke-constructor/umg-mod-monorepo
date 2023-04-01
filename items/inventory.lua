@@ -93,7 +93,11 @@ end
 
 
 local floor = math.floor
-local getUIScale = base.client.getUIScale
+local getUIScale
+if client then
+    getUIScale = base.client.getUIScale
+end
+
 
 
 function Inventory:getXY(index)

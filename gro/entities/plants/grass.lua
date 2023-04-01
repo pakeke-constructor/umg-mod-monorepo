@@ -6,7 +6,7 @@ return {
     "growStage",
 
     placementCategory = {"plant"};
-    init = base.entityHelper.initPosition;
+    init = base.initializers.initXY;
 
     growable = {
         time = 10;

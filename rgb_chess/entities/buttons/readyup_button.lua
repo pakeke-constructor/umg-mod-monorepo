@@ -40,7 +40,7 @@ return umg.extend("abstract_button", {
         }
         ent.rgbTeam = rgbTeam
         ent.rgb_is_ready = false
-        base.entityHelper.initPosition(ent,x,y)
+        base.initializers.initXY(ent,x,y)
     end
 })
 

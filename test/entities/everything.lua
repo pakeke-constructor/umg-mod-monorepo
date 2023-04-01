@@ -13,7 +13,7 @@ return {
     maxHealth = 15,
 
     init = function(ent,x,y)
-        base.entityHelper.initPositionVelocity(ent,x,y)
+        base.initializers.initVxVy(ent,x,y)
         ent.healthBar = {
             color = {math.random(), math.random(), math.random()};
             offset = 20

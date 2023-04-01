@@ -11,7 +11,7 @@ return {
     color = {.6,.6,.6};
 
     init = function(ent,x,y)
-        base.entityHelper.initPositionVelocity(ent,x,y,0,0)
+        base.initializers.initVxVy(ent,x,y,0,0)
         ent.healthBar = {
             color = {math.random(), math.random(), math.random()};
             offset = 20

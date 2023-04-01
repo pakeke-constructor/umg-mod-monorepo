@@ -16,7 +16,7 @@ local function init(ent, x, y)
         spread = {x = 3, y = 0}
     }
 
-    base.entityHelper.initPosition(ent, x, y)
+    base.initializers.initXY(ent, x, y);
 end
 
 

@@ -42,7 +42,7 @@ return {
         activation = 15
     };
 
-    init = base.entityHelper.initPositionVelocity,
+    init = base.initializers.initVxVy,
 
     speed = SPEED;
     agility = SPEED * 10

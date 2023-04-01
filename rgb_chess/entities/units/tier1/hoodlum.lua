@@ -45,7 +45,7 @@ return umg.extend("abstract_melee", {
         activation = 15
     };
 
-    init = base.entityHelper.initPosition
+    init = base.initializers.initXY
 
 })
 

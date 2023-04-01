@@ -42,7 +42,7 @@ return {
 
 
     init = function(ent, x, y)
-        base.entityHelper.initPosition(ent,x,y)
+        base.initializers.initXY(ent,x,y)
     end
 }
 

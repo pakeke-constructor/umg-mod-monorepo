@@ -23,7 +23,7 @@ return {
         if math.random() > 0.5 then
             e.scaleY = -1
         end
-        base.entityHelper.initPosition(e,x,y)
+        base.initializers.initXY(e,x,y)
     end
 }
 

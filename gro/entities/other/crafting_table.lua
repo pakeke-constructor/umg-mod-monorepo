@@ -29,6 +29,6 @@ return umg.extend("abstract_crafter", {
     openable = {distance = 100};
 
     crafter = my_crafter;
-    init = base.entityHelper.initPosition
+    init = base.initializers.initXY;
 })
 

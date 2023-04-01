@@ -7,7 +7,7 @@ return {
         shape = love.physics.newCircleShape(5);
         friction =  0
     },
-    init = base.entityHelper.initPositionVelocity
+    init = base.initializers.initVxVy
 }
 
 

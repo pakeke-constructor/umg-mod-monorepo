@@ -13,6 +13,6 @@ return {
 
     itemHoldType = "above",
 
-    init = base.entityHelper.initPosition
+    init = base.initializers.initXY
 }
 

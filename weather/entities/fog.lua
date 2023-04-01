@@ -9,7 +9,7 @@ return {
     drawDepth = 400, -- draw in front of other stuff
 
     init = function(e,x,y)
-        base.entityHelper.initPosition(e,x,y)
+        base.initializers.initXY(e,x,y)
         e.color = {1,1,1,0.25}
         e.scale = 1 + math.random() * 2
         if math.random() > 0.5 then

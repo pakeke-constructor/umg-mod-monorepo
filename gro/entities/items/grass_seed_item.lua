@@ -16,7 +16,7 @@ return placement.newPlaceable({
 
     itemHoldType = "place";
 
-    init = base.entityHelper.initPosition;
+    init = base.initializers.initXY;
 
     spawn = function(x,y) return entities.grass(x,y) end
 })

@@ -29,7 +29,7 @@ return umg.extend("abstract_button", {
             value = NOT_SHOWING_TAG
         }
         ent.rgbTeam = rgbTeam
-        base.entityHelper.initPosition(ent,x,y)
+        base.initializers.initXY(ent,x,y)
     end
 })
 

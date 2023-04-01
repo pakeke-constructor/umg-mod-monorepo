@@ -14,7 +14,7 @@ return {
         diagonal = "road_diagonal"
     }),
 
-    init = base.entityHelper.initPosition
+    init = base.initializers.initXY;
 }
 
 
