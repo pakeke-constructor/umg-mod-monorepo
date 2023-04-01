@@ -1,7 +1,7 @@
 
 import { ParticleSystem, Quad } from "love.graphics";
-import { input as inputAPI } from "./input";
-import { control as controlAPI } from "./control";
+import { input as inputAPI } from "./client/input";
+import { control as controlAPI } from "./client/control";
 
 
 type BaseImage = Quad | string;

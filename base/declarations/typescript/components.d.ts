@@ -1,8 +1,7 @@
 import { BodyType, Shape } from "love.physics";
-import {Color as ColorObject} from "./color";
-import { MouseButton } from "./input";
+import {Color as ColorObject} from "./client/color";
+import { MouseButton } from "./client/input";
 
-export {};
 
 /**
  * @noSelf

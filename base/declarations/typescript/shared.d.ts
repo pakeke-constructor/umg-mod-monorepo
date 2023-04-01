@@ -1,7 +1,10 @@
 /** @noSelfInFile */
 
-import { gravity } from "./gravity";
+import { gravity } from "./shared/gravity";
 
 export interface baseShared {
     readonly gravity: gravity;
+    
+    getGameTime(): number;
+
 }
