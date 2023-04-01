@@ -25,7 +25,10 @@ return umg.extend("abstract_melee", {
     defaultAttackDamage = 1,
     defaultAttackSpeed = 0.4,
 
-    animation = {"huhu1","huhu2","huhu3","huhu2", speed=0.6};
+    animation = {
+        frames = {"huhu1","huhu2","huhu3","huhu2"}, 
+        speed=0.6
+    };
 
     onSell = function(ent)
         if ent.squadron_buff_done then return end

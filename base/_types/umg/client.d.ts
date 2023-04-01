@@ -8,7 +8,7 @@ type Image = import("love.graphics").Image;
 
 
 type Atlas = {
-    draw(quad: Quad, x: number, y: number, r: number|undefined, sx:number|undefined, sy:number|undefined, ox:number|undefined, oy:number|undefined, kx:number|undefined, ky:number|undefined): void;
+    draw(quad: Quad, x: number, y: number, r?: number, sx?:number, sy?:number, ox?:number, oy?:number, kx?:number, ky?:number): void;
     flush(): void;
     useBatch(use: boolean): void;
     add(image: Image): void;
@@ -16,20 +16,20 @@ type Atlas = {
 
 
 /** @noSelf **/
-declare namespace _clientAPI {          
-    export function on(event: string, callback: (...args: any[]) => void): void;
-    export function send(event: string, ...args: any[]): void;
-    export function getUsername(): string;
+declare interface _clientAPI {          
+    on(event: string, callback: (...args: any[]) => void): void;
+    send(event: string, ...args: any[]): void;
+    getUsername(): string;
 
-    export const atlas: Atlas;
+    readonly atlas: Atlas;
 
-    export namespace assets {
-        export const images: LuaMap<string, Quad>;
-        export const sounds: LuaMap<string, Source>;
+    readonly assets: {
+        readonly images: LuaMap<string, Quad>;
+        readonly sounds: LuaMap<string, Source>;
     }
 }
 
 declare global {
-    const client: (typeof _clientAPI) | undefined;
+    const client: _clientAPI | undefined;
 }
 

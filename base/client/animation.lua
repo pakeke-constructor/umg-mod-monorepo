@@ -24,12 +24,12 @@ local EPSILON = 0.00001
 local function updateEnt(ent)
     local anim = ent.animation
     local spd = anim.speed or DEFAULT_ANIM_SPEED
-    local len = #anim
+    local len = #anim.frames
 
     -- minus epsilon to ensure that we don't hit the top len value,
     -- plus 1 because of lua's 1-based indexing.
     local frame_i = math.floor(((tick % spd) / spd) * len - EPSILON) + 1
-    local frame = anim[frame_i]
+    local frame = anim.frames[frame_i]
     ent.image = frame
 end
 

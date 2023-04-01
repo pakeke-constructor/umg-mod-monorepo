@@ -15,7 +15,6 @@ declare module "math" {
 
 declare global {
 
-
     /** @noSelf **/
     export namespace umg {
         export function on(event: string, callback: (...args: unknown[]) => void): void;
@@ -56,5 +55,4 @@ declare global {
         deleteCallback(callback: (entity: Entity & T) => void): void;
     }
 }
-
 
