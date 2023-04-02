@@ -21,6 +21,9 @@ local color = {1,1,1}
 
 
 function groundTexture.setColor(newcolor)
+    if type(newcolor) ~= "table" then
+        error("Bad argument to groundTexture.setColor, expects a color as an argument", 2)
+    end
     color = newcolor;
 end
 

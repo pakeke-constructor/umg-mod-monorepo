@@ -3,6 +3,6 @@
 return {
     image = "ME_Singles_School_16x16_Soccer_Net_3",
 
-    init = base.entityHelper.initPosition
+    init = base.initializers.initXY
 }
 
