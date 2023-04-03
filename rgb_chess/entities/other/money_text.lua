@@ -1,11 +1,6 @@
 
 
-
 return {
-    "x","y", 
-    "moneyCount", 
-    "rgbTeam",
-    "text",
     image = "nothing",
 
     init = function(ent, x, y, rgbTeam)

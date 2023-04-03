@@ -17,5 +17,3 @@ local circlePsys = base.client.particles.newParticleSystem({
 circlePsys:setParticleLifetime(0.3,0.4)
 base.client.particles.define("circle", circlePsys)
 
-
-

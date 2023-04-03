@@ -1,6 +1,6 @@
 
 
-
+-- Damage falloffs for splash damage
 local falloffs = {
     none = function(dmg, x, y, rad) return dmg end;
     linear = function(dmg, x, y, rad)
@@ -15,14 +15,8 @@ local falloffs = {
 
 
 local function applyAttack(attacker_ent, victim_ent, dmg)
-    -- TODO: Allow for damage reduction / damage bonuses here.
-    -- Perhaps tag into a callback? <--- this would be the most flexible way.
-    --  we should have two callbacks; 
-    -- one on the victim for damage reduction,
-    -- and one on the attacker for damage bonuses.
     umg.call("attack", attacker_ent, victim_ent, dmg)
     server.broadcast("attack", attacker_ent, victim_ent, dmg)
-    victim_ent.health = victim_ent.health - dmg
 end
 
 
@@ -62,10 +56,6 @@ end
 
 
 local function attack(ent, target_ent)
-    --[[
-        TODO: Do particle effects here maybe?
-    ]]
-    
     if ent.attackBehaviour.splash then
         doSplash(ent, target_ent)
     else

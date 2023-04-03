@@ -1,0 +1,9 @@
+
+globals:
+  rgb:
+    any: true
+  server:
+    any: true
+
+
+  

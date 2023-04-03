@@ -8,9 +8,6 @@ end
 
 
 return umg.extend("abstract_button", {
-    "nametag",
-    "rerollCost",
-
     onClickServer = function(ent)
         local cost = ent.rerollCost
         local money = rgb.getMoney(ent.rgbTeam)

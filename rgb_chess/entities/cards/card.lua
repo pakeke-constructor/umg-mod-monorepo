@@ -11,17 +11,6 @@ end
     Unit card entity
 ]]
 return {
-    --[[
-    "x","y",
-    "rgbTeam",
-    "rgb",
-    "color",
-    "cost",
-    "cardBuyTarget",
-    "shopIndex",
-    "cardType",
-    ]]
-
     image = "invisible_card",
 
     onClick = function(ent, username, button)

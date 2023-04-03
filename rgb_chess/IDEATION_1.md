@@ -1,7 +1,7 @@
 
 
 
-# Auto chess, just like legends of runeterra.
+# Auto chess
 
 
 --> standard auto-chess mechanics:

@@ -1,85 +1,5 @@
 
 
--- ignore the magic numbers, they just "work" 
--- (They are to do with the dimensions of the card sprites.)
-local UNIT_NAME_OY = -43
-local UNIT_NAME_OX = -26
-
-local UNIT_INFO_OY = -26
-local UNIT_INFO_OX1 = -26
-local UNIT_INFO_OX2 = -6
-local UNIT_INFO_OX3 = 16
-
-local DESCRIPTION_OY = -9
-
-local MOUSE_HOVER_OY = -15
-
-
-local currentTime = 0
-
-
-local fontScale = 1/3
-
-
-
-
-
-
-local function drawUnitCard(ent)
-    local x, y = ent.x, ent.y
-    if base.client.isHovered(ent) then
-        y = y + MOUSE_HOVER_OY
-    end
-    local unitEType = ent.cardBuyTarget
-    local unitCardInfo = unitEType.unitCardInfo
-
-    love.graphics.push("all")
-    love.graphics.setColor(ent.color)
-    base.client.drawImage("unit_card", x, y)
-    
-    love.graphics.setColor(0.2,0.2,0.2)
-    love.graphics.print(
-        unitCardInfo.name, x + UNIT_NAME_OX, y + UNIT_NAME_OY,
-        0,fontScale,fontScale
-    )
-    
-    local health = unitEType.defaultHealth
-    local damageEstimate = rgb.getDamageEstimate(unitEType.defaultAttackDamage, unitEType.defaultAttackSpeed)
-    local damage = ("%.1f"):format(damageEstimate)
-    local color_str = rgb.getColorString(ent.rgb)
-    local description = unitCardInfo.description:gsub(constants.COLOR_SUB_TAG, color_str)
-
-    assert(unitCardInfo.cost,"?")
-    local cost = "$" .. tostring(ent.cost)
-
-    love.graphics.setColor(0.3, 0.1, 0.1)
-    love.graphics.print(
-        tostring(health), x + UNIT_INFO_OX1, y + UNIT_INFO_OY,
-        0,fontScale,fontScale
-    )
-    love.graphics.setColor(0.25, 0.25, 0.05)
-    love.graphics.print(
-        tostring(damage), x + UNIT_INFO_OX2, y + UNIT_INFO_OY,
-        0,fontScale,fontScale
-    )
-    love.graphics.setColor(0.1, 0.3, 0.1)
-    love.graphics.print(
-        tostring(cost), x + UNIT_INFO_OX3, y + UNIT_INFO_OY,
-        0,fontScale,fontScale
-    )
-
-    love.graphics.setColor(0.1,0.1,0.1)
-    love.graphics.scale(fontScale)
-    love.graphics.printf(
-        description, 
-        (x + UNIT_NAME_OX) / fontScale, 
-        (y + DESCRIPTION_OY) / fontScale,
-        160, "left"
-    )
-    
-    love.graphics.pop()
-end
-
 
 
 
@@ -143,30 +63,12 @@ end
 
 
 
-
-local function drawSpellCard(ent)
-    love.graphics.push("all")
-    base.client.drawImage("spell_card", ent.x, ent.y)
-    love.graphics.pop()
-end
-
-
-
-
 local function drawCard(ent)
-    if ent.x and ent.y then
-        if rgb.isUnitCard(ent) then
-            drawUnitCard(ent)
-        else
-            drawSpellCard(ent)
-        end
-    end
+
 end
 
 
-umg.on("gameUpdate",function(dt)
-    currentTime = currentTime + dt
-end)
+
 
 umg.on("drawEntity", function(ent)
     if ent.cardBuyTarget then
@@ -190,11 +92,6 @@ umg.on("slabUpdate", function()
     for _, ent in ipairs(rgbGroup) do
         if ent.rgbTeam == client.getUsername() then
             if base.client.isHovered(ent) then
-                --[[
-                local x, y = mouse.getPosition()
-                local uiscale = base.client.getUIScale()
-                x,y = x/uiscale, y/uiscale
-                ]]
                 drawUnitInfo(ent)
                 entBeingHovered = ent
             end

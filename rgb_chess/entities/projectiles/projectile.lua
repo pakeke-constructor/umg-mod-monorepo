@@ -10,12 +10,6 @@ Used when ranged units attack.
 local constants = require("shared.constants")
 
 return {
-
-    "x", "y",
-    "vx", "vy",
-    "particles",
-    "attackBehaviourProjectile",
-
     speed = constants.PROJECTILE_SPEED,
     image = "nothing",
 

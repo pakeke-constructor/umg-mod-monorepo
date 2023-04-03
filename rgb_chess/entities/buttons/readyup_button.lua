@@ -11,9 +11,6 @@ local CANCEL_READY_NAMETAG = "CANCEL READY"
 
 
 return umg.extend("abstract_button", {
-    "nametag",
-    "rgb_is_ready",
-
     readyUpButton = true,
 
     onClickServer = function(ent)

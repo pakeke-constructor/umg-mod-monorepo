@@ -8,9 +8,6 @@ end
 
 
 return umg.extend("abstract_button", {
-    "nametag",
-    "rerollCost",
-    
     normalColor = {1,0.2,0.2},
     hoverColor = {0.5,0.1,0.1},
 

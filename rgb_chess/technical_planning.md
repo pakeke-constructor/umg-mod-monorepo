@@ -100,6 +100,9 @@ ent.health, ent.maxHealth
 ent.defaultAttackDamage = 10
 ent.attackDamage = 10
 
+ent.defaultManaPower = 5
+ent.manaPower = 5
+
 ent.defaultAttackSpeed = 0.5
 ent.attackSpeed = 0.5
 
@@ -145,8 +148,10 @@ BUFF_TYPES = {
     ATTACK_DAMAGE = "ATTACK_DAMAGE",
     ATTACK_SPEED = "ATTACK_SPEED",
     SPEED = "SPEED",
-    HEALTH = "HEALTH"
+    HEALTH = "HEALTH",
+    SHIELD = "SHIELD"
 }
+
 call("buff", unit, BUFF_TYPE, amount, fromUnit=nil, depth=0)
 call("debuff", unit, BUFF_TYPE, amount, fromUnit=nil, depth=0)
 

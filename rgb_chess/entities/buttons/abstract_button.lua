@@ -10,8 +10,6 @@ end
 
 
 return {
-    "x", "y", "rgbTeam",
-    "color",
     image = "button1",
 
     onUpdate = function(ent)

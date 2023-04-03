@@ -11,8 +11,6 @@ local NOT_SHOWING_TAG = "SHOW STATS"
 
 
 return umg.extend("abstract_button", {
-    "nametag",
-
     onClickClient = function(ent)
         if ent.nametag.value == SHOWING_TAG then
             showDetails.hideDetails()

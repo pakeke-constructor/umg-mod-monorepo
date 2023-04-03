@@ -10,22 +10,7 @@ Generates cards for shop rerolls.
 ]]
 
 
-local tiers = {
-    [1] = {
-        "brute","enhancer","hoodlum","huhu","slime","squash","tanko"
-    },
-
-    [2] = {
-
-    }, 
-
-    [3] = {
-
-    },
-
-    [4] = {
-
-    }
+local unitTiers = {
 }
 
 
@@ -35,12 +20,6 @@ local genCards = {}
 
 
 function genCards.getBuyTarget()
-    local turn = rgb.getTurn()
-    local buf = table.copy(tiers[1])
-    table.shuffle(buf)
-    local ret = server.entities[buf[1]]
-    assert(ret,"??" .. buf[1])
-    return ret
 end
 
 

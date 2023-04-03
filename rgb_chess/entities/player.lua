@@ -25,14 +25,6 @@ end
 
 
 return {
-    "x", "y", "z",
-    "vx", "vy","vz",
-    "controller",
-    "image",
-    "particles",
-
-    "faceDirection",
-
     follow = true;
 
     color = {0.9,0.9,0.9,0.7},
