@@ -4,6 +4,11 @@ globals:
     any: true
   server:
     any: true
+  items:
+    any: true
+  weather:
+    any: true
+
 
 
   

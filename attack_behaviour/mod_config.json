@@ -1,7 +1,8 @@
 {
     "uses": [
       "base",
-      "categories"
+      "categories",
+      "items"
     ],
     
     "baseMod": true

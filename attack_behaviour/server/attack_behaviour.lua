@@ -6,7 +6,7 @@ local attackGroup = umg.group("attackBehaviour")
 
 
 local ATTACK_TYPES = {
-    melee = true, ranged = true, item = true
+    regular = true, item = true
 }
 local FALLOFF_TYPES = {
     linear = true, quadratic = true, none = true
@@ -35,55 +35,38 @@ attackGroup:onAdded(function(ent)
             error("invalid damage falloff value for ent: " .. ent:type())
         end
     end
-
-    if ab.type == "ranged" then
-        assert(ab.projectile and server.entities[ab.projectile], "invalid attackBehaviour.projectile value: " .. tostring(ab.projectile) .. " for ent: " .. ent:type())
-    end
 end)
 
 
 
+local attackTypes = {}
 
 
-local function attackMelee(ent, target_ent)
+function attackTypes.regular(ent, target_ent)
     attack(ent, target_ent)
 end
 
-
-local function attackRanged(ent, target_ent)
-    --[[
-        for ranged attacking.
-        This function spawns a projectile entity.
-    ]]
-    local etype = ent.attackBehaviour.projectile
-    assert(etype and server.entities[etype], "ranged attacker doesn't have a valid projectile")
-    local projectile_ent = server.entities[etype](ent.x, ent.y)
-    assert(projectile_ent:hasComponent("attackBehaviourProjectile"), "This entity is not a projectile! (projectiles require attackBehaviourProjectile component.)")
-    if ent.fireProjectile then
-        ent:fireProjectile(target_ent, projectile_ent)
+function attackTypes.item(ent, target_ent)
+    if target_ent then
+        items.useHoldItem(ent, target_ent)
     end
-    projectile_ent.attackBehaviourProjectile = {
-        target_ent = target_ent;
-        target_x = target_ent.x;
-        target_y = target_ent.y;
-        projector_ent = ent
-    }
 end
 
 
 
-local function attackItem(ent, target_ent)
-    error("not yet implemented.")
-    -- TODO.
+local updateTypes = {} 
+
+function updateTypes.regular(ent)
 end
 
+function updateTypes.item(ent)
+    local target = ent.attackBehaviourTargetEntity
+    if umg.exists(target) then
+        ent.lookX = target.x
+        ent.lookY = target.y
+    end
+end
 
-
-local attackTypes = {
-    melee = attackMelee;
-    ranged = attackRanged;
-    item = attackItem
-}
 
 
 
@@ -133,23 +116,25 @@ local function tryAttack(ent, target, now)
     ent.attackBehaviour_lastAttack = ent.attackBehaviour_lastAttack or now
     local last_attack = ent.attackBehaviour_lastAttack
     if (now - last_attack) > ent.attackSpeed then
-        attackTypes[typ](ent, target)
+        local func = attackTypes[typ]
+        func(ent, target)
         ent.attackBehaviour_lastAttack = now + ((now - last_attack) - ent.attackSpeed)
     end
 end
 
 
-
-local ct = 0
-umg.on("gameUpdate", function(dt)
-    -- Run the function every 5 game frames:
-    ct = ct + 1
-    if ct < 5 then
-        return
-    else
-        ct = 0 
+local function updateAttack(ent)
+    local updateFunc = updateTypes[ent.attackBehaviour.type]
+    if updateFunc then
+        updateFunc(ent)
     end
+end
 
+
+
+
+
+umg.on("@tick", function(dt)
     local now = base.getGameTime()
     for _, ent in ipairs(attackGroup) do
         if ent.attackBehaviour then
@@ -166,6 +151,7 @@ umg.on("gameUpdate", function(dt)
                 ent.attackBehaviourTargetEntity = target -- we do a bit of cacheing
                 tryAttack(ent, target, now)
             end
+            updateAttack(ent)
         end
     end
 end)
