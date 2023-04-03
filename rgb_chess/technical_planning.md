@@ -144,6 +144,7 @@ ent.onEndBattle = function(ent) ... end
 ### Callbacks:
 ```lua
 
+--TODO: Should we do something different??
 BUFF_TYPES = {
     ATTACK_DAMAGE = "ATTACK_DAMAGE",
     ATTACK_SPEED = "ATTACK_SPEED",
