@@ -3,9 +3,8 @@
 local ents = server.entities
 
 
-local uname_to_player = {
+local uname_to_player = {}
 
-}
 
 local function make_player(uname)
     local ent = ents.player(0, 0, uname)
@@ -128,5 +127,6 @@ end)
 
 umg.on("newPlayer", function(uname)
     make_player(uname)
+    print("NEW PLAYER")
 end)
 
