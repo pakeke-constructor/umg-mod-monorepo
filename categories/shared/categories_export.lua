@@ -37,7 +37,7 @@ function categories.iterateChunked(category, x, y)
     iterateChunkedTc(category, x, y)
     local chunk = chunkedCategories.categoryToChunk[category]
     if chunk then
-        return chunk:iterate(x, y)
+        return chunk:iterator(x, y)
     end
 end
 

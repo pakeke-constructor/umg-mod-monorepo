@@ -1,4 +1,6 @@
 
+local droppedItemGroup = umg.group("itemBeingHeld")
+
 
 local itemDrops = {}
 
@@ -17,7 +19,7 @@ itemDrops.PICKUP_DELAY_TIME = PICKUP_DELAY_TIME
 
 if server then
 itemDrops.itemPartition = base.Partition(
-    PICKUP_DISTANCE + 5, PICKUP_DISTANCE + 5
+    PICKUP_DISTANCE + 5
 )
 end
 
@@ -37,7 +39,7 @@ function itemDrops.dropItem(item, x, y)
 
     item.hidden = false
     item.itemBeingHeld = false
-    itemDrops.itemPartition:add(item)
+    itemDrops.itemPartition:addEntity(item)
 
     server.broadcast("dropInventoryItem", item, item.x, item.y)
 end
@@ -48,7 +50,7 @@ function itemDrops.pickupItem(item)
     --[[
         signals for an item entity to be picked up
     ]]
-    itemDrops.itemPartition:remove(item)
+    itemDrops.itemPartition:removeEntity(item)
     server.broadcast("pickUpInventoryItem", item)
     item._item_last_holdtime = nil
     item.hidden = true

@@ -1,20 +1,18 @@
 
 --[[
-    ChunkRegistrys contain chunks,
-    and handle entities nicely.
+    
+Spatial partition object.
 
-    NOTE:
-    Entities must be updated MANUALLY when dealing with ChunkRegistries!
-    This isn't done automatically!!!
 
-    See `chunks.lua` for an example.
+Each spatial partition object has a big map of chunks that
+contain entities.
 
 ]]
-local ChunkRegistry = base.Class("chunks:ChunkRegistry")
+local Partition = base.Class("base:Partition")
 
 
-function ChunkRegistry:init(chunkSize)    
-    -- gotta define in here to capture `self` closure
+function Partition:init(chunkSize)    
+    -- gotta define metatable in here to capture `self` closure
     local array2dOfChunk_mt = {
         __index = function(t,x)
             t[x] = setmetatable({}, {
@@ -43,12 +41,12 @@ end
 
 
 
-function ChunkRegistry:getChunkIndexes(x, y)
+function Partition:getChunkIndexes(x, y)
     return math.floor(x / self.chunkSize), math.floor(y / self.chunkSize)
 end
 
 
-function ChunkRegistry:removeEmptyChunks()
+function Partition:removeEmptyChunks()
     for i=#self.chunksList, 1, -1 do
         local c = self.chunksList[i]
         if c:isEmpty() then
@@ -57,11 +55,11 @@ function ChunkRegistry:removeEmptyChunks()
     end
 end
 
-function ChunkRegistry:getLastXY(ent)
+function Partition:getLastXY(ent)
     return self.entityToLastX[ent], self.entityToLastY[ent]
 end
 
-function ChunkRegistry:setLastXY(ent)
+function Partition:setLastXY(ent)
     self.entityToLastX[ent] = ent.x
     self.entityToLastY[ent] = ent.y
 end
@@ -71,7 +69,7 @@ end
 --[[
     moves an entity into a different chunk if required
 ]]
-function ChunkRegistry:updateEnt(ent)
+function Partition:updateEnt(ent)
     local entX, entY = self:getLastXY(ent)
     local ix, iy = self:getChunkIndexes(entX, entY)
     local ix2, iy2 = self:getChunkIndexes(ent.x, ent.y)
@@ -88,14 +86,14 @@ end
 
 
 
-function ChunkRegistry:addEntity(ent)
+function Partition:addEntity(ent)
     local ix, iy = self:getChunkIndexes(ent.x, ent.y)
     self.chunks[ix][iy]:add(ent)
     self:setLastXY(ent)
 end
 
 
-function ChunkRegistry:removeEntity(ent)
+function Partition:removeEntity(ent)
     local lastx, lasty = self:getLastXY()
     local ix, iy = self:getChunkIndexes(lastx or 0, lasty or 0)
     self.chunks[ix][iy]:remove(ent)
@@ -107,7 +105,7 @@ end
 
 local forEachAssert = base.typecheck.assert("number", "number", "function")
 
-function ChunkRegistry:forEach(x, y, func)
+function Partition:forEach(x, y, func)
     forEachAssert(x,y,func)
     
     local ix, iy = self:getChunkIndexes(x, y)
@@ -135,7 +133,7 @@ end
 
 local iterAssert = base.typecheck.assert("number", "number")
 
-function ChunkRegistry:iterator(x, y)
+function Partition:iterator(x, y)
     iterAssert(x,y)
     local ix, iy = self:getChunkIndexes(x, y)
     local dx = -1
@@ -169,5 +167,5 @@ end
 
 
 
-return ChunkRegistry
+return Partition
 

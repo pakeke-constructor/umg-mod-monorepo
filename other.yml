@@ -10,4 +10,9 @@ globals:
     any: true
   chunks:
     any: true
+  categories:
+    any: true
+  assert:
+    any: true
+
 
