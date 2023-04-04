@@ -1,20 +1,16 @@
 
-
-local constants = require("shared.constants")
-
-
-local globalChunkRegistry = chunks.ChunkRegistry(constants.CHUNK_SIZE)
+local getAllCategories = require("shared.get_all_categories")
 
 
 
 local categoryMoveGroup = umg.group("x", "y", "vx", "vy", "category")
-
 local categoryGroup = umg.group("x", "y", "category")
 
 
 
 
 local categoryToChunk = {}
+
 
 local function getCategoryChunk(category)
     if not categoryToChunk[category] then
@@ -25,34 +21,45 @@ end
 
 
 
+function addEntity(ent)
+    local categories = getAllCategories(ent)
+    for _, cat in ipairs(categories) do
+        getCategoryChunk(cat):addEntity(ent)
+    end
+end
 
-categoryMoveGroup:onAdded(function(ent)
-    local chunks = getAllChunks(ent)
-    globalChunkRegistry:addEntity(ent)
-end)
+
+function removeEntity(ent)
+    local categories = getAllCategories(ent)
+    for _, cat in ipairs(categories) do
+        getCategoryChunk(cat):removeEntity(ent)
+    end
+end
 
 
-categoryMoveGroup:onRemoved(function(ent)
-    globalChunkRegistry:removeEntity(ent)
-end)
+
+categoryGroup:onAdded(addEntity)
+
+categoryGroup:onRemoved(removeEntity)
+
 
 
 
 umg.on("@tick", function()
     for _, ent in ipairs(categoryMoveGroup) do
-        globalChunkRegistry:updateEnt(ent)
+        local categories = getAllCategories(ent)
+        for _, cat in ipairs(categories) do
+            getCategoryChunk(cat):removeEntity(ent)
+        end
     end
 end)
 
 
-function chunks.iter(x,y)
-    return globalChunkRegistry:iterate(x,y)
-end
+local chunkedCategories = {
+    categoryToChunk = categoryToChunk;
+    addEntity = addEntity;
+    removeEntity = removeEntity
+}
 
-
-function chunks.getChunkSize()
-    return constants.CHUNK_SIZE
-end
-
-
+return chunkedCategories
 
