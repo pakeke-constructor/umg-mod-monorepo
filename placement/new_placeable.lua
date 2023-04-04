@@ -56,7 +56,7 @@ local function closeTo(rule, item, holder, bx, by)
         return false -- none, deny
     end
     local count = 0
-    for _, ent in placementCategories[c]:ipairs() do
+    for _, ent in ipairs(placementCategories[c]) do
         -- TODO: Should we check z axis here?
         if math.distance(ent.x-bx, ent.y-by) < rule.distance then
             count = count + 1
@@ -74,7 +74,7 @@ local function awayFrom(rule, item, holder, bx, by)
     if not rawget(placementCategories, c) then
         return true -- none, we are fine lol
     end
-    for _, ent in placementCategories[c]:ipairs() do
+    for _, ent in ipairs(placementCategories[c]) do
         -- TODO: Should we check z axis here?
         if math.distance(ent.x-bx, ent.y-by) < rule.distance then
             return false

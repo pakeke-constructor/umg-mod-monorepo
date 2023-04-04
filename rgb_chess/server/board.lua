@@ -131,7 +131,7 @@ end
 
 
 function Board:iterUnits()
-    return categories.getSet(self:getTeam()):ipairs()
+    return ipairs(categories.getSet(self:getTeam()))
 end
 
 

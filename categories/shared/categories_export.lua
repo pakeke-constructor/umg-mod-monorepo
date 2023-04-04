@@ -26,7 +26,7 @@ local iterateTc = base.typecheck.assert("string")
 
 function categories.iterate(category)
     iterateTc(category)
-    return regularCategories.categoryMap[category]:ipairs()
+    return ipairs(regularCategories.categoryMap[category])
 end
 
 

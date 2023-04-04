@@ -95,7 +95,7 @@ end
 
 function Partition:update()
     self.updated_this_frame = true
-    for _, obj in self.moving_objects:ipairs() do
+    for _, obj in ipairs(self.moving_objects) do
         self:updateObj(obj)
     end
 end

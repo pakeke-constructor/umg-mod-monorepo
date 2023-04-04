@@ -37,7 +37,7 @@ local function doSplash(ent, hitx, hity, category)
     local splash = ent.attackBehaviour.splash
     
     if category then
-        for _, e in categories.getSet(category):ipairs() do
+        for _, e in ipairs(categories.getSet(category)) do
             if math.distance(e.x-hitx, e.y-hity) <= splash.radius then
                 if e ~= ent then
                     -- we dont want the entity hitting itself!

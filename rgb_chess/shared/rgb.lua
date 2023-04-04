@@ -122,7 +122,7 @@ end
 
 function rgb.iterUnits(rgbTeam)
     assert(rgbTeam, "rgb.iterUnits not given rgbTeam")
-    return categories.getSet(rgbTeam):ipairs()
+    return ipairs(categories.getSet(rgbTeam))
 end
 
 

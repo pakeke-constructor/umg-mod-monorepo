@@ -13,7 +13,7 @@ local function findClosestEntity(src_ent, category)
     ]]
     local best_dist = math.huge
     local best_ent = nil
-    for _, ent in categories.getSet(category):ipairs() do
+    for _, ent in ipairs(categories.getSet(category)) do
         if ent ~= src_ent then
             local dist = math.distance(ent, src_ent)
             if dist < best_dist then

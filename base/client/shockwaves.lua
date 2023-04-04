@@ -14,7 +14,7 @@ local shockwaveSet = Set()
 
 
 umg.on("gameUpdate", function(dt)
-    for _,sw in shockwaveSet:ipairs()do
+    for _,sw in ipairs(shockwaveSet) do
         sw:update(dt)
         if sw.isFinished then
             shockwaveSet:remove(sw)
@@ -27,7 +27,7 @@ end)
 
 
 umg.on("drawEffects", function()
-    for _,sw in shockwaveSet:ipairs() do
+    for _,sw in ipairs(shockwaveSet) do
         sw:draw()
     end
 end)

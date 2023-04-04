@@ -8,7 +8,7 @@ local function selectNew(ent, category, range)
     if not category then
         return
     end
-    for _, e in categories.getSet(category):ipairs() do
+    for _, e in ipairs(categories.getSet(category)) do
         if e ~= ent and math.distance(ent, e) <= range then
             return e
         end

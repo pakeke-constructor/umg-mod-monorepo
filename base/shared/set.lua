@@ -7,7 +7,6 @@ local Set = Class("base:Set")
 
 
 function Set:init(initial)
-    self.objects  = {}
     self.pointers = {}
     self.size     = 0
     if initial then
@@ -21,12 +20,11 @@ end
 --- Clears the sSet completely.
 function Set:clear()
     local obj
-    local objs = self.objects
     local ptrs = self.pointers
     for i=1, self.size do
-        obj = objs[i]
+        obj = self[i]
         ptrs[obj] = nil
-        objs[i] = nil    
+        self[i] = nil    
     end
 
     self.size = 0
@@ -43,19 +41,11 @@ function Set:add(obj)
 
    local size = self.size + 1
 
-   self.objects[size] = obj
+   self[size] = obj
    self.pointers[obj] = size
    self.size          = size
 
    return self
-end
-
-
-
-
--- iterates over a Set
-function Set:ipairs()
-    return ipairs(self.objects)
 end
 
 
@@ -76,14 +66,14 @@ function Set:remove(obj, index)
     local size  = self.size
 
     if index == size then
-        self.objects[size] = nil
+        self[size] = nil
     else
-        local other = self.objects[size]
+        local other = self[size]
 
-        self.objects[index]  = other
+        self[index]  = other
         self.pointers[other] = index
 
-        self.objects[size] = nil
+        self[size] = nil
     end
 
     self.pointers[obj] = nil
@@ -92,12 +82,6 @@ function Set:remove(obj, index)
     return self
 end
 
-
-
--- Gets the object at `index` in the Set
-function Set:get(index)
-   return self.objects[index]
-end
 
 
 -- returns true if the Set contains `obj`, false otherwise.

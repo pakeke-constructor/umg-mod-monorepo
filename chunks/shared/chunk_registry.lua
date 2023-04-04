@@ -115,7 +115,7 @@ function ChunkRegistry:forEach(x, y, func)
         for yy = iy-1, iy+1, 1 do
             if rawget(self.chunks, xx) and rawget(self.chunks[xx], yy) then
                 local chunkSet = self.chunks[xx][yy]
-                for _, ent in chunkSet:ipairs() do
+                for _, ent in ipairs(chunkSet) do
                     func(ent)
                 end
             end
