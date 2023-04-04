@@ -16,12 +16,6 @@ return {
     attackBehaviour = {
         type = "ranged",
         range = RANGE,
-
-        projectile = "projectile", -- the entity that is being shot.
-        projectileCount = 1,
-        fireProjectile = function(ent, targ, proj)
-            proj.color = ent.color
-        end
     };
 
     moveBehaviour = {

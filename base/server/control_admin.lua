@@ -100,7 +100,8 @@ local function filterPlayerPosition(sender_username, ent, x,y,z)
     if not umg.exists(ent) then
         return false -- DENY! Non existant entity
     end
-    if type(x) ~= "number" or type(y) ~= "number" or (z and (type(z) ~= "number")) then
+    z = z or 0
+    if type(x) ~= "number" or type(y) ~= "number" or type(z) ~= "number" then
         return false -- bad type for x,y, or z
     end
     if State.getCurrentState() ~= "game" then
@@ -113,7 +114,7 @@ local function filterPlayerPosition(sender_username, ent, x,y,z)
         return false
     end
 
-    local dist = math.distance(ent.x-x, ent.y-y, ent.z-z)
+    local dist = math.distance(ent.x-x, ent.y-y, (ent.z or 0)-z)
     if dist > FORCE_SYNC_THRESHOLD then
         -- TODO: This forceSync call is bad, ddos opportunity here.
         -- Perhaps we should instead mark this entity as "should force sync"

@@ -26,6 +26,8 @@ return {
     };
 
     bobbing = {},
+
+    moveRotation = {},
     
     controllable = {};
 

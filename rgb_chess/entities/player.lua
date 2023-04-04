@@ -16,7 +16,7 @@ local function init(ent, x, y)
         spread = {x = 3, y = 0}
     }
 
-    base.initializers.initXY(ent, x, y);
+    base.initializers.initVxVy(ent, x, y);
 end
 
 
@@ -48,7 +48,6 @@ return {
 
     speed = PLAYER_SPEED;
     agility = PLAYER_SPEED * 20;
-
 
     init = init
 }

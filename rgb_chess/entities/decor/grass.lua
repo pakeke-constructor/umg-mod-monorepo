@@ -6,8 +6,6 @@ end
 
 
 return {
-    "image",
-    "x", "y",
     swaying = {},
 
     init = function(ent, x, y)

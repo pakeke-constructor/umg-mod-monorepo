@@ -1,19 +1,19 @@
 
 --[[
 
-Projectile entity.
-
-Used when ranged units attack.
+Bullet entity;
+used when ranged units attack
 
 ]]
+
 
 local constants = require("shared.constants")
 
 return {
     speed = constants.PROJECTILE_SPEED,
-    image = "nothing",
+    image = "bullet",
 
-    color = {0.25,0.25,0.25},
+    moveRotation = {};
 
     moveBehaviour = {
         type = "follow"

@@ -11,7 +11,7 @@
 - Change the color of all [color] units
 - Reroll all items that are held by [color] units
 - Subtract [color] from all units  (e.g. subtract BLU from AQU, becomes GRN)
-
+- Deletes a random [color] ally and gives 3 [color] items
 
 
 
@@ -27,6 +27,7 @@ Obviously, we will have the basic units:
 - On win round:  Spawn a random [color] item
 - Turn start:  If there are only [color] units, give a free reroll
 - Turn end: give all [color] allys +1/+1
+- On buy: mimic the health of the healthiest [color] ally
 
 - Backpack unit, Has a very large inventory space
 - Reroller, Has inventory ui, allowing to reroll items. 2 items = 1 reroll

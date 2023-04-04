@@ -13,23 +13,6 @@ end
     entities that extend this will inherit these components:
 ]]
 return {
-    "x", "y",
-    "vx", "vy",
-    "image",
-    "color",
-    "category",
-
-    "rgb",
-    "rgbTeam", -- the team this entity is in
-    "rgb_saveStats", -- a table for saving entity stats before combat.
-
-    "attackDamage", "attackSpeed",
-    "health", "maxHealth",
-    "speed",
-
-    "cardType",
-    "squadron",
-
     onClick = function(ent, username, button)
         if client then
             if username == ent.rgbTeam and button == 1 then
@@ -39,12 +22,12 @@ return {
     end;
 
     physics = {
-        shape = physics.newCircleShape(5);
+        shape = love.physics.newCircleShape(5);
         friction = 7
     };
 
     attackBehaviour = {
-        type = "melee",
+        type = "regular",
         range = MELEE_RANGE
     };
 
