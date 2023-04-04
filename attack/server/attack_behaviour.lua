@@ -87,26 +87,39 @@ end)
 
 
 
+
+local function pollClosestEntity(src_ent, ent, best_ent, best_dist)
+    if ent ~= src_ent and ent:hasComponent("health") then
+        -- we don't want to attack self, and we don't want to hit an entity without
+        -- a health component (that wouldn't make sense.)
+        if not umg.exists(ent) then
+            error("what the fuck")
+        end
+        local dist = math.distance(ent, src_ent)
+        if dist < best_dist then
+            best_dist = dist
+            best_ent = ent
+        end
+    end
+    return best_ent, best_dist
+end
+
+
+
 local function findClosestEntity(src_ent, category)
     --[[
         finds the closest entity to `src_ent` in category `category`.
-
-        TODO: Do spatial partitioning for this.
     ]]
     local best_dist = math.huge
     local best_ent = nil
-    for _, ent in categories.getSet(category):ipairs() do
-        if ent ~= src_ent and ent:hasComponent("health") then
-            -- we don't want to attack self, and we don't want to hit an entity without
-            -- a health component (that wouldn't make sense.)
-            if not umg.exists(ent) then
-                error("what the fuck")
-            end
-            local dist = math.distance(ent, src_ent)
-            if dist < best_dist then
-                best_dist = dist
-                best_ent = ent
-            end
+    local x,y = src_ent.x, src_ent.y
+    if category then
+        for _, ent in categories.iterateChunked(category,x,y) do 
+            best_ent, best_dist = pollClosestEntity(ent)
+        end
+    else -- no category, so search all entities
+        for _, ent in chunks.iterate(x,y) do
+            best_ent, best_dist = pollClosestEntity(ent)
         end
     end
     return best_ent, best_dist
@@ -147,7 +160,7 @@ umg.on("@tick", function(dt)
                 target = nil
             end
             local targetCategory = ent.attackBehaviourTargetCategory or ent.attackBehaviour.target
-            if targetCategory and (not target) then
+            if (not target) then
                 target = findClosestEntity(ent, targetCategory)
             end
             if umg.exists(target) and math.distance(target, ent) < ent.attackBehaviour.range then

@@ -1,6 +1,4 @@
 
-local getAllCategories = require("shared.get_all_categories")
-
 local regularCategories = require("shared.categories")
 local chunkedCategories = require("shared.chunk_categories")
 
@@ -16,14 +14,27 @@ function categories.getSet(category)
     return regularCategories.categoryMap[category]
 end
 
+function categories.getChunk(category)
+    assert(category, "categories.getEntities(category) requires a valid category as first argument.")
+    return chunkedCategories.categoryToChunk[category]
+end
 
 
-function categories.ipairs(category)
+
+
+local iterateTc = base.typecheck.assert("string")
+
+function categories.iterate(category)
+    iterateTc(category)
     return regularCategories.categoryMap[category]:ipairs()
 end
 
 
+
+local iterateChunkedTc = base.typecheck.assert("string", "number", "number")
+
 function categories.iterateChunked(category, x, y)
+    iterateChunkedTc(category, x, y)
     local chunk = chunkedCategories.categoryToChunk[category]
     if chunk then
         return chunk:iterate(x, y)

@@ -163,7 +163,7 @@ function ChunkRegistry:iterate(x, y)
 
         local ent = currentChunk:get(chunkI)
         chunkI = chunkI + 1
-        return ent
+        return chunkI, ent
     end
 end
 
