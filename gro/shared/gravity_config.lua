@@ -31,7 +31,7 @@ base.gravity.setGroundTest(function(ent)
     if ent.z > 0 then
         return false
     end
-    for gtile in tilePartition:iter(ent.x, ent.y) do
+    for gtile in tilePartition:iterate(ent.x, ent.y) do
         local dist = math.distance(gtile.x - ent.x, gtile.y - ent.y)
         if dist <= TILE_SIZE and ent.z > -50 then
             return true

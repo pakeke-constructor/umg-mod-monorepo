@@ -54,11 +54,10 @@ end
 
 
 -- iterates over a Set
-function Set:iter()
+function Set:ipairs()
     return ipairs(self.objects)
 end
 
-Set.ipairs = Set.iter -- alias
 
 
 

@@ -135,7 +135,7 @@ end
 
 local iterAssert = base.typecheck.assert("number", "number")
 
-function ChunkRegistry:iter(x, y)
+function ChunkRegistry:iterate(x, y)
     iterAssert(x,y)
     local ix, iy = self:getChunkIndexes(x, y)
     local dx = -1

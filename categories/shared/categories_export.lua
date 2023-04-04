@@ -1,5 +1,5 @@
 
-local categoryMap = require("shared.categories")
+local categorySets = require("shared.categories")
 
 local categories = {}
 
@@ -8,20 +8,19 @@ local categories = {}
 
 function categories.getSet(category)
     assert(category, "categories.getEntities(category) requires a valid category as first argument.")
-    return categoryMap[category]
+    return categorySets[category]
 end
 
 
 
-function categories.ipairs(category)
-    return categoryMap[category]:iter()
-end
-
-function categories.iter(category)
-    return categoryMap[category]:iter()
+function categories.iterateAll(category)
+    return categorySets[category]:ipairs()
 end
 
 
+function categories.iterateChunked(x, y, category)
+
+end
 
 
 
@@ -40,14 +39,14 @@ function categories.changeEntityCategory(ent, newCategory)
             -- its a list of categories:
             for i=1, #ent.category do
                 local c = ent.category[i]
-                if rawget(categoryMap, c) then
-                    categoryMap[c]:remove(ent)
+                if rawget(categorySets, c) then
+                    categorySets[c]:remove(ent)
                 end
             end
         else -- its just a category string:
             local c = ent.category
-            if rawget(categoryMap, c) then
-                categoryMap[c]:remove(ent)
+            if rawget(categorySets, c) then
+                categorySets[c]:remove(ent)
             end
         end
     end
@@ -57,13 +56,13 @@ function categories.changeEntityCategory(ent, newCategory)
     if type(newCategory) == "table" then
         -- this entity has multiple categories.
         for _, c in ipairs(newCategory) do
-            categoryMap[c]:add(ent)
+            categorySets[c]:add(ent)
         end
     else
         if type(newCategory) ~= "string" then 
             error("newCategory value must be string or list of strings: " .. tostring(ent))
         end
-        categoryMap[newCategory]:add(ent)
+        categorySets[newCategory]:add(ent)
     end
     ent.category = newCategory
 end

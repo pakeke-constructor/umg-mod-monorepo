@@ -24,7 +24,7 @@ local function getFreeSource(src)
     else
         local srcSet = availableSourceClones[src]
         assert(srcSet, "srcSet was nil, why? (src: " .. tostring(src) .." )")
-        for _, clone in srcSet:iter() do
+        for _, clone in srcSet:ipairs() do
             if not clone:isPlaying() then
                 return clone
             end

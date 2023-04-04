@@ -69,7 +69,7 @@ end
 
 
 umg.on("drawIndex", function( z_dep )
-    for _, emtr in drawingPSyses[z_dep]:iter() do
+    for _, emtr in drawingPSyses[z_dep]:ipairs() do
         drawEmitter(emtr)
     end
 end)
@@ -85,7 +85,7 @@ local function isFinished(emitter)
 end
 
 umg.on("gameUpdate", function(dt)
-    for _, emitr in in_use:iter() do
+    for _, emitr in in_use:ipairs() do
         emitr.psys:update(dt)
         emitr.runtime = emitr.runtime + dt
         if isFinished(emitr) then

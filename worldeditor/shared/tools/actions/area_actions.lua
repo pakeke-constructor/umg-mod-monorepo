@@ -195,6 +195,7 @@ function AreaEntityAction:apply(area, excludeArea)
     local x,y,w,h = area.x, area.y, area.w, area.h
     assertNumbers4(x,y,w,h)
 
+    for ent in chunks.
     chunks.forEach(x, y, function(ent)
         if inArea(ent.x,ent.y, area) and (not inArea(ent.x, ent.y, excludeArea)) then
             self.entityAction:apply(ent)

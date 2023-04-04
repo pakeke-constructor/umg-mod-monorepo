@@ -6,7 +6,7 @@ local attackGroup = umg.group("attackBehaviour")
 
 
 local ATTACK_TYPES = {
-    regular = true, item = true
+    melee = true, ranged = true, item = true
 }
 local FALLOFF_TYPES = {
     linear = true, quadratic = true, none = true
@@ -42,21 +42,24 @@ end)
 local attackTypes = {}
 
 
-function attackTypes.regular(ent, target_ent)
+function attackTypes.melee(ent, target_ent)
+    umg.call("meleeAttack", ent, target_ent)
     attack(ent, target_ent)
 end
 
 function attackTypes.item(ent, target_ent)
-    if target_ent then
-        items.useHoldItem(ent, target_ent)
-    end
+    umg.call("itemAttack", ent, target_ent)
+    items.useHoldItem(ent, target_ent)
 end
 
+function attackTypes.ranged(ent, target_ent)
+    umg.call("rangedAttack", ent, target_ent)
+end
 
 
 local updateTypes = {} 
 
-function updateTypes.regular(ent)
+function updateTypes.melee(ent)
 end
 
 function updateTypes.item(ent)
@@ -92,7 +95,7 @@ local function findClosestEntity(src_ent, category)
     ]]
     local best_dist = math.huge
     local best_ent = nil
-    for _, ent in categories.getSet(category):iter() do
+    for _, ent in categories.getSet(category):ipairs() do
         if ent ~= src_ent and ent:hasComponent("health") then
             -- we don't want to attack self, and we don't want to hit an entity without
             -- a health component (that wouldn't make sense.)

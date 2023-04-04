@@ -8,39 +8,54 @@ local categoryMap = setmetatable({}, {
 })
 
 
-local categoryEntities = umg.group("x", "y", "category")
+local categoryGroup = umg.group("x", "y", "category")
 
 
-categoryEntities:onAdded(function(ent)
+
+local function getAllCategories(ent)
+    --[[
+        Entities can store categories in two different ways:
+
+        ent.category = "category1"
+        ent.category = {"category1", "category2", "categoryABC"}
+    ]]
     local category = ent.category
-    if not category then 
+    local returnArray
+    if type(category) == "table" then
+        returnArray = category
+    elseif type(category) == "string" then
+        returnArray = {category}
+    else
+        error("Bad category component for entity " .. ent:type())
+    end
+    for _, c in ipairs(returnArray) do
+        assert(type(c) == "string", "Bad category component for entity " .. ent:type())
+    end
+end
+
+
+
+categoryGroup:onAdded(function(ent)
+    if not ent.category then 
         return -- assume that this entity doesn't have a category yet.
     end
 
-    -- if ent.category is not constant, there will be issues.
-    if type(category) == "table" then
-        -- this entity has multiple categories.
-        for _, c in ipairs(category) do
-            categoryMap[c]:add(ent)
-        end
-    else
-        assert(type(category) == "string", ".category value must be string or list of strings: " .. tostring(ent))
+    local allCategories = getAllCategories(ent)
+    for _, category in ipairs(allCategories) do
         categoryMap[category]:add(ent)
+        assert(type(category) == "string", ".category value must be string or list of strings: " .. tostring(ent))
     end
 end)
 
 
-categoryEntities:onRemoved(function(ent)
-    local category = ent.category
-    if not category then
+
+categoryGroup:onRemoved(function(ent)
+    if not ent.category then
         return -- nothing much we can do here!
     end
-    if type(category) == "table" then
-        -- this entity has multiple categories.
-        for _, c in ipairs(category) do
-            categoryMap[c]:remove(ent)
-        end
-    else
+
+    local allCategories = getAllCategories(ent)
+    for _, category in ipairs(allCategories) do
         categoryMap[category]:remove(ent)
     end
 end)

@@ -25,7 +25,7 @@ return {
 
         ent.particles = {
             type = "circle",
-            rate = 30
+            rate = 20
         }
     end
 }

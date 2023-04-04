@@ -95,7 +95,7 @@ end
 
 function Partition:update()
     self.updated_this_frame = true
-    for _, obj in self.moving_objects:iter() do
+    for _, obj in self.moving_objects:ipairs() do
         self:updateObj(obj)
     end
 end
@@ -264,11 +264,11 @@ do
     -- Iterates over spacial Partition that `obj_or_x` is in. (including `obj`)
     -- If `x` and `y` are numbers, will iterate over that spacial positioning Partition.
     
-    function Partition:iter(obj_or_x ,y_)
+    function Partition:iterate(obj_or_x ,y_)
         if not y_ then
-            assert(umg.exists(obj_or_x), "Partition:iter(ent) requires an entity as an argument.\nThe partition will iterate objects surrounding the entity.")
+            assert(umg.exists(obj_or_x), "Partition:iterate(ent) requires an entity as an argument.\nThe partition will iterate objects surrounding the entity.")
         else
-            assert(type(obj_or_x) == "number" and type(y_) == "number", "Partition:iter(x,y) requires numbers as an iteration target area")
+            assert(type(obj_or_x) == "number" and type(y_) == "number", "Partition:iterate(x,y) requires numbers as an iteration target area")
         end
         local inst = { } -- The state of this iteration.
                          -- We can't use closures, because locals are shared

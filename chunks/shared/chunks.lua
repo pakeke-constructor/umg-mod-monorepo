@@ -45,12 +45,13 @@ local chunks = {}
 chunks.ChunkRegistry = ChunkRegistry
 
 
-function chunks.forEach(x, y, func)
-    return globalChunkRegistry:forEach(x,y,func)
+
+function chunks.iterate(x,y)
+    return globalChunkRegistry:iterate(x,y)
 end
 
-function chunks.iter(x,y)
-    return globalChunkRegistry:iter(x,y)
+function chunks.getChunkSize()
+    return constants.CHUNK_SIZE
 end
 
 
