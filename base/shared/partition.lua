@@ -69,7 +69,7 @@ end
 --[[
     moves an entity into a different chunk if required
 ]]
-function Partition:updateEnt(ent)
+function Partition:updateEntity(ent)
     local entX, entY = self:getLastXY(ent)
     local ix, iy = self:getChunkIndexes(entX, entY)
     local ix2, iy2 = self:getChunkIndexes(ent.x, ent.y)
@@ -103,6 +103,9 @@ end
 
 
 
+
+
+
 local forEachAssert = base.typecheck.assert("number", "number", "function")
 
 function Partition:forEach(x, y, func)
@@ -129,6 +132,22 @@ end
 local function tryGetChunk(self,ix,iy)
     return rawget(self.chunks, ix) and rawget(self.chunks[ix], iy)
 end
+
+
+
+
+function Partition:contains(ent)
+    local entX, entY = self:getLastXY(ent)
+    local ix, iy = self:getChunkIndexes(entX, entY)
+    local chunk = tryGetChunk(ix,iy)
+    if chunk and chunk:has(ent) then
+        return true
+    end
+    return false
+end
+
+
+
 
 
 local iterAssert = base.typecheck.assert("number", "number")

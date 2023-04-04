@@ -22,12 +22,14 @@ local currentTime = love.timer.getTime()
 
 
 itemGroup:onAdded(function(e)
-    itemDrops.itemPartition:add(e)
+    if not e.itemBeingHeld then
+        itemDrops.itemPartition:addEntity(e)
+    end
 end)
 
 
 itemGroup:onRemoved(function(e)
-    itemDrops.itemPartition:remove(e)
+    itemDrops.itemPartition:removeEntity(e)
 end)
 
 
@@ -64,7 +66,7 @@ local function tryPickUpHold(ent, picked)
     local best_item
     local best_dist = math.huge
 
-    for item in itemDrops.itemPartition:foreach(ent.x, ent.y) do
+    for _, item in itemDrops.itemPartition:iterator(ent.x, ent.y) do
         if item.itemHoldType and (not item.itemBeingHeld) and (not picked[item]) then 
             -- then the item is on the ground
             local d = math.distance(ent, item)
@@ -92,7 +94,7 @@ local function tryPickUpInventory(ent, picked)
     local best_dist = math.huge
 
     local free_ix, free_iy = ent.inventory:getFreeSpace()
-    for item in itemDrops.itemPartition:foreach(ent.x, ent.y) do
+    for _, item in itemDrops.itemPartition:iterator(ent.x, ent.y) do
         if (not item.itemBeingHeld) and (not picked[item]) then 
             -- then the item is on the ground
             local d = math.distance(ent, item)
@@ -131,12 +133,27 @@ end
 
 
 
+local function updatePartition()
+    for _, ent in ipairs(pickUpGroup) do
+        if ent.itemBeingHeld then
+            ent.hidden = true
+            if itemDrops.itemPartition:contains(ent) then
+                itemDrops.itemPartition:removeEntity(ent)
+            end
+        else
+            ent.hidden = false
+            itemDrops.itemPartition:updateEntity(ent)
+        end
+    end
+end
+
+
 
 local ct = 0
 local LOOP_CT = 8
 
-umg.on("gameUpdate", function(dt)
-    -- This function runes once every LOOP_CT frames:
+umg.on("@tick", function(dt)
+    -- This function runs once every LOOP_CT frames:
     ct = ct + 1
     if ct < LOOP_CT then
         return -- return early
@@ -146,8 +163,9 @@ umg.on("gameUpdate", function(dt)
     -- ==========
     currentTime = base.getGameTime()
 
+    updatePartition()
+
     local picked = {}
-    itemDrops.itemPartition:update(dt)
     for _, ent in ipairs(pickUpGroup) do
         if ent:isRegular("inventory") and ent.inventory then
             tryPickUpInventory(ent, picked)

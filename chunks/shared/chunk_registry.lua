@@ -71,7 +71,7 @@ end
 --[[
     moves an entity into a different chunk if required
 ]]
-function ChunkRegistry:updateEnt(ent)
+function ChunkRegistry:updateEntity(ent)
     local entX, entY = self:getLastXY(ent)
     local ix, iy = self:getChunkIndexes(entX, entY)
     local ix2, iy2 = self:getChunkIndexes(ent.x, ent.y)
