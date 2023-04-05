@@ -1,7 +1,7 @@
 
 local Board = require("server.board")
 
-local spawnEntity = require("server.spawn_entity")
+local spawnEntity = require("server.shop.spawn_entity")
 
 
 

@@ -14,7 +14,7 @@ local categoryToChunk = {}
 
 local function getCategoryChunk(category)
     if not categoryToChunk[category] then
-        categoryToChunk[category] = chunks.ChunkRegistry(chunks.getChunkSize())
+        categoryToChunk[category] = base.Partition(chunks.getChunkSize())
     end
     return categoryToChunk[category]
 end

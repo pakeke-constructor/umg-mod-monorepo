@@ -14,5 +14,7 @@ globals:
     any: true
   assert:
     any: true
+  attack:
+    any: true
 
 

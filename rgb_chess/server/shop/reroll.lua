@@ -1,7 +1,7 @@
 
 local Board = require("server.board")
 
-local buy = require("server.buy")
+local buy = require("server.shop.buy")
 local genCards = require("server.gen.generate_cards")
 
 

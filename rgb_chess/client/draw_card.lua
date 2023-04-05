@@ -51,7 +51,7 @@ local function drawUnitInfo(ent)
 
     Slab.Text("Contains:")
     for colname, col in pairs(rgb.COLS) do
-        if rgb.areMatchingColors(col, ent.rgb) then
+        if rgb.match(col, ent.rgb) then
             Slab.Text(colname .. "  ", {Color = col})
             Slab.SameLine()
         end

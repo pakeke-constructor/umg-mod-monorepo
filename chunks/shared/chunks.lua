@@ -2,7 +2,6 @@
 
 local constants = require("shared.constants")
 
-local ChunkRegistry = require("shared.chunk_registry")
 
 
 
@@ -10,7 +9,7 @@ local ChunkRegistry = require("shared.chunk_registry")
     This is the "main" chunk,
     i.e. a chunk of all entities that exist in the game
 ]]
-local globalChunkRegistry = ChunkRegistry(constants.CHUNK_SIZE)
+local globalChunk = base.Partition(constants.CHUNK_SIZE)
 
 
 
@@ -20,19 +19,19 @@ local positionGroup = umg.group("x", "y")
 
 
 positionGroup:onAdded(function(ent)
-    globalChunkRegistry:addEntity(ent)
+    globalChunk:addEntity(ent)
 end)
 
 
 positionGroup:onRemoved(function(ent)
-    globalChunkRegistry:removeEntity(ent)
+    globalChunk:removeEntity(ent)
 end)
 
 
 
 umg.on("@tick", function()
     for _, ent in ipairs(moveGroup) do
-        globalChunkRegistry:updateEnt(ent)
+        globalChunk:updateEnt(ent)
     end
 end)
 
@@ -42,12 +41,8 @@ end)
 local chunks = {}
 
 
-chunks.ChunkRegistry = ChunkRegistry
-
-
-
 function chunks.iterate(x,y)
-    return globalChunkRegistry:iterate(x,y)
+    return globalChunk:iterate(x,y)
 end
 
 function chunks.getChunkSize()

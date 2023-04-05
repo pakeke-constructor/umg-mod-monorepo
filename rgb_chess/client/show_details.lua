@@ -44,7 +44,7 @@ local function drawSelectTarget(ent)
         love.graphics.setColor(WHITE)
         base.client.drawImage("target", ent.x, ent.y, t)
         love.graphics.pop("all")
-    elseif rgb.areMatchingColors(ent.rgb, select.getSelectedRGB()) then
+    elseif rgb.match(ent.rgb, select.getSelectedRGB()) then
         local t = love.timer.getTime()
         love.graphics.push("all")
         local c = ent.color

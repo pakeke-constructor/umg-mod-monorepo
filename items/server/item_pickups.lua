@@ -134,14 +134,13 @@ end
 
 
 local function updatePartition()
+    -- TODO: bugfix this!!!! there could easily be issues
     for _, ent in ipairs(pickUpGroup) do
         if ent.itemBeingHeld then
-            ent.hidden = true
             if itemDrops.itemPartition:contains(ent) then
                 itemDrops.itemPartition:removeEntity(ent)
             end
         else
-            ent.hidden = false
             itemDrops.itemPartition:updateEntity(ent)
         end
     end

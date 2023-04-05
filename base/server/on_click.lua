@@ -22,7 +22,11 @@ server.on("clickEntity", function(sender_uname, ent, button, worldX, worldY)
     if not isInRange(ent, worldX, worldY) then
         return
     end
-    ent:onClick(sender_uname, button, worldX, worldY)
+
+    if type(ent.onClick) == "function" then
+        ent:onClick(sender_uname, button, worldX, worldY)
+    end
+    umg.call("onClick", sender_uname, ent, button, worldX, worldY)
     server.broadcast("clickEntity", ent, sender_uname, button, worldX, worldY)
 end)
 

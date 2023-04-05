@@ -24,7 +24,7 @@ end
 
 local iterateTc = base.typecheck.assert("string")
 
-function categories.iterate(category)
+function categories.iterator(category)
     iterateTc(category)
     return ipairs(regularCategories.categoryMap[category])
 end
@@ -33,7 +33,7 @@ end
 
 local iterateChunkedTc = base.typecheck.assert("string", "number", "number")
 
-function categories.iterateChunked(category, x, y)
+function categories.chunkedIterator(category, x, y)
     iterateChunkedTc(category, x, y)
     local chunk = chunkedCategories.categoryToChunk[category]
     if chunk then

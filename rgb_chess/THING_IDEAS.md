@@ -50,6 +50,7 @@ There are also some items that can be given regardless of color.
 - End of turn: unit becomes color [color], and this item is consumed
 - End of turn: unit gets [color] removed, and this item is consumed
 - Start battle: unit becomes [color]
+- Start of turn:  If there are no [color] allies, give +2 income
 
 etc. BE MORE CREATIVE!!! More items like these above three.
 We want the items to be meshing with their own rules as much as possible.
@@ -57,12 +58,18 @@ We want the items to be meshing with their own rules as much as possible.
 
 **Weapon items**
 - Battleaxe, gives melee splash damage
-- Leaf staff, shields the strongest ally
 - Dagger, x2 damage to melee unit
-- Merchant staff, 
 
-
-
+**Magic items**
+These are only usable by units with high enough Mana Power
+- Leaf staff, shields the strongest ally
+- Basic staff, deals damage equal to 100% MP 
+- Splash staff, deals splash damage equal to 20% MP
+- Heal staff, heals the ally with the most missing health
+- Heal splash staff, splash heals allies
+- Moon staff, heals allies for 5% of their health
+- Kinetic staff, uses all other [color] staffs in the inventory
+- Rock staff, stuns and deals damage
 
 
 

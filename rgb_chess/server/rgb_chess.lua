@@ -3,14 +3,14 @@ require("shared.rgb")
 
 local Board = require("server.board")
 
-local matchmaking = require("server.matchmaking")
+local matchmaking = require("server.fight.matchmaking")
 
-local income = require("server.income")
+local income = require("server.shop.income")
 
 local generatePVE = require("server.gen.generate_pve")
 local generateBoardDecor = require("server.gen.generate_board_decor")
 
-local readyUp = require("server.ready_up")
+local readyUp = require("server.shop.ready_up")
 
 local START_MONEY = 10
 

@@ -43,10 +43,10 @@ function rgb.getColorString(rgbColor)
 end
 
 
-function rgb.areMatchingColors(col1, col2)
+function rgb.match(col1, col2)
     if col1.rgb and col2.rgb then
         local ent1, ent2 = col1, col2
-        return rgb.areMatchingColors(ent1.rgb, ent2.rgb)
+        return rgb.match(ent1.rgb, ent2.rgb)
     end
 
     local r = col1[1]*col2[1]
@@ -58,31 +58,12 @@ end
 
 
 
-rgb.cardTypes = setmetatable({
-    unit="unit",
-    UNIT="unit",
-    Unit="unit",
 
-    other="other",
-    OTHER="other",
-    Other="other"
-},{__index=function(t,k) error("undefined cardType") end})
-
-
-function rgb.isUnitCard(card_ent)
-    -- retures true if `card_ent` is spawning a unit,
-    -- false otherwise.
-    return card_ent.cardType == rgb.cardTypes.UNIT
-end
-
-function rgb.isOtherCard(card_ent)
-    return card_ent.cardType == rgb.cardTypes.OTHER
-end
-
-function rgb.setCardType(card_ent, cardType)
-    assert(rgb.cardTypes[cardType])
-    card_ent.cardType = rgb.cardTypes[cardType]
-end
+rgb.cardTypes = base.Enum({
+    UNIT = "UNIT",
+    SPELL = "SPELL",
+    ITEM = "ITEM"
+})
 
 
 
@@ -91,7 +72,7 @@ function rgb.getDamageEstimate(attackDamage, attackSpeed)
 end
 
 
-function rgb.getPVEEnemyTeam(rgbTeam)
+function rgb.generatePVEEnemyTeam(rgbTeam)
     -- generates a team ID for use by PVE enemies
     return constants.PVE_PREFIX .. rgbTeam
 end
@@ -172,7 +153,7 @@ end
 
 if server then
 function rgb.changeRGB(ent, newRGB)
-    if rgb.areMatchingColors(ent.rgb, newRGB) then
+    if rgb.match(ent.rgb, newRGB) then
         ent.rgb = newRGB
         return
     else
@@ -184,6 +165,7 @@ end
 else
 client.on("swapRGB", function(ent, newRGB)
     ent.rgb = newRGB
+    umg.call("swapRGB", ent, newRGB)
 end)
 end
 

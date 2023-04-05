@@ -68,7 +68,10 @@ end
 
 
 client.on("clickEntity", function(ent, username, button, worldX, worldY)
-    ent:onClick(username, button, worldX, worldY)
+    umg.call("onClick", username, button, worldX, worldY)
+    if type(ent.onClick) == "function" then
+        ent:onClick(username, button, worldX, worldY)
+    end
 end)
 
 
