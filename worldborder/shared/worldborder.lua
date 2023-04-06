@@ -123,7 +123,7 @@ local function dealWithEntity(borderBuffer, ent)
                 moveEntToBorder(closestBorder, ent)
             else
                 -- too far out, just kill it
-                base.kill(ent)
+                base.server.kill(ent)
             end
         end
     end

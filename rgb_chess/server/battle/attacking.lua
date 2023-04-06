@@ -6,9 +6,12 @@ end)
 
 
 umg.on("rangedAttack", function(ent, targetEnt)
+    assert(ent.attackDamage,"?")
     local bullet = server.entities.projectile(ent.x, ent.y, {
-        projectileSource = ent,
-        targetEntity = targetEnt
+        projectileType = constants.PROJECTILE_TYPES.DAMAGE,
+        attackDamage = ent.attackDamage,
+        targetEntity = targetEnt,
+        sourceEntity = ent
     })
     bullet.color = ent.color
     -- When bullet collides, this will call rgbProjectileHit.

@@ -3,23 +3,23 @@
 local PROJTYPES = constants.PROJECTILE_TYPES
 
 local hitHandlers = {
-    [PROJTYPES.CUSTOM] = function(projectileSource, targetEnt)
-        projectileSource:projectileOnHit(targetEnt)
+    [PROJTYPES.CUSTOM] = function(projectile, targetEnt)
+        projectile.sourceEntity:projectileOnHit(targetEnt)
     end,
 
-    [PROJTYPES.DAMAGE] = function(projectileSource, targetEnt)
-        attack.attack(projectileSource, targetEnt)  
+    [PROJTYPES.DAMAGE] = function(projectile, targetEnt)
+        attack.attack(projectile.sourceEntity, targetEnt)  
     end,
 
-    [PROJTYPES.HEAL] = function(projectileSource, targetEnt)
+    [PROJTYPES.HEAL] = function(projectile, targetEnt)
         -- TODO: Heal unit here        
     end,
 
-    [PROJTYPES.SHIELD] = function(projectileSource, targetEnt)
+    [PROJTYPES.SHIELD] = function(projectile, targetEnt)
         -- TODO: Shield unit here
     end,
 
-    [PROJTYPES.BUFF] = function(projectileSource, targetEnt)
+    [PROJTYPES.BUFF] = function(projectile, targetEnt)
         -- TODO: Buff unit here
     end
 }

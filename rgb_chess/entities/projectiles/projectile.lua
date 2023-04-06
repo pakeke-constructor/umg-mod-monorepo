@@ -8,28 +8,25 @@ Projectile entity
 
 local PROJTYPE = constants.PROJECTILE_TYPES
 
-
-local function assertSource(source)
-    assert(source, "Not given a source")
-    assert(source.projectileType and PROJTYPE[source.projectileType], "Invalid projectile type for source: " .. tostring(source))
-    local ptyp = source.projectileType
-    if ptyp == PROJTYPE.CUSTOM then
-        assert(source.projectileOnHit, "not given custom projectileOnHit callback")
-    elseif ptyp == PROJTYPE.DAMAGE then
-        assert(umg.exists(source), "source needs to be entity")
-        assert(source.attackDamage, "not given attackDamage")
-    elseif ptyp == PROJTYPE.HEAL then
-        assert(umg.exists(source), "source needs to be entity")
-        assert(source.healAmount, "?")
-    elseif ptyp == PROJTYPE.SHIELD then
-        assert(umg.exists(source), "source needs to be entity")
-        assert(source.shieldAmount, "?")
-    end
-end
-
-
 local function assertOptions(options)
-    assertSource(options.projectileSource)
+    local ptyp = options.projectileType
+    assert(options.sourceEntity, "needs a source entity")
+
+    if ptyp == PROJTYPE.CUSTOM then
+        local src = options.sourceEntity
+        assert(src and src.projectileOnHit, "need to give a sourceEntity that has a .projectileOnHit callback")
+
+    elseif ptyp == PROJTYPE.DAMAGE then
+        assert(options.attackDamage, "not given attackDamage")
+        
+    elseif ptyp == PROJTYPE.HEAL then
+        assert(options.healAmount, "?")
+
+    elseif ptyp == PROJTYPE.SHIELD then
+        assert(options.shieldAmount, "?")
+    end
+
+    assert(options.projectileType and PROJTYPE[options.projectileType], "Invalid projectile type for source: " .. tostring(source))
     assert(umg.exists(options.targetEntity), "Not given a targetEntity") 
 end
 
@@ -53,9 +50,8 @@ return {
         range = 100,
 
         enter = function(ent, target_ent)
-            local source = ent.projectileSource -- the entity that shot the bullet
-            umg.call("rgbProjectileHit", source, target_ent)
-            base.kill(ent)
+            umg.call("rgbProjectileHit", ent, target_ent)
+            base.server.kill(ent)
         end
     },
 
@@ -64,6 +60,9 @@ return {
         ent.y = y
 
         assertOptions(options)
+        for k,v in pairs(options)do
+            ent[k] = v
+        end
 
         ent.moveBehaviourTargetEntity = options.targetEntity
         ent.proximityTargetEntity = options.targetEntity
