@@ -6,6 +6,8 @@ Spatial partition object.
 
 Each spatial partition object has a big map of chunks that
 contain entities.
+Think of each "chunk" as like a big bucket where entities are kept.
+
 
 ]]
 local Class = require("shared.class")
@@ -89,6 +91,12 @@ end
 
 
 
+--[[
+:addEntity and :removeEntity should be executed atomically,
+i.e. between frames.
+
+Tagging onto group's onRemoved and onAdded is what should be done in the ideal case.
+]]
 function Partition:addEntity(ent)
     local ix, iy = self:getChunkIndexes(ent.x, ent.y)
     self.chunks[ix][iy]:add(ent)
@@ -168,6 +176,7 @@ function Partition:iterator(x, y)
         if (not currentChunk) or chunkI > currentChunk.size then
             currentChunk = nil
             while (not currentChunk) or chunkI > currentChunk.size do
+                -- We force search for a non-empty chunk
                 if dx < 1 then
                     dx = dx + 1
                 elseif dy < 1 then
