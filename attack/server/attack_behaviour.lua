@@ -150,17 +150,14 @@ umg.on("@tick", function()
         if ent.attackBehaviour then
             local target = ent.attackBehaviourTargetEntity
             if not umg.exists(target) then
-                print("reset target")
                 ent.attackBehaviourTargetEntity = nil
                 target = nil
             end
             local targetCategory = ent.attackBehaviourTargetCategory or ent.attackBehaviour.target
             if (not target) then
                 target = findClosestEntity(ent, targetCategory)
-                print("finding new target for ent, success?: ", (target and true) or false)
             end
             if umg.exists(target) and math.distance(target, ent) < ent.attackBehaviour.range then
-                print("in range! try to attack")
                 ent.attackBehaviourTargetEntity = target -- we do a bit of cacheing
                 tryAttack(ent, target, now)
             end

@@ -1,7 +1,6 @@
 
 
 umg.on("meleeAttack", function(ent, targetEnt)
-    print("attackMelee")
     attack.attack(ent, targetEnt)
 end)
 
