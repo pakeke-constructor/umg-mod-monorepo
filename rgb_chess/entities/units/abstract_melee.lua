@@ -27,7 +27,7 @@ return {
     };
 
     attackBehaviour = {
-        type = "regular",
+        type = "melee",
         range = MELEE_RANGE
     };
 

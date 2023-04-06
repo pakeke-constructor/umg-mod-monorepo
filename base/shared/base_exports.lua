@@ -68,7 +68,7 @@ local function loadShared(base)
     base.Set = require("shared.set");
     base.Array = require("shared.array");
     base.Heap = require("shared.heap");
-    base.Partition = require("shared.partition.partition");
+    base.Partition = require("shared.partition");
     base.Enum = require("shared.enum")
     
     base.components = require("shared.components")

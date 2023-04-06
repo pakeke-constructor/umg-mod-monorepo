@@ -6,12 +6,12 @@ end)
 
 
 umg.on("attackRanged", function(ent, targetEnt)
-    local bullet = server.entities.bullet(ent.x, ent.y)
-    bullet.moveBehaviourTargetEntity = targetEnt
+    local bullet = server.entities.projectile(ent.x, ent.y, {
+        projectileSource = ent,
+        targetEntity = targetEnt
+    })
     bullet.color = ent.color
-    bullet.proximityTargetEntity = targetEnt
-    bullet.shooterEnt = ent
-    -- When bullet collides, bullet calls `attack.attack(ent, target)`
+    -- When bullet collides, this will call rgbProjectileHit.
 end)
 
 
@@ -22,15 +22,8 @@ umg.on("attackItem", function(ent, targetEnt)
 end)
 
 
-umg.on("rgbBulletHit", function(shooterEnt, targetEnt)
-    if umg.exists(shooterEnt) then
-        attack.attack(shooterEnt, targetEnt)
-    end
-end)
-
-
-
 umg.on("attack", function(ent, targetEnt, effectiveness)
+    -- TODO: Add support for shielding, resistances, etc here.
     targetEnt.health = targetEnt.health - ent.attackDamage * effectiveness
 end)
 

@@ -23,7 +23,7 @@ return {
     end;
 
     attackBehaviour = {
-        type = "regular",
+        type = "ranged",
         range = RANGE,
     };
 

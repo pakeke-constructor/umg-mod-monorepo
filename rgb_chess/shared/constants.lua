@@ -1,17 +1,8 @@
 
-
 _G.constants = {
     PROJECTILE_SPEED = 280,
 
     MAX_INCOME = 20,
-
-    BUFF_TYPES = setmetatable({
-        ATTACK_DAMAGE = "ATTACK_DAMAGE",
-        ATTACK_SPEED = "ATTACK_SPEED",
-        SPEED = "SPEED",
-        HEALTH = "HEALTH"
-    },{__index=error});
-
     MAX_BUFF_DEPTH = 10,
 
     CARD_LIGHTNESS = 0.5,
@@ -27,7 +18,22 @@ _G.constants = {
 
     COLOR_SUB_TAG = "%[color%]",
 
-    PVE_PREFIX = "@pve_enemy_" -- concat this with another rgbTeam to get the category.,
+    PVE_PREFIX = "@pve_enemy_", -- concat this with another rgbTeam to get the category.,
+    
+    PROJECTILE_TYPES = base.Enum({
+        DAMAGE = "DAMAGE",
+        HEAL = "HEAL",
+        SHIELD = "SHIELD",
+        CUSTOM = "CUSTOM",
+        BUFF = "BUFF"
+    }),
+
+    BUFF_TYPES = base.Enum({
+        ATTACK_DAMAGE = "ATTACK_DAMAGE",
+        ATTACK_SPEED = "ATTACK_SPEED",
+        SPEED = "SPEED",
+        HEALTH = "HEALTH"
+    })
 }
 
 

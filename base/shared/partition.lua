@@ -8,7 +8,10 @@ Each spatial partition object has a big map of chunks that
 contain entities.
 
 ]]
-local Partition = base.Class("base:Partition")
+local Class = require("shared.class")
+local Partition = Class("base:Partition")
+
+local typecheck = require("shared.typecheck")
 
 
 function Partition:init(chunkSize)    
@@ -56,7 +59,7 @@ function Partition:removeEmptyChunks()
 end
 
 function Partition:getLastXY(ent)
-    return self.entityToLastX[ent], self.entityToLastY[ent]
+    return self.entityToLastX[ent] or ent.x, self.entityToLastY[ent] or ent.y
 end
 
 function Partition:setLastXY(ent)
@@ -94,7 +97,7 @@ end
 
 
 function Partition:removeEntity(ent)
-    local lastx, lasty = self:getLastXY()
+    local lastx, lasty = self:getLastXY(ent)
     local ix, iy = self:getChunkIndexes(lastx or 0, lasty or 0)
     self.chunks[ix][iy]:remove(ent)
     self.entityToLastX[ent] = nil
@@ -106,7 +109,7 @@ end
 
 
 
-local forEachAssert = base.typecheck.assert("number", "number", "function")
+local forEachAssert = typecheck.assert("number", "number", "function")
 
 function Partition:forEach(x, y, func)
     forEachAssert(x,y,func)
@@ -150,7 +153,7 @@ end
 
 
 
-local iterAssert = base.typecheck.assert("number", "number")
+local iterAssert = typecheck.assert("number", "number")
 
 function Partition:iterator(x, y)
     iterAssert(x,y)
@@ -178,7 +181,7 @@ function Partition:iterator(x, y)
             end
         end
 
-        local ent = currentChunk:get(chunkI)
+        local ent = currentChunk[chunkI]
         chunkI = chunkI + 1
         return chunkI, ent
     end

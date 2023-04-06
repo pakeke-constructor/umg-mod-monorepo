@@ -31,7 +31,7 @@ end)
 
 umg.on("@tick", function()
     for _, ent in ipairs(moveGroup) do
-        globalChunk:updateEnt(ent)
+        globalChunk:updateEntity(ent)
     end
 end)
 
@@ -41,8 +41,8 @@ end)
 local chunks = {}
 
 
-function chunks.iterate(x,y)
-    return globalChunk:iterate(x,y)
+function chunks.iterator(x,y)
+    return globalChunk:iterator(x,y)
 end
 
 function chunks.getChunkSize()

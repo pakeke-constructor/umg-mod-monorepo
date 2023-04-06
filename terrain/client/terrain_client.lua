@@ -139,7 +139,7 @@ end)
 
 
 umg.on("drawIndex", function(drawIndex)
-    for _, terrain in ipairs(terrainIds.getTerrainObjects().objects) do
+    for _, terrain in ipairs(terrainIds.getTerrainObjects()) do
         local ditgm = terrain.drawIndexToGreedyMesh
         if ditgm and ditgm[drawIndex] then
             love.graphics.draw(ditgm[drawIndex])

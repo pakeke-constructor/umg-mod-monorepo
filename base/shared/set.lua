@@ -83,6 +83,11 @@ function Set:remove(obj, index)
 end
 
 
+function Set:length()
+    return self.size
+end
+
+
 
 -- returns true if the Set contains `obj`, false otherwise.
 function Set:has(obj)
