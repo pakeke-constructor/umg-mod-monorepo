@@ -3,7 +3,7 @@
 
 local reroll
 if server then
-    reroll = require("server.reroll")
+    reroll = require("server.shop.reroll")
 end
 
 

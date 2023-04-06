@@ -15,7 +15,11 @@ umg.on("gameUpdate", function(dt)
     ]]
     for _, ent in ipairs(moveRotationGroup) do
         local moveRot = ent.moveRotation
-        local startAngle = moveRot.startAngle or DEFAULT_START_ANGLE
+        local startAngle = DEFAULT_START_ANGLE
+        if type(moveRot) == "table" then
+            startAngle = moveRot.startAngle or DEFAULT_START_ANGLE
+        end
+
         if math.distance(ent.vy, ent.vy) > 0 then
             ent.rot = startAngle + math.atan2(ent.vy, ent.vx)
         end

@@ -4,7 +4,7 @@ local RANGE = 200
 
 local select
 if client then
-    select = require("client.select")
+    select = require("client.shop.select")
 end
 
 
@@ -15,6 +15,7 @@ end
 ]]
 return {
     onClick = function(ent, username, button)
+        -- TODO: Move this out into it's own system please.
         if client then
             if username == ent.rgbTeam and button == 1 then
                 select.select(ent)

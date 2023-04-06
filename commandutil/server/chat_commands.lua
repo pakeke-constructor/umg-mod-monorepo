@@ -35,6 +35,8 @@ chat.handleCommand("run", {
 
 
 
+local PLAYER_SPAWN_OFFSET = 30
+
 chat.handleCommand("spawn", {
     arguments = {
         {name = "entType", type = "string"}
@@ -46,10 +48,9 @@ chat.handleCommand("spawn", {
             local p = base.getPlayer(sender)
             local x,y = 0,0
             if p then
-                x,y = p.x, p.y + 30
+                x,y = p.x, p.y + PLAYER_SPAWN_OFFSET
             end
-            local e = server.entities[entType](x,y)
-            e:delete()
+            server.entities[entType](x,y)
         else
             chat.message("SPAWN FAILED: Unknown entity type " .. tostring(entType))
         end

@@ -31,14 +31,17 @@ end
 
 
 
-local iterateChunkedTc = base.typecheck.assert("string", "number", "number")
+local EMPTY_ITERATOR = function() return nil end
+
+local chunkedIteratorTc = base.typecheck.assert("string", "number", "number")
 
 function categories.chunkedIterator(category, x, y)
-    iterateChunkedTc(category, x, y)
+    chunkedIteratorTc(category, x, y)
     local chunk = chunkedCategories.categoryToChunk[category]
     if chunk then
         return chunk:iterator(x, y)
     end
+    return EMPTY_ITERATOR
 end
 
 

@@ -2,7 +2,7 @@
 local attack = require("server.attack")
 
 
-local attackGroup = umg.group("attackBehaviour")
+local attackGroup = umg.group("attackBehaviour", "x", "y")
 
 
 local ATTACK_TYPES = {
@@ -44,12 +44,10 @@ local attackTypes = {}
 
 function attackTypes.melee(ent, target_ent)
     umg.call("meleeAttack", ent, target_ent)
-    attack(ent, target_ent)
 end
 
 function attackTypes.item(ent, target_ent)
     umg.call("itemAttack", ent, target_ent)
-    items.useHoldItem(ent, target_ent)
 end
 
 function attackTypes.ranged(ent, target_ent)
@@ -92,9 +90,6 @@ local function pollClosestEntity(src_ent, ent, best_ent, best_dist)
     if ent ~= src_ent and ent:hasComponent("health") then
         -- we don't want to attack self, and we don't want to hit an entity without
         -- a health component (that wouldn't make sense.)
-        if not umg.exists(ent) then
-            error("what the fuck")
-        end
         local dist = math.distance(ent, src_ent)
         if dist < best_dist then
             best_dist = dist
@@ -114,12 +109,12 @@ local function findClosestEntity(src_ent, category)
     local best_ent = nil
     local x,y = src_ent.x, src_ent.y
     if category then
-        for _, ent in categories.iterateChunked(category,x,y) do 
-            best_ent, best_dist = pollClosestEntity(ent)
+        for _, ent in categories.chunkedIterator(category,x,y) do 
+            best_ent, best_dist = pollClosestEntity(src_ent, ent, best_ent, best_dist)
         end
     else -- no category, so search all entities
         for _, ent in chunks.iterate(x,y) do
-            best_ent, best_dist = pollClosestEntity(ent)
+            best_ent, best_dist = pollClosestEntity(src_ent, ent, best_ent, best_dist)
         end
     end
     return best_ent, best_dist
@@ -149,21 +144,23 @@ end
 
 
 
-
-umg.on("@tick", function(dt)
+umg.on("@tick", function()
     local now = base.getGameTime()
     for _, ent in ipairs(attackGroup) do
         if ent.attackBehaviour then
             local target = ent.attackBehaviourTargetEntity
             if not umg.exists(target) then
+                print("reset target")
                 ent.attackBehaviourTargetEntity = nil
                 target = nil
             end
             local targetCategory = ent.attackBehaviourTargetCategory or ent.attackBehaviour.target
             if (not target) then
                 target = findClosestEntity(ent, targetCategory)
+                print("finding new target for ent, success?: ", (target and true) or false)
             end
             if umg.exists(target) and math.distance(target, ent) < ent.attackBehaviour.range then
+                print("in range! try to attack")
                 ent.attackBehaviourTargetEntity = target -- we do a bit of cacheing
                 tryAttack(ent, target, now)
             end

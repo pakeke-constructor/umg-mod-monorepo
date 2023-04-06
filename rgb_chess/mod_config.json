@@ -8,8 +8,9 @@
       "placement",
       "chests",
       "move_behaviour",
-      "attack_behaviour",
+      "attack",
       "proximity",
-      "ui"
+      "ui",
+      "commandutil"
     ]
 }

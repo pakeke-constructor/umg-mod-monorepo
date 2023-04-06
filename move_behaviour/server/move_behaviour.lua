@@ -1,9 +1,10 @@
 
 
-local moveBehaviourGroup = umg.group("x", "y", "vx", "vy", "moveBehaviour", "speed")
+
+local moveBehaviourGroup = umg.group("x", "y", "vx", "vy", "moveBehaviour")
 
 local helper = require("server.helper")
-
+local constants = require("constants")
 
 
 
@@ -65,8 +66,9 @@ function flee.update(ent,dt)
         local dx,dy = ent.x - targ.x, ent.y - targ.y
         local mag = math.distance(dx,dy)
         if mag > 0 then
-            ent.vx = (dx / mag) * ent.speed
-            ent.vy = (dy / mag) * ent.speed
+            local speed = ent.speed or constants.DEFAULT_SPEED
+            ent.vx = (dx / mag) * speed
+            ent.vy = (dy / mag) * speed
         else
             ent.vx = 0
             ent.vy = 0

@@ -1,8 +1,8 @@
 
 local buy, reroll
 if server then
-    reroll = require("server.reroll")
-    buy = require("server.buy")
+    reroll = require("server.shop.reroll")
+    buy = require("server.shop.buy")
 end
 
 

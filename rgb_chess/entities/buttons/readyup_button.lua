@@ -2,7 +2,7 @@
 
 local readyUp
 if server then
-    readyUp = require("server.ready_up")
+    readyUp = require("server.shop.ready_up")
 end
 
 

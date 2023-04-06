@@ -1,5 +1,5 @@
 
-
+local constants = require("constants")
 
 local DEFAULT_STOP_DISTANCE = 30
 
@@ -83,8 +83,9 @@ local function moveTo(ent, x, y)
     local stopDistance = ent.moveBehaviour.stopDistance or DEFAULT_STOP_DISTANCE
 
     if mag > 0 and stopDistance < mag then
-        ent.vx = (dx / mag) * ent.speed
-        ent.vy = (dy / mag) * ent.speed
+        local speed = ent.speed or constants.DEFAULT_SPEED
+        ent.vx = (dx / mag) * speed
+        ent.vy = (dy / mag) * speed
     else
         ent.vx = 0
         ent.vy = 0

@@ -3,7 +3,7 @@ require("shared.rgb")
 
 local Board = require("server.board")
 
-local matchmaking = require("server.fight.matchmaking")
+local matchmaking = require("server.battle.matchmaking")
 
 local income = require("server.shop.income")
 
@@ -45,10 +45,13 @@ end)
 
 
 umg.on("@playerLeave", function(username)
-    base.getPlayer(username):delete()
-    local b = Board.getBoard(username)
-    if b then
-        b:delete()
+    local player = base.getPlayer(username)
+    if player then
+        base.getPlayer(username):delete()
+        local b = Board.getBoard(username)
+        if b then
+            b:delete()
+        end
     end
 end)
 

@@ -1,8 +1,8 @@
 
 local buy, select
 if client then
-    select = require("client.select")
-    buy = require("client.buy")
+    select = require("client.shop.select")
+    buy = require("client.shop.buy")
 end
 
 

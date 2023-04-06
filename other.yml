@@ -18,5 +18,6 @@ globals:
     any: true
   attack:
     any: true
-
+  chat:
+    any: true
 

@@ -1,7 +1,7 @@
 
 
 
-local select = require("client.select")
+local select = require("client.shop.select")
 
 
 
@@ -20,7 +20,7 @@ function showDetails.hideDetails()
     showingDetails = false
 end
 
-function showDetails.showingDetails()
+function showDetails.isShowingDetails()
     return showingDetails
 end
 

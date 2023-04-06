@@ -2,7 +2,7 @@
 
 local showDetails
 if client then
-    showDetails = require("client.show_details")
+    showDetails = require("client.shop.show_details")
 end
 
 
@@ -12,7 +12,7 @@ local NOT_SHOWING_TAG = "SHOW STATS"
 
 return umg.extend("abstract_button", {
     onClickClient = function(ent)
-        if ent.nametag.value == SHOWING_TAG then
+        if showDetails.isShowingDetails() then 
             showDetails.hideDetails()
             ent.nametag.value = NOT_SHOWING_TAG
         else
