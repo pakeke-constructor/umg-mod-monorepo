@@ -49,7 +49,7 @@ umg.on("@tick", function()
     for _, ent in ipairs(categoryMoveGroup) do
         local categories = getAllCategories(ent)
         for _, cat in ipairs(categories) do
-            getCategoryChunk(cat):removeEntity(ent)
+            getCategoryChunk(cat):updateEntity(ent)
         end
     end
 end)

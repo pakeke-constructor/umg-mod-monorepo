@@ -87,7 +87,7 @@ end)
 
 
 local function pollClosestEntity(src_ent, ent, best_ent, best_dist)
-    if ent ~= src_ent and ent:hasComponent("health") then
+    if ent ~= src_ent and ent.health then
         -- we don't want to attack self, and we don't want to hit an entity without
         -- a health component (that wouldn't make sense.)
         local dist = math.distance(ent, src_ent)
@@ -113,7 +113,7 @@ local function findClosestEntity(src_ent, category)
             best_ent, best_dist = pollClosestEntity(src_ent, ent, best_ent, best_dist)
         end
     else -- no category, so search all entities
-        for _, ent in chunks.iterate(x,y) do
+        for _, ent in chunks.iterator(x,y) do
             best_ent, best_dist = pollClosestEntity(src_ent, ent, best_ent, best_dist)
         end
     end
