@@ -167,7 +167,7 @@ function Partition:iterator(x, y)
     return function()
         if (not currentChunk) or chunkI > currentChunk.size then
             currentChunk = nil
-            while (not currentChunk) do
+            while (not currentChunk) or chunkI > currentChunk.size do
                 if dx < 1 then
                     dx = dx + 1
                 elseif dy < 1 then
