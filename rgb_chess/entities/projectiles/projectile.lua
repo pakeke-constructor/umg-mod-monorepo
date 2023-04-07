@@ -3,6 +3,9 @@
 
 Projectile entity
 
+Projectiles can be shot by unit entities,
+OR by item entities.
+
 ]]
 
 
@@ -46,6 +49,8 @@ return {
         stopDistance = 0
     },
 
+    rgbProjectile = true,
+
     proximity = {
         range = 4,
         enter = function(ent, target_ent)
@@ -59,7 +64,8 @@ return {
             options = {
                 projectileType = constants.PROJECTILE_TYPES.*,
                 targetEntity = <target>
-                
+                sourceEntity = <source ent>
+                ...
             }
         ]]
         base.initializers.initVxVy(ent,x,y)
