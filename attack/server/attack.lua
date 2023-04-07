@@ -64,14 +64,15 @@ local attack = {}
 
 function attack.attack(ent, target_ent)
     assert(ent.attackBehaviour, "Entity needs attackBehaviour to attack")
+    assert(umg.exists(ent), "Attempt to attack with a deleted entity")
+    assert(umg.exists(target_ent), "Attempt to attack a deleted entity")
     if ent.attackBehaviour.splash then
         doSplash(ent, target_ent)
     else
-        assert(umg.exists(ent), "Ent didn't exist!! (TODO: Theres a bug here)")
-        assert(umg.exists(target_ent), "Target ent didn't exist!! (TODO: Theres a bug here)")
         applyAttack(ent, target_ent, 1)
     end
 end
+
 
 function attack.splashAttack(ent, target_ent)
     local category = target_ent.category

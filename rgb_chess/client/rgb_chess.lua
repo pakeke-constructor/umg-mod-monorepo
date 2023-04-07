@@ -1,4 +1,8 @@
 
+base.client.groundTexture.setColor({199/255, 140/255, 89/255})
+base.client.groundTexture.setTextureList({"ground_texture"})
+
+
 
 require("shared.rgb")
 

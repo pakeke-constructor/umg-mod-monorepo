@@ -1,20 +1,24 @@
 
 
 umg.on("meleeAttack", function(ent, targetEnt)
-    attack.attack(ent, targetEnt)
+    if umg.exists(targetEnt) and umg.exists(ent) then
+        attack.attack(ent, targetEnt)
+    end
 end)
 
 
 umg.on("rangedAttack", function(ent, targetEnt)
     assert(ent.attackDamage,"?")
-    local bullet = server.entities.projectile(ent.x, ent.y, {
-        projectileType = constants.PROJECTILE_TYPES.DAMAGE,
-        attackDamage = ent.attackDamage,
-        targetEntity = targetEnt,
-        sourceEntity = ent
-    })
-    bullet.color = ent.color
-    -- When bullet collides, this will call rgbProjectileHit.
+    if umg.exists(targetEnt) then
+        local bullet = server.entities.projectile(ent.x, ent.y, {
+            projectileType = constants.PROJECTILE_TYPES.DAMAGE,
+            attackDamage = ent.attackDamage,
+            targetEntity = targetEnt,
+            sourceEntity = ent
+        })
+        bullet.color = ent.color
+        -- When bullet collides, this will call rgbProjectileHit.
+    end
 end)
 
 

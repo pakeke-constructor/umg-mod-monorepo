@@ -13,8 +13,8 @@ return umg.extend("abstract_ranged", {
 
     projectileType = constants.PROJECTILE_TYPES.DAMAGE,
 
-    attackSpeed = 1,
-    attackDamage = 8,
+    attackSpeed = 0.1,
+    attackDamage = 0.5,
 
     maxHealth = 100,
 

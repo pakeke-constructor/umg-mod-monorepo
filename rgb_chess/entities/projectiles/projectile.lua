@@ -42,13 +42,12 @@ return {
     moveRotation = {};
 
     moveBehaviour = {
-        type = "follow"
+        type = "follow",
+        stopDistance = 0
     },
 
     proximity = {
-        targetCategory = "enemy",
-        range = 100,
-
+        range = 4,
         enter = function(ent, target_ent)
             umg.call("rgbProjectileHit", ent, target_ent)
             base.server.kill(ent)
@@ -56,8 +55,14 @@ return {
     },
 
     init = function(ent, x, y, options)
-        ent.x = x
-        ent.y = y
+        --[[
+            options = {
+                projectileType = constants.PROJECTILE_TYPES.*,
+                targetEntity = <target>
+                
+            }
+        ]]
+        base.initializers.initVxVy(ent,x,y)
 
         assertOptions(options)
         for k,v in pairs(options)do
@@ -66,11 +71,6 @@ return {
 
         ent.moveBehaviourTargetEntity = options.targetEntity
         ent.proximityTargetEntity = options.targetEntity
-
-        ent.particles = {
-            type = "circle",
-            rate = 20
-        }
     end
 }
 

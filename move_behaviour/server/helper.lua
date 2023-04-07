@@ -87,8 +87,8 @@ local function moveTo(ent, x, y)
         ent.vx = (dx / mag) * speed
         ent.vy = (dy / mag) * speed
     else
-        ent.vx = 0
-        ent.vy = 0
+        ent.vx = ent.vx / 2
+        ent.vy = ent.vy / 2 
     end
 end
 
