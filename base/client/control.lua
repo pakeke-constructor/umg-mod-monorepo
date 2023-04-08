@@ -178,11 +178,10 @@ end)
 
 
 
-client.on("lockMovement", function(player, x, y, z, ack_number)
+client.on("forceSetPlayerPosition", function(player, x, y, z)
     player.x = x
     player.y = y
     player.z = z
-    client.send("lockMovementAck", player, ack_number)
 end)
 
 

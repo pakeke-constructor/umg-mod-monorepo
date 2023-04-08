@@ -7,7 +7,7 @@ base.client.groundTexture.setTextureList({"ground_texture"})
 require("shared.rgb")
 
 
-client.on("setRGBCameraBounds",function(x,y,w,h)
+client.on("rgbEmplacePlayer",function(x,y,w,h)
     base.client.camera:setBounds(x,y, w,h)
 end)
 

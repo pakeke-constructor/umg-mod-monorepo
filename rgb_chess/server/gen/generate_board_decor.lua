@@ -34,7 +34,7 @@ end
 local function generateBoardDecor(board)
     local x, y = board:getXY()
     local w, h = board:getWH()
-
+--[[
     -- Pines:
     for xx = x, x + w, PINE_STEP do
         local dx,dy = getRandXY(PINE_RANDOM)
@@ -45,7 +45,7 @@ local function generateBoardDecor(board)
         server.entities.pine(x + dx, yy + dy)
         server.entities.pine(x - dx + w, yy - dy)
     end
-
+]]
     -- Grass:
     for xx = x + 20, x + w - 20, GRASS_STEP do
         for yy = y + 50, y + h - 160, GRASS_STEP do

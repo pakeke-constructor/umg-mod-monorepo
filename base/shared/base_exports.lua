@@ -90,8 +90,11 @@ end
 
 
 local function loadServer(base)
+    local controlAdmin = require("server.control_admin")
+    
     base.server = {}
     base.server.kill = require("shared.death")
+    base.server.forceSetPlayerPosition = controlAdmin.forceSetPlayerPosition 
 end
 
 

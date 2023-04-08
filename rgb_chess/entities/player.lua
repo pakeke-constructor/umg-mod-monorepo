@@ -25,9 +25,7 @@ return {
     color = {0.9,0.9,0.9,0.7},
 
     bobbing = {},
-    
     controllable = {};
-
     nametag = {};
 
     moveAnimation = {
@@ -40,7 +38,6 @@ return {
     };
     
     moveRotation = {},
-
     shouldEmitParticles = shouldEmitParticles,
 
     speed = PLAYER_SPEED;

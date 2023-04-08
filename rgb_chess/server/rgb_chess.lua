@@ -29,7 +29,7 @@ local function allocateBoard(username)
 
     board:spawnWidgets()
 
-    board:lockPlayerCamera(username)
+    board:emplacePlayer(username)
 end
 
 
@@ -109,8 +109,8 @@ end
 
 local function setupPvPMatch(match)
     local board = Board.getBoard(match.home)
-    board:lockPlayerCamera(match.home)
-    board:lockPlayerCamera(match.away)
+    board:emplacePlayer(match.home)
+    board:emplacePlayer(match.away)
 
     server.unicast(match.home, "setupPvPMatch", match.away)
     server.unicast(match.away, "setupPvPMatch", match.home)
@@ -153,7 +153,7 @@ local function startTurn()
     umg.call("startTurn")
     rgb.setState(rgb.STATES.TURN_STATE)
     for _, board in Board.iterBoards() do
-        board:lockPlayerCamera(board:getTeam())
+        board:emplacePlayer(board:getTeam())
         board:clear()
         board:reset()
     end
