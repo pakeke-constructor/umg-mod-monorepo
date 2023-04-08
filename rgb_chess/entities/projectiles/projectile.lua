@@ -29,7 +29,7 @@ local function assertOptions(options)
         assert(options.shieldAmount, "?")
     end
 
-    assert(options.projectileType and PROJTYPE[options.projectileType], "Invalid projectile type for source: " .. tostring(source))
+    assert(options.projectileType and PROJTYPE[options.projectileType], "Invalid projectile type: " .. tostring(options.projectileType))
     assert(umg.exists(options.targetEntity), "Not given a targetEntity") 
 end
 
@@ -55,7 +55,6 @@ return {
         range = 4,
         enter = function(ent, target_ent)
             umg.call("rgbProjectileHit", ent, target_ent)
-            base.server.kill(ent)
         end
     },
 

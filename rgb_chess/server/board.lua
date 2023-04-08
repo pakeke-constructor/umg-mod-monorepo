@@ -71,43 +71,46 @@ function Board:getXY()
     return self.x, self.y
 end
 
-function Board:getCardXY(i)
+function Board:getCardXY(self,i)
     local x1 = self.x + self.width/2
     local dx = ((i - 1) - (self.shopSize/2)) * CARD_SPACING
     return CARD_EXTRA_X + x1 + dx, self.y + (self.height * (5/6))
 end
 
-function Board:spawnRerollButton()
+
+
+
+function spawnRerollButton(self)
     local x,y = self.x + (self.width * (1/6)), self.y + (self.height * (5/6))
     server.entities.reroll_button(x, y, self:getTeam())
 end
 
-function Board:spawnSellButton()
+function spawnSellButton(self)
     local x,y = self.x + (self.width * (1/3)), self.y + self.height
     server.entities.sell_button(x,y,self:getTeam())
 end
 
-function Board:spawnToggleDetailsButton()
+function spawnToggleDetailsButton(self)
     local x,y = self.x + (self.width * (1/2)), self.y + self.height
     server.entities.show_details_button(x,y,self:getTeam())
 end
 
-function Board:spawnMoneyText()
+function spawnMoneyText(self)
     local x, y = self.x + (self.width * (1/6)), self.y + (self.height * (11/12))
     server.entities.money_text(x, y, self:getTeam())
 end
 
-function Board:spawnBattleButton()
+function spawnBattleButton(self)
     local x,y = self.x + (self.width * (1/6)), self.y + (self.height)
     server.entities.readyup_button(x, y, self:getTeam())
 end
 
 function Board:spawnWidgets()
-    self:spawnRerollButton()
-    self:spawnMoneyText()
-    self:spawnBattleButton()
-    self:spawnSellButton()
-    self:spawnToggleDetailsButton()
+    spawnRerollButton(self)
+    spawnMoneyText(self)
+    spawnBattleButton(self)
+    spawnSellButton(self)
+    spawnToggleDetailsButton(self)
 end
 
 

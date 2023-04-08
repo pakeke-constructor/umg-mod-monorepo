@@ -25,8 +25,8 @@ local hitHandlers = {
 }
 
 
-local function miss(projectileEnt)
-    -- called when a projectile misses
+local function done(projectileEnt)
+    -- called when a projectile is done it's journey
     -- TODO: Maybe offload sfx or something?
     base.server.kill(projectileEnt)
 end
@@ -36,9 +36,8 @@ end
 umg.on("rgbProjectileHit", function(projectileEnt, targetEnt)
     if umg.exists(targetEnt) and umg.exists(projectileEnt.sourceEntity) then
         hitHandlers[projectileEnt.projectileType](projectileEnt, targetEnt)
-    else
-        miss(projectileEnt)
     end
+    done(projectileEnt)
 end)
 
 
@@ -49,7 +48,7 @@ umg.on("@tick", function()
     for _, ent in ipairs(projectileGroup) do
         local targetEnt = ent.targetEntity
         if not umg.exists(targetEnt) then
-            miss(ent)
+            done(ent)
         end
     end
 end)

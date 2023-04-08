@@ -7,7 +7,6 @@ local function shouldEmitParticles(ent)
 end
 
 
-
 local function init(ent, x, y)
     ent.particles = {
         type = "dust",
@@ -18,10 +17,6 @@ local function init(ent, x, y)
 
     base.initializers.initVxVy(ent, x, y);
 end
-
-
-
-
 
 
 return {
@@ -35,7 +30,6 @@ return {
 
     nametag = {};
 
-    --[[
     moveAnimation = {
         up = {"red_player_up_1", "red_player_up_2", "red_player_up_3", "red_player_up_4"},
         down = {"red_player_down_1", "red_player_down_2", "red_player_down_3", "red_player_down_4"}, 
@@ -44,10 +38,8 @@ return {
         speed = 0.7;
         activation = 15
     };
-    ]]
+    
     moveRotation = {},
-
-    image = "bullet",
 
     shouldEmitParticles = shouldEmitParticles,
 
