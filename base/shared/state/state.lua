@@ -75,7 +75,7 @@ end
 
 local LISTENING_CALLBACKS = {--[[
     [eventName] --> true    
-    keeps track of what events are being listened to by the state handler
+    keeps track of what events are already being listened to by the state handler
 ]]}
 
 
@@ -88,7 +88,7 @@ end
 
 
 
-local function tryDefineNewListener(event_name)
+local function ensureListeningTo(event_name)
     -- This kind of reflective, meta programming is kind of hacky..
     -- I'm not a fan of it, but oh well! :-)
     if isListening(event_name) then
@@ -123,7 +123,7 @@ function State:on(event_name, func)
     assert(not self.eventListeners[event_name], "Not allowed to override")
     
     self.eventListeners[event_name] = func
-    tryDefineNewListener(event_name)
+    ensureListeningTo(event_name)
 end
 
 
