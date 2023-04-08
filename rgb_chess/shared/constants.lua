@@ -33,7 +33,8 @@ _G.constants = {
         ATTACK_DAMAGE = "ATTACK_DAMAGE",
         ATTACK_SPEED = "ATTACK_SPEED",
         SPEED = "SPEED",
-        HEALTH = "HEALTH"
+        HEALTH = "HEALTH",
+        SORCERY = "SORCERY"
     })
 }
 

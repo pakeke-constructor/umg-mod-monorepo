@@ -4,7 +4,7 @@ local Board = require("server.board")
 
 
 
-umg.on("attack", function(atcker_ent, targ_ent, dmg)
+umg.on("rgbAttack", function(atcker_ent, targ_ent, dmg)
     if targ_ent.onDamage then
         targ_ent:onDamage(atcker_ent, dmg)
     end
@@ -108,6 +108,7 @@ local BUFF_TYPES = constants.BUFF_TYPES
 umg.on("buff", function(unit, buffType, amount, buffer_ent, depth)
     assert(constants.BUFF_TYPES[buffType], "???")
     
+    -- TODO: We shouldn't be doing the actual changing of values here.
     if buffType == BUFF_TYPES.HEALTH then
         unit.health = unit.health + amount
         unit.maxHealth = unit.maxHealth + amount
@@ -127,6 +128,7 @@ end)
 umg.on("debuff", function(unit, buffType, amount, buffer_ent, depth)
     assert(constants.BUFF_TYPES[buffType], "???")
     
+    -- TODO: We shouldn't be doing the actual changing of values here.
     if buffType == BUFF_TYPES.HEALTH then
         unit.health = unit.health - amount
         unit.maxHealth = unit.maxHealth - amount

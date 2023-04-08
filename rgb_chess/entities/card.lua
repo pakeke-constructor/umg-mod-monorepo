@@ -23,14 +23,13 @@ return {
         end
     end,
 
-    init = function(e,fields)
-        assert(fields.x and fields.y)
-        assert(fields.rgbTeam)
-        assert(fields.cardBuyTarget)
+    init = function(e,x,y,options)
+        assert(options.rgbTeam)
+        assert(options.cardBuyTarget)
 
-        e.cardBuyTarget = fields.cardBuyTarget
-        e.rgbTeam = fields.rgbTeam
-        base.initializers.initXY(e,fields.x,fields.y)
+        e.cardBuyTarget = options.cardBuyTarget
+        e.rgbTeam = options.rgbTeam
+        base.initializers.initXY(e,x,y)
     end
 }
 

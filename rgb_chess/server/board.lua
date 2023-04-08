@@ -71,7 +71,7 @@ function Board:getXY()
     return self.x, self.y
 end
 
-function Board:getCardXY(self,i)
+function Board:getCardXY(i)
     local x1 = self.x + self.width/2
     local dx = ((i - 1) - (self.shopSize/2)) * CARD_SPACING
     return CARD_EXTRA_X + x1 + dx, self.y + (self.height * (5/6))

@@ -211,7 +211,7 @@ else
 end
 
 
-
+umg.expose("rgb", rgb)
 _G.rgb = rgb
 
 

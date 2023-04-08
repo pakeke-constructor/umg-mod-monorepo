@@ -31,6 +31,8 @@ end)
 
 umg.on("attack", function(ent, targetEnt, effectiveness)
     -- TODO: Add support for shielding, resistances, etc here.
-    targetEnt.health = targetEnt.health - ent.attackDamage * effectiveness
+    local damage = ent.attackDamage * effectiveness
+    targetEnt.health = targetEnt.health - damage
+    umg.call("rgbAttack", damage)
 end)
 
