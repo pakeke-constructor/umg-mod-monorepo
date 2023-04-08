@@ -27,7 +27,7 @@ local function allocateBoard(username)
     generateBoardDecor(board)
     board:setMoney(START_MONEY)
 
-    board:spawnWidgets()
+    board:spawnObjects()
 
     board:emplacePlayer(username)
 end

@@ -103,6 +103,10 @@ end)
 local EPSILON = 0.01
 
 umg.on("gameUpdate", function(dt)
+    --[[
+        we restrict controllable entities to the border,
+        just so it's more responsive on client-side.
+    ]]
     for _, ent in ipairs(controllableGroup) do
         local entIsWithin = false
         local closestBorder = nil

@@ -15,6 +15,7 @@ _G.constants = {
 
     BOARD_WIDTH = 700,
     BOARD_HEIGHT = 700,
+    BOARD_BORDER_LEIGHWAY = 80,
 
     COLOR_SUB_TAG = "%[color%]",
 

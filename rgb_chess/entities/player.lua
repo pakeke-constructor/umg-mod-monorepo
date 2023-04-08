@@ -37,7 +37,6 @@ return {
         activation = 15
     };
     
-    moveRotation = {},
     shouldEmitParticles = shouldEmitParticles,
 
     speed = PLAYER_SPEED;

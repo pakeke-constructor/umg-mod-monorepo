@@ -105,12 +105,24 @@ function spawnBattleButton(self)
     server.entities.readyup_button(x, y, self:getTeam())
 end
 
-function Board:spawnWidgets()
+function spawnBorder(self)
+    local cx, cy = self.x + self.width/2, self.y + self.height/2
+    local ent = server.entities.empty()
+    ent.border = worldborder.Border({
+        centerX = cx,
+        centerY = cy,
+        width = self.width + constants.BOARD_BORDER_LEIGHWAY,
+        height = self.height + constants.BOARD_BORDER_LEIGHWAY
+    })
+end
+
+function Board:spawnObjects()
     spawnRerollButton(self)
     spawnMoneyText(self)
     spawnBattleButton(self)
     spawnSellButton(self)
     spawnToggleDetailsButton(self)
+    spawnBorder(self)
 end
 
 

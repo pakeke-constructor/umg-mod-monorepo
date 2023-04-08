@@ -62,12 +62,12 @@ local function generateBoardDecor(board)
             local lx = x + (xi * w/2) - w/4
             local ly = y + (yi * h/2) - h/4
             local rx, ry = (math.random()-0.5) * LIGHT_RANDOM, (math.random()-0.5) * LIGHT_RANDOM
-            server.entities.light(lx+rx, ly+ry, 200)
+            server.entities.light(lx+rx, ly+ry)
         end
     end
     local lx, ly = x + w/2, y + h/2
     local rx, ry = (math.random()-0.5) * LIGHT_RANDOM, (math.random()-0.5) * LIGHT_RANDOM
-    server.entities.light(lx+rx, ly+ry, 200)
+    server.entities.light(lx+rx, ly+ry)
 end
 
 return generateBoardDecor

@@ -20,4 +20,6 @@ globals:
     any: true
   chat:
     any: true
+  worldborder:
+    any: true
 
