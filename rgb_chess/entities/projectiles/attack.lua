@@ -1,15 +1,12 @@
 
-
 return umg.extend("abstract_projectile", {
     rgbProjectileOnHit = function(projEnt, targetEnt)
-        local healAmount = projEnt.healAmount
-        -- TODO: Actually heal the entity
-        umg.call("heal", targetEnt, healAmount, projEnt.depth)
+        attack.attack(projEnt.sourceEntity, targetEnt)  
     end,
 
     init = function(ent, x, y, options)
-        assert(options.healAmount,"?")
+        assert(options.attackDamage, "?")
+        -- todo: Do we need this here?
         ent:superInit(x,y,options)
     end
 })
-

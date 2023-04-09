@@ -9,37 +9,6 @@ OR by item entities.
 ]]
 
 
-local PROJTYPE = constants.PROJECTILE_TYPES
-
-local function assertOptions(options)
-    local ptyp = options.projectileType
-
-    if ptyp == PROJTYPE.CUSTOM then
-        local src = options.sourceEntity
-        assert(options.sourceEntity, "projectileType CUSTOM needs a source entity")
-        assert(src and src.projectileOnHit, "need to give a sourceEntity that has a .projectileOnHit callback")
-
-    elseif ptyp == PROJTYPE.DAMAGE then
-        assert(options.attackDamage, "not given attackDamage")
-        
-    elseif ptyp == PROJTYPE.HEAL then
-        assert(options.healAmount, "?")
-
-    elseif ptyp == PROJTYPE.SHIELD then
-        assert(options.shieldAmount, "?")
-    
-    elseif ptyp == PROJTYPE.BUFF or ptyp == PROJTYPE.DEBUFF then
-        assert(options.buffType, "?")
-        assert(options.buffAmount, "?")
-    end
-
-    assert(options.projectileType and PROJTYPE[options.projectileType], "Invalid projectile type: " .. tostring(options.projectileType))
-    assert(umg.exists(options.targetEntity), "Not given a targetEntity") 
-end
-
-
-
-
 local constants = require("shared.constants")
 
 return {
@@ -54,15 +23,8 @@ return {
     },
 
     rgbProjectile = true,
-
-    proximity = {
-        range = 4,
-        enter = function(ent, target_ent)
-            umg.call("rgbProjectileHit", ent, target_ent)
-        end
-    },
-
-    init = function(ent, x, y, options)
+    
+    superInit = function(ent, x, y, options)
         --[[
             options = {
                 projectileType = constants.PROJECTILE_TYPES.*,
@@ -73,13 +35,15 @@ return {
         ]]
         base.initializers.initVxVy(ent,x,y)
 
-        assertOptions(options)
+        assert(options and type(options) == "table", "Not given options table")
+        assert(umg.exists(options.targetEntity), "Not given a targetEntity") 
+
         for k,v in pairs(options)do
             ent[k] = v
         end
 
         ent.moveBehaviourTargetEntity = options.targetEntity
-        ent.proximityTargetEntity = options.targetEntity
+        ent.rgbProjectileTargetEntity = options.targetEntity
     end
 }
 
