@@ -122,3 +122,18 @@ end)
 
 
 
+
+
+local shieldBreakGroup = umg.group("onAllyShieldBreak")
+
+umg.on("breakShield", function(ent, shield)
+    for _, e in ipairs(shieldBreakGroup) do
+        if e.rgbTeam == ent.rgbTeam then
+            e:onAllyShieldBreak(ent, shield)
+        end
+    end
+    if ent.onShieldBreak then
+        ent:onShieldBreak(shield)
+    end
+end)
+

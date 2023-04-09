@@ -30,6 +30,7 @@ local healTc = base.typecheck.assert("entity", "number", "entity?", "number?")
 
 function rgbAPI.heal(ent, amount, sourceEnt, depth)
     healTc(ent, amount, sourceEnt, depth)
+
 end
 
 
@@ -37,6 +38,20 @@ local shieldTc = base.typecheck.assert("entity", "number", "entity?", "number?")
 
 function rgbAPI.shield(ent, amount, sourceEnt, depth)
     shieldTc(ent, amount, sourceEnt, depth)
+    
+    local team = ent.rgbTeam
+    local player = base.getPlayer(team)
+    local x,y = player.x, player.y
+    if umg.exists(sourceEnt) then
+        x,y = sourceEnt.x, sourceEnt.y
+    end
+    server.entities.projectile(x, y, {
+        projectileType = constants.PROJECTILE_TYPES.BUFF,
+        targetEntity = ent,
+        sourceEntity = sourceEnt,
+        buffAmount = amount,
+        depth = depth
+    })
 end
 
 

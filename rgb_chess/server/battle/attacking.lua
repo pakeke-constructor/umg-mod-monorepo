@@ -1,4 +1,7 @@
 
+local shieldAPI = require("battle.shields")
+
+
 
 umg.on("meleeAttack", function(ent, targetEnt)
     if umg.exists(targetEnt) and umg.exists(ent) then
@@ -30,14 +33,10 @@ end)
 
 
 
-local function getBestShield()
-    --todo
-end
-
-
 umg.on("attack", function(ent, targetEnt, effectiveness)
     -- TODO: Add support for shielding, resistances, etc here.
     local damage = ent.attackDamage * effectiveness
+    damage = shieldAPI.getDamage(ent, damage)
     targetEnt.health = targetEnt.health - damage
     umg.call("rgbAttack", damage)
 end)
