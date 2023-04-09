@@ -3,7 +3,7 @@ local rgbAPI = {}
 
 
 
-local spawnProjectileTc = base.typecheck.assert("entity", "entity", "table", "number?")
+local spawnProjectileTc = base.typecheck.assert("entity", "entity?", "table", "number?")
 
 local function spawnProjectile(targetEnt, sourceEnt, options, depth)
     spawnProjectileTc(targetEnt, sourceEnt, options, depth)
@@ -15,7 +15,7 @@ local function spawnProjectile(targetEnt, sourceEnt, options, depth)
     end
     options.targetEntity = targetEnt
     options.sourceEntity = sourceEnt
-    options.depth = depth or 0
+    options.depth = (depth and depth + 1) or 0
     server.entities.projectile(x,y,options)
 end
 
@@ -60,5 +60,9 @@ function rgbAPI.shield(ent, amount, sourceEnt, depth)
 end
 
 
-_G.rgbAPI = rgbAPI
+
+
 umg.expose("rgbAPI", rgbAPI)
+_G.rgbAPI = rgbAPI
+
+

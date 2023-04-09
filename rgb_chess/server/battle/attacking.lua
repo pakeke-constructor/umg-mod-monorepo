@@ -1,5 +1,5 @@
 
-local shieldAPI = require("battle.shields")
+local shieldAPI = require("server.battle.shields")
 
 
 
@@ -33,11 +33,11 @@ end)
 
 
 
-umg.on("attack", function(ent, targetEnt, effectiveness)
+umg.on("attack", function(attackerEnt, targetEnt, effectiveness)
     -- TODO: Add support for shielding, resistances, etc here.
-    local damage = ent.attackDamage * effectiveness
-    damage = shieldAPI.getDamage(ent, damage)
+    local damage = attackerEnt.attackDamage * effectiveness
+    damage = shieldAPI.getDamage(targetEnt, damage)
     targetEnt.health = targetEnt.health - damage
-    umg.call("rgbAttack", damage)
+    umg.call("rgbAttack", attackerEnt, targetEnt, damage)
 end)
 

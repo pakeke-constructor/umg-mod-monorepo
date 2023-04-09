@@ -31,6 +31,7 @@ return umg.extend("abstract_melee", {
         ent.color = DBG_COLS[selfC]
 
         ent.category = selfC
+        ent.rgbTeam = selfC
         ent.attackBehaviourTargetCategory = targC
         ent.moveBehaviourTargetCategory = targC
     end

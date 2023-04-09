@@ -3,7 +3,8 @@ _G.constants = {
     PROJECTILE_SPEED = 280,
 
     MAX_INCOME = 20,
-    MAX_BUFF_DEPTH = 10,
+
+    MAX_ACTION_DEPTH = 16,
 
     CARD_LIGHTNESS = 0.5,
 
@@ -26,7 +27,8 @@ _G.constants = {
         HEAL = "HEAL",
         SHIELD = "SHIELD",
         CUSTOM = "CUSTOM",
-        BUFF = "BUFF"
+        BUFF = "BUFF",
+        DEBUFF = "DEBUFF"
     }),
 
     BUFF_TYPES = base.Enum({

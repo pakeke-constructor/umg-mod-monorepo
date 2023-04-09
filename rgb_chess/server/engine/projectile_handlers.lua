@@ -81,7 +81,7 @@ local hitHandlers = {
 
 do
 for ptype,_ in pairs(PROJTYPES)do
-    assert(buffHandlers[ptype],"?")
+    assert(hitHandlers[ptype],ptype)
 end
 end
 

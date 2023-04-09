@@ -2,6 +2,9 @@
 globals:
   rgb:
     any: true
+  rgbAPI:
+    any: true
+
   constants:
     any: true
   server:

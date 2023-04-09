@@ -3,6 +3,9 @@ local shieldAPI = { }
 
 local function getBestShield(shields)
     -- We take the shield with the lowest time to live first
+    if not shields then
+        return nil
+    end
     local bestTime = math.huge
     local bestShield = nil
     local bestIndex = 0
@@ -81,7 +84,9 @@ end
 
 umg.on("@tick", function()
     for _, ent in ipairs(shieldGroup) do
-        expireShields(ent.shields)    
+        if ent.shields then
+            expireShields(ent.shields)
+        end
     end
 end)
 
