@@ -10,26 +10,26 @@ local BUFFTYPES = constants.BUFF_TYPES
 
 
 local buffHandlers = {
-    [BUFFTYPES.ATTACK_DAMAGE] = function(projectile, targetEnt)
+    [BUFFTYPES.ATTACK_DAMAGE] = function(projectile, targetEnt, mult)
         local amount = projectile.buffAmount
-        targetEnt.attackDamage = targetEnt.attackDamage + amount
+        targetEnt.attackDamage = targetEnt.attackDamage + amount * mult
     end,
-    [BUFFTYPES.ATTACK_SPEED] = function(projectile, targetEnt)
+    [BUFFTYPES.ATTACK_SPEED] = function(projectile, targetEnt, mult)
         local amount = projectile.buffAmount
-        targetEnt.attackSpeed = targetEnt.attackSpeed + amount
+        targetEnt.attackSpeed = targetEnt.attackSpeed + amount * mult
     end,
-    [BUFFTYPES.SPEED] = function(projectile, targetEnt)
+    [BUFFTYPES.SPEED] = function(projectile, targetEnt, mult)
         local amount = projectile.buffAmount
-        targetEnt.speed = targetEnt.speed + amount
+        targetEnt.speed = targetEnt.speed + amount * mult
     end,
-    [BUFFTYPES.HEALTH] = function(projectile, targetEnt)
+    [BUFFTYPES.HEALTH] = function(projectile, targetEnt, mult)
         local amount = projectile.buffAmount
-        targetEnt.health = targetEnt.health + amount
-        targetEnt.maxHealth = targetEnt.maxHealth + amount
+        targetEnt.health = targetEnt.health + amount * mult
+        targetEnt.maxHealth = targetEnt.maxHealth + amount * mult
     end,
-    [BUFFTYPES.SORCERY] = function(projectile, targetEnt)
+    [BUFFTYPES.SORCERY] = function(projectile, targetEnt, mult)
         local amount = projectile.buffAmount
-        targetEnt.sorcery = targetEnt.sorcery + amount
+        targetEnt.sorcery = targetEnt.sorcery + amount * mult
     end
 }
 
@@ -48,23 +48,33 @@ local hitHandlers = {
     end,
 
     [PROJTYPES.DAMAGE] = function(projectile, targetEnt)
-        -- TODO: Redo attack API.
         attack.attack(projectile.sourceEntity, targetEnt)  
     end,
 
     [PROJTYPES.HEAL] = function(projectile, targetEnt)
-        -- TODO: Heal unit here        
+        local healAmount = projectile.healAmount
+        umg.call("heal", targetEnt, healAmount, projectile.depth)
     end,
 
     [PROJTYPES.SHIELD] = function(projectile, targetEnt)
-        -- TODO: Shield unit here
+        local shieldAmount = projectile.shieldAmount
+        umg.call("shield", targetEnt, shieldAmount, projectile.depth)
     end,
 
     [PROJTYPES.BUFF] = function(projectile, targetEnt)
         local btype = projectile.buffType
-        local sourceEnt = projectile.sourceEnt
-        buffHandlers[btype](projectile, targetEnt)
+        local sourceEnt = projectile.sourceEntity
+        local multiplier = 1 -- buffing has a 1x multiplier, debuffing -1x mult.
+        buffHandlers[btype](projectile, targetEnt, multiplier)
         umg.call("buff", targetEnt, btype, projectile.buffAmount, sourceEnt, projectile.depth)
+    end,
+
+    [PROJTYPES.DEBUFF] = function(projectile, targetEnt)
+        local btype = projectile.buffType
+        local sourceEnt = projectile.sourceEntity
+        local multiplier = -1 -- buffing has a 1x multiplier, debuffing -1x mult.
+        buffHandlers[btype](projectile, targetEnt, multiplier)
+        umg.call("debuff", targetEnt, btype, projectile.buffAmount, sourceEnt, projectile.depth)
     end
 }
 
@@ -96,6 +106,10 @@ end)
 local projectileGroup = umg.group("rgbProjectile")
 
 umg.on("@tick", function()
+    --[[
+        check for projectiles whose target has been deleted.
+        If the target no longer exists, mark projectile as done.
+    ]]
     for _, ent in ipairs(projectileGroup) do
         local targetEnt = ent.targetEntity
         if not umg.exists(targetEnt) then

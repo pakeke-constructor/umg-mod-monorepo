@@ -29,6 +29,12 @@ umg.on("itemAttack", function(ent, targetEnt)
 end)
 
 
+
+local function getBestShield()
+    --todo
+end
+
+
 umg.on("attack", function(ent, targetEnt, effectiveness)
     -- TODO: Add support for shielding, resistances, etc here.
     local damage = ent.attackDamage * effectiveness

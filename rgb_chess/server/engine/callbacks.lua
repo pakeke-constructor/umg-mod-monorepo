@@ -106,39 +106,14 @@ end)
 local BUFF_TYPES = constants.BUFF_TYPES
 
 umg.on("buff", function(unit, buffType, amount, buffer_ent, depth)
-    assert(constants.BUFF_TYPES[buffType], "???")
-    
-    -- TODO: We shouldn't be doing the actual changing of values here.
-    if buffType == BUFF_TYPES.HEALTH then
-        unit.health = unit.health + amount
-        unit.maxHealth = unit.maxHealth + amount
-    elseif buffType == BUFF_TYPES.ATTACK_DAMAGE then
-        unit.attackDamage = unit.attackDamage + amount
-    elseif buffType == BUFF_TYPES.ATTACK_SPEED then
-        unit.attackSpeed = unit.attackSpeed + amount
-    elseif buffType == BUFF_TYPES.SPEED then
-        unit.speed = unit.speed + amount
-    end
-
+    assert(BUFF_TYPES[buffType], "???")
     if unit.onBuff then
         unit:onBuff(buffType, amount, buffer_ent, depth)
     end
 end)
 
 umg.on("debuff", function(unit, buffType, amount, buffer_ent, depth)
-    assert(constants.BUFF_TYPES[buffType], "???")
-    
-    -- TODO: We shouldn't be doing the actual changing of values here.
-    if buffType == BUFF_TYPES.HEALTH then
-        unit.health = unit.health - amount
-        unit.maxHealth = unit.maxHealth - amount
-    elseif buffType == BUFF_TYPES.ATTACK_DAMAGE then
-        unit.attackDamage = unit.attackDamage - amount
-    elseif buffType == BUFF_TYPES.ATTACK_SPEED then
-        unit.attackSpeed = unit.attackSpeed - amount
-    elseif buffType == BUFF_TYPES.SPEED then
-        unit.speed = unit.speed - amount
-    end
+    assert(BUFF_TYPES[buffType], "???")
 
     if unit.onDebuff then
         unit:onDebuff(buffType, amount, buffer_ent, depth)

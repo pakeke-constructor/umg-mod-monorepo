@@ -76,6 +76,11 @@ ent.category = ent.rgbTeam
 ent.moveBehaviour = {...}
 ent.attackBehaviour = {...}
 
+ent.shields = {
+    {startTime = base.getGameTime(), duration = 4, shieldSize = 10}
+    ...
+}
+
 ent.squadron = {ent1, ent2, ...} -- The squadron that this unit belongs to.
 -- This is only set if `ent` is a swarm unit.  
 -- (Swarm units count as 1 slot.)
