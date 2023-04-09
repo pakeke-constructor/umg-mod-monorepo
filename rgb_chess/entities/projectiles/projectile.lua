@@ -27,6 +27,9 @@ local function assertOptions(options)
 
     elseif ptyp == PROJTYPE.SHIELD then
         assert(options.shieldAmount, "?")
+    
+    elseif ptyp == PROJTYPE.BUFF then
+        assert(options.buffAmount, "?")
     end
 
     assert(options.projectileType and PROJTYPE[options.projectileType], "Invalid projectile type: " .. tostring(options.projectileType))
