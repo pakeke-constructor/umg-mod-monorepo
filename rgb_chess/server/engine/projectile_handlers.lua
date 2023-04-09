@@ -15,19 +15,8 @@ local projectileGroup = umg.group("rgbProjectile")
 local PROJECTILE_STOP_DIST = 4
 
 
-local function checkHit(projectileEnt, targetEnt)
-    if not umg.exists(projectileEnt.sourceEntity) then
-        return
-    end
-    if math.distance(projectileEnt, targetEnt) <= PROJECTILE_STOP_DIST then
-        projectileEnt:rgbProjectileHit(targetEnt)
-        done(projectileEnt)
-    end
-end
-
-
 projectileGroup:onAdded(function(projEnt)
-    assert(projEnt.rgbProjectileHit, "needs a rgbProjectileHit callback")
+    assert(projEnt.rgbProjectileOnHit, "needs a rgbProjectileOnHit callback")
 end)
 
 
@@ -41,7 +30,10 @@ umg.on("@tick", function()
         if not umg.exists(targetEnt) then
             done(ent)
         else
-            checkHit(ent, targetEnt)
+            if math.distance(ent, targetEnt) <= PROJECTILE_STOP_DIST then
+                ent:rgbProjectileOnHit(targetEnt)
+                done(ent)
+            end
         end
     end
 end)

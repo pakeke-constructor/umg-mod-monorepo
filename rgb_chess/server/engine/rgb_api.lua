@@ -3,20 +3,26 @@ local rgbAPI = {}
 
 
 
-local spawnProjectileTc = base.typecheck.assert("entity", "entity?", "table", "number?")
+local getXYassert = base.typecheck.assert("entity", "entity?")
 
-local function spawnProjectile(targetEnt, sourceEnt, options, depth)
-    spawnProjectileTc(targetEnt, sourceEnt, options, depth)
-    local player = base.getPlayer(server.getHostUsername())
-    local x,y = player.x, player.y
-    if umg.exists(sourceEnt) then
-        x,y = sourceEnt.x, sourceEnt.y
+local function getXY(targetEnt, sourceEnt)
+    --[[
+        gets the X,Y position of the projectile.
+        Sensible defaults are provided if there is no sourceEntity.
+    ]]
+    getXYassert(targetEnt, sourceEnt)
+    if umg.exists(sourceEnt) and sourceEnt.x then
+        return sourceEnt.x, sourceEnt.y
+    else
+        local player = base.getPlayer(targetEnt.rgbTeam)
+        if player then
+            return player.x, player.y
+        else
+            return targetEnt.x, targetEnt.y
+        end
     end
-    options.targetEntity = targetEnt
-    options.sourceEntity = sourceEnt
-    options.depth = (depth and depth + 1) or 0
-    server.entities.projectile(x,y,options)
 end
+
 
 
 
@@ -26,11 +32,14 @@ function rgbAPI.buff(ent, buffType, amount, sourceEnt, depth)
     buffTc(ent, buffType, amount, sourceEnt, depth)
     assert(constants.BUFF_TYPES[buffType], "Invalid bufftype")
 
-    spawnProjectile(ent, sourceEnt, {
-        projectileType = constants.PROJECTILE_TYPES.BUFF,
+    local x,y = getXY(ent, sourceEnt)
+    server.entities.buff(x,y, {
         buffAmount = amount,
-        buffType = buffType
-    }, depth)
+        buffType = buffType,
+        targetEntity = ent,
+        sourceEntity = sourceEnt,
+        depth = depth
+    })
 end
 
 
@@ -40,22 +49,30 @@ local healTc = base.typecheck.assert("entity", "number", "entity?", "number?")
 function rgbAPI.heal(ent, amount, sourceEnt, depth)
     healTc(ent, amount, sourceEnt, depth)
 
-    spawnProjectile(ent, sourceEnt, {
-        projectileType = constants.PROJECTILE_TYPES.HEAL,
-        healAmount = amount
-    }, depth)
+    local x,y = getXY(ent, sourceEnt)
+    server.entities.heal(x,y, {
+        healAmount = amount,
+        targetEntity = ent,
+        sourceEntity = sourceEnt,
+        depth = depth
+    })
 end
 
 
-local shieldTc = base.typecheck.assert("entity", "number", "entity?", "number?")
 
-function rgbAPI.shield(ent, amount, sourceEnt, depth)
-    shieldTc(ent, amount, sourceEnt, depth)
+local shieldTc = base.typecheck.assert("entity", "number", "number", "entity?", "number?")
 
-    spawnProjectile(ent, sourceEnt, {
-        projectileType = constants.PROJECTILE_TYPES.SHIELD,
-        shieldAmount = amount
-    }, depth)
+function rgbAPI.shield(ent, amount, duration, sourceEnt, depth)
+    shieldTc(ent, amount, duration, sourceEnt, depth)
+
+    local x,y = getXY(ent, sourceEnt)
+    server.entities.shield(x,y, {
+        shieldAmount = amount,
+        shieldDuration = duration,
+        targetEntity = ent,
+        sourceEntity = sourceEnt,
+        depth = depth
+    })
 end
 
 

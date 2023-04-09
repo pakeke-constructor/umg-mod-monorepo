@@ -28,7 +28,7 @@ chat.handleCommand("ths", {
         for i=1, 20 do
             local ent = bruteGroup[math.random(bruteGroup:size())]
             rgbAPI.heal(ent, 1000)
-            rgbAPI.shield(ent, 10)
+            rgbAPI.shield(ent, 10, 2)
         end
     end
 })

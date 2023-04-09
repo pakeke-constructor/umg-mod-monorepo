@@ -1,7 +1,7 @@
 
 local shieldAPI
 if server then
-shieldAPI = require("server.engine.sheilds")
+shieldAPI = require("server.engine.shields")
 end
 
 return umg.extend("abstract_projectile", {
@@ -13,7 +13,8 @@ return umg.extend("abstract_projectile", {
     end,
 
     init = function(ent, x, y, options)
-        assert(options.healAmount,"?")
+        assert(options.shieldAmount,"?")
+        assert(options.shieldDuration,"?")
         ent:superInit(x,y,options)
     end
 })

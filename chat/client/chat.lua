@@ -72,6 +72,8 @@ local function drawCursor(opacity)
 end
 
 
+local BACKDROP_SEP = 1
+
 local function drawMessage(msg, opacity)
     -- TODO: Do different colors here.
     local scale = curChatScale
@@ -81,7 +83,7 @@ local function drawMessage(msg, opacity)
     curHeight = curHeight + ((newlines * (curFontHeight)) + MESSAGE_SEP) * scale
     local y = curScreenHeight - curHeight
     love.graphics.setColor(0.1,0.1,0.1,opacity)
-    love.graphics.printf(msg, CHATBOX_START_X - 1, y - 1, wrapWidth, "left", 0, scale,scale)    
+    love.graphics.printf(msg, CHATBOX_START_X - BACKDROP_SEP, y - BACKDROP_SEP, wrapWidth, "left", 0, scale,scale)    
     love.graphics.setColor(1,1,1,opacity)
     love.graphics.printf(msg, CHATBOX_START_X, y, wrapWidth, "left", 0, scale,scale)
 end

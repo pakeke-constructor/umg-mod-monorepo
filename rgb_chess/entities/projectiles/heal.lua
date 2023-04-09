@@ -3,7 +3,7 @@
 return umg.extend("abstract_projectile", {
     rgbProjectileOnHit = function(projEnt, targetEnt)
         local healAmount = projEnt.healAmount
-        -- TODO: Actually heal the entity
+        targetEnt.health = math.min(targetEnt.maxHealth, targetEnt.health + healAmount)
         umg.call("heal", targetEnt, healAmount, projEnt.depth)
     end,
 

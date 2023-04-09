@@ -2,7 +2,7 @@
 local getGameTime = require("shared.get_game_time")
 
 
-local rainbowGroup = umg.group("rainbow", "color")
+local rainbowGroup = umg.group("rainbow") 
 
 
 
@@ -16,9 +16,6 @@ end
 
 
 rainbowGroup:onAdded(function(ent)
-    if ent:isShared("color") then
-        error("When entity has rainbow component, color must not be shared")
-    end
     if not ent.color then
         ent.color = {1,1,1}
     end
