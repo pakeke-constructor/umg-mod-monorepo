@@ -28,7 +28,8 @@ local function assertOptions(options)
     elseif ptyp == PROJTYPE.SHIELD then
         assert(options.shieldAmount, "?")
     
-    elseif ptyp == PROJTYPE.BUFF then
+    elseif ptyp == PROJTYPE.BUFF or ptyp == PROJTYPE.DEBUFF then
+        assert(options.buffType, "?")
         assert(options.buffAmount, "?")
     end
 
