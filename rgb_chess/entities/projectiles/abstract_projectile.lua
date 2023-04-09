@@ -13,10 +13,10 @@ local PROJTYPE = constants.PROJECTILE_TYPES
 
 local function assertOptions(options)
     local ptyp = options.projectileType
-    assert(options.sourceEntity, "needs a source entity")
 
     if ptyp == PROJTYPE.CUSTOM then
         local src = options.sourceEntity
+        assert(options.sourceEntity, "projectileType CUSTOM needs a source entity")
         assert(src and src.projectileOnHit, "need to give a sourceEntity that has a .projectileOnHit callback")
 
     elseif ptyp == PROJTYPE.DAMAGE then

@@ -7,8 +7,7 @@ local spawnProjectileTc = base.typecheck.assert("entity", "entity?", "table", "n
 
 local function spawnProjectile(targetEnt, sourceEnt, options, depth)
     spawnProjectileTc(targetEnt, sourceEnt, options, depth)
-    local team = targetEnt.rgbTeam
-    local player = base.getPlayer(team)
+    local player = base.getPlayer(server.getHostUsername())
     local x,y = player.x, player.y
     if umg.exists(sourceEnt) then
         x,y = sourceEnt.x, sourceEnt.y
@@ -54,7 +53,7 @@ function rgbAPI.shield(ent, amount, sourceEnt, depth)
     shieldTc(ent, amount, sourceEnt, depth)
 
     spawnProjectile(ent, sourceEnt, {
-        projectileType = constants.PROJECTILE_TYPES.HEAL,
+        projectileType = constants.PROJECTILE_TYPES.SHIELD,
         shieldAmount = amount
     }, depth)
 end

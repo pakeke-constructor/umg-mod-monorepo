@@ -4,6 +4,11 @@
 This file handles what happens when projectiles actually hit the target.
 
 ]]
+require("server.engine.rgb_api")
+
+local shieldAPI = require("server.engine.shields")
+
+
 
 local PROJTYPES = constants.PROJECTILE_TYPES
 local BUFFTYPES = constants.BUFF_TYPES
@@ -58,6 +63,8 @@ local hitHandlers = {
 
     [PROJTYPES.SHIELD] = function(projectile, targetEnt)
         local shieldAmount = projectile.shieldAmount
+        local duration = projectile.shieldDuration
+        shieldAPI.createShield(targetEnt, shieldAmount, duration)
         umg.call("shield", targetEnt, shieldAmount, projectile.depth)
     end,
 
