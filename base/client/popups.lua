@@ -2,6 +2,8 @@
 local typecheck = require("shared.typecheck")
 local Color = require("client.color")
 local getGameTime = require("shared.get_game_time")
+local drawImage = require("client.image_helpers.draw_image")
+
 
 local Heap = require("shared.heap")
 
@@ -34,6 +36,8 @@ function popups.image(image, x, y, options)
     obj.scale = options.scale or 1
     obj.scaleX = options.scaleX or 1
     obj.scaleY = options.scaleY or 1
+    
+    obj.vx, obj.vx = options.vx or 0, options.vy or 0
 
     obj.image = image
     obj.x, obj.y = x, y
@@ -102,6 +106,7 @@ function popups.animation(frames, x, y, color)
 
         Have a think.
     ]]
+    error("NYI")
 end
 
 
@@ -152,12 +157,38 @@ end
 
 
 local function drawImageObj(imageObj)
+    local time = getGameTime()
+    local timeElapsed = time - imageObj.startTime
+    local rot = imageObj.rotation + timeElapsed * imageObj.rotationSpeed
+    local x = imageObj.x + imageObj.vx * timeElapsed
+    local y = imageObj.y + imageObj.vy * timeElapsed
+    local sx, sy = imageObj.scale * imageObj.scaleX, imageObj.scale * imageObj.scaleY
+    local a = math.min(1, (imageObj.endTime - time) / imageObj.fadeTime)
 
+    local col = imageObj.color
+    love.graphics.setColor(col.r, col.g, col.b, a)
+    drawImage(imageObj.image, x, y, rot, sx, sy) 
+end
+
+
+
+
+
+local function cleanHeap(heap)
+    local time = getGameTime()
+    local obj = heap:peek()
+    while obj and obj.endTime > time do
+        heap:pop()
+        obj = heap:peek()
+    end
 end
 
 
 
 umg.on("drawEffects", function()
+    cleanHeap(textHeap)
+    cleanHeap(imageHeap)
+
     for _, textObj in ipairs(textHeap) do
         drawTextObj(textObj)
     end
