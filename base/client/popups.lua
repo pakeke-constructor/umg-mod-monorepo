@@ -80,6 +80,8 @@ function popups.text(text, x, y, options)
     obj.scaleX = options.scaleX or 1
     obj.scaleY = options.scaleY or 1
 
+    obj.vx, obj.vx = options.vx or 0, options.vy or 0
+
     obj.text = text
     obj.x, obj.y = x, y
 
@@ -107,7 +109,10 @@ end
 
 local function drawTextObj(textObj)
     local time = getGameTime()
-    local rot = textObj.rotation + (time - textObj.startTime) * textObj.rotationSpeed
+    local timeElapsed = time - textObj.startTime
+    local rot = textObj.rotation + timeElapsed * textObj.rotationSpeed
+    local x = textObj.x + textObj.vx * timeElapsed
+    local y = textObj.y + textObj.vy * timeElapsed
     local sx, sy = textObj.scale * textObj.scaleX, textObj.scale * textObj.scaleY
     local font = love.graphics.getFont()
     local ox, oy = font:getWidth()/2, font:getHeight()/2
@@ -117,10 +122,10 @@ local function drawTextObj(textObj)
     if textObj.outline then
         local c = textObj.outlineColor
         love.graphics.setColor(c.r, c.g, c.b, a)
-        love.graphics.print(textObj.text, textObj.x-1, textObj.y-1, rot, sx, sy, ox,oy)
-        love.graphics.print(textObj.text, textObj.x+1, textObj.y-1, rot, sx, sy, ox,oy)
-        love.graphics.print(textObj.text, textObj.x+1, textObj.y+1, rot, sx, sy, ox,oy)
-        love.graphics.print(textObj.text, textObj.x-1, textObj.y+1, rot, sx, sy, ox,oy)
+        love.graphics.print(textObj.text, x-1, y-1, rot, sx, sy, ox,oy)
+        love.graphics.print(textObj.text, x+1, y-1, rot, sx, sy, ox,oy)
+        love.graphics.print(textObj.text, x+1, y+1, rot, sx, sy, ox,oy)
+        love.graphics.print(textObj.text, x-1, y+1, rot, sx, sy, ox,oy)
     end
 
     -- Draw backdrop
@@ -133,14 +138,14 @@ local function drawTextObj(textObj)
             local s = textObj.backdropColorShift
             love.graphics.setColor(c.r-s, c.g-s, c.b-s, a)
         end
-        love.graphics.print(textObj.text, textObj.x-bdd, textObj.y-bdd, rot, sx, sy, ox,oy)
+        love.graphics.print(textObj.text, x-bdd, y-bdd, rot, sx, sy, ox,oy)
     end
  
     -- Draw regular text
     do
     local c = textObj.color
     love.graphics.setColor(c.r, c.g, c.b, a)
-    love.graphics.print(textObj.text, textObj.x, textObj.y, rot, sx, sy, ox,oy)
+    love.graphics.print(textObj.text, x, y, rot, sx, sy, ox,oy)
     end
 end
 
