@@ -57,15 +57,23 @@ local textTc = typecheck.assert("string", "number", "number", "table?")
 function popups.text(text, x, y, options)
     --[[
         draw popup text for a short period of time
+
+        List of options is shown below.
     ]]
     textTc(text, x, y, options)
     
     local obj = {}
     obj.color = options.color or Color.WHITE
-    obj.fade = options.fade or DEFAULT_FADE_TIME
+    obj.fadeTime = options.fadeTime or DEFAULT_FADE_TIME
     obj.duration = options.duration or DEFAULT_POPUP_DURATION
+
     obj.backdropDistance = options.backdropDistance or DEFAULT_BACKDROP_DISTANCE 
     obj.backdropColorShift = options.backdropColorShift or DEFAULT_BACKDROP_COLOR_SHIFT
+    obj.backdropColor = options.backdropColor or nil
+
+    obj.outline = options.outline
+    obj.outlineColor = options.outlineColor or Color.BLACK
+
     obj.rotation = options.rotation or 0
     obj.rotationSpeed = options.rotationSpeed or 0
     obj.scale = options.scale or 1
@@ -103,18 +111,39 @@ local function drawTextObj(textObj)
     local sx, sy = textObj.scale * textObj.scaleX, textObj.scale * textObj.scaleY
     local font = love.graphics.getFont()
     local ox, oy = font:getWidth()/2, font:getHeight()/2
+    local a = math.min(1, (textObj.endTime - time) / textObj.fadeTime)
 
+    -- Draw outline
+    if textObj.outline then
+        local c = textObj.outlineColor
+        love.graphics.setColor(c.r, c.g, c.b, a)
+        love.graphics.print(textObj.text, textObj.x-1, textObj.y-1, rot, sx, sy, ox,oy)
+        love.graphics.print(textObj.text, textObj.x+1, textObj.y-1, rot, sx, sy, ox,oy)
+        love.graphics.print(textObj.text, textObj.x+1, textObj.y+1, rot, sx, sy, ox,oy)
+        love.graphics.print(textObj.text, textObj.x-1, textObj.y+1, rot, sx, sy, ox,oy)
+    end
+
+    -- Draw backdrop
     if textObj.backdropDistance > 0 then
         local c = textObj.color
-        local s = textObj.backdropColorShift
         local bdd = textObj.backdropDistance
-        love.graphics.setColor(c.r-s, c.g-s, c.b-s)
+        if textObj.backdropColor then
+            love.graphics.setColor(textObj.backdropColor)
+        else
+            local s = textObj.backdropColorShift
+            love.graphics.setColor(c.r-s, c.g-s, c.b-s, a)
+        end
         love.graphics.print(textObj.text, textObj.x-bdd, textObj.y-bdd, rot, sx, sy, ox,oy)
     end
-    
-    love.graphics.setColor(textObj.color)
+ 
+    -- Draw regular text
+    do
+    local c = textObj.color
+    love.graphics.setColor(c.r, c.g, c.b, a)
     love.graphics.print(textObj.text, textObj.x, textObj.y, rot, sx, sy, ox,oy)
+    end
 end
+
 
 
 local function drawImageObj(imageObj)
