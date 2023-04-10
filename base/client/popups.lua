@@ -14,7 +14,6 @@ end
 
 local DEFAULT_POPUP_DURATION = 0.5
 local DEFAULT_FADE_TIME = 0.1
-local DEFAULT_BACKDROP_DISTANCE = 1
 
 
 local popups = {}
@@ -32,6 +31,9 @@ function popups.image(image, x, y, options)
     obj.duration = options.duration or DEFAULT_POPUP_DURATION
     obj.rotation = options.rotation or 0
     obj.rotationSpeed = options.rotationSpeed or 0
+    obj.scale = options.scale or 1
+    obj.scaleX = options.scaleX or 1
+    obj.scaleY = options.scaleY or 1
 
     obj.image = image
     obj.x, obj.y = x, y
@@ -40,6 +42,11 @@ function popups.image(image, x, y, options)
     imageHeap:insert(obj)
 end
 
+
+
+
+local DEFAULT_BACKDROP_DISTANCE = 1
+local DEFAULT_BACKDROP_COLOR_SHIFT = -0.5
 
 
 local textHeap = Heap(endTimeComparator)
@@ -58,13 +65,18 @@ function popups.text(text, x, y, options)
     obj.fade = options.fade or DEFAULT_FADE_TIME
     obj.duration = options.duration or DEFAULT_POPUP_DURATION
     obj.backdropDistance = options.backdropDistance or DEFAULT_BACKDROP_DISTANCE 
+    obj.backdropColorShift = options.backdropColorShift or DEFAULT_BACKDROP_COLOR_SHIFT
     obj.rotation = options.rotation or 0
     obj.rotationSpeed = options.rotationSpeed or 0
+    obj.scale = options.scale or 1
+    obj.scaleX = options.scaleX or 1
+    obj.scaleY = options.scaleY or 1
 
     obj.text = text
     obj.x, obj.y = x, y
 
-    obj.endTime = obj.duration + getGameTime()
+    obj.startTime = getGameTime()
+    obj.endTime = obj.duration + obj.startTime
     textHeap:insert(obj)
 end
 
@@ -84,6 +96,42 @@ end
 
 
 
+
+local function drawTextObj(textObj)
+    local time = getGameTime()
+    local rot = textObj.rotation + (time - textObj.startTime) * textObj.rotationSpeed
+    local sx, sy = textObj.scale * textObj.scaleX, textObj.scale * textObj.scaleY
+    local font = love.graphics.getFont()
+    local ox, oy = font:getWidth()/2, font:getHeight()/2
+
+    if textObj.backdropDistance > 0 then
+        local c = textObj.color
+        local s = textObj.backdropColorShift
+        local bdd = textObj.backdropDistance
+        love.graphics.setColor(c.r-s, c.g-s, c.b-s)
+        love.graphics.print(textObj.text, textObj.x-bdd, textObj.y-bdd, rot, sx, sy, ox,oy)
+    end
+    
+    love.graphics.setColor(textObj.color)
+    love.graphics.print(textObj.text, textObj.x, textObj.y, rot, sx, sy, ox,oy)
+end
+
+
+local function drawImageObj(imageObj)
+
+end
+
+
+
+umg.on("drawEffects", function()
+    for _, textObj in ipairs(textHeap) do
+        drawTextObj(textObj)
+    end
+
+    for _, imageObj in ipairs(imageHeap) do
+        drawImageObj(imageObj)
+    end
+end)
 
 
 
