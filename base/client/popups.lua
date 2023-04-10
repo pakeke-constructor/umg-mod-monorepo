@@ -20,11 +20,24 @@ local DEFAULT_BACKDROP_DISTANCE = 1
 local popups = {}
 
 
+local imageHeap = Heap(endTimeComparator)
 
 function popups.image(image, x, y, options)
     --[[
         draw a popup image for a short period of time
     ]]
+    local obj = {}
+    obj.color = options.color or Color.WHITE
+    obj.fade = options.fade or DEFAULT_FADE_TIME
+    obj.duration = options.duration or DEFAULT_POPUP_DURATION
+    obj.rotation = options.rotation or 0
+    obj.rotationSpeed = options.rotationSpeed or 0
+
+    obj.image = image
+    obj.x, obj.y = x, y
+
+    obj.endTime = obj.duration + getGameTime()
+    imageHeap:insert(obj)
 end
 
 
@@ -45,6 +58,8 @@ function popups.text(text, x, y, options)
     obj.fade = options.fade or DEFAULT_FADE_TIME
     obj.duration = options.duration or DEFAULT_POPUP_DURATION
     obj.backdropDistance = options.backdropDistance or DEFAULT_BACKDROP_DISTANCE 
+    obj.rotation = options.rotation or 0
+    obj.rotationSpeed = options.rotationSpeed or 0
 
     obj.text = text
     obj.x, obj.y = x, y
