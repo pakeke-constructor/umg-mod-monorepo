@@ -57,6 +57,13 @@ function rgb.match(col1, col2)
 end
 
 
+function rgb.sameTeam(obj1, obj2)
+    local team1 = umg.exists(obj1) and obj1.rgbTeam or obj1
+    local team2 = umg.exists(obj2) and obj2.rgbTeam or obj2
+    return team1 == team2 
+end
+
+
 
 
 rgb.cardTypes = base.Enum({
@@ -126,11 +133,12 @@ function rgb.getSquadronCount(rgbTeam)
 end
 
 
-rgb.STATES = setmetatable({
-    LOBBY_STATE = "lobby_state",
-    BATTLE_STATE = "battle_state",
-    TURN_STATE = "turn_state"
-}, {__index=function(_,k) error("invalid rgb state: " .. tostring(k)) end})
+rgb.STATES = base.Enum({
+    LOBBY_STATE = "LOBBY_STATE",
+    BATTLE_STATE = "BATTLE_STATE",
+    TURN_STATE = "TURN_STATE"
+}) 
+
 
 local states_invert = {}
 for k,v in pairs(rgb.STATES)do states_invert[v] = k end
@@ -181,7 +189,7 @@ if server then
     end
 
     function rgb.setState(state)
-        assert(states_invert[state])
+        assert(states_invert[state], "invalid state")
         rgb.state = state
         server.broadcast("setRGBState", state)
     end

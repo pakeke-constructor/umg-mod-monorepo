@@ -6,36 +6,41 @@ local abilityGroup = umg.group("abilities")
 
 
 
---[[
-    Okay... this is a *bit* hacky,
-    but basically all abilities are tied directly to callbacks.
 
-    when the callback is emitted, then the ability is called.
+--[[
+
+A list of valid abilities.
+
+Abilities work the same on items, as they do on units.
+
 ]]
 local validAbilities = {
     "onDeath",-- (ent)
+    "onAllyDeath",-- (ent, allyEnt)
+--    "onEnemyDeath",-- (ent, enemyEnt)  TODO: This will be harder to do
+
     "onBuff",-- (ent, buffType, amount, buffer_ent, depth )
     "onDebuff",-- (ent, buffType, amount, buffer_ent, depth )
-    
-    "onBuy",-- (ent)
-    "onSell",-- (ent)
 
-    "onAllySummoned",
-    "onAllySold",
+    "onAllySummoned",-- (ent, summonedEnt)
+    "onAllySold",-- (ent, soldEnt)
     
-    "onDamage",
-    "onHeal",
-    "onAttack",
-    "onStun",
+    "onDamage",-- (ent, attackerEnt, damage)
+    "onHeal",-- (ent, healerEnt, amount)
+    "onAttack",-- (ent, targetEnt, damage)
 
-    "onAllyDeath",
+    "onStun",-- (ent, duration)
+    "onAllyStun",-- (ent, stunnedAlly, duration)
+
+    "onBreakShield",-- (ent)  when ent's shield is broken
+    "onAllyBreakShield", -- (ent, allyEnt)
     
-    "onReroll",
-    "onStartTurn",
-    "onEndTurn",
+    "onReroll",-- (ent)
+    "onStartTurn",-- (ent)
+    "onEndTurn",-- (ent)
 
-    "onStartBattle",
-    "onEndBattle"
+    "onStartBattle",-- (ent)
+    "onEndBattle"-- (ent)
 }
 
 for _, ability in ipairs(validAbilities) do
@@ -66,7 +71,7 @@ end
 
 local abilityGroups = {
 --[[
-    [abilityType] -> { ent1, ent2, ... }
+    [abilityType] -> Set{ ent1, ent2, ... }
     -- list of entities that contain `abilityType`
 ]]
 }
@@ -74,10 +79,11 @@ local abilityGroups = {
 
 
 local getABGroupTc = base.typecheck.assert("string")
+
 local function getAbilityGroup(abilityType)
     getABGroupTc(abilityType)
     if not abilityGroups[abilityType] then
-        abilityGroups[abilityType] = base.Array()
+        abilityGroups[abilityType] = base.Set()
     end
     return abilityGroups[abilityType]
 end
@@ -99,5 +105,21 @@ end)
 
 
 
+local function call(abilityType, ent, ...)
+    local abil = ent.abilities
+    local handler = abil.abilityMapping[abilityType]
+    if (not handler.activation) or handler.activation(ent, ...) then
+        handler.apply(ent, ...)
+    end
+end
 
+
+local function callForTeam(abilityType, rgbTeam, ...)
+    local group = getAbilityGroup(abilityType)
+    for _, ent in ipairs(group) do
+        if rgb.sameTeam(rgbTeam,ent) then
+            call(abilityType, ent, ...)
+        end
+    end
+end
 
