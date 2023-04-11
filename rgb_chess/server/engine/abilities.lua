@@ -20,7 +20,7 @@ NOTE: Each ability callback takes an implicit `self` as first argument!
 ]]
 local validAbilities = {
     "onAllyDeath",-- (allyEnt)
-    "onEnemyDeath",-- (enemyEnt)
+--    "onEnemyDeath",-- (enemyEnt)    --TODO: This will be a bit harder
 
     "onAllyBuff",-- (buffType, amount, buffer_ent, depth )
     "onAllyDebuff",-- (buffType, amount, buffer_ent, depth )
@@ -38,8 +38,8 @@ local validAbilities = {
     "onAllyShieldExpire", -- (allyEnt, shieldSize)
 
     "onAllyEquip", -- (allyEnt, itemEnt)
-    "onAllyDequip", -- (allyEnt, itemEnt)
-    
+    "onAllyUnequip", -- (allyEnt, itemEnt)
+ 
     "onReroll",-- ()
     "onStartTurn",-- ()
     "onEndTurn",-- ()
@@ -109,7 +109,15 @@ end)
 
 
 
+local function tryGetAbility(ent, abilityType)
+    return ent.ability.abilityMapping[abilityType]
+end
+
+
+local callTc = base.typecheck.assert("string", "entity")
+
 local function call(abilityType, ent, ...)
+    callTc(abilityType, ent)
     local abil = ent.abilities
     local handler = abil.abilityMapping[abilityType]
     if (not handler.activation) or handler.activation(ent, ...) then
@@ -134,14 +142,6 @@ local function callForTeam(abilityType, rgbTeam, ...)
     end
 end
 
-local function callForEnemyTeam(abilityType, rgbTeam, ...)
-    local group = getAbilityGroup(abilityType)
-    for _, ent in ipairs(group) do
-        if not rgb.sameTeam(rgbTeam,ent) then
-            call(abilityType, ent, ...)
-        end
-    end
-end
 
 
 
@@ -158,7 +158,7 @@ end
 
 local function proxyToAll(eventType, abilityType)
     -- Generates an in-line callback listener that offloads
-    -- the event onto all entities.
+    -- the abilityType onto all entities with the same args.
     umg.on(eventType, function(...)
         local group = getAbilityGroup(abilityType)
         for _, ent in ipairs(group)do
@@ -170,8 +170,8 @@ end
 
 
 local function proxyToTeam(eventType, abilityType)
-    -- Generates a callback listener that offloads
-    -- the event onto all the entities in a team.
+    -- Same as proxyToAll, but filters by team.
+    -- NOTE: This function only works if the callback takes an ent as first argument!
     umg.on(eventType, function(ent, ...)
         assert(umg.exists(ent), "this callback must have entity as first arg")
         local rgbTeam = ent.rgbTeam
@@ -181,28 +181,28 @@ local function proxyToTeam(eventType, abilityType)
 end
 
 
-local function proxyToEnemyTeam(eventType, abilityType)
-    -- Generates a callback listener that offloads
-    -- the event onto all the entities in a team.
-    umg.on(eventType, function(ent, ...)
-        assert(umg.exists(ent), "this callback must have entity as first arg")
-        local rgbTeam = ent.rgbTeam
-        callForEnemyTeam(abilityType, rgbTeam, ent, ...)
-    end)
-    handled(abilityType)
-end
 
 
 
 proxyToTeam("entityDeath", "onAllyDeath")
-proxyToEnemyTeam("entityDeath", "onEnemyDeath")
 
 proxyToTeam("buff", "onAllyBuff")
 proxyToTeam("debuff", "onAllyDebuff")
 
+proxyToTeam("summon", "onAllySummoned")
+proxyToTeam("sold", "onAllySold")
+
+proxyToTeam("rgbAttack", "onAllyAttack")
+proxyToTeam("heal", "onAllyHeal")
+umg.on("rgbAttack", function(attackerEnt, targetEnt, damage)
+    callForTeam("onAllyDamage", targetEnt.rgbTeam, targetEnt, attackerEnt, damage)
+end)
+
+-- TODO: I don't think this callback exists yet
+proxyToTeam("stun", "onAllyStun")
+
 proxyToTeam("shieldBreak", "onAllyShieldBreak")
 proxyToTeam("shieldExpire", "onAllyShieldBreak")
-
 
 proxyToAll("reroll", "onReroll")
 
@@ -213,12 +213,13 @@ proxyToAll("startBattle", "onStartBattle")
 
 
 
+
 -- ensure we covered all abilityTypes:
 do
-
 for _, abilityType in ipairs(validAbilities) do
     assert(abilityTypeIsDealtWith[abilityType], "ability type not dealt with")
 end
-
 end
+
+
 

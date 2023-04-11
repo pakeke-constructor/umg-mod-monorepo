@@ -71,12 +71,14 @@ end
 local shieldGroup = umg.group("shields")
 
 
-local function expireShields(shields)
+local function expireShields(ent)
+    local shields = ent.shields
     local time = base.getGameTime()
     for i, sh in ipairs(shields)do
         local endTime = sh.duration + sh.startTime
         if endTime > time then
             -- Remove the shield, it's expired.
+            umg.call("shieldExpire", ent, sh.shieldSize)
             table.remove(shields, i)
         end
     end
@@ -85,7 +87,7 @@ end
 umg.on("@tick", function()
     for _, ent in ipairs(shieldGroup) do
         if ent.shields then
-            expireShields(ent.shields)
+            expireShields(ent)
         end
     end
 end)
