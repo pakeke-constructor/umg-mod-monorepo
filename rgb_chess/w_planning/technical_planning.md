@@ -53,7 +53,7 @@ ent.attackSpeed = 0.5
 ]]
 ent.abilities = {
     {
-        type = "onDeath",
+        type = "onAllyDeath",
         filter = function(ent, ...)
             return true or false 
             -- depending on whether this ability should activate

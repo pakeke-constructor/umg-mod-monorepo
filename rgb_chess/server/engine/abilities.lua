@@ -13,34 +13,38 @@ A list of valid abilities.
 
 Abilities work the same on items, as they do on units.
 
+
+NOTE: Each ability callback takes an implicit `self` as first argument!
+`self` is the entity that contains the ability
+
 ]]
 local validAbilities = {
-    "onDeath",-- (ent)
-    "onAllyDeath",-- (ent, allyEnt)
---    "onEnemyDeath",-- (ent, enemyEnt)  TODO: This will be harder to do
+    "onAllyDeath",-- (allyEnt)
+    "onEnemyDeath",-- (enemyEnt)
 
-    "onBuff",-- (ent, buffType, amount, buffer_ent, depth )
-    "onDebuff",-- (ent, buffType, amount, buffer_ent, depth )
+    "onAllyBuff",-- (buffType, amount, buffer_ent, depth )
+    "onAllyDebuff",-- (buffType, amount, buffer_ent, depth )
 
-    "onAllySummoned",-- (ent, summonedEnt)
-    "onAllySold",-- (ent, soldEnt)
+    "onAllySummoned",-- (summonedEnt)
+    "onAllySold",-- (soldEnt)
+ 
+    "onAllyDamage",-- (allyVictimEnt, attackerEnt, damage)
+    "onAllyHeal",-- (allyEnt, healerEnt, amount)
+    "onAllyAttack",-- (allyEnt, targetEnt, damage)
+
+    "onAllyStun",-- (stunnedAllyEnt, duration)
+
+    "onAllyShieldBreak", -- (allyEnt)
+    "onAllyShieldExpire", -- (allyEnt, shieldSize)
+
+    "onAllyEquip", -- (allyEnt, itemEnt)
+    "onAllyDequip", -- (allyEnt, itemEnt)
     
-    "onDamage",-- (ent, attackerEnt, damage)
-    "onHeal",-- (ent, healerEnt, amount)
-    "onAttack",-- (ent, targetEnt, damage)
+    "onReroll",-- ()
+    "onStartTurn",-- ()
+    "onEndTurn",-- ()
 
-    "onStun",-- (ent, duration)
-    "onAllyStun",-- (ent, stunnedAlly, duration)
-
-    "onBreakShield",-- (ent)  when ent's shield is broken
-    "onAllyBreakShield", -- (ent, allyEnt)
-    
-    "onReroll",-- (ent)
-    "onStartTurn",-- (ent)
-    "onEndTurn",-- (ent)
-
-    "onStartBattle",-- (ent)
-    "onEndBattle"-- (ent)
+    "onStartBattle"-- ()
 }
 
 for _, ability in ipairs(validAbilities) do
@@ -68,7 +72,7 @@ end
 
 
 
-
+-- NOTE: these aren't actually umg groups!
 local abilityGroups = {
 --[[
     [abilityType] -> Set{ ent1, ent2, ... }
@@ -110,16 +114,111 @@ local function call(abilityType, ent, ...)
     local handler = abil.abilityMapping[abilityType]
     if (not handler.activation) or handler.activation(ent, ...) then
         handler.apply(ent, ...)
+        call("ability", ent, ...)
     end
 end
 
 
+--[[
+    Offloads an event onto all other entities that have the ability,
+    AND are in the same team.
+]]
 local function callForTeam(abilityType, rgbTeam, ...)
     local group = getAbilityGroup(abilityType)
+    -- todo: this is kinda bad, we are doing a linear filter here.
+    -- for future, we need to keep track of each team's abilities individually.
     for _, ent in ipairs(group) do
         if rgb.sameTeam(rgbTeam,ent) then
             call(abilityType, ent, ...)
         end
     end
+end
+
+local function callForEnemyTeam(abilityType, rgbTeam, ...)
+    local group = getAbilityGroup(abilityType)
+    for _, ent in ipairs(group) do
+        if not rgb.sameTeam(rgbTeam,ent) then
+            call(abilityType, ent, ...)
+        end
+    end
+end
+
+
+
+
+local abilityTypeIsDealtWith = {}
+-- This table is just for testing, to ensure we cover all abilityTypes.
+
+local function handled(abilityType)
+    -- This function is just for debug purposes, to ensure
+    -- that we cover every single abilityType.
+    abilityTypeIsDealtWith[abilityType] = true
+end
+
+
+local function proxyToAll(eventType, abilityType)
+    -- Generates an in-line callback listener that offloads
+    -- the event onto all entities.
+    umg.on(eventType, function(...)
+        local group = getAbilityGroup(abilityType)
+        for _, ent in ipairs(group)do
+            call(abilityType, ent, ...)
+        end
+    end)
+    handled(abilityType)
+end
+
+
+local function proxyToTeam(eventType, abilityType)
+    -- Generates a callback listener that offloads
+    -- the event onto all the entities in a team.
+    umg.on(eventType, function(ent, ...)
+        assert(umg.exists(ent), "this callback must have entity as first arg")
+        local rgbTeam = ent.rgbTeam
+        callForTeam(abilityType, rgbTeam, ent, ...)
+    end)
+    handled(abilityType)
+end
+
+
+local function proxyToEnemyTeam(eventType, abilityType)
+    -- Generates a callback listener that offloads
+    -- the event onto all the entities in a team.
+    umg.on(eventType, function(ent, ...)
+        assert(umg.exists(ent), "this callback must have entity as first arg")
+        local rgbTeam = ent.rgbTeam
+        callForEnemyTeam(abilityType, rgbTeam, ent, ...)
+    end)
+    handled(abilityType)
+end
+
+
+
+proxyToTeam("entityDeath", "onAllyDeath")
+proxyToEnemyTeam("entityDeath", "onEnemyDeath")
+
+proxyToTeam("buff", "onAllyBuff")
+proxyToTeam("debuff", "onAllyDebuff")
+
+proxyToTeam("shieldBreak", "onAllyShieldBreak")
+proxyToTeam("shieldExpire", "onAllyShieldBreak")
+
+
+proxyToAll("reroll", "onReroll")
+
+proxyToAll("startTurn", "onStartTurn")
+proxyToAll("endTurn", "onEndturn")
+proxyToAll("startBattle", "onStartBattle")
+
+
+
+
+-- ensure we covered all abilityTypes:
+do
+
+for _, abilityType in ipairs(validAbilities) do
+    assert(abilityTypeIsDealtWith[abilityType], "ability type not dealt with")
+end
+
 end
 
