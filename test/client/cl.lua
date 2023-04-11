@@ -83,9 +83,7 @@ function listener:mousepressed(x, y, button, istouch, presses)
             items.useHoldItem(p)
         end
         local wx,wy = base.client.camera:toWorldCoords(x,y)
-        base.client.shockwave({
-            x = wx, y = wy, startRadius = 1, endRadius = 60, thickness = 20, duration = 0.55
-        })
+        base.client.popups.text("Hello", wx, wy)
     elseif button == 2 then
         local wx,wy = base.client.camera:toWorldCoords(x,y)
         client.send("spawn",wx,wy)

@@ -23,11 +23,17 @@ local popups = {}
 
 local imageHeap = Heap(endTimeComparator)
 
+
+local imageTc = typecheck.assert("string", "number", "number", "table?")
+
 function popups.image(image, x, y, options)
     --[[
         draw a popup image for a short period of time
     ]]
+    imageTc(image, x, y, options)
+
     local obj = {}
+    options = options or {}
     obj.color = options.color or Color.WHITE
     obj.fade = options.fade or DEFAULT_FADE_TIME
     obj.duration = options.duration or DEFAULT_POPUP_DURATION
@@ -37,7 +43,7 @@ function popups.image(image, x, y, options)
     obj.scaleX = options.scaleX or 1
     obj.scaleY = options.scaleY or 1
     
-    obj.vx, obj.vx = options.vx or 0, options.vy or 0
+    obj.vx, obj.vy = options.vx or 0, options.vy or 0
 
     obj.image = image
     obj.x, obj.y = x, y
@@ -50,7 +56,7 @@ end
 
 
 local DEFAULT_BACKDROP_DISTANCE = 1
-local DEFAULT_BACKDROP_COLOR_SHIFT = -0.5
+local DEFAULT_BACKDROP_COLOR_SHIFT = -0.8
 
 
 local textHeap = Heap(endTimeComparator)
@@ -67,6 +73,7 @@ function popups.text(text, x, y, options)
     textTc(text, x, y, options)
     
     local obj = {}
+    options = options or {}
     obj.color = options.color or Color.WHITE
     obj.fadeTime = options.fadeTime or DEFAULT_FADE_TIME
     obj.duration = options.duration or DEFAULT_POPUP_DURATION
@@ -84,7 +91,7 @@ function popups.text(text, x, y, options)
     obj.scaleX = options.scaleX or 1
     obj.scaleY = options.scaleY or 1
 
-    obj.vx, obj.vx = options.vx or 0, options.vy or 0
+    obj.vx, obj.vy = options.vx or 0, options.vy or 0
 
     obj.text = text
     obj.x, obj.y = x, y
@@ -113,6 +120,7 @@ end
 
 
 local function drawTextObj(textObj)
+    local text = textObj.text
     local time = getGameTime()
     local timeElapsed = time - textObj.startTime
     local rot = textObj.rotation + timeElapsed * textObj.rotationSpeed
@@ -120,17 +128,17 @@ local function drawTextObj(textObj)
     local y = textObj.y + textObj.vy * timeElapsed
     local sx, sy = textObj.scale * textObj.scaleX, textObj.scale * textObj.scaleY
     local font = love.graphics.getFont()
-    local ox, oy = font:getWidth()/2, font:getHeight()/2
+    local ox, oy = font:getWidth(text)/2, font:getHeight(text)/2
     local a = math.min(1, (textObj.endTime - time) / textObj.fadeTime)
 
     -- Draw outline
     if textObj.outline then
         local c = textObj.outlineColor
         love.graphics.setColor(c.r, c.g, c.b, a)
-        love.graphics.print(textObj.text, x-1, y-1, rot, sx, sy, ox,oy)
-        love.graphics.print(textObj.text, x+1, y-1, rot, sx, sy, ox,oy)
-        love.graphics.print(textObj.text, x+1, y+1, rot, sx, sy, ox,oy)
-        love.graphics.print(textObj.text, x-1, y+1, rot, sx, sy, ox,oy)
+        love.graphics.print(text, x-1, y-1, rot, sx, sy, ox,oy)
+        love.graphics.print(text, x+1, y-1, rot, sx, sy, ox,oy)
+        love.graphics.print(text, x+1, y+1, rot, sx, sy, ox,oy)
+        love.graphics.print(text, x-1, y+1, rot, sx, sy, ox,oy)
     end
 
     -- Draw backdrop
@@ -141,16 +149,16 @@ local function drawTextObj(textObj)
             love.graphics.setColor(textObj.backdropColor)
         else
             local s = textObj.backdropColorShift
-            love.graphics.setColor(c.r-s, c.g-s, c.b-s, a)
+            love.graphics.setColor(c.r+s, c.g+s, c.b+s, a)
         end
-        love.graphics.print(textObj.text, x-bdd, y-bdd, rot, sx, sy, ox,oy)
+        love.graphics.print(text, x-bdd, y-bdd, rot, sx, sy, ox,oy)
     end
  
     -- Draw regular text
     do
     local c = textObj.color
     love.graphics.setColor(c.r, c.g, c.b, a)
-    love.graphics.print(textObj.text, x, y, rot, sx, sy, ox,oy)
+    love.graphics.print(text, x, y, rot, sx, sy, ox,oy)
     end
 end
 
@@ -177,7 +185,7 @@ end
 local function cleanHeap(heap)
     local time = getGameTime()
     local obj = heap:peek()
-    while obj and obj.endTime > time do
+    while obj and obj.endTime < time do
         heap:pop()
         obj = heap:peek()
     end

@@ -50,6 +50,8 @@ local function loadClient(base)
 
     base.client.particles = require("client.particles");
 
+    base.client.popups = require("client.popups")
+
     base.client.playSound = sound.playSound;
     base.client.playMusic = sound.playMusic;
 
