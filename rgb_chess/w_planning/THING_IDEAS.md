@@ -3,6 +3,11 @@
 # SPELL_IDEAS
 
 
+### CARD IDEAS:
+- If the last played card is [color], copy that card's effects
+
+
+
 
 ### SPELL IDEAS:
 - Change the color of all non-[color] shop cards

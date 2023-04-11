@@ -17,6 +17,17 @@
 
 
 
+## Reroll mechanics:
+In rgb-chess, you get 2 free rerolls every turn.
+
+In order to reroll more, the player must buy cards that invoke
+a reroll, or give rerolls: 
+
+IDEAS:
+- `joker` card rerolls all non-[color] cards.
+- `face_down_card` gives 2 free rerolls
+
+
 ## Core mechanics to interact with:
 These are a list of core mechanics that should interact with other
 units and items.
