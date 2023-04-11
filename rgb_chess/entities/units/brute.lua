@@ -5,6 +5,8 @@ local DBG_COLS = {
     b = {0,0,0.5}
 }
 
+
+
 return umg.extend("abstract_melee", {
     image = "huhu1",
     bobbing = {},
@@ -13,6 +15,18 @@ return umg.extend("abstract_melee", {
     attackDamage = 8,
 
     maxHealth = 100,
+
+    abilities = {
+        {
+            type = "onAllyDeath", 
+            filter = function(ent, allyEnt)
+                return ent == allyEnt
+            end,
+            apply = function()
+                print("hi")
+            end
+        }
+    },
 
     init = function(ent, x, y)
         base.initializers.initVxVy(ent,x,y)

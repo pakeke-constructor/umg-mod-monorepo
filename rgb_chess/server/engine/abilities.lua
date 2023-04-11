@@ -1,5 +1,6 @@
 
-local Board = require("server.board")
+
+local abilities = {}
 
 
 local abilityGroup = umg.group("abilities")
@@ -37,8 +38,8 @@ local validAbilities = {
     "onAllyShieldBreak", -- (allyEnt)
     "onAllyShieldExpire", -- (allyEnt, shieldSize)
 
-    "onAllyEquip", -- (allyEnt, itemEnt)
-    "onAllyUnequip", -- (allyEnt, itemEnt)
+--    "onAllyEquip", -- (allyEnt, itemEnt)
+--    "onAllyUnequip", -- (allyEnt, itemEnt)
  
     "onReroll",-- ()
     "onStartTurn",-- ()
@@ -120,11 +121,16 @@ local function call(abilityType, ent, ...)
     callTc(abilityType, ent)
     local abil = ent.abilities
     local handler = abil.abilityMapping[abilityType]
-    if (not handler.activation) or handler.activation(ent, ...) then
+    if (not handler.filter) or handler.filter(ent, ...) then
         handler.apply(ent, ...)
-        call("ability", ent, ...)
+        -- TODO: Surely we can do something better here?
+        umg.call("ability", abilityType, ent, ...)
     end
 end
+
+abilities.call = call
+
+
 
 
 --[[
@@ -197,19 +203,19 @@ proxyToTeam("heal", "onAllyHeal")
 umg.on("rgbAttack", function(attackerEnt, targetEnt, damage)
     callForTeam("onAllyDamage", targetEnt.rgbTeam, targetEnt, attackerEnt, damage)
 end)
+handled("onAllyDamage")
 
 -- TODO: I don't think this callback exists yet
 proxyToTeam("stun", "onAllyStun")
 
 proxyToTeam("shieldBreak", "onAllyShieldBreak")
-proxyToTeam("shieldExpire", "onAllyShieldBreak")
+proxyToTeam("shieldExpire", "onAllyShieldExpire")
 
 proxyToAll("reroll", "onReroll")
 
 proxyToAll("startTurn", "onStartTurn")
-proxyToAll("endTurn", "onEndturn")
+proxyToAll("endTurn", "onEndTurn")
 proxyToAll("startBattle", "onStartBattle")
-
 
 
 
@@ -217,9 +223,11 @@ proxyToAll("startBattle", "onStartBattle")
 -- ensure we covered all abilityTypes:
 do
 for _, abilityType in ipairs(validAbilities) do
-    assert(abilityTypeIsDealtWith[abilityType], "ability type not dealt with")
+    if not abilityTypeIsDealtWith[abilityType] then
+        error("ability type not dealt with: " .. abilityType)
+    end
 end
 end
 
 
-
+return abilities
