@@ -128,7 +128,7 @@ local function call(abilityType, ent, ...)
     end
 end
 
-abilities.call = call
+abilities.applyAbility = call
 
 
 

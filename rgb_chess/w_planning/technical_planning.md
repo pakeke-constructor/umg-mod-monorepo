@@ -20,14 +20,6 @@ ent.squadron = {ent1, ent2, ...} -- The squadron that this unit belongs to.
 -- This is only set if `ent` is a swarm unit.  
 -- (Swarm units count as 1 slot.)
 
-ent.unitCardInfo = {
-    cost = 1,
-    name = "Monster x 1",
-    description = "Gives +1/1 to a random [color] ally",
-    -- All [color] occurances are replaced with the color of the card.
-    squadronSize = 1,
-}
-
 -- UNIT STATS:
 -- units should have all of these stats:
 -- NOTE: The defaults should be compulsory!!!! 
@@ -64,6 +56,43 @@ ent.abilities = {
     },
     ... -- Entities can have many abilities
 }
+
+
+ent.cardOnBuy = function(rgbTeam)
+
+end
+
+
+
+--[[
+    PLANNING:::
+
+    Entities with a `card` component are
+    automatically added to the card pool.
+]]
+ent.card = {
+    type = cardTypes.UNIT,
+    cost = 5,
+    name = "Monster x 1",
+    description = "On buy: Gives +1/1 to a random [color] ally",
+    symbol = "my_symbol1", -- an image
+
+    -- OPTIONAL VALUES:
+    rarity = 1, -- number from 0-1 representing chance of this card 
+    -- appearing when compared to other cards. Default = 1.
+    minimumTurn = 1, -- minimum turn for this card to appear.
+    
+    -- only needed for cardType UNIT
+    unitInfo = {
+        squadronSize = 1 -- how many units to spawn
+    }
+
+    -- only needed for cardType SPELL
+    spellInfo = {
+
+    }
+}
+
 ```
 
 

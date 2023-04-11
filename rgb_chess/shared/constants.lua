@@ -37,6 +37,12 @@ _G.constants = {
         SPEED = "SPEED",
         HEALTH = "HEALTH",
         SORCERY = "SORCERY"
+    }),
+    
+    CARD_TYPES = base.Enum({
+        UNIT = "UNIT",
+        SPELL = "SPELL",
+        ITEM = "ITEM"
     })
 }
 
