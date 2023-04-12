@@ -8,6 +8,7 @@ Or else this mod will be too hard to use.
 
 
 
+
 ```lua
 
 --[[
@@ -18,8 +19,10 @@ Or else this mod will be too hard to use.
 ai.listenToEvent("explosion", {
     emotions = {
         --emotion(s) this event evokes
-        fear = 1,
-        curiosity = 0.15   
+        surprise = 1,
+        fear = 0.4,
+        curiosity = 0.4,
+        trust = -0.3 -- negative = decrease trust
     },
 
     sense = {"sound", "sight"}-- how it's sensed
@@ -30,6 +33,17 @@ ai.listenToEvent("explosion", {
 })
 
 
+
+
+EMOTION_TYPES = {
+    "surprise", -- short-term fear/suprise, i.e. explosion, shotgun blast
+    "sadness",
+    "trust",
+    "joy",
+    "anger",
+    "curiosity"
+    "fear",
+}
 
 
 ```
