@@ -20,28 +20,27 @@ rgb.COLS = {
 
 setmetatable(rgb.COLS, {__index = function(_,k) error("invalid color: " .. tostring(k)) end})
 
-local invertTable = {}
 
+
+
+local EPSILON = 0.01 -- any value lower than this, 
+-- means that the color component is non-existant.
 
 local function componentMatch(a,b)
-    return ((a>0) and (b>0)) or ((a==0) and (b==0))
+    return ((a>EPSILON) and (b>EPSILON)) or ((a<=EPSILON) and (b<=EPSILON))
 end
 
 
-local function generateInversions()
-    for colName, color in pairs(rgb.COLS) do
-        for _, invertCandidate in pairs(rgb.COLS) do
-            local rOk = componentMatch(color[1], invertCandidate[1])
-            local gOk = componentMatch(color[2], invertCandidate[2])
-            local bOk = componentMatch(color[3], invertCandidate[3])
-            if (not rOk) and (not gOk) and (not bOk) then
-                invertTable[colName] = invertCandidate
-                invertTable[color] = invertCandidate
-            end
+function rgb.invert(color)
+    for _, invertCandidate in pairs(rgb.COLS) do
+        local rOk = componentMatch(color[1], invertCandidate[1])
+        local gOk = componentMatch(color[2], invertCandidate[2])
+        local bOk = componentMatch(color[3], invertCandidate[3])
+        if (not rOk) and (not gOk) and (not bOk) then
+            return invertCandidate
         end
     end
 end
-generateInversions()
 
 
 
@@ -71,12 +70,21 @@ function rgb.match(col1, col2)
     local g = col1[2]*col2[2]
     local b = col1[3]*col2[3]
 
-    return (r+g+b) > 0
+    return (r+g+b) > EPSILON
 end
 
 
-function rgb.invert(col)
-    return invertTable[col]
+
+
+local subtractTc = base.typecheck.assert("table", "table")
+
+function rgb.subtract(col, sub)
+    subtractTc(col,sub)
+    return {
+        math.max(0, col[1] - sub[1]),
+        math.max(0, col[2] - sub[2]),
+        math.max(0, col[3] - sub[3])
+    }
 end
 
 

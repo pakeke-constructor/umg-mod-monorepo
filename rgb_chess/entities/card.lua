@@ -1,9 +1,17 @@
 
+local buy, reroll
+if server then
+    reroll = require("server.shop.reroll")
+    buy = require("server.shop.buy")
+end
+
+
+
 local function assertOptions(options)
     assert(options,"?")
     assert(options.rgbTeam, "needs rgbTeam")
-    assert(options.cardInfo, "needs cardInfo")
-    assert(options.cardType, "needs cardType")
+    assert(options.cardEntityType, "needs cardEntityType")
+    assert(options.shopIndex, "needs shopIndex")
 end
 
 
@@ -14,11 +22,12 @@ end
 return {
     card = true,
 
-    onClick = function()
+    onClick = function(ent, username, button)
         if button == 1 and ent.rgbTeam == username then
             if server then
-                if buy.tryBuy(ent) then
-                    reroll.rerollSingle(ent.rgbTeam, ent.shopIndex)
+                if buy.canBuy(ent) then
+                    buy.buyCard(ent)
+                    reroll.rerollCardSlot(ent.rgbTeam, ent.shopIndex)
                 end
             elseif client then
                 -- idk, play sound here or something?

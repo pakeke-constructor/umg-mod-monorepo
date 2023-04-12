@@ -6,7 +6,8 @@ _G.constants = {
 
     MAX_ACTION_DEPTH = 16,
 
-    CARD_LIGHTNESS = 0.5,
+    CARD_LIGHTNESS = 0.3,
+    DEFAULT_CARD_IMAGE = "blank_card",
 
     REROLL_TIME = 0.15,
     REROLL_COST = 1,

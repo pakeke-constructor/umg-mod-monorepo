@@ -47,10 +47,6 @@ function Board:init(x, y, owner)
 
     self.shopSize = 5
     self.shop = {--[[card1, card2, ... ]]}
-    self.shopLocks = {--[[
-        [shopIndex] = true/false
-        tells what shop items are locked
-    ]]}
 
     self.owner = owner
     self.rgbTeam = owner

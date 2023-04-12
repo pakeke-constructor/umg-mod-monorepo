@@ -50,21 +50,14 @@ end
 
 
 
-
-function buy.tryBuy(card_ent)
-    --[[
-        tries to buy a card entity
-    ]]
+function buy.canBuy(card_ent)
     if rgb.state ~= rgb.STATES.TURN_STATE then
-        return 
+        return false
     end
 
     local cost = buy.getCost(card_ent)
     local board = Board.getBoard(card_ent.rgbTeam)
-    if cost <= board:getMoney() then
-        buy.buyCard(card_ent, cost)
-        return true
-    end
+    return cost <= board:getMoney() 
 end
 
 

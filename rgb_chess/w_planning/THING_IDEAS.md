@@ -57,11 +57,11 @@ Obviously, we will have the basic units:
 
 - Start battle: Instantly kill all non-[color] allys
 - Turn start: If there are no [color] allys, gain +3 income
-- Turn start: If there are no [color] allys, gain 2 free rerolls
-- Turn start: If there are no [color] allys, give the best sorcery ally +10% SORC
+- Turn start: If there are no [color] allys, gain 2 rerolls
+- Turn start: If there are no [color] allys, give the best sorcery ally +15% SORC
 - On reroll: If there are only [color] allys, gain +1/+1 
 - On win round:  Spawn a random [color] item
-- Turn start:  If there are only [color] allys, give a free reroll
+- Turn start:  If there are only [color] allys, gain 1 reroll
 - Turn end: if there are at least 4 [color] allys, give [color] allys +1/+1
 - On buy: mimic the health of the healthiest [color] ally
 - On ally summon: if ally is [color], invert ally color
@@ -70,6 +70,7 @@ Obviously, we will have the basic units:
 - On ally change color: if ally is [color], mimic the healthiest [color] ally
 - On ally summon: If there are only [color] units, give ally a random item
 - Turn start: If there are no [color] allys, gain 50% HP. Else, lose 50% HP.
+- On buff: If buff type is HP, give all [color] allys +1 DMG
 
 - Backpack unit, Has a very large inventory space
 - Reroller, Start of turn: rerolls the color of all items in inventory 
@@ -78,7 +79,7 @@ Obviously, we will have the basic units:
 
 ### ITEM IDEAS:
 Most items can only be given to a unit if they are the same color.
-(However, AQU,MAG,YLO items are much more common to compensate.)
+(AQU,MAG,YLO items are much more common to compensate.)
 There are also some items that can be given regardless of color.
 
 **Passive items**
@@ -88,6 +89,7 @@ There are also some items that can be given regardless of color.
 - Start battle: give +15% damage
 - Start battle: give 20% hp shield
 - End turn: give +2 Sorcery
+- On reroll: give +1 HP
 
 - End of turn: unit becomes color [color], and this item is consumed
 - End of turn: unit gets [color] removed, and this item is consumed
@@ -95,7 +97,7 @@ There are also some items that can be given regardless of color.
 - Start of turn:  If there are no [color] allies, give +2 income
 - On death: Revive 2 copies of this unit, and delete this item
 
-etc. BE MORE CREATIVE!!! More items like these above three.
+etc. BE MORE CREATIVE!!! More items like the above ones.
 We want the items to be meshing with their own rules as much as possible.
 
 
