@@ -18,14 +18,18 @@ Or else this mod will be too hard to use.
 ]]
 ai.listenToEvent("explosion", {
     emotions = {
-        --emotion(s) this event evokes
+        --emotion(s) this event evokes:
         surprise = 1,
         fear = 0.4,
         curiosity = 0.4,
         trust = -0.3 -- negative = decrease trust
     },
 
-    sense = {"sound", "sight"}-- how it's sensed
+    sense = {
+        -- how it's sensed
+        sound = 1,
+        sight = 1,
+    }
 
     class = "impact" -- The "class" of the event.
     -- Some entities may be resistant/ignore certain classes of events.
@@ -43,6 +47,15 @@ EMOTION_TYPES = {
     "anger",
     "curiosity"
     "fear",
+    "desire"
+}
+
+
+local SENSE_TYPES = {
+    "sight",
+    "sound",
+    "touch",
+    "smell",
 }
 
 
