@@ -1,12 +1,5 @@
 
 
-local DBG_COLS = {
-    a = {0.5,0,0},
-    b = {0,0,0.5}
-}
-
-
-
 return umg.extend("abstract_melee", {
     image = "huhu1",
     bobbing = {},
@@ -28,26 +21,16 @@ return umg.extend("abstract_melee", {
         }
     },
 
-    init = function(ent, x, y)
-        base.initializers.initVxVy(ent,x,y)
+    cardInfo = {
+        type = constants.CARD_TYPES.UNIT,
+        cost = 3,
+        name = "Brute x 1",
+        description = "on ally death,\nprint hi in console",
+        unitInfo = {
+            squadronSize = 1,
+        }
+    },
 
-        ent.health = 50
-
-        local targC, selfC
-        if math.random() > 0.5 then
-            targC = "a"
-            selfC = "b"
-        else
-            targC = "b"
-            selfC = "a"
-        end
-
-        ent.color = DBG_COLS[selfC]
-
-        ent.category = selfC
-        ent.rgbTeam = selfC
-        ent.attackBehaviourTargetCategory = targC
-        ent.moveBehaviourTargetCategory = targC
-    end
+    init = base.initializers.initVxVy
 })
 

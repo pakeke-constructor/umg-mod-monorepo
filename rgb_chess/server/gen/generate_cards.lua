@@ -40,15 +40,42 @@ local itemRGBSelection = base.weightedRandom({
 })
 
 
+local function assertFor(bool, etypeName)
+    if not bool then
+        error("cardInfo is missing something for this entity type: " .. etypeName)
+    end
+end
+
+local function assertUnitInfo(unitInfo, etypeName)
+    assertFor(unitInfo, etypeName)
+    assertFor(unitInfo.squadronSize)
+end
+
+local function assertCardInfoOk(etype, etypeName)
+    local cardInfo = etype.cardInfo
+    assertFor(constants.CARD_TYPES[cardInfo.type], etypeName) 
+    assertFor(cardInfo.cost, etypeName)
+    assertFor(cardInfo.name, etypeName)
+    assertFor(cardInfo.description, etypeName)
+
+    if cardInfo.type == constants.CARD_TYPES.UNIT then
+        assertUnitInfo(cardInfo.unitInfo, etypeName)
+    elseif cardInfo.type == constants.CARD_TYPES.SPELL then
+        assertFor(cardInfo.spellInfo, etypeName)
+    end
+end
+
+
 local randomCardEtype
 
 do
 local cardPool = {}
 
 for _, etype in pairs(server.entities) do
-    if etype.card then
+    if etype.cardInfo then
         -- Add this etype to the pool.
-        cardPool[etype] = etype.card
+        assertCardInfoOk(etype)
+        cardPool[etype] = etype
     end
 end
 
