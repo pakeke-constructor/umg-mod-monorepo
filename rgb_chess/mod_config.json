@@ -7,7 +7,7 @@
       "zoom",
       "placement",
       "move_behaviour",
-      "attack",
+      "attack_behaviour",
       "proximity",
       "ui",
       "commandutil",
