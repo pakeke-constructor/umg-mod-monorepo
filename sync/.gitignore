@@ -1,0 +1,15 @@
+
+# typescript declarations and selene config
+_types/
+
+# node modules
+node_modules/
+
+
+
+
+# macOS
+**/.DS_Store
+.DS_Store
+
+

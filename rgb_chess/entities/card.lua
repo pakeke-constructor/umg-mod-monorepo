@@ -19,15 +19,16 @@ return {
                 if buy.tryBuy(ent) then
                     reroll.rerollSingle(ent.rgbTeam, ent.shopIndex)
                 end
+            elseif client then
+                -- idk, play sound here or something?
             end
         end
     end,
 
     init = function(e,x,y,options)
-        assert(options.rgbTeam)
-        assert(options.cardBuyTarget)
+        assert(options,"?")
+        assert(options.rgbTeam, "needs rgbTeam")
 
-        e.cardBuyTarget = options.cardBuyTarget
         e.rgbTeam = options.rgbTeam
         base.initializers.initXY(e,x,y)
     end
