@@ -10,64 +10,6 @@ local buy = {}
 
 
 
-local function unitPriceFunction(baseCardPrice, numSquadrons)
-    -- price function for unit cards.
-    return baseCardPrice + numSquadrons
-end
-
-
-
-
-
-function buy.getCost(card_ent, squadronCount)
-    --[[
-        unit card costs will increase linearly with respect to the number
-        of squadrons on the board.
-    ]]
-    assert(card_ent.rgbTeam, "not given rgbTeam")
-    squadronCount = squadronCount or rgb.getSquadronCount(card_ent.rgbTeam)
-
-    if rgb.isUnitCard(card_ent) then
-        local info = card_ent.cardBuyTarget.unitCardInfo
-        return unitPriceFunction(info.cost, squadronCount)
-    else
-        local info = card_ent.cardBuyTarget.otherCardInfo
-        assert(info.cost, "?")
-        return info.cost
-    end
-end
-
-
-
-function buy.setCosts(rgbTeam)
-    -- sets the card costs appropriately for the board owned by rgbTeam.
-    local ct = rgb.getSquadronCount(rgbTeam)
-    local board = Board.getBoard(rgbTeam)
-    for i=1, #board.shop do
-        local card = board.shop[i]
-        if umg.exists(card) then
-            card.cost = buy.getCost(card, ct)
-            server.broadcast("setRGBCardCost", card, card.cost)
-        end
-    end
-end
-
-
-
-function buy.changeCosts(rgbTeam, dCost)
-    -- changes all card costs by a flat amount.
-    local board = Board.getBoard(rgbTeam)
-    for i=1, #board.shop do
-        local card = board.shop[i]
-        if umg.exists(card) then
-            card.cost = card.cost + dCost
-            server.broadcast("setRGBCardCost", card, card.cost)
-        end
-    end
-end
-
-
-
 local function buyUnitCard(card_ent)
     --[[
         buys a squadron described by a card.
@@ -84,13 +26,6 @@ local function buyUnitCard(card_ent)
     for _, ent in ipairs(squadron) do
         umg.call("buyUnit", ent)
     end
-    -- TODO: Do feedback and stuff here.
-end
-
-
-
-local function buyOtherCard(card_ent)
-
 end
 
 

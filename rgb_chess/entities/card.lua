@@ -1,8 +1,9 @@
 
-local buy, reroll
-if server then
-    reroll = require("server.shop.reroll")
-    buy = require("server.shop.buy")
+local function assertOptions(options)
+    assert(options,"?")
+    assert(options.rgbTeam, "needs rgbTeam")
+    assert(options.cardInfo, "needs cardInfo")
+    assert(options.cardType, "needs cardType")
 end
 
 
@@ -11,9 +12,9 @@ end
     Unit card entity
 ]]
 return {
-    image = "invisible_card",
+    card = true,
 
-    onClick = function(ent, username, button)
+    onClick = function()
         if button == 1 and ent.rgbTeam == username then
             if server then
                 if buy.tryBuy(ent) then
@@ -26,10 +27,11 @@ return {
     end,
 
     init = function(e,x,y,options)
-        assert(options,"?")
-        assert(options.rgbTeam, "needs rgbTeam")
+        assertOptions(options)
+        for k,v in pairs(options)do
+            e[k] = v
+        end
 
-        e.rgbTeam = options.rgbTeam
         base.initializers.initXY(e,x,y)
     end
 }

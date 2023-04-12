@@ -20,21 +20,39 @@ rgb.COLS = {
 
 setmetatable(rgb.COLS, {__index = function(_,k) error("invalid color: " .. tostring(k)) end})
 
+local invertTable = {}
 
 
-
-local function not_xor(a,b)
+local function componentMatch(a,b)
     return ((a>0) and (b>0)) or ((a==0) and (b==0))
 end
+
+
+local function generateInversions()
+    for colName, color in pairs(rgb.COLS) do
+        for _, invertCandidate in pairs(rgb.COLS) do
+            local rOk = componentMatch(color[1], invertCandidate[1])
+            local gOk = componentMatch(color[2], invertCandidate[2])
+            local bOk = componentMatch(color[3], invertCandidate[3])
+            if (not rOk) and (not gOk) and (not bOk) then
+                invertTable[colName] = invertCandidate
+                invertTable[color] = invertCandidate
+            end
+        end
+    end
+end
+generateInversions()
+
+
 
 function rgb.getColorString(rgbColor)
     --[[
         returns the name of the color, as a string.
     ]]
     for col, tabl in pairs(rgb.COLS) do
-        local rOk = not_xor(tabl[1], rgbColor[1])
-        local gOk = not_xor(tabl[2], rgbColor[2])
-        local bOk = not_xor(tabl[3], rgbColor[3])
+        local rOk = componentMatch(tabl[1], rgbColor[1])
+        local gOk = componentMatch(tabl[2], rgbColor[2])
+        local bOk = componentMatch(tabl[3], rgbColor[3])
         if rOk and gOk and bOk then
             return col
         end
@@ -54,6 +72,11 @@ function rgb.match(col1, col2)
     local b = col1[3]*col2[3]
 
     return (r+g+b) > 0
+end
+
+
+function rgb.invert(col)
+    return invertTable[col]
 end
 
 
