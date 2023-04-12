@@ -4,14 +4,43 @@
 
 
 ### CARD IDEAS:
-- If the last played card is [color], copy that card's effects
+ALL OF THESE ARE SUBJECT TO CHANGE.
 
+- `0 of clubs`: Removes [color] from all shop cards
+- `2 of clubs`: Adds [color] to all shop cards
 
+- `4 of clubs`: rerolls all non-[color] shop cards.
+- `10 of clubs`: rerolls all cards, and discards any [color] cards that appear.
+- `10 of diamonds`: Change the color of all non-[color] shop cards
+- `joker`: if there are no [color] units on board, give 4 rerolls. Else, give 1 reroll.
+
+- `ace_of_diamonds`: give +1 SORCERY to all [color] allies
+- `ace_of_hearts`: give +2 HEALTH to all [color] allies
+- `ace_of_spades`: give +1 DAMAGE to all [color] allies
+
+- `blank_card`: If the last card played is [color], replace all shop slots with copies of that card. 
+    Else, replace only one slot.
+
+- `duplicate_card`: copy the last card's effects as [color]
+- `flipped_duplicate_card`: copy the last card's effects as the inverse of [color]
+
+- `face_down_card`: [color] paragon units will now spawn in the shop
+
+- `full_suit_card`: give +1 HP, +1 ATK, +1 SORC to all [color] allies
+
+- `jack_of_diamonds`: Swap HP and SORC of a random [color] ally 
+- `jack_of_spades`: Swap HP and ATK of a random [color] ally 
+
+- `king_of_spades_card`: Kill a random [color] ally. In return, gain 3 [color] items 
+- `king_of_hearts_card`: Give +6 HEALTH to all [color] allies holding at least 1 item
+
+- `queen_of_spades_card`: Reroll all [color] items that are on the ground
+- `queen_of_diamonds_card`: Spawn a random [color] item
+
+- `null_card`: Subtract [color] from a random [color] ally
 
 
 ### SPELL IDEAS:
-- Change the color of all non-[color] shop cards
-- If you have no [color] units, gain 3 gold
 - Give a [color] unit 5 hp
 - Change the color of all [color] units
 - Reroll all items that are held by [color] units
@@ -26,8 +55,10 @@ Obviously, we will have the basic units:
 
 *Here are some more unique ideas:*
 
-- Start battle:  Instantly kill all non-[color] allys
-- Turn start:  If there are no [color] allys, gain +3 income
+- Start battle: Instantly kill all non-[color] allys
+- Turn start: If there are no [color] allys, gain +3 income
+- Turn start: If there are no [color] allys, gain 2 free rerolls
+- Turn start: If there are no [color] allys, give the best sorcery ally +10% SORC
 - On reroll: If there are only [color] allys, gain +1/+1 
 - On win round:  Spawn a random [color] item
 - Turn start:  If there are only [color] allys, give a free reroll
