@@ -13,6 +13,8 @@ end
     entities that extend this will inherit these components:
 ]]
 return {
+    rgbUnit = true, -- Tells the systems that this entity is a unit
+
     onClick = function(ent, username, button)
         -- TODO: Move this out into it's own system please
         if client then

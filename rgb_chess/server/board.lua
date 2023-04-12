@@ -73,6 +73,9 @@ function Board:getCardXY(i)
     return CARD_EXTRA_X + x1 + dx, self.y + (self.height * (5/6))
 end
 
+function Board:getCard(shopIndex)
+    return self.shop[shopIndex]
+end
 
 
 

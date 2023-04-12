@@ -10,7 +10,7 @@ end
 local function assertOptions(options)
     assert(options,"?")
     assert(options.rgbTeam, "needs rgbTeam")
-    assert(options.cardEntityType, "needs cardEntityType")
+    assert(options.cardBuyTarget, "needs cardBuyTarget")
     assert(options.shopIndex, "needs shopIndex")
 end
 
@@ -20,14 +20,15 @@ end
     Unit card entity
 ]]
 return {
-    card = true,
+    rgbCard = true,
+    scale = 2,
 
     onClick = function(ent, username, button)
         if button == 1 and ent.rgbTeam == username then
             if server then
                 if buy.canBuy(ent) then
                     buy.buyCard(ent)
-                    reroll.rerollCardSlot(ent.rgbTeam, ent.shopIndex)
+                    reroll.rerollSlot(ent.rgbTeam, ent.shopIndex)
                 end
             elseif client then
                 -- idk, play sound here or something?

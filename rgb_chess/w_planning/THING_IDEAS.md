@@ -133,7 +133,45 @@ These are only usable by units with high enough `Sorcery`.
 
 
 
+# UNIT NAME IDEAS:
 
+
+QUICK RECAP:
+We aren't drawing the units here,
+we are drawing an easily-identifyable symbol for them.
+The symbols should ideally be simple, and easy to distinguish.
+
+
+- Tanky unit
+Tank unit, strong and blocky
+
+- Goblin
+Small annoying unit
+
+- Dice unit
+This unit rerolls stuff. (We probably want a dice for this image)
+
+- Wizard unit
+Maybe a wizard hat? :-)
+
+- Brute
+Looks like the player off PushOps
+
+- Slug swarm unit
+(something that looks like the one I posted before maybe?)
+
+- Pig unit
+perhaps a pig face for this could be good?
+
+- Money unit; generates money
+Perhaps a coin symbol for this?
+
+- Visionary unit
+A giant eye symbol would be really cool for this unit.
+This unit is basically a "support" unit
+
+- Shield mage unit
+This unit creates magic shields for allies
 
 
 

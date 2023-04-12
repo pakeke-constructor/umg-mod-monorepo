@@ -8,6 +8,7 @@ _G.constants = {
 
     CARD_LIGHTNESS = 0.3,
     DEFAULT_CARD_IMAGE = "blank_card",
+    DEFAULT_CARD_RARITY = 1,
 
     REROLL_TIME = 0.15,
     REROLL_COST = 1,

@@ -7,19 +7,22 @@ local genCards = require("server.gen.generate_cards")
 local reroll = {}
 
 
-function reroll.rerollCard(rgbTeam, card)
+function reroll.rerollSlot(rgbTeam, shopIndex)
     local board = Board.getBoard(rgbTeam)
-    local shopIndex = card.shopIndex
-    if not card.isLocked then
-        -- then we reroll
-        if umg.exists(card) then
-            umg.call("rerollCard", card)
-            card:delete()
-        end
-        base.delay(constants.REROLL_TIME, function()
-            genCards.spawnCard(board, shopIndex)
-        end)
+    local card = board:getCard(shopIndex)
+    if umg.exists(card) and card.isLocked then
+        return
     end
+
+    -- we good to reroll
+    if umg.exists(card) then
+        umg.call("rerollCard", card)
+        card:delete()
+    end
+
+    base.delay(constants.REROLL_TIME, function()
+        genCards.spawnCard(board, shopIndex)
+    end)
 end
 
 
@@ -28,12 +31,11 @@ end
 function reroll.rerollAllCards(rgbTeam)
     local board = Board.getBoard(rgbTeam)
     local rgb_team = board:getOwner()
-    local squadronCount = rgb.getSquadronCount(rgbTeam)
 
-    for i=1, board.shopSize do
-        local delay = (i/board.shopSize) * 0.3
+    for shopIndex=1, board.shopSize do
+        local delay = (shopIndex/board.shopSize) * 0.3
         base.delay(delay, function()
-            reroll.rerollCard(rgbTeam, squadronCount) 
+            reroll.rerollSlot(rgbTeam, shopIndex)
         end)
     end
 

@@ -68,28 +68,30 @@ end
 
 local randomCardEtype
 
-do
-local cardPool = {}
 
-for _, etype in pairs(server.entities) do
-    if etype.cardInfo then
-        -- Add this etype to the pool.
-        assertCardInfoOk(etype)
-        cardPool[etype] = etype
+umg.on("@load", function()
+    -- We have to do this within the load function,
+    -- because entities aren't loaded yet.
+    local cardPool = {}
+    for etypeName, etype in pairs(server.entities) do
+        if etype.cardInfo then
+            -- Add this etype to the pool.
+            assertCardInfoOk(etype, etypeName)
+            cardPool[etype] = etype.cardInfo.rarity or constants.DEFAULT_CARD_RARITY
+        end
     end
-end
 
-local rawRandom = base.weightedRandom(cardPool)
+    local rawRandom = base.weightedRandom(cardPool)
 
-function randomCardEtype(turn)
-    local cardEtype = rawRandom()
-    while (cardEtype.minimumTurn or 1) > turn do 
-        cardEtype = rawRandom()
+    function randomCardEtype(turn)
+        local cardEtype = rawRandom()
+        while (cardEtype.minimumTurn or 1) > turn do 
+            cardEtype = rawRandom()
+        end
+        return cardEtype
     end
-    return cardEtype
-end
+end)
 
-end
 
 
 
@@ -104,13 +106,13 @@ function generateCards.spawnCard(board, shopIndex)
 
     local cardEnt = server.entities.card(x, y, {
         rgbTeam = board:getTeam(),
-        cardInfo = cardEtype.cardInfo,
+        cardBuyTarget = cardEtype,
+        shopIndex = shopIndex
     })
 
     cardEnt.image = cardEtype.cardInfo.image or constants.DEFAULT_CARD_IMAGE
     cardEnt.rgb = rgbSelection()
     cardEnt.color = getCardColor(cardEnt.rgb)
-    cardEnt.shopIndex = shopIndex
     board.shop[shopIndex] = cardEnt
 
     return cardEnt
