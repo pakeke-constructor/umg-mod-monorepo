@@ -34,7 +34,7 @@ local descTextArgs = {Color = {0.6,0.6,0.6}}
 
 local renderEtypeUnitInfoTc = base.typecheck.assert("table", "table")
 
-function renderTools.renderUnitEtypeInfo(unitEType, rgbColor)
+function renderTools.renderBasicUnitInfo(unitEType, rgbColor)
     renderEtypeUnitInfoTc(unitEType, rgbColor)
 
     local unitCardInfo = unitEType.unitCardInfo

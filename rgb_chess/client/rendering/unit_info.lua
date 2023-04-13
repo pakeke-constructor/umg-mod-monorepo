@@ -11,24 +11,31 @@ local UNIT_INFO_WINDOW_X = 20
 local UNIT_INFO_WINDOW_Y = 20
 
 
-
-local function drawUnitInfo(unitEType, rgbColor)
-    Slab.BeginWindow("cardInfoPopup", {X=UNIT_INFO_WINDOW_X, Y=UNIT_INFO_WINDOW_Y})
-
+local function singleUnitStats(ent)
     Slab.Separator()
-
-    Slab.Text("Health: " .. unitEType.defaultHealth, healthTextArgs)
-
-    local damageEstimate = rgb.getDamageEstimate(unitEType.defaultAttackDamage, unitEType.defaultAttackSpeed)
+    Slab.Text("Health: " .. ent.maxHealth)
+    local damageEstimate = rgb.getDamageEstimate(ent.attackDamage, ent.attackSpeed)
     local damage = ("%.1f"):format(damageEstimate)
     Slab.Text("DPS:    " .. damage, dmgTextArgs)
+end
 
-    local color_str = rgb.getColorString(rgbColor)
+
+local function drawUnitInfo(ent)
+    Slab.BeginWindow("unitInfoPopup", {X=UNIT_INFO_WINDOW_X, Y=UNIT_INFO_WINDOW_Y})
+    
+    local unitEType = ent:getClass()
+    renderTools.renderBasicUnitInfo(unitEType, ent.rgb)
+
+    for _, e in ipairs(ent.squadron) do
+        singleUnitStats(e)
+    end
+
+    local color_str = rgb.getColorString(ent.rgb)
     Slab.Text("RGB: ")
     Slab.SameLine()
-    Slab.Text(color_str, {Color=rgbColor})
+    Slab.Text(color_str, {Color=ent.rgb})
 
-    renderTools.renderMatchingColors(rgbColor)
+    renderTools.renderMatchingColors(ent.rgb)
 
     Slab.EndWindow()
 end

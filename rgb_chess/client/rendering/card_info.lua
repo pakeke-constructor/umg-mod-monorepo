@@ -2,12 +2,14 @@
 local renderTools = require("client.rendering.render_tools")
 
 
+local CARD_INFO_WINDOW_X = 30
+local CARD_INFO_WINDOW_Y = 30
 
 
 
 
-local function drawCardInfo(ent)
-    Slab.BeginWindow("cardInfoPopup", {X=UNIT_INFO_WINDOW_X, Y=UNIT_INFO_WINDOW_Y})
+local function drawCardInfo(cardEnt)
+    Slab.BeginWindow("cardInfoPopup", {X=CARD_INFO_WINDOW_X, Y=CARD_INFO_WINDOW_Y})
     local unitCardInfo = unitEType.unitCardInfo
 
     Slab.Text(unitCardInfo.name)
