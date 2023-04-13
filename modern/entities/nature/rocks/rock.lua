@@ -13,6 +13,6 @@ return {
     init = function(ent, x, y)
         ent.x = x
         ent.y = y
-        ent.image = table.pick_random(IMGS)
+        ent.image = table.random(IMGS)
     end
 }

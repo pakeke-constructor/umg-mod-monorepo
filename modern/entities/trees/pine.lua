@@ -19,7 +19,7 @@ return {
     init = function(ent,x,y)
         ent.x = x
         ent.y = y
-        ent.image = table.pick_random(PINES)
+        ent.image = table.random(PINES)
     end
 }
 

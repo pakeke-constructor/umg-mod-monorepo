@@ -16,7 +16,7 @@ return {
 
     init = function(ent,x,y)
         base.initializers.initXY(ent,x,y)
-        ent.image = table.pick_random(IMGS)
+        ent.image = table.random(IMGS)
     end
 }
 

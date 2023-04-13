@@ -10,7 +10,7 @@ return {
 
     init = function(ent, x, y)
         base.initializers.initXY(ent,x,y)
-        ent.image = table.pick_random(GRASS_IMAGES)
+        ent.image = table.random(GRASS_IMAGES)
     end
 }
 

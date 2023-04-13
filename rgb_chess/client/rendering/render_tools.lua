@@ -1,4 +1,6 @@
 
+require("shared.rgb")
+
 
 local renderTools = {}
 
@@ -23,7 +25,7 @@ local COLS_PER_LINE = 3 -- How many colors displayed per line
 
 local COL_KEYS = base.Array()
 do
-for key, _ in pairs(COL_KEYS) do
+for key, _ in pairs(rgb.COLS) do
     COL_KEYS:add(key)
 end
 table.sort(COL_KEYS)

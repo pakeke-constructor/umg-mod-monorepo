@@ -18,7 +18,7 @@ return {
 
     init = function(ent,x,y)
         base.initializers.initVxVy(ent,x,y)
-        ent.image = table.pick_random(IMGS)
+        ent.image = table.random(IMGS)
     end
 }
 
