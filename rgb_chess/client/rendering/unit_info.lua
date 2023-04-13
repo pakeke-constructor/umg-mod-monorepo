@@ -4,8 +4,11 @@ local renderTools = require("client.rendering.render_tools")
 
 
 
-local healthTextArgs = {Color = {1,0.2,0.2}}
-local dmgTextArgs = {Color = {0.8,0.7,0.1}}
+local healthTextArgs = {Color = renderTools.healthColor} 
+local dmgTextArgs = {Color = renderTools.attackColor}
+local dpsTextArgs = {Color = renderTools.dpsColor} 
+local sorcTextArgs = {Color = renderTools.sorceryColor}
+
 
 local UNIT_INFO_WINDOW_X = 20
 local UNIT_INFO_WINDOW_Y = 20
@@ -13,11 +16,19 @@ local UNIT_INFO_WINDOW_Y = 20
 
 local function singleUnitStats(ent)
     Slab.Separator()
-    Slab.Text("Health: " .. ent.maxHealth)
-    local damageEstimate = rgb.getDamageEstimate(ent.attackDamage, ent.attackSpeed)
-    local damage = ("%.1f"):format(damageEstimate)
-    Slab.Text("DPS:    " .. damage, dmgTextArgs)
+    renderTools.renderUnitHealth(ent.maxHealth)
+   
+    -- todo: Make this more robust. perhaps rgb.isAttacker(ent)?
+    if ent.attackDamage and ent.attackSpeed then
+        renderTools.renderUnitDamage(ent.attackDamage, ent.attackSpeed)
+    end
+
+    -- todo: Make this more robust. Perhaps rgb.isSorcerer(ent)?
+    if ent.sorcery and ent.sorcery > 0 then
+        renderTools.renderUnitSorcery(ent.sorcery)
+    end
 end
+
 
 
 local function drawUnitInfo(ent)
@@ -30,10 +41,10 @@ local function drawUnitInfo(ent)
         singleUnitStats(e)
     end
 
-    local color_str = rgb.getColorString(ent.rgb)
+    local colstr = rgb.getColorString(ent.rgb)
     Slab.Text("RGB: ")
     Slab.SameLine()
-    Slab.Text(color_str, {Color=ent.rgb})
+    Slab.Text(colstr, {Color=ent.rgb})
 
     renderTools.renderMatchingColors(ent.rgb)
 

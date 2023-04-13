@@ -4,6 +4,10 @@ return umg.extend("abstract_melee", {
     image = "huhu1",
     bobbing = {},
 
+    defaultHealth = 100,
+    defaultAttackSpeed = 1,
+    defaultAttackDamage = 8,
+
     attackSpeed = 1,
     attackDamage = 8,
 

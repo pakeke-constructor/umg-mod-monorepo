@@ -8,41 +8,44 @@ local CARD_INFO_WINDOW_Y = 30
 
 
 
-local function drawCardInfo(cardEnt)
-    Slab.BeginWindow("cardInfoPopup", {X=CARD_INFO_WINDOW_X, Y=CARD_INFO_WINDOW_Y})
-    local unitCardInfo = unitEType.unitCardInfo
 
-    Slab.Text(unitCardInfo.name)
+
+
+
+local function drawUnitCardInfo(cardEnt)
+    Slab.BeginWindow("cardInfoPopup", {X=CARD_INFO_WINDOW_X, Y=CARD_INFO_WINDOW_Y})
+    local unitEType = cardEnt.cardBuyTarget 
+    local rgbColor = cardEnt.rgb
+
+    renderTools.renderBasicUnitInfo(unitEType, cardEnt.rgb)
     
     Slab.Separator()
 
-    Slab.Text("Health: " .. unitEType.defaultHealth, healthTextArgs)
+    renderTools.renderUnitHealth(unitEType.defaultHealth)
+    -- TODO: Add support for sorcerers here
+    renderTools.renderUnitDamage(unitEType.defaultAttackDamage, unitEType.defaultAttackSpeed)
 
-    local damageEstimate = rgb.getDamageEstimate(unitEType.defaultAttackDamage, unitEType.defaultAttackSpeed)
-    local damage = ("%.1f"):format(damageEstimate)
-    Slab.Text("DPS:    " .. damage, dmgTextArgs)
+    Slab.Separator()
 
     local color_str = rgb.getColorString(rgbColor)
     Slab.Text("RGB: ")
     Slab.SameLine()
     Slab.Text(color_str, {Color=rgbColor})
 
-    Slab.Text(" ")
-
-    local f = love.graphics.getFont()
-    local description = unitCardInfo.description:gsub(constants.COLOR_SUB_TAG, color_str)
-    local _, txt_table = f:getWrap(description, 600)
-    for _, txt in ipairs(txt_table) do
-        Slab.Text(txt, descTextArgs)
-    end
-
-    Slab.Text(" ")
     Slab.Separator()
 
     renderTools.renderMatchingColors(rgbColor)
 
     Slab.EndWindow()
 end
+
+
+
+local function drawCardInfo(cardEnt)
+    drawUnitCardInfo(cardEnt)
+    --todo: support for spell cards.
+end
+
 
 
 

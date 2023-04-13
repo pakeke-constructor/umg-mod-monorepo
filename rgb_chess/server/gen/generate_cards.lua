@@ -42,7 +42,7 @@ local itemRGBSelection = base.weightedRandom({
 
 local function assertFor(bool, etypeName)
     if not bool then
-        error("cardInfo is missing something for this entity type: " .. etypeName)
+        error("This entity type is missing some vital info - " .. etypeName)
     end
 end
 
@@ -60,6 +60,11 @@ local function assertCardInfoOk(etype, etypeName)
 
     if cardInfo.type == constants.CARD_TYPES.UNIT then
         assertUnitInfo(cardInfo.unitInfo, etypeName)
+        assertFor(etype.defaultHealth, etypeName)
+        -- TODO: Sorcery entities don't have attackDamage;
+        -- this should be changed.
+        assertFor(etype.defaultAttackDamage, etypeName)
+        assertFor(etype.defaultAttackSpeed, etypeName)
     elseif cardInfo.type == constants.CARD_TYPES.SPELL then
         assertFor(cardInfo.spellInfo, etypeName)
     end

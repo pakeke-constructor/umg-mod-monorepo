@@ -16,7 +16,7 @@ local function buyUnitCard(card_ent)
     ]]
     local squadron = {}
     local unit_etype = card_ent.cardBuyTarget
-    local info = unit_etype.unitCardInfo
+    local info = unit_etype.cardInfo
     local numUnits = info.squadronSize or 1
     for _=1, numUnits do
         local ent = spawnEntity.spawnUnitFromCard(card_ent)
@@ -71,7 +71,7 @@ end
 
 function buy.sellSquadron(ent)
     umg.call("sellSquadron", ent.squadron)
-    local baseCost = ent.unitCardInfo.cost
+    local baseCost = ent.cardInfo.cost
     assert(ent.squadron,"?")
     local board = Board.getBoard(ent.rgbTeam)
     board:setMoney(board:getMoney() - baseCost)
