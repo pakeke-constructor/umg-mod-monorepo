@@ -31,7 +31,8 @@ return umg.extend("abstract_melee", {
         name = "Brute x 1",
         description = "on ally death,\nprint hi in console",
         unitInfo = {
-            squadronSize = 1,
+            symbol = "dice",
+            squadronSize = 1
         }
     },
 

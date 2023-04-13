@@ -31,6 +31,7 @@ local rgbSelection = base.weightedRandom({
 
 local itemRGBSelection = base.weightedRandom({
     -- [result]    =  probability weight
+    -- Composite colors are more common on items.
     [rgb.COLS.RED] =   0.3,
     [rgb.COLS.BLU] =   0.3,
     [rgb.COLS.GRN] =   0.3,
@@ -42,16 +43,27 @@ local itemRGBSelection = base.weightedRandom({
 
 local function assertFor(bool, etypeName)
     if not bool then
-        error("This entity type is missing some vital info - " .. etypeName)
+        error("This entity type is missing some vital info - " .. tostring(etypeName))
     end
 end
 
+
 local function assertUnitInfo(unitInfo, etypeName)
     assertFor(unitInfo, etypeName)
-    assertFor(unitInfo.squadronSize)
+    assertFor(unitInfo.squadronSize, etypeName)
+    assertFor(unitInfo.symbol, etypeName)
 end
 
-local function assertCardInfoOk(etype, etypeName)
+local function assertUnitFields(etype, etypeName)
+    assertFor(etype.defaultHealth, etypeName)
+    -- TODO: Sorcery entities don't have attackDamage;
+    -- this should be changed.
+    assertFor(etype.defaultAttackDamage, etypeName)
+    assertFor(etype.defaultAttackSpeed, etypeName)
+end
+
+
+local function assertETypeOk(etype, etypeName)
     local cardInfo = etype.cardInfo
     assertFor(constants.CARD_TYPES[cardInfo.type], etypeName) 
     assertFor(cardInfo.cost, etypeName)
@@ -60,11 +72,7 @@ local function assertCardInfoOk(etype, etypeName)
 
     if cardInfo.type == constants.CARD_TYPES.UNIT then
         assertUnitInfo(cardInfo.unitInfo, etypeName)
-        assertFor(etype.defaultHealth, etypeName)
-        -- TODO: Sorcery entities don't have attackDamage;
-        -- this should be changed.
-        assertFor(etype.defaultAttackDamage, etypeName)
-        assertFor(etype.defaultAttackSpeed, etypeName)
+        assertUnitFields(etype, etypeName)
     elseif cardInfo.type == constants.CARD_TYPES.SPELL then
         assertFor(cardInfo.spellInfo, etypeName)
     end
@@ -81,7 +89,7 @@ umg.on("@load", function()
     for etypeName, etype in pairs(server.entities) do
         if etype.cardInfo then
             -- Add this etype to the pool.
-            assertCardInfoOk(etype, etypeName)
+            assertETypeOk(etype, etypeName)
             cardPool[etype] = etype.cardInfo.rarity or constants.DEFAULT_CARD_RARITY
         end
     end

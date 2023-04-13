@@ -3,13 +3,6 @@ local renderTools = require("client.rendering.render_tools")
 
 
 
-
-local healthTextArgs = {Color = renderTools.healthColor} 
-local dmgTextArgs = {Color = renderTools.attackColor}
-local dpsTextArgs = {Color = renderTools.dpsColor} 
-local sorcTextArgs = {Color = renderTools.sorceryColor}
-
-
 local UNIT_INFO_WINDOW_X = 20
 local UNIT_INFO_WINDOW_Y = 20
 

@@ -14,7 +14,6 @@ renderTools.sorceryColor = {0.1,0.3,0.9}
 local healthTextArgs = {Color = renderTools.healthColor} 
 local dmgTextArgs = {Color = renderTools.attackColor}
 local dpsTextArgs = {Color = renderTools.dpsColor} 
-
 local sorcTextArgs = {Color = renderTools.sorceryColor}
 
 
@@ -22,11 +21,20 @@ local sorcTextArgs = {Color = renderTools.sorceryColor}
 
 local COLS_PER_LINE = 3 -- How many colors displayed per line
 
+local COL_KEYS = base.Array()
+do
+for key, _ in pairs(COL_KEYS) do
+    COL_KEYS:add(key)
+end
+table.sort(COL_KEYS)
+end
+
 function renderTools.renderMatchingColors(rgbColor)
     -- renders matching colors UI inside of a Slab context
     Slab.Text("Matches:")
     local count = 0
-    for colname, col in pairs(rgb.COLS) do
+    for _, colname in ipairs(COL_KEYS) do
+        local col = rgb.COLS[colname]
         if rgb.match(col, rgbColor) then
             Slab.Text(colname .. "  ", {Color = col})
             count = count + 1
@@ -87,7 +95,7 @@ end
 
 
 function renderTools.renderUnitSorcery(sorcery)
-    Slab.Text("SORC: " .. sorcery)
+    Slab.Text("SORC: " .. sorcery, sorcTextArgs)
 end
 
 
