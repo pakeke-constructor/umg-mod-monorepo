@@ -31,6 +31,7 @@ local function loadClient(base)
     
     base.client.getUIScale = draw.getUIScale
     base.client.setUIScale = draw.setUIScale
+    base.client.getUIMousePosition = draw.getUIMousePosition
 
     base.client.isOnScreen = drawEntities.isOnScreen
     base.client.entIsOnScreen = drawEntities.entIsOnScreen

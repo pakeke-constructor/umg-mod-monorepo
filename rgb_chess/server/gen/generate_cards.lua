@@ -29,18 +29,6 @@ local rgbSelection = base.weightedRandom({
 
 
 
-local itemRGBSelection = base.weightedRandom({
-    -- [result]    =  probability weight
-    -- Composite colors are more common on items.
-    [rgb.COLS.RED] =   0.3,
-    [rgb.COLS.BLU] =   0.3,
-    [rgb.COLS.GRN] =   0.3,
-    [rgb.COLS.YLO] =   0.2,
-    [rgb.COLS.MAG] =   0.2,
-    [rgb.COLS.AQU] =   0.2,
-})
-
-
 local function assertFor(bool, etypeName)
     if not bool then
         error("This entity type is missing some vital info - " .. tostring(etypeName))
@@ -56,10 +44,16 @@ end
 
 local function assertUnitFields(etype, etypeName)
     assertFor(etype.defaultHealth, etypeName)
-    -- TODO: Sorcery entities don't have attackDamage;
-    -- this should be changed.
-    assertFor(etype.defaultAttackDamage, etypeName)
-    assertFor(etype.defaultAttackSpeed, etypeName)
+    assertFor(etype.unitType, etypeName)
+    local UNIT_TYPES = constants.UNIT_TYPES
+    assertFor(UNIT_TYPES[etype.unitType], etypeName)
+
+    if etype.unitType == UNIT_TYPES.MELEE or etype.unitType == UNIT_TYPES.RANGED then
+        assertFor(etype.defaultAttackDamage, etypeName)
+        assertFor(etype.defaultAttackSpeed, etypeName)
+    elseif etype.unitType == UNIT_TYPES.SORCERER then
+        assertFor(etype.defaultSorcery, etypeName)
+    end
 end
 
 
@@ -90,7 +84,7 @@ umg.on("@load", function()
         if etype.cardInfo then
             -- Add this etype to the pool.
             assertETypeOk(etype, etypeName)
-            cardPool[etype] = etype.cardInfo.rarity or constants.DEFAULT_CARD_RARITY
+            cardPool[etype] = etype.cardInfo.rarity or constants.DEFAULT_RARITY
         end
     end
 
@@ -98,7 +92,7 @@ umg.on("@load", function()
 
     function randomCardEtype(turn)
         local cardEtype = rawRandom()
-        while (cardEtype.minimumTurn or 1) > turn do 
+        while (cardEtype.cardInfo.minimumTurn or 1) > turn do 
             cardEtype = rawRandom()
         end
         return cardEtype

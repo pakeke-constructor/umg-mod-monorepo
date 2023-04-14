@@ -78,7 +78,7 @@ end
 
 
 
-rgbAPI.abilities = require("server.engine.abilities.abilities")
+rgbAPI.abilities = require("server.engine.abilities.ability_defs")
 
 
 

@@ -299,17 +299,14 @@ function Inventory:withinBounds(mouse_x, mouse_y)
     -- returns true/false, depending on whether mouse_x or mouse_y is
     -- within the inventory interface
     local ui_scale = getUIScale()
-    local x, y = mouse_x / ui_scale, mouse_y / ui_scale
-    local x_valid = (self.draw_x - self.borderWidth <= x) and (x <= self.draw_x + (self.width * self.totalSlotSize) + self.borderWidth)
-    local y_valid = (self.draw_y - self.borderWidth <= y) and (y <= self.draw_y + (self.height * self.totalSlotSize) + self.borderWidth)
+    local mx, my = mouse_x / ui_scale, mouse_y / ui_scale
+    local x_valid = (self.draw_x - self.borderWidth <= mx) and (mx <= self.draw_x + (self.width * self.totalSlotSize) + self.borderWidth)
+    local y_valid = (self.draw_y - self.borderWidth <= my) and (my <= self.draw_y + (self.height * self.totalSlotSize) + self.borderWidth)
     return x_valid and y_valid
 end
 
 
-function Inventory:getBucket(mouse_x, mouse_y)
-    if not (base and getUIScale)  then
-        error("Inventory mod requires base mod to be loaded!")
-    end
+function Inventory:getSlot(mouse_x, mouse_y)
     local ui_scale = getUIScale()
     local x, y = mouse_x / ui_scale, mouse_y / ui_scale
     local norm_x = x - self.draw_x 
@@ -363,14 +360,11 @@ function Inventory:drawItem(item_ent, x, y)
 end
 
 
-
-
-
-function Inventory:updateSlabUI()   
+local function updateInventoryUI(self)
     local ent = self.owner
     for i, ui in ipairs(ent.inventoryUI) do
         local ent_id = ent.id
-        local windowName = tostring(ent_id) .. "_" .. tostring(i)
+        local windowName = "inventory:" .. tostring(ent_id) .. "_" .. tostring(i)
         -- we must generate a unique string identifier due to Slab
         local scale = Slab.GetScale() / getUIScale()
         local winX = (self.draw_x + (ui.x-1) * self.totalSlotSize) / scale
@@ -387,6 +381,32 @@ function Inventory:updateSlabUI()
         })
         ui.render(ent)
         Slab.EndWindow(windowName)
+    end
+end
+
+
+local function drawItemInfo(itemEnt, mx, my)
+    Slab.BeginWindow("inventory:itemInfo", {
+        X = mx, Y = my,
+
+    })
+
+    Slab.EndWindow()
+end
+
+
+function Inventory:updateSlabUI() 
+    local ent = self.owner
+    if ent.inventoryUI then
+        -- custom UI stuff
+        updateInventoryUI(self)
+    end
+
+    local mx, my = love.mouse.getPosition()
+    local slotx, sloty = self:getSlot(mx,my)
+    local item = self:get(slotx, sloty)
+    if item then
+        -- draw
     end
 end
 

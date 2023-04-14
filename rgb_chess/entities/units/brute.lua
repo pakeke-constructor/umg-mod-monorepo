@@ -1,3 +1,4 @@
+local abilityTypes = require("shared.ability_types")
 
 
 return umg.extend("abstract_melee", {
@@ -13,7 +14,7 @@ return umg.extend("abstract_melee", {
 
     maxHealth = 100,
 
-    abilities = {rgbAPI.abilities.test},
+    abilities = {abilityTypes.test},
 
     cardInfo = {
         type = constants.CARD_TYPES.UNIT,

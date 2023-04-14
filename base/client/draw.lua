@@ -1,4 +1,7 @@
 
+local draw = {}
+
+
 local camera = require("client.camera")
 local constants = require("shared.constants")
 
@@ -43,15 +46,24 @@ local function fudgeUIScale(scale)
 end
 
 
-local function setUIScale(scale)
+function draw.setUIScale(scale)
     assert(type(scale) == "number", "love.graphics.setUIScale(scale) requires a number")
     scaleUI = fudgeUIScale(scale)
 end
 
-local function getUIScale()
+
+function draw.getUIScale()
     return scaleUI
 end
 
+
+function draw.getUIMousePosition()
+    -- gets the mouse position within the UI context
+    local mouse_x, mouse_y = love.mouse.getPosition()
+    local ui_scale = draw.getUIScale()
+    local mx, my = mouse_x / ui_scale, mouse_y / ui_scale
+    return mx, my
+end
 
 
 
@@ -66,8 +78,4 @@ end)
 
 
 
-
-return {
-    setUIScale = setUIScale,
-    getUIScale = getUIScale
-}
+return draw

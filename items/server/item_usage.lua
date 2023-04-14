@@ -37,16 +37,19 @@ end
 
 
 
+local function useItemDeny(item, holder_ent, ...)
+    item:useItemDeny(holder_ent, ...)
+    umg.call("useItemDeny", holder_ent, item, ...)
+end
 
-local asserter = base.typecheck.assert("entity")
+
 
 function itemUsage.useHoldItem(holder_ent, ...)
     local item = holder_ent.holdItem
     if itemUsage.canUseHoldItem(holder_ent) then
-        asserter(holder_ent)
         itemUsage.useItemDirectly(holder_ent, item, ...)
     elseif item and item.useItemDeny then
-        item:useItemDeny(holder_ent, ...)
+        useItemDeny(item, holder_ent, ...)
     end
 end
 

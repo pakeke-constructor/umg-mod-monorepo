@@ -2,8 +2,10 @@
 
 # attack mod.  Handles basic AI for attacking, and splash damage.
 
+## IMPORTANT NOTE: This mod is actually kinda shit. Don't use this for future mods. 
 
-NOTE: 
+
+**NOTE:**
 This mod requires A LOT of setup to actually use properly.
 
 On it's own, this mod doesn't actually deal any damage; it's up to YOU

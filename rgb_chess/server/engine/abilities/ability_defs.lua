@@ -1,5 +1,13 @@
+--[[
+
+Ability definitions
+
+]]
+
 
 local validTriggers = require("server.engine.abilities.triggers")
+local abilityTypes = require("shared.ability_types")
+
 
 
 local abilities = setmetatable({}, {
@@ -31,7 +39,7 @@ end
 
 
 
-defineAbility("test", {
+defineAbility(abilityTypes.test, {
     trigger = "onAllyDeath", 
     description = "When die, print hi",
     filter = function(ent, allyEnt)
@@ -43,6 +51,13 @@ defineAbility("test", {
 })
 
 
+
+
+do
+for abilType, _ in pairs(abilityTypes) do
+    assert(abilities[abilType], "Undefined ability type: " .. abilType)
+end
+end
 
 
 return abilities

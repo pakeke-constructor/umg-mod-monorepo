@@ -246,15 +246,15 @@ function listener:mousepressed(mx, my, button)
                 table.remove(open_inventories, i)
                 table.insert(open_inventories, inv)
             end
-            local bx, by = inv:getBucket(mx,my)
-            if bx then
-                if inv:slotExists(bx,by) then
+            local slotX, slotY = inv:getSlot(mx,my)
+            if slotX then
+                if inv:slotExists(slotX, slotY) then
                     if button == ALPHA_BUTTON then
                         self:lockMouseButton(ALPHA_BUTTON)
-                        executeAlphaInteraction(inv, bx, by)
+                        executeAlphaInteraction(inv, slotX, slotY)
                     elseif button == BETA_BUTTON then
                         self:lockMouseButton(BETA_BUTTON)
-                        executeBetaInteraction(inv, bx, by)
+                        executeBetaInteraction(inv, slotX, slotY)
                     end
                 elseif button == ALPHA_BUTTON then
                     self:lockMouseButton(ALPHA_BUTTON)
@@ -304,8 +304,7 @@ end
 
 umg.on("slabUpdate", function()
     for _, inv in ipairs(open_inventories) do
-        local owner = inv.owner
-        if owner.inventoryUI and inv.isOpen then
+        if inv.isOpen then
             inv:updateSlabUI()
         end
     end

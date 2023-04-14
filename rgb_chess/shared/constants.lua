@@ -8,7 +8,8 @@ _G.constants = {
 
     CARD_LIGHTNESS = 0.3,
     DEFAULT_CARD_IMAGE = "blank_card",
-    DEFAULT_CARD_RARITY = 1,
+
+    DEFAULT_RARITY = 1,
 
     REROLL_TIME = 0.15,
     REROLL_COST = 1,
@@ -30,6 +31,7 @@ _G.constants = {
         SHIELD = "SHIELD",
         CUSTOM = "CUSTOM",
         BUFF = "BUFF",
+        ABILITY = "ABILITY",
         DEBUFF = "DEBUFF"
     }),
 
@@ -45,6 +47,17 @@ _G.constants = {
         UNIT = "UNIT",
         SPELL = "SPELL",
         ITEM = "ITEM"
+    }),
+
+    UNIT_TYPES = base.Enum({
+        MELEE = "MELEE",
+        RANGED = "RANGED",
+        SORCERER = "SORCERER"
+    }),
+
+    ITEM_TYPES = base.Enum({
+        PASSIVE = "PASSIVE",
+        USABLE = "USABLE"
     })
 }
 

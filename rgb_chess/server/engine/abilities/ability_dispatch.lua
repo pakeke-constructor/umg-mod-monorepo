@@ -5,28 +5,17 @@ This file is responsible for "activating" abilities,
 and providing an API for manually activating abilities.
 
 
-]]
-
-
-local abilities = {}
-
-
-local abilityGroup = umg.group("abilities")
-
-
---[[
-
 Abilities work the same on items, as they do on units.
 
 NOTE: Each ability callback takes an implicit `self` as first argument!
 `self` is the entity that contains the ability
-
 ]]
 
-
+local abilities = require("server.engine.abilities.ability_defs")
 local validTriggers = require("server.engine.abilities.triggers")
 
 
+local abilityGroup = umg.group("abilities")
 
 
 -- NOTE: these aren't actually umg groups!

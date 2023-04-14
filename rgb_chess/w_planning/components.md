@@ -78,8 +78,23 @@ ent.cardInfo = {
 
     -- only needed for cardType SPELL
     spellInfo = {
+        -- TODO: Do we need this?
     }
 }
+
+
+
+
+
+--[[
+    Only used by item entities.
+    This component will automatically add this item to the item pool.
+]]
+ent.itemInfo = {
+    rarity = 1, -- number from 0-1 representing chance of this card 
+    minimumTurn = 2, -- minimum turn for this item to appear.
+}
+
 
 ```
 

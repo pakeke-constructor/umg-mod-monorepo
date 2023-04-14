@@ -75,6 +75,11 @@ end
 
 
 
+function rgb.isBlack(col)
+    return (col[1] + col[2] + col[3]) < EPSILON 
+end
+
+
 
 local subtractTc = base.typecheck.assert("table", "table")
 
