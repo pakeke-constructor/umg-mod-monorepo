@@ -39,23 +39,23 @@ ent.sorcery = 5
 ent.defaultAttackSpeed = 0.5
 ent.attackSpeed = 0.5
 
---[[
-    FOR ALL VALID ABILITIES,
-    SEE abilities.lua
-]]
+
+
 ent.abilities = {
-    {
-        type = "onAllyDeath",
-        filter = function(ent, ...)
-            return true or false 
-            -- depending on whether this ability should activate
-        end,
-        apply = function(ent, ...)
-            ... -- what actually happens in the ability
-        end
-    },
-    ... -- Entities can have many abilities
+    -- See abilities.lua for ability definitions.
+    rgbAPI.abilities.onSummonBuffHealth,
+    ... -- ents may have multiple abilities
 }
+
+
+local abilityExample = {
+    trigger = abilityTriggers.onAllyDeath,
+    
+}
+
+
+
+
 
 
 --[[

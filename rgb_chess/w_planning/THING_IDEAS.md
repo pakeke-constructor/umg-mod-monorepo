@@ -32,10 +32,10 @@ ALL OF THESE ARE SUBJECT TO CHANGE.
 - `jack_of_spades`: Swap HP and ATK of a random [color] ally 
 
 - `king_of_spades_card`: Kill a random [color] ally. In return, gain 3 [color] items 
-- `king_of_hearts_card`: Give +6 HEALTH to all [color] allies holding at least 1 item
+- `king_of_hearts_card`: Spawn 2 [color] items
 
-- `queen_of_spades_card`: Reroll all [color] items that are on the ground
-- `queen_of_diamonds_card`: Spawn a random [color] item
+- `queen_of_spades_card`: 
+- `queen_of_diamonds_card`: 
 
 - `null_card`: Subtract [color] from a random [color] ally
 
@@ -74,6 +74,14 @@ Obviously, we will have the basic units:
 
 - Backpack unit, Has a very large inventory space
 - Reroller, Start of turn: rerolls the color of all items in inventory 
+
+- On buy:  Swap the abilities of the two healthiest [color] allys
+
+- On buy: If the last bought unit is [color], all non-[color] allys inherit that ability. Else, inherit that ability.
+
+
+# PARAGON UNITS:
+
 
 
 

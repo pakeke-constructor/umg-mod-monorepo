@@ -1,4 +1,12 @@
 
+--[[
+
+This file is responsible for "activating" abilities,
+and providing an API for manually activating abilities.
+
+
+]]
+
 
 local abilities = {}
 
@@ -6,69 +14,29 @@ local abilities = {}
 local abilityGroup = umg.group("abilities")
 
 
-
-
 --[[
 
-A list of valid abilities.
-
 Abilities work the same on items, as they do on units.
-
 
 NOTE: Each ability callback takes an implicit `self` as first argument!
 `self` is the entity that contains the ability
 
 ]]
-local validAbilities = {
-    "onAllyDeath",-- (allyEnt)
---    "onEnemyDeath",-- (enemyEnt)    --TODO: This will be a bit harder
 
-    "onAllyBuff",-- (buffType, amount, buffer_ent, depth )
-    "onAllyDebuff",-- (buffType, amount, buffer_ent, depth )
 
-    "onAllySummoned",-- (summonedEnt)
-    "onAllySold",-- (soldEnt)
- 
-    "onAllyDamage",-- (allyVictimEnt, attackerEnt, damage)
-    "onAllyHeal",-- (allyEnt, healerEnt, amount)
-    "onAllyAttack",-- (allyEnt, targetEnt, damage)
-
-    "onAllyStun",-- (stunnedAllyEnt, duration)
-
-    "onAllyShieldBreak", -- (allyEnt)
-    "onAllyShieldExpire", -- (allyEnt, shieldSize)
-
---    "onAllyEquip", -- (allyEnt, itemEnt)
---    "onAllyUnequip", -- (allyEnt, itemEnt)
- 
-    "onReroll",-- ()
-    "onStartTurn",-- ()
-    "onEndTurn",-- ()
-
-    "onStartBattle"-- ()
-}
-
-for _, ability in ipairs(validAbilities) do
-    validAbilities[ability] = true
-end
+local validTriggers = require("server.engine.abilities.triggers")
 
 
 
 
-local function ensureAbilityMapping(ent)
-    if ent.abilities.abilityMapping then
-        return
+
+local function ensureTriggerMapping(ability)
+    local trigger = ability.trigger or "nil"
+    if not validTriggers[trigger] then
+        error("Invalid ability trigger for entity: " .. ent:type() .. "  " .. trigger)
     end
 
-    ent.abilities.abilityMapping = {}
-    for _, ability in ipairs(ent.abilities) do
-        local typ = ability.type or "nil"
-        if not validAbilities[typ] then
-            error("Invalid ability type for entity: " .. ent:type() .. "  " .. typ)
-        end
-
-        ent.abilities.abilityMapping[typ] = ability
-    end
+    ent.abilities.triggerMapping[trigger] = ability
 end
 
 
@@ -76,8 +44,8 @@ end
 -- NOTE: these aren't actually umg groups!
 local abilityGroups = {
 --[[
-    [abilityType] -> Set{ ent1, ent2, ... }
-    -- list of entities that contain `abilityType`
+    [triggerType] -> Set{ ent1, ent2, ... }
+    -- list of entities that contain `triggerType`
 ]]
 }
 
@@ -104,14 +72,14 @@ end
 
 
 abilityGroup:onAdded(function(ent)
-    ensureAbilityMapping(ent)
+    ensureTriggerMapping(ent)
     addToAbilityGroups(ent)
 end)
 
 
 
 local function tryGetAbility(ent, abilityType)
-    return ent.ability.abilityMapping[abilityType]
+    return ent.ability.triggerMapping[abilityType]
 end
 
 
@@ -120,7 +88,7 @@ local callTc = base.typecheck.assert("string", "entity")
 local function call(abilityType, ent, ...)
     callTc(abilityType, ent)
     local abil = ent.abilities
-    local handler = abil.abilityMapping[abilityType]
+    local handler = abil.triggerMapping[abilityType]
     if (not handler.filter) or handler.filter(ent, ...) then
         handler.apply(ent, ...)
         -- TODO: Surely we can do something better here?
@@ -152,13 +120,13 @@ end
 
 
 
-local abilityTypeIsDealtWith = {}
--- This table is just for testing, to ensure we cover all abilityTypes.
+local triggerTypeDealthWith = {}
+-- This table is just for testing, to ensure we cover all triggerTypes.
 
 local function handled(abilityType)
     -- This function is just for debug purposes, to ensure
-    -- that we cover every single abilityType.
-    abilityTypeIsDealtWith[abilityType] = true
+    -- that we cover every single triggerType.
+    triggerTypeDealthWith[abilityType] = true
 end
 
 
@@ -222,9 +190,9 @@ proxyToAll("startBattle", "onStartBattle")
 
 -- ensure we covered all abilityTypes:
 do
-for _, abilityType in ipairs(validAbilities) do
-    if not abilityTypeIsDealtWith[abilityType] then
-        error("ability type not dealt with: " .. abilityType)
+for _, triggerType in ipairs(validTriggers) do
+    if not triggerTypeDealthWith[triggerType] then
+        error("triggerType not dealt with: " .. triggerType)
     end
 end
 end
