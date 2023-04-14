@@ -1,6 +1,12 @@
 
 
 # RGB Chess:
+OK: so this is getting to be quite a complex game.
+Perhaps we have 2 modes:
+`LEARNING` mode, and `NORMAL` mode.
+`NORMAL` mode contains all the features, whereas `LEARNING` mode
+does not contain items, nor any complicated cards.
+
 
 
 ### GAME LOOP:

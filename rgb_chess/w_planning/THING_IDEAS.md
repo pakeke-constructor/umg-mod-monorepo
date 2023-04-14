@@ -18,6 +18,11 @@ ALL OF THESE ARE SUBJECT TO CHANGE.
 - `ace_of_hearts`: give +2 HEALTH to all [color] allies
 - `ace_of_spades`: give +1 DAMAGE to all [color] allies
 
+- `full_suit_card`: give +1 HP, +1 ATK, +1 SORC to all [color] allies
+
+
+**CARDS BELOW THIS LINE ARE "ADVANCED", or more complicated:**
+
 - `blank_card`: If the last card played is [color], replace all shop slots with copies of that card. 
     Else, replace only one slot.
 
@@ -26,16 +31,14 @@ ALL OF THESE ARE SUBJECT TO CHANGE.
 
 - `face_down_card`: [color] paragon units will now spawn in the shop
 
-- `full_suit_card`: give +1 HP, +1 ATK, +1 SORC to all [color] allies
-
 - `jack_of_diamonds`: Swap HP and SORC of a random [color] ally 
 - `jack_of_spades`: Swap HP and ATK of a random [color] ally 
 
-- `king_of_spades_card`: Kill a random [color] ally. In return, gain 3 [color] items 
+- `king_of_spades_card`: Kill the lowest health [color] ally. In return, gain 3 [color] items 
 - `king_of_hearts_card`: Spawn 2 [color] items
 
-- `queen_of_spades_card`: 
-- `queen_of_diamonds_card`: 
+- `queen_of_spades_card`: Transfer an ability from the lowest health [color] ally to the highest health [color] ally
+- `queen_of_diamonds_card`: Instantly proc the abilities of [color] allies
 
 - `null_card`: Subtract [color] from a random [color] ally
 
@@ -60,7 +63,7 @@ Obviously, we will have the basic units:
 - Turn start: If there are no [color] allys, gain 2 rerolls
 - Turn start: If there are no [color] allys, give the best sorcery ally +15% SORC
 - On reroll: If there are only [color] allys, gain +1/+1 
-- On win round:  Spawn a random [color] item
+- Turn start: If won round, spawn a random [color] item
 - Turn start:  If there are only [color] allys, gain 1 reroll
 - Turn end: if there are at least 4 [color] allys, give [color] allys +1/+1
 - On buy: mimic the health of the healthiest [color] ally
@@ -81,6 +84,7 @@ Obviously, we will have the basic units:
 
 
 # PARAGON UNITS:
+- SAIYO:  On buy, steals all abilities from [color] units
 
 
 
