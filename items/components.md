@@ -22,6 +22,10 @@
     --===========================================
     -- OPTIONAL VALUES:
     itemDescription = "..." -- item description
+
+    displayItemInfo = function(self)
+        -- Used when you want to display Item info.
+    end
     
     useItem = function(self, holderEnt)
         -- Called when item is used by `holderEnt`

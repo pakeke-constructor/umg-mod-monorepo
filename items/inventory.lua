@@ -385,11 +385,20 @@ local function updateInventoryUI(self)
 end
 
 
+local descriptionArgs = {Color = {0.7,0.7,0.7}}
+
 local function drawItemInfo(itemEnt, mx, my)
     Slab.BeginWindow("inventory:itemInfo", {
         X = mx, Y = my,
-
+        AllowResize = false
     })
+ 
+    Slab.Text(itemEnt.itemName)
+    if itemEnt.itemDescription then
+        Slab.Text(itemEnt.itemDescription, descriptionArgs)
+    end
+
+    umg.call("displayItemInfo", itemEnt)
 
     Slab.EndWindow()
 end
@@ -406,7 +415,7 @@ function Inventory:updateSlabUI()
     local slotx, sloty = self:getSlot(mx,my)
     local item = self:get(slotx, sloty)
     if item then
-        -- draw
+        drawItemInfo(item, mx, my)
     end
 end
 
