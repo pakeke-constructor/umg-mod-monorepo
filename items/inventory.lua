@@ -385,11 +385,13 @@ local function updateInventoryUI(self)
 end
 
 
-local descriptionArgs = {Color = {0.7,0.7,0.7}}
 
-local function drawItemInfo(itemEnt, mx, my)
+local descriptionArgs = {Color = {0.56,0.56,0.56}}
+local TOOLTIP_DELTA = 3
+
+local function updateItemTooltip(itemEnt, mx, my)
     Slab.BeginWindow("inventory:itemInfo", {
-        X = mx, Y = my,
+        X = mx+TOOLTIP_DELTA, Y = my+TOOLTIP_DELTA,
         AllowResize = false
     })
  
@@ -398,10 +400,12 @@ local function drawItemInfo(itemEnt, mx, my)
         Slab.Text(itemEnt.itemDescription, descriptionArgs)
     end
 
-    umg.call("displayItemInfo", itemEnt)
+    umg.call("displayItemTooltip", itemEnt)
 
     Slab.EndWindow()
 end
+
+
 
 
 function Inventory:updateSlabUI() 
@@ -413,9 +417,11 @@ function Inventory:updateSlabUI()
 
     local mx, my = love.mouse.getPosition()
     local slotx, sloty = self:getSlot(mx,my)
-    local item = self:get(slotx, sloty)
-    if item then
-        drawItemInfo(item, mx, my)
+    if slotx then
+        local item = self:get(slotx, sloty)
+        if umg.exists(item) then
+            updateItemTooltip(item, mx, my)
+        end
     end
 end
 

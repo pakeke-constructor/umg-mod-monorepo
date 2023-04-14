@@ -23,7 +23,7 @@
     -- OPTIONAL VALUES:
     itemDescription = "..." -- item description
 
-    displayItemInfo = function(self)
+    displayItemTooltip = function(self)
         -- Used when you want to display Item info.
     end
     
