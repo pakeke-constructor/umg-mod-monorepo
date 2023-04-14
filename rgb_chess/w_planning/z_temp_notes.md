@@ -13,8 +13,8 @@ IDEA: Define abilities statically:
 ```lua
 
 defineAbility("dice", {
-    trigger = "onTurnStart",
-    description = "If there are no [color] allys, gain 2 rerolls",
+    trigger = "onAllyBuff",
+    description = "Ally buffed:\nIf there are no [color] allys, gain 2 rerolls",
     
     filter = function(ent)
         local units = rgbAPI.getUnits(ent.rgbTeam)

@@ -29,23 +29,11 @@ local validTriggers = require("server.engine.abilities.triggers")
 
 
 
-
-local function ensureTriggerMapping(ability)
-    local trigger = ability.trigger or "nil"
-    if not validTriggers[trigger] then
-        error("Invalid ability trigger for entity: " .. ent:type() .. "  " .. trigger)
-    end
-
-    ent.abilities.triggerMapping[trigger] = ability
-end
-
-
-
 -- NOTE: these aren't actually umg groups!
 local abilityGroups = {
 --[[
     [triggerType] -> Set{ ent1, ent2, ... }
-    -- list of entities that contain `triggerType`
+    -- list of entities that are triggered by `triggerType`
 ]]
 }
 
@@ -53,18 +41,19 @@ local abilityGroups = {
 
 local getABGroupTc = base.typecheck.assert("string")
 
-local function getAbilityGroup(abilityType)
-    getABGroupTc(abilityType)
-    if not abilityGroups[abilityType] then
-        abilityGroups[abilityType] = base.Set()
+local function getAbilityGroup(triggerType)
+    getABGroupTc(triggerType)
+    if not abilityGroups[triggerType] then
+        abilityGroups[triggerType] = base.Set()
     end
-    return abilityGroups[abilityType]
+    return abilityGroups[triggerType]
 end
 
 
 local function addToAbilityGroups(ent)
-    for _, ability in ipairs(ent.abilities) do
-        local group = getAbilityGroup(ability.type)
+    for _, abilityName in ipairs(ent.abilities) do
+        local ability = abilities.get(abilityName)
+        local group = getAbilityGroup(ability.trigger)
         group:add(ent)
     end
 end
@@ -72,32 +61,31 @@ end
 
 
 abilityGroup:onAdded(function(ent)
-    ensureTriggerMapping(ent)
     addToAbilityGroups(ent)
 end)
 
 
 
-local function tryGetAbility(ent, abilityType)
-    return ent.ability.triggerMapping[abilityType]
+local function tryApplyAbility(ability, ent, ...)
+    if (not ability.filter) or ability.filter(ent, ...) then
+        ability.apply(ent, ...)
+        -- TODO: Surely we can do something better here with the umg.call?
+        umg.call("ability", ability, ent, ...)
+    end
 end
 
 
 local callTc = base.typecheck.assert("string", "entity")
 
-local function call(abilityType, ent, ...)
-    callTc(abilityType, ent)
-    local abil = ent.abilities
-    local handler = abil.triggerMapping[abilityType]
-    if (not handler.filter) or handler.filter(ent, ...) then
-        handler.apply(ent, ...)
-        -- TODO: Surely we can do something better here?
-        umg.call("ability", abilityType, ent, ...)
+local function applyAbilities(triggerType, ent, ...)
+    callTc(triggerType, ent)
+    for _, abilityName in ipairs(ent.abilities) do
+        local ability = abilities.get(abilityName)
+        if ability.trigger == triggerType then
+            tryApplyAbility(ability, ent, ...)
+        end
     end
 end
-
-abilities.applyAbility = call
-
 
 
 
@@ -111,7 +99,7 @@ local function callForTeam(abilityType, rgbTeam, ...)
     -- for future, we need to keep track of each team's abilities individually.
     for _, ent in ipairs(group) do
         if rgb.sameTeam(rgbTeam,ent) then
-            call(abilityType, ent, ...)
+            applyAbilities(abilityType, ent, ...)
         end
     end
 end
@@ -136,7 +124,7 @@ local function proxyToAll(eventType, abilityType)
     umg.on(eventType, function(...)
         local group = getAbilityGroup(abilityType)
         for _, ent in ipairs(group)do
-            call(abilityType, ent, ...)
+            applyAbilities(abilityType, ent, ...)
         end
     end)
     handled(abilityType)
@@ -187,8 +175,8 @@ proxyToAll("startBattle", "onStartBattle")
 
 
 
-
--- ensure we covered all abilityTypes:
+-- We need to ensure all triggerTypes are being dealt with.
+-- This is just for debug/safety purposes.
 do
 for _, triggerType in ipairs(validTriggers) do
     if not triggerTypeDealthWith[triggerType] then

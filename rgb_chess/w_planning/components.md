@@ -48,14 +48,6 @@ ent.abilities = {
 }
 
 
-local abilityExample = {
-    trigger = abilityTriggers.onAllyDeath,
-    
-}
-
-
-
-
 
 
 --[[

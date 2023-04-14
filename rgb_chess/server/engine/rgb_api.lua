@@ -78,6 +78,10 @@ end
 
 
 
+rgbAPI.abilities = require("server.engine.abilities.abilities")
+
+
+
 umg.expose("rgbAPI", rgbAPI)
 _G.rgbAPI = rgbAPI
 

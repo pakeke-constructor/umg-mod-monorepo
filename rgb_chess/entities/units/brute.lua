@@ -13,17 +13,7 @@ return umg.extend("abstract_melee", {
 
     maxHealth = 100,
 
-    abilities = {
-        {
-            type = "onAllyDeath", 
-            filter = function(ent, allyEnt)
-                return ent == allyEnt
-            end,
-            apply = function()
-                print("hi")
-            end
-        }
-    },
+    abilities = {rgbAPI.abilities.test},
 
     cardInfo = {
         type = constants.CARD_TYPES.UNIT,
