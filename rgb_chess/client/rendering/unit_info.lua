@@ -33,13 +33,8 @@ local function drawUnitInfo(ent)
     for _, e in ipairs(ent.squadron) do
         singleUnitStats(e)
     end
-
-    local colstr = rgb.getColorString(ent.rgb)
-    Slab.Text("RGB: ")
-    Slab.SameLine()
-    Slab.Text(colstr, {Color=ent.rgb})
-
-    renderTools.renderMatchingColors(ent.rgb)
+    
+    renderTools.renderRGBInfo(ent.rgb)
 
     Slab.EndWindow()
 end

@@ -31,8 +31,18 @@ end
 table.sort(COL_KEYS)
 end
 
-function renderTools.renderMatchingColors(rgbColor)
-    -- renders matching colors UI inside of a Slab context
+
+function renderTools.renderRGBInfo(rgbColor)
+    -- renders info about what this RGB value is,
+    -- and gives information about what other colors match.
+
+    local color_str = rgb.getColorString(rgbColor)
+    Slab.Text("RGB: ")
+    Slab.SameLine()
+    Slab.Text(color_str, {Color=rgbColor})
+
+    Slab.Separator()
+
     Slab.Text("Matches:")
     local count = 0
     for _, colname in ipairs(COL_KEYS) do
@@ -45,6 +55,7 @@ function renderTools.renderMatchingColors(rgbColor)
             end
         end
     end
+
     if count == 0 then
         Slab.Text("Nothing", {Color = base.Color.GRAY})
     end

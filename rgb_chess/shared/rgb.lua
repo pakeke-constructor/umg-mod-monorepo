@@ -74,9 +74,21 @@ function rgb.match(col1, col2)
 end
 
 
+function rgb.getCardinality(col)
+    --[[
+    gets the cardinality of a color; how many color components it has
+    
+    RED cardinality 1
+    WHI cardinality 3
+    BLK cardinality 0
+    AQU cardinality 2        
+    ]]
+    return math.round(col[1] + col[2] + col[3])
+end
+
 
 function rgb.isBlack(col)
-    return (col[1] + col[2] + col[3]) < EPSILON 
+    return (rgb.cardinality(col)) < EPSILON 
 end
 
 

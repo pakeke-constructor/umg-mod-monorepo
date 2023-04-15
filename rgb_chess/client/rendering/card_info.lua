@@ -27,14 +27,7 @@ local function drawUnitCardInfo(cardEnt)
 
     Slab.Separator()
 
-    local color_str = rgb.getColorString(rgbColor)
-    Slab.Text("RGB: ")
-    Slab.SameLine()
-    Slab.Text(color_str, {Color=rgbColor})
-
-    Slab.Separator()
-
-    renderTools.renderMatchingColors(rgbColor)
+    renderTools.renderRGBInfo(rgbColor)
 
     Slab.EndWindow()
 end
