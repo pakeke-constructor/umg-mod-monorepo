@@ -19,19 +19,21 @@ local itemRGBSelection = base.weightedRandom({
 
 
 local rawRandom
-do
-local etypeToRarity = {}
 
-for _, etype in pairs(server.entities)do
-    if etype.itemInfo then
-        -- its an item, add it to item pool
-        etypeToRarity[etype] = etype.itemInfo.rarity or constants.DEFAULT_RARITY
+umg.on("@load", function()
+    -- We have to do this within the load function,
+    -- because entities aren't loaded yet.
+    local etypeToRarity = {}
+
+    for _, etype in pairs(server.entities)do
+        if etype.itemInfo then
+            -- its an item, add it to item pool
+            etypeToRarity[etype] = etype.itemInfo.rarity or constants.DEFAULT_RARITY
+        end
     end
-end
 
-rawRandom = base.weightedRandom(etypeToRarity)
-end
-
+    rawRandom = base.weightedRandom(etypeToRarity)
+end)
 
 
 

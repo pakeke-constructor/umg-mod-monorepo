@@ -1,6 +1,9 @@
 
 
-
+--[[
+    TODO: A bunch of this needs to be refactored to fit
+    with the new inventory ui API.
+]]
 local function craftOnClick(inv)
     assert(client, "this should only be called clientside")
     local ent = inv.owner

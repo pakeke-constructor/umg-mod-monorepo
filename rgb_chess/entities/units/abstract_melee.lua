@@ -14,6 +14,7 @@ end
 ]]
 return {
     rgbUnit = true, -- Tells the systems that this entity is a unit
+    unitType = constants.UNIT_TYPES.MELEE,
 
     onClick = function(ent, username, button)
         -- TODO: Move this out into it's own system please

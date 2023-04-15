@@ -228,7 +228,7 @@ end
 
 
 if server then
-    local Board
+    local Board -- we need to require at runtime to avoid circular dependency
 
     function rgb.getBoard(rgbTeam)
         if not Board then

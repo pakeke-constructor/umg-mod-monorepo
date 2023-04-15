@@ -84,7 +84,6 @@ end
 
 
 function parseToFunction(str)
-    print(str)
     str = str:gsub(" ","")
 
     if str:find("|") then

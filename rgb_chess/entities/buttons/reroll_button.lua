@@ -5,7 +5,7 @@
 return umg.extend("abstract_button", {
     onClickServer = function(ent)
         local cost = ent.rerollCost
-        local board = rgb.getBoard()
+        local board = rgb.getBoard(ent.rgbTeam)
         local money = board:getMoney()
         if money >= cost then
             board:setMoney(ent.rgbTeam, money - cost)

@@ -1,7 +1,6 @@
 
 local buy, reroll
 if server then
-    reroll = require("server.shop.reroll")
     buy = require("server.shop.buy")
 end
 
@@ -28,7 +27,8 @@ return {
             if server then
                 if buy.canBuy(ent) then
                     buy.buyCard(ent)
-                    reroll.rerollSlot(ent.rgbTeam, ent.shopIndex)
+                    local board = rgb.getBoard(ent.rgbTeam)
+                    board:rerollSlot(ent.shopIndex)
                 end
             elseif client then
                 -- idk, play sound here or something?
