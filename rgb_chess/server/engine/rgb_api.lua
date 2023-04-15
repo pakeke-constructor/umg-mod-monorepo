@@ -5,7 +5,7 @@ local rgbAPI = {}
 
 local getXYassert = base.typecheck.assert("entity", "entity?")
 
-local function getXY(targetEnt, sourceEnt)
+local function getProjectileSpawn(targetEnt, sourceEnt)
     --[[
         gets the X,Y position of the projectile.
         Sensible defaults are provided if there is no sourceEntity.
@@ -32,7 +32,7 @@ function rgbAPI.buff(ent, buffType, amount, sourceEnt, depth)
     buffTc(ent, buffType, amount, sourceEnt, depth)
     assert(constants.BUFF_TYPES[buffType], "Invalid bufftype")
 
-    local x,y = getXY(ent, sourceEnt)
+    local x,y = getProjectileSpawn(ent, sourceEnt)
     server.entities.buff(x,y, {
         buffAmount = amount,
         buffType = buffType,
@@ -49,7 +49,7 @@ local healTc = base.typecheck.assert("entity", "number", "entity?", "number?")
 function rgbAPI.heal(ent, amount, sourceEnt, depth)
     healTc(ent, amount, sourceEnt, depth)
 
-    local x,y = getXY(ent, sourceEnt)
+    local x,y = getProjectileSpawn(ent, sourceEnt)
     server.entities.heal(x,y, {
         healAmount = amount,
         targetEntity = ent,
@@ -65,7 +65,7 @@ local shieldTc = base.typecheck.assert("entity", "number", "number", "entity?", 
 function rgbAPI.shield(ent, amount, duration, sourceEnt, depth)
     shieldTc(ent, amount, duration, sourceEnt, depth)
 
-    local x,y = getXY(ent, sourceEnt)
+    local x,y = getProjectileSpawn(ent, sourceEnt)
     server.entities.shield(x,y, {
         shieldAmount = amount,
         shieldDuration = duration,
@@ -75,6 +75,12 @@ function rgbAPI.shield(ent, amount, duration, sourceEnt, depth)
     })
 end
 
+
+
+
+function rgbAPI.generateItem()
+    local turn = rgb.getTurn()
+end
 
 
 

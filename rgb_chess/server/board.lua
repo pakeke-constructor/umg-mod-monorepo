@@ -1,6 +1,9 @@
 
 require("shared.constants")
 
+local genCards = require("server.gen.generate_cards")
+local itemPool = require("server.engine.item_pool")
+
 
 local BOARD_WIDTH = constants.BOARD_WIDTH
 local BOARD_HEIGHT = constants.BOARD_HEIGHT
@@ -127,10 +130,6 @@ end
 
 function Board:getWH()
     return self.width, self.height
-end
-
-function Board:getOwner()
-    return self.owner
 end
 
 function Board:getTeam()
@@ -321,6 +320,53 @@ end
 function Board:isWinner()
     return self.wonBattle
 end
+
+
+
+
+function Board:rerollAllCards()
+    local rgb_team = self:getTeam()
+
+    for shopIndex=1, self.shopSize do
+        local delay = (shopIndex/self.shopSize) * 0.3
+        base.delay(delay, function()
+            self:rerollSlot(shopIndex)
+        end)
+    end
+
+    umg.call("reroll", rgb_team)
+end
+
+
+
+function Board:rerollSlot(shopIndex)
+    local card = self:getCard(shopIndex)
+    if umg.exists(card) and card.isLocked then
+        return
+    end
+
+    -- we good to reroll
+    if umg.exists(card) then
+        umg.call("rerollCard", card)
+        card:delete()
+    end
+
+    base.delay(constants.REROLL_TIME, function()
+        genCards.spawnCard(self, shopIndex)
+    end)
+end
+
+
+
+
+
+function Board:generateItem()
+    local IBD = 40 -- Minimum Item Border Distance
+    local x = math.random(self.x+IBD, self.x+self.width-IBD)
+    local y = math.random(self.y+IBD, self.y+self.height-IBD)
+    itemPool.randomItem(self, x, y)
+end
+
 
 
 

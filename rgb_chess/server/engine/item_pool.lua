@@ -35,10 +35,14 @@ end
 
 
 
+local MAX_ITER = 100
+
 local function randomItemEType(turn)
     local itemEType = rawRandom()
-    while (itemEType.itemInfo.minimumTurn or 1) > turn do 
+    local ct = 1
+    while ct < MAX_ITER and (itemEType.itemInfo.minimumTurn or 1) > turn do 
         itemEType = rawRandom()
+        ct = ct + 1
     end
     return itemEType
 end
@@ -46,10 +50,10 @@ end
 
 
 
-function itemPool.randomItem(rgbTeam)
+function itemPool.randomItem(board, x, y)
+    local rgbTeam = board:getTeam()
     local turn = rgb.getTurn()
     local etype = randomItemEType(turn)
-    local x,y = base.getPlayer(rgbTeam)
     local ent = etype(x,y)
     ent.rgb = itemRGBSelection()
     ent.rgbTeam = rgbTeam

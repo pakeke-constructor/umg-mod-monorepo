@@ -71,10 +71,10 @@ end
 
 function buy.sellSquadron(ent)
     umg.call("sellSquadron", ent.squadron)
-    local baseCost = ent.cardInfo.cost
+    local cost = ent.cardInfo.cost
     assert(ent.squadron,"?")
     local board = Board.getBoard(ent.rgbTeam)
-    board:setMoney(board:getMoney() - baseCost)
+    board:setMoney(board:getMoney() + cost)
     for _, e in ipairs(ent.squadron)do
         sellUnit(e)
     end
