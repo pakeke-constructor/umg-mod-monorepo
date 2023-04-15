@@ -1,10 +1,15 @@
 
+local abstractProjectile = require("shared.abstract.abstract_projectile")
+
+
+
 local shieldAPI
 if server then
 shieldAPI = require("server.engine.shields")
 end
 
-return umg.extend("abstract_projectile", {
+
+return umg.extend(abstractProjectile, {
     rgbProjectileOnHit = function(projEnt, targetEnt)
         local shieldAmount = projEnt.shieldAmount
         local duration = projEnt.shieldDuration

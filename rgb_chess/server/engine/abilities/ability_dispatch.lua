@@ -11,8 +11,8 @@ NOTE: Each ability callback takes an implicit `self` as first argument!
 `self` is the entity that contains the ability
 ]]
 
-local abilities = require("server.engine.abilities.ability_defs")
-local validTriggers = require("server.engine.abilities.triggers")
+local abilities = require("shared.abilities.abilities")
+local validTriggers = require("shared.abilities.triggers")
 
 
 local abilityGroup = umg.group("abilities")

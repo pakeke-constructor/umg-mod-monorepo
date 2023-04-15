@@ -19,7 +19,7 @@ return {
 
     follow = true;
 
-    canPickUp = true,
+    canPickUpItems = true,
 
     shadow = {
         size=6

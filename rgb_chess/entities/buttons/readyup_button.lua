@@ -1,4 +1,7 @@
 
+local abstractButton = require("shared.abstract.abstract_button")
+
+
 
 local readyUp
 if server then
@@ -10,7 +13,8 @@ local READY_NAMETAG = "READY UP"
 local CANCEL_READY_NAMETAG = "CANCEL READY"
 
 
-return umg.extend("abstract_button", {
+
+return umg.extend(abstractButton, {
     readyUpButton = true,
 
     onClickServer = function(ent)

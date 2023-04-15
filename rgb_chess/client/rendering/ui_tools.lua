@@ -6,17 +6,10 @@ local uiTools = {}
 
 
 
-
-uiTools.healthColor = {1,0.2,0.2}
-uiTools.attackColor = {0.8,0.7,0.1}
-uiTools.dpsColor = {0.9,0.3,0.1}
-uiTools.sorceryColor = {0.1,0.3,0.9}
-
-
-local healthTextArgs = {Color = uiTools.healthColor} 
-local dmgTextArgs = {Color = uiTools.attackColor}
-local dpsTextArgs = {Color = uiTools.dpsColor} 
-local sorcTextArgs = {Color = uiTools.sorceryColor}
+local healthTextArgs = {Color = {1,0.2,0.2}} 
+local dmgTextArgs = {Color = {0.8,0.7,0.1}}
+local dpsTextArgs = {Color = {0.9,0.3,0.1}} 
+local sorcTextArgs = {Color = {0.1,0.3,0.9}}
 
 
 
@@ -78,14 +71,33 @@ function uiTools.renderBasicUnitInfo(unitEType, rgbColor)
     Slab.Text(cardInfo.name, {Color = rgbColor})
      
     Slab.Text(" ")
+    Slab.Separator()
+    uiTools.renderAbilityInfo(unitEType.abilities or {})
+end
+
+
+
+local function renderAbility(ability)
     local f = love.graphics.getFont()
-    local colorStr = rgb.getColorString(rgbColor)
-    local description = cardInfo.description:gsub(constants.COLOR_SUB_TAG, colorStr)
-    local _, txt_table = f:getWrap(description, 600)
+    local _, txt_table = f:getWrap(ability.description, 600)
     for _, txt in ipairs(txt_table) do
         Slab.Text(txt, descTextArgs)
     end
-    Slab.Text(" ")
+end
+
+
+function uiTools.renderAbilityInfo(abilities)
+    Slab.Text("Abilities:")
+    for _, ability in ipairs(abilities)do
+        Slab.Separator()
+        renderAbility(ability)
+        Slab.Separator()
+    end    
+
+    if #abilities == 0 then
+        Slab.Text("None!")
+        return
+    end
 end
 
 
@@ -97,7 +109,6 @@ end
 
 
 function uiTools.renderUnitDamage(attackDamage, attackSpeed)
-
     local damageEstimate = rgb.getDamageEstimate(attackDamage, attackSpeed)
     local damage = ("%.1f"):format(damageEstimate)
     Slab.Text("DPS:    " .. damage, dpsTextArgs)

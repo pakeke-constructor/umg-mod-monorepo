@@ -1,4 +1,7 @@
 
+local abstractProjectile = require("shared.abstract.abstract_projectile")
+
+
 
 local BUFFTYPES = constants.BUFF_TYPES
 
@@ -33,7 +36,7 @@ end
 
 
 
-return umg.extend("abstract_projectile", {
+return umg.extend(abstractProjectile, {
     rgbProjectileOnHit = function(projEnt, targetEnt)
         local btype = projEnt.buffType
         local sourceEnt = projEnt.sourceEntity

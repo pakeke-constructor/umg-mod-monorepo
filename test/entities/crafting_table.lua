@@ -27,7 +27,10 @@ my_crafter:addRecipe(
 
 
 
-return umg.extend("abstract_crafter", {
+local abstractCrafter = {} -- TODO.
+
+
+return umg.extend(abstractCrafter, {
     image = "crate",
     openable = {distance = 100};
 

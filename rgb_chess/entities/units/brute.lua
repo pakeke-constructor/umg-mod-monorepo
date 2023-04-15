@@ -1,7 +1,9 @@
-local abilityTypes = require("shared.ability_types")
+local abilities = require("shared.abilities.abilities")
+
+local abstractMelee = require("shared.abstract.abstract_melee")
 
 
-return umg.extend("abstract_melee", {
+return umg.extend(abstractMelee, {
     image = "huhu1",
     bobbing = {},
 
@@ -14,7 +16,7 @@ return umg.extend("abstract_melee", {
 
     maxHealth = 100,
 
-    abilities = {abilityTypes.test},
+    abilities = {abilities.test},
 
     cardInfo = {
         type = constants.CARD_TYPES.UNIT,

@@ -1,5 +1,4 @@
 
-local droppedItemGroup = umg.group("itemBeingHeld")
 
 
 local itemDrops = {}

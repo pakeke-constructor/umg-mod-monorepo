@@ -57,7 +57,7 @@ globals:
     - type: any
   umg.extend:
     args:
-    - type: string
+    - type: table
     - type: table
   umg.group:
     args:

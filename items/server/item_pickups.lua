@@ -1,7 +1,7 @@
 
 --[[
 
-Entities that can pick up items off the ground have a `canPickUp` component.
+Entities that can pick up items off the ground have a `canPickUpItems` component.
 
 ]]
 
@@ -9,7 +9,7 @@ Entities that can pick up items off the ground have a `canPickUp` component.
 local itemDrops = require("server.item_drops")
 
 
-local pickUpGroup = umg.group("x", "y", "canPickUp")
+local pickUpGroup = umg.group("x", "y", "canPickUpItems")
 
 local itemGroup = umg.group("x", "y", "itemName")
 

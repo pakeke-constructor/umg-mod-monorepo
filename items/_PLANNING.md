@@ -163,7 +163,7 @@ my_item_ent.itemOwner = ent
 ### Picking up items:
 ```lua
 
-ent.canPickUp = true
+ent.canPickUpItems = true
 -- Now this entity can pick up items
 
 ```

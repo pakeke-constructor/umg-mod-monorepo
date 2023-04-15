@@ -26,6 +26,7 @@ end
 
 return {
     follow = true;
+    canPickUpItems = true,
 
     color = {0.9,0.9,0.9,0.7},
 

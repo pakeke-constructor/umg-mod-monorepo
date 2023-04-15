@@ -1,6 +1,8 @@
 
+local abstractProjectile = require("shared.abstract.abstract_projectile")
 
-return umg.extend("abstract_projectile", {
+
+return umg.extend(abstractProjectile, {
     rgbProjectileOnHit = function(projEnt, targetEnt)
         projEnt.sourceEntity:projectileOnHit(targetEnt)
     end,

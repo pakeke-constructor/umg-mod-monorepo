@@ -1,4 +1,5 @@
 
+local abstractRanged = require("shared.abstract.abstract_ranged")
 local constants = require("shared.constants")
 
 
@@ -7,7 +8,8 @@ local DBG_COLS = {
     b = {0,0,0.5}
 }
 
-return umg.extend("abstract_ranged", {
+
+return umg.extend(abstractRanged, {
     image = "red_player_up_1",
     bobbing = {},
 

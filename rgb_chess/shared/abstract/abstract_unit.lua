@@ -1,5 +1,5 @@
 
-local MELEE_RANGE = 30
+
 
 local select
 if client then
@@ -14,7 +14,6 @@ end
 ]]
 return {
     rgbUnit = true, -- Tells the systems that this entity is a unit
-    unitType = constants.UNIT_TYPES.MELEE,
 
     onClick = function(ent, username, button)
         -- TODO: Move this out into it's own system please
@@ -30,19 +29,15 @@ return {
         friction = 7
     };
 
-    attackBehaviour = {
-        type = "melee",
-        range = MELEE_RANGE
-    };
-
-    moveBehaviour = {
-        type = "follow";
-        activateDistance = 1000,
-    };
-
     healthBar = {
         offset = 20,
         color = {1,0,0}
+    },
+
+    openable = {
+        distance = 0xfffff -- can open from large distance away.
     }
 }
+
+
 

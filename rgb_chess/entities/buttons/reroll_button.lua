@@ -1,8 +1,9 @@
 
+local abstractButton = require("shared.abstract.abstract_button")
 
 
 
-return umg.extend("abstract_button", {
+return umg.extend(abstractButton, {
     onClickServer = function(ent)
         local cost = ent.rerollCost
         local board = rgb.getBoard(ent.rgbTeam)

@@ -1,4 +1,7 @@
 
+local abstractButton = require("shared.abstract.abstract_button")
+
+
 local buy, select
 if client then
     select = require("client.shop.select")
@@ -7,7 +10,7 @@ end
 
 
 
-return umg.extend("abstract_button", {
+return umg.extend(abstractButton, {
     normalColor = {1,0.2,0.2},
     hoverColor = {0.5,0.1,0.1},
 

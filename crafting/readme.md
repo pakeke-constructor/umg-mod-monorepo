@@ -52,7 +52,7 @@ my_crafter:addRecipe(
 
 
 -- Creates a crafting table entity:
-return extend("abstract_crafter", {
+return extend(abstractCrafter, {
     crafter = crafter; -- the crafting schematic to be used.
 
     craftItemLocation = {5, 1}; -- where the items get put after crafting

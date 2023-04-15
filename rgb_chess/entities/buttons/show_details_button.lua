@@ -1,4 +1,6 @@
 
+local abstractButton = require("shared.abstract.abstract_button")
+
 
 local showDetails
 if client then
@@ -10,7 +12,7 @@ local SHOWING_TAG = "HIDE STATS"
 local NOT_SHOWING_TAG = "SHOW STATS"
 
 
-return umg.extend("abstract_button", {
+return umg.extend(abstractButton, {
     onClickClient = function(ent)
         if showDetails.isShowingDetails() then 
             showDetails.hideDetails()

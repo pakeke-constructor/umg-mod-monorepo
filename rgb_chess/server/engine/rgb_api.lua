@@ -78,13 +78,7 @@ end
 
 
 
-function rgbAPI.generateItem()
-    local turn = rgb.getTurn()
-end
-
-
-
-rgbAPI.abilities = require("server.engine.abilities.ability_defs")
+rgbAPI.abilities = require("shared.abilities.abilities")
 
 
 
