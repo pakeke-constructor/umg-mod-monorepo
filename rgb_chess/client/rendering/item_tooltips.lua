@@ -1,5 +1,5 @@
 
-local renderTools = require("client.rendering.render_tools")
+local uiTools = require("client.rendering.ui_tools")
 
 
 umg.on("displayItemTooltip", function(itemEnt)
@@ -7,11 +7,12 @@ umg.on("displayItemTooltip", function(itemEnt)
     --[[
         PLANNING:
 
+        ---
         item abilities
         ---
         rgb + matching
     ]]
-    
-
+    Slab.Separator()
+    uiTools.renderRGBInfo(itemEnt.rgb)
 end)
 

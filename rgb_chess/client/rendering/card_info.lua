@@ -1,5 +1,5 @@
 
-local renderTools = require("client.rendering.render_tools")
+local uiTools = require("client.rendering.ui_tools")
 
 
 local CARD_INFO_WINDOW_X = 30
@@ -17,17 +17,17 @@ local function drawUnitCardInfo(cardEnt)
     local unitEType = cardEnt.cardBuyTarget 
     local rgbColor = cardEnt.rgb
 
-    renderTools.renderBasicUnitInfo(unitEType, cardEnt.rgb)
+    uiTools.renderBasicUnitInfo(unitEType, cardEnt.rgb)
     
     Slab.Separator()
 
-    renderTools.renderUnitHealth(unitEType.defaultHealth)
+    uiTools.renderUnitHealth(unitEType.defaultHealth)
     -- TODO: Add support for sorcerers here
-    renderTools.renderUnitDamage(unitEType.defaultAttackDamage, unitEType.defaultAttackSpeed)
+    uiTools.renderUnitDamage(unitEType.defaultAttackDamage, unitEType.defaultAttackSpeed)
 
     Slab.Separator()
 
-    renderTools.renderRGBInfo(rgbColor)
+    uiTools.renderRGBInfo(rgbColor)
 
     Slab.EndWindow()
 end

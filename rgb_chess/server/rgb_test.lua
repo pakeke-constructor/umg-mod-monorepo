@@ -1,4 +1,5 @@
 
+local Board = require("server.board")
 
 
 
@@ -20,7 +21,7 @@ chat.handleCommand("spawnArmy", {
 
 local bruteGroup = umg.group("attackBehaviourTargetCategory")
 
-chat.handleCommand("ths", {
+chat.handleCommand("testHeal", {
     adminLevel = 1,
     arguments = {},
 
@@ -33,3 +34,16 @@ chat.handleCommand("ths", {
     end
 })
 
+
+
+chat.handleCommand("spawnItems", {
+    adminLevel = 1,
+    arguments = {},
+
+    handler = function(sender)
+        local board = Board.getBoard(sender) 
+        if board then
+            board:generateItem()
+        end
+    end
+})

@@ -1,5 +1,5 @@
 
-local renderTools = require("client.rendering.render_tools")
+local uiTools = require("client.rendering.ui_tools")
 
 
 
@@ -9,16 +9,16 @@ local UNIT_INFO_WINDOW_Y = 20
 
 local function singleUnitStats(ent)
     Slab.Separator()
-    renderTools.renderUnitHealth(ent.maxHealth)
+    uiTools.renderUnitHealth(ent.maxHealth)
    
     -- todo: Make this more robust. perhaps rgb.isAttacker(ent)?
     if ent.attackDamage and ent.attackSpeed then
-        renderTools.renderUnitDamage(ent.attackDamage, ent.attackSpeed)
+        uiTools.renderUnitDamage(ent.attackDamage, ent.attackSpeed)
     end
 
     -- todo: Make this more robust. Perhaps rgb.isSorcerer(ent)?
     if ent.sorcery and ent.sorcery > 0 then
-        renderTools.renderUnitSorcery(ent.sorcery)
+        uiTools.renderUnitSorcery(ent.sorcery)
     end
 end
 
@@ -28,13 +28,13 @@ local function drawUnitInfo(ent)
     Slab.BeginWindow("unitInfoPopup", {X=UNIT_INFO_WINDOW_X, Y=UNIT_INFO_WINDOW_Y})
     
     local unitEType = ent:getClass()
-    renderTools.renderBasicUnitInfo(unitEType, ent.rgb)
+    uiTools.renderBasicUnitInfo(unitEType, ent.rgb)
 
     for _, e in ipairs(ent.squadron) do
         singleUnitStats(e)
     end
     
-    renderTools.renderRGBInfo(ent.rgb)
+    uiTools.renderRGBInfo(ent.rgb)
 
     Slab.EndWindow()
 end

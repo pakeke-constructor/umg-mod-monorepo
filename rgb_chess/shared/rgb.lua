@@ -93,7 +93,7 @@ end
 
 
 
-local subtractTc = base.typecheck.assert("table", "table")
+local subtractTc = base.typecheck.assert("table")--, "table")
 
 function rgb.subtract(col, sub)
     subtractTc(col,sub)
@@ -228,28 +228,19 @@ end
 
 
 if server then
-    local Board = require("server.board")
+    local Board
 
-    function rgb.iterShop(rgbTeam)
-        assert(rgbTeam, "rgb.iterShop not given rgbTeam")
-        local board = Board.getBoard(rgbTeam)
-        return ipairs(board.shop)
+    function rgb.getBoard(rgbTeam)
+        if not Board then
+            Board = require("server.board")
+        end
+        return Board.getBoard(rgbTeam)
     end
 
     function rgb.setState(state)
         assert(states_invert[state], "invalid state")
         rgb.state = state
         server.broadcast("setRGBState", state)
-    end
-
-    function rgb.setMoney(rgbTeam, x)
-        local board = Board.getBoard(rgbTeam)
-        board:setMoney(x)
-    end
-
-    function rgb.getMoney(rgbTeam)
-        local board = Board.getBoard(rgbTeam)
-        return board:getMoney()
     end
 
     function rgb.increaseTurnCount()

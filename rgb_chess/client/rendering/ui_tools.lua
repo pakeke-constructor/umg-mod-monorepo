@@ -2,21 +2,21 @@
 require("shared.rgb")
 
 
-local renderTools = {}
+local uiTools = {}
 
 
 
 
-renderTools.healthColor = {1,0.2,0.2}
-renderTools.attackColor = {0.8,0.7,0.1}
-renderTools.dpsColor = {0.9,0.3,0.1}
-renderTools.sorceryColor = {0.1,0.3,0.9}
+uiTools.healthColor = {1,0.2,0.2}
+uiTools.attackColor = {0.8,0.7,0.1}
+uiTools.dpsColor = {0.9,0.3,0.1}
+uiTools.sorceryColor = {0.1,0.3,0.9}
 
 
-local healthTextArgs = {Color = renderTools.healthColor} 
-local dmgTextArgs = {Color = renderTools.attackColor}
-local dpsTextArgs = {Color = renderTools.dpsColor} 
-local sorcTextArgs = {Color = renderTools.sorceryColor}
+local healthTextArgs = {Color = uiTools.healthColor} 
+local dmgTextArgs = {Color = uiTools.attackColor}
+local dpsTextArgs = {Color = uiTools.dpsColor} 
+local sorcTextArgs = {Color = uiTools.sorceryColor}
 
 
 
@@ -32,7 +32,7 @@ table.sort(COL_KEYS)
 end
 
 
-function renderTools.renderRGBInfo(rgbColor)
+function uiTools.renderRGBInfo(rgbColor)
     -- renders info about what this RGB value is,
     -- and gives information about what other colors match.
 
@@ -70,7 +70,7 @@ local descTextArgs = {Color = {0.6,0.6,0.6}}
 
 local renderEtypeUnitInfoTc = base.typecheck.assert("table", "table")
 
-function renderTools.renderBasicUnitInfo(unitEType, rgbColor)
+function uiTools.renderBasicUnitInfo(unitEType, rgbColor)
     renderEtypeUnitInfoTc(unitEType, rgbColor)
 
     local cardInfo = unitEType.cardInfo
@@ -91,12 +91,12 @@ end
 
 
 
-function renderTools.renderUnitHealth(health)
+function uiTools.renderUnitHealth(health)
     Slab.Text("Health: " .. health, healthTextArgs)
 end
 
 
-function renderTools.renderUnitDamage(attackDamage, attackSpeed)
+function uiTools.renderUnitDamage(attackDamage, attackSpeed)
 
     local damageEstimate = rgb.getDamageEstimate(attackDamage, attackSpeed)
     local damage = ("%.1f"):format(damageEstimate)
@@ -107,10 +107,10 @@ function renderTools.renderUnitDamage(attackDamage, attackSpeed)
 end
 
 
-function renderTools.renderUnitSorcery(sorcery)
+function uiTools.renderUnitSorcery(sorcery)
     Slab.Text("SORC: " .. sorcery, sorcTextArgs)
 end
 
 
 
-return renderTools
+return uiTools

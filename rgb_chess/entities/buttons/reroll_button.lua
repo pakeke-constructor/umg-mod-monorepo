@@ -1,19 +1,15 @@
 
 
 
-local reroll
-if server then
-    reroll = require("server.shop.reroll")
-end
-
 
 return umg.extend("abstract_button", {
     onClickServer = function(ent)
         local cost = ent.rerollCost
-        local money = rgb.getMoney(ent.rgbTeam)
+        local board = rgb.getBoard()
+        local money = board:getMoney()
         if money >= cost then
-            rgb.setMoney(ent.rgbTeam, money - cost)
-            reroll.rerollAllCards(ent.rgbTeam)
+            board:setMoney(ent.rgbTeam, money - cost)
+            board:rerollAllCards(ent.rgbTeam)
         else
             -- TODO:
             -- send feedback here. (Deny sound or something?)
