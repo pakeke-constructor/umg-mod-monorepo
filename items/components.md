@@ -3,12 +3,11 @@
 
 ## ITEM ENTITY EXAMPLE:
 ```lua
-
-    "stackSize", -- the current stack size of the item.
+{
+    ent.stackSize -- the current stack size of the item.
     -- if this reaches 0, the item is deleted.
 
-    "x", "y",
-    "hidden",
+    x, y -- items need position
 
     -- Item specific components:
     maxStackSize = 32; -- Maximum stack size of this item
@@ -99,48 +98,48 @@
 # INVENTORY COMPONENTS:
 ```lua
 
--- Chest entity
 return {
-    "inventory",
+    -- right click to open this chest
+    openable = {
+        distance = 100; -- default distance that player can open the chest from
+        openSound = "chestOpen"; -- default open/close sounds.
+        closeSound = "chestClose",
+    }
 
-    "x", "y",
-    image = "chest_image"
+    image = "chest_image",
+
+    init = function(ent, x, y)
+        base.initializers.initXY(ent,x,y)
+
+        -- Upon creation, the `inventory` component should be set to a table,
+        -- like the following:
+        chest.inventory = Inventory({
+            width = 6 -- width of inventory slots
+            height = 3 -- height
+
+            -- OPTIONAL VALUES:
+            hotbar = true -- DST / minecraft like hotbar.
+                -- (only works for controllable entities)
+
+            private = true/false -- This means that only the owner can open this inventory
+
+            autohold = true/false
+            -- automatically hold the item that's being hovered
+
+            autoopen = true/false
+            -- open inventory when pressing the OPEN button (see openable)
+            -- only works on controllable entities
+        })
+    end
 }
 ```
 
-```lua
-
-local chest = entities.chest()
 
 
+### Custom behaviour:
+We can customize inventory behaviour with callbacks.
 
--- Upon creation, the `inventory` component should be set to a table,
--- like the following:
-chest.inventory = Inventory({
-    width = 6 -- width of inventory slots
-    height = 3 -- height
-
-    -- OPTIONAL VALUES:
-    hotbar = true -- DST / minecraft like hotbar.
-        -- (Is always open if on a control entity.)
-
-    private = true/false -- This means that only the owner can open this inventory
-
-    autohold = true/false
-    -- automatically hold the item that's being hovered
-})
--- if this isn't done, the client will crash.
-
-```
-
-
-
-### shops and stuff
-Shops and stuff can be done through `inventoryCallbacks` component.
-(This is a shared component, because it contains functions.)
-
-Also, the `inventoryButtons` component can be used to add buttons to inventory
-
+(For example, only allowing access if you are on a specific team)
 ```lua
 
 local invCbs = ent.inventoryCallbacks
@@ -192,6 +191,11 @@ end
 ```
 
 
+
+### shops and stuff
+Shops and stuff can be done through the `inventoryUI` component.
+(This is a shared component, because it contains functions.)
+
 #### Inventory UI:
 ```lua
 
@@ -222,7 +226,7 @@ ent.inventoryUI = {
 
 
 --[[
-    having inventories with custom slot positions:
+    Removing slots from inventories:
     we can use the `inventorySlots` component to enable/disable slots.
 ]]
 
@@ -247,22 +251,23 @@ For example, here's a basic entity that can hold a gun:
 ```lua
 
 return {
-    "x", "y",
     image = "blob",
 
-    "holdItem",
+    init = function(ent, x, y)
+        base.initializers.initXY(ent,x,y)
 
-    "lookX",
-    "lookY" -- the X and Y position that this entity is looking at.
-    -- (This will also determine the face direction, and the direction
-    --   that the tool is facing)
+        ent.lookX, ent.lookY = 0,0
+        -- the X and Y position that this entity is looking at.
+        -- (This will also determine the face direction, and the direction
+        --   that the tool is facing)
 
-
+        holdItem = newGunEntity()
+    end
 }
 
 
 ```
 Note that this entity doesn't have an `inventory` component.
-Entities don't need an inventory to be able to hold items.
+Entities don't neccessarily need an inventory to be able to hold items.
 
 

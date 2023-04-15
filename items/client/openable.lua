@@ -110,9 +110,10 @@ end
 
 function listener:keypressed(key, scancode, isrepeat)
     local inputEnum = self:getInputEnum(scancode)
+    -- TODO: Allow for controls to be set
     if inputEnum == base.client.input.BUTTON_2 then
         local player = base.getPlayer()
-        if player.inventory then
+        if player.inventory and player.inventory.autoopen then
             if player.inventory.isOpen then
                 if openInv then
                     close(openInv)

@@ -15,7 +15,10 @@ local function init(ent, x, y)
         spread = {x = 3, y = 0}
     }
 
-    ent.inventory = items.Inventory({width=3, height = 3, autohold = true})
+    ent.inventory = items.Inventory({
+        width=3, height = 3, 
+        autohold = true, autoopen = true
+    })
 
     base.initializers.initVxVy(ent, x, y);
 end

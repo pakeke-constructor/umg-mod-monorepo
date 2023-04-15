@@ -50,7 +50,10 @@ function Inventory:init(options)
 
     self.totalSlotSize = self.slotSize + self.slotSeparation
 
+    -- automatically holds the item that's hovered
     self.autohold = options.autohold
+    -- (For controllable ents,) opens the inventory when OPEN button pressed.
+    self.autoopen = options.autoopen
 
     self.inventory = {}
     -- randomize initial draw position, to avoid overlap

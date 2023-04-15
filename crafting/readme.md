@@ -21,11 +21,6 @@ automatic crafters, etc.
 return {
     "inventory";
 
-    openable = {
-        distance = 100; -- default distance that player can open the chest from
-        openSound = "chestOpen"; -- default open/close sounds.
-        closeSound = "chestClose"
-    }
 }
 
 ```
