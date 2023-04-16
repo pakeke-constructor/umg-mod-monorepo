@@ -156,29 +156,13 @@ function rgb.isRanged(ent)
 end
 
 
-function rgb.iterUnits(rgbTeam)
-    assert(rgbTeam, "rgb.iterUnits not given rgbTeam")
-    return ipairs(categories.getSet(rgbTeam))
+
+function rgb.isUnit(ent)
+    -- returns true if ent is a unit entity
+    return ent.cardType.type == constants.CARD_TYPES.UNIT
+    -- This is a bit of a hacky way of doing things, but o well
 end
 
-
-
-function rgb.getSquadronCount(rgbTeam)
-    local seenEntities = {}
-    local count = 0
-    for _, ent in rgb.iterUnits(rgbTeam)do
-        if not seenEntities[ent] then
-            seenEntities[ent] = true
-            if ent.squadron then
-                for _, e in ipairs(ent.squadron) do
-                    seenEntities[e] = true
-                end
-            end
-            count = count + 1
-        end
-    end
-    return count
-end
 
 
 rgb.STATES = base.Enum({

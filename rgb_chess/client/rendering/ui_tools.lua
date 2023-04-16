@@ -1,4 +1,5 @@
 
+local abilities = require("shared.abilities.abilities")
 require("shared.rgb")
 
 
@@ -77,7 +78,9 @@ end
 
 
 
+local renderAbilityTc = base.typecheck.assert("table")
 local function renderAbility(ability)
+    renderAbilityTc(ability)
     local f = love.graphics.getFont()
     local _, txt_table = f:getWrap(ability.description, 600)
     for _, txt in ipairs(txt_table) do
@@ -86,15 +89,16 @@ local function renderAbility(ability)
 end
 
 
-function uiTools.renderAbilityInfo(abilities)
+function uiTools.renderAbilityInfo(abilityList)
     Slab.Text("Abilities:")
-    for _, ability in ipairs(abilities)do
+    for _, abilityName in ipairs(abilityList)do
+        local ability = abilities.get(abilityName) 
         Slab.Separator()
         renderAbility(ability)
         Slab.Separator()
     end    
 
-    if #abilities == 0 then
+    if #abilityList == 0 then
         Slab.Text("None!")
         return
     end

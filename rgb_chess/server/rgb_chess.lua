@@ -87,7 +87,7 @@ end
 local function finalizePvE(board, enemies)
     board:putEnemies(enemies)
     local allyArray = {}
-    for _,ent in rgb.iterUnits(board:getTeam()) do 
+    for ent in board:iterUnits() do 
         table.insert(allyArray, ent)
     end
     board:putAllies(allyArray)
@@ -109,6 +109,7 @@ end
 
 local function setupPvPMatch(match)
     local board = Board.getBoard(match.home)
+    local awayBoard = Board.getBoard(match.away)
     board:emplacePlayer(match.home)
     board:emplacePlayer(match.away)
 
@@ -118,11 +119,11 @@ local function setupPvPMatch(match)
     -- TODO: Maybe delay this for cool effect?
     board:setEnemyTeam(match.away)
     local allyArray = {}
-    for _,ent in rgb.iterUnits(match.home) do 
+    for ent in board:iterUnits() do 
         table.insert(allyArray, ent)
     end
     local enemyArray = {}
-    for _,ent in rgb.iterUnits(match.away) do 
+    for ent in awayBoard:iterUnits() do 
         table.insert(enemyArray, ent)
     end
     board:putAllies(allyArray)

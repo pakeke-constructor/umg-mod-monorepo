@@ -50,14 +50,26 @@ end
 
 
 
+function buy.getCost(card_ent)
+    return card_ent.cardInfo.cost
+end
+
+
 function buy.canBuy(card_ent)
+    local board = rgb.getBoard(card_ent.rgbTeam)
+
     if rgb.state ~= rgb.STATES.TURN_STATE then
         return false
     end
 
-    local cost = buy.getCost(card_ent)
-    local board = Board.getBoard(card_ent.rgbTeam)
-    return cost <= board:getMoney() 
+    if buy.getCost(card_ent) > board:getMoney() then
+        return false -- too expensive
+    end
+
+    if card_ent.cardInfo.type == constants.CARD_TYPES.UNIT then
+        local numSquadrons = board:getSquadronCount()
+        -- if over max, disallow.
+    end
 end
 
 

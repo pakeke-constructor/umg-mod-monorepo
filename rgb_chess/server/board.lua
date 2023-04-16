@@ -143,16 +143,52 @@ function Board:delete()
 end
 
 
+
 function Board:iterUnits()
-    return ipairs(categories.getSet(self:getTeam()))
+    -- iterates over all the units on a board.
+    local set = categories.getSet(self:getTeam())
+    local i = 0
+
+    return function()
+        i = i + 1
+        local ent = set[i]
+
+        while (ent) and (not rgb.isUnit(ent)) do
+            i = i + 1
+            ent = set[i]
+        end
+
+        return ent
+    end
 end
+
+
+
+
+function Board:getSquadronCount()
+    local seenEntities = {}
+    local count = 0
+    for ent in self:iterUnits() do
+        if not seenEntities[ent] then
+            seenEntities[ent] = true
+            if ent.squadron then
+                for _, e in ipairs(ent.squadron) do
+                    seenEntities[e] = true
+                end
+            end
+            count = count + 1
+        end
+    end
+    return count
+end
+
 
 
 
 function Board:serialize()
     -- serializes the allies on the board
     local buffer = {}
-    for _, ent in rgb.iterUnits(self:getTeam()) do
+    for ent in self:iterUnits() do
         table.insert(buffer, ent)
     end
     self.serialized = umg.serialize(buffer)
@@ -176,11 +212,11 @@ end
 function Board:clear()
     local enemyTeam = self.enemyRgbTeam
     if enemyTeam then
-        for _, ent in rgb.iterUnits(enemyTeam) do
+        for ent in self:iterUnits(enemyTeam) do
             ent:delete()
         end
     end
-    for _, ent in rgb.iterUnits(self:getTeam()) do
+    for ent in self:iterUnits(self:getTeam()) do
         ent:delete()
     end
 end
