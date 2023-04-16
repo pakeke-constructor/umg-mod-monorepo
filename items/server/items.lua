@@ -277,8 +277,10 @@ function(username, ent, x, y)
         return -- exit early
     end
 
+    -- NOTE: The order that these are called is important.
+    itemHolding.releaseItemIfHeld(ent, item)
     itemDrops.dropItem(item, ent.x, ent.y)
-    itemHolding.dropItemIfHeld(ent, item)
+
     inv:set(x, y, nil)
 end)
 
