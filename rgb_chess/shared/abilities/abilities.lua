@@ -8,6 +8,8 @@ Ability definitions
 local validTriggers = require("shared.abilities.triggers")
 
 
+local abilityNameToObject = {}
+
 
 local abilities = setmetatable({}, {
     __index = function(t,k)
@@ -25,14 +27,15 @@ local function defineAbility(name, options)
 
     assert(not rawget(abilities,name), "Duplicate ability name")
 
-    abilities[name] = options
+    abilityNameToObject[name] = options
+    abilities[name] = name
 end
 
 
 
 
 function abilities.get(abilityType)
-    return abilities[abilityType]
+    return abilityNameToObject[abilityType]
 end
 
 

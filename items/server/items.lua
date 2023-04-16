@@ -278,6 +278,7 @@ function(username, ent, x, y)
     end
 
     itemDrops.dropItem(item, ent.x, ent.y)
+    itemHolding.dropItemIfHeld(ent, item)
     inv:set(x, y, nil)
 end)
 

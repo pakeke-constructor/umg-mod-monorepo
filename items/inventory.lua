@@ -342,8 +342,12 @@ function Inventory:drawItem(item_ent, x, y)
     local X = self.totalSlotSize * (x-1) + offset + self.draw_x
     local Y = self.totalSlotSize * (y-1) + offset + self.draw_y
 
+    local drawX, drawY = X + w/2, Y + w/2
     local scale = self.slotSize / w
-    base.client.drawImage(quad, X + w/2, Y + w/2, 0, scale, scale)
+    base.client.drawImage(quad, drawX, drawY, 0, scale, scale)
+
+    local holder_ent = self.owner
+    umg.call("drawInventoryItem", holder_ent, item_ent, drawX, drawY, self.slotSize)
 
     if (item_ent.stackSize or 1) > 1 then
         -- Draw stack number

@@ -106,18 +106,29 @@ end
 
 
 
+local function holdable(item_ent)
+    -- items are holdable if they have an itemHoldType
+    return item_ent.itemHoldType
+end
+
+
+local function updateHoldItem(ent, item_ent)
+    item_ent.hidden = false
+    assert(item_ent.itemHoldType, "held items need holdType")
+    if not itemHoldPositioning[item_ent.itemHoldType] then 
+        error("unknown itemHoldType " .. tostring(item_ent.itemHoldType) .. " for entity " .. tostring(item_ent))
+    end
+    itemHoldPositioning[item_ent.itemHoldType](item_ent, ent)   
+end
 
 
 umg.on("gameUpdate", function()
     for _, ent in ipairs(holdingItemGroup) do
         if umg.exists(ent.holdItem) then
-            ent.holdItem.hidden = false
             local item_ent = ent.holdItem
-            assert(item_ent.itemHoldType, "held items need holdType")
-            if not itemHoldPositioning[item_ent.itemHoldType] then 
-                error("unknown itemHoldType " .. tostring(item_ent.itemHoldType) .. " for entity " .. tostring(item_ent))
+            if holdable(item_ent) then
+                updateHoldItem(ent, item_ent)
             end
-            itemHoldPositioning[item_ent.itemHoldType](item_ent, ent)
         else
             ent.holdItem = nil -- could have been deleted 
         end

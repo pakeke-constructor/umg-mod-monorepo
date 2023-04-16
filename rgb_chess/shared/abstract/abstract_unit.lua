@@ -36,7 +36,13 @@ return {
 
     openable = {
         distance = 0xfffff -- can open from large distance away.
-    }
+    },
+
+    makeUnitInventory = {
+        -- automatically generates an inventory
+        width = 5,
+        height = 1,
+    },
 }
 
 

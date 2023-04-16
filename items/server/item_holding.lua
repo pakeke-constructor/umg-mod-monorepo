@@ -6,6 +6,14 @@ local itemHolding = {}
 
 
 
+function itemHolding.dropItemIfHeld(ent, item_ent)
+    if ent.holdItem == item_ent then
+        ent.holdItem = nil
+    end
+end
+
+
+
 
 function itemHolding.removeHoldItem(ent)
     if ent.holdItem then
@@ -14,9 +22,10 @@ function itemHolding.removeHoldItem(ent)
             -- then we drop item on the ground
             itemDrops.dropItem(item_ent)
         end
+        itemHolding.dropItemIfHeld(ent, item_ent)
     end
-    ent.holdItem = nil
 end
+
 
 
 function itemHolding.setHoldItem(ent, item_ent)    
