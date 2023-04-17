@@ -104,7 +104,7 @@ local function applyAbilities(triggerType, ent, selfArg, ...)
         For example, if an ability is on an item, `selfArg` will be the
         unit. `ent` will be the item itself.
     ]]
-    callTc(triggerType, ent)
+    callTc(triggerType, ent, selfArg)
     for _, abilityName in ipairs(ent.abilities) do
         local ability = abilities.get(abilityName)
         if ability.trigger == triggerType then
@@ -116,7 +116,11 @@ end
 
 
 
+
+local tryCallItemAbilitiesTc = base.typecheck.assert("string", "entity")
+
 function tryCallItemAbilities(triggerType, ent, ...)
+    tryCallItemAbilitiesTc(triggerType, ent) 
     -- Tries to call abilities on items in an inventory
     if ent.inventory then
         local inventory = ent.inventory
@@ -165,11 +169,14 @@ end
 
 local function proxyToAll(eventType, abilityType)
     -- Generates an in-line callback listener that offloads
-    -- the abilityType onto all entities with the same args.
+    -- the event onto all entities with the required trigger.
+    -- The same args are passed.
     umg.on(eventType, function(...)
         local group = getAbilityGroup(abilityType)
         for _, ent in ipairs(group)do
-            applyAbilities(abilityType, ent, ...)
+            if rgb.isUnit(ent) then
+                applyAbilities(abilityType, ent, ent, ...)
+            end
         end
     end)
     handled(abilityType)

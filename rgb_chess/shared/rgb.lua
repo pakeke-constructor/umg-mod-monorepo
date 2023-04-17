@@ -114,14 +114,6 @@ end
 
 
 
-rgb.cardTypes = base.Enum({
-    UNIT = "UNIT",
-    SPELL = "SPELL",
-    ITEM = "ITEM"
-})
-
-
-
 function rgb.getDamageEstimate(attackDamage, attackSpeed)
     return attackDamage * attackSpeed
 end
@@ -165,7 +157,7 @@ end
 
 function rgb.isUnit(ent)
     -- returns true if ent is a unit entity
-    return ent.cardType and ent.cardType.type == constants.CARD_TYPES.UNIT
+    return ent.cardInfo and ent.cardInfo.type == constants.CARD_TYPES.UNIT
     -- This is a bit of a hacky way of doing things, but o well
 end
 
