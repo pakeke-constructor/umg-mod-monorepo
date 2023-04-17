@@ -38,13 +38,13 @@ local abilityTriggers = {
 }
 
 
-local validTriggers = {}
+local triggers = {}
 
 for _, trigger in ipairs(abilityTriggers)do
-    assert(not validTriggers[trigger], "duplicate trigger name " .. trigger)
-    validTriggers[trigger] = trigger
+    assert(not triggers[trigger], "duplicate trigger name " .. trigger)
+    triggers[trigger] = trigger
 end
 
 
-return validTriggers
+return triggers
 

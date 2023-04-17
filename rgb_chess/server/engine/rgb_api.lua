@@ -76,6 +76,23 @@ function rgbAPI.shield(ent, amount, duration, sourceEnt, depth)
 end
 
 
+local damageTc = base.typecheck.assert("entity", "entity", "number")
+
+function rgbAPI.damage(sourceEnt, targetEnt, damage)
+    damageTc(sourceEnt, targetEnt, damage)
+    local bullet = server.entities.projectile(sourceEnt.x, sourceEnt.y, {
+        projectileType = constants.PROJECTILE_TYPES.DAMAGE,
+        attackDamage = damage,
+        targetEntity = targetEnt,
+        sourceEntity = sourceEnt
+    })
+    bullet.color = sourceEnt.color
+    -- When bullet collides, this will call rgbProjectileHit.
+    return bullet
+end
+
+
+
 
 
 rgbAPI.abilities = require("shared.abilities.abilities")

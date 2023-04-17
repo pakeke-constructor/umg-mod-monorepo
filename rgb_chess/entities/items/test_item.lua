@@ -9,6 +9,8 @@ return {
 
     abilities = {abilities.test},
 
+    itemType = constants.ITEM_TYPES.PASSIVE,
+
     itemInfo = {
         rarity = 1,
         minimumTurn = 1,

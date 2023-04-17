@@ -5,7 +5,7 @@ Ability definitions
 ]]
 
 
-local validTriggers = require("shared.abilities.triggers")
+local triggers = require("shared.abilities.triggers")
 
 
 local abilityNameToObject = {}
@@ -21,7 +21,7 @@ local abilities = setmetatable({}, {
 
 local function defineAbility(name, options)
     assert(options.description, "Needs description")
-    assert(options.trigger and validTriggers[options.trigger], "Needs valid trigger")
+    assert(options.trigger and triggers[options.trigger], "Needs valid trigger")
     assert(type(options.apply) == "function", "Needs apply")
     assert((not options.filter) or type(options.filter) == "function", "?")
     assert((not options.applyForItem) or type(options.applyForItem) == "function", "?")
@@ -35,7 +35,7 @@ end
 
 
 
-function abilities.get(abilityType)
+function abilities.getAbilityObject(abilityType)
     return abilityNameToObject[abilityType]
 end
 

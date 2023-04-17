@@ -41,7 +41,7 @@ end
 
 local function addToAbilityGroups(ent)
     for _, abilityName in ipairs(ent.abilities) do
-        local ability = abilities.get(abilityName)
+        local ability = abilities.getAbilityObject(abilityName)
         local group = getAbilityGroup(ability.trigger)
         group:add(ent)
     end
@@ -106,7 +106,7 @@ local function applyAbilities(triggerType, ent, selfArg, ...)
     ]]
     callTc(triggerType, ent, selfArg)
     for _, abilityName in ipairs(ent.abilities) do
-        local ability = abilities.get(abilityName)
+        local ability = abilities.getAbilityObject(abilityName)
         if ability.trigger == triggerType then
             tryApplyAbility(ability, selfArg, ...)
         end

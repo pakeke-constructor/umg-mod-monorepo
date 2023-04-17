@@ -54,7 +54,7 @@ _G.constants = {
     UNIT_TYPES = base.Enum({
         MELEE = "MELEE",
         RANGED = "RANGED",
-        SORCERER = "SORCERER"
+        SORCERER = "SORCERER" -- sorcerers can hold items
     }),
 
     ITEM_TYPES = base.Enum({
