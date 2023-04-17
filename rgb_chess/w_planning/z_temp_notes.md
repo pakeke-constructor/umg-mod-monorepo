@@ -29,12 +29,43 @@ defineAbility("dice", {
 
 
 
-### PROBLEM 2:
+### PROBLEM-2:
 
 We have items, and units.
-These two entity types can share abilities.
+These two entity types can share the same abilities.
 
-But they are different 
+Issue:
+Some abilities may only work on units,
+and some abilities may only work on items.
+
+For example:  `End of turn: gain +10% hp`
+This ability must be written differently if it's on an item, or unit.
 
 
+### PROPOSED SOLUTION TO PROBLEM-2:
+Have item abilities automatically act on the entity that is holding them.
+As in, the `apply(ent, ...)` function in an item, `ent` references the
+unit entity, NOT the item entity.
 
+This is quite a "clean" way of doing things, but it's a lot less
+flexible.
+
+
+To account for the lack of flexibility, we could have a separate function,
+`applyForItem(itemEnt, holderEnt, ...)`, (within ability objects) that is 
+also called when an item ability is activated.
+
+```lua
+defineAbility("reroll", {
+    trigger = "onReroll", 
+    description = "On reroll, print REROLL",
+
+    applyForItem = function(itemEnt, holderEnt, ...)
+        print("reroll from item!")
+    end,
+    apply = function(ent)
+        print("REROLL")
+    end
+})
+
+```

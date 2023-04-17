@@ -53,9 +53,11 @@ function Inventory:init(options)
     -- automatically holds the item that's hovered
     self.autohold = options.autohold
     -- (For controllable ents,) opens the inventory when OPEN button pressed.
+    -- TODO: Maybe rename this?
     self.autoopen = options.autoopen
 
-    self.inventory = {}
+    self.inventory = {}  -- Array where the items are actually stored.
+
     -- randomize initial draw position, to avoid overlap
     self.draw_x = math.random(0, 100)
     self.draw_y = math.random(0, 100)
@@ -259,14 +261,14 @@ end
 
 
 function Inventory:open()
-    -- Should only be called on client-side
+    assert(client, "Only available client-side")
     umg.call("openInventory", self.owner)
     self.isOpen = true
 end
 
 
 function Inventory:close()
-    -- Should only be called on client-side
+    assert(client, "Only available client-side")
     umg.call("closeInventory", self.owner)
     self.isOpen = false
 end

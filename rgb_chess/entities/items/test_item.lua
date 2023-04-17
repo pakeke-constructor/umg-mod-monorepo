@@ -1,10 +1,13 @@
 
+local abilities = require("shared.abilities.abilities")
 
 
 return {
     image = "target",
 
     maxStackSize = 1,
+
+    abilities = {abilities.test},
 
     itemInfo = {
         rarity = 1,

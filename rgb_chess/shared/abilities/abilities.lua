@@ -24,8 +24,9 @@ local function defineAbility(name, options)
     assert(options.trigger and validTriggers[options.trigger], "Needs valid trigger")
     assert(type(options.apply) == "function", "Needs apply")
     assert((not options.filter) or type(options.filter) == "function", "?")
+    assert((not options.applyForItem) or type(options.applyForItem) == "function", "?")
 
-    assert(not rawget(abilities,name), "Duplicate ability name")
+    assert(not rawget(abilityNameToObject, name), "Duplicate ability name")
 
     abilityNameToObject[name] = options
     abilities[name] = name
@@ -42,13 +43,13 @@ end
 
 
 defineAbility("test", {
-    trigger = "onAllyDeath", 
+    trigger = "onReroll", 
     description = "When die, print hi",
-    filter = function(ent, allyEnt)
-        return ent == allyEnt
+    filter = function(ent)
+        return true
     end,
-    apply = function()
-        print("hi")
+    apply = function(ent)
+        print("reroll with args:",ent)
     end
 })
 

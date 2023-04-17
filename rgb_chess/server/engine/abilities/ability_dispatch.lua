@@ -49,32 +49,88 @@ end
 
 
 
+local removeFromAbilityGroupTc = base.typecheck.assert("entity", "string")
+
+local function removeFromAbilityGroup(ent, triggerType)
+    removeFromAbilityGroupTc(ent, triggerType)
+    local group = abilityGroups[triggerType] 
+    if group:has(ent) then
+        group:remove(ent)
+    end   
+end
+
+
+local function removeFromAbilityGroups(ent)
+    -- removes from all ability groups.
+    for triggerType, _ in pairs(abilityGroups)do
+        removeFromAbilityGroup(ent, triggerType)
+    end
+end
+
+
 abilityGroup:onAdded(function(ent)
     addToAbilityGroups(ent)
 end)
+
+abilityGroup:onRemoved(function(ent)
+    removeFromAbilityGroups(ent)
+end)
+
+
+
+
 
 
 
 local function tryApplyAbility(ability, ent, ...)
     if (not ability.filter) or ability.filter(ent, ...) then
         ability.apply(ent, ...)
-        -- TODO: Surely we can do something better here with the umg.call?
         umg.call("ability", ability, ent, ...)
     end
 end
 
 
-local callTc = base.typecheck.assert("string", "entity")
 
-local function applyAbilities(triggerType, ent, ...)
+local tryCallItemAbilities
+
+
+local callTc = base.typecheck.assert("string", "entity", "entity")
+
+local function applyAbilities(triggerType, ent, selfArg, ...)
+    --[[
+        selfArg is the first argument passed to ability.apply(...)
+
+        It's always a Unit entity.
+        For example, if an ability is on an item, `selfArg` will be the
+        unit. `ent` will be the item itself.
+    ]]
     callTc(triggerType, ent)
     for _, abilityName in ipairs(ent.abilities) do
         local ability = abilities.get(abilityName)
         if ability.trigger == triggerType then
-            tryApplyAbility(ability, ent, ...)
+            tryApplyAbility(ability, selfArg, ...)
+        end
+    end
+    tryCallItemAbilities(triggerType, ent, ...)
+end
+
+
+
+function tryCallItemAbilities(triggerType, ent, ...)
+    -- Tries to call abilities on items in an inventory
+    if ent.inventory then
+        local inventory = ent.inventory
+        for x=1, inventory.width do
+            for y=1, inventory.height do
+                local item = inventory:get(x,y)
+                if umg.exists(item) then
+                    applyAbilities(triggerType, item, ent, ...)
+                end
+            end
         end
     end
 end
+
 
 
 
@@ -85,10 +141,10 @@ end
 local function callForTeam(abilityType, rgbTeam, ...)
     local group = getAbilityGroup(abilityType)
     -- todo: this is kinda bad, we are doing a linear filter here.
-    -- for future, we need to keep track of each team's abilities individually.
+    -- for future, we should keep track of each team's abilities individually.
     for _, ent in ipairs(group) do
-        if rgb.sameTeam(rgbTeam,ent) then
-            applyAbilities(abilityType, ent, ...)
+        if rgb.sameTeam(rgbTeam,ent) and rgb.isUnit(ent) then
+            applyAbilities(abilityType, ent, ent, ...)
         end
     end
 end
