@@ -91,9 +91,9 @@ end
 
 function uiTools.renderAbilityInfo(abilityList)
     Slab.Text("Abilities:")
+    Slab.Separator()
     for _, abilityName in ipairs(abilityList)do
         local ability = abilities.get(abilityName) 
-        Slab.Separator()
         renderAbility(ability)
         Slab.Separator()
     end    

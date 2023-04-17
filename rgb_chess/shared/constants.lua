@@ -16,6 +16,8 @@ _G.constants = {
 
     WIN_INCOME = 10,
     LOSE_INCOME = 7,
+    
+    SQUADRON_COUNT_INCREMENT = 1,
 
     BOARD_WIDTH = 700,
     BOARD_HEIGHT = 700,

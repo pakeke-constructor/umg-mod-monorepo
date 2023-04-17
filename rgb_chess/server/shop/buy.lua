@@ -1,7 +1,7 @@
 
 local Board = require("server.board")
 
-local spawnEntity = require("server.shop.spawn_entity")
+local spawn = require("server.shop.spawn_entity")
 
 
 
@@ -19,7 +19,7 @@ local function buyUnitCard(card_ent)
     local info = unit_etype.cardInfo
     local numUnits = info.squadronSize or 1
     for _=1, numUnits do
-        local ent = spawnEntity.spawnUnitFromCard(card_ent)
+        local ent = spawn.spawnUnitFromCard(card_ent)
         ent.squadron = squadron
         table.insert(squadron, ent)
     end
@@ -33,30 +33,27 @@ end
 function buy.buyCard(card_ent, cost)
     local board = Board.getBoard(card_ent.rgbTeam)
     cost = cost or buy.getCost(card_ent)
-    if rgb.isUnitCard(card_ent) then
+
+    local etype = card_ent.cardBuyTarget
+    if etype.cardInfo.type == constants.CARD_TYPES.UNIT then
         buyUnitCard(card_ent)
-    else
-        buyOtherCard(card_ent)
+    else 
+        -- TODO: Spell cards, and other stuff
     end
+
     board:setMoney(board:getMoney() - cost)
-
-    --[[
-    this is lowkey terrible code!
-    We intentially wait 0.2 seconds here, because unit(s) might still be spawning.
-        (They will be officially spawned in next frame.)
-    ]]
-    base.delay(0.2, buy.setCosts, card_ent.rgbTeam)
 end
-
 
 
 function buy.getCost(card_ent)
-    return card_ent.cardInfo.cost
+    return card_ent.cost
 end
+
 
 
 function buy.canBuy(card_ent)
     local board = rgb.getBoard(card_ent.rgbTeam)
+    local etype = card_ent.cardBuyTarget
 
     if rgb.state ~= rgb.STATES.TURN_STATE then
         return false
@@ -66,10 +63,14 @@ function buy.canBuy(card_ent)
         return false -- too expensive
     end
 
-    if card_ent.cardInfo.type == constants.CARD_TYPES.UNIT then
-        local numSquadrons = board:getSquadronCount()
-        -- if over max, disallow.
+    if etype.cardInfo.type == constants.CARD_TYPES.UNIT then
+        if rgb.getMaxSquadrons() <= board:getSquadronCount() then
+            -- if board is full, disallow
+            return false
+        end
     end
+
+    return true
 end
 
 

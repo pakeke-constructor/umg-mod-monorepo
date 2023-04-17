@@ -9,7 +9,7 @@ return umg.extend(abstractButton, {
         local board = rgb.getBoard(ent.rgbTeam)
         local money = board:getMoney()
         if money >= cost then
-            board:setMoney(ent.rgbTeam, money - cost)
+            board:setMoney(money - cost)
             board:rerollAllCards(ent.rgbTeam)
         else
             -- TODO:

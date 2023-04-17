@@ -114,7 +114,8 @@ function generateCards.spawnCard(board, shopIndex)
     local cardEnt = server.entities.card(x, y, {
         rgbTeam = board:getTeam(),
         cardBuyTarget = cardEtype,
-        shopIndex = shopIndex
+        shopIndex = shopIndex,
+        cost = cardEtype.cardInfo.cost
     })
 
     cardEnt.image = cardEtype.cardInfo.image or constants.DEFAULT_CARD_IMAGE

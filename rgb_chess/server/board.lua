@@ -61,7 +61,11 @@ function Board:getMoney()
     return self.money
 end
 
+
+local setMoneyTc = base.typecheck.assert("table", "number")
+
 function Board:setMoney(x)
+    setMoneyTc(self,x)
     server.broadcast("setMoney", self:getTeam(), x)
     self.money = x
 end

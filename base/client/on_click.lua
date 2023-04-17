@@ -1,34 +1,8 @@
 
 local input = require("client.input")
-local getQuadOffsets = require("client.image_helpers.quad_offsets")
-
+local isHovered = require("client.mouse_hover")
 
 local clickEnts = umg.group("x", "y", "onClick")
-
-
-
-local DEFAULT_SIZE = 10 --  this seems reasonable as a default...? maybe
-
-
-
-
-local abs = math.abs
-
-local function isInRange(ent, worldX, worldY, dist)
-    local dx, dy = abs(ent.x - worldX), abs(ent.y - worldY)
-    
-    if ent.image then
-        local ox,oy = getQuadOffsets(ent.image)
-        if dx <= ox and dy <= oy then
-            return true
-        end
-    else
-        local size = ent.size or DEFAULT_SIZE
-        if dist <= size then
-            return true
-        end
-    end
-end
 
 
 
@@ -51,7 +25,7 @@ function listener:mousepressed(mx, my, button, istouch, presses)
         local x, y = ent.x, base.client.getDrawY(ent.y, ent.z)
         local dist = math.distance(x-worldX, y-worldY)
         if dist < bestDist then
-            if isInRange(ent, worldX, worldY, dist) then
+            if isHovered(ent) then
                 bestEnt = ent
                 bestDist = dist
             end

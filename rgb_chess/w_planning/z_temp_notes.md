@@ -6,10 +6,7 @@ Obviously, this means that abilities must be globally defined somewhere.
 
 We also want the ability for effects to be reused per ability.
 
-
-
 IDEA: Define abilities statically:
-
 ```lua
 
 defineAbility("dice", {
@@ -22,13 +19,22 @@ defineAbility("dice", {
         return #units <= 0
     end,
 
-    effect = function(ent)
+    apply = function(ent)
         local board = rgbAPI.getBoard(ent.rgbTeam)
         board:addRerolls(2)
     end
 })
-
-
 ```
+
+
+
+
+### PROBLEM 2:
+
+We have items, and units.
+These two entity types can share abilities.
+
+But they are different 
+
 
 

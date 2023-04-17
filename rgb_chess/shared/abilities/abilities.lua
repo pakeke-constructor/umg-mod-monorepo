@@ -53,6 +53,14 @@ defineAbility("test", {
 })
 
 
+defineAbility("reroll", {
+    trigger = "onReroll", 
+    description = "On reroll, print REROLL",
+    apply = function(ent)
+        print("REROLL")
+    end
+})
+
 
 
 return abilities

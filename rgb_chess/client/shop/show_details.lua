@@ -118,7 +118,7 @@ end
 umg.on("drawEntity", function(ent)
     if ent.rgb then
         drawSelectTarget(ent)
-        if ent.squadron and showDetails.showingDetails() then
+        if ent.squadron and showDetails.isShowingDetails() then
             drawUnitDetails(ent)
         end
     end

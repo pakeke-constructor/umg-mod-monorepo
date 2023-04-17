@@ -16,7 +16,7 @@ return umg.extend(abstractMelee, {
 
     maxHealth = 100,
 
-    abilities = {abilities.test},
+    abilities = {abilities.test, abilities.reroll},
 
     cardInfo = {
         type = constants.CARD_TYPES.UNIT,
