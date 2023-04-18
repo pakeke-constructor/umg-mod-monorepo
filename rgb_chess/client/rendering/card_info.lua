@@ -9,9 +9,6 @@ local CARD_INFO_WINDOW_Y = 30
 
 
 
-
-
-
 local function drawUnitCardInfo(cardEnt)
     Slab.BeginWindow("cardInfoPopup", {X=CARD_INFO_WINDOW_X, Y=CARD_INFO_WINDOW_Y})
     local unitEType = cardEnt.cardBuyTarget 
@@ -22,8 +19,13 @@ local function drawUnitCardInfo(cardEnt)
     Slab.Separator()
 
     uiTools.renderUnitHealth(unitEType.defaultHealth)
-    -- TODO: Add support for sorcerers here
-    uiTools.renderUnitDamage(unitEType.defaultAttackDamage, unitEType.defaultAttackSpeed)
+
+    if rgb.isSorcerer(unitEType) then
+        uiTools.renderUnitSorcery(unitEType.defaultSorcery)
+    else
+        -- it's ranged or melee, which means it has attack damage
+        uiTools.renderUnitDamage(unitEType.defaultAttackDamage, unitEType.defaultAttackSpeed)
+    end
 
     Slab.Separator()
 

@@ -162,6 +162,11 @@ function rgb.isUnit(ent)
 end
 
 
+function rgb.isSorcerer(ent)
+    return ent.unitType == constants.UNIT_TYPES.SORCERER
+end
+
+
 
 rgb.STATES = base.Enum({
     LOBBY_STATE = "LOBBY_STATE",

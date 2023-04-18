@@ -49,7 +49,7 @@ end
 
 
 
-local removeFromAbilityGroupTc = base.typecheck.assert("entity", "string")
+local removeFromAbilityGroupTc = base.typecheck.assert("table", "string")
 
 local function removeFromAbilityGroup(ent, triggerType)
     removeFromAbilityGroupTc(ent, triggerType)

@@ -1,6 +1,7 @@
 
 local abstractUnit = require("shared.abstract.abstract_unit")
 
+local SORCERER_RANGE = 1000
 
 
 --[[
@@ -10,14 +11,17 @@ local abstractUnit = require("shared.abstract.abstract_unit")
 ]]
 return umg.extend(abstractUnit, {
     unitType = constants.UNIT_TYPES.SORCERER,
+    attackSpeed = 1,
+    attackDamage = 0,
 
     attackBehaviour = {
+        range = SORCERER_RANGE,
         type = "item",
     };
 
     moveBehaviour = {
         type = "follow";
-        activateDistance = 1000,
+        activateDistance = SORCERER_RANGE,
     };
 })
 
