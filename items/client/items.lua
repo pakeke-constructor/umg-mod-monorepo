@@ -40,10 +40,10 @@ local open_inventories = {}
     The inventory, along with the x and y of the item
     that the player is holding.
 ]]
-local holding_inv -- The inventory that is currently being focused
-local holding_x -- X pos in holding inv
-local holding_y -- Y pos in holding inv
-local holding_half -- whether only half a stack is being held
+local focus_inv -- The inventory that is currently being focused
+local focus_x -- X pos in holding inv
+local focus_y -- Y pos in holding inv
+local focus_half_stack -- whether only half a stack is being held
 -- (This is true if it was picked up by BETA_BUTTON. (right click))
 
 
@@ -66,8 +66,8 @@ end
 
 inventoryGroup:onRemoved(function(ent)
     local inv = ent.inventory
-    if holding_inv == inv then
-        holding_inv, holding_x, holding_y = nil, nil, nil
+    if focus_inv == inv then
+        focus_inv, focus_x, focus_y = nil, nil, nil
     end
     table_remove(open_inventories, inv)
 end)
@@ -82,11 +82,11 @@ umg.on("closeInventory", function(owner_ent)
     local inv = owner_ent.inventory
     table_remove(open_inventories, inv)
 
-    if holding_inv == inv then
+    if focus_inv == inv then
         -- stop holding of item
-        holding_inv = nil
-        holding_x = nil
-        holding_y = nil
+        focus_inv = nil
+        focus_x = nil
+        focus_y = nil
     end
 end)
 
@@ -108,10 +108,10 @@ end
 
 
 local function resetHoldingInv()
-    holding_inv = nil
-    holding_x = nil
-    holding_y = nil
-    holding_half = nil
+    focus_inv = nil
+    focus_x = nil
+    focus_y = nil
+    focus_half_stack = nil
 end
 
 
@@ -119,13 +119,13 @@ end
 
 local function executeFullPut(inv, x, y)
     -- Ok... so `holding` exists.
-    local holding = holding_inv:get(holding_x, holding_y)
+    local holding = focus_inv:get(focus_x, focus_y)
     if not umg.exists(holding) then
         resetHoldingInv()
         return -- erm, okay? I guess we just ignore this
     end
 
-    if (inv==holding_inv) and (x==holding_x) and (y==holding_y) then
+    if (inv==focus_inv) and (x==focus_x) and (y==focus_y) then
         resetHoldingInv()
         return -- moving an item to it's own position...? nope!
     end
@@ -140,13 +140,13 @@ local function executeFullPut(inv, x, y)
             else
                 -- they stack!  (no need to swap)
                 swapping = false
-                local div = holding_half and 2 or 1
+                local div = focus_half_stack and 2 or 1
                 move_count = math.min(math.ceil(holding.stackSize/div), targ.maxStackSize - targ.stackSize)
             end            
         else
             -- We are swapping- so lets check that we actually can:
             swapping = true
-            local c1 = checkCallback(holding_inv.owner, "canAdd", holding_x, holding_y)
+            local c1 = checkCallback(focus_inv.owner, "canAdd", focus_x, focus_y)
             local c2 = checkCallback(inv.owner, "canRemove", x, y)
             if not (c1 and c2) then
                 return
@@ -158,17 +158,17 @@ local function executeFullPut(inv, x, y)
         return
     end
 
-    if not checkCallback(holding_inv.owner, "canRemove", holding_x, holding_y) then
+    if not checkCallback(focus_inv.owner, "canRemove", focus_x, focus_y) then
         return
     end
 
     if swapping then
-        client.send("trySwapInventoryItem", holding_inv.owner, inv.owner, holding_x,holding_y, x,y)
+        client.send("trySwapInventoryItem", focus_inv.owner, inv.owner, focus_x,focus_y, x,y)
     else
         if not move_count then
-            move_count = math.ceil(holding.stackSize / (holding_half and 2 or 1))
+            move_count = math.ceil(holding.stackSize / (focus_half_stack and 2 or 1))
         end
-        client.send("tryMoveInventoryItem", holding_inv.owner, inv.owner, holding_x,holding_y, x,y, move_count)
+        client.send("tryMoveInventoryItem", focus_inv.owner, inv.owner, focus_x,focus_y, x,y, move_count)
     end
 
     resetHoldingInv()
@@ -182,16 +182,16 @@ local function executeAlphaInteraction(inv, x, y)
         "alpha" interactions are for stuff like placing full stacks
         of items, etc.
     ]]
-    if holding_inv and umg.exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
+    if focus_inv and umg.exists(focus_inv.owner) and focus_inv:get(focus_x, focus_y) then
         executeFullPut(inv, x, y)
     else
         -- Else we just set the holding to a value, so long as there is an item
         -- in the target slot:
-        holding_inv = inv
-        holding_x = x
-        holding_y = y
+        focus_inv = inv
+        focus_x = x
+        focus_y = y
         inv:setHoldSlot(x,y)
-        holding_half = false
+        focus_half_stack = false
         if not inv:get(x,y) then
             resetHoldingInv()
         end
@@ -204,23 +204,23 @@ local function executeBetaInteraction(inv, x, y)
         "beta" interactions are for placing one item out of an entire stack,
         or splitting a stack.
     ]]
-    if holding_inv and umg.exists(holding_inv.owner) and holding_inv:get(holding_x, holding_y) then
-        local holding_item = holding_inv:get(holding_x, holding_y)
+    if focus_inv and umg.exists(focus_inv.owner) and focus_inv:get(focus_x, focus_y) then
+        local holding_item = focus_inv:get(focus_x, focus_y)
         if not checkCallback(inv.owner, "canAdd", x, y, holding_item) then
             return
         end
-        if not checkCallback(holding_inv.owner, "canRemove", holding_x, holding_y) then
+        if not checkCallback(focus_inv.owner, "canRemove", focus_x, focus_y) then
             return
         end
         local targ = inv:get(x,y)
         if (not targ) or targ.itemName == holding_item.itemName then
-            client.send("tryMoveInventoryItem", holding_inv.owner, inv.owner, holding_x,holding_y, x,y, 1)
+            client.send("tryMoveInventoryItem", focus_inv.owner, inv.owner, focus_x,focus_y, x,y, 1)
         end
     else
-        holding_inv = inv
-        holding_x = x
-        holding_y = y
-        holding_half = true
+        focus_inv = inv
+        focus_x = x
+        focus_y = y
+        focus_half_stack = true
         if not inv:get(x,y) then
             resetHoldingInv()
         end
@@ -271,11 +271,11 @@ function listener:mousepressed(mx, my, button)
         end
     end
 
-    if (not loop_used) and holding_inv then
+    if (not loop_used) and focus_inv then
         if button == ALPHA_BUTTON then    
             -- Then the player wants to drop an item on the floor:
-            if umg.exists(holding_inv:get(holding_x, holding_y)) then
-                client.send("tryDropInventoryItem", holding_inv.owner, holding_x, holding_y)
+            if umg.exists(focus_inv:get(focus_x, focus_y)) then
+                client.send("tryDropInventoryItem", focus_inv.owner, focus_x, focus_y)
             end
             self:lockMouseButton(ALPHA_BUTTON)
         elseif button == BETA_BUTTON then
@@ -316,8 +316,8 @@ umg.on("mainDrawUI", function()
         inv:drawUI()
     end
     
-    if holding_inv then
-        holding_inv:drawHoverWidget(holding_x, holding_y)
+    if focus_inv then
+        focus_inv:drawHoverWidget(focus_x, focus_y)
     end
 end)
 
@@ -326,7 +326,7 @@ end)
 client.on("setInventoryItem", function(ent, x, y, item_ent)
     local inventory = ent.inventory
     inventory:_rawset(x,y,item_ent)
-    if inventory == holding_inv and x == holding_x and y == holding_y then
+    if inventory == focus_inv and x == focus_x and y == focus_y then
         resetHoldingInv()
     end
 end)
