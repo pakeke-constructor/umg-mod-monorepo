@@ -190,7 +190,7 @@ local function executeAlphaInteraction(inv, x, y)
         holding_inv = inv
         holding_x = x
         holding_y = y
-        inv:setHoverXY(x,y)
+        inv:setHoldSlot(x,y)
         holding_half = false
         if not inv:get(x,y) then
             resetHoldingInv()
@@ -325,7 +325,7 @@ end)
 
 client.on("setInventoryItem", function(ent, x, y, item_ent)
     local inventory = ent.inventory
-    inventory:set(x,y,item_ent)
+    inventory:_rawset(x,y,item_ent)
     if inventory == holding_inv and x == holding_x and y == holding_y then
         resetHoldingInv()
     end

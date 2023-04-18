@@ -15,21 +15,6 @@ local Inventory = base.Class("items_mod:inventory")
 local DEFAULT_INVENTORY_COLOUR = {0.8,0.8,0.8}
 
 
-
-local function checkCallback(ent, callbackName, x, y, item)
-    --[[
-        returns true/false according to inventoryCallbacks component.
-        (Only works on `canRemove` and `canAdd`!!!)
-    ]]
-    if ent.inventoryCallbacks and ent.inventoryCallbacks[callbackName] then
-        item = item or ent.inventory:get(x,y)
-        return ent.inventoryCallbacks[callbackName](ent.inventory, x, y, item)
-    end
-    return true -- return true otherwise (no callbacks)
-end
-
-
-
 local DEFAULT_BORDER_WIDTH = 10
 local DEFAULT_SLOT_SIZE = 12
 local DEFAULT_SLOT_SEPARATION = 2
@@ -69,8 +54,8 @@ function Inventory:init(options)
         self.color = DEFAULT_INVENTORY_COLOUR
     end
 
-    self.hovering_x = 1 -- The current item that the player is hovering over.
-    self.hovering_y = 1
+    self.holding_x = 1 -- The current item that the player is hovering over.
+    self.holding_y = 1
 
     self.isOpen = false
 
@@ -113,8 +98,8 @@ end
 
 
 function Inventory:getHoveringItem()
-    if self.hovering_x and self.hovering_y then
-        return self:get(self.hovering_x, self.hovering_y)
+    if self.holding_x and self.holding_y then
+        return self:get(self.holding_x, self.holding_y)
     end
 end
 
@@ -128,10 +113,12 @@ local function assertItem(item_ent)
 end
 
 
-function Inventory:set(x, y, item_ent)
-    -- Should only be called on server.
-    -- If `item_ent` is nil, then it removes the item from inventory.
-    
+
+function Inventory:_rawset(x, y, item_ent)
+    --[[
+        This is a helper function, and SHOULDN'T BE CALLED!!!!
+        CALL THIS FUNCTION AT YOUR OWN RISK!
+    ]]
     if not self:slotExists(x, y) then
         return -- No slot.. can't do anything
     end
@@ -145,7 +132,15 @@ function Inventory:set(x, y, item_ent)
     else
         self.inventory[i] = nil
     end
+end
 
+
+function Inventory:set(x, y, item_ent)
+    assert(server, "Can only be called on server")
+
+    -- If `item_ent` is nil, then it removes the item from inventory.
+    self:_rawset(x, y, item_ent)
+    
     if server then
         -- We update the stacksize with this too.
         server.broadcast("setInventoryItem", self.owner, x, y, item_ent)
@@ -283,6 +278,7 @@ end
 
 
 function Inventory:swap(other_inv, self_x, self_y, other_x, other_y)
+    assert(server, "Can only be called on server")
     local item_self = self:get(self_x, self_y)
     local item_other = other_inv:get(other_x, other_y)
     other_inv:set(other_x, other_y, item_self)
@@ -437,9 +433,12 @@ end
 
 
 
-function Inventory:setHoverXY(x,y)
-    self.hovering_x = x
-    self.hovering_y = y
+function Inventory:hold(x,y)
+    --[[
+        sets the hold position for an inventory.
+    ]]
+    self.holding_x = x
+    self.holding_y = y
     if client and self.autohold then
         local owner_ent = umg.exists(self.owner) and self.owner
         if owner_ent then
@@ -447,6 +446,16 @@ function Inventory:setHoverXY(x,y)
         end
     end
 end
+
+
+function Inventory:getHold()
+    return self.holding_x, self.holding_y
+end
+
+function Inventory:getHoldItem()
+    return self:get(self:getHold())
+end
+
 
 
 
@@ -494,7 +503,7 @@ local function drawSlot(self, inv_x, inv_y, offset, color)
     -- love.graphics.setColor(0,0,0)
     -- love.graphics.rectangle("line", X, Y, self.slotSize, self.slotSize)
 
-    if self.hovering_x == inv_x and self.hovering_y == inv_y then
+    if self.holding_x == inv_x and self.holding_y == inv_y then
         love.graphics.setLineWidth(4)
         love.graphics.setColor(0,0,0, 0.65)
         love.graphics.rectangle("line", X, Y, self.slotSize, self.slotSize)
@@ -515,6 +524,7 @@ end
 
 
 function Inventory:drawUI()
+    assert(client, "Shouldn't be called serverside")
     if not self.isOpen then
         return
     end
