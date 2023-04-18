@@ -9,9 +9,6 @@ local valid_callbacks = require("inventory_callbacks")
 
 local updateStackSize = require("server.update_stacksize")
 
-local itemDrops = require("server.item_drops")
-
-local itemHolding = require("server.item_holding")
 
 
 
@@ -105,7 +102,7 @@ local function hasAccess(username, ent)
         to `ent`s inventory.
     ]]
     local inv = ent.inventory
-    if inv.private and ent.controller ~= username then
+    if (not inv.public) and ent.controller ~= username then
         return false
     else
         return true
@@ -260,7 +257,7 @@ function(username, ent, x, y)
         Not the position of an entity or anything!
     ]]
     local inv = ent.inventory
-    if inv.private and ent.controller ~= username then
+    if (not inv.public) and ent.controller ~= username then
         return
     end
 
@@ -277,9 +274,6 @@ function(username, ent, x, y)
         return -- exit early
     end
 
-    -- NOTE: The order that these are called is important.
-    itemHolding.releaseItemIfHeld(ent, item)
-    itemDrops.dropItem(item, ent.x, ent.y)
 
     inv:set(x, y, nil)
 end)

@@ -7,8 +7,6 @@ interface Inventory {
         slotSize?: number,
         slotSeparation?: number,
         borderWidth?: number,
-        autohold?: boolean,
-        autoopen?: boolean
     }): Inventory;
 
     slotExists(x: number, y: number): boolean;

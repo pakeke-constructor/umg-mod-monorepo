@@ -4,5 +4,5 @@ export {};
 
 /** @NoSelf */
 declare global {
-    const items: {};
+    const items: object;
 }

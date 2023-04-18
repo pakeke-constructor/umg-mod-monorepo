@@ -7,8 +7,6 @@
     ent.stackSize -- the current stack size of the item.
     -- if this reaches 0, the item is deleted.
 
-    x, y -- items need position
-
     -- Item specific components:
     maxStackSize = 32; -- Maximum stack size of this item
     
@@ -121,14 +119,7 @@ return {
             hotbar = true -- DST / minecraft like hotbar.
                 -- (only works for controllable entities)
 
-            private = true/false -- This means that only the owner can open this inventory
-
-            autohold = true/false
-            -- automatically hold the item that's being hovered
-
-            autoopen = true/false
-            -- open inventory when pressing the OPEN button (see openable)
-            -- only works on controllable entities
+            public = true/false -- Whether inv is publically accessible
         })
     end
 }
@@ -261,13 +252,13 @@ return {
         -- (This will also determine the face direction, and the direction
         --   that the tool is facing)
 
-        holdItem = newGunEntity()
+        ent.inventory = items.Inventory({width=1, height=1})
+
+        local gunItem = newGunItem()
+        ent.inventory:set(1,1, gunItem)
+        ent.inventory:hold(1,1) -- set it to hold slot (1,1)
     end
 }
 
 
 ```
-Note that this entity doesn't have an `inventory` component.
-Entities don't neccessarily need an inventory to be able to hold items.
-
-

@@ -17,7 +17,6 @@ local function init(ent, x, y)
 
     ent.inventory = items.Inventory({
         width=3, height = 3, 
-        autohold = true, autoopen = true
     })
 
     base.initializers.initVxVy(ent, x, y);
@@ -33,6 +32,8 @@ return {
     bobbing = {},
     controllable = {};
     nametag = {};
+
+    openable = {};
 
     moveAnimation = {
         up = {"red_player_up_1", "red_player_up_2", "red_player_up_3", "red_player_up_4"},

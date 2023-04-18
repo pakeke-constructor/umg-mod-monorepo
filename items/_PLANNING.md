@@ -114,9 +114,6 @@ Server --> Client ::: sets an inventory item
 `dropInventoryItem(item, x, y)`
 Server --> Client ::: drops item at x,y
 
-`pickUpInventoryItem(item)` 
-Server --> Client ::: removes item from the group
-
 `setInventoryItemStackSize(item, stackSize)`
 Server --> Client ::: sets stack size for inventory item
 

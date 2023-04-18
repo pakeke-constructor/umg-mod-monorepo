@@ -6,8 +6,6 @@ Entities that can pick up items off the ground have a `canPickUpItems` component
 ]]
 
 
-local itemDrops = require("server.item_drops")
-
 
 local pickUpGroup = umg.group("x", "y", "canPickUpItems")
 
@@ -51,36 +49,6 @@ local function canBePickedUp(dist, best_dist, item)
     return true
 end
 
-
-
-
-
-local function tryPickUpHold(ent, picked)
-    --[[
-        tries to pick up an item via `ent.holdItem` component
-    ]]
-    if umg.exists(ent.holdItem) then
-        return
-    end
-
-    local best_item
-    local best_dist = math.huge
-
-    for _, item in itemDrops.itemPartition:iterator(ent.x, ent.y) do
-        if item.itemHoldType and (not item.itemBeingHeld) and (not picked[item]) then 
-            -- then the item is on the ground
-            local d = math.distance(ent, item)
-            if canBePickedUp(d, best_dist, item) then
-                best_dist = d
-                best_item = item
-            end
-        end
-    end
-    if best_item then
-        ent.holdItem = best_item
-        server.broadcast("setInventoryHoldItem", ent, best_item)
-    end
-end
 
 
 

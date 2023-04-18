@@ -20,15 +20,19 @@ local DEFAULT_ITEM_COOLDOWN = 0.01
 
 
 function itemUsage.canUseHoldItem(holder_ent, ...)
-    if (not umg.exists(holder_ent)) or (not umg.exists(holder_ent.holdItem)) then
+    if not umg.exists(holder_ent) then
         return false
     end
     if holder_ent.controller ~= client.getUsername() then
         return false
     end
 
-    local item = holder_ent.holdItem
-    if not item.useItem then
+    if not holder_ent.inventory then
+        return false
+    end
+
+    local item = holder_ent.inventory:getHoldItem()
+    if (not umg.exists(item)) or (not item.useItem) then
         return false
     end
 

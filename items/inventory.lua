@@ -33,13 +33,10 @@ function Inventory:init(options)
     -- border offset from inventory edge
     self.borderWidth = options.borderWidth or DEFAULT_BORDER_WIDTH
 
-    self.totalSlotSize = self.slotSize + self.slotSeparation
+    -- whether this inventory is publically accessible.
+    self.public = options.public or false
 
-    -- automatically holds the item that's hovered
-    self.autohold = options.autohold
-    -- (For controllable ents,) opens the inventory when OPEN button pressed.
-    -- TODO: Maybe rename this?
-    self.autoopen = options.autoopen
+    self.totalSlotSize = self.slotSize + self.slotSeparation
 
     self.inventory = {}  -- Array where the items are actually stored.
 
@@ -431,18 +428,26 @@ function Inventory:updateSlabUI()
 end
 
 
-
+function Inventory:_rawhold(x,y)
+    self.holding_x = x
+    self.holding_y = y
+end
 
 function Inventory:hold(x,y)
     --[[
         sets the hold position for an inventory.
+        The item in this slot will now be "held" by the inventory owner.
     ]]
-    self.holding_x = x
-    self.holding_y = y
-    if client and self.autohold then
+    self:_rawhold(x, y)
+    if client then
+        local owner_ent = umg.exists(self.owner) and self.owner
+        if owner_ent.controller == client.getUsername() then
+            client.send("setInventoryHoldSlot", owner_ent, x, y)
+        end
+    elseif server then
         local owner_ent = umg.exists(self.owner) and self.owner
         if owner_ent then
-            client.send("setInventoryHoldItem", owner_ent, x, y)
+            server.broadcast("setInventoryHoldSlot", owner_ent, x, y)
         end
     end
 end

@@ -5,13 +5,21 @@ local itemUsage = {}
 local DEFAULT_ITEM_COOLDOWN = 0.01
 
 
+local function getHoldItem(ent)
+    local inv = ent.inventory
+    if inv then
+        local item = inv:getHoldItem()
+        return umg.exists(item) and item
+    end
+end
+
 
 function itemUsage.canUseHoldItem(holder_ent, ...)
-    if (not umg.exists(holder_ent)) or (not umg.exists(holder_ent.holdItem)) then
+    if (not umg.exists(holder_ent)) or (not getHoldItem(holder_ent)) then
         return false
     end
 
-    local item = holder_ent.holdItem
+    local item = getHoldItem(holder_ent)
     if not item.useItem then
         return false
     end
@@ -45,7 +53,7 @@ end
 
 
 function itemUsage.useHoldItem(holder_ent, ...)
-    local item = holder_ent.holdItem
+    local item = getHoldItem(holder_ent)
     if itemUsage.canUseHoldItem(holder_ent) then
         itemUsage.useItemDirectly(holder_ent, item, ...)
     elseif item and item.useItemDeny then
@@ -73,7 +81,7 @@ end
 
 server.on("useItem", function(username, holder_ent, ...)
     if not umg.exists(holder_ent) then return end
-    if not umg.exists(holder_ent.holdItem) then return end
+    if not getHoldItem(holder_ent) then return end
     if holder_ent.controller ~= username then return end
 
     itemUsage.useHoldItem(holder_ent, ...)
