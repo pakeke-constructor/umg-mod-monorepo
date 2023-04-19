@@ -123,8 +123,6 @@ function Inventory:_rawset(x, y, item_ent)
     local i = self:getIndex(x,y)
     if item_ent then
         assertItem(item_ent)
-        item_ent.hidden = true
-        item_ent.itemBeingHeld = true
         self.inventory[i] = item_ent
     else
         self.inventory[i] = nil

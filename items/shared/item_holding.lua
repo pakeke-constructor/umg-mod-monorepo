@@ -113,7 +113,6 @@ end
 
 
 local function updateHoldItem(ent, item_ent)
-    item_ent.hidden = false
     assert(item_ent.itemHoldType, "held items need holdType")
     if not itemHoldPositioning[item_ent.itemHoldType] then 
         error("unknown itemHoldType " .. tostring(item_ent.itemHoldType) .. " for entity " .. tostring(item_ent))

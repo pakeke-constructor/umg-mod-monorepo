@@ -107,12 +107,13 @@ x,y = inventory:getSpace() -- gets a free space in the inventory.
 
 
 # server <--> client  events
+
+`setInventoryHoldSlot( ent, slotx, sloty )`
+Server <---> Client  ::: sets hold slot for an inventory
+
 ## Server --> Client
 `setInventoryItem( ent, x, y, item_ent )`
 Server --> Client ::: sets an inventory item
-
-`dropInventoryItem(item, x, y)`
-Server --> Client ::: drops item at x,y
 
 `setInventoryItemStackSize(item, stackSize)`
 Server --> Client ::: sets stack size for inventory item
@@ -137,8 +138,8 @@ Player moves item in their own inventory:
 Generates two `setInventoryItem` calls, one for deletion, one for addition
 
 Player drops inventory item:
-Generates `setInventoryItem` nil call, and sets `item.hidden = true`,
-and `item.itemBeingHeld = false`
+A `groundItem` entity is created, containing the inventory item.
+This groundItem is able to be picked up, and will delete itself when picked up.
 
 
 

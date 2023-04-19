@@ -338,22 +338,10 @@ end)
 
 
 
-client.on("dropInventoryItem", function(item, x, y)
-    assert(x and y, "?")
-    item.x = x
-    item.y = y
-    item.itemBeingHeld = false
-    item.hidden = false
-end)
-
-
-
 client.on("setInventoryHoldSlot", function(ent, x, y)
     local inv = ent.inventory
     if inv then
         inv:_rawhold(x, y)
     end
 end)
-
-
 

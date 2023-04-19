@@ -7,6 +7,8 @@ local inventoryGroup = umg.group("inventory")
 local Inventory = require("inventory")
 local valid_callbacks = require("inventory_callbacks")
 
+local groundItemsHandler = require("server.ground_items_handler")
+
 local updateStackSize = require("server.update_stacksize")
 
 
@@ -78,15 +80,15 @@ end
 do
 local asserter = base.typecheck.check("entity", "integer", "integer")
 
-server.on("setInventoryHoldItem", function(sender, ent, x, y)
-    if not asserter(ent, x, y) then return end
+server.on("setInventoryHoldSlot", function(sender, ent, slotX, slotY)
+    if not asserter(ent, slotX, slotY) then return end
     if ent.controller ~= sender then return end
     if not ent.inventory then return end
     
     local inv = ent.inventory
-    if x <= inv.width and x >= 1 and y <= inv.height and y >= 1 then
-        if inv:slotExists(x,y) then
-            itemHolding.setHoldItem(ent, inv:get(x,y))
+    if slotX <= inv.width and slotX >= 1 and slotY <= inv.height and slotY >= 1 then
+        if inv:slotExists(slotX,slotY) then
+            inv:hold(slotX,slotY)
         end
     end
 end)
@@ -274,7 +276,7 @@ function(username, ent, x, y)
         return -- exit early
     end
 
-
+    groundItemsHandler.dropItem(ent.x, ent.y, item)
     inv:set(x, y, nil)
 end)
 

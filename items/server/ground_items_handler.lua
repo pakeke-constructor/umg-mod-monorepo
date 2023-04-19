@@ -6,6 +6,10 @@ Entities that can pick up items off the ground have a `canPickUpItems` component
 ]]
 
 
+local groundItemsHandler = {}
+
+
+
 
 local pickUpGroup = umg.group("x", "y", "canPickUpItems", "inventory")
 
@@ -20,6 +24,30 @@ local PICKUP_DISTANCE = 10
 local PICKUP_DELAY_TIME = 1
 
 
+
+
+
+local function dropItem(x, y, itemEnt)
+    local e = server.entities.items_ground_item(x, y)
+    e.inventory:set(1,1,itemEnt)
+    e.image = itemEnt.image
+    umg.call("dropGroundItem", e, itemEnt)
+end
+
+
+
+local dropItemHandler = dropItem
+local dropItemTc = base.typecheck.assert("number", "number", "entity")
+
+function groundItemsHandler.dropItem(x, y, itemEnt)
+    dropItemTc(x, y, itemEnt)
+    dropItemHandler(x, y, itemEnt)
+end
+
+
+function groundItemsHandler.setDropItemHandler(func)
+    dropItemHandler = func
+end
 
 
 
@@ -104,22 +132,15 @@ end
 
 
 local function updatePartition()
-    -- TODO: bugfix this!!!! there could easily be issues
-    for _, ent in ipairs(pickUpGroup) do
-        if ent.itemBeingHeld then
-            if groundItemPartition:contains(ent) then
-                groundItemPartition:removeEntity(ent)
-            end
-        else
-            groundItemPartition:updateEntity(ent)
-        end
+    for _, ent in ipairs(groundItemGroup) do
+        groundItemPartition:updateEntity(ent)
     end
 end
 
 
 
 local ct = 0
-local LOOP_CT = 8
+local LOOP_CT = 8 -- we only want to update every X ticks.
 
 umg.on("@tick", function(dt)
     -- This function runs once every LOOP_CT frames:
@@ -141,3 +162,4 @@ umg.on("@tick", function(dt)
 end)
 
 
+return groundItemsHandler
