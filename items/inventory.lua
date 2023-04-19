@@ -245,6 +245,7 @@ function Inventory:add(item)
     if slotx and sloty then
         local preItem = self:get(slotx, sloty)
         preItem.stackSize = preItem.stackSize + item.stackSize
+        item:delete() -- no more stack space left for old item; delete.
         return true
     else
         -- then we get

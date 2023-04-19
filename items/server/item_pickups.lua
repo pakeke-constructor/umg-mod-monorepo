@@ -57,35 +57,35 @@ end
 
 
 
-local function pickup(pickupEnt, groundItemEnt)
-    
+
+local function getWrappedItem(groundItemEnt)
+    local inv = groundItemEnt.inventory
+    local w,h = inv.width, inv.height
+    assert(w == 1 and h == 1, "?")
+    -- the wrapped item will always be at slot 1,1
+    return inv:get(w,h) 
 end
 
 
 
+
 local function tryPickUp(ent, picked)
-    local ix, iy
     local best_ent
-    local combine = false -- whether stacks are combined or not
     local best_dist = math.huge
 
-    local free_ix, free_iy = ent.inventory:getFreeSlot()
-    for _, groundItem in groundItemPartition:iterator(ent.x, ent.y) do
-        if (not picked[groundItem]) then 
+    for _, groundEnt in groundItemPartition:iterator(ent.x, ent.y) do
+        --[[
+            `groundEnt` has a 1x1 inventory, holding an item entity.
+            We want to pick up that item.   
+        ]]
+        local item = getWrappedItem(groundEnt)
+        if (not picked[groundEnt]) then 
             -- then the item is on the ground
-            local d = math.distance(ent, groundItem)
-            if canBePickedUp(d, best_dist, groundItem) then
-                ix, iy = ent.inventory:getFreeSlotFor(groundItem)
-                if ix then
-                    -- first, we try to put into existing slot
-                    combine = true
+            local d = math.distance(ent, groundEnt)
+            if canBePickedUp(d, best_dist, groundEnt) then
+                if ent.inventory:canAdd(item) then
                     best_dist = d
-                    best_ent = groundItem
-                elseif (not combine) and free_ix then
-                    -- we only want to pick up an item into a free spot,
-                    -- if there are no opportunities to combine stacks.
-                    best_dist = d
-                    best_ent = groundItem
+                    best_ent = groundEnt
                 end
             end
         end
@@ -93,17 +93,11 @@ local function tryPickUp(ent, picked)
 
     if best_ent then
         -- pick up this groundItem
-        if combine then
-            -- we combine stacks
-            local item = ent.inventory:get(ix, iy)
-            item.stackSize = (item.stackSize or 1) + (best_ent.stackSize or 1)
-            best_ent:delete()
-        else
-            -- we just set normally
-            ent.inventory:set(free_ix, free_iy, best_ent)
-        end
-        picked[best_ent] = true
-        pickup(best_ent)
+        local item = getWrappedItem(best_ent)
+        ent.inventory:add(item)
+        umg.call("pickupGroundItem", ent, item)
+        -- delete the item on ground
+        best_ent:delete()
     end
 end
 
