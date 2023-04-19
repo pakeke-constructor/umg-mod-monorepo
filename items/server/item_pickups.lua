@@ -7,41 +7,47 @@ Entities that can pick up items off the ground have a `canPickUpItems` component
 
 
 
-local pickUpGroup = umg.group("x", "y", "canPickUpItems")
+local pickUpGroup = umg.group("x", "y", "canPickUpItems", "inventory")
 
-local itemGroup = umg.group("x", "y", "itemName")
-
-
+local groundItemGroup = umg.group("x", "y", "groundItem", "inventory")
 
 
-local currentTime = love.timer.getTime()
+local CHUNK_SIZE = 100
+local groundItemPartition = base.Partition(CHUNK_SIZE)
+
+local PICKUP_DISTANCE = 10
+
+local PICKUP_DELAY_TIME = 1
 
 
 
 
-itemGroup:onAdded(function(e)
-    if not e.itemBeingHeld then
-        itemDrops.itemPartition:addEntity(e)
-    end
+
+
+
+groundItemGroup:onAdded(function(e)
+    groundItemPartition:addEntity(e)
+    e.groundItemSpawnTime = base.getGameTime()
 end)
 
 
-itemGroup:onRemoved(function(e)
-    itemDrops.itemPartition:removeEntity(e)
+groundItemGroup:onRemoved(function(e)
+    groundItemPartition:removeEntity(e)
 end)
+
 
 
 
 local function canBePickedUp(dist, best_dist, item)
-    if dist > itemDrops.PICKUP_DISTANCE or dist > best_dist then 
+    if dist > PICKUP_DISTANCE or dist > best_dist then 
         -- we want to try and pick up the closest item.
         -- if there is an item that is closer, ignore it
         return
     end
 
     if item._item_last_holdtime then
-        local time = currentTime - item._item_last_holdtime
-        if time < itemDrops.PICKUP_DELAY_TIME then
+        local time = base.getGameTime() - item._item_last_holdtime
+        if time < PICKUP_DELAY_TIME then
             return
         end
     end
@@ -51,51 +57,53 @@ end
 
 
 
+local function pickup(pickupEnt, groundItemEnt)
+    
+end
 
-local function tryPickUpInventory(ent, picked)
-    --[[
-        tries to pick up an item via `ent.inventory` component
-    ]]
+
+
+local function tryPickUp(ent, picked)
     local ix, iy
-    local best_item
+    local best_ent
     local combine = false -- whether stacks are combined or not
     local best_dist = math.huge
 
-    local free_ix, free_iy = ent.inventory:getFreeSpace()
-    for _, item in itemDrops.itemPartition:iterator(ent.x, ent.y) do
-        if (not item.itemBeingHeld) and (not picked[item]) then 
+    local free_ix, free_iy = ent.inventory:getFreeSlot()
+    for _, groundItem in groundItemPartition:iterator(ent.x, ent.y) do
+        if (not picked[groundItem]) then 
             -- then the item is on the ground
-            local d = math.distance(ent, item)
-            if canBePickedUp(d, best_dist, item) then
-                ix, iy = ent.inventory:getFreeSpaceFor(item)
+            local d = math.distance(ent, groundItem)
+            if canBePickedUp(d, best_dist, groundItem) then
+                ix, iy = ent.inventory:getFreeSlotFor(groundItem)
                 if ix then
                     -- first, we try to put into existing slot
                     combine = true
                     best_dist = d
-                    best_item = item
+                    best_ent = groundItem
                 elseif (not combine) and free_ix then
                     -- we only want to pick up an item into a free spot,
                     -- if there are no opportunities to combine stacks.
                     best_dist = d
-                    best_item = item
+                    best_ent = groundItem
                 end
             end
         end
     end
 
-    if best_item then
-        -- pick up this item.
+    if best_ent then
+        -- pick up this groundItem
         if combine then
             -- we combine stacks
             local item = ent.inventory:get(ix, iy)
-            item.stackSize = (item.stackSize or 1) + (best_item.stackSize or 1)
-            best_item:delete()
+            item.stackSize = (item.stackSize or 1) + (best_ent.stackSize or 1)
+            best_ent:delete()
         else
             -- we just set normally
-            ent.inventory:set(free_ix, free_iy, best_item)
+            ent.inventory:set(free_ix, free_iy, best_ent)
         end
-        picked[best_item] = true
-        itemDrops.pickupItem(best_item)
+        picked[best_ent] = true
+        pickup(best_ent)
     end
 end
 
@@ -105,11 +113,11 @@ local function updatePartition()
     -- TODO: bugfix this!!!! there could easily be issues
     for _, ent in ipairs(pickUpGroup) do
         if ent.itemBeingHeld then
-            if itemDrops.itemPartition:contains(ent) then
-                itemDrops.itemPartition:removeEntity(ent)
+            if groundItemPartition:contains(ent) then
+                groundItemPartition:removeEntity(ent)
             end
         else
-            itemDrops.itemPartition:updateEntity(ent)
+            groundItemPartition:updateEntity(ent)
         end
     end
 end
@@ -128,18 +136,13 @@ umg.on("@tick", function(dt)
         ct = 0 -- else, we run function
     end
     -- ==========
-    currentTime = base.getGameTime()
-
     updatePartition()
 
     local picked = {}
     for _, ent in ipairs(pickUpGroup) do
-        if ent:isRegular("inventory") and ent.inventory then
-            tryPickUpInventory(ent, picked)
+        if ent.inventory then
+            tryPickUp(ent, picked)
         end 
-        if ent:isRegular("holdItem") then
-            tryPickUpHold(ent, picked)
-        end
     end
 end)
 

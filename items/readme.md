@@ -62,8 +62,8 @@ item = inv:getHoldingItem()
 num = inv:count("banana") 
 -- gets count of the total number of "bananas" in the 
 
-x, y = inv:getFreeSpace() 
--- returns the closest empty space in the inventory
+x, y = inv:getFreeSlot() 
+-- returns the closest empty slot in the inventory
 
 
 ```

@@ -188,7 +188,7 @@ end
 
 
 
-function Inventory:getFreeSpace()
+function Inventory:getFreeSlot()
     local x,y
     -- else search for empty inventory space
     for i=1, self.width * self.height do
@@ -209,7 +209,7 @@ function Inventory:getFreeSpace()
 end
 
 
-function Inventory:getFreeSpaceFor(item)
+function Inventory:getFreeSlotFor(item)
     local x,y
     if item then
         -- then we first search for an item slot that is same type as `item`
@@ -228,6 +228,34 @@ function Inventory:getFreeSpaceFor(item)
             end
         end
     end
+end
+
+
+
+function Inventory:canAdd(item)
+    return self:getFreeSlotFor(item) or self:getFreeSlot(item)
+end
+
+
+
+function Inventory:add(item)
+    assert(server,"only available on server")
+    local slotx, sloty = self:getFreeSlotFor(item)
+
+    if slotx and sloty then
+        local preItem = self:get(slotx, sloty)
+        preItem.stackSize = preItem.stackSize + item.stackSize
+        return true
+    else
+        -- then we get
+        slotx, sloty = self:getFreeSlot()
+        if slotx and sloty then
+            self:set(slotx, sloty, item)
+            return true
+        end
+    end
+
+    return false -- failed
 end
 
 
@@ -275,6 +303,10 @@ end
 
 
 function Inventory:swap(other_inv, self_x, self_y, other_x, other_y)
+    --[[
+        self_x, self_y: position of the slot in `self` inventory
+        other_x, other_y:  position of the slot in `other` inventory
+    ]]
     assert(server, "Can only be called on server")
     local item_self = self:get(self_x, self_y)
     local item_other = other_inv:get(other_x, other_y)
