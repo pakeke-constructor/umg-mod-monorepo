@@ -7,6 +7,8 @@ itemPickups
 
 holdItem
 
+itemBeingHeld
+
 
 
 
