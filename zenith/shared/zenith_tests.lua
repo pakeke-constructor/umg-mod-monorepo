@@ -18,15 +18,15 @@ end
 
 
 
-local i = 0
+local i = 1
 
 umg.on("@tick", function()
     if zenith.nextTest() and tests[i] then
-        i = i + 1
         local tst = tests[i]
         if tst then
-            zenith.test(tst)
+            zenith.test(tst.testName, tst.testFunction)
         end
+        i = i + 1
     end
 end)
 

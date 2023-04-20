@@ -4,13 +4,14 @@ local zenith = {}
 
 local currentTestName = "nil"
 local currentTestCoroutine = nil
+local currentTestFailed = false
 
 
-function zenith.tick()
+umg.on("@tick", function()
     if currentTestCoroutine then
         coroutine.resume(currentTestCoroutine)
     end
-end
+end)
 
 
 
@@ -22,6 +23,7 @@ end
 function zenith.assert(bool, err)
     if not bool then
         print("[zenith] FAIL: ", currentTestName, " with error: ", err)
+        currentTestFailed = true
     end
 end
 
@@ -34,9 +36,12 @@ function zenith.tick(ticks)
 end
 
 
-function zenith.test(func)
+function zenith.test(name, func)
+    assert(type(name) == "string" and type(func) == "function", "?")
     local co = coroutine.create(func)
     currentTestCoroutine = co
+    currentTestFailed = false
+    currentTestName = name
 
     coroutine.resume(co)
 end
@@ -47,7 +52,11 @@ function zenith.nextTest()
     if not currentTestCoroutine then
         return true
     end
-    return coroutine.status(currentTestCoroutine) == "dead"
+    if coroutine.status(currentTestCoroutine) == "dead" then
+        if not currentTestFailed then
+            print("[zenith] TEST PASSED: ", currentTestName)
+        end
+    end
 end
 
 
