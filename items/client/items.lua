@@ -190,7 +190,7 @@ local function executeAlphaInteraction(inv, x, y)
         focus_inv = inv
         focus_x = x
         focus_y = y
-        inv:setHoldSlot(x,y)
+        inv:hold(x,y)
         focus_half_stack = false
         if not inv:get(x,y) then
             resetHoldingInv()

@@ -38,7 +38,8 @@ inventoryGroup:onAdded(function(ent)
     if not ent.stackSize then
         ent.stackSize = 1
     end
-    ent.inventory.owner = ent
+
+    ent.inventory:setup(ent)
 end)
 
 
@@ -276,7 +277,7 @@ function(username, ent, x, y)
         return -- exit early
     end
 
-    groundItemsHandler.dropItem(ent.x, ent.y, item)
+    groundItemsHandler.drop(item, ent.x, ent.y)
     inv:set(x, y, nil)
 end)
 

@@ -8,5 +8,6 @@ return {
         e.inventory = items.Inventory({
             width = 1, height = 1
         })
+        e.inventory:setup(e)
     end
 }

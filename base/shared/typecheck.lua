@@ -47,7 +47,7 @@ typecheck.bool = typecheck.boolean
 
 
 function typecheck.entity(x)
-    return umg.exists(x), "expected entity"
+    return (typecheck.table(x) and x.id), "expected entity"
 end
 typecheck.ent = typecheck.entity
 

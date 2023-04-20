@@ -29,42 +29,25 @@ chat.handleCommand("chunkTest", {
 })
 
 
+local function newItem(ctor, stackSize)
+    local MAG = 200
+    local e = ctor()
+    e.stackSize = stackSize
+    items.drop(e, math.random(-MAG, MAG), math.random(-MAG, MAG))
+end
+
 
 umg.on("@createWorld", function()
     for i=1, 30 do
-        local MAG = 200
-        local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
-        local e = ents.item()
-        e.stackSize = math.floor(math.random(1,5))
-        e.x = x
-        e.y = y
+        newItem(ents.item, 1)
     end
 
     for i=1, 4 do
-        local MAG = 200
-        local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
-        local e = ents.pickaxe()
-        e.stackSize = 1
-        e.x = x
-        e.y = y
+        newItem(ents.pickaxe, 1)
     end
 
     for i=1, 4 do
-        local MAG = 200
-        local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
-        local e = ents.musket()
-        e.stackSize = 1
-        e.x = x
-        e.y = y
-    end
-
-    for i=1, 1 do
-        local MAG = 200
-        local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
-        local e = ents.player_item()
-        e.stackSize = 1
-        e.x = x
-        e.y = y
+        newItem(ents.musket, 1)
     end
 
     for i=1, 30 do
@@ -104,6 +87,5 @@ end)
 
 umg.on("newPlayer", function(uname)
     make_player(uname)
-    print("NEW PLAYER")
 end)
 

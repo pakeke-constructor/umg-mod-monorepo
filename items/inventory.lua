@@ -62,6 +62,21 @@ end
 
 
 
+function Inventory:setup(ent)
+    --[[ 
+    This is called automatically by the main items system on the server.
+    if you intend to use the inventory immediately after creation,
+    call this function. 
+    ]]
+    if self.owner and self.owner ~= ent then
+        error("owner is already set to a different inventory!")
+    end
+
+    self.owner = ent
+end
+
+
+
 function Inventory:slotExists(x, y)
     local ent = self.owner
     if ent.inventorySlots then

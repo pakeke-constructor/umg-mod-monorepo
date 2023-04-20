@@ -27,7 +27,7 @@ local PICKUP_DELAY_TIME = 1
 
 
 
-local function dropItem(x, y, itemEnt)
+local function dropItem(itemEnt, x, y)
     local e = server.entities.items_ground_item(x, y)
     e.inventory:set(1,1,itemEnt)
     e.image = itemEnt.image
@@ -37,15 +37,15 @@ end
 
 
 local dropItemHandler = dropItem
-local dropItemTc = base.typecheck.assert("number", "number", "entity")
+local dropItemTc = base.typecheck.assert("entity", "number", "number")
 
-function groundItemsHandler.dropItem(x, y, itemEnt)
-    dropItemTc(x, y, itemEnt)
-    dropItemHandler(x, y, itemEnt)
+function groundItemsHandler.drop(itemEnt, x, y)
+    dropItemTc(itemEnt, x, y)
+    dropItemHandler(itemEnt, x, y)
 end
 
 
-function groundItemsHandler.setDropItemHandler(func)
+function groundItemsHandler.setDropHandler(func)
     dropItemHandler = func
 end
 
