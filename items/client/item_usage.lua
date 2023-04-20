@@ -62,7 +62,7 @@ local asserter = base.typecheck.assert("entity")
 
 function itemUsage.useHoldItem(holder_ent, ...)
     asserter(holder_ent)
-    local item = holder_ent.holdItem
+    local item = holder_ent.inventory and holder_ent.inventory:getHoldItem()
     if itemUsage.canUseHoldItem(holder_ent) then
         asserter(holder_ent)
         client.send("useItem", holder_ent, ...)

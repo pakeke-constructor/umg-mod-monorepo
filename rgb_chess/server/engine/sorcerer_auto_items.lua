@@ -35,8 +35,9 @@ end
 
 local function holdStaffAutomatically(ent)
     local item = findBestItem(ent)
-    if item ~= ent.holdItem then
-        items.setHoldItem(ent, item)
+    local inv = ent.inventory
+    if inv and inv:getHoldItem() ~= item then
+        inv:hold(item)
     end
 end
 

@@ -94,7 +94,9 @@ inventory:remove(item, amount) -- removes from any slot
 
 inventory:get(x, y)
 
-inventory:add(item, amount) -- adds to any slot
+inventory:canAdd(item) -- true/false, whether can add to inventory or not.
+
+inventory:add(item, amount) -- adds to any slot. Returns false on failure.
 
 inventory:has(item, amount)
 
@@ -102,6 +104,9 @@ inventory:swap(other_inventory, self_x, self_y, other_x, other_y)
 
 x,y = inventory:getSpace() -- gets a free space in the inventory.
 -- (returns nil if full.)
+
+slotx, sloty = inventory:getHold() -- gets hold slot
+item = inventory:getHoldItem() -- gets hold item
 
 ```
 
@@ -143,21 +148,6 @@ This groundItem is able to be picked up, and will delete itself when picked up.
 
 
 
-
-# Item holding and usage:
-```lua
-
-ent.holdingItem = my_item_ent
--- ent is now holding `my_item_ent`
-
-my_item_ent.itemOwner = ent
--- this should be set to ensure stuff works properly
-
-
-
-```
-
-
 ### Picking up items:
 ```lua
 
@@ -166,43 +156,5 @@ ent.canPickUpItems = true
 
 ```
 
-
-### PLANNING FOR ITEM HOLDING:::
-I don't *really* like the way that it's currently being done.
-
-With items being able to be held OR in inventory, there needs to be twice
-as much syncing, and there are way more moving parts.
-It needs to be made more robust.
-
-IDEA:
-Directly set the hold item:
-`items.setHoldItem(holder_ent, item_ent)`
-(Can be called both client and server, 
-but only on client if holder_ent is controlled by `username`.)
-
-^^^ This is probably the best way to do it tbh.
-
-```lua
-
-items.setHoldItem(ent, item_ent) -- `ent` is now holding `item_ent`
-items.setHoldItem(ent, nil)
-
-```
-
-
-
-
-
-
-# planning for hold item verification:
-- Do items need to know what entity is holding them?
-
-What does NEED to be known:
-Server needs to know, given an item and ent, if ent holds item or not.
-
-
-IDEA: 
-Have the server check if `ent.holdItem = item`.
-If so, the item can be used.
 
 

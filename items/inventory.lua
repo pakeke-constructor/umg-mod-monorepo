@@ -474,10 +474,23 @@ function Inventory:updateSlabUI()
 end
 
 
+
+local function clearPreviousHoldItem(item)
+    item:removeComponent("x")
+    item:removeComponent("y")
+end
+
+
 function Inventory:_rawhold(x,y)
+    local prevItem = self:getHoldItem()
+    if prevItem then
+        clearPreviousHoldItem(prevItem)
+    end
+
     self.holding_x = x
     self.holding_y = y
 end
+
 
 function Inventory:hold(x,y)
     --[[

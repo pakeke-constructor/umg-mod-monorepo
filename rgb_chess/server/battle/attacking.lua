@@ -20,7 +20,7 @@ end)
 
 
 umg.on("itemAttack", function(ent, targetEnt)
-    if ent.holdItem then
+    if ent.inventory and ent.inventory:getHoldItem() then
         items.useHoldItem(ent, targetEnt)
     end
 end)

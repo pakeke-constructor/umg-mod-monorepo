@@ -121,15 +121,16 @@ local function updateHoldItem(ent, item_ent)
 end
 
 
+local function getHoldItem(ent)
+    return ent.inventory and ent.inventory:getHoldItem()
+end
+
+
 umg.on("gameUpdate", function()
     for _, ent in ipairs(holdingItemGroup) do
-        if umg.exists(ent.holdItem) then
-            local item_ent = ent.holdItem
-            if holdable(item_ent) then
-                updateHoldItem(ent, item_ent)
-            end
-        else
-            ent.holdItem = nil -- could have been deleted 
+        local item_ent = getHoldItem(ent)
+        if item_ent and holdable(item_ent) then
+            updateHoldItem(ent, item_ent)
         end
     end
 end)
