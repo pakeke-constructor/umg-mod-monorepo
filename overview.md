@@ -380,11 +380,6 @@ server
     server.unicast(username, event_name, ...) -- unicasts to one client
     server.lazyBroadcast(event_name, ...) -- lazy broadcast: efficient, but not guaranteed arrival
     server.lazyUnicast(username, event_name, ...) -- lazy unicast: efficient, but not guaranteed arrival
-
-    server.forceSpawn(ent) -- forces an entity spawn event for `ent`
-    server.forceDelete(ent) -- forces an entity delete event for `ent`
-    -- ITS NOT RECOMMENDED TO USE THESE TWO ^^^
-
 ```
 
 Most lua functions can be used as well, such as `setmetatable`, `rawget`, `pairs`, `require`, etc etc.    

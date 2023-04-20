@@ -11,7 +11,5 @@ return {
     end;
     
     itemHoldType = "tool",
-
-    init = base.initializers.initXY
 }
 

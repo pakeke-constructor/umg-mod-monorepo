@@ -25,4 +25,6 @@ globals:
     any: true
   worldborder:
     any: true
+  zenith:
+    any: true
 

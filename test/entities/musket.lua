@@ -42,7 +42,6 @@ return {
     end;
     
     itemHoldType = "recoil",
-
-    init = base.initializers.initXY
 }
+
 

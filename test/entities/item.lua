@@ -14,7 +14,5 @@ return {
     };
 
     itemHoldType = "above",
-
-    init = base.initializers.initXY
 }
 
