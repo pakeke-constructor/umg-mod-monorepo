@@ -50,6 +50,8 @@ return function()
 
     zenith.clear()
     removeThenAddInstant()
+    
+    zenith.tick()
 end
 
 

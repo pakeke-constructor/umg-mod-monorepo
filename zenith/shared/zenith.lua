@@ -2,28 +2,25 @@
 local zenith = {}
 
 
-local currentTestName = "nil"
-local currentTestCoroutine = nil
-local currentTestFailed = false
+
+local currentTest = nil
+
+
+
 
 
 umg.on("@tick", function()
-    if currentTestCoroutine then
-        coroutine.resume(currentTestCoroutine)
+    if currentTest then
+        coroutine.resume(currentTest.co)
     end
 end)
 
 
 
-function zenith.name(name)
-    currentTestName = name
-end
-
-
 function zenith.assert(bool, err)
     if not bool then
-        print("[zenith] FAIL: ", currentTestName, " with error: ", err)
-        currentTestFailed = true
+        print("[zenith] FAIL: ", currentTest.name, " with error: ", err)
+        currentTest.failed = true
     end
 end
 
@@ -36,35 +33,46 @@ function zenith.tick(ticks)
 end
 
 
-function zenith.test(name, func)
-    assert(type(name) == "string" and type(func) == "function", "?")
-    local co = coroutine.create(func)
-    currentTestCoroutine = co
-    currentTestFailed = false
-    currentTestName = name
+function zenith.test(options)
+    assert(type(options.name) == "string" and type(options.func) == "function", "?")
+    options.failed = false
 
-    coroutine.resume(co)
+    options.co = coroutine.create(options.func)
+    return options
+end
+
+
+function zenith.run(test)
+    if currentTest and not currentTest.failed then
+        -- output state of previous test
+        print("[zenith] TEST PASSED", currentTest.name)
+    end
+
+    assert(zenith.readyForNextTest(),"?")
+    assert(test.co, "?")
+    currentTest = test
+    coroutine.resume(test.co)
 end
 
 
 
-function zenith.nextTest()
-    if not currentTestCoroutine then
+function zenith.readyForNextTest()
+    if not currentTest then
         return true
     end
-    if coroutine.status(currentTestCoroutine) == "dead" then
-        if not currentTestFailed then
-            print("[zenith] TEST PASSED: ", currentTestName)
-        end
-    end
+    return coroutine.status(currentTest.co) == "dead"
 end
+
 
 
 
 
 local allGroup = umg.group()
 
+
 function zenith.clear()
+    if not server then return end
+
     for _, ent in ipairs(allGroup)do
         ent:delete()
     end
