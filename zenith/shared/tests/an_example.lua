@@ -24,4 +24,6 @@ return function()
     if client then
         zenith.assert(recvd, "msg not recvd")
     end
+
+    print("hello?")
 end

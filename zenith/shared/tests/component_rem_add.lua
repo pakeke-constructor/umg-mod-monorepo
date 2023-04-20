@@ -1,6 +1,23 @@
 
 
-local function removeThenAdd()
+local function addComp()
+    local e
+    if server then
+        e = server.entities.empty()
+    end
+
+    zenith.tick()
+    if server then
+        e.foo = 123
+    end
+
+    zenith.tick()
+    zenith.assert(e.foo == 123, "addComponent")
+end
+
+
+
+local function removeComp()
     local N = 10
     local appleGroup = umg.group("apple")
 
@@ -26,7 +43,7 @@ local function removeThenAdd()
 end
 
 
-local function removeThenAddInstant()
+local function addThenRemoveInstant()
     local N = 10
     local appleGroup = umg.group("apple")
 
@@ -46,10 +63,13 @@ end
 
 return function()
     zenith.clear()
-    removeThenAdd()
+    addComp()
 
     zenith.clear()
-    removeThenAddInstant()
+    removeComp()
+
+    zenith.clear()
+    addThenRemoveInstant()
     
     zenith.tick()
 end

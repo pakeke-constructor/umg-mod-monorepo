@@ -9,19 +9,17 @@ local currentTest = nil
 
 
 
-umg.on("@tick", function()
-    if currentTest then
-        coroutine.resume(currentTest.co)
-    end
-end)
-
-
-
 function zenith.assert(bool, err)
+    err = err or "(none)"
     if not bool then
         print("[zenith] FAIL: ", currentTest.name, " with error: ", err)
         currentTest.failed = true
     end
+end
+
+
+function zenith.resume()
+    return coroutine.resume(currentTest.co)
 end
 
 
@@ -30,6 +28,16 @@ function zenith.tick(ticks)
     for _=1, ticks do
         coroutine.yield()
     end
+end
+
+
+function zenith.fail()
+    currentTest.failed = true
+end
+
+
+function zenith.getTest()
+    return currentTest
 end
 
 
@@ -43,9 +51,13 @@ end
 
 
 function zenith.run(test)
-    if currentTest and not currentTest.failed then
-        -- output state of previous test
-        print("[zenith] TEST PASSED", currentTest.name)
+    if currentTest then
+        if currentTest.failed then
+            -- output state of previous test
+            print("[zenith] TEST FAILED: ", currentTest.name)
+        else
+            print("[zenith] TEST PASSED", currentTest.name)
+        end
     end
 
     assert(zenith.readyForNextTest(),"?")

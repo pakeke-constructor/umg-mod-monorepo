@@ -4,7 +4,6 @@ local zenith = require("shared.zenith")
 
 
 local tests = {
-    "_wait_for_client_join",
     "an_example",
     "component_rem_add",
     "z"
@@ -24,21 +23,42 @@ end
 local i = 1
 
 local clientReady = true
+local clientSentReady = false
 
+
+local waitTicks = 1
+local WAIT_N = 60 -- wait X ticks for client to join.
 
 
 umg.on("@tick", function()
+    if not tests[i] then
+        return
+    end
+
+    if server and waitTicks < WAIT_N then
+        -- wait for client to join
+        waitTicks = waitTicks + 1
+        return
+    end
+
     if zenith.readyForNextTest() then
         if server and clientReady then
             local tst = tests[i]
-            if not tst then return end
-
             clientReady = false
             server.broadcast("zenithNextTest", i)
             zenith.run(tst)
             i = i + 1
-        elseif client then
+        elseif client and (not clientSentReady) then
+            clientSentReady = true
             client.send("zenithReady")
+        end
+    end
+
+    if zenith.getTest() then
+        local res, err = zenith.resume()
+        if not res then
+            print("[zenith] FAIL: ", err)
+            zenith.fail()
         end
     end
 end)
@@ -46,6 +66,7 @@ end)
 
 if client then
     client.on("zenithNextTest", function(index)
+        clientSentReady = false
         local tst = tests[index]
         zenith.run(tst)
     end)
@@ -57,3 +78,5 @@ if server then
         clientReady = true
     end)
 end
+
+
