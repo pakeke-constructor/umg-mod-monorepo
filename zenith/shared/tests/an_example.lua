@@ -1,7 +1,5 @@
 
 return function()
-    zenith.name("an example test")
-
     -- runs code on server
     if server then
         server.broadcast("an_example_test", "hi")
@@ -24,6 +22,4 @@ return function()
     if client then
         zenith.assert(recvd, "msg not recvd")
     end
-
-    print("hello?")
 end

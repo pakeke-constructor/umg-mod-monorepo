@@ -1,5 +1,10 @@
 
 
+local appleGroup = umg.group("apple")
+local allGroup = umg.group()
+
+
+
 local function addComp()
     local e
     if server then
@@ -7,19 +12,23 @@ local function addComp()
     end
 
     zenith.tick()
+
     if server then
         e.foo = 123
     end
 
-    zenith.tick()
-    zenith.assert(e.foo == 123, "addComponent")
+    zenith.tick(2)
+
+    assert(#allGroup == 1, "allGroup size not 1?")
+    for _, ent in ipairs(allGroup) do
+        zenith.assert(ent.foo == 123, "addComponent")
+    end
 end
 
 
 
 local function removeComp()
     local N = 10
-    local appleGroup = umg.group("apple")
 
     if server then
         for _=1, N do
@@ -28,24 +37,23 @@ local function removeComp()
         end
     end
 
-    zenith.assert(#appleGroup == 0, "?")
+    zenith.assert(#appleGroup == 0, "appleGroup size not 0")
     zenith.tick(1)
-    zenith.assert(#appleGroup == N, "?")
+    zenith.assert(#appleGroup == N, "appleGroup size not N")
 
     if server then
-        for _, e in ipairs(zenith.allGroup()) do
+        for _, e in ipairs(allGroup) do
             e:removeComponent("apple")
         end
     end
 
     zenith.tick(1)
-    zenith.assert(#appleGroup == 0, "?")
+    zenith.assert(#appleGroup == 0, "appleGroup size not 0 (2nd time)")
 end
 
 
 local function addThenRemoveInstant()
     local N = 10
-    local appleGroup = umg.group("apple")
 
     if server then
         for _=1, N do
@@ -56,7 +64,7 @@ local function addThenRemoveInstant()
     end
 
     zenith.tick(1)
-    zenith.assert(#appleGroup == 0, "apple group wasn't empty")
+    zenith.assert(#appleGroup == 0, "appleGroup size not 0 (2nd time)")
 end
 
 

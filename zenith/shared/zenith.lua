@@ -83,11 +83,6 @@ function zenith.clear()
 end
 
 
-function zenith.allGroup()
-    return allGroup
-end
-
-
 
 
 
@@ -106,7 +101,6 @@ local function startNextTest(index)
     if not tst then return end
     currentTest = tst
     clientReady = false
-    coroutine.resume(tst.co)
 end
 
 
@@ -190,6 +184,6 @@ end
 
 
 
-
+_G.zenith = zenith
 
 return zenith
