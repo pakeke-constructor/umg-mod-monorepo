@@ -1,6 +1,12 @@
 
 local zenith = {}
 
+if server then
+    -- must set it to a slow tickrate so client can keep up.
+    server.setTickrate(1)
+end
+
+
 
 
 local currentTest = nil
@@ -92,7 +98,7 @@ local clientReady = true
 
 
 local waitTicks = 1
-local WAIT_N = 50 -- wait X ticks for client to join.
+local WAIT_N = 8 -- wait X ticks for client to join.
 
 
 local function startNextTest(index)

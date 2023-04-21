@@ -21,7 +21,7 @@ local function addComp()
 
     assert(#allGroup == 1, "allGroup size not 1?")
     for _, ent in ipairs(allGroup) do
-        zenith.assert(ent.foo == 123, "addComponent")
+        zenith.assert(ent.foo == 123, "addComponent: " .. tostring(ent))
     end
 end
 
@@ -38,7 +38,7 @@ local function removeComp()
     end
 
     zenith.assert(#appleGroup == 0, "appleGroup size not 0")
-    zenith.tick(1)
+    zenith.tick(3)
     zenith.assert(#appleGroup == N, "appleGroup size not N")
 
     if server then
