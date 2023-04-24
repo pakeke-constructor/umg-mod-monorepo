@@ -49,5 +49,9 @@ to override the default item dropping behaviour..?
 
 ### BUGS:
 
-Item holding 
+Item holding bug:
+Item holding is just all-around buggy and SHITTY.
+This is probably due to the weird `:removeComponent` stuff that's happening.
+`removeComponent` may need more testing.
+
 

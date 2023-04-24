@@ -20,6 +20,7 @@ return {
     follow = true;
 
     canPickUpItems = true,
+    autoHoldItem = true,
 
     shadow = {
         size=6

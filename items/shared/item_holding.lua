@@ -53,7 +53,7 @@ end
 
 
 function itemHoldPositioning.spin(item_ent, holder_ent)
-    local rot = base.getGameTime() * 7
+    local rot = base.getGameTime() * 7 -- todo: allow for changing of rot speed
     local dx,dy = getLookDirection(holder_ent)
     local hold_dist = getHoldDistance(item_ent, holder_ent)
 
@@ -130,6 +130,7 @@ umg.on("gameUpdate", function()
     for _, ent in ipairs(holdingItemGroup) do
         local item_ent = getHoldItem(ent)
         if item_ent and holdable(item_ent) then
+            --print("updat! ", item_ent)
             updateHoldItem(ent, item_ent)
         end
     end

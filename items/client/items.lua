@@ -177,22 +177,22 @@ end
 
 
 
-local function executeAlphaInteraction(inv, x, y)
+local function executeAlphaInteraction(inv, slot_x, slot_y)
     --[[
         "alpha" interactions are for stuff like placing full stacks
         of items, etc.
     ]]
     if focus_inv and umg.exists(focus_inv.owner) and focus_inv:get(focus_x, focus_y) then
-        executeFullPut(inv, x, y)
+        executeFullPut(inv, slot_x, slot_y)
     else
         -- Else we just set the holding to a value, so long as there is an item
         -- in the target slot:
         focus_inv = inv
-        focus_x = x
-        focus_y = y
-        inv:hold(x,y)
+        focus_x = slot_x
+        focus_y = slot_y
+        inv:setHover(slot_x, slot_y)
         focus_half_stack = false
-        if not inv:get(x,y) then
+        if not inv:get(slot_x,slot_y) then
             resetHoldingInv()
         end
     end

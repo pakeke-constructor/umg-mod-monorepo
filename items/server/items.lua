@@ -79,10 +79,10 @@ end
 
 
 do
-local asserter = base.typecheck.check("entity", "integer", "integer")
+local check = base.typecheck.check("entity", "integer", "integer")
 
 server.on("setInventoryHoldSlot", function(sender, ent, slotX, slotY)
-    if not asserter(ent, slotX, slotY) then return end
+    if not check(ent, slotX, slotY) then return end
     if ent.controller ~= sender then return end
     if not ent.inventory then return end
     

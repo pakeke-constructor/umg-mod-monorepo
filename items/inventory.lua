@@ -11,6 +11,7 @@ Inventory objects
 local Inventory = base.Class("items_mod:inventory")
 
 
+local assert2Numbers = base.typecheck.assert("number", "number")
 
 local DEFAULT_INVENTORY_COLOUR = {0.8,0.8,0.8}
 
@@ -115,7 +116,14 @@ end
 
 
 function Inventory:setHover(slotX, slotY)
+    assert2Numbers(slotX, slotY)
     self.hovering_x, self.hovering_y = slotX, slotY
+
+    umg.call("inventoryHover", self.owner, slotX, slotY)
+
+    if self.owner.autoHoldItem then
+        self:hold(slotX, slotY)
+    end
 end
 
 
@@ -123,6 +131,7 @@ function Inventory:getHover()
     -- gets the slot that's currently being hovered over.
     return self.hovering_x, self.hovering_y
 end
+
 
 function Inventory:getHoverItem()
     local hx, hy = self.hovering_x, self.hovering_y
@@ -163,6 +172,7 @@ end
 
 function Inventory:set(x, y, item_ent)
     assert(server, "Can only be called on server")
+    assert2Numbers(x, y)
 
     -- If `item_ent` is nil, then it removes the item from inventory.
     self:_rawset(x, y, item_ent)
@@ -499,8 +509,14 @@ local function clearPreviousHoldItem(item)
 end
 
 
-function Inventory:_setHoldSlot(x,y)
+function Inventory:_setHoldSlot(slotX, slotY)
     -- sets the hold item slot
+    -- NOTE: This is a private method!!! This should not be called normally
+    local prevX, prevY = self:getHold()
+    if prevX == slotX and prevY == prevY then
+        return
+    end
+
     local ownerEnt = self.owner
     local prevItem = self:getHoldItem()
     if umg.exists(prevItem) then
@@ -508,8 +524,8 @@ function Inventory:_setHoldSlot(x,y)
         umg.call("unequipItem", ownerEnt, prevItem)
     end
 
-    self.holding_x = x
-    self.holding_y = y
+    self.holding_x = slotX
+    self.holding_y = slotY
 
     local item = self:getHoldItem()
     if umg.exists(item) then
@@ -519,21 +535,23 @@ end
 
 
 
-function Inventory:hold(x,y)
+function Inventory:hold(slotX, slotY)
     --[[
         sets the hold position for an inventory.
         The item in this slot will now be "held" by the inventory owner.
     ]]
-    self:_setHoldSlot(x, y)
+    assert2Numbers(slotX, slotY)
+
     if client then
         local owner_ent = umg.exists(self.owner) and self.owner
         if owner_ent.controller == client.getUsername() then
-            client.send("setInventoryHoldSlot", owner_ent, x, y)
+            client.send("setInventoryHoldSlot", owner_ent, slotX, slotY)
         end
     elseif server then
+        self:_setHoldSlot(slotX, slotY)
         local owner_ent = umg.exists(self.owner) and self.owner
         if owner_ent then
-            server.broadcast("setInventoryHoldSlot", owner_ent, x, y)
+            server.broadcast("setInventoryHoldSlot", owner_ent, slotX, slotY)
         end
     end
 end
@@ -544,7 +562,10 @@ function Inventory:getHold()
 end
 
 function Inventory:getHoldItem()
-    return self:get(self:getHold())
+    local slot_x, slot_y = self:getHold()
+    if slot_x and slot_y then
+        return self:get(slot_x, slot_y)
+    end
 end
 
 
