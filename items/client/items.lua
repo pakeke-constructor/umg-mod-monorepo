@@ -341,7 +341,7 @@ end)
 client.on("setInventoryHoldSlot", function(ent, x, y)
     local inv = ent.inventory
     if inv then
-        inv:_rawhold(x, y)
+        inv:_setHoldSlot(x, y)
     end
 end)
 

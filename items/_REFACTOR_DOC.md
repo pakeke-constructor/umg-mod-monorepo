@@ -2,15 +2,6 @@
 
 # List of keywords / fields / events that are now deleted:
 
-itemDrops
-itemPickups
-
-holdItem
-
-itemBeingHeld
-
-
-
 
 
 # PROBLEM SPACE:
@@ -53,4 +44,10 @@ Perhaps `item.setDropBehaviour(function(itemEnt) ... end)` could allow us
 to override the default item dropping behaviour..?
 
 
+
+
+
+### BUGS:
+
+Item holding 
 

@@ -51,8 +51,11 @@ function Inventory:init(options)
         self.color = DEFAULT_INVENTORY_COLOUR
     end
 
-    self.holding_x = 1 -- The current item that the player is hovering over.
-    self.holding_y = 1
+    self.holding_x = nil -- The slot that the entity is holding
+    self.holding_y = nil
+
+    self.hovering_x = nil -- The slot that the entity is hovering over.
+    self.hovering_y = nil
 
     self.isOpen = false
 
@@ -109,9 +112,22 @@ end
 
 
 
-function Inventory:getHoveringItem()
-    if self.holding_x and self.holding_y then
-        return self:get(self.holding_x, self.holding_y)
+
+
+function Inventory:setHover(slotX, slotY)
+    self.hovering_x, self.hovering_y = slotX, slotY
+end
+
+
+function Inventory:getHover()
+    -- gets the slot that's currently being hovered over.
+    return self.hovering_x, self.hovering_y
+end
+
+function Inventory:getHoverItem()
+    local hx, hy = self.hovering_x, self.hovering_y
+    if hx and hy then
+        return self:get(hx,hy)
     end
 end
 
@@ -476,20 +492,31 @@ end
 
 
 local function clearPreviousHoldItem(item)
+    -- We remove position components from the previous item, since it's no longer being held.
+    -- When items are held, they are granted a position in the world.
     item:removeComponent("x")
     item:removeComponent("y")
 end
 
 
-function Inventory:_rawhold(x,y)
+function Inventory:_setHoldSlot(x,y)
+    -- sets the hold item slot
+    local ownerEnt = self.owner
     local prevItem = self:getHoldItem()
-    if prevItem then
+    if umg.exists(prevItem) then
         clearPreviousHoldItem(prevItem)
+        umg.call("unequipItem", ownerEnt, prevItem)
     end
 
     self.holding_x = x
     self.holding_y = y
+
+    local item = self:getHoldItem()
+    if umg.exists(item) then
+        umg.call("equipItem", ownerEnt, item)
+    end
 end
+
 
 
 function Inventory:hold(x,y)
@@ -497,7 +524,7 @@ function Inventory:hold(x,y)
         sets the hold position for an inventory.
         The item in this slot will now be "held" by the inventory owner.
     ]]
-    self:_rawhold(x, y)
+    self:_setHoldSlot(x, y)
     if client then
         local owner_ent = umg.exists(self.owner) and self.owner
         if owner_ent.controller == client.getUsername() then
@@ -567,7 +594,7 @@ local function drawSlot(self, inv_x, inv_y, offset, color)
     -- love.graphics.setColor(0,0,0)
     -- love.graphics.rectangle("line", X, Y, self.slotSize, self.slotSize)
 
-    if self.holding_x == inv_x and self.holding_y == inv_y then
+    if self.hovering_x == inv_x and self.hovering_y == inv_y then
         love.graphics.setLineWidth(4)
         love.graphics.setColor(0,0,0, 0.65)
         love.graphics.rectangle("line", X, Y, self.slotSize, self.slotSize)
