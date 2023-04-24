@@ -1,6 +1,6 @@
 
 
-local holdingItemGroup = umg.group("holdItem", "x", "y")
+local holdingItemGroup = umg.group("inventory", "x", "y")
 
 
 
@@ -20,9 +20,9 @@ end
 local DEFAULT_HOLD_DISTANCE = 10
 
 
-local function getHoldDistance(ent, holder)
+local function getHoldDistance(ent, holderEnt)
     local dis1 = ent.itemHoldDistance or DEFAULT_HOLD_DISTANCE
-    local dis2 = holder.itemHoldDistance or DEFAULT_HOLD_DISTANCE
+    local dis2 = holderEnt.itemHoldDistance or DEFAULT_HOLD_DISTANCE
     return dis1 + dis2
 end
 

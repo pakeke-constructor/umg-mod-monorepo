@@ -13,10 +13,6 @@ chat.handleCommand("script", {
 
 chat.handleCommand("run", {
     handler = function(sender, script)
-        if type(script) ~= "string" then
-            chat.privateMessage(sender, "invalid usage: /run <luaScript>")
-            return
-        end
         local chunk = pcall(loadstring, script)
         if not chunk then
             chat.privateMessage(sender, "invalid syntax: /run <luaScript>")
@@ -24,7 +20,7 @@ chat.handleCommand("run", {
     
         local success, err = pcall(chunk)
         if not success then
-            chat.privateMessage("error running script: " .. err)
+            chat.privateMessage(sender, "error running script: " .. err)
         end
     end,
 
@@ -32,6 +28,18 @@ chat.handleCommand("run", {
     arguments = {{name = "script", type = "string"}}
 })
 
+
+chat.handleCommand("tickrate", {
+    handler = function(sender, tickrate)
+        local succ, err = pcall(server.setTickrate, tickrate)
+        if not succ then
+            chat.privateMessage(sender, "error setting tickrate: " .. tostring(err))
+        end
+    end,
+
+    adminLevel = 100,
+    arguments = {{name = "tickrate", type = "number"}}
+})
 
 
 

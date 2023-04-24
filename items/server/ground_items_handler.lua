@@ -19,7 +19,7 @@ local groundItemGroup = umg.group("x", "y", "groundItem", "inventory")
 local CHUNK_SIZE = 100
 local groundItemPartition = base.Partition(CHUNK_SIZE)
 
-local PICKUP_DISTANCE = 10
+local PICKUP_DISTANCE = 24
 
 local PICKUP_DELAY_TIME = 1
 

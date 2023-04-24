@@ -11,15 +11,15 @@ local function addComp()
         e = server.entities.empty()
     end
 
-    zenith.tick()
+    zenith.tick(4)
 
     if server then
         e.foo = 123
     end
 
-    zenith.tick(2)
+    zenith.tick(4)
 
-    assert(#allGroup == 1, "allGroup size not 1?")
+    zenith.assert(#allGroup == 1, "allGroup size not 1?")
     for _, ent in ipairs(allGroup) do
         zenith.assert(ent.foo == 123, "addComponent: " .. tostring(ent))
     end
@@ -38,7 +38,7 @@ local function removeComp()
     end
 
     zenith.assert(#appleGroup == 0, "appleGroup size not 0")
-    zenith.tick(3)
+    zenith.tick(4)
     zenith.assert(#appleGroup == N, "appleGroup size not N")
 
     if server then
@@ -47,7 +47,7 @@ local function removeComp()
         end
     end
 
-    zenith.tick(1)
+    zenith.tick(4)
     zenith.assert(#appleGroup == 0, "appleGroup size not 0 (2nd time)")
 end
 
@@ -63,8 +63,8 @@ local function addThenRemoveInstant()
         end
     end
 
-    zenith.tick(1)
-    zenith.assert(#appleGroup == 0, "appleGroup size not 0 (2nd time)")
+    zenith.tick(4)
+    zenith.assert(#appleGroup == 0, "appleGroup size not 0 (3rd time)")
 end
 
 
