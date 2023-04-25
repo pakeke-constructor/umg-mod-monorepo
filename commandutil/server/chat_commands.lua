@@ -13,12 +13,14 @@ chat.handleCommand("script", {
 
 chat.handleCommand("run", {
     handler = function(sender, script)
-        local chunk = pcall(loadstring, script)
-        if not chunk then
+        local success, err, chunk
+        success, chunk = pcall(loadstring, script)
+        if not success then
             chat.privateMessage(sender, "invalid syntax: /run <luaScript>")
+            return
         end
     
-        local success, err = pcall(chunk)
+        success, err = pcall(chunk)
         if not success then
             chat.privateMessage(sender, "error running script: " .. err)
         end
