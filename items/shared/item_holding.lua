@@ -112,11 +112,22 @@ local function holdable(item_ent)
 end
 
 
+local function ensureHasXY(ent)
+    if not ent:hasComponent("x") then
+        ent:addComponent("x", 0)
+    end
+    if not ent:hasComponent("y") then
+        ent:addComponent("y", 0)
+    end
+end
+
+
 local function updateHoldItem(ent, item_ent)
     assert(item_ent.itemHoldType, "held items need holdType")
     if not itemHoldPositioning[item_ent.itemHoldType] then 
         error("unknown itemHoldType " .. tostring(item_ent.itemHoldType) .. " for entity " .. tostring(item_ent))
     end
+    ensureHasXY(item_ent)
     itemHoldPositioning[item_ent.itemHoldType](item_ent, ent)   
 end
 

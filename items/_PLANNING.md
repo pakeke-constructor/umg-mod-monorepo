@@ -92,7 +92,7 @@ inventory:count(item)
 
 inventory:remove(item, amount) -- removes from any slot
 
-inventory:get(x, y)
+inventory:get(slot_x, slot_y)
 
 inventory:canAdd(item) -- true/false, whether can add to inventory or not.
 
@@ -105,7 +105,8 @@ inventory:swap(other_inventory, self_x, self_y, other_x, other_y)
 x,y = inventory:getSpace() -- gets a free space in the inventory.
 -- (returns nil if full.)
 
-slotx, sloty = inventory:getHold() -- gets hold slot
+inventory:hold(slot_x, slot_y) -- holds the item at (x,y)
+
 item = inventory:getHoldItem() -- gets hold item
 
 ```

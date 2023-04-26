@@ -229,7 +229,7 @@ end
 
 
 local ALPHA_BUTTON = 1
-local BETA_BUTTON = 2 -- right click is clearly insuperior 
+local BETA_BUTTON = 2 -- right click is clearly inferior 
 
 
 local listener = base.client.input.Listener({priority = 5})

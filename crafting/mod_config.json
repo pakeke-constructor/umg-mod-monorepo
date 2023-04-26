@@ -1,7 +1,7 @@
 {
   "uses": [
     "base",
-    "inventory"
+    "items"
   ],
   "baseMod": true
 }

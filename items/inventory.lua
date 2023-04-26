@@ -501,35 +501,39 @@ end
 
 
 
-local function clearPreviousHoldItem(item)
+local function clearPreviousHoldItem(self)
     -- We remove position components from the previous item, since it's no longer being held.
     -- When items are held, they are granted a position in the world.
-    item:removeComponent("x")
-    item:removeComponent("y")
+    local item = self.holdItem
+    self.holdItem = nil
+    if server and umg.exists(item) then
+        -- removeComponent should be server-authoritative generally
+        item:removeComponent("x")
+        item:removeComponent("y")
+    end
 end
 
 
 function Inventory:_setHoldSlot(slotX, slotY)
     -- sets the hold item slot
     -- NOTE: This is a private method!!! This should not be called normally
-    local prevX, prevY = self:getHold()
-    if prevX == slotX and prevY == prevY then
+    local prevItem = self:getHoldItem()
+    local newItem = self:get(slotX, slotY)
+    if prevItem == newItem then
         return
     end
 
     local ownerEnt = self.owner
-    local prevItem = self:getHoldItem()
+    
     if umg.exists(prevItem) then
-        clearPreviousHoldItem(prevItem)
+        clearPreviousHoldItem(self)
         umg.call("unequipItem", ownerEnt, prevItem)
     end
 
-    self.holding_x = slotX
-    self.holding_y = slotY
+    self.holdItem = newItem
 
-    local item = self:getHoldItem()
-    if umg.exists(item) then
-        umg.call("equipItem", ownerEnt, item)
+    if umg.exists(newItem) then
+        umg.call("equipItem", ownerEnt, newItem)
     end
 end
 
@@ -537,8 +541,10 @@ end
 
 function Inventory:hold(slotX, slotY)
     --[[
-        sets the hold position for an inventory.
-        The item in this slot will now be "held" by the inventory owner.
+        The owner of this inventory will now hold the item in this slot.
+
+        Can be called client OR server,
+        but only works on client for entities controlled by the user.
     ]]
     assert2Numbers(slotX, slotY)
 
@@ -557,15 +563,8 @@ function Inventory:hold(slotX, slotY)
 end
 
 
-function Inventory:getHold()
-    return self.holding_x, self.holding_y
-end
-
 function Inventory:getHoldItem()
-    local slot_x, slot_y = self:getHold()
-    if slot_x and slot_y then
-        return self:get(slot_x, slot_y)
-    end
+    return self.holdItem
 end
 
 

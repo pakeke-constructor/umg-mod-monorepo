@@ -69,6 +69,9 @@ end
 
 
 local function getEntityDrawDepth(ent)
+    if not ent.y then
+        print("BAD: ", ent.id)
+    end
     local depth = ent.drawDepth or 0
     return getDrawDepth(ent.y + depth, ent.z)
 end
@@ -156,13 +159,8 @@ local removeBufferFrozen = {}-- [ent] -> true   entity needs to be removed.
 
 
 drawGroup:onRemoved(function( ent )
-    if ent:hasComponent("vy") or ent:hasComponent("vz") then
-        -- the entity moves, its in the move array
-        removeBufferMove[ent] = true
-    else
-        -- the entity doesnt move, its in the frozen array
-        removeBufferFrozen[ent] = true
-    end
+    removeBufferMove[ent] = true
+    removeBufferFrozen[ent] = true
 end)
 
 
