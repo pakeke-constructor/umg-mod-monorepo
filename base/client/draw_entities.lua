@@ -163,7 +163,6 @@ local removeBufferFrozen = {}-- [ent] -> true   entity needs to be removed.
 
 
 drawGroup:onRemoved(function(ent)
-    print("removed draw group: ", ent)
     removeBufferMove[ent] = true
     removeBufferFrozen[ent] = true
 end)

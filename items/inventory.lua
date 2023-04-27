@@ -304,6 +304,10 @@ end
 function Inventory:canBeOpenedBy(ent)
     assert(umg.exists(ent), "Inventory:canOpen(ent) takes an entity as first argument. (Where the entity is the one opening the inventory)")
 
+    --[[
+        if any answerer returns "true" to canOpenInventory,
+        then this inventory can be opened.
+    ]]
     return umg.ask("canOpenInventory", base.operators.OR, ent, self)
 end
 

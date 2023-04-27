@@ -1,5 +1,5 @@
 
-local Array = require("base.shared.array")
+local Array = require("shared.array")
 
 
 local operators = {}
