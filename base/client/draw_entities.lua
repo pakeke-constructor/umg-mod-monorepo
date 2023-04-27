@@ -69,12 +69,16 @@ end
 
 
 local function getEntityDrawDepth(ent)
-    if not ent.y then
-        print("BAD: ", ent.id)
-    end
     local depth = ent.drawDepth or 0
-    return getDrawDepth(ent.y + depth, ent.z)
+    --[[
+        the reason we must have a default value for ent.y here,
+        is because `y` may be nil.
+        (If a component is deleted, AND an entity is added the same frame, then 
+            binarySearch is called whilst the "dead" entity is still in the list.)
+    ]]
+    return getDrawDepth((ent.y or 0) + depth, ent.z)
 end
+
 
 
 local function entIsOnScreen(ent, leighway, w, h)
@@ -158,7 +162,8 @@ local removeBufferMove = {} --  [ent] -> true   entity needs to be removed.
 local removeBufferFrozen = {}-- [ent] -> true   entity needs to be removed.
 
 
-drawGroup:onRemoved(function( ent )
+drawGroup:onRemoved(function(ent)
+    print("removed draw group: ", ent)
     removeBufferMove[ent] = true
     removeBufferFrozen[ent] = true
 end)

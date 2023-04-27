@@ -104,8 +104,7 @@ local function hasAccess(username, ent)
         returns true/false, depending on whether this username has access
         to `ent`s inventory.
     ]]
-    local inv = ent.inventory
-    if (not inv.public) and ent.controller ~= username then
+    if ent.controller ~= username then
         return false
     else
         return true
@@ -253,7 +252,7 @@ function(username, ent, x, y)
         Not the position of an entity or anything!
     ]]
     local inv = ent.inventory
-    if (not inv.public) and ent.controller ~= username then
+    if not inv:canBeOpenedBy(ent) then
         return
     end
 

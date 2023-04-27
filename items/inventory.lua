@@ -301,21 +301,10 @@ end
 
 
 
-function Inventory:canOpen(ent)
+function Inventory:canBeOpenedBy(ent)
     assert(umg.exists(ent), "Inventory:canOpen(ent) takes an entity as first argument. (Where the entity is the one opening the inventory)")
-    local owner = self.owner
-    if owner.controllable or owner.controller then
-        if not (owner.publicInventory or (owner == ent)) then
-            return false
-        end
-    end
-    if ent.inventoryCallbacks and ent.inventoryCallbacks.canOpen then
-        local func = ent.inventoryCallbacks.canOpen
-        if not func(self, ent) then
-            return false
-        end
-    end
-    return true
+
+    return umg.ask("canOpenInventory", base.operators.OR, ent, self)
 end
 
 
@@ -337,6 +326,7 @@ end
 
 
 function Inventory:get(x, y)
+    assert2Numbers(x, y)
     local i = self:getIndex(x, y)
     return self.inventory[i]
 end

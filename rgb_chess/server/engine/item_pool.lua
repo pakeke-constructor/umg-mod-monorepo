@@ -56,9 +56,10 @@ function itemPool.randomItem(board, x, y)
     local rgbTeam = board:getTeam()
     local turn = rgb.getTurn()
     local etype = randomItemEType(turn)
-    local ent = etype(x,y)
+    local ent = etype()
     ent.rgb = itemRGBSelection()
     ent.rgbTeam = rgbTeam
+    items.drop(ent, x, y)
 end
 
 

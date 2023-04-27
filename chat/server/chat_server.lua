@@ -83,7 +83,9 @@ function chat.handleCommand(commandName, handler)
                 {type = "string", name = "etype"},
                 {type = "number", name = "x"},
                 {type = "number", name = "y"}
-            }
+            },
+
+            description = "this command does stuff"
         }
     ]]
     handleCommandTypecheck(commandName, handler)
@@ -91,6 +93,7 @@ function chat.handleCommand(commandName, handler)
     assert(type(handler.arguments) == "table", "not given .arguments table")
     assert(handler.adminLevel, "not given .adminLevel number")
     handler.typechecker = getArgsTypechecker(handler.arguments)
+    handler.commandName = commandName
     commandToHandler[commandName] = handler
 end
 
@@ -128,6 +131,46 @@ end)
 
 
 
+local function formatCommand(handler)
+    local str = handler.commandName .. "("
+    for _, arg in ipairs(handler.arguments) do
+        str = str .. arg.name .. ":" .. arg.type .. "  "
+    end
+    str = str .. ")"
+    if handler.description then
+        str = str .. "\n   " .. handler.description
+    end
+    return str
+end
+
+
+function chat.getCommands()
+    local buffer = base.Array()
+    for _, handler in pairs(commandToHandler) do
+        buffer:add(handler) 
+    end
+    return buffer
+end
+
+
+
+
+chat.handleCommand("help", {
+    arguments = {},
+    adminLevel = 0,
+
+    handler = function(sender)
+        local adminLevel = chat.getAdminLevel(sender)
+        local commands = chat.getCommands()
+        chat.privateMessage(sender, "COMMAND LIST:")
+        for _, handler in ipairs(commands)do
+            if handler.adminLevel <= adminLevel then
+                local str = formatCommand(handler)
+                chat.privateMessage(sender, str)
+            end
+        end
+    end
+})
 
 
 

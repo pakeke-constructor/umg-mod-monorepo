@@ -45,6 +45,20 @@ chat.handleCommand("tickrate", {
 
 
 
+chat.handleCommand("position", {
+    handler = function(sender)
+        local player = base.getPlayer(sender)
+        if player and player.x and player.y then
+            chat.privateMessage(sender, ("(%.1f, %.1f)"):format(player.x, player.y))
+        end
+    end,
+
+    adminLevel = 0,
+    arguments = {}
+})
+
+
+
 local PLAYER_SPAWN_OFFSET = 30
 
 chat.handleCommand("spawn", {

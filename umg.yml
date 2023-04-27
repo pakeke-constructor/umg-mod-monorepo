@@ -45,6 +45,12 @@ globals:
     - type: string
     - required: false
       type: '...'
+  umg.ask:
+    args:
+    - type: '...'
+  umg.answer:
+    args:
+    - type: '...'
   umg.deserialize:
     args:
     - type: string

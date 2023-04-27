@@ -140,7 +140,7 @@ end
 
 
 local ct = 0
-local LOOP_CT = 8 -- we only want to update every X ticks.
+local LOOP_CT = 8 -- we only want to update every X ticks, for efficiency
 
 umg.on("@tick", function(dt)
     -- This function runs once every LOOP_CT frames:

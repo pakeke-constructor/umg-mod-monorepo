@@ -15,7 +15,7 @@ end
 
 
 
-local function findBestItem(ent)
+local function findBestItemSlot(ent)
     --[[
         finds the top-left item as first choice.
     ]]
@@ -24,7 +24,7 @@ local function findBestItem(ent)
         for y=1, inv.height do
             local item = inv:get(x,y)
             if umg.exists(item) and isUsableItem(item) then
-                return item
+                return x, y
             end
         end
     end
@@ -34,10 +34,13 @@ end
 
 
 local function holdStaffAutomatically(ent)
-    local item = findBestItem(ent)
     local inv = ent.inventory
-    if inv and inv:getHoldItem() ~= item then
-        inv:hold(item)
+    local slot_x, slot_y = findBestItemSlot(ent)
+    if slot_x and slot_y then
+        local item = inv:get(slot_x, slot_y)
+        if inv:getHoldItem() ~= item then
+            inv:hold(slot_x, slot_y)
+        end
     end
 end
 

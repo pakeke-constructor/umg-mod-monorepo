@@ -14,13 +14,14 @@ local function searchForOpenable(player, mouse_x, mouse_y)
     local best_dist = math.huge
     local best_inv_ent = nil
     local x, y = base.client.camera:toWorldCoords(mouse_x, mouse_y)
-    for _, inv in ipairs(openGroup) do
+    for _, ent in ipairs(openGroup) do
         -- todo; spatial partition this.
-        local dist = math.distance(inv, player)
-        local mouse_dist = math.distance(inv.x-x,inv.y-y)
-        if dist < best_dist and mouse_dist <= MOUSE_INTERACTION_DIST then
-            if dist <= (inv.openable.distance or DEFAULT_OPENABLE_DISTANCE) then
-                best_inv_ent = inv
+        local dist = math.distance(ent, player)
+        local mouse_dist = math.distance(ent.x-x,ent.y-y)
+        local inv = ent.inventory
+        if inv:canBeOpenedBy(player) and dist < best_dist and mouse_dist <= MOUSE_INTERACTION_DIST then
+            if dist <= (ent.openable.distance or DEFAULT_OPENABLE_DISTANCE) then
+                best_inv_ent = ent
                 best_dist = dist
             end
         end
@@ -60,8 +61,8 @@ end
 local function tryOpenInv(player, inv_ent)
     local opn = inv_ent.openable
     local inv = inv_ent.inventory
-    if inv:canOpen(player) then
-        if player.inventory and player.inventory:canOpen(player) then
+    if inv:canBeOpenedBy(player) then
+        if player.inventory and player.inventory:canBeOpenedBy(player) then
             player.inventory:open()
         end
         open(inv)

@@ -156,7 +156,7 @@ function invCbs:canAdd(item, x, y)
     return true/false
 end
 
-function invCbs:canOpen(ent)
+function invCbs:canBeOpenedBy(ent)
     -- `self` is the inventory object
     -- `ent` is the player that is trying to open the inventory
     return true/false
