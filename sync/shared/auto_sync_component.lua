@@ -37,6 +37,7 @@ end
 
 local abs = math.abs
 local type = type
+local max, min = math.max, math.min
 
 local function isDifferent(compVal, lastVal, options)
     if type(compVal) == "number" and type(lastVal) == "number" then
@@ -126,21 +127,26 @@ end
 
 
 
-local lastTickDelta = 1/20
+local lastTickDelta = 0.1 -- this value is pretty arbitrary and does matter
 local timeOfLastTick = love.timer.getTime()
 
-umg.on("@tick", function(dt)
+local MIN_TICK_DELTA = 0.01
+
+umg.on("@tick", function()
     local time = love.timer.getTime()
-    lastTickDelta = time - timeOfLastTick
+    lastTickDelta = max(MIN_TICK_DELTA, time - timeOfLastTick)
     timeOfLastTick = time
 end)
 
 
-local function updateEntityWithLerp(ent, compName, targetVal)
-    local currVal = ent[compName]
-    local delta = (targetVal - currVal)
 
-    ent[compName] = ent[compName] + delta
+local function updateEntityWithLerp(ent, compName, targetVal, time)
+    local currVal = ent[compName]
+
+    local t = min(1, max(0, (time - timeOfLastTick) / lastTickDelta))
+    local delta = (targetVal - currVal) * (1-t)
+
+    ent[compName] = targetVal - delta
 end
 
 
@@ -149,11 +155,12 @@ local function setupLerp(compName, options)
     local group = umg.group(unpack(requiredComponents))
 
     umg.on("@update", function(dt)
+        local time = love.timer.getTime()
         local lerpBuffer = compNameToLerpBuffer[compName]
         for _, ent in ipairs(group) do
             if lerpBuffer[ent] then
                 local targetVal = lerpBuffer[ent]
-                updateEntityWithLerp(ent, compName, targetVal)
+                updateEntityWithLerp(ent, compName, targetVal, time)
             end
         end
     end)
