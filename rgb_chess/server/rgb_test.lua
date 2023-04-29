@@ -43,7 +43,9 @@ chat.handleCommand("spawnItems", {
     handler = function(sender)
         local board = Board.getBoard(sender) 
         if board then
-            board:generateItem()
+            for i=1, 10 do
+                board:generateItem()
+            end
         end
     end
 })

@@ -162,7 +162,6 @@ local DEFAULT_PARTICLES = 10 -- default number of particles to emit
 
 
 
-local typecheck = require("shared.typecheck")
 local emitAssert = typecheck.assert("string", "number", "number", "number?", "number?", "table?")
 
 function particles.emit(name, x, y, z, num_particles, color)

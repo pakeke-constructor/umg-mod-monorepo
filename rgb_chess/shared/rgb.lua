@@ -93,7 +93,7 @@ end
 
 
 
-local subtractTc = base.typecheck.assert("table")--, "table")
+local subtractTc = typecheck.assert("table")--, "table")
 
 function rgb.subtract(col, sub)
     subtractTc(col,sub)

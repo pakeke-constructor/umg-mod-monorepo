@@ -58,7 +58,7 @@ end
 
 
 
-local asserter = base.typecheck.assert("entity")
+local asserter = typecheck.assert("entity")
 
 function itemUsage.useHoldItem(holder_ent, ...)
     asserter(holder_ent)

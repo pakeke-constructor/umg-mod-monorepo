@@ -3,6 +3,10 @@
 
 Maps local server events automatically to the client.
 
+For example, if umg.call("hello", 1, 2) is called on the server,
+then umg.call("hello", 1, 3) will be called automatically on the client.
+
+
 ]]
 
 local definedEvents = {}

@@ -63,7 +63,7 @@ end
 
 
 
-local asserterDirect = base.typecheck.assert("entity?", "entity")
+local asserterDirect = typecheck.assert("entity?", "entity")
 
 function itemUsage.useItemDirectly(holder_ent, item, ...)
     asserterDirect(holder_ent, item)

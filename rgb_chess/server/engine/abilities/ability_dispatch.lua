@@ -28,7 +28,7 @@ local abilityGroups = {
 
 
 
-local getABGroupTc = base.typecheck.assert("string")
+local getABGroupTc = typecheck.assert("string")
 
 local function getAbilityGroup(triggerType)
     getABGroupTc(triggerType)
@@ -49,7 +49,7 @@ end
 
 
 
-local removeFromAbilityGroupTc = base.typecheck.assert("table", "string")
+local removeFromAbilityGroupTc = typecheck.assert("table", "string")
 
 local function removeFromAbilityGroup(ent, triggerType)
     removeFromAbilityGroupTc(ent, triggerType)
@@ -94,7 +94,7 @@ end
 local tryCallItemAbilities
 
 
-local callTc = base.typecheck.assert("string", "entity", "entity")
+local callTc = typecheck.assert("string", "entity", "entity")
 
 local function applyAbilities(triggerType, ent, selfArg, ...)
     --[[
@@ -117,7 +117,7 @@ end
 
 
 
-local tryCallItemAbilitiesTc = base.typecheck.assert("string", "entity")
+local tryCallItemAbilitiesTc = typecheck.assert("string", "entity")
 
 function tryCallItemAbilities(triggerType, ent, ...)
     tryCallItemAbilitiesTc(triggerType, ent) 

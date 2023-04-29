@@ -11,7 +11,7 @@ Inventory objects
 local Inventory = base.Class("items_mod:inventory")
 
 
-local assert2Numbers = base.typecheck.assert("number", "number")
+local assert2Numbers = typecheck.assert("number", "number")
 
 local DEFAULT_INVENTORY_COLOUR = {0.8,0.8,0.8}
 
@@ -302,7 +302,7 @@ end
 
 
 function Inventory:canBeOpenedBy(ent)
-    assert(umg.exists(ent), "Inventory:canOpen(ent) takes an entity as first argument. (Where the entity is the one opening the inventory)")
+    assert(umg.exists(ent), "takes an entity as first argument. (Where the entity is the one opening the inventory)")
 
     --[[
         if any answerer returns "true" to canOpenInventory,

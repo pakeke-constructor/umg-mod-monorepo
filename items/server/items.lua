@@ -79,7 +79,7 @@ end
 
 
 do
-local check = base.typecheck.check("entity", "integer", "integer")
+local check = typecheck.check("entity", "integer", "integer")
 
 server.on("setInventoryHoldSlot", function(sender, ent, slotX, slotY)
     if not check(ent, slotX, slotY) then return end
@@ -99,27 +99,41 @@ end
 
 
 
-local function hasAccess(username, ent)
+local function hasAccess(ent1, ent2)
     --[[
-        returns true/false, depending on whether this username has access
-        to `ent`s inventory.
+        checks whether ent1 has access to ent2's inventory
     ]]
-    if ent.controller ~= username then
+    if not ent2.inventory then
         return false
-    else
-        return true
     end
+    return ent2.inventory:canBeOpenedBy(ent1)
 end
 
 
+error([[
+Do some thinking about all of this.
+
+Behaviour that we want:
+- Players can move items in and out of their own inventory
+- Players can move items between two inventories that AREN'T inside the player
+
+Behaviour we DONT want:
+- Players can move items between inventories that they can't open.
+
+IDEA:
+Send an extra first argument: `controlEnt` that represents the player executing the transfer.
+If `controlEnt` can open both inventories, then its OK.
+
+]])
 
 server.on("trySwapInventoryItem",
-function(username, ent, other_ent, x, y, x2, y2)
+function(username, controlEnt, ent, other_ent, x, y, x2, y2)
     --[[
         x, y, other_x, other_y are coordinates of the position
         IN THE INVENTORY.
         Not the position of an entity or anything!
     ]]
+    error("todo: refactor this")
     local inv1 = ent.inventory
     local inv2 = other_ent.inventory
     if (not inv1) or (not inv2) then

@@ -3,7 +3,7 @@ local rgbAPI = {}
 
 
 
-local getXYassert = base.typecheck.assert("entity", "entity?")
+local getXYassert = typecheck.assert("entity", "entity?")
 
 local function getProjectileSpawn(targetEnt, sourceEnt)
     --[[
@@ -26,7 +26,7 @@ end
 
 
 
-local buffTc = base.typecheck.assert("entity", "string", "number", "entity?", "number?")
+local buffTc = typecheck.assert("entity", "string", "number", "entity?", "number?")
 
 function rgbAPI.buff(ent, buffType, amount, sourceEnt, depth)
     buffTc(ent, buffType, amount, sourceEnt, depth)
@@ -44,7 +44,7 @@ end
 
 
 
-local healTc = base.typecheck.assert("entity", "number", "entity?", "number?")
+local healTc = typecheck.assert("entity", "number", "entity?", "number?")
 
 function rgbAPI.heal(ent, amount, sourceEnt, depth)
     healTc(ent, amount, sourceEnt, depth)
@@ -60,7 +60,7 @@ end
 
 
 
-local shieldTc = base.typecheck.assert("entity", "number", "number", "entity?", "number?")
+local shieldTc = typecheck.assert("entity", "number", "number", "entity?", "number?")
 
 function rgbAPI.shield(ent, amount, duration, sourceEnt, depth)
     shieldTc(ent, amount, duration, sourceEnt, depth)
@@ -76,7 +76,7 @@ function rgbAPI.shield(ent, amount, duration, sourceEnt, depth)
 end
 
 
-local damageTc = base.typecheck.assert("entity", "entity", "number")
+local damageTc = typecheck.assert("entity", "entity", "number")
 
 function rgbAPI.damage(sourceEnt, targetEnt, damage)
     damageTc(sourceEnt, targetEnt, damage)

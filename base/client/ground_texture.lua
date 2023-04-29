@@ -3,7 +3,6 @@
 local Array = require("shared.array")
 local camera = require("client.camera")
 local drawImage = require("client.image_helpers.draw_image")
-local typecheck = require("shared.typecheck")
 
 
 

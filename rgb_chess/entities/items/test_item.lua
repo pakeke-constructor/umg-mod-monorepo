@@ -16,7 +16,5 @@ return {
         minimumTurn = 1,
     },
 
-    itemName = "test",
-
-    init = base.initializers.initXY
+    itemName = "test"
 }

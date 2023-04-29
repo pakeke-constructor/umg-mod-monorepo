@@ -22,7 +22,7 @@ local areaActions = {
 
 
 
-local inAreaAssert = base.typecheck.assert("number", "number", "table")
+local inAreaAssert = typecheck.assert("number", "number", "table")
 
 local function inArea(x,y, area)
     inAreaAssert(x,y,area)
@@ -102,7 +102,7 @@ local function hasPointWithinRange(pointBuffer, minDistance, x, y)
     return false
 end
 
-local assertNumbers4 = base.typecheck.assert("number","number","number","number")
+local assertNumbers4 = typecheck.assert("number","number","number","number")
 
 function AreaRandomPointAction:apply(area, excludeArea)
     assert(server, "?")
@@ -139,7 +139,7 @@ AreaRandomPointAction.description ="Generates random points, then applies action
 
 -- AreaGridPointAction START
 
-local assertNumbers = base.typecheck.assert("number","number")
+local assertNumbers = typecheck.assert("number","number")
 
 function AreaGridPointAction:init(params)
     assertNumbers(params.pointGapX, params.pointGapY)

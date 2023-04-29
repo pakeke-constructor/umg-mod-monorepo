@@ -117,7 +117,7 @@ end
 
 local EXPORT_HOVER_TIME = 5 -- seconds to hover export message
 
-local renderExportTC = base.typecheck.assert("string", "string", "table", "number")
+local renderExportTC = typecheck.assert("string", "string", "table", "number")
 -- eg:  lastExportTime = renderExportUI( "tool", lastExportTime, toolInfo.name, toolInfo )
 local function renderExportUI(packageType, exportName, exportObject, lastExportTime)
     renderExportTC(packageType, exportName, exportObject, lastExportTime)

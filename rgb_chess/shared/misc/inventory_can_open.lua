@@ -6,3 +6,4 @@ umg.answer("canOpenInventory", function(ent, inventory)
     return owner.rgbTeam == ent.rgbTeam
 end)
 
+

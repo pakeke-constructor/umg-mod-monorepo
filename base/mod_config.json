@@ -1,3 +1,4 @@
-{    
-    "baseMod": true
+{
+    "baseMod": true,
+    "uses": ["typecheck", "sync"]
 }

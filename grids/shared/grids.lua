@@ -39,7 +39,7 @@ end
 
 
 
-local gridInitAsserter = base.typecheck.assert("string", "number", "number")
+local gridInitAsserter = typecheck.assert("string", "number", "number")
 
 function Grid:init(name, width, height)
     gridInitAsserter(name, width, height)
@@ -50,7 +50,7 @@ function Grid:init(name, width, height)
 end
 
 
-local gridXYAsserter = base.typecheck.assert("table", "number", "number")
+local gridXYAsserter = typecheck.assert("table", "number", "number")
 
 function Grid:get(gridX, gridY)
     gridXYAsserter(self,gridX,gridY)
@@ -135,7 +135,7 @@ end)
 
 
 
-local asserter = base.typecheck.assert("string | table")
+local asserter = typecheck.assert("string | table")
 
 function grids.getGrid(name_or_entity)
     asserter(name_or_entity)

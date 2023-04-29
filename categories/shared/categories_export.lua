@@ -22,7 +22,7 @@ end
 
 
 
-local iterateTc = base.typecheck.assert("string")
+local iterateTc = typecheck.assert("string")
 
 function categories.iterator(category)
     iterateTc(category)
@@ -33,7 +33,7 @@ end
 
 local EMPTY_ITERATOR = function() return nil end
 
-local chunkedIteratorTc = base.typecheck.assert("string", "number", "number")
+local chunkedIteratorTc = typecheck.assert("string", "number", "number")
 
 function categories.chunkedIterator(category, x, y)
     chunkedIteratorTc(category, x, y)

@@ -51,7 +51,7 @@ end
 
 
 
-local assertExport = base.typecheck.assert("string", "table", "string")
+local assertExport = typecheck.assert("string", "table", "string")
 
 --[[
     serializes an object type and copies it to clipboard

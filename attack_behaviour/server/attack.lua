@@ -25,7 +25,7 @@ local function applyAttack(attacker_ent, victim_ent, effectiveness)
 end
 
 
-local doSplashTc = base.typecheck.assert("entity", "number", "number", "string")
+local doSplashTc = typecheck.assert("entity", "number", "number", "string")
 
 local function doSplash(ent, hitx, hity, category)
     --[[

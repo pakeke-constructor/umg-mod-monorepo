@@ -103,7 +103,7 @@ end)
 
 
 
-local spawnCardTc = base.typecheck.assert("table", "number")
+local spawnCardTc = typecheck.assert("table", "number")
 
 function generateCards.spawnCard(board, shopIndex)
     spawnCardTc(board, shopIndex)

@@ -62,7 +62,7 @@ end
 local descTextArgs = {Color = {0.6,0.6,0.6}}
 
 
-local renderEtypeUnitInfoTc = base.typecheck.assert("table", "table")
+local renderEtypeUnitInfoTc = typecheck.assert("table", "table")
 
 function uiTools.renderBasicUnitInfo(unitEType, rgbColor)
     renderEtypeUnitInfoTc(unitEType, rgbColor)
@@ -78,7 +78,7 @@ end
 
 
 
-local renderAbilityTc = base.typecheck.assert("table")
+local renderAbilityTc = typecheck.assert("table")
 local function renderAbility(ability)
     renderAbilityTc(ability)
     local f = love.graphics.getFont()

@@ -235,7 +235,7 @@ local typeMapping = {
 
 
 
-local nodeGenAsserter = base.typecheck.assert("table", "string")
+local nodeGenAsserter = typecheck.assert("table", "string")
 
 local function customNodeGenerator(args)
     --[[

@@ -27,4 +27,6 @@ globals:
     any: true
   zenith:
     any: true
+  typecheck:
+    any: true
 

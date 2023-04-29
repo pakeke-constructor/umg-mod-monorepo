@@ -13,7 +13,6 @@ or when the game is in an alternative state,
 ]]
 
 local Class = require("shared.class")
-local typecheck = require("shared.typecheck")
 
 
 

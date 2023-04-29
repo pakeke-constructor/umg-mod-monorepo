@@ -1,5 +1,4 @@
 
-local typecheck = require("shared.typecheck")
 local Color = require("client.color")
 local getGameTime = require("shared.get_game_time")
 local drawImage = require("client.image_helpers.draw_image")

@@ -24,7 +24,7 @@ function chat.getAdminLevel(username)
     return ADMIN_LEVELS[username] or DEFAULT_ADMIN_LEVEL
 end
 
-local setAdminLevelAssert = base.typecheck.assert("string", "number")
+local setAdminLevelAssert = typecheck.assert("string", "number")
 function chat.setAdminLevel(username, level)
     setAdminLevelAssert(username, level)
     ADMIN_LEVELS[username] = level
@@ -57,12 +57,12 @@ local function getArgsTypechecker(arguments)
         assert(type(arg.name) == "string", "arg.name needs to be string")
         typeBuffer:add(arg.type)
     end
-    return base.typecheck.check(unpack(typeBuffer))
+    return typecheck.check(unpack(typeBuffer))
 end
 
 
 
-local handleCommandTypecheck = base.typecheck.assert("string", "table")
+local handleCommandTypecheck = typecheck.assert("string", "table")
 
 
 function chat.handleCommand(commandName, handler)

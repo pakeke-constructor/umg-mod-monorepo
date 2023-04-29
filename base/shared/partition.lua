@@ -13,7 +13,6 @@ Think of each "chunk" as like a big bucket where entities are kept.
 local Class = require("shared.class")
 local Partition = Class("base:Partition")
 
-local typecheck = require("shared.typecheck")
 
 
 function Partition:init(chunkSize)    

@@ -22,7 +22,7 @@ end
 
 
 
-local tc = base.typecheck.assert("table", "string", "table", "table")
+local tc = typecheck.assert("table", "string", "table", "table")
 function common.add(args, argName, array, tiling)
     tc(args, argName, array, tiling)
     local img = args[argName]

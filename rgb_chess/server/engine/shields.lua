@@ -49,7 +49,7 @@ end
 
 
 
-local createShieldTc = base.typecheck.assert("entity", "number", "number")
+local createShieldTc = typecheck.assert("entity", "number", "number")
 
 function shieldAPI.createShield(targetEnt, size, duration)
     createShieldTc(targetEnt, size, duration)

@@ -62,7 +62,7 @@ function Board:getMoney()
 end
 
 
-local setMoneyTc = base.typecheck.assert("table", "number")
+local setMoneyTc = typecheck.assert("table", "number")
 
 function Board:setMoney(x)
     setMoneyTc(self,x)

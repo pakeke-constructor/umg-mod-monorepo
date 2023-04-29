@@ -2,7 +2,7 @@
 
 
 
-local tc = base.typecheck.assert("string", "function")
+local tc = typecheck.assert("string", "function")
 
 local runScript = {}
 

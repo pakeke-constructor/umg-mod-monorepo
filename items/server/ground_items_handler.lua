@@ -37,7 +37,7 @@ end
 
 
 local dropItemHandler = dropItem
-local dropItemTc = base.typecheck.assert("entity", "number", "number")
+local dropItemTc = typecheck.assert("entity", "number", "number")
 
 function groundItemsHandler.drop(itemEnt, x, y)
     dropItemTc(itemEnt, x, y)
@@ -70,13 +70,13 @@ local function canBePickedUp(dist, best_dist, item)
     if dist > PICKUP_DISTANCE or dist > best_dist then 
         -- we want to try and pick up the closest item.
         -- if there is an item that is closer, ignore it
-        return
+        return false
     end
 
     if item._item_last_holdtime then
         local time = base.getGameTime() - item._item_last_holdtime
         if time < PICKUP_DELAY_TIME then
-            return
+            return false
         end
     end
 

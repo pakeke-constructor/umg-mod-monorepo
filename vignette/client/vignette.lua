@@ -8,14 +8,14 @@ local vignetteStrength = 0.4
 
 
 
-local setColorTC = base.typecheck.assert("table")
+local setColorTC = typecheck.assert("table")
 
 function vignette.setColor(color)
     setColorTC(color)
 end
 
 
-local setStrengthTC = base.typecheck.assert("number")
+local setStrengthTC = typecheck.assert("number")
 
 function vignette.setStrength(strength)
     setStrengthTC(strength)
