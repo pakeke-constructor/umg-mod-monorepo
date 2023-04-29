@@ -14,13 +14,12 @@ sync.autoSyncComponent("x", {
     -- this options table is OPTIONAL.  The values are the defaults:
     syncWhenNil = false
     lerp = false, -- only works for numbers
-    numberSyncThreshold = 0.05, -- difference between 
+    numberSyncThreshold = 0.05, -- difference between numbers to sync
     noDeltaCompression = false, -- turns off delta-compression
 })
 
 
 sync.defineEvent()
-
 
 
 
