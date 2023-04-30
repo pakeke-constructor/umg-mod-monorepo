@@ -21,7 +21,6 @@ return function()
         noDeltaCompression = true
     })
 
-
     local ent
     if server then
         ent = server.entities.empty()
@@ -41,9 +40,9 @@ return function()
     if client then
         -- there's only 1 entity that exists
         ent = allGroup[1]
-        zenith.assert(ent.stringComponent == "abc")
-        zenith.assert(ent.numberComponent == 1)
-        zenith.assert(ent.numberComponentNoDelta == 150.0)
+        zenith.assert(ent.stringComponent == "abc", "string component")
+        zenith.assert(ent.numberComponent == 1, "number component")
+        zenith.assert(ent.numberComponentNoDelta == 150.0, "number component, no delta")
     end
 
     local NUM = 150.0001
@@ -56,10 +55,10 @@ return function()
     zenith.tick(2)
 
     if client then
-        zenith.assert(ent.stringComponent == "foo")
-        zenith.assert(ent.numberComponent == 1)
+        zenith.assert(ent.stringComponent == "foo", "string component 2")
+        zenith.assert(ent.numberComponent == 1, "number component 2")
         -- it's terrible to compare floats like this, but it should be "fine" in this case
-        zenith.assert(ent.numberComponentNoDelta == NUM)
+        zenith.assert(ent.numberComponentNoDelta == NUM, "number component, no delta 2")
     end
 end
 

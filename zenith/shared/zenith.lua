@@ -1,12 +1,6 @@
 
 local zenith = {}
 
-if server then
-    -- must set it to a slow tickrate so client can keep up.
-    server.setTickrate(1)
-end
-
-
 
 
 local currentTest = nil
@@ -191,6 +185,7 @@ end
 
 
 
+umg.expose("zenith", zenith)
 _G.zenith = zenith
 
 return zenith

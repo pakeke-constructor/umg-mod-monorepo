@@ -1,12 +1,11 @@
 
 
 local tests = {
-    "component_rem_add",
-    "broadcast"
+    "test_comp_sync",
 }
 
 
-for i, test in ipairs(tests)do
+for _, test in ipairs(tests)do
     local tes = require("shared.tests." .. test)
     zenith.defineTest({
         test = tes,

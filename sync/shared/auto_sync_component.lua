@@ -41,7 +41,7 @@ local max, min = math.max, math.min
 
 local function isDifferent(compVal, lastVal, options)
     if type(compVal) == "number" and type(lastVal) == "number" then
-        return abs(compVal - lastVal) <= options.numberSyncThreshold
+        return abs(compVal - lastVal) >= options.numberSyncThreshold
     end
     return compVal ~= lastVal
 end
