@@ -15,11 +15,11 @@ local currentTest = nil
 local allTests = {} -- list of all tests
 
 
-function zenith.test(options)
-    assert(type(options.name) == "string" and type(options.func) == "function", "?")
+function zenith.defineTest(options)
+    assert(type(options.name) == "string" and type(options.test) == "function", "?")
     options.failures = {}
 
-    options.co = coroutine.create(options.func)
+    options.co = coroutine.create(options.test)
     table.insert(allTests, options)
 end
 
@@ -71,6 +71,7 @@ end
 local testing = false
 
 function zenith.runTests()
+    assert(not testing, "runTests can only be called once")
     testing = true
 end
 

@@ -1,6 +1,6 @@
 
 
-local constants = require("shared.constants")
+local constants = require("constants")
 
 
 local VALID_OPTIONS = {
@@ -105,6 +105,20 @@ end
 
 
 
+
+
+
+
+--[[
+    Clientside lerping.
+
+    The way this works, is we receive a number value for a component
+    from the server, and we automatically LERP to the new value
+    slowly over the next frame.
+    This makes things more delayed on the client, but it also
+    makes stuff a lot smoother.
+]]
+
 local compNameToLerpBuffer = {--[[
     [compName] -> lerpBuffer
 
@@ -117,7 +131,14 @@ local compNameToLerpBuffer = {--[[
 
 local function setLerpValue(ent, compName, compVal)
     local lerpBuf = compNameToLerpBuffer[compName]
-    if not lerpBuf[ent] then
+    if lerpBuf[ent] then
+        -- If there's a lerp value that we are currently lerping,
+        -- set the entity comp value to that value.
+        -- (i.e.  "jump" to the old value directly)
+        ent[compName] = lerpBuf[ent]
+    else
+        -- Else there's no old value, so just jump directly to the sent value.
+        -- (This should only happen when an entity is first created.)
         ent[compName] = compVal
     end
 
@@ -151,6 +172,7 @@ end
 
 
 local function setupLerp(compName, options)
+    assert(client, "Should only be called on client side!")
     local requiredComponents = getRequiredComponents(compName, options)
     local group = umg.group(unpack(requiredComponents))
 
