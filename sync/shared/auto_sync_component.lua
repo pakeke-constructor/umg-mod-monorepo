@@ -7,7 +7,7 @@ local VALID_OPTIONS = {
     syncWhenNil = true,
     lerp = true,
     noDeltaCompression = true,
-    numberSyncThreshold = 0.1,
+    numberSyncThreshold = true,
     requiredComponents = true,
 }
 
@@ -41,7 +41,8 @@ local max, min = math.max, math.min
 
 local function isDifferent(compVal, lastVal, options)
     if type(compVal) == "number" and type(lastVal) == "number" then
-        return abs(compVal - lastVal) >= options.numberSyncThreshold
+        local syncThresh = options.numberSyncThreshold or constants.DEFAULT_NUMBER_SYNC_THRESHOLD
+        return abs(compVal - lastVal) >= syncThresh
     end
     return compVal ~= lastVal
 end
@@ -176,11 +177,13 @@ local function setupLerp(compName, options)
     local requiredComponents = getRequiredComponents(compName, options)
     local group = umg.group(unpack(requiredComponents))
 
+    local lerpBuffer = {}
+    compNameToLerpBuffer[compName] = lerpBuffer
+
     umg.on("@update", function(dt)
         local time = love.timer.getTime()
-        local lerpBuffer = compNameToLerpBuffer[compName]
         for _, ent in ipairs(group) do
-            if lerpBuffer[ent] then
+            if lerpBuffer and lerpBuffer[ent] then
                 local targetVal = lerpBuffer[ent]
                 updateEntityWithLerp(ent, compName, targetVal, time)
             end

@@ -19,9 +19,21 @@ sync.autoSyncComponent("x", {
 })
 
 
-sync.defineEvent()
+
+--[[
+    TODO: Do some planning for all of this.
+]]
+sync.definePacket(packetName, {
+
+})
+
+sync.recievePacket(packetName, function(sender, ...)
+    hello() 
+end)
+
+sync.sendPacket(packetName, ...)
+
 
 
 
 ```
-

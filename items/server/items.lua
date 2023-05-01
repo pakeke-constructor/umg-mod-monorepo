@@ -99,58 +99,60 @@ end
 
 
 
-local function hasAccess(ent1, ent2)
-    --[[
-        checks whether ent1 has access to ent2's inventory
-    ]]
-    if not ent2.inventory then
+local function controlEntIsOk(sender, controlEnt)
+    if not umg.exists(controlEnt) then
         return false
     end
-    return ent2.inventory:canBeOpenedBy(ent1)
+    if sender ~= controlEnt.controller then
+        return false
+    end
+    return true
+end
+
+
+local function hasAccess(controlEnt, invEnt)
+    --[[
+        `controlEnt` is the entity executing the transfer upon invEnt.
+        invEnt is the entity holding the inventory
+
+        TODO: Do we want a maximum interaction distance enforced here???
+    ]]
+    if umg.exists(invEnt) then
+        return false
+    end
+   if invEnt.inventory then
+        return false
+    end
+
+    return invEnt.inventory:canBeOpenedBy(controlEnt)
 end
 
 
 
-error([[
-Do some thinking about all of this.
 
-Behaviour that we want:
-- Players can move items in and out of their own inventory
-- Players can move items between two inventories that AREN'T inside the player
-
-Behaviour we DONT want:
-- Players can move items between inventories that they can't open.
-
-IDEA:
-Send an extra first argument: `controlEnt` that represents the player executing the transfer.
-If `controlEnt` can open both inventories, then its OK.
-
-]])
 
 server.on("trySwapInventoryItem",
-function(username, controlEnt, ent, other_ent, x, y, x2, y2)
+function(sender, controlEnt, ent, other_ent, x, y, x2, y2)
     --[[
         x, y, other_x, other_y are coordinates of the position
         IN THE INVENTORY.
         Not the position of an entity or anything!
     ]]
-    error("todo: refactor this")
+    if not controlEntIsOk(sender, controlEnt) then return end
+    if not (hasAccess(controlEnt, ent) and hasAccess(controlEnt, other_ent)) then return end
+
     local inv1 = ent.inventory
     local inv2 = other_ent.inventory
     if (not inv1) or (not inv2) then
         return
     end
+
     if (not inv1:slotExists(x,y)) or (not inv2:slotExists(x2,y2)) then
         return
     end
     
     local item1 = inv1:get(x,y)
     local item2 = inv2:get(x2,y2)
-
-    if not (hasAccess(username, ent) and hasAccess(username, other_ent)) then
-        return -- this user doesn't have access to both inventories!
-        -- welp!
-    end
     
     if not checkCallback(ent, "canRemove", x, y, item1) then
         return -- exit early
@@ -172,12 +174,15 @@ end)
 
 
 server.on("tryMoveInventoryItem",
-function(username, ent, other_ent, x, y, x2, y2, count)
+function(sender, controlEnt, ent, other_ent, x, y, x2, y2, count)
     --[[
         x, y, other_x, other_y are coordinates of the position
         IN THE INVENTORY.
         Not the position of an entity or anything!
     ]]
+    if (not umg.exists(ent)) or (not umg.exists(other_ent)) then return end
+    if not controlEntIsOk(sender, controlEnt) then return end
+
     local inv1 = ent.inventory
     local inv2 = other_ent.inventory
     if (not inv1) or (not inv2) then
@@ -260,12 +265,16 @@ end)
 
 
 server.on("tryDropInventoryItem",
-function(username, ent, x, y)
+function(sender, controlEnt, ent, x, y)
     --[[
         x, y, are coordinates of the position
         IN THE INVENTORY.
         Not the position of an entity or anything!
     ]]
+    if not controlEntIsOk(sender, controlEnt) then
+        return
+    end
+
     local inv = ent.inventory
     if not inv:canBeOpenedBy(ent) then
         return

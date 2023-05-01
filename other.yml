@@ -29,4 +29,6 @@ globals:
     any: true
   typecheck:
     any: true
+  sync:
+    any: true
 

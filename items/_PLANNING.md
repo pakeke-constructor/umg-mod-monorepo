@@ -127,7 +127,7 @@ Server --> Client ::: sets stack size for inventory item
 
 
 ## Client --> Server
-`trySwapInventoryItem( ent, other_ent, self_x, `
+`trySwapInventoryItem( transferEnt, ent, other_ent, self_x, `
                         `self_y, other_x, other_y )`
 Client --> Server ::: tries to swap an inventory item with another inventory
 
