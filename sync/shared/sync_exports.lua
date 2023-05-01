@@ -3,7 +3,7 @@
 local sync = {}
 
 
-sync.defineEventProxy = require("shared.proxy")
+sync.denoteEventProxy = require("shared.proxy")
 
 sync.autoSyncComponent = require("shared.auto_sync_component")
 

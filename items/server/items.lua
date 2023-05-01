@@ -79,12 +79,19 @@ end
 
 
 do
-local check = typecheck.check("entity", "integer", "integer")
+
+local filter = sync.filter(
+    sync.filters.controlEntity,
+    sync.filters.number,
+    sync.filters.number
+)
 
 server.on("setInventoryHoldSlot", function(sender, ent, slotX, slotY)
-    if not check(ent, slotX, slotY) then return end
+    if not filter(ent, slotX, slotY) then return end
     if ent.controller ~= sender then return end
     if not ent.inventory then return end
+    slotX = math.floor(slotX)
+    slotY = math.floor(slotY)
     
     local inv = ent.inventory
     if slotX <= inv.width and slotX >= 1 and slotY <= inv.height and slotY >= 1 then
@@ -172,6 +179,7 @@ function(sender, controlEnt, ent, other_ent, x, y, x2, y2)
 end)
 
 
+local check4Numbers = typecheck.check("number", "number", "number", "number")
 
 server.on("tryMoveInventoryItem",
 function(sender, controlEnt, ent, other_ent, x, y, x2, y2, count)
@@ -182,6 +190,8 @@ function(sender, controlEnt, ent, other_ent, x, y, x2, y2, count)
     ]]
     if (not umg.exists(ent)) or (not umg.exists(other_ent)) then return end
     if not controlEntIsOk(sender, controlEnt) then return end
+    if not check4Numbers(x,y,x2,y2) then return end
+    count = count or 1
 
     local inv1 = ent.inventory
     local inv2 = other_ent.inventory
@@ -215,9 +225,6 @@ function(sender, controlEnt, ent, other_ent, x, y, x2, y2, count)
         return -- ooohkay?? exit here i guess
     end
 
-    if not (hasAccess(username, ent) and hasAccess(username, other_ent)) then
-        return -- this user doesn't have access to both inventories!
-    end
     if not checkCallback(ent, "canRemove", x, y) then
         return -- exit early
     end

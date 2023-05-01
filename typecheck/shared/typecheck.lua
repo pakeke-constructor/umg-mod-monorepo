@@ -8,6 +8,10 @@ local floor = math.floor
 local select = select
 
 
+function typecheck.any()
+    return true
+end
+
 
 function typecheck.int(x)
     return (type(x) == "number") and floor(x) == x, "expected integer, (not float!)"
@@ -47,7 +51,7 @@ typecheck.bool = typecheck.boolean
 
 
 function typecheck.entity(x)
-    return (typecheck.table(x) and x.id), "expected entity"
+    return umg.exists(x), "expected entity"
 end
 typecheck.ent = typecheck.entity
 

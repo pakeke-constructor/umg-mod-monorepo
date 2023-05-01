@@ -4,7 +4,7 @@
 
 ```lua
 
-sync.defineEventProxy("hello") 
+sync.denoteEventProxy("hello") 
 -- automatically routes umg.call("hello", ...) on server to a 
 -- umg.call("hello", ...) on clientside.
 
@@ -20,20 +20,31 @@ sync.autoSyncComponent("x", {
 
 
 
+
+
 --[[
-    TODO: Do some planning for all of this.
+    IDEA: Auto filter API
 ]]
-sync.definePacket(packetName, {
+local sf = sync.filters
 
-})
+local filters = sync.filter(
+    sf.controlEntity,
+    sf.number,
+    sf.number,
+    sf.NumberInRange(-5, 5)
+    sf.And(sf.inventoryEntity, sf.controlEntity)
+)
 
-sync.recievePacket(packetName, function(sender, ...)
-    hello() 
+
+sync.defineFilter("controlEntity", function(sender, x)
+    return umg.exists(x) and x.controller == sender
 end)
 
-sync.sendPacket(packetName, ...)
-
+sync.defineFilter("inventoryEntity", function(sender, x)
+    return umg.exists(x) and x.inventory
+end)
 
 
 
 ```
+

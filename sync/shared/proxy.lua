@@ -9,14 +9,14 @@ then umg.call("hello", 1, 3) will be called automatically on the client.
 
 ]]
 
-local definedEvents = {}
+local proxiedEvents = {}
 
-local function defineEventProxy(eventName)
+local function denoteEventProxy(eventName)
     if type(eventName) ~= "string" then
         error("Expected string as first argument")
     end
-    if definedEvents[eventName] then
-        error("This event is already defined: " .. eventName)
+    if proxiedEvents[eventName] then
+        error("This event is already being proxied: " .. eventName)
     end
 
     local networkEventName = "proxy_" .. eventName
@@ -32,5 +32,4 @@ local function defineEventProxy(eventName)
 end
 
 
-return defineEventProxy
-
+return denoteEventProxy
