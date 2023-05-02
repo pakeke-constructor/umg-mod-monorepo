@@ -78,14 +78,18 @@ end
 
 
 
+local sf = sync.filters
 
-server.on("useItem", function(username, holder_ent, ...)
-    if not umg.exists(holder_ent) then return end
-    if not getHoldItem(holder_ent) then return end
-    if holder_ent.controller ~= username then return end
+server.on("useItem", {
+    arguments = {sf.entity}
+    handler = function(sender, holder_ent, ...)
+        if not umg.exists(holder_ent) then return end
+        if not getHoldItem(holder_ent) then return end
+        if holder_ent.controller ~= sender then return end
 
-    itemUsage.useHoldItem(holder_ent, ...)
-end)
+        itemUsage.useHoldItem(holder_ent, ...)
+    end
+})
 
 
 

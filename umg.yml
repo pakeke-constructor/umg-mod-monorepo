@@ -33,7 +33,7 @@ globals:
   server.on:
     args:
     - type: string
-    - type: function
+    - type: table
   server.unicast:
     args:
     - type: string

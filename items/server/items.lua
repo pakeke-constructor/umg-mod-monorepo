@@ -76,32 +76,26 @@ end
 
 
 
+local sf = sync.filters
 
 
-do
 
-local filter = sync.filter(
-    sync.filters.controlEntity,
-    sync.filters.number,
-    sync.filters.number
-)
-
-server.on("setInventoryHoldSlot", function(sender, ent, slotX, slotY)
-    if not filter(ent, slotX, slotY) then return end
-    if ent.controller ~= sender then return end
-    if not ent.inventory then return end
-    slotX = math.floor(slotX)
-    slotY = math.floor(slotY)
-    
-    local inv = ent.inventory
-    if slotX <= inv.width and slotX >= 1 and slotY <= inv.height and slotY >= 1 then
-        if inv:slotExists(slotX,slotY) then
-            inv:hold(slotX,slotY)
+server.on("setInventoryHoldSlot", {
+    arguments = {sf.controlEntity, sf.number, sf.number},
+    handler = function(sender, ent, slotX, slotY)
+        if not ent.inventory then return end
+        slotX = math.floor(slotX)
+        slotY = math.floor(slotY)
+        
+        local inv = ent.inventory
+        if slotX <= inv.width and slotX >= 1 and slotY <= inv.height and slotY >= 1 then
+            if inv:slotExists(slotX,slotY) then
+                inv:hold(slotX,slotY)
+            end
         end
     end
-end)
+})
 
-end
 
 
 
@@ -136,172 +130,195 @@ end
 
 
 
+server.on("trySwapInventoryItem", {
+    arguments = {
+        sf.controlEntity,
+        sf.entity,
+        sf.entity,
+        sf.number,
+        sf.number,
+        sf.number,
+        sf.number
+    },
 
+    handler = function(sender, controlEnt, ent, other_ent, x, y, x2, y2)
+        --[[
+            x, y, other_x, other_y are coordinates of the position
+            IN THE INVENTORY.
+            Not the position of an entity or anything!
+        ]]
+        if not controlEntIsOk(sender, controlEnt) then return end
+        if not (hasAccess(controlEnt, ent) and hasAccess(controlEnt, other_ent)) then return end
 
-server.on("trySwapInventoryItem",
-function(sender, controlEnt, ent, other_ent, x, y, x2, y2)
-    --[[
-        x, y, other_x, other_y are coordinates of the position
-        IN THE INVENTORY.
-        Not the position of an entity or anything!
-    ]]
-    if not controlEntIsOk(sender, controlEnt) then return end
-    if not (hasAccess(controlEnt, ent) and hasAccess(controlEnt, other_ent)) then return end
+        local inv1 = ent.inventory
+        local inv2 = other_ent.inventory
+        if (not inv1) or (not inv2) then
+            return
+        end
 
-    local inv1 = ent.inventory
-    local inv2 = other_ent.inventory
-    if (not inv1) or (not inv2) then
-        return
-    end
+        if (not inv1:slotExists(x,y)) or (not inv2:slotExists(x2,y2)) then
+            return
+        end
+        
+        local item1 = inv1:get(x,y)
+        local item2 = inv2:get(x2,y2)
+        
+        if not checkCallback(ent, "canRemove", x, y, item1) then
+            return -- exit early
+        end
+        if not checkCallback(ent, "canAdd", x, y, item2) then
+            return -- exit early
+        end
+        if not checkCallback(other_ent, "canRemove", x2, y2, item2) then
+            return -- exit early
+        end
+        if not checkCallback(other_ent, "canAdd", x2, y2, item1) then
+            return -- exit early
+        end
 
-    if (not inv1:slotExists(x,y)) or (not inv2:slotExists(x2,y2)) then
-        return
+        inv1:set(x, y, item2)
+        inv2:set(x2, y2, item1)
     end
-    
-    local item1 = inv1:get(x,y)
-    local item2 = inv2:get(x2,y2)
-    
-    if not checkCallback(ent, "canRemove", x, y, item1) then
-        return -- exit early
-    end
-    if not checkCallback(ent, "canAdd", x, y, item2) then
-        return -- exit early
-    end
-    if not checkCallback(other_ent, "canRemove", x2, y2, item2) then
-        return -- exit early
-    end
-    if not checkCallback(other_ent, "canAdd", x2, y2, item1) then
-        return -- exit early
-    end
-
-    inv1:set(x, y, item2)
-    inv2:set(x2, y2, item1)
-end)
+})
 
 
 local check4Numbers = typecheck.check("number", "number", "number", "number")
 
-server.on("tryMoveInventoryItem",
-function(sender, controlEnt, ent, other_ent, x, y, x2, y2, count)
-    --[[
-        x, y, other_x, other_y are coordinates of the position
-        IN THE INVENTORY.
-        Not the position of an entity or anything!
-    ]]
-    if (not umg.exists(ent)) or (not umg.exists(other_ent)) then return end
-    if not controlEntIsOk(sender, controlEnt) then return end
-    if not check4Numbers(x,y,x2,y2) then return end
-    count = count or 1
+server.on("tryMoveInventoryItem", {
+    arguments = {
+        sf.controlEntity,
+        sf.entity,
+        sf.entity,
+        sf.number,
+        sf.number,
+        sf.number,
+        sf.number
+    },
 
-    local inv1 = ent.inventory
-    local inv2 = other_ent.inventory
-    if (not inv1) or (not inv2) then
-        return
-    end
-    if (not inv1:slotExists(x,y)) or (not inv2:slotExists(x2,y2)) then
-        return
-    end
-    -- moving `item` from `inv1` to `inv2`
+    handler = function(sender, controlEnt, ent, other_ent, x, y, x2, y2, count)
+        --[[
+            x, y, other_x, other_y are coordinates of the position
+            IN THE INVENTORY.
+            Not the position of an entity or anything!
+        ]]
+        if (not umg.exists(ent)) or (not umg.exists(other_ent)) then return end
+        if not controlEntIsOk(sender, controlEnt) then return end
+        if not check4Numbers(x,y,x2,y2) then return end
+        count = count or 1
 
-    if inv1 == inv2 and (x==x2) and (y==y2) then
-        return -- moving an item to it's own position...? nope!
-    end
+        local inv1 = ent.inventory
+        local inv2 = other_ent.inventory
+        if (not inv1) or (not inv2) then
+            return
+        end
+        if (not inv1:slotExists(x,y)) or (not inv2:slotExists(x2,y2)) then
+            return
+        end
+        -- moving `item` from `inv1` to `inv2`
 
-    local item = inv1:get(x,y)
-    local targ = inv2:get(x2,y2)
+        if inv1 == inv2 and (x==x2) and (y==y2) then
+            return -- moving an item to it's own position...? nope!
+        end
 
-    if not umg.exists(item) then
-        return -- Nothing to move; exit early
-    end
+        local item = inv1:get(x,y)
+        local targ = inv2:get(x2,y2)
 
-    local stackSize = item.stackSize or 1
-    count = count or stackSize
-    count = math.min(count, stackSize)
-    if targ then
-        count = math.min(count, (targ.maxStackSize or 1) - targ.stackSize)
-    end
+        if not umg.exists(item) then
+            return -- Nothing to move; exit early
+        end
 
-    if count <= 0 then
-        return -- ooohkay?? exit here i guess
-    end
+        local stackSize = item.stackSize or 1
+        count = count or stackSize
+        count = math.min(count, stackSize)
+        if targ then
+            count = math.min(count, (targ.maxStackSize or 1) - targ.stackSize)
+        end
 
-    if not checkCallback(ent, "canRemove", x, y) then
-        return -- exit early
-    end
-    if not checkCallback(other_ent, "canAdd", x2, y2) then
-        return -- exit early
-    end
-    if targ then
-        -- welp, we are replacing/adding to targ!
-        if not checkCallback(other_ent, "canRemove", x2, y2) then
+        if count <= 0 then
+            return -- ooohkay?? exit here i guess
+        end
+
+        if not checkCallback(ent, "canRemove", x, y) then
             return -- exit early
         end
-    end
-
-    if targ then
-        local item_stacksize = item.stackSize - count
-        if item_stacksize <= 0 then
-            inv1:set(x,y,nil)
-            item:delete()
-        else
-            item.stackSize = item_stacksize
-            updateStackSize(item)
+        if not checkCallback(other_ent, "canAdd", x2, y2) then
+            return -- exit early
         end
-        targ.stackSize = targ.stackSize + count
-        updateStackSize(item)
-    else
-        if count < stackSize then
-            -- Damn, gotta create a new entity
-            local typename = item:type()
-            local new = server.entities[typename]()
-            new.x = item.x
-            new.y = item.y
-            new.stackSize = count
-            item.stackSize = stackSize - count
-            inv2:set(x2, y2, new)
+        if targ then
+            -- welp, we are replacing/adding to targ!
+            if not checkCallback(other_ent, "canRemove", x2, y2) then
+                return -- exit early
+            end
+        end
+
+        if targ then
+            local item_stacksize = item.stackSize - count
+            if item_stacksize <= 0 then
+                inv1:set(x,y,nil)
+                item:delete()
+            else
+                item.stackSize = item_stacksize
+                updateStackSize(item)
+            end
+            targ.stackSize = targ.stackSize + count
             updateStackSize(item)
         else
-            -- Else we just move it
-            inv1:set(x, y, nil)
-            inv2:set(x2, y2, item)
+            if count < stackSize then
+                -- Damn, gotta create a new entity
+                local typename = item:type()
+                local new = server.entities[typename]()
+                new.x = item.x
+                new.y = item.y
+                new.stackSize = count
+                item.stackSize = stackSize - count
+                inv2:set(x2, y2, new)
+                updateStackSize(item)
+            else
+                -- Else we just move it
+                inv1:set(x, y, nil)
+                inv2:set(x2, y2, item)
+            end
         end
     end
-end)
+})
 
 
 
 
-server.on("tryDropInventoryItem",
-function(sender, controlEnt, ent, x, y)
-    --[[
-        x, y, are coordinates of the position
-        IN THE INVENTORY.
-        Not the position of an entity or anything!
-    ]]
-    if not controlEntIsOk(sender, controlEnt) then
-        return
+server.on("tryDropInventoryItem", {
+    arguments = {sf.controlEntity, sf.entity, sf.number, sf.number},
+
+    handler = function(sender, controlEnt, ent, x, y)
+        --[[
+            x, y, are coordinates of the position
+            IN THE INVENTORY.
+            Not the position of an entity or anything!
+        ]]
+        if not controlEntIsOk(sender, controlEnt) then
+            return
+        end
+
+        local inv = ent.inventory
+        if not inv:canBeOpenedBy(ent) then
+            return
+        end
+
+        local item = inv:get(x,y)
+        if not item then
+            return -- exit early
+        end
+
+        if not inv:slotExists(x,y) then
+            return  -- exit early
+        end
+
+        if not checkCallback(ent, "canRemove", x, y) then
+            return -- exit early
+        end
+
+        groundItemsHandler.drop(item, ent.x, ent.y)
+        inv:set(x, y, nil)
     end
-
-    local inv = ent.inventory
-    if not inv:canBeOpenedBy(ent) then
-        return
-    end
-
-    local item = inv:get(x,y)
-    if not item then
-        return -- exit early
-    end
-
-    if not inv:slotExists(x,y) then
-        return  -- exit early
-    end
-
-    if not checkCallback(ent, "canRemove", x, y) then
-        return -- exit early
-    end
-
-    groundItemsHandler.drop(item, ent.x, ent.y)
-    inv:set(x, y, nil)
-end)
+})
 
 

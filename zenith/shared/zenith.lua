@@ -178,9 +178,12 @@ end
 
 
 if server then
-    server.on("zenithReady", function()
-        clientReady = true
-    end)
+    server.on("zenithReady", {
+        arguments = {},
+        handler = function()
+            clientReady = true
+        end
+    })
 end
 
 

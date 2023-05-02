@@ -23,19 +23,27 @@ sync.autoSyncComponent("x", {
 
 
 --[[
-    IDEA: Auto filter API
+    IDEA: Auto filter API,
+    to filter away bad events.
 ]]
 local sf = sync.filters
 
-local filters = sync.filter(
-    sf.controlEntity,
-    sf.number,
-    sf.number,
-    sf.NumberInRange(-5, 5)
-    sf.And(sf.inventoryEntity, sf.controlEntity)
-)
+server.on("ev", {
+    handler = function(sender, a,b,c,d,e)
+        ...
+    end
+    arguments = {
+        sf.controlEntity,
+        sf.number,
+        sf.number,
+        sf.NumberInRange(-5, 5)
+        sf.And(sf.inventoryEntity, sf.controlEntity)
+    }
+})
 
 
+
+-- Can also create custom filters here.
 sync.defineFilter("controlEntity", function(sender, x)
     return umg.exists(x) and x.controller == sender
 end)
@@ -43,7 +51,6 @@ end)
 sync.defineFilter("inventoryEntity", function(sender, x)
     return umg.exists(x) and x.inventory
 end)
-
 
 
 ```

@@ -16,6 +16,7 @@ local editors = {--[[
 ]]}
 
 
+local sf = sync.filters
 
 local REQUIRED_ADMIN_LEVEL = 100
 
@@ -23,42 +24,58 @@ local function isAdmin(sender)
     return chat.getAdminLevel(sender) > REQUIRED_ADMIN_LEVEL
 end
 
-server.on("worldeditorDefineTool", function(sender, tool, toolName)
-    if not isAdmin(sender) then
+local function isValidTool(tool)
+    if not sf.table(tool) then
         return
     end
-
-    editors[sender] = editors[sender] or ClientContext(sender)
-    local cc = editors[sender]
-    cc:defineTool(tool, toolName)
-end)
+end
 
 
-server.on("worldeditorSetTool", function(sender, toolName)
-    if not isAdmin(sender) then
-        return
+server.on("worldeditorDefineTool", {
+    arguments = {isValidTool, sf.string},
+    handler = function(sender, tool, toolName)
+        if not isAdmin(sender) then
+            return
+        end
+
+        editors[sender] = editors[sender] or ClientContext(sender)
+        local cc = editors[sender]
+        cc:defineTool(tool, toolName)
     end
-
-    editors[sender] = editors[sender] or ClientContext(sender)
-    local cc = editors[sender]
-    cc:setCurrentTool(toolName)
-end)
+})
 
 
-server.on("worldeditorUseTool", function(sender, toolName, ...)
-    if not isAdmin(sender) then
-        return
+server.on("worldeditorSetTool", {
+    arguments = {sf.string},
+    handler = function(sender, toolName)
+        if not isAdmin(sender) then
+            return
+        end
+
+        editors[sender] = editors[sender] or ClientContext(sender)
+        local cc = editors[sender]
+        cc:setCurrentTool(toolName)
     end
+})
 
-    editors[sender] = editors[sender] or ClientContext(sender)
-    local cc = editors[sender]
-    local tool = cc:getCurrentTool(toolName)
-    if tool then
-        tool:apply(...)
-    else
-        chat.privateMessage(sender, "Couldn't find tool " .. toolName)
+
+server.on("worldeditorUseTool", {
+    arguments = {sf.string},
+    handler = function(sender, toolName, ...)
+        if not isAdmin(sender) then
+            return
+        end
+
+        editors[sender] = editors[sender] or ClientContext(sender)
+        local cc = editors[sender]
+        local tool = cc:getCurrentTool(toolName)
+        if tool then
+            tool:apply(...)
+        else
+            chat.privateMessage(sender, "Couldn't find tool " .. toolName)
+            end
     end
-end)
+})
 
 
 
@@ -78,6 +95,5 @@ local commandHandler = {
 
 chat.handleCommand("worldeditor", commandHandler)
 chat.handleCommand("worldedit", commandHandler)
-
 
 

@@ -67,21 +67,30 @@ umg.on("@createWorld", function()
 end)
 
 
+local sf = sync.filters
+
 local e1
-server.on("spawn", function(u, x,y)
-    server.entities.opacity_test(x,y)
-end)
+server.on("spawn", {
+    arguments = {sf.number, sf.number},
+    handler = function(u, x,y)
+        server.entities.opacity_test(x,y)
+    end
+})
 
 
 local control_ents = umg.group("controllable", "x", "y")
-server.on("CONGLOMERATE", function(username, ent)
-    for _,e in ipairs(control_ents)do
-        if e.controller == username then
-            e.x = ent.x
-            e.y = ent.y
+
+server.on("CONGLOMERATE", {
+    arguments = {sf.table},
+    handler = function(username, ent)
+        for _,e in ipairs(control_ents)do
+            if e.controller == username then
+                e.x = ent.x
+                e.y = ent.y
+            end
         end
     end
-end)
+})
 
 
 

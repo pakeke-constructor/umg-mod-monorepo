@@ -41,7 +41,7 @@ globals:
   server.on:
     args:
       - type: string
-      - type: function
+      - type: table
   server.broadcast:
     args:
       - type: string
