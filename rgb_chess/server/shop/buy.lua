@@ -94,22 +94,31 @@ function buy.sellSquadron(ent)
 end
 
 
-server.on("sellSquadron", function(sender, ent)
+
+
+local function isUnitEntity(ent, sender)
     if not umg.exists(ent) then
-        return
+        return false
     end
     if not ent.squadron then
-        return
+        return false
     end
     if ent.rgbTeam ~= sender then
-        return
+        return false
     end
+    return true
+end
 
+
+
+server.on("sellSquadron", {
+    arguments = {isUnitEntity},
+    handler = function(sender, ent)
     local board = Board.getBoard(sender)
     if board then
         buy.sellSquadron(ent)
     end
-end)
+end})
 
 
 

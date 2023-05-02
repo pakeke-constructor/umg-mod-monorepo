@@ -109,18 +109,21 @@ umg.on("@playerJoin", function(username)
 end)
 
 
-server.on("defineClientOnlyAPI", function(username, clientOnlyAPI)
-    --[[
-        this is guaranteed to be the first player to join (i.e. the host)
-        so we can trust the data. The host won't want to crash their own server.
-    ]]
-    if not needsClientExports then
-        return
+server.on("defineClientOnlyAPI", {
+    arguments = {},
+    handler = function(sender, clientOnlyAPI)
+        --[[
+            this is guaranteed to be the first player to join (i.e. the host)
+            so we can trust the data. The host won't want to crash their own server.
+        ]]
+        if not needsClientExports then
+            return
+        end
+        needsClientExports = false
+        -- make clientside functions illegal on serverside
+        makeIllegal(clientOnlyAPI, serverError)
     end
-    needsClientExports = false
-    -- make clientside functions illegal on serverside
-    makeIllegal(clientOnlyAPI, serverError)
-end)
+})
 
 
 elseif client then

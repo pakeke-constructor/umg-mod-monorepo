@@ -266,10 +266,13 @@ server.unicast(playerUsername, "message1",   1.0545, 2.9, -5, "random data :)")
 
 
 -- listens to `moveTo` messages sent by clients
-server.on("moveTo", function(sender_username, ...)
-    print("message from", sender_username)
-    print("data:", ...)
-end)
+server.on("moveTo", {
+    arguments = {checkString}, -- add typecheckers here.
+    handler = function(sender_username, msg, ...) 
+        print("message from", sender_username)
+        print("data:", msg, ...)
+    end
+})
 
 ```
 

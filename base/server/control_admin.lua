@@ -29,13 +29,6 @@ end
 
 
 local function filterPlayerPosition(sender, ent, x,y,z)
-    if not umg.exists(ent) then
-        return false -- DENY! Non existant entity
-    end
-    z = z or 0
-    if type(x) ~= "number" or type(y) ~= "number" or type(z) ~= "number" then
-        return false -- bad type for x,y, or z
-    end
     if State.getCurrentState() ~= "game" then
         return false -- game is probably paused
         -- TODO: This is kinda hacky and shitty
@@ -62,54 +55,55 @@ end
 
 
 
-local function filterPlayerVelocity(sender_username, ent, vx,vy,vz)
-    if not umg.exists(ent) then
-        return false -- DENY! Non existant entity
-    end
-    if type(vx) ~= "number" or type(vy) ~= "number" or (vz and (type(vz) ~= "number")) then
-        return false
-    end
+local function filterPlayerVelocity(sender, ent, vx,vy,vz)
     if State.getCurrentState() ~= "game" then
         return false -- game is probably paused
         -- TODO: This is kinda hacky and shitty
     end
 
-    return ent.controllable and sender_username == ent.controller
+    return ent.controllable and sender == ent.controller
         and ent.vx and ent.vy
 end
 
 
+local sf = sync.filters
 
-server.on("setPlayerPosition", function(sender_username, ent, x,y,z)
-    if not filterPlayerPosition(sender_username, ent, x,y,z)then
-        return
+server.on("setPlayerPosition", {
+    arguments = {sf.controlEntity, sf.number, sf.number, sf.Optional(sf.number)},
+    handler = function(sender, ent, x,y,z)
+        if not filterPlayerPosition(sender, ent, x,y,z)then
+            return
+        end
+
+        ent.x = x
+        ent.y = y
+        ent.z = z or ent.z
     end
-
-    ent.x = x
-    ent.y = y
-    ent.z = z or ent.z
-end)
+})
 
 
 
 
 
-server.on("setPlayerVelocity", function(sender_username, ent, vx,vy,vz)
-    if not filterPlayerVelocity(sender_username, ent, vx,vy,vz) then
-        return
-    end
-    local max_spd = (ent.speed or constants.DEFAULT_SPEED) 
-    if max_spd >= vx and max_spd >= vy then
-        -- check that the player aint cheating.
-        -- Note that the player can cheat by "flying" though, haha.
-        -- (Because vz isn't checked)
-        ent.vx = vx
-        ent.vy = vy
-        if ent.vz then
-            ent.vz = vz
+server.on("setPlayerVelocity", {
+    arguments = {sf.controlEntity, sf.number, sf.number, sf.Optional(sf.number)},
+    handler = function(sender, ent, vx, vy, vz)
+        if not filterPlayerVelocity(sender, ent, vx, vy, vz) then
+            return
+        end
+        local max_spd = (ent.speed or constants.DEFAULT_SPEED) 
+        if max_spd >= vx and max_spd >= vy then
+            -- check that the player aint cheating.
+            -- Note that the player can cheat by "flying" though, haha.
+            -- (Because vz isn't checked)
+            ent.vx = vx
+            ent.vy = vy
+            if ent.vz then
+                ent.vz = vz
+            end
         end
     end
-end)
+})
 
 
 return controlAdmin
