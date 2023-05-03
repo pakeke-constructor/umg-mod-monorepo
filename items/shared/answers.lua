@@ -2,21 +2,40 @@
 
 umg.answer("canOpenInventory", function(ent, inventory)
     --[[
-        entities can always open inventories if they own
-        the inventory, or if the inventory is public.
+        entities can always open inventories if they own the inventory
     ]]
     local owner = inventory.owner
     if ent == owner then
         return true
     end
 
-    if inventory.public then
-        return true
-    end
-
     if owner.controller == ent.controller then
         return true
     end
+    return false
+end)
+
+
+
+
+local DEFAULT_OPENABLE_DISTANCE = 100
+
+
+umg.answer("canOpenInventory", function(ent, inventory)
+    --[[
+        entities can open inventories if they have the
+        "openable" component, and are within range.
+    ]]
+    local invEnt = inventory.owner
+    if invEnt.openable and invEnt.x and invEnt.y then
+        if ent.x and ent.y then
+            local dist = math.distance(ent, invEnt)
+            if dist <= (invEnt.openable.distance or DEFAULT_OPENABLE_DISTANCE) then
+                return true
+            end
+        end
+    end
+    return false
 end)
 
 
@@ -30,6 +49,7 @@ umg.answer("canOpenInventory", function(ent, inventory)
     if func and func(inventory, ent) then
         return true
     end
+    return false
 end)
 
 

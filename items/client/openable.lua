@@ -5,7 +5,6 @@ local openGroup = umg.group("openable", "inventory", "x", "y")
 
 local OPEN_BUTTON = 2
 
-local DEFAULT_OPENABLE_DISTANCE = 100
 
 local MOUSE_INTERACTION_DIST = 30
 
@@ -20,10 +19,8 @@ local function searchForOpenable(player, mouse_x, mouse_y)
         local mouse_dist = math.distance(ent.x-x,ent.y-y)
         local inv = ent.inventory
         if inv:canBeOpenedBy(player) and dist < best_dist and mouse_dist <= MOUSE_INTERACTION_DIST then
-            if dist <= (ent.openable.distance or DEFAULT_OPENABLE_DISTANCE) then
-                best_inv_ent = ent
-                best_dist = dist
-            end
+            best_inv_ent = ent
+            best_dist = dist
         end
     end
     return best_inv_ent

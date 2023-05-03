@@ -122,7 +122,7 @@ local function executeFullPut(inv, x, y)
     local holding = focus_inv:get(focus_x, focus_y)
     if not umg.exists(holding) then
         resetHoldingInv()
-        return -- erm, okay? I guess we just ignore this
+        return -- erm, okay? I guess the entity was deleted, so we just ignore this
     end
 
     if (inv==focus_inv) and (x==focus_x) and (y==focus_y) then

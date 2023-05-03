@@ -275,6 +275,8 @@ end
 
 local canAddToSlotTc = typecheck.assert("entity", "number", "number")
 
+-- returns `true` if we can add item to slotx, sloty.
+-- false otherwise.
 function Inventory:canAddToSlot(item, slotX, slotY)
     canAddToSlotTc(item, slotY, slotY)
     if not self:slotExists(slotX, slotY) then
@@ -282,7 +284,7 @@ function Inventory:canAddToSlot(item, slotX, slotY)
     end
     local preItem = self:get(slotX, slotY)
     if item then
-
+        
     end
 end
 
