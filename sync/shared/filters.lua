@@ -23,23 +23,6 @@ function filterAPI.defineFilter(filterName, checkFunc)
     validFilters[checkFunc] = true
 end
 
-function filterAPI.filter(...)
-    local check_fns = {...}
-    for _, f in ipairs(check_fns)do
-        assert(type(f) == "function", "filter must be a function")
-    end
-
-    return function(sender, ...)
-        for i=1, #check_fns do
-            local arg = select(i, ...)
-            local ok = check_fns[i](sender, arg)
-            if not ok then
-                return false
-            end
-        end
-    end
-end
-
 
 local numbers2Tc = typecheck.assert("number", "number")
 local funcs2Tc = typecheck.assert("function", "function")
@@ -68,7 +51,7 @@ local defaults = {
 
     Optional = function(f1)
         funcTc(f1)
-        return function(sender, x)
+        return function(x, sender)
             return x == nil or f1(sender, x)
         end
     end

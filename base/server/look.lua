@@ -14,11 +14,7 @@ local sf = sync.filters
 
 server.on("setLookDirection", {
     arguments = {sf.entity, sf.number, sf.number},
-    hander = function(sender, ent, lookX, lookY)
-        if not umg.exists(ent) then return end
-        if type(lookX) ~= "number" then return end
-        if type(lookY) ~= "number" then return end
-        
+    handler = function(sender, ent, lookX, lookY)
         if ent.controller == sender then
             ent.lookX = lookX
             ent.lookY = lookY

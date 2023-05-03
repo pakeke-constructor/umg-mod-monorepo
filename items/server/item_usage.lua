@@ -81,7 +81,7 @@ end
 local sf = sync.filters
 
 server.on("useItem", {
-    arguments = {sf.entity}
+    arguments = {sf.entity},
     handler = function(sender, holder_ent, ...)
         if not umg.exists(holder_ent) then return end
         if not getHoldItem(holder_ent) then return end

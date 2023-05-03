@@ -37,7 +37,7 @@ end
 
 
 local dropItemHandler = dropItem
-local dropItemTc = typecheck.assert("entity", "number", "number")
+local dropItemTc = typecheck.assert("table", "number", "number")
 
 function groundItemsHandler.drop(itemEnt, x, y)
     dropItemTc(itemEnt, x, y)
