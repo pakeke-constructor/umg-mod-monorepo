@@ -100,17 +100,6 @@ server.on("setInventoryHoldSlot", {
 
 
 
-local function controlEntIsOk(sender, controlEnt)
-    if not umg.exists(controlEnt) then
-        return false
-    end
-    if sender ~= controlEnt.controller then
-        return false
-    end
-    return true
-end
-
-
 local function hasAccess(controlEnt, invEnt)
     --[[
         `controlEnt` is the entity executing the transfer upon invEnt.
@@ -147,7 +136,6 @@ server.on("trySwapInventoryItem", {
             IN THE INVENTORY.
             Not the position of an entity or anything!
         ]]
-        if not controlEntIsOk(sender, controlEnt) then return end
         if not (hasAccess(controlEnt, ent) and hasAccess(controlEnt, other_ent)) then return end
 
         local inv1 = ent.inventory
@@ -182,7 +170,6 @@ server.on("trySwapInventoryItem", {
 })
 
 
-local check4Numbers = typecheck.check("number", "number", "number", "number")
 
 server.on("tryMoveInventoryItem", {
     arguments = {
@@ -201,9 +188,6 @@ server.on("tryMoveInventoryItem", {
             IN THE INVENTORY.
             Not the position of an entity or anything!
         ]]
-        if (not umg.exists(ent)) or (not umg.exists(other_ent)) then return end
-        if not controlEntIsOk(sender, controlEnt) then return end
-        if not check4Numbers(x,y,x2,y2) then return end
         count = count or 1
 
         local inv1 = ent.inventory
@@ -294,10 +278,6 @@ server.on("tryDropInventoryItem", {
             IN THE INVENTORY.
             Not the position of an entity or anything!
         ]]
-        if not controlEntIsOk(sender, controlEnt) then
-            return
-        end
-
         local inv = ent.inventory
         if not inv:canBeOpenedBy(ent) then
             return
