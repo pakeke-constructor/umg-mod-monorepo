@@ -275,6 +275,12 @@ local BETA_BUTTON = 2 -- right click is clearly inferior
 local listener = base.client.input.Listener({priority = 5})
 
 
+
+local function click(self, inv)
+    
+end
+
+
 function listener:mousepressed(mx, my, button)
     local len = #open_inventories
     local loop_used = false
@@ -283,6 +289,7 @@ function listener:mousepressed(mx, my, button)
         if inv:withinBounds(mx, my) then
             loop_used = true
             if i ~= len then
+                -- Push this inventory to the top, so it's focused
                 table.remove(open_inventories, i)
                 table.insert(open_inventories, inv)
             end

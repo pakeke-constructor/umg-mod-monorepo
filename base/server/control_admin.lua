@@ -29,6 +29,7 @@ end
 
 
 local function filterPlayerPosition(sender, ent, x,y,z)
+    z = z or 0
     if State.getCurrentState() ~= "game" then
         return false -- game is probably paused
         -- TODO: This is kinda hacky and shitty
@@ -42,7 +43,7 @@ local function filterPlayerPosition(sender, ent, x,y,z)
     local dist = math.distance(ent.x-x, ent.y-y, (ent.z or 0)-z)
     local sync_threshold = ent.speed * (1 + constants.PLAYER_MOVE_LEIGHWAY)
     if dist > sync_threshold then
-        -- TODO: This forceSync call is bad, ddos opportunity here.
+        -- TODO: This forceSync call is bad, hacked client crash opportunity here.
         -- Perhaps we should instead mark this entity as "should force sync"
         -- and then sync once on the next tick?
         -- with this setup, hacked clients could send multiple position packets per frame and ddos the server

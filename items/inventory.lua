@@ -228,20 +228,21 @@ end
 
 
 function Inventory:getFreeSlot()
-    local x,y
     -- else search for empty inventory space
-    for i=1, self.width * self.height do
-        x, y = self:getXY(i)
-        if self:slotExists(x, y) then
-            if not umg.exists(self.inventory[i]) then
-                if self.inventory[i] then
-                    -- delete non-existant entity
-                    -- yeah... idk what happened here lol.
-                    self.inventory[i] = nil
+    for x=1, self.width do
+        for y=1, self.height do
+            local i = self:getIndex(x, y)
+            if self:slotExists(x, y) then
+                if not umg.exists(self.inventory[i]) then
+                    if self.inventory[i] then
+                        -- delete non-existant entity
+                        -- yeah... idk what happened here lol.
+                        self.inventory[i] = nil
+                    end
+                    assert(self:getIndex(x,y) == i, "bug with inventory mod")--sanity check
+                    assert(not umg.exists(self:get(x,y)), "bug with inventory mod")
+                    return x,y
                 end
-                assert(self:getIndex(x,y) == i, "bug with inventory mod")--sanity check
-                assert(not umg.exists(self:get(x,y)), "bug with inventory mod")
-                return x,y
             end
         end
     end
@@ -290,7 +291,7 @@ end
 
 
 function Inventory:canAdd(item)
-    return self:getFreeSlotFor(item) or self:getFreeSlot(item)
+    return self:getFreeSlotFor(item) or self:getFreeSlot()
 end
 
 

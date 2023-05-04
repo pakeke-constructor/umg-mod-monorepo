@@ -78,12 +78,12 @@ server.on("spawn", {
 })
 
 
-local control_ents = umg.group("controllable", "x", "y")
+local controlGroup = umg.group("controllable", "x", "y")
 
 server.on("CONGLOMERATE", {
     arguments = {sf.table},
     handler = function(username, ent)
-        for _,e in ipairs(control_ents)do
+        for _,e in ipairs(controlGroup)do
             if e.controller == username then
                 e.x = ent.x
                 e.y = ent.y
@@ -96,5 +96,13 @@ server.on("CONGLOMERATE", {
 
 umg.on("newPlayer", function(uname)
     make_player(uname)
+end)
+
+
+
+umg.on("@tick", function()
+    for i, e in ipairs(controlGroup) do
+        print(e)
+    end
 end)
 

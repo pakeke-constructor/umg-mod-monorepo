@@ -21,7 +21,10 @@ local groundItemPartition = base.Partition(CHUNK_SIZE)
 
 local PICKUP_DISTANCE = 24
 
-local PICKUP_DELAY_TIME = 1
+
+-- Wait X seconds before being able to pick up dropped items.
+-- this way, when an item is dropped on the ground, it isn't instantly picked up.
+local PICKUP_DELAY_TIME = 4
 
 
 
@@ -66,15 +69,13 @@ end)
 
 
 
-local function canBePickedUp(dist, best_dist, item)
-    if dist > PICKUP_DISTANCE or dist > best_dist then 
-        -- we want to try and pick up the closest item.
-        -- if there is an item that is closer, ignore it
+local function canBePickedUp(dist, item)
+    if dist > PICKUP_DISTANCE then 
         return false
     end
 
-    if item._item_last_holdtime then
-        local time = base.getGameTime() - item._item_last_holdtime
+    if item.groundItemSpawnTime then
+        local time = base.getGameTime() - item.groundItemSpawnTime
         if time < PICKUP_DELAY_TIME then
             return false
         end
@@ -109,10 +110,11 @@ local function tryPickUp(ent, picked)
         local item = getWrappedItem(groundEnt)
         if (not picked[groundEnt]) then 
             -- then the item is on the ground
-            local d = math.distance(ent, groundEnt)
-            if canBePickedUp(d, best_dist, groundEnt) then
+            local dist = math.distance(ent, groundEnt)
+            if canBePickedUp(dist, groundEnt) and dist < best_dist then
+                -- always pick up the closest item.
                 if ent.inventory:canAdd(item) then
-                    best_dist = d
+                    best_dist = dist
                     best_ent = groundEnt
                 end
             end

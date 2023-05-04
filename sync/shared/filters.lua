@@ -45,14 +45,14 @@ local defaults = {
     And = function(f1, f2)
         funcs2Tc(f1,f2)
         return function(x, sender)
-            return f1(sender, x) and f2(sender, x)
+            return f1(x, sender) and f2(x, sender)
         end
     end,
 
     Optional = function(f1)
         funcTc(f1)
         return function(x, sender)
-            return x == nil or f1(sender, x)
+            return x == nil or f1(x, sender)
         end
     end
 }
