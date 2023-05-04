@@ -5,6 +5,8 @@ local Inventory = require("inventory")
 local inventoryGroup = umg.group("inventory")
 -- group of all entities that have an `inventory` component.
 
+local controlGroup = umg.group("controller")
+
 
 
 
@@ -51,7 +53,7 @@ local focus_half_stack -- whether only half a stack is being held
 local dragging_inv
 
 
-local function table_remove(tabl, item)
+local function remove_from(tabl, item)
     -- removes item from flat array.
     -- Usually I would use sets, but for this I want to modify the order easily.
     -- (Messing around with the order of sets is a recipe for disaster.)
@@ -69,7 +71,7 @@ inventoryGroup:onRemoved(function(ent)
     if focus_inv == inv then
         focus_inv, focus_x, focus_y = nil, nil, nil
     end
-    table_remove(open_inventories, inv)
+    remove_from(open_inventories, inv)
 end)
 
 
@@ -80,7 +82,7 @@ end)
 
 umg.on("closeInventory", function(owner_ent)
     local inv = owner_ent.inventory
-    table_remove(open_inventories, inv)
+    remove_from(open_inventories, inv)
 
     if focus_inv == inv then
         -- stop holding of item
@@ -115,9 +117,46 @@ local function resetHoldingInv()
 end
 
 
+local function getControlEntity(inv)
+    local slf = client.getUsername()
+    for _, ent in ipairs(controlGroup) do
+        if ent.controller == slf then
+            if inv:canBeOpenedBy(ent) then
+                return ent
+            end
+        end
+    end
+    return false
+end
+
+
+local function getControlTransferEntity(inv1, inv2)
+    --[[
+        Players can only move things around inventories
+        if they have a controlEnt that can facilitate the transer.
+
+        look through all controlled entities, filter for
+        the ones controlled by the client, and return any that
+        are able to make the transfer between inv1 and inv2.
+    ]]
+    local slf = client.getUsername()
+    for _, ent in ipairs(controlGroup) do
+        if ent.controller == slf then
+            if inv1:canBeOpenedBy(ent) then
+                if inv2 == inv1 or inv2:canBeOpenedBy(ent) then
+                    return ent
+                end
+            end
+        end
+    end
+    return false
+end
+
 
 
 local function executeFullPut(inv, x, y)
+    local controlEnt = getControlTransferEntity(inv, focus_inv)
+
     -- Ok... so `holding` exists.
     local holding = focus_inv:get(focus_x, focus_y)
     if not umg.exists(holding) then
@@ -163,12 +202,12 @@ local function executeFullPut(inv, x, y)
     end
 
     if swapping then
-        client.send("trySwapInventoryItem", focus_inv.owner, inv.owner, focus_x,focus_y, x,y)
+        client.send("trySwapInventoryItem", controlEnt, focus_inv.owner, inv.owner, focus_x,focus_y, x,y)
     else
         if not move_count then
             move_count = math.ceil(holding.stackSize / (focus_half_stack and 2 or 1))
         end
-        client.send("tryMoveInventoryItem", focus_inv.owner, inv.owner, focus_x,focus_y, x,y, move_count)
+        client.send("tryMoveInventoryItem", controlEnt, focus_inv.owner, inv.owner, focus_x,focus_y, x,y, move_count)
     end
 
     resetHoldingInv()
@@ -205,6 +244,7 @@ local function executeBetaInteraction(inv, x, y)
         or splitting a stack.
     ]]
     if focus_inv and umg.exists(focus_inv.owner) and focus_inv:get(focus_x, focus_y) then
+        local controlEnt = getControlTransferEntity(inv, focus_inv)
         local holding_item = focus_inv:get(focus_x, focus_y)
         if not checkCallback(inv.owner, "canAdd", x, y, holding_item) then
             return
@@ -214,7 +254,7 @@ local function executeBetaInteraction(inv, x, y)
         end
         local targ = inv:get(x,y)
         if (not targ) or targ.itemName == holding_item.itemName then
-            client.send("tryMoveInventoryItem", focus_inv.owner, inv.owner, focus_x,focus_y, x,y, 1)
+            client.send("tryMoveInventoryItem", controlEnt, focus_inv.owner, inv.owner, focus_x,focus_y, x,y, 1)
         end
     else
         focus_inv = inv
@@ -275,7 +315,8 @@ function listener:mousepressed(mx, my, button)
         if button == ALPHA_BUTTON then    
             -- Then the player wants to drop an item on the floor:
             if umg.exists(focus_inv:get(focus_x, focus_y)) then
-                client.send("tryDropInventoryItem", focus_inv.owner, focus_x, focus_y)
+                local controlEnt = getControlEntity(focus_inv)
+                client.send("tryDropInventoryItem", controlEnt, focus_inv.owner, focus_x, focus_y)
             end
             self:lockMouseButton(ALPHA_BUTTON)
         elseif button == BETA_BUTTON then

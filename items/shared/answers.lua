@@ -23,11 +23,11 @@ local DEFAULT_OPENABLE_DISTANCE = 100
 
 umg.answer("canOpenInventory", function(ent, inventory)
     --[[
-        entities can open inventories if they have the
-        "openable" component, and are within range.
+        entities can open inventories if they are public,
+        and are within range.
     ]]
     local invEnt = inventory.owner
-    if invEnt.openable and invEnt.x and invEnt.y then
+    if inventory.public and invEnt.x and invEnt.y then
         if ent.x and ent.y then
             local dist = math.distance(ent, invEnt)
             if dist <= (invEnt.openable.distance or DEFAULT_OPENABLE_DISTANCE) then
