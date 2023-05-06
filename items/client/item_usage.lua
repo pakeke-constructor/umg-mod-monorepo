@@ -11,7 +11,7 @@ client.on("useItem", function(holder_ent, item, ...)
         -- since we are the ones who sent the event!
     end
     item:useItem(holder_ent, ...)
-    item.item_lastUseTime = base.getGameTime()
+    item.itemLastUseTime = base.getGameTime()
 end)
 
 
@@ -37,7 +37,7 @@ function itemUsage.canUseHoldItem(holder_ent, ...)
     end
 
     local time = base.getGameTime()
-    local time_since_use = time - (item.item_lastUseTime or 0)
+    local time_since_use = time - (item.itemLastUseTime or 0)
     local cooldown = (item.itemCooldown or DEFAULT_ITEM_COOLDOWN)
     if math.abs(time_since_use) < cooldown then
         return false
@@ -70,7 +70,7 @@ function itemUsage.useHoldItem(holder_ent, ...)
         if type(item.useItem) == "function" then
             item:useItem(holder_ent or false, ...)
         end
-        item.item_lastUseTime = base.getGameTime()
+        item.itemLastUseTime = base.getGameTime()
     elseif item and item.useItemDeny then
         item:useItemDeny(holder_ent, ...)
     end

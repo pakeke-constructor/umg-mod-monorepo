@@ -73,7 +73,7 @@ function itemUsage.useItemDirectly(holder_ent, item, ...)
     end
     umg.call("useItem", holder_ent, item, ...)
     server.broadcast("useItem", holder_ent, item, ...)
-    item.item_lastUseTime = base.getGameTime()
+    item.itemLastUseTime = base.getGameTime()
 end
 
 

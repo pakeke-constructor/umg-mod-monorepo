@@ -168,7 +168,6 @@ umg.on("@tick", function(dt)
 
     for i, ent in ipairs(controllableGroup) do
         if ent.controller == client.getUsername() then
-            print("Sending: ", ent.x, ent.y, ent.z)
             client.send("setPlayerPosition", ent, ent.x, ent.y, ent.z)
             if ent.vx and ent.vy then
                 client.send("setPlayerVelocity", ent, ent.vx, ent.vy, ent.vz)

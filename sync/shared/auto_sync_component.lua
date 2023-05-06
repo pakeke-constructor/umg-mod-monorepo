@@ -1,4 +1,18 @@
 
+--[[
+
+Automatic component syncing facilities.
+
+usage:
+
+sync.autoSyncComponent(<compName>, options)
+
+
+Can configure delta compression, extra components required for syncing,
+lerp for clientside to make number changes more smooth
+
+
+]]
 
 local constants = require("constants")
 
@@ -172,7 +186,7 @@ local function updateEntityWithLerp(ent, compName, targetVal, time)
 end
 
 
-local function setupLerp(compName, options)
+local function setupClientNumberLerp(compName, options)
     assert(client, "Should only be called on client side!")
     local requiredComponents = getRequiredComponents(compName, options)
     local group = umg.group(unpack(requiredComponents))
@@ -206,7 +220,7 @@ local function setupClientSync(compName, options)
     end)
 
     if options.lerp then
-        setupLerp(compName, options)
+        setupClientNumberLerp(compName, options)
     end
 end
 

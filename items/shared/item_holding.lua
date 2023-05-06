@@ -39,7 +39,7 @@ local TOOL_USE_TIME = 0.3
 function itemHoldPositioning.tool(item_ent, holder_ent)
     local dx,dy = getLookDirection(holder_ent)
     local curTime = base.getGameTime()
-    local t = math.max(0, ((item_ent.item_lastUseTime or curTime) - curTime) + TOOL_USE_TIME) / TOOL_USE_TIME
+    local t = math.max(0, ((item_ent.itemLastUseTime or curTime) - curTime) + TOOL_USE_TIME) / TOOL_USE_TIME
     local sinv = math.sin(t*6.282)
     local hold_dist = getHoldDistance(item_ent, holder_ent)
 
@@ -78,7 +78,7 @@ local RECOIL_TIME = 0.3
 function itemHoldPositioning.recoil(item_ent, holder_ent)
     local dx,dy = getLookDirection(holder_ent)
     local curTime = base.getGameTime()
-    local t = math.max(0, ((item_ent.item_lastUseTime or curTime) - curTime) + RECOIL_TIME) / RECOIL_TIME
+    local t = math.max(0, ((item_ent.itemLastUseTime or curTime) - curTime) + RECOIL_TIME) / RECOIL_TIME
     local sinv = math.sin(t*3.14)
     local recoil_amount = ((1-sinv)/2 + 0.5)
     local hold_dist = getHoldDistance(item_ent, holder_ent)

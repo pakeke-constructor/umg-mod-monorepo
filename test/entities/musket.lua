@@ -32,9 +32,7 @@ return {
             base.client.particles.emit("musket_smoke", x,y,nil,10)
         else
             if type(dx) == "number" and type(dy) == "number" then        
-                local e = server.entities.player()
-                e.x = x
-                e.y = y
+                local e = server.entities.player(x, y, holderEnt.controller)
                 e.vx = dx*BULLET_SPEED
                 e.vy = dy*BULLET_SPEED     
             end

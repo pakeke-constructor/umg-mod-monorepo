@@ -49,7 +49,7 @@ return function()
         zenith.assert(ent.stringComponent == "abc", "string component")
         zenith.assert(ent.numberComponent == 1, "number component")
         zenith.assert(ent.numberComponentNoDelta == 150.0, "number component, no delta")
-        zenith.assert(ent.numberComponentLerp == 150.0, "number component, no lerp 2")
+        zenith.assert(ent.numberComponentLerp == 150.0, "number component, no lerp")
     end
 
     local NUM = 150.0001

@@ -1,10 +1,12 @@
 
+local constants = require("shared.constants")
+
+
 local openGroup = umg.group("openable", "inventory", "x", "y")
 
 
 
 local OPEN_BUTTON = 2
-
 
 local MOUSE_INTERACTION_DIST = 30
 
@@ -73,7 +75,7 @@ end
 umg.on("gameUpdate", function(dt)
     if openInv then
         local player = base.getPlayer()
-        if math.distance(player, openInv.owner) > (DEFAULT_OPENABLE_DISTANCE + 1) then
+        if math.distance(player, openInv.owner) > (constants.DEFAULT_OPENABLE_DISTANCE + 1) then
             local ent = openInv.owner
             local sound = ent.openable.closeSound or DEFAULT_CLOSE_SOUND
             openInv:close()

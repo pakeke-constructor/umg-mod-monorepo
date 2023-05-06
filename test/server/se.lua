@@ -99,10 +99,3 @@ umg.on("newPlayer", function(uname)
 end)
 
 
-
-umg.on("@tick", function()
-    for i, e in ipairs(controlGroup) do
-        print(e)
-    end
-end)
-
