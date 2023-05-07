@@ -37,6 +37,7 @@ umg.on("@tick", function(dt)
         -- delta compression, syncing health values:
         local previousHealth = entToPreviousHealth[ent]
         if previousHealth ~= ent.health then
+            -- TODO: move this file to shared/, and change this to use `denoteEventProxy`
             server.broadcast("changeEntHealth", ent, ent.health, ent.maxHealth)
             entToPreviousHealth[ent] = ent.health
         end

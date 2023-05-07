@@ -2,7 +2,7 @@
 
 local itemUsage = {}
 
-local DEFAULT_ITEM_COOLDOWN = 0.01
+local DEFAULT_ITEM_COOLDOWN = 0.2
 
 
 local function getHoldItem(ent)
@@ -25,7 +25,7 @@ function itemUsage.canUseHoldItem(holder_ent, ...)
     end
 
     local time = base.getGameTime()
-    local time_since_use = time - (item.item_lastUseTime or 0)
+    local time_since_use = time - (item.itemLastUseTime or 0)
     local cooldown = (item.itemCooldown or DEFAULT_ITEM_COOLDOWN)
     if math.abs(time_since_use) < cooldown then
         return false
