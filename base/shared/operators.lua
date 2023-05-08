@@ -32,6 +32,17 @@ function operators.EXISTS(a,b)
 end
 
 
+function operators.ADD(a,b)
+    return a + b
+end
+
+
+function operators.MULT(a,b)
+    return a * b
+end
+
+
+
 function operators.COLLECT(a, b)
     --[[
         Collects all inputs into an array.

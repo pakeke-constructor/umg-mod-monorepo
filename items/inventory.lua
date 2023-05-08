@@ -321,13 +321,22 @@ end
 
 
 function Inventory:canBeOpenedBy(ent)
+    --[[
+        we ask two questions here,
+        one for whether the inventory can be opened,
+        another for whether the inventory is locked.
+
+        This provides a lot of flexibility.
+    ]]
     assert(umg.exists(ent), "takes an entity as first argument. (Where the entity is the one opening the inventory)")
 
-    --[[
-        if any answerer returns "true" to canOpenInventory,
-        then this inventory can be opened.
-    ]]
-    return umg.ask("canOpenInventory", base.operators.OR, ent, self)
+    local canOpen = umg.ask("canOpenInventory", base.operators.OR, ent, self)
+    if canOpen then
+        local isLocked = umg.ask("isInventoryLocked", base.operators.OR, ent, self)
+        if not isLocked then
+            return true
+        end
+    end
 end
 
 

@@ -14,7 +14,7 @@
       "terrain",
       "worldeditor",
       "worldborder",
-      "commandutil",
+      "commands",
       "modern",
       "weather",
       "vignette"

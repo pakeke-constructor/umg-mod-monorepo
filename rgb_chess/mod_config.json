@@ -10,7 +10,7 @@
       "attack_behaviour",
       "proximity",
       "ui",
-      "commandutil",
+      "commands",
       "worldborder"
     ]
 }

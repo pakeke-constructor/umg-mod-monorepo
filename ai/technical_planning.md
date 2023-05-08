@@ -69,7 +69,7 @@ local SENSE_TYPES = {
 ## Components, some ideas:
 ```lua
 
-ent.sensor = {
+ent.hearing = {
     ...
 }
 

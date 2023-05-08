@@ -50,6 +50,8 @@ chat.handleCommand("position", {
         local player = base.getPlayer(sender)
         if player and player.x and player.y then
             chat.privateMessage(sender, ("(%.1f, %.1f)"):format(player.x, player.y))
+        else
+            chat.privateMessage(sender, "You have no player entity!")
         end
     end,
 
