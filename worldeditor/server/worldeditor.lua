@@ -25,9 +25,11 @@ local function isAdmin(sender)
 end
 
 local function isValidTool(tool)
-    if not sf.table(tool) then
-        return
+    if sf.table(tool) then
+        -- todo: Do better checks here!
+        return true
     end
+    return false
 end
 
 

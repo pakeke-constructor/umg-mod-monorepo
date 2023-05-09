@@ -40,8 +40,14 @@ end
 local function updateTile(ent)
     local imageTiling = ent.imageTiling
     local grid = grids.getGrid(ent)
-    local gridX,gridY = grid:getPosition(ent.x+0.1, ent.y+0.1)
-    assert(grid:get(gridX, gridY) == ent, "excuse me?")
+    local gridX,gridY = grid:getPosition(ent.x, ent.y)
+
+    if grid:get(gridX, gridY) ~= ent then
+        -- the grid space is filled by another entity,
+        -- Which means our ent isn't affecting anything.
+        -- So we should just return.
+        return
+    end
     
     local bufKey = {}
     for dy=-1,1 do
@@ -238,6 +244,13 @@ end
 local function updateSurroundingTiles(ent)
     local grid = grids.getGrid(ent)
     local gridX,gridY = grid:getPosition(ent)
+
+    if grid:get(gridX, gridY) ~= ent then
+        -- the grid space is filled by another entity,
+        -- Which means our ent isn't affecting anything.
+        -- So we should just return.
+        return
+    end
     
     for dy=-1,1 do
         for dx=-1,1 do

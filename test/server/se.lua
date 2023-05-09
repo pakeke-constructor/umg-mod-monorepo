@@ -15,17 +15,20 @@ end
 
 
 
-chat.handleCommand("chunkTest", {
-    arguments = {{name="x", type="number"}, {name="y", type="number"}},
-    adminLevel = 0,
+local valid_letters = {
+    u=true, m=true, g=true
+}
 
-    handler = function(sender,x,y)
-        local ct = 0
-        chunks.forEach(x,y,function(ent)
-            ct = ct + 1
-        end)
-        print("count: ", ct)
-    end,
+chat.handleCommand("spawnLetter", {
+    arguments = {{name = "letter", type = "string"}},
+    adminLevel = 0,
+    handler = function(sender, letter)
+        local p = base.getPlayer(sender)
+        if p and valid_letters[letter] then
+            local img = "letter_" .. letter
+            server.entities.letter(p.x + 16, p.y + 16, img)
+        end
+    end
 })
 
 
