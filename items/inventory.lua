@@ -321,31 +321,56 @@ end
 
 
 
-local canAddToSlotTc = typecheck.assert("entity", "number", "number")
+local canAddToSlotTc = typecheck.assert("entity", "number", "number", "number")
 
--- returns `true` if we can add item to slotx, sloty.
+-- returns `true` if we can add `count` stacks of item to (slotx, sloty)
 -- false otherwise.
-function Inventory:canAddToSlot(slotX, slotY, item)
-    canAddToSlotTc(item, slotY, slotY)
+function Inventory:canAddToSlot(slotX, slotY, item, count)
+    canAddToSlotTc(slotX, slotY, item, count)
     if not self:slotExists(slotX, slotY) then
         return nil
     end
+
+    -- `count` is the number of items that we want to add. (defaults to the full stackSize of item)
+    count = (count or item.stackSize) or 1
 
     local i = self:getIndex(slotX, slotY)
     local item_ent = umg.exists(self.inventory[i]) and self.inventory[i]
     if item_ent then
         if item_ent.itemName == item.itemName then
-            local remainingStackSize = (item_ent.maxStackSize or 1) - (item_ent.stackSize or 1)
-            if (remainingStackSize >= (item.stackSize or 1)) then
+            local remainingStackSize = (item_ent.maxStackSize or 1) - count
+            if (remainingStackSize >= count) then
+                -- the target slot is the same item type, and there is free space in the stack
                 return true
             end
         end
+    else
+        return true -- slot is empty, so its fine to add
     end
 end
 
 
 function Inventory:canAdd(item)
     return self:getFreeSlotFor(item) or self:getFreeSlot()
+end
+
+
+
+function Inventory:addToSlotPartial(slotX, slotY, item, count)
+    if not self:canAddToSlot(slotX, slotY, item, count) then
+        return false -- failed
+    end
+
+    local preItem = self:get(slotX, slotY)
+    if preItem then
+        -- then we are combining stacks.
+        preItem.stackSize = preItem.stackSize + item.stackSize
+        updateStackSize(preItem)
+        item:delete() -- item has been added to the existing stack; delete.
+        return true
+    else -- else (slotX, slotY) is empty, so just put the item in
+        self:set(slotX, slotY, item)
+    end
 end
 
 
@@ -356,12 +381,6 @@ end
     Take a look at  Inventory:swap  or Inventory:move  if you want safety
 ]]
 function Inventory:addToSlot(slotX, slotY, item)
-    --[[
-        TODO: this function is broken
-    ]]
-    if not self:canAddToSlot(slotX, slotY, item) then
-        return false -- failed
-    end
 
     local preItem = self:get(slotX, slotY)
     if preItem then
@@ -399,20 +418,98 @@ end
 local moveSwapTc = typecheck.assert("table", "number", "number", "number", "number")
 
 
-function Inventory:move(otherInv, slotX, slotY, otherSlotX, otherSlotY)
+
+local function getMoveStackCount(item, count, targetItem)
     --[[
-        moves an item from one inventory to another
+        gets how many items can be moved from item to targetItem
+    ]]
+    local stackSize = item.stackSize or 1
+    count = math.max(0, count or stackSize)
+
+    if targetItem then
+        local targSS = targetItem.stackSize or 1
+        local targMaxSS = targetItem.maxStackSize or 1
+        local stacksLeft = targMaxSS - targSS
+        local maxx = item.maxStackSize or 1
+        return math.min(math.min(maxx, count), stacksLeft)
+    else
+        local maxx = item.maxStackSize or 1
+        return math.min(maxx, stackSize)
+    end
+end
+
+
+local function moveIntoTakenSlot(self, otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+    local targ = otherInv:get(otherSlotX, otherSlotY)
+    local item = self:get(slotX, slotY)
+    count = getMoveStackCount(item, count, targ)
+
+    count = getMoveStackCount(item, count)
+    local newStackSize = item.stackSize - count
+    if newStackSize <= 0 then
+        -- delete src item, since all it's stacks are gone
+        self:set(slotX, slotY, nil)
+        item:delete()
+    else
+        -- else, we reduce the src item stacks
+        item.stackSize = newStackSize
+        updateStackSize(item)
+    end
+    -- add stacks to the target item 
+    targ.stackSize = targ.stackSize + count
+    updateStackSize(item)
+end
+
+
+
+local function moveIntoEmptySlot(self, otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+    local item = self:get(slotX, slotY)
+
+    if count <= 0 then return
+        false -- failure, no space
+    end
+
+    if count < item.stackSize then
+        -- then we are only moving part of the stack; so we must create a copy
+        local typename = item:type()
+        local newItem = server.entities[typename]()
+        -- TODO: This is kinda shitty, as this means that all items must have a blank constructor.
+        -- It would be better to use `ent:clone()` here when that's implemented.
+        newItem.stackSize = count
+        item.stackSize = item.stackSize - count
+        otherInv:set(otherSlotX, otherSlotY, newItem)
+        updateStackSize(item)
+    else
+        -- we are moving the whole item
+        local success = otherInv:addToSlot(otherSlotX, otherSlotY, item)
+        if success then
+            self:set(slotX, slotY, nil)
+            return true -- success!
+        end
+    end
+end
+
+
+
+function Inventory:move(otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+    --[[
+        moves an item from one inventory to another.
+        Can also specify the `stackSize` argument to only send part of a stack.
     ]]
     assert(server, "only available on server")
     moveSwapTc(otherInv, slotX, slotY, otherSlotX, otherSlotY)
 
-    local item1 = self:get(slotX, slotY)
-    local success = otherInv:addToSlot(otherSlotX, otherSlotY, item1)
-    if success then
-        self:set(slotX, slotY, nil)
-        return true -- success!
+    local item = self:get(slotX, slotY)
+    local stackSize = item.stackSize or 1
+    count = math.min(count or stackSize, stackSize)
+
+    local targ = otherInv:get(otherSlotX, otherSlotY)
+
+    if targ then
+        return moveIntoTakenSlot(otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+    else
+        return moveIntoEmptySlot(otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
     end
-    return false -- failure.
 end
 
 

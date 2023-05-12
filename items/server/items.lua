@@ -140,9 +140,8 @@ server.on("trySwapInventoryItem", {
         if not (inv2:hasAddAuthority(controlEnt,x2,y2,item1) and inv2:hasRemoveAuthority(controlEnt,x2,y2)) then
             return false
         end
-
-        inv1:set(x, y, item2)
-        inv2:set(x2, y2, item1)
+        
+        inv1:swap(inv2, x,y, x2,y2)
     end
 })
 
@@ -192,7 +191,7 @@ server.on("tryMoveInventoryItem", {
         count = count or stackSize
         count = math.min(count, stackSize)
         if targ then
-            count = math.min(count, (targ.maxStackSize or 1) - targ.stackSize)
+            count = math.min(count, (targ.maxStackSize or 1) - targ.stackSize or 1)
         end
 
         if count <= 0 then
