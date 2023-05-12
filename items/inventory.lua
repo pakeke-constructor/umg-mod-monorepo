@@ -257,7 +257,7 @@ function Inventory:getFreeSlot()
 end
 
 
-function Inventory:getFreeSlotFor(item)
+function Inventory:getFreeSlotFor(item, count)
     --[[
         Returns a slot that will fit `item` entity.
         Or nil if there's no room.
@@ -266,7 +266,7 @@ function Inventory:getFreeSlotFor(item)
     if item then
         for i=1, self.width * self.height do
             slotX, slotY = self:getXY(i)
-            if self:canAddToSlot(item) then
+            if self:canAddToSlot(slotX, slotY, item, count) then
                 return slotX, slotY
             end
         end
@@ -302,14 +302,14 @@ end
 
 
 
-local hasAddAuthorityTc = typecheck.assert("entity", "number", "number")
+local hasAddAuthorityTc = typecheck.assert("entity", "table", "number", "number")
 
 function Inventory:hasAddAuthority(controlEnt, itemToBeAdded, slotX, slotY)
     --[[
         whether the controlEnt has the authority to add
         `item` to the slot (slotX, slotY)
     ]]
-    hasAddAuthorityTc(controlEnt, slotX, slotY, itemToBeAdded)
+    hasAddAuthorityTc(controlEnt, itemToBeAdded, slotX, slotY)
     if not self:canBeOpenedBy(controlEnt) then
         return
     end
@@ -350,21 +350,6 @@ function Inventory:canAddToSlot(slotX, slotY, item, count)
 end
 
 
-error([[
-
-
-todo:
-fix this all up.
-
-remove all the :addToslot() :add() stuff,
-replace it with :moveToSlot() and :move() functions.
-
-The :move functions should also handle removing the item from
-the source inventory!
-
-
-]])
-
 --[[
     returns true if an item can be added to inventory, (i.e. there's enough space)
     false otherwise.
@@ -403,42 +388,10 @@ function Inventory:addToSlotPartial(slotX, slotY, item, count)
 end
 
 
---[[
-    TODO: Remove this function
-]]
-function Inventory:addToSlot(slotX, slotY, item)
-    local preItem = self:get(slotX, slotY)
-    if preItem then
-        -- then we are combining stacks.
-        preItem.stackSize = preItem.stackSize + item.stackSize
-        updateStackSize(preItem)
-        item:delete() -- item has been added to the existing stack; delete.
-        return true
-    else -- else (slotX, slotY) is empty, so just put the item in
-        self:set(slotX, slotY, item)
-    end
-end
-
-
---[[
-    TODO: Remove this function
-]]
-function Inventory:add(item)
-    assert(server,"only available on server")
-    local slotX, slotY = self:getFreeSlotFor(item)
-
-    if slotX and slotY then
-        return self:addToSlot(slotX, slotY, item)
-    end
-    return self:addToSlot(slotX, slotY, item)
-end
 
 
 
-
-
-local moveSwapTc = typecheck.assert("table", "number", "number", "number", "number")
-
+local moveSwapTc = typecheck.assert("number", "number", "table", "number", "number")
 
 
 local function getMoveStackCount(item, count, targetItem)
@@ -466,7 +419,6 @@ local function moveIntoTakenSlot(self, otherInv, slotX, slotY, otherSlotX, other
     local item = self:get(slotX, slotY)
     count = getMoveStackCount(item, count, targ)
 
-    count = getMoveStackCount(item, count)
     local newStackSize = item.stackSize - count
     if newStackSize <= 0 then
         -- delete src item, since all it's stacks are gone
@@ -486,6 +438,7 @@ end
 
 local function moveIntoEmptySlot(self, otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
     local item = self:get(slotX, slotY)
+    count = getMoveStackCount(item, count)
 
     if count <= 0 then return
         false -- failure, no space
@@ -511,14 +464,31 @@ end
 
 
 
-function Inventory:move(otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+local moveTc = typecheck.assert("number","number","table","number?")
+
+--[[
+    attempts to move the item at slotX, slotY in `self`
+    into otherInv
+]]
+function Inventory:move(slotX, slotY, otherInv, count)
+    moveTc(slotX, slotY, otherInv, count)
+    local item = self:get(slotX, slotY)
+    local otherX, otherY = otherInv:getFreeSlotFor(item, count)
+    if otherX and otherY then
+        return self:moveToSlot(otherInv, slotX, slotY, otherX, otherY, count)
+    end
+    return false
+end
+
+
+
+function Inventory:moveToSlot(slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
     --[[
         moves an item from one inventory to another.
         Can also specify the `stackSize` argument to only send part of a stack.
     ]]
     assert(server, "only available on server")
-    moveSwapTc(otherInv, slotX, slotY, otherSlotX, otherSlotY)
-    if self:canMove
+    moveSwapTc(slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
 
     local item = self:get(slotX, slotY)
     local stackSize = item.stackSize or 1
@@ -527,20 +497,26 @@ function Inventory:move(otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
     local targ = otherInv:get(otherSlotX, otherSlotY)
 
     if targ then
-        return moveIntoTakenSlot(otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+        if otherInv:canAddToSlot(otherSlotX, otherSlotY, item, count) then
+            moveIntoTakenSlot(otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+            return true -- success
+        end
     else
-        return moveIntoEmptySlot(otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+        moveIntoEmptySlot(otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+        return true -- success
     end
+
+    return false -- failed
 end
 
 
 
-function Inventory:swap(otherInv, slotX, slotY, otherSlotX, otherSlotY)
+function Inventory:swap(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     --[[
         swaps two items in inventories.
     ]]
     assert(server, "only available on server")
-    moveSwapTc(otherInv, slotX, slotY, otherSlotX, otherSlotY)
+    moveSwapTc(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     local item = self:get(slotX, slotY)
     local otherItem = otherInv:get(otherSlotX, otherSlotY)
     otherInv:set(otherSlotX, otherSlotY, item)
