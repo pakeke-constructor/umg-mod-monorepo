@@ -60,24 +60,7 @@ end)
 
 
 
-
-local function checkCallback(ent, callbackName, x, y, item)
-    --[[
-        returns true/false according to inventoryCallbacks component.
-        (Only works on `canRemove` and `canAdd`!!!)
-    ]]
-    if ent.inventoryCallbacks and ent.inventoryCallbacks[callbackName] then
-        item = item or ent.inventory:get(x,y)
-        return ent.inventoryCallbacks[callbackName](ent.inventory, x, y, item)
-    end
-    return true -- return true otherwise (no callbacks)
-end
-
-
-
-
 local sf = sync.filters
-
 
 
 server.on("setInventoryHoldSlot", {
@@ -151,17 +134,11 @@ server.on("trySwapInventoryItem", {
         local item1 = inv1:get(x,y)
         local item2 = inv2:get(x2,y2)
         
-        if not checkCallback(ent, "canRemove", x, y, item1) then
-            return -- exit early
+        if not (inv1:hasAddAuthority(controlEnt,x,y,item2) and inv1:hasRemoveAuthority(controlEnt,x,y)) then
+            return false
         end
-        if not checkCallback(ent, "canAdd", x, y, item2) then
-            return -- exit early
-        end
-        if not checkCallback(other_ent, "canRemove", x2, y2, item2) then
-            return -- exit early
-        end
-        if not checkCallback(other_ent, "canAdd", x2, y2, item1) then
-            return -- exit early
+        if not (inv2:hasAddAuthority(controlEnt,x2,y2,item1) and inv2:hasRemoveAuthority(controlEnt,x2,y2)) then
+            return false
         end
 
         inv1:set(x, y, item2)
@@ -222,19 +199,6 @@ server.on("tryMoveInventoryItem", {
             return -- ooohkay?? exit here i guess
         end
 
-        if not checkCallback(ent, "canRemove", x, y) then
-            return -- exit early
-        end
-        if not checkCallback(other_ent, "canAdd", x2, y2) then
-            return -- exit early
-        end
-        if targ then
-            -- welp, we are replacing/adding to targ!
-            if not checkCallback(other_ent, "canRemove", x2, y2) then
-                return -- exit early
-            end
-        end
-
         if targ then
             local item_stacksize = item.stackSize - count
             if item_stacksize <= 0 then
@@ -272,7 +236,7 @@ server.on("tryMoveInventoryItem", {
 server.on("tryDropInventoryItem", {
     arguments = {sf.controlEntity, sf.entity, sf.number, sf.number},
 
-    handler = function(sender, controlEnt, ent, x, y)
+    handler = function(sender, controlEnt, ent, slotX, slotY)
         --[[
             x, y, are coordinates of the position
             IN THE INVENTORY.
@@ -283,21 +247,17 @@ server.on("tryDropInventoryItem", {
             return
         end
 
-        local item = inv:get(x,y)
+        local item = inv:get(slotX, slotY)
         if not item then
             return -- exit early
         end
 
-        if not inv:slotExists(x,y) then
+        if not inv:slotExists(slotX, slotY) then
             return  -- exit early
         end
 
-        if not checkCallback(ent, "canRemove", x, y) then
-            return -- exit early
-        end
-
         groundItemsHandler.drop(item, ent.x, ent.y)
-        inv:set(x, y, nil)
+        inv:set(slotX, slotY, nil)
     end
 })
 

@@ -4,13 +4,18 @@ light.setBaseLighting(1,1,1)
 
 
 weather.rain.setOptions({
-    rainRate = 0, -- 800
+    rainRate = 800,
     rainDrift = 0.1
 })
 
 
+vignette.setStrength(0.65)
 
-base.client.groundTexture.setColor({199/255, 140/255, 89/255})
+
+base.client.groundTexture.setColor(
+    {50/255, 100/255, 199/255}
+--    {199/255, 140/255, 89/255}
+)
 base.client.groundTexture.setTextureList({"ground_texture_final4"})
 
 

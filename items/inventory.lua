@@ -10,6 +10,11 @@ Inventory objects
 
 local Inventory = base.Class("items_mod:inventory")
 
+local updateStackSize
+if server then
+    updateStackSize = require("server.update_stacksize")
+end
+
 
 local assert2Numbers = typecheck.assert("number", "number")
 
@@ -170,17 +175,20 @@ function Inventory:_rawset(x, y, item_ent)
 end
 
 
-function Inventory:set(x, y, item_ent)
+--[[
+    puts an item directly into an inventory.
+    BIG WARNING:
+    This is a very low-level function, and IS VERY DANGEROUS TO CALL!
+    If you want to move inventory items around, take a look at the
+    :move  and  :swap  methods.
+]]
+function Inventory:set(slotX, slotY, item)
     assert(server, "Can only be called on server")
-    assert2Numbers(x, y)
+    assert2Numbers(slotX, slotY)
 
     -- If `item_ent` is nil, then it removes the item from inventory.
-    self:_rawset(x, y, item_ent)
-    
-    if server then
-        -- We update the stacksize with this too.
-        server.broadcast("setInventoryItem", self.owner, x, y, item_ent)
-    end
+    self:_rawset(slotX, slotY, item)
+    server.broadcast("setInventoryItem", self.owner, slotX, slotY, item)
 end
 
 
@@ -250,21 +258,16 @@ end
 
 
 function Inventory:getFreeSlotFor(item)
-    local x,y
+    --[[
+        Returns a slot that will fit `item` entity.
+        Or nil if there's no room.
+    ]]
+    local slotX, slotY
     if item then
-        -- then we first search for an item slot that is same type as `item`
         for i=1, self.width * self.height do
-            x, y = self:getXY(i)
-            if self:slotExists(x, y) then
-                local item_ent = umg.exists(self.inventory[i]) and self.inventory[i]
-                if item_ent then
-                    if item_ent.itemName == item.itemName then
-                        local remainingStackSize = (item_ent.maxStackSize or 1) - (item_ent.stackSize or 1)
-                        if (remainingStackSize >= (item.stackSize or 1)) then
-                            return x, y
-                        end
-                    end
-                end
+            slotX, slotY = self:getXY(i)
+            if self:canAddToSlot(item) then
+                return slotX, slotY
             end
         end
     end
@@ -273,19 +276,70 @@ end
 
 
 
+local OR = base.operators.OR
+
+local hasRemoveAuthorityTc = typecheck.assert("entity", "number", "number")
+
+function Inventory:hasRemoveAuthority(controlEnt, slotX, slotY)
+    --[[
+        whether the controlEnt has the authority to remove the
+        item at slotX, slotY
+    ]]
+    hasRemoveAuthorityTc(controlEnt, slotX, slotY)
+    if not self:canBeOpenedBy(controlEnt) then
+        return
+    end
+
+    local item = self:get(slotX, slotY)
+    if not item then
+        -- cannot remove an empty slot.
+        return false 
+    end
+
+    local isBlocked = umg.ask("isItemRemovalBlocked", OR, controlEnt, self.owner, slotX, slotY)
+    return not isBlocked
+end
+
+
+
+local hasAddAuthorityTc = typecheck.assert("entity", "number", "number")
+
+function Inventory:hasAddAuthority(controlEnt, itemToBeAdded, slotX, slotY)
+    --[[
+        whether the controlEnt has the authority to add
+        `item` to the slot (slotX, slotY)
+    ]]
+    hasAddAuthorityTc(controlEnt, slotX, slotY, itemToBeAdded)
+    if not self:canBeOpenedBy(controlEnt) then
+        return
+    end
+
+    local isBlocked = umg.ask("isItemAdditionBlocked", OR, controlEnt, self.owner, itemToBeAdded, slotX, slotY)
+    return not isBlocked
+end
+
+
+
 
 local canAddToSlotTc = typecheck.assert("entity", "number", "number")
 
 -- returns `true` if we can add item to slotx, sloty.
 -- false otherwise.
-function Inventory:canAddToSlot(item, slotX, slotY)
+function Inventory:canAddToSlot(slotX, slotY, item)
     canAddToSlotTc(item, slotY, slotY)
     if not self:slotExists(slotX, slotY) then
         return nil
     end
-    local preItem = self:get(slotX, slotY)
-    if item then
-        
+
+    local i = self:getIndex(slotX, slotY)
+    local item_ent = umg.exists(self.inventory[i]) and self.inventory[i]
+    if item_ent then
+        if item_ent.itemName == item.itemName then
+            local remainingStackSize = (item_ent.maxStackSize or 1) - (item_ent.stackSize or 1)
+            if (remainingStackSize >= (item.stackSize or 1)) then
+                return true
+            end
+        end
     end
 end
 
@@ -295,26 +349,84 @@ function Inventory:canAdd(item)
 end
 
 
+--[[
+    WARNING: This function is very dangerous to call!
+    Since it doesn't remove the item from the source inventory.
 
-function Inventory:add(item)
-    assert(server,"only available on server")
-    local slotx, sloty = self:getFreeSlotFor(item)
-
-    if slotx and sloty then
-        local preItem = self:get(slotx, sloty)
-        preItem.stackSize = preItem.stackSize + item.stackSize
-        item:delete() -- no more stack space left for old item; delete.
-        return true
-    else
-        -- then we get
-        slotx, sloty = self:getFreeSlot()
-        if slotx and sloty then
-            self:set(slotx, sloty, item)
-            return true
-        end
+    Take a look at  Inventory:swap  or Inventory:move  if you want safety
+]]
+function Inventory:addToSlot(slotX, slotY, item)
+    --[[
+        TODO: this function is broken
+    ]]
+    if not self:canAddToSlot(slotX, slotY, item) then
+        return false -- failed
     end
 
-    return false -- failed
+    local preItem = self:get(slotX, slotY)
+    if preItem then
+        -- then we are combining stacks.
+        preItem.stackSize = preItem.stackSize + item.stackSize
+        updateStackSize(preItem)
+        item:delete() -- item has been added to the existing stack; delete.
+        return true
+    else -- else (slotX, slotY) is empty, so just put the item in
+        self:set(slotX, slotY, item)
+    end
+end
+
+
+--[[
+    WARNING: This function is very dangerous to call!
+    Since it doesn't remove the item from the source inventory.
+
+    Take a look at  Inventory:swap  or Inventory:move  if you want safety
+]]
+function Inventory:add(item)
+    assert(server,"only available on server")
+    local slotX, slotY = self:getFreeSlotFor(item)
+
+    if slotX and slotY then
+        return self:addToSlot(slotX, slotY, item)
+    end
+    return self:addToSlot(slotX, slotY, item)
+end
+
+
+
+
+
+local moveSwapTc = typecheck.assert("table", "number", "number", "number", "number")
+
+
+function Inventory:move(otherInv, slotX, slotY, otherSlotX, otherSlotY)
+    --[[
+        moves an item from one inventory to another
+    ]]
+    assert(server, "only available on server")
+    moveSwapTc(otherInv, slotX, slotY, otherSlotX, otherSlotY)
+
+    local item1 = self:get(slotX, slotY)
+    local success = otherInv:addToSlot(otherSlotX, otherSlotY, item1)
+    if success then
+        self:set(slotX, slotY, nil)
+        return true -- success!
+    end
+    return false -- failure.
+end
+
+
+
+function Inventory:swap(otherInv, slotX, slotY, otherSlotX, otherSlotY)
+    --[[
+        swaps two items in inventories.
+    ]]
+    assert(server, "only available on server")
+    moveSwapTc(otherInv, slotX, slotY, otherSlotX, otherSlotY)
+    local item = self:get(slotX, slotY)
+    local otherItem = otherInv:get(otherSlotX, otherSlotY)
+    otherInv:set(otherSlotX, otherSlotY, item)
+    self:set(slotX, slotY, otherItem)
 end
 
 
@@ -361,19 +473,6 @@ function Inventory:get(x, y)
     assert2Numbers(x, y)
     local i = self:getIndex(x, y)
     return self.inventory[i]
-end
-
-
-function Inventory:swap(other_inv, self_x, self_y, other_x, other_y)
-    --[[
-        self_x, self_y: position of the slot in `self` inventory
-        other_x, other_y:  position of the slot in `other` inventory
-    ]]
-    assert(server, "Can only be called on server")
-    local item_self = self:get(self_x, self_y)
-    local item_other = other_inv:get(other_x, other_y)
-    other_inv:set(other_x, other_y, item_self)
-    self:set(self_x, self_y, item_other)
 end
 
 
@@ -552,9 +651,8 @@ function Inventory:_setHoldSlot(slotX, slotY)
         umg.call("unequipItem", ownerEnt, prevItem)
     end
 
-    self.holdItem = newItem
-
     if umg.exists(newItem) then
+        self.holdItem = newItem
         umg.call("equipItem", ownerEnt, newItem)
     end
 end

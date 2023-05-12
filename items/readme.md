@@ -49,10 +49,6 @@ inv:open() -- opens inventory for viewing
 inv:close() -- closes inventory
 
 
-inv:swap(other_inv, slot_x, slot_y, other_slot_x, other_slot_y)
--- swaps an item with another inventory
--- Good for stuff like player trading maybe?
-
 
 item = inv:getHoldingItem()
 -- gets the item that is currently being held.

@@ -4,7 +4,6 @@ globals:
     any: true
   rgbAPI:
     any: true
-
   constants:
     any: true
   server:
@@ -30,5 +29,9 @@ globals:
   typecheck:
     any: true
   sync:
+    any: true
+  vignette:
+    any: true
+  light:
     any: true
 
