@@ -9,8 +9,6 @@ local valid_callbacks = require("inventory_callbacks")
 
 local groundItemsHandler = require("server.ground_items_handler")
 
-local updateStackSize = require("server.update_stacksize")
-
 
 
 
@@ -134,10 +132,10 @@ server.on("trySwapInventoryItem", {
         local item1 = inv1:get(x,y)
         local item2 = inv2:get(x2,y2)
         
-        if not (inv1:hasAddAuthority(controlEnt,x,y,item2) and inv1:hasRemoveAuthority(controlEnt,x,y)) then
+        if not (inv1:hasAddAuthority(controlEnt,item2,x,y) and inv1:hasRemoveAuthority(controlEnt,x,y)) then
             return false
         end
-        if not (inv2:hasAddAuthority(controlEnt,x2,y2,item1) and inv2:hasRemoveAuthority(controlEnt,x2,y2)) then
+        if not (inv2:hasAddAuthority(controlEnt,item1,x2,y2) and inv2:hasRemoveAuthority(controlEnt,x2,y2)) then
             return false
         end
         
@@ -181,51 +179,14 @@ server.on("tryMoveInventoryItem", {
         end
 
         local item = inv1:get(x,y)
-        local targ = inv2:get(x2,y2)
-
-        if not umg.exists(item) then
-            return -- Nothing to move; exit early
+        if not inv2:hasAddAuthority(controlEnt,x2,y2,item) then
+            return
+        end
+        if not inv1:hasRemoveAuthority(controlEnt, x,y) then
+            return
         end
 
-        local stackSize = item.stackSize or 1
-        count = count or stackSize
-        count = math.min(count, stackSize)
-        if targ then
-            count = math.min(count, (targ.maxStackSize or 1) - targ.stackSize or 1)
-        end
-
-        if count <= 0 then
-            return -- ooohkay?? exit here i guess
-        end
-
-        if targ then
-            local item_stacksize = item.stackSize - count
-            if item_stacksize <= 0 then
-                inv1:set(x,y,nil)
-                item:delete()
-            else
-                item.stackSize = item_stacksize
-                updateStackSize(item)
-            end
-            targ.stackSize = targ.stackSize + count
-            updateStackSize(item)
-        else
-            if count < stackSize then
-                -- Damn, gotta create a new entity
-                local typename = item:type()
-                local new = server.entities[typename]()
-                new.x = item.x
-                new.y = item.y
-                new.stackSize = count
-                item.stackSize = stackSize - count
-                inv2:set(x2, y2, new)
-                updateStackSize(item)
-            else
-                -- Else we just move it
-                inv1:set(x, y, nil)
-                inv2:set(x2, y2, item)
-            end
-        end
+        inv1:moveToSlot(x,y, inv2, x2,y2, count)
     end
 })
 
@@ -251,8 +212,8 @@ server.on("tryDropInventoryItem", {
             return -- exit early
         end
 
-        if not inv:slotExists(slotX, slotY) then
-            return  -- exit early
+        if not inv:hasRemoveAuthority(controlEnt,slotX,slotY) then
+            return
         end
 
         groundItemsHandler.drop(item, ent.x, ent.y)

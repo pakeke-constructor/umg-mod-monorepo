@@ -235,39 +235,17 @@ end
 
 
 
-function Inventory:getFreeSlot()
-    -- else search for empty inventory space
+function Inventory:getEmptySlot()
+    -- Returns the slotX,Y of an empty inventory slot
     for x=1, self.width do
         for y=1, self.height do
             local i = self:getIndex(x, y)
             if self:slotExists(x, y) then
                 if not umg.exists(self.inventory[i]) then
-                    if self.inventory[i] then
-                        -- delete non-existant entity
-                        -- yeah... idk what happened here lol.
-                        self.inventory[i] = nil
-                    end
                     assert(self:getIndex(x,y) == i, "bug with inventory mod")--sanity check
                     assert(not umg.exists(self:get(x,y)), "bug with inventory mod")
                     return x,y
                 end
-            end
-        end
-    end
-end
-
-
-function Inventory:getFreeSlotFor(item, count)
-    --[[
-        Returns a slot that will fit `item` entity.
-        Or nil if there's no room.
-    ]]
-    local slotX, slotY
-    if item then
-        for i=1, self.width * self.height do
-            slotX, slotY = self:getXY(i)
-            if self:canAddToSlot(slotX, slotY, item, count) then
-                return slotX, slotY
             end
         end
     end
@@ -351,12 +329,11 @@ end
 
 
 --[[
-    returns true if an item can be added to inventory, (i.e. there's enough space)
-    false otherwise.
+    Finds an inventory slot that will fit `item`
 
     count is the number of items to take from the stack. (default = item.stackSize)
 ]]
-function Inventory:canAdd(item, count)
+function Inventory:findAvailableSlot(item, count)
     for x=1, self.width do
         for y=1, self.height do
             if self:canAddToSlot(x, y, item, count) then
@@ -366,25 +343,6 @@ function Inventory:canAdd(item, count)
         end
     end
     return false -- can't add
-end
-
-
-
-function Inventory:addToSlotPartial(slotX, slotY, item, count)
-    if not self:canAddToSlot(slotX, slotY, item, count) then
-        return false -- failed
-    end
-
-    local preItem = self:get(slotX, slotY)
-    if preItem then
-        -- then we are combining stacks.
-        preItem.stackSize = preItem.stackSize + item.stackSize
-        updateStackSize(preItem)
-        item:delete() -- item has been added to the existing stack; delete.
-        return true
-    else -- else (slotX, slotY) is empty, so just put the item in
-        self:set(slotX, slotY, item)
-    end
 end
 
 
@@ -464,7 +422,7 @@ end
 
 
 
-local moveTc = typecheck.assert("number","number","table","number?")
+local moveTc = typecheck.assert("number", "number", "table", "number?")
 
 --[[
     attempts to move the item at slotX, slotY in `self`
@@ -473,7 +431,7 @@ local moveTc = typecheck.assert("number","number","table","number?")
 function Inventory:move(slotX, slotY, otherInv, count)
     moveTc(slotX, slotY, otherInv, count)
     local item = self:get(slotX, slotY)
-    local otherX, otherY = otherInv:getFreeSlotFor(item, count)
+    local otherX, otherY = otherInv:findAvailableSlot(item, count)
     if otherX and otherY then
         return self:moveToSlot(otherInv, slotX, slotY, otherX, otherY, count)
     end
