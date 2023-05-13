@@ -36,3 +36,13 @@ we should have a `groundItem` component, that is automatically put into
 a spatial partition. Then, all the entities with `canPickUpItems` component
 look for `groundItem` entities to pick up.
 
+
+
+
+# current bugs:
+
+Adding part of a stack (i.e. 1 item)
+
+Swapping doesn't work
+
+

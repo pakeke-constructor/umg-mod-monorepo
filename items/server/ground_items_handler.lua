@@ -99,7 +99,7 @@ end
 
 
 local function tryPickUp(ent, picked)
-    local best_ent
+    local best_ent -- the best ground ent to pick up
     local best_dist = math.huge
 
     for _, groundEnt in groundItemPartition:iterator(ent.x, ent.y) do
@@ -113,7 +113,7 @@ local function tryPickUp(ent, picked)
             local dist = math.distance(ent, groundEnt)
             if canBePickedUp(dist, groundEnt) and dist < best_dist then
                 -- always pick up the closest item.
-                if ent.inventory:canAdd(item) then
+                if ent.inventory:findAvailableSlot(item) then
                     best_dist = dist
                     best_ent = groundEnt
                 end
@@ -124,7 +124,7 @@ local function tryPickUp(ent, picked)
     if best_ent then
         -- pick up this groundItem
         local item = getWrappedItem(best_ent)
-        ent.inventory:add(item)
+        best_ent.inventory:move(1,1, ent.inventory)
         umg.call("pickupGroundItem", ent, item)
         -- delete the item on ground
         best_ent:delete()

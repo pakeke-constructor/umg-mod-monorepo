@@ -88,10 +88,10 @@ local function hasAccess(controlEnt, invEnt)
 
         TODO: Do we want a maximum interaction distance enforced here???
     ]]
-    if umg.exists(invEnt) then
+    if not umg.exists(invEnt) then
         return false
     end
-   if invEnt.inventory then
+    if not invEnt.inventory then
         return false
     end
 
@@ -117,7 +117,9 @@ server.on("trySwapInventoryItem", {
             IN THE INVENTORY.
             Not the position of an entity or anything!
         ]]
-        if not (hasAccess(controlEnt, ent) and hasAccess(controlEnt, other_ent)) then return end
+        if not (hasAccess(controlEnt, ent) and hasAccess(controlEnt, other_ent)) then
+            return
+        end
 
         local inv1 = ent.inventory
         local inv2 = other_ent.inventory
@@ -133,13 +135,13 @@ server.on("trySwapInventoryItem", {
         local item2 = inv2:get(x2,y2)
         
         if not (inv1:hasAddAuthority(controlEnt,item2,x,y) and inv1:hasRemoveAuthority(controlEnt,x,y)) then
-            return false
+            return
         end
         if not (inv2:hasAddAuthority(controlEnt,item1,x2,y2) and inv2:hasRemoveAuthority(controlEnt,x2,y2)) then
-            return false
+            return
         end
         
-        inv1:swap(inv2, x,y, x2,y2)
+        inv1:swap(x,y, inv2, x2,y2)
     end
 })
 
@@ -162,6 +164,9 @@ server.on("tryMoveInventoryItem", {
             IN THE INVENTORY.
             Not the position of an entity or anything!
         ]]
+        if not (hasAccess(controlEnt, ent) and hasAccess(controlEnt, other_ent)) then
+            return
+        end
         count = count or 1
 
         local inv1 = ent.inventory
@@ -179,7 +184,7 @@ server.on("tryMoveInventoryItem", {
         end
 
         local item = inv1:get(x,y)
-        if not inv2:hasAddAuthority(controlEnt,x2,y2,item) then
+        if not inv2:hasAddAuthority(controlEnt,item,x2,y2) then
             return
         end
         if not inv1:hasRemoveAuthority(controlEnt, x,y) then
@@ -203,6 +208,10 @@ server.on("tryDropInventoryItem", {
             Not the position of an entity or anything!
         ]]
         local inv = ent.inventory
+        
+        if not (hasAccess(controlEnt, ent)) then
+            return
+        end
         if not inv:canBeOpenedBy(ent) then
             return
         end

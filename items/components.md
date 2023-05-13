@@ -127,61 +127,6 @@ return {
 
 
 
-### Custom behaviour:
-We can customize inventory behaviour with callbacks.
-
-(For example, only allowing access if you are on a specific team)
-```lua
-
-local invCbs = ent.inventoryCallbacks
-
-
--- Callbacks:
-
-
--- Used to draw overlays and stuff, etc.
-function invCbs:draw()
-    ... -- called when the inventory interface is drawn.
-    -- `self` is the inventory object.
-end
-
-
-function invCbs:canRemove(item, x, y)
-    -- `self` is the inventory object
-    return true/false
-end
-
-function invCbs:canAdd(item, x, y)
-    -- `self` is the inventory object
-    return true/false
-end
-
-function invCbs:canBeOpenedBy(ent)
-    -- `self` is the inventory object
-    -- `ent` is the player that is trying to open the inventory
-    return true/false
-end
-
-
-function invCbs:onAdd(item, x, y)
-    -- `self` is the inventory object
-    ...
-end
-
-function invCbs:onRemove(item_ent, x, y)
-    -- `self` is the inventory object
-    ...
-end
-
-function invCbs:onOpen(ent)
-    -- `self` is the inventory object
-    -- `ent` is the player that is trying to open the inventory
-    ...
-end
-
-```
-
-
 
 ### shops and stuff
 Shops and stuff can be done through the `inventoryUI` component.

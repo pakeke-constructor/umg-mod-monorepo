@@ -94,9 +94,6 @@ inventory:remove(item, amount) -- removes from any slot
 
 inventory:get(slot_x, slot_y)
 
-inventory:canAdd(item) -- true/false, whether can add to inventory or not.
-
-inventory:add(item, amount) -- adds to any slot. Returns false on failure.
 
 inventory:has(item, amount)
 

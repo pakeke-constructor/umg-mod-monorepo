@@ -181,6 +181,9 @@ end
     This is a very low-level function, and IS VERY DANGEROUS TO CALL!
     If you want to move inventory items around, take a look at the
     :move  and  :swap  methods.
+
+    Calling this function willy-nilly will make it so the same item
+        may be duplicated across multiple inventories.
 ]]
 function Inventory:set(slotX, slotY, item)
     assert(server, "Can only be called on server")
@@ -299,7 +302,7 @@ end
 
 
 
-local canAddToSlotTc = typecheck.assert("entity", "number", "number", "number?")
+local canAddToSlotTc = typecheck.assert("number", "number", "entity", "number?")
 
 -- returns `true` if we can add `count` stacks of item to (slotx, sloty)
 -- false otherwise.
@@ -352,7 +355,10 @@ end
 local moveSwapTc = typecheck.assert("number", "number", "table", "number", "number")
 
 
+local moveStackCountTc = typecheck.assert("table", "number", "table?")
+
 local function getMoveStackCount(item, count, targetItem)
+    moveStackCountTc(item, count, targetItem)
     --[[
         gets how many items can be moved from item to targetItem
     ]]
@@ -367,12 +373,12 @@ local function getMoveStackCount(item, count, targetItem)
         return math.min(math.min(maxx, count), stacksLeft)
     else
         local maxx = item.maxStackSize or 1
-        return math.min(maxx, stackSize)
+        return math.min(maxx, count)
     end
 end
 
 
-local function moveIntoTakenSlot(self, otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+local function moveIntoTakenSlot(self, slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
     local targ = otherInv:get(otherSlotX, otherSlotY)
     local item = self:get(slotX, slotY)
     count = getMoveStackCount(item, count, targ)
@@ -394,7 +400,7 @@ end
 
 
 
-local function moveIntoEmptySlot(self, otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+local function moveIntoEmptySlot(self, slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
     local item = self:get(slotX, slotY)
     count = getMoveStackCount(item, count)
 
@@ -433,7 +439,7 @@ function Inventory:move(slotX, slotY, otherInv, count)
     local item = self:get(slotX, slotY)
     local otherX, otherY = otherInv:findAvailableSlot(item, count)
     if otherX and otherY then
-        return self:moveToSlot(otherInv, slotX, slotY, otherX, otherY, count)
+        return self:moveToSlot(slotX, slotY, otherInv, otherX, otherY, count)
     end
     return false
 end
@@ -456,11 +462,11 @@ function Inventory:moveToSlot(slotX, slotY, otherInv, otherSlotX, otherSlotY, co
 
     if targ then
         if otherInv:canAddToSlot(otherSlotX, otherSlotY, item, count) then
-            moveIntoTakenSlot(otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+            moveIntoTakenSlot(self, slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
             return true -- success
         end
     else
-        moveIntoEmptySlot(otherInv, slotX, slotY, otherSlotX, otherSlotY, count)
+        moveIntoEmptySlot(self, slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
         return true -- success
     end
 
