@@ -81,10 +81,12 @@ end
 
 
 
+local controlInventoryGroup = umg.group("inventory", "controllable")
+
+
 function listener:mousepressed(x, y, button, istouch, presses)
     if button == 1 then
-        local p = base.getPlayer()
-        if umg.exists(p) then
+        for _, p in ipairs(controlInventoryGroup) do
             items.useHoldItem(p)
         end
         local wx,wy = base.client.camera:toWorldCoords(x,y)

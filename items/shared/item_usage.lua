@@ -20,6 +20,7 @@ end
 
 function itemUsageShared.canUseHoldItem(holder_ent, ...)
     if (not umg.exists(holder_ent)) or (not getHoldItem(holder_ent)) then
+        print("ret false")
         return false
     end
 

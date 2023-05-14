@@ -29,7 +29,10 @@ ALL OF THESE ARE SUBJECT TO CHANGE.
 - `duplicate_card`: copy the last card's effects as [color]
 - `flipped_duplicate_card`: copy the last card's effects as the inverse of [color]
 
+
+TODO: Redo these cards!!! This whole paragon thing is very one-dimensional
 - `face_down_card`: [color] paragon units will now spawn in the shop
+- `face_down_rainbow_card`: (SUPER RARE) Allows for another paragon unit
 
 - `jack_of_diamonds`: Swap HP and SORC of a random [color] ally 
 - `jack_of_spades`: Swap HP and ATK of a random [color] ally 
@@ -84,9 +87,15 @@ Obviously, we will have the basic units:
 
 
 # PARAGON UNITS:
-- SAIYO:  On buy, steals all abilities from [color] units
+Only show up in the shop after turn 6.
+There is a maximum of 1 paragon unit for each army.
 
-
+- SAIYO:  Turn start:  Steals 10% HP from all non-[color] units
+- SORCIO:  Turn start:  Steals 15% SORC from all non-[color] units
+- CELESTION:  On buy: copies all abilities from [color] units
+- MYTHRUNE:  Has 36 inventory slots. Turn start: Gives 5 free [color] items
+- ZEPHYR:  During battle, mimic all [color] unit abilities when executed
+- HIVESWARM:  On buy:  Duplicates all [color] units with 70% stat reduction
 
 
 ### ITEM IDEAS:

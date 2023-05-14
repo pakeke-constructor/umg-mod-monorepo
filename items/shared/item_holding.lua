@@ -141,7 +141,6 @@ umg.on("gameUpdate", function()
     for _, ent in ipairs(holdingItemGroup) do
         local item_ent = getHoldItem(ent)
         if item_ent and holdable(item_ent) then
-            --print("updat! ", item_ent)
             updateHoldItem(ent, item_ent)
         end
     end

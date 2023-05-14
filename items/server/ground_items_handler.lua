@@ -124,10 +124,15 @@ local function tryPickUp(ent, picked)
     if best_ent then
         -- pick up this groundItem
         local item = getWrappedItem(best_ent)
-        best_ent.inventory:move(1,1, ent.inventory)
-        umg.call("pickupGroundItem", ent, item)
-        -- delete the item on ground
-        best_ent:delete()
+        local success = best_ent.inventory:move(1,1, ent.inventory)
+        if success then
+            -- realistically, `success` should always be true, (since we used findAvailableSlot)
+            -- but its better to be safe than sorry
+            picked[best_ent] = true
+            umg.call("pickupGroundItem", ent, item)
+            -- delete the item on ground
+            best_ent:delete()
+        end
     end
 end
 
