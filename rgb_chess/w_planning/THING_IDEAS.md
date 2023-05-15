@@ -9,14 +9,16 @@ ALL OF THESE ARE SUBJECT TO CHANGE.
 - `0 of clubs`: Removes [color] from all shop cards
 - `2 of clubs`: Adds [color] to all shop cards
 
-- `4 of clubs`: rerolls all non-[color] shop cards.
-- `10 of clubs`: rerolls all cards, and discards any [color] cards that appear.
-- `10 of diamonds`: Change the color of all non-[color] shop cards
-- `joker`: if there are no [color] units on board, give 4 rerolls. Else, give 1 reroll.
+- `4 of clubs`: Set all shop cards to be [color]
 
-- `ace_of_diamonds`: give +1 SORCERY to all [color] allies
-- `ace_of_hearts`: give +2 HEALTH to all [color] allies
-- `ace_of_spades`: give +1 DAMAGE to all [color] allies
+- `10 of clubs`: rerolls all non-[color] shop cards.
+- `10 of diamonds`: Change the color of all non-[color] shop cards
+- `joker`: if there are no [color] units on board, give 4 rerolls. Else, give 2 rerolls.
+
+TODO: These are probably too strong with swarm units.
+- `ace_of_diamonds`: give +2 SORC to all [color] allies
+- `ace_of_hearts`: give +3 HP to all [color] allies
+- `ace_of_spades`: give +2 ATK to all [color] allies
 
 - `full_suit_card`: give +1 HP, +1 ATK, +1 SORC to all [color] allies
 
@@ -30,14 +32,14 @@ ALL OF THESE ARE SUBJECT TO CHANGE.
 - `flipped_duplicate_card`: copy the last card's effects as the inverse of [color]
 
 
-TODO: Redo these cards!!! This whole paragon thing is very one-dimensional
+TODO: Redo these cards!!! This whole paragon spawning thing is very one-dimensional
 - `face_down_card`: [color] paragon units will now spawn in the shop
 - `face_down_rainbow_card`: (SUPER RARE) Allows for another paragon unit
 
-- `jack_of_diamonds`: Swap HP and SORC of a random [color] ally 
-- `jack_of_spades`: Swap HP and ATK of a random [color] ally 
+- `jack_of_diamonds`: Swap HP and SORC of all [color] allies
+- `jack_of_spades`: Swap HP and ATK of all [color] allies
 
-- `king_of_spades_card`: Kill the lowest health [color] ally. In return, gain 3 [color] items 
+- `king_of_spades_card`: Delete the lowest health [color] ally. In return, gain 4 [color] items
 - `king_of_hearts_card`: Spawn 2 [color] items
 
 - `queen_of_spades_card`: Transfer an ability from the lowest health [color] ally to the highest health [color] ally
@@ -66,7 +68,7 @@ Obviously, we will have the basic units:
 - Turn start: If there are no [color] allys, gain 2 rerolls
 - Turn start: If there are no [color] allys, give the best sorcery ally +15% SORC
 - On reroll: If there are only [color] allys, gain +1/+1 
-- Turn start: If won round, spawn a random [color] item
+- Turn start: If won previous battle, spawn a random [color] item
 - Turn start:  If there are only [color] allys, gain 1 reroll
 - Turn end: if there are at least 4 [color] allys, give [color] allys +1/+1
 - On buy: mimic the health of the healthiest [color] ally
@@ -93,7 +95,7 @@ There is a maximum of 1 paragon unit for each army.
 - SAIYO:  Turn start:  Steals 10% HP from all non-[color] units
 - SORCIO:  Turn start:  Steals 15% SORC from all non-[color] units
 - CELESTION:  On buy: copies all abilities from [color] units
-- MYTHRUNE:  Has 36 inventory slots. Turn start: Gives 5 free [color] items
+- MYTHRUNE:  Has 36 inventory slots. Turn start: Gives 4 free [color] items
 - ZEPHYR:  During battle, mimic all [color] unit abilities when executed
 - HIVESWARM:  On buy:  Duplicates all [color] units with 70% stat reduction
 

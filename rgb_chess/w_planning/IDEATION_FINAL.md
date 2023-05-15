@@ -2,10 +2,13 @@
 
 # RGB Chess:
 OK: so this is getting to be quite a complex game.
-Perhaps we have 2 modes:
-`LEARNING` mode, and `NORMAL` mode.
-`NORMAL` mode contains all the features, whereas `LEARNING` mode
-does not contain items, nor any complicated cards.
+Perhaps we have a few modes:
+`LEARNING` mode, contains simple cards only
+`NORMAL` mode, contains all the features
+`EXPERT` mode, super hard mode, and has extra bosses at the end.
+
+Make sure to write JSON files of people's army when playing!
+This will give good test data!!!
 
 
 
