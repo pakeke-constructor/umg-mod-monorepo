@@ -4,7 +4,7 @@ local constants = require("shared.constants")
 
 local openGroup = umg.group("openable", "inventory", "x", "y")
 
-local controllableGroup = umg.group("controllable", "inventory")
+local controlInventoryGroup = umg.group("controllable", "inventory")
 
 
 local openInventories = require("client.open_inventories")
@@ -14,6 +14,7 @@ local openInventories = require("client.open_inventories")
 local OPEN_BUTTON = 2
 
 local MOUSE_INTERACTION_DIST = 30
+
 
 
 local function searchForOpenable(player, mouse_x, mouse_y)
@@ -41,27 +42,14 @@ end
 
 
 
-local DEFAULT_OPEN_SOUND = "chestOpenSound"
-local DEFAULT_CLOSE_SOUND = "chestCloseSound"
-
-local function close(inv)
-    local opn = inv.owner.openable
-    local sound = opn.closeSound or DEFAULT_CLOSE_SOUND
-    base.client.playSound(sound, 1, 0.7, nil, 0, 0.3)
-    inv:close()
-    openInventories.close(inv)
-end
 
 
 local function open(inv)
     local opn = inv.owner.openable
-    local sound = opn.openSound or DEFAULT_OPEN_SOUND
-    base.client.playSound(sound, 1, 1.4, nil, 0, 0.3)
-    if openInv then
-        close(openInv)
+    if opn.openSound then
+        base.client.playSound(opn.openSound, 1, 1.4, nil, 0, 0.3)
     end
     inv:open()
-    openInventories.open(inv)
 end
 
 
@@ -69,39 +57,17 @@ local function tryOpenInv(player, inv_ent)
     local opn = inv_ent.openable
     local inv = inv_ent.inventory
     if inv:canBeOpenedBy(player) then
-        if player.inventory and player.inventory:canBeOpenedBy(player) then
-            player.inventory:open()
-        end
+        player.inventory:open()
         open(inv)
     else
-        local sound = opn.closeSound or DEFAULT_CLOSE_SOUND
-        base.client.playSound(sound, 1, 0.7, nil, 0, 0.15)
-    end
-end
-
-
-
-local function pollForClosure(openInventory)
-
-end
-
-
-
-umg.on("gameUpdate", function(dt)
-    if openInv then
-        local player = base.getPlayer()
-        if math.distance(player, openInv.owner) > (constants.DEFAULT_OPENABLE_DISTANCE + 1) then
-            local ent = openInv.owner
-            local sound = ent.openable.closeSound or DEFAULT_CLOSE_SOUND
-            openInv:close()
-            if player.inventory then
-                player.inventory:close()
-            end
-            base.client.playSound(sound, 1, 0.7, nil, 0, 0.15)    
-            openInv = nil
+        if opn.closeSound then
+            -- locked!
+            base.client.playSound(opn.closeSound, 1, 0.7, nil, 0, 0.15)
         end
     end
-end)
+end
+
+
 
 
 
@@ -126,9 +92,6 @@ end
 local function pressButton(player)
     if player.inventory and player.openable then
         if player.inventory.isOpen then
-            if openInv then
-                close(openInv)
-            end
             player.inventory:close()
         else
             player.inventory:open()
@@ -141,7 +104,7 @@ function listener:keypressed(key, scancode, isrepeat)
     local inputEnum = self:getInputEnum(scancode)
     -- TODO: Allow for controls to be set
     if inputEnum == base.client.input.BUTTON_2 then
-        for _, player in ipairs(controllableGroup)do
+        for _, player in ipairs(controlInventoryGroup)do
             if isInControlOf(player) then
                 pressButton(player)
             end

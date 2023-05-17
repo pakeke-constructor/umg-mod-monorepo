@@ -11,7 +11,7 @@ function Array:init(initial)
 
     if initial then
         if (type(initial) ~= "table") then
-            error("Bad argument #1 to Array().\nexpected table, got: " .. tostring(type(arr_initial)))
+            error("Bad argument #1 to Array().\nexpected table, got: " .. tostring(type(initial)))
         end
 
         for i=1, #initial do

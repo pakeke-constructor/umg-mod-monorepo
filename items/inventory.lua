@@ -45,9 +45,6 @@ function Inventory:init(options)
     -- border offset from inventory edge
     self.borderWidth = options.borderWidth or DEFAULT_BORDER_WIDTH
 
-    -- whether this inventory is publically accessible.
-    self.public = options.public or false
-
     self.totalSlotSize = self.slotSize + self.slotSeparation
 
     self.inventory = {}  -- Array where the items are actually stored.

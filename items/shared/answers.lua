@@ -28,7 +28,7 @@ umg.answer("canOpenInventory", function(ent, inventory)
         and are within range in terms of position.
     ]]
     local invEnt = inventory.owner
-    if inventory.public and invEnt.x and invEnt.y then
+    if invEnt.openable and invEnt.openable.public and invEnt.x and invEnt.y then
         if ent.x and ent.y then
             local dist = math.distance(ent, invEnt)
             if dist <= (invEnt.openable.distance or constants.DEFAULT_OPENABLE_DISTANCE) then

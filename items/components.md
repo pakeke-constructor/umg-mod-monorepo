@@ -100,6 +100,7 @@ return {
     -- right click to open this chest
     openable = {
         distance = 100; -- default distance that player can open the chest from
+        public = true/false, -- whether this inv is publically accessible
         openSound = "chestOpen"; -- default open/close sounds.
         closeSound = "chestClose",
     }
@@ -118,8 +119,6 @@ return {
             -- OPTIONAL VALUES:
             hotbar = true -- DST / minecraft like hotbar.
                 -- (only works for controllable entities)
-
-            public = true/false -- Whether inv is publically accessible
         })
     end
 }

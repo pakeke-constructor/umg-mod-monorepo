@@ -5,7 +5,7 @@ local Inventory = require("inventory")
 local inventoryGroup = umg.group("inventory")
 -- group of all entities that have an `inventory` component.
 
-local controlGroup = umg.group("controller", "inventory")
+local controlInventoryGroup = umg.group("controller", "inventory")
 
 
 
@@ -116,7 +116,7 @@ end
 
 local function getControlEntity(inv)
     local slf = client.getUsername()
-    for _, ent in ipairs(controlGroup) do
+    for _, ent in ipairs(controlInventoryGroup) do
         if ent.controller == slf then
             if inv:canBeOpenedBy(ent) then
                 return ent
@@ -137,7 +137,7 @@ local function getControlTransferEntity(inv1, inv2)
         are able to make the transfer between inv1 and inv2.
     ]]
     local slf = client.getUsername()
-    for _, ent in ipairs(controlGroup) do
+    for _, ent in ipairs(controlInventoryGroup) do
         if ent.controller == slf then
             if inv1:canBeOpenedBy(ent) then
                 if inv2 == inv1 or inv2:canBeOpenedBy(ent) then
@@ -273,11 +273,6 @@ local listener = base.client.input.Listener({priority = 5})
 
 
 
-local function click(self, inv)
-    
-end
-
-
 function listener:mousepressed(mx, my, button)
     local openInvs = openInventories.getOpenInventories()
     local len = #openInvs
@@ -384,6 +379,27 @@ client.on("setInventoryHoldSlot", function(ent, x, y)
     local inv = ent.inventory
     if inv then
         inv:_setHoldSlot(x, y)
+    end
+end)
+
+
+
+
+--[[
+    Automatically close any inventories that can no longer
+    be accessed by the player
+]]
+umg.on("gameUpdate", function(dt)
+    for _, inv in ipairs(openInventories.getOpenInventories())do
+        local keepOpen = false
+        for _, player in ipairs(controlInventoryGroup)do
+            if inv:canBeOpenedBy(player) then
+                keepOpen = true
+            end
+        end
+        if not keepOpen then
+            inv:close()
+        end
     end
 end)
 

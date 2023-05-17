@@ -33,7 +33,7 @@ end
 function openInventories.focus(inventory)
     -- Push this inventory to the top, so it's focused
     assert(inventory ~= openInventories, "bad call")
-    if invArray[invArray.size] == inventory then
+    if invArray[invArray:size()] == inventory then
         return -- its already focused
     end
     openInventories.close(inventory)
