@@ -15,6 +15,12 @@ if server then
     updateStackSize = require("server.update_stacksize")
 end
 
+local openInventories
+if client then
+    openInventories = require("client.open_inventories")
+end
+
+
 
 local assert2Numbers = typecheck.assert("number", "number")
 
@@ -514,6 +520,7 @@ end
 function Inventory:open()
     assert(client, "Only available client-side")
     umg.call("openInventory", self.owner)
+    openInventories.open(self)
     self.isOpen = true
 end
 
@@ -521,6 +528,7 @@ end
 function Inventory:close()
     assert(client, "Only available client-side")
     umg.call("closeInventory", self.owner)
+    openInventories.close(self)
     self.isOpen = false
 end
 

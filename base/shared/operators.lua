@@ -43,6 +43,11 @@ end
 
 
 
+operators.MIN = math.min
+
+operators.MAX = math.max
+
+
 function operators.COLLECT(a, b)
     --[[
         Collects all inputs into an array.

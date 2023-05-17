@@ -5,7 +5,7 @@ local Inventory = require("inventory")
 local inventoryGroup = umg.group("inventory")
 -- group of all entities that have an `inventory` component.
 
-local controlGroup = umg.group("controller")
+local controlGroup = umg.group("controller", "inventory")
 
 
 
@@ -34,7 +34,7 @@ end)
 
 
 
-local open_inventories = {}
+local openInventories = require("client.open_inventories")
 
 
 
@@ -71,18 +71,15 @@ inventoryGroup:onRemoved(function(ent)
     if focus_inv == inv then
         focus_inv, focus_x, focus_y = nil, nil, nil
     end
-    remove_from(open_inventories, inv)
+    openInventories.close(inv)
 end)
 
-
-umg.on("openInventory", function(owner_ent)
-    table.insert(open_inventories, owner_ent.inventory)
-end)
 
 
 umg.on("closeInventory", function(owner_ent)
+    -- todo: This is slightly hacky?
+    -- We shouldn't be using callbacks to determine critical state like this.
     local inv = owner_ent.inventory
-    remove_from(open_inventories, inv)
 
     if focus_inv == inv then
         -- stop holding of item
@@ -282,17 +279,14 @@ end
 
 
 function listener:mousepressed(mx, my, button)
-    local len = #open_inventories
+    local openInvs = openInventories.getOpenInventories()
+    local len = #openInvs
     local loop_used = false
     for i=len, 1, -1 do
-        local inv = open_inventories[i]
+        local inv = openInvs[i]
         if inv:withinBounds(mx, my) then
             loop_used = true
-            if i ~= len then
-                -- Push this inventory to the top, so it's focused
-                table.remove(open_inventories, i)
-                table.insert(open_inventories, inv)
-            end
+            openInventories.focus(inv)
             local slotX, slotY = inv:getSlot(mx,my)
             if slotX then
                 if inv:slotExists(slotX, slotY) then
@@ -351,7 +345,7 @@ end
 
 
 umg.on("slabUpdate", function()
-    for _, inv in ipairs(open_inventories) do
+    for _, inv in ipairs(openInventories.getOpenInventories()) do
         if inv.isOpen then
             inv:updateSlabUI()
         end
@@ -360,7 +354,7 @@ end)
 
 
 umg.on("mainDrawUI", function()
-    for _, inv in ipairs(open_inventories) do
+    for _, inv in ipairs(openInventories.getOpenInventories()) do
         inv:drawUI()
     end
     

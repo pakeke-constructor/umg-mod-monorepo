@@ -4,6 +4,11 @@ local constants = require("shared.constants")
 
 local openGroup = umg.group("openable", "inventory", "x", "y")
 
+local controllableGroup = umg.group("controllable", "inventory")
+
+
+local openInventories = require("client.open_inventories")
+
 
 
 local OPEN_BUTTON = 2
@@ -30,8 +35,11 @@ end
 
 
 
+local function isInControlOf(player)
+    return player.controller == client.getUsername()
+end
 
-local openInv = nil
+
 
 local DEFAULT_OPEN_SOUND = "chestOpenSound"
 local DEFAULT_CLOSE_SOUND = "chestCloseSound"
@@ -41,7 +49,7 @@ local function close(inv)
     local sound = opn.closeSound or DEFAULT_CLOSE_SOUND
     base.client.playSound(sound, 1, 0.7, nil, 0, 0.3)
     inv:close()
-    openInv = nil
+    openInventories.close(inv)
 end
 
 
@@ -53,7 +61,7 @@ local function open(inv)
         close(openInv)
     end
     inv:open()
-    openInv = inv
+    openInventories.open(inv)
 end
 
 
@@ -70,6 +78,13 @@ local function tryOpenInv(player, inv_ent)
         base.client.playSound(sound, 1, 0.7, nil, 0, 0.15)
     end
 end
+
+
+
+local function pollForClosure(openInventory)
+
+end
+
 
 
 umg.on("gameUpdate", function(dt)
@@ -108,19 +123,27 @@ function listener:mousepressed(mx, my, button)
 end
 
 
+local function pressButton(player)
+    if player.inventory and player.openable then
+        if player.inventory.isOpen then
+            if openInv then
+                close(openInv)
+            end
+            player.inventory:close()
+        else
+            player.inventory:open()
+        end
+    end
+end
+
+
 function listener:keypressed(key, scancode, isrepeat)
     local inputEnum = self:getInputEnum(scancode)
     -- TODO: Allow for controls to be set
     if inputEnum == base.client.input.BUTTON_2 then
-        local player = base.getPlayer()
-        if player.inventory and player.openable then
-            if player.inventory.isOpen then
-                if openInv then
-                    close(openInv)
-                end
-                player.inventory:close()
-            else
-                player.inventory:open()
+        for _, player in ipairs(controllableGroup)do
+            if isInControlOf(player) then
+                pressButton(player)
             end
         end
         self:lockKey(scancode)

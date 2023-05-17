@@ -72,5 +72,17 @@ end
 
 
 
+function Array:find(obj)
+    -- WARNING: Linear search O(n)
+    for i=1, self.len do
+        if self[i] == obj then
+            return i
+        end
+    end
+    return nil
+end
+
+
+
 
 return Array
