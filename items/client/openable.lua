@@ -6,7 +6,6 @@ local openGroup = umg.group("openable", "inventory", "x", "y")
 
 local controlInventoryGroup = umg.group("controllable", "inventory")
 
-
 local openInventories = require("client.open_inventories")
 
 
@@ -76,13 +75,11 @@ local listener = base.client.input.Listener({priority = 2})
 
 function listener:mousepressed(mx, my, button)
     if button == OPEN_BUTTON then
-        local player = base.getPlayer()
-        if (not openInv) or (not openInv:withinBounds(mx,my)) then
-            if player then
-                local inv_ent = searchForOpenable(player, mx, my)
-                if inv_ent then
-                    tryOpenInv(player, inv_ent)
-                end
+        -- Try open inventories
+        for _, player in ipairs(controlInventoryGroup)do
+            local inv_ent = searchForOpenable(player, mx, my)
+            if inv_ent then
+                tryOpenInv(player, inv_ent)
             end
         end
     end
@@ -97,6 +94,29 @@ local function pressButton(player)
             player.inventory:open()
         end
     end
+end
+
+
+
+local function areInventoriesOpen()
+    --[[
+        The client may be controlling multiple players at once.
+        This function checks if the majority of players have open inventories.
+    ]]
+    local ct = 0
+    local tot_ct = 0
+    for _, player in ipairs(controlInventoryGroup)do
+        local inv = player.inventory
+        tot_ct = tot_ct + 1
+        if inv:isOpen() then
+            ct = ct + 1
+        end
+    end
+
+    if tot_ct > 0 then
+        return (ct / tot_ct) > 0.5
+    end
+    return false
 end
 
 
