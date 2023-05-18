@@ -79,6 +79,8 @@
         "above" -- item is above head of entity
         "custom" -- custom positioning, defined by ent.itemHoldUpdate
 
+    itemHoldRotation = math.pi -- change the hold item's rotation
+
 
     -- ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING!
     itemHoldUpdate = function(item_ent, holder_ent)
@@ -107,12 +109,15 @@ return {
 
     image = "chest_image",
 
+    inventoryName = "My Inventory" -- We can name inventories like this
+
     init = function(ent, x, y)
         base.initializers.initXY(ent,x,y)
 
         -- Upon creation, the `inventory` component should be set to a table,
         -- like the following:
         chest.inventory = Inventory({
+            name = "my inventory", -- OR, name inventories like this
             width = 6 -- width of inventory slots
             height = 3 -- height
 

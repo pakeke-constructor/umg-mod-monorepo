@@ -4,7 +4,7 @@ local BOX_W, BOX_H = 18,18
 
 -- Drawing within world
 umg.on("drawEntity", function(ent)
-    if ent.itemName and ent.rgb then
+    if ent.groundItem and ent.rgb then
         love.graphics.setLineWidth(2)
         love.graphics.setColor(ent.rgb)
         local x,y = ent.x - BOX_W/2, ent.y - BOX_H/2

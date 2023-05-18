@@ -555,6 +555,80 @@ end
 
 
 
+local function clearPreviousHoldItem(self)
+    -- We remove position components from the previous item, since it's no longer being held.
+    -- When items are held, they are granted a position in the world.
+    local item = self.holdItem
+    self.holdItem = nil
+    if server and umg.exists(item) then
+        -- removeComponent should be server-authoritative generally
+        item:removeComponent("x")
+        item:removeComponent("y")
+    end
+end
+
+
+function Inventory:_setHoldSlot(slotX, slotY)
+    -- sets the hold item slot
+    -- NOTE: This is a private method!!! This should not be called normally
+    local prevItem = self:getHoldItem()
+    local newItem = self:get(slotX, slotY)
+    if prevItem == newItem then
+        return
+    end
+
+    local ownerEnt = self.owner
+    
+    if umg.exists(prevItem) then
+        clearPreviousHoldItem(self)
+        umg.call("unequipItem", ownerEnt, prevItem)
+    end
+
+    if umg.exists(newItem) then
+        self.holdItem = newItem
+        umg.call("equipItem", ownerEnt, newItem)
+    end
+end
+
+
+
+function Inventory:hold(slotX, slotY)
+    --[[
+        The owner of this inventory will now hold the item in this slot.
+
+        Can be called client OR server,
+        but only works on client for entities controlled by the user.
+    ]]
+    assert2Numbers(slotX, slotY)
+
+    if client then
+        local owner_ent = umg.exists(self.owner) and self.owner
+        if owner_ent.controller == client.getUsername() then
+            client.send("setInventoryHoldSlot", owner_ent, slotX, slotY)
+        end
+    elseif server then
+        self:_setHoldSlot(slotX, slotY)
+        local owner_ent = umg.exists(self.owner) and self.owner
+        if owner_ent then
+            server.broadcast("setInventoryHoldSlot", owner_ent, slotX, slotY)
+        end
+    end
+end
+
+
+function Inventory:getHoldItem()
+    return self.holdItem
+end
+
+
+
+
+
+
+
+
+
+
 --[[
 Warning: 
 Yucky, bad rendering code below this point!!!
@@ -698,73 +772,6 @@ end
 
 
 
-local function clearPreviousHoldItem(self)
-    -- We remove position components from the previous item, since it's no longer being held.
-    -- When items are held, they are granted a position in the world.
-    local item = self.holdItem
-    self.holdItem = nil
-    if server and umg.exists(item) then
-        -- removeComponent should be server-authoritative generally
-        item:removeComponent("x")
-        item:removeComponent("y")
-    end
-end
-
-
-function Inventory:_setHoldSlot(slotX, slotY)
-    -- sets the hold item slot
-    -- NOTE: This is a private method!!! This should not be called normally
-    local prevItem = self:getHoldItem()
-    local newItem = self:get(slotX, slotY)
-    if prevItem == newItem then
-        return
-    end
-
-    local ownerEnt = self.owner
-    
-    if umg.exists(prevItem) then
-        clearPreviousHoldItem(self)
-        umg.call("unequipItem", ownerEnt, prevItem)
-    end
-
-    if umg.exists(newItem) then
-        self.holdItem = newItem
-        umg.call("equipItem", ownerEnt, newItem)
-    end
-end
-
-
-
-function Inventory:hold(slotX, slotY)
-    --[[
-        The owner of this inventory will now hold the item in this slot.
-
-        Can be called client OR server,
-        but only works on client for entities controlled by the user.
-    ]]
-    assert2Numbers(slotX, slotY)
-
-    if client then
-        local owner_ent = umg.exists(self.owner) and self.owner
-        if owner_ent.controller == client.getUsername() then
-            client.send("setInventoryHoldSlot", owner_ent, slotX, slotY)
-        end
-    elseif server then
-        self:_setHoldSlot(slotX, slotY)
-        local owner_ent = umg.exists(self.owner) and self.owner
-        if owner_ent then
-            server.broadcast("setInventoryHoldSlot", owner_ent, slotX, slotY)
-        end
-    end
-end
-
-
-function Inventory:getHoldItem()
-    return self.holdItem
-end
-
-
-
 
 local sqrt = math.sqrt
 
@@ -830,6 +837,28 @@ end
 
 
 
+
+local function getInventoryName(self)
+    local ent = self.owner
+    return (ent.inventoryName or self.name) or ""
+end
+
+
+
+local function getNameTextHeight(self)
+    local font = love.graphics.getFont()
+    local name = getInventoryName(self)
+    return font:getHeight(name)
+end
+
+
+
+local function drawExitButton(x, y)
+    love.graphics.rectangle()
+end
+
+
+
 function Inventory:drawUI()
     assert(client, "Shouldn't be called serverside")
     if not self:isOpen() then
@@ -839,15 +868,21 @@ function Inventory:drawUI()
     love.graphics.push("all")
     -- No need to scale for UI- this should be done by draw system.
 
+
     local col = self.color or WHITE
+    -- total width/height of inventory
     local W = self.width * self.totalSlotSize + self.borderWidth * 2
     local H = self.height * self.totalSlotSize + self.borderWidth * 2
+
+    -- the top-left coords of inventory
+    local X = self.draw_x - self.borderWidth
+    local Y = self.draw_y - self.borderWidth
     
     love.graphics.setLineWidth(2)
     
     -- Draw inventory body
     love.graphics.setColor(col) 
-    love.graphics.rectangle("fill", self.draw_x - self.borderWidth, self.draw_y - self.borderWidth, W, H)
+    love.graphics.rectangle("fill", X, Y, W, H)
 
     local offset = self.slotSeparation / 2
 
@@ -862,11 +897,11 @@ function Inventory:drawUI()
     end
 
     love.graphics.setLineWidth(2)
-    drawHighlights(self.draw_x-self.borderWidth, self.draw_y-self.borderWidth, W, H, col[1],col[2],col[3])
+    drawHighlights(X, Y, W, H, col[1],col[2],col[3])
 
     -- Draw outline
     love.graphics.setColor(0,0,0)
-    love.graphics.rectangle("line", self.draw_x - self.borderWidth, self.draw_y - self.borderWidth, W, H)
+    love.graphics.rectangle("line", X, Y, W, H)
 
     local callbacks = self.owner.inventoryCallbacks
     if callbacks and callbacks.draw then
