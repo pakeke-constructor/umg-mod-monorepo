@@ -1,56 +1,50 @@
 
-
 # Abilities:
+
+Okay:
+We want cool emergent behaviour with abilities.
+
+Stuff like:
+- Abilities editing themselves
+- Abilities trasferring between entities
+- Abilities swapping filters and functionality
+- Abilities triggering each other arbitrarily
+
+
+=======================================
 
 
 Abilities are composed of 4 parts:
 
+```
 - Trigger (what triggers ability)
-- Target (what the ability targets)
+    - (NO ARGS)
+
+- Target (what the ability targets)  
+    - args:  (sourceEnt) : returns Array<Entity>
+
 - Filter (whether the ability should occur)
+    - args:  (sourceEnt, targetEnt) : returns boolean
+
 - Action (what happens when the ability triggers)
-
-
-
-
-Before we create abilities, we must define all the appropriate actions,
-filters, targets, and triggers in the respective files.
-From there, we can then simply create abilities using strings
-
-
-Creating abilities:
-
-```lua
-
-local ability = newAbility({
-    trigger = "roundStart", -- On round start:
-    target = "matching", -- for all matching allies,
-    filter = "moreHealthThan", -- if the target has less health than me,
-    action = "buffAttackSpeed" --buff attack speed by X
-})
-
+    - args:  (sourceEnt)
 
 ```
 
 
 
 
-Trigger:
-(no args)
+Creating abilities:
+An ability should just be a regular table:
 
-Target:
-If the target is multiple entities, then the ability is applied/filtered to multiple entities.
-(no args)
+```lua
 
-
-
-Filter:
-a function that returns true/false, whether an ability should occur. (takes args:
-(sourceEnt, targetEnt)
-
+local ability = {
+    trigger = "roundStart", -- On round start:
+    target = "matching", -- for all matching allies,
+    filter = "moreHealthThan", -- if the target has less health than me,
+    action = "buffAttackSpeed" --buff attack speed by X
+}
 
 
-Action:
-What happens when an ability triggers. Takes args:
-(sourceEnt, targetEnt, level, depth)
-
+```

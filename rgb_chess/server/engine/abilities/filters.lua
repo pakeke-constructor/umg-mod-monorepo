@@ -2,12 +2,17 @@
 
 local filters = {}
 
-local Filter = base.Class("rgb-chess:Action")
+local Filter = base.Class("rgb-chess:Filter")
 
 
 local nameToFilter = {--[[
     [name] = Filter
 ]]}
+
+
+function filters.getFilter(name)
+    return nameToFilter[name]
+end
 
 
 
@@ -32,8 +37,8 @@ function Filter:drawSlabUI()
 end
 
 
-function Filter:apply(...)
-    self.action(...)
+function Filter:filter(...)
+    return self.filter(...)
 end
 
 
@@ -80,7 +85,6 @@ Filter({
 
 
 
-
 Filter({
     name = "hasInventorySpace",
     filter = function(sourceEnt, targetEnt)
@@ -112,11 +116,6 @@ for enum, _ in pairs(constants.UNIT_TYPES) do
         description = "If the target is a " .. upperName
     })
 end
-
-
-
-
-
 
 
 

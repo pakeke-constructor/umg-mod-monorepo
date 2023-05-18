@@ -49,6 +49,3 @@ umg.on("@tick", function(dt)
 end)
 
 
-
-
-

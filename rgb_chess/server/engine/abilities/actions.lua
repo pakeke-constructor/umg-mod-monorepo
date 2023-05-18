@@ -10,6 +10,11 @@ local nameToAction = {--[[
 ]]}
 
 
+function actions.getAction(name)
+    return nameToAction[name]
+end
+
+
 
 function Action:init(options)
     assert(options.name, "?")

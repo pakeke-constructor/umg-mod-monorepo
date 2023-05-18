@@ -42,8 +42,11 @@ TODO: Redo these cards!!! This whole paragon spawning thing is very one-dimensio
 - `king_of_spades_card`: Delete the lowest health [color] ally. In return, gain 4 [color] items
 - `king_of_hearts_card`: Spawn 2 [color] items
 
-- `queen_of_spades_card`: Transfer an ability from the lowest health [color] ally to the highest health [color] ally
+MAKE THESE CARDS SOMEWHAT RARE:
+- `queen_of_spades_card`: Swap abilities between two random [color] allies
 - `queen_of_diamonds_card`: Instantly proc the abilities of [color] allies
+- `queen_of_hearts_card`: Shuffle the ability filters of all [color] allies
+- `queen_of_clubs_card`: Shuffle the ability triggers of all [color] allies
 
 - `null_card`: Subtract [color] from a random [color] ally
 
