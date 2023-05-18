@@ -26,7 +26,7 @@ local abilityGroups = {
 ]]
 }
 
-
+ 
 
 local getABGroupTc = typecheck.assert("string")
 
