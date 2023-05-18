@@ -226,6 +226,17 @@ proxyToAll("endTurn", "onEndTurn")
 proxyToAll("startBattle", "onStartBattle")
 
 
+umg.on("itemAdded", function(inventoryOwner, itemEnt)
+    if rgb.isUnit(inventoryOwner) then
+        callForTeam("onAllyEquip", inventoryOwner.rgbTeam, itemEnt)
+    end
+end)
+umg.on("itemRemoved", function(inventoryOwner, itemEnt)
+    if rgb.isUnit(inventoryOwner) then
+        callForTeam("onAllyUnequip", inventoryOwner.rgbTeam, itemEnt)
+    end
+end)
+
 
 -- We need to ensure all triggerTypes are being dealt with.
 -- This is just for debug/safety purposes.

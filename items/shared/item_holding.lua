@@ -84,7 +84,8 @@ function itemHoldPositioning.recoil(item_ent, holder_ent)
     local hold_dist = getHoldDistance(item_ent, holder_ent)
     hold_dist = hold_dist * recoil_amount
 
-    item_ent.rot = -math.atan2(dx,dy) + math.pi/2 + sinv/3
+    local addRot = item_ent.itemHoldRotation or 0
+    item_ent.rot = addRot + -math.atan2(dx,dy) + math.pi/2 + sinv/3
     item_ent.scaleY = dx>0 and 1 or -1
     item_ent.x = holder_ent.x + dx * hold_dist
     item_ent.y = holder_ent.y + dy * hold_dist

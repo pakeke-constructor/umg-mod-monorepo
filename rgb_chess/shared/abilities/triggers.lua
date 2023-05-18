@@ -27,8 +27,8 @@ local abilityTriggers = {
     "onAllyShieldBreak", -- (allyEnt)
     "onAllyShieldExpire", -- (allyEnt, shieldSize)
 
---    "onAllyEquip", -- (allyEnt, itemEnt)
---    "onAllyUnequip", -- (allyEnt, itemEnt)
+    "onAllyEquip", -- (allyEnt, itemEnt)
+    "onAllyUnequip", -- (allyEnt, itemEnt)
  
     "onReroll",-- ()
     "onStartTurn",-- ()

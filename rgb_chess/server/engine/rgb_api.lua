@@ -80,7 +80,7 @@ local damageTc = typecheck.assert("entity", "entity", "number")
 
 function rgbAPI.damage(sourceEnt, targetEnt, damage)
     damageTc(sourceEnt, targetEnt, damage)
-    local bullet = server.entities.projectile(sourceEnt.x, sourceEnt.y, {
+    local bullet = server.entities.damage(sourceEnt.x, sourceEnt.y, {
         projectileType = constants.PROJECTILE_TYPES.DAMAGE,
         attackDamage = damage,
         targetEntity = targetEnt,

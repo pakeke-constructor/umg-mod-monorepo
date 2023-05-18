@@ -40,9 +40,9 @@ return {
 
     makeUnitInventory = {
         -- automatically generates an inventory
-        width = 5,
+        width = 3,
         height = 1,
-    },
+    }
 }
 
 

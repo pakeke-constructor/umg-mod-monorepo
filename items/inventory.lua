@@ -169,10 +169,17 @@ function Inventory:_rawset(x, y, item_ent)
     end
 
     local i = self:getIndex(x,y)
+    -- TODO: Is it fine to call these callbacks here???
     if item_ent then
         assertItem(item_ent)
+        if item_ent ~= self.inventory[i] then
+            umg.call("itemAdded", self.owner, item_ent)
+        end
         self.inventory[i] = item_ent
     else
+        if self.inventory[i] then
+            umg.call("itemRemoved", self.owner, self.inventory[i])
+        end
         self.inventory[i] = nil
     end
 end

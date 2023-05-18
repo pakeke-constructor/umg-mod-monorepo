@@ -1,6 +1,7 @@
 
 return {
     groundItem = true,
+    spinning = {},
 
     init = function(e, x, y)
         e.x = x

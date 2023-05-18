@@ -9,6 +9,7 @@ return umg.extend(abstractProjectile, {
 
     init = function(ent, x, y, options)
         assert(options.attackDamage, "?")
+        assert(options.sourceEntity, "?")
         -- todo: Do we need this here?
         ent:superInit(x,y,options)
     end
