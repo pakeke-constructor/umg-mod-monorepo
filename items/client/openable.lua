@@ -77,28 +77,20 @@ function listener:mousepressed(mx, my, button)
     if button == OPEN_BUTTON then
         -- Try open inventories
         for _, player in ipairs(controlInventoryGroup)do
-            local inv_ent = searchForOpenable(player, mx, my)
-            if inv_ent then
-                tryOpenInv(player, inv_ent)
+            if isInControlOf(player) then
+                local inv_ent = searchForOpenable(player, mx, my)
+                if inv_ent then
+                    tryOpenInv(player, inv_ent)
+                end
             end
         end
     end
 end
 
 
-local function pressButton(player)
-    if player.inventory and player.openable then
-        if player.inventory.isOpen then
-            player.inventory:close()
-        else
-            player.inventory:open()
-        end
-    end
-end
 
 
-
-local function areInventoriesOpen()
+local function areMostInventoriesOpen()
     --[[
         The client may be controlling multiple players at once.
         This function checks if the majority of players have open inventories.
@@ -106,10 +98,12 @@ local function areInventoriesOpen()
     local ct = 0
     local tot_ct = 0
     for _, player in ipairs(controlInventoryGroup)do
-        local inv = player.inventory
-        tot_ct = tot_ct + 1
-        if inv:isOpen() then
-            ct = ct + 1
+        if isInControlOf(player) then
+            local inv = player.inventory
+            tot_ct = tot_ct + 1
+            if inv:isOpen() then
+                ct = ct + 1
+            end
         end
     end
 
@@ -120,14 +114,33 @@ local function areInventoriesOpen()
 end
 
 
+local function openAllPlayerInventories()
+    for _, player in ipairs(controlInventoryGroup)do
+        if isInControlOf(player) then
+            local inv = player.inventory
+            inv:open()
+        end
+    end
+end
+
+
+local function closeAllInventories()
+    for _, inv in ipairs(openInventories.getOpenInventories())do
+        inv:close()
+    end
+end
+
+
+
 function listener:keypressed(key, scancode, isrepeat)
     local inputEnum = self:getInputEnum(scancode)
     -- TODO: Allow for controls to be set
     if inputEnum == base.client.input.BUTTON_2 then
-        for _, player in ipairs(controlInventoryGroup)do
-            if isInControlOf(player) then
-                pressButton(player)
-            end
+        if areMostInventoriesOpen() then
+            -- most player inventories are open, close all inventories
+            closeAllInventories()
+        else
+            openAllPlayerInventories()
         end
         self:lockKey(scancode)
     end

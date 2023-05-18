@@ -53,18 +53,6 @@ local focus_half_stack -- whether only half a stack is being held
 local dragging_inv
 
 
-local function remove_from(tabl, item)
-    -- removes item from flat array.
-    -- Usually I would use sets, but for this I want to modify the order easily.
-    -- (Messing around with the order of sets is a recipe for disaster.)
-    local len = #tabl 
-    for i=len, 1, -1 do
-        if tabl[i] == item then
-            table.remove(tabl, i)
-        end
-    end
-end
-
 
 inventoryGroup:onRemoved(function(ent)
     local inv = ent.inventory
