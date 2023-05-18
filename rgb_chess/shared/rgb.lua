@@ -163,7 +163,11 @@ end
 
 
 function rgb.isSorcerer(ent)
-    return ent.unitType == constants.UNIT_TYPES.SORCERER
+    return rgb.isUnitOfType(ent, constants.UNIT_TYPES.SORCERER)
+end
+
+function rgb.isUnitOfType(ent, enum)
+    return rgb.isUnit(ent) and rgb.unitType == enum
 end
 
 

@@ -364,7 +364,7 @@ end
 
 
 
-function Board:rerollAllCards()
+function Board:reroll()
     local rgb_team = self:getTeam()
 
     for shopIndex=1, self.shopSize do
