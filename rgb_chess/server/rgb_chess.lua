@@ -37,6 +37,7 @@ end
 umg.on("@playerJoin", function(username)
     local plyr_ent = server.entities.player(0, 0)
     plyr_ent.controller = username
+    plyr_ent.rgbTeam = username
 
     rgb.setState(rgb.getState()) -- this doesnt change the state,
     -- we just need to update the new player.
@@ -163,7 +164,7 @@ end
 
 
 local function startGame()
-    assert(rgb.state == rgb.STATES.LOBBY_STATE)
+    assert(rgb.state == rgb.STATES.LOBBY_STATE, "?")
     for _,player in ipairs(server.getPlayers()) do
         allocateBoard(player)
     end

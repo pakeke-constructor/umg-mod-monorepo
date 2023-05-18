@@ -3,7 +3,10 @@
 
 return {
     image = "crate",
-    openable = {distance = 100};
+    openable = {
+        distance = 100,
+        public = true
+    };
 
     init = function(ent, x,y)
         ent.x = x

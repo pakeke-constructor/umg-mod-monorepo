@@ -21,7 +21,7 @@ local function searchForOpenable(player, mouse_x, mouse_y)
     local best_inv_ent = nil
     local x, y = base.client.camera:toWorldCoords(mouse_x, mouse_y)
     for _, ent in ipairs(openGroup) do
-        -- todo; spatial partition this.
+        -- TODO: IMPORTANT: spatial partition this.
         local dist = math.distance(ent, player)
         local mouse_dist = math.distance(ent.x-x,ent.y-y)
         local inv = ent.inventory
@@ -125,7 +125,12 @@ end
 
 
 local function closeAllInventories()
+    local buffer = base.Array()
+    -- gotta buffer it, since we are removing during iter
     for _, inv in ipairs(openInventories.getOpenInventories())do
+        buffer:add(inv)
+    end
+    for _, inv in ipairs(buffer)do
         inv:close()
     end
 end

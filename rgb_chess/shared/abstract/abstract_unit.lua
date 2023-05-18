@@ -35,7 +35,7 @@ return {
     },
 
     openable = {
-        distance = 0xfffff -- can open from large distance away.
+        distance = 200 -- can open from large distance away.
     },
 
     makeUnitInventory = {

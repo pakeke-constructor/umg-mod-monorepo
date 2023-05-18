@@ -5,7 +5,7 @@ return {
 
     maxStackSize = 1,
 
-    itemType = constants.ITEM_TYPES.PASSIVE,
+    itemType = constants.ITEM_TYPES.USABLE,
 
     itemHoldType = "recoil",
 

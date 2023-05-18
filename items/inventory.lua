@@ -66,7 +66,7 @@ function Inventory:init(options)
     self.hovering_x = nil -- The slot that the entity is hovering over.
     self.hovering_y = nil
 
-    self.isOpen = false
+    self.is_open = false
 
     self.owner = nil -- The entity that owns this inventory.
     -- Should be set by some system.
@@ -518,7 +518,7 @@ function Inventory:open()
     assert(client, "Only available client-side")
     umg.call("openInventory", self.owner)
     openInventories.open(self)
-    self.isOpen = true
+    self.is_open = true
 end
 
 
@@ -526,7 +526,13 @@ function Inventory:close()
     assert(client, "Only available client-side")
     umg.call("closeInventory", self.owner)
     openInventories.close(self)
-    self.isOpen = false
+    self.is_open = false
+end
+
+
+
+function Inventory:isOpen()
+    return self.is_open
 end
 
 
@@ -819,7 +825,7 @@ end
 
 function Inventory:drawUI()
     assert(client, "Shouldn't be called serverside")
-    if not self.isOpen then
+    if not self:isOpen() then
         return
     end
 

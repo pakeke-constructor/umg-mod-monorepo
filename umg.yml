@@ -1,4 +1,6 @@
 globals:
+  math.distance:
+    any: true
   client.assets:
     any: true
   client.getUsername:

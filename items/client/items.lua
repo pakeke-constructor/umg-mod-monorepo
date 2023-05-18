@@ -329,7 +329,7 @@ end
 
 umg.on("slabUpdate", function()
     for _, inv in ipairs(openInventories.getOpenInventories()) do
-        if inv.isOpen then
+        if inv.is_open then
             inv:updateSlabUI()
         end
     end
