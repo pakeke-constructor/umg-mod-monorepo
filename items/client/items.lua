@@ -261,6 +261,36 @@ local listener = base.client.input.Listener({priority = 5})
 
 
 
+
+
+local function inventoryMousePress(listenr, inv, mx, my, button)
+    --[[
+        called when the mouse is pressed, and we are within an inventory
+    ]]
+    openInventories.focus(inv)
+    local slotX, slotY = inv:getSlot(mx,my)
+    if slotX then
+        if inv:slotExists(slotX, slotY) then
+            if button == ALPHA_BUTTON then
+                listenr:lockMouseButton(ALPHA_BUTTON)
+                executeAlphaInteraction(inv, slotX, slotY)
+            elseif button == BETA_BUTTON then
+                listenr:lockMouseButton(BETA_BUTTON)
+                executeBetaInteraction(inv, slotX, slotY)
+            end
+        elseif button == ALPHA_BUTTON then
+            listenr:lockMouseButton(ALPHA_BUTTON)
+            dragging_inv = inv
+            resetHoldingInv()
+        end
+    elseif button == ALPHA_BUTTON then
+        listenr:lockMouseButton(ALPHA_BUTTON)
+        dragging_inv = inv
+        resetHoldingInv()
+    end
+end
+
+
 function listener:mousepressed(mx, my, button)
     local openInvs = openInventories.getOpenInventories()
     local len = #openInvs
@@ -269,29 +299,12 @@ function listener:mousepressed(mx, my, button)
         local inv = openInvs[i]
         if inv:withinBounds(mx, my) then
             loop_used = true
-            openInventories.focus(inv)
-            local slotX, slotY = inv:getSlot(mx,my)
-            if slotX then
-                if inv:slotExists(slotX, slotY) then
-                    if button == ALPHA_BUTTON then
-                        self:lockMouseButton(ALPHA_BUTTON)
-                        executeAlphaInteraction(inv, slotX, slotY)
-                    elseif button == BETA_BUTTON then
-                        self:lockMouseButton(BETA_BUTTON)
-                        executeBetaInteraction(inv, slotX, slotY)
-                    end
-                elseif button == ALPHA_BUTTON then
-                    self:lockMouseButton(ALPHA_BUTTON)
-                    dragging_inv = inv
-                    resetHoldingInv()
-                end
-                break -- done; only 1 interaction should be done per click.
-            elseif button == ALPHA_BUTTON then
-                self:lockMouseButton(ALPHA_BUTTON)
-                dragging_inv = inv
-                resetHoldingInv()
-                break
+            if inv:withinExitButtonBounds(mx, my) then
+                inv:close()
+            else
+                inventoryMousePress(self, inv, mx, my, button)
             end
+            break -- Only one interaction per inventory allowed.
         end
     end
 

@@ -641,8 +641,9 @@ function Inventory:withinBounds(mouse_x, mouse_y)
     -- within the inventory interface
     local ui_scale = getUIScale()
     local mx, my = mouse_x / ui_scale, mouse_y / ui_scale
-    local x_valid = (self.draw_x - self.borderWidth <= mx) and (mx <= self.draw_x + (self.width * self.totalSlotSize) + self.borderWidth)
-    local y_valid = (self.draw_y - self.borderWidth <= my) and (my <= self.draw_y + (self.height * self.totalSlotSize) + self.borderWidth)
+    local x,y,w,h = self:getDrawBounds()
+    local x_valid = (x <= mx) and (mx <= x+w)
+    local y_valid = (y <= my) and (my <= y+h)
     return x_valid and y_valid
 end
 
@@ -838,24 +839,91 @@ end
 
 
 
+
+
+local EXIT_BUTTON_SIZE = 8
+local EXIT_BUTTON_BORDER = 3
+
+local EXTRA_TOP_BORDER = 8
+
+function getExitButtonBounds(self)
+    local x,y,w,h = self:getDrawBounds()
+    local bx = x + w - EXIT_BUTTON_SIZE - EXIT_BUTTON_BORDER
+    local by = y + EXIT_BUTTON_BORDER
+    return bx,by, EXIT_BUTTON_SIZE,EXIT_BUTTON_SIZE
+end
+
+
+function Inventory:withinExitButtonBounds(mouse_x, mouse_y)
+    -- returns true/false, depending on whether mouse_x or mouse_y is
+    -- within the exit button region
+    local ui_scale = getUIScale()
+    local mx, my = mouse_x / ui_scale, mouse_y / ui_scale
+    local x,y,w,h = getExitButtonBounds(self)
+    local x_valid = (x <= mx) and (mx <= x+w)
+    local y_valid = (y <= my) and (my <= y+h)
+    return x_valid and y_valid
+end
+
+
+
+function Inventory:getDrawBounds()
+    assert(client, "Shouldn't be called serverside")
+    -- total width/height of inventory
+    local w = self.width * self.totalSlotSize + self.borderWidth * 2
+    local h = self.height * self.totalSlotSize + self.borderWidth * 2 + EXTRA_TOP_BORDER
+
+    -- the top-left coords of inventory
+    local x = self.draw_x - self.borderWidth
+    local y = self.draw_y - self.borderWidth - EXTRA_TOP_BORDER
+    return x,y, w,h
+end
+
+
+
+
+
+local function drawExitButton(self)
+    love.graphics.setLineWidth(1)
+    local x,y,w,h = getExitButtonBounds(self)
+    local col = self.color or WHITE
+    love.graphics.setColor(col)
+    love.graphics.rectangle("fill", x,y,w,h)
+
+    love.graphics.setColor(col[1]/2, col[2]/2, col[3]/2)
+    love.graphics.line(x,y, x+w,y+h)
+    love.graphics.line(x+w,y, x,y+h)
+
+    love.graphics.setColor(0,0,0)
+    love.graphics.rectangle("line", x,y,w,h)
+end
+
+
+
+
 local function getInventoryName(self)
     local ent = self.owner
-    return (ent.inventoryName or self.name) or ""
+    return (ent.inventoryName or self.name)
 end
 
 
 
-local function getNameTextHeight(self)
-    local font = love.graphics.getFont()
+local INVENTORY_NAME_OFFSET = 4
+
+local function drawInventoryName(self)
     local name = getInventoryName(self)
-    return font:getHeight(name)
+    if name then
+        local x,y,_,_ = self:getDrawBounds()
+        local X = x + INVENTORY_NAME_OFFSET
+        local Y = y + INVENTORY_NAME_OFFSET
+        local font = love.graphics.getFont()
+        local w,h = font:getWidth(name), font:getHeight()
+        local scale = EXTRA_TOP_BORDER / h
+        love.graphics.setColor(0,0,0,1)
+        love.graphics.print(name, X,Y,0,scale,scale)
+    end
 end
 
-
-
-local function drawExitButton(x, y)
-    love.graphics.rectangle()
-end
 
 
 
@@ -868,21 +936,17 @@ function Inventory:drawUI()
     love.graphics.push("all")
     -- No need to scale for UI- this should be done by draw system.
 
+    local X,Y,W,H = self:getDrawBounds()
 
     local col = self.color or WHITE
-    -- total width/height of inventory
-    local W = self.width * self.totalSlotSize + self.borderWidth * 2
-    local H = self.height * self.totalSlotSize + self.borderWidth * 2
-
-    -- the top-left coords of inventory
-    local X = self.draw_x - self.borderWidth
-    local Y = self.draw_y - self.borderWidth
     
     love.graphics.setLineWidth(2)
     
     -- Draw inventory body
     love.graphics.setColor(col) 
     love.graphics.rectangle("fill", X, Y, W, H)
+
+    drawInventoryName(self)
 
     local offset = self.slotSeparation / 2
 
@@ -903,10 +967,9 @@ function Inventory:drawUI()
     love.graphics.setColor(0,0,0)
     love.graphics.rectangle("line", X, Y, W, H)
 
-    local callbacks = self.owner.inventoryCallbacks
-    if callbacks and callbacks.draw then
-        callbacks.draw(self)
-    end
+    drawExitButton(self)
+
+    umg.call("drawInventory", self.owner)
     
     love.graphics.pop()
 end

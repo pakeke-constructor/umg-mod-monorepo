@@ -54,6 +54,7 @@ return {
     speed = PLAYER_SPEED;
     agility = PLAYER_SPEED * 20;
 
+    inventoryName = "my inventoryyyyyyyyyyyyyyyyyyyyyyyyyj",
     openable = {},
 
     init = function(e, x, y, uname)
