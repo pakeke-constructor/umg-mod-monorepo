@@ -9,6 +9,7 @@ Stuff like:
 - Abilities trasferring between entities
 - Abilities swapping filters and functionality
 - Abilities triggering each other arbitrarily
+- Abilities on one entity, applying to another entity
 
 
 =======================================
@@ -27,7 +28,7 @@ Abilities are composed of 4 parts:
     - args:  (sourceEnt, targetEnt) : returns boolean
 
 - Action (what happens when the ability triggers)
-    - args:  (sourceEnt)
+    - args:  (sourceEnt, targetEnt)
 
 ```
 
@@ -42,9 +43,11 @@ An ability should just be a regular table:
 local ability = {
     trigger = "roundStart", -- On round start:
     target = "matching", -- for all matching allies,
-    filter = "moreHealthThan", -- if the target has less health than me,
+    filters = {"moreHealthThan", "notSelf"},
+    -- if the target has less health than me, and is not self
     action = "buffAttackSpeed" --buff attack speed by X
 }
 
 
 ```
+
