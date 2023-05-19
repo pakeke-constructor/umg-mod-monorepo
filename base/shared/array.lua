@@ -83,6 +83,17 @@ function Array:find(obj)
 end
 
 
+function Array:filter(func)
+    local newArray = Array()
+    for i=1, self.len do
+        local item = self[i]
+        if func(item) then
+            newArray:add(item)
+        end
+    end
+    return newArray
+end
+
 
 
 return Array

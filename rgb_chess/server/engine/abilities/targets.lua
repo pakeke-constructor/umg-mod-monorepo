@@ -44,54 +44,45 @@ function Target:getTargets(...)
 end
 
 
+local function getAllies(board)
+    local buffer = base.Array()
+    for _, ent in board:iterUnits() do
+        buffer:add(ent)
+    end
+    return buffer
+end
 
 
 Target({
-    name = "matching",
-    getTargets = function(sourceEnt)
-        local buffer = base.Array()
-        for _, ent in rgb.getBoard(sourceEnt.rgbTeam):iterUnits()do
-            if ent ~= sourceEnt and rgb.match(sourceEnt, ent) then
-                buffer:add(ent)
-            end
-        end
-        return buffer
+    name = "allies",
+    getTargets = function(board)
+        return getAllies(board)
     end,
-    description = "For all matching allies:"
-})
-
-
-
-Target({
-    name = "matchingSelfIncluded",
-    getTargets = function(sourceEnt)
-        local buffer = base.Array()
-        for _, ent in rgb.getBoard(sourceEnt.rgbTeam):iterUnits() do
-            if rgb.match(sourceEnt, ent) then
-                buffer:add(ent)
-            end
-        end
-        return buffer
-    end,
-    description = "For all matching allies, including self:"
+    description = "For all allies:"
 })
 
 
 
 
-Target({
-    name = "unmatching",
-    getTargets = function(sourceEnt)
-        local buffer = base.Array()
-        for _, ent in rgb.getBoard(sourceEnt.rgbTeam):iterUnits()do
-            if not rgb.match(sourceEnt, ent) then
-                buffer:add(ent)
-            end
-        end
-        return buffer
-    end,
-    description = "For all non-matching allies:"
-})
+
+for _, enum in ipairs(constants.UNIT_TYPES)do
+    local postFix = "Allies"
+    local enumLowered = enum:lower() 
+
+    local function filter(ent)
+        return rgb.isUnitOfType(ent, enum)
+    end
+
+    Target({
+        name = enumLowered .. postFix,
+        getTargets = function(board)
+            return getAllies(board):filter(filter)
+        end,
+        description = "For all " .. enumLowered .. " allies:"
+    })
+end
+
+
 
 
 

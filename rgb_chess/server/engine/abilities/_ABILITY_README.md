@@ -18,10 +18,10 @@ Abilities are composed of 4 parts:
 
 ```
 - Trigger (what triggers ability)
-    - (NO ARGS)
+    ---> causes ability to trigger
 
 - Target (what the ability targets)  
-    - args:  (sourceEnt) : returns Array<Entity>
+    - args: (board) : returns Array<Entity>
 
 - Filter (whether the ability should occur)
     - args:  (sourceEnt, targetEnt) : returns boolean
