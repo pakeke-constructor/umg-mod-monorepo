@@ -83,15 +83,15 @@ local function applyAbility(unitEnt, ability)
 end
 
 
-local function applyAbilities(ent)
-    for _, ability in ipairs(ent.abilities)do
+local function applyAllAbilities(ent, abilityList)
+    for _, ability in ipairs(abilityList)do
         applyAbility(ent, ability)
     end
 end
 
 
-local function applyAbilitiesOfType(ent, triggerType)
-    for _, ability in ipairs(ent.abilities)do
+local function applyAbilitiesOfType(ent, abilityList, triggerType)
+    for _, ability in ipairs(abilityList)do
         if ability.trigger == triggerType then
             applyAbility(ent, ability)
         end
@@ -109,9 +109,28 @@ function abilities.trigger(triggerType, rgbTeam)
     local arr = triggerMapping[triggerType] or EMPTY
     for _, ent in ipairs(arr)do
         if ent.rgbTeam == rgbTeam then
-            applyAbilitiesOfType(ent, triggerTc)
+            applyAbilitiesOfType(ent, ent.abilities, triggerTc)
         end
     end
+end
+
+
+
+
+
+local triggerDirectlyTc = typecheck.assert("entity", "table")
+
+function abilities.triggerAbilityDirectly(ent, ability)
+    triggerDirectlyTc(ent, ability)
+    applyAbility(ent, ability)
+end
+
+
+
+function abilities.triggerAbilitiesDirectly(ent)
+    assert(umg.exists(ent), "?")
+    assert(rgb.isUnit(ent), "not a unit entity")
+    applyAbilities(ent)
 end
 
 

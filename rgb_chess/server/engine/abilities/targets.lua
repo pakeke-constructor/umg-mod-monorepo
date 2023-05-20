@@ -86,13 +86,13 @@ Target({
     etc
 ]]
 for _, enum in ipairs(constants.UNIT_TYPES)do
-    local postFix = "Allies"
     local enumLowered = enum:lower() 
 
     local function filter(ent)
         return rgb.isUnitOfType(ent, enum)
     end
 
+    local postFix = "Allies"
     Target({
         name = enumLowered .. postFix,
         getTargets = function(sourceEnt)

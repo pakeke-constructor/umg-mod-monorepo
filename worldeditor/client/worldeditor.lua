@@ -14,10 +14,14 @@ setmetatable(we, {__index = error})
 
 
 
+local followIsActive = true
+
 client.on("worldeditorSetMode", function(a)
     _G.settings.editing = a
-    base.client.control.setFollowActive(not a)
+    followIsActive = not a
 end)
+
+
 
 
 
