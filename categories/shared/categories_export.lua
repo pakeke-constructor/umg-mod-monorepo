@@ -22,6 +22,28 @@ end
 
 
 
+
+local isCategoryTc = typecheck.assert("entity", "string")
+
+function categories.isCategory(ent, category)
+    --[[
+        returns true if ent has category `category`
+    ]]
+    isCategoryTc(ent, category)
+    if type(ent.category) == "string" then
+        return ent.category == category
+    elseif type(ent.category) == "table" then
+        for _, cat in ipairs(ent.category) do
+            if cat == category then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+
+
 local iterateTc = typecheck.assert("string")
 
 function categories.iterator(category)

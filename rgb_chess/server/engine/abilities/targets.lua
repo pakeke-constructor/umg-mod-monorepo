@@ -39,8 +39,8 @@ function Target:drawSlabUI()
 end
 
 
-function Target:getTargets(...)
-    return self.getTargets(...)
+function Target:getTargets(sourceEnt)
+    return self.getTargets(sourceEnt)
 end
 
 

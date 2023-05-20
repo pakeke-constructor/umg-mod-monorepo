@@ -57,8 +57,29 @@ end
 
 
 
-local function applyAbility(ent, ability)
-    
+local function filtersOk(sourceEnt, ent, filts)
+    for _, f in ipairs(filts) do
+        local filt = filters.getFilter(f)
+        if not filt:filter(sourceEnt, ent) then
+            return false
+        end
+    end
+    return true
+end
+
+
+
+local function applyAbility(unitEnt, ability)
+    local target = targets.getTarget(ability.target)
+    local action = actions.getAction(ability.action)
+    local filts = ability.filters
+
+    local entities = target:getTargets(unitEnt)
+    for _, ent in ipairs(entities) do
+        if filtersOk(unitEnt, ent, filts) then
+            action:apply(unitEnt, ent)
+        end
+    end
 end
 
 
@@ -88,10 +109,12 @@ function abilities.trigger(triggerType, rgbTeam)
     local arr = triggerMapping[triggerType] or EMPTY
     for _, ent in ipairs(arr)do
         if ent.rgbTeam == rgbTeam then
-            tryApplyAbilities(ent, triggerTc)
+            applyAbilitiesOfType(ent, triggerTc)
         end
     end
 end
+
+
 
 
 abilityGroup:onAdded(function(ent)

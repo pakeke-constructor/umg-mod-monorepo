@@ -46,8 +46,8 @@ function Action:drawSlabUI(level)
 end
 
 
-function Action:apply(...)
-    self.action(...)
+function Action:apply(sourceEnt, targetEnt)
+    self.action(sourceEnt, targetEnt)
 end
 
 

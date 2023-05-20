@@ -22,7 +22,7 @@ Abilities are composed of 4 parts:
     ---> causes ability to trigger
 
 - Target (what the ability targets)  
-    - args: (board) : returns Array<Entity>
+    - args: (sourceEnt) : returns Array<Entity>
 
 - Filter (whether the ability should occur)
     - args:  (sourceEnt, targetEnt) : returns boolean

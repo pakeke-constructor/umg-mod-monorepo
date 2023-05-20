@@ -144,16 +144,18 @@ end
 
 
 
+
 umg.on("@tick", function()
     local now = base.getGameTime()
     for _, ent in ipairs(attackGroup) do
         if ent.attackBehaviour then
+            local targetCategory = ent.attackBehaviourTargetCategory or ent.attackBehaviour.target
             local target = ent.attackBehaviourTargetEntity
-            if not umg.exists(target) then
+            if (not umg.exists(target)) or (not categories.isCategory(ent, targetCategory)) then
+                -- if the entity has been deleted, or if it has changed category, reset state
                 ent.attackBehaviourTargetEntity = nil
                 target = nil
             end
-            local targetCategory = ent.attackBehaviourTargetCategory or ent.attackBehaviour.target
             if (not target) then
                 target = findClosestEntity(ent, targetCategory)
             end

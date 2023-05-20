@@ -36,3 +36,4 @@ triggers.TYPES = base.enum({
 })
 
 
+return triggers
