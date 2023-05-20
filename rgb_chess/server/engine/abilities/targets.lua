@@ -55,8 +55,8 @@ end
 
 Target({
     name = "allies",
-    getTargets = function(board)
-        return getAllies(board)
+    getTargets = function(sourceEnt)
+        return getAllies(sourceEnt)
     end,
     description = "For all allies:"
 })
@@ -65,8 +65,8 @@ Target({
 
 Target({
     name = "self",
-    getTargets = function(board)
-        return getAllies(board)
+    getTargets = function(sourceEnt)
+        return getAllies(sourceEnt)
     end,
     description = "Affect self:"
 })
@@ -95,8 +95,8 @@ for _, enum in ipairs(constants.UNIT_TYPES)do
 
     Target({
         name = enumLowered .. postFix,
-        getTargets = function(board)
-            return getAllies(board):filter(filter)
+        getTargets = function(sourceEnt)
+            return getAllies(sourceEnt):filter(filter)
         end,
         description = "For all " .. enumLowered .. " allies:"
     })

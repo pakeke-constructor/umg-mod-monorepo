@@ -2,44 +2,38 @@
 
 local triggers = {}
 
-local Trigger = base.Class("rgb-chess:Trigger")
 
-
-Trigger()
-
-
-
-triggers.TYPES = base.enum({
-    "allyDeath",
+local triggerTypeToDescription = {
+    allyDeath = "When an ally dies:",
     -- "enemyDeath", NYI
 
-    "allyBuff",
-    "allyDebuff",
+    allyBuff = "When an ally is buffed:",
+    allyDebuff = "When an ally is debuffed:",
 
-    "allySummoned",
-    "allySold",
+    allySummoned = "When an ally is summoned:",
+    allySold = "When an ally is sold:",
  
-    "allyDamage",
-    "onAllyHeal",
-    "onAllyAttack",
+    allyDamage = "When an ally takes damage:",
+    onAllyHeal = "When an ally is healed:",
+    onAllyAttack = "When an ally attacks:",
 
-    "allyStun",
+    allyStun = "When an ally is stunned:",
 
-    "allyShieldBreak", 
-    "allyShieldExpire",
+    allyShieldBreak = "When an ally's shield breaks:", 
+    allyShieldExpire = "When an ally's shield expires:",
 
-    "allyEquip",
-    "allyUnequip",
+    allyEquip = "When an ally equips an item:",
+    allyUnequip = "When an ally unequips an item:",
  
-    "reroll",
-    "startTurn",
-    "endTurn",
+    reroll = "On reroll:",
+    startTurn = "On turn start:",
+    endTurn = "On turn end:",
 
-    "startBattle",
-    "startTurn",
+    startBattle = "On battle start:",
+    endBattle = "On battle end:",
 
-    "ability"
-})
+    ability = "When an ability is procs:"
+}
 
 
 return triggers
