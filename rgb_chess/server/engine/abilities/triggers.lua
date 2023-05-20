@@ -2,6 +2,12 @@
 
 local triggers = {}
 
+local Trigger = base.Class("rgb-chess:Trigger")
+
+
+Trigger()
+
+
 
 triggers.TYPES = base.enum({
     "allyDeath",

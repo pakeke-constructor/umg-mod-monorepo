@@ -63,8 +63,28 @@ Target({
 
 
 
+Target({
+    name = "self",
+    getTargets = function(board)
+        return getAllies(board)
+    end,
+    description = "Affect self:"
+})
 
 
+
+
+
+
+--[[
+    Creating a bunch of targets to target each ally type.
+
+    sorcererAllies
+    meleeAllies
+    rangedAllies
+
+    etc
+]]
 for _, enum in ipairs(constants.UNIT_TYPES)do
     local postFix = "Allies"
     local enumLowered = enum:lower() 
@@ -81,9 +101,6 @@ for _, enum in ipairs(constants.UNIT_TYPES)do
         description = "For all " .. enumLowered .. " allies:"
     })
 end
-
-
-
 
 
 
