@@ -90,56 +90,50 @@ local function moveCam(dt)
 end
 
 
-local IS_PAN_MODE = false
+
+
+local CAMERA_PAN_ACTIVE = false
 
 
 
-local controllableGroup = umg.group("controllable", "controller", "x", "y")
 local input = base.client.input
 
 
 function listener:keypressed(key, scancode, isrepeat)
     local inputEnum = self:getInputEnum(scancode)
     if inputEnum == input.BUTTON_SHIFT then
-        -- unlock camera
-        IS_PAN_MODE = true
-        for _, ent in ipairs(controllableGroup)do
-            --[[
-                TODO: FUTURE OLI HERE.
-                WTF IS ALL THIS???? REMOVE ALL OF THIS, WTF
-            ]]
-            -- we set follow to false for ALL ents, regardless of whether we
-            -- are controlling them or not.
-            -- This is so if control is changed dynamically, nothing will break.
-            -- (This is also a desync between client-server, but it doesn't matter,
-            --  because .follow is only used on clientside.)
-            ent.follow = false
-        end
-
+        -- camera is panning / in free mode
+        CAMERA_PAN_ACTIVE = true
         self:lockKey(scancode)
     end
 end
 
 
 
-function listener:keypressed(key, scancode, isrepeat)
+function listener:keyreleased(key, scancode, isrepeat)
     local inputEnum = self:getInputEnum(scancode)
     if inputEnum == input.BUTTON_SHIFT then
-        -- lock camera.
-        IS_PAN_MODE = false
-        for _, ent in ipairs(controllableGroup) do
-            --[[
-                TODO: FUTURE OLI HERE.
-                WTF IS ALL THIS???? REMOVE ALL OF THIS, WTF
-            ]]
-            ent.follow = true
-        end
+        -- Camera is no longer panning
+        CAMERA_PAN_ACTIVE = false
     end
 end
 
 
+
+local function isCameraPanBlocked()
+    local blocked = umg.ask("cameraPanBlocked", base.operators.OR)
+    return blocked
+end
+
+
+
+
 function listener:update(dt)
-    if IS_PAN_MODE then
+    if isCameraPanBlocked() then
+        return
+    end
+
+    if CAMERA_PAN_ACTIVE then
         camera.x = last_camx
         camera.y = last_camy
         moveCam(dt)
@@ -154,7 +148,7 @@ end
 local MIDDLE_MOUSE_BUTTON = 3
 
 function listener:mousemoved(x,y,dx,dy)
-    if love.mouse.isDown(MIDDLE_MOUSE_BUTTON) then
+    if CAMERA_PAN_ACTIVE and love.mouse.isDown(MIDDLE_MOUSE_BUTTON) then
         local wx1, wy1 = camera:toWorldCoords(x-dx,y-dy)
         local wx2, wy2 = camera:toWorldCoords(x,y)
         local wdx, wdy = wx2-wx1, wy1-wy2

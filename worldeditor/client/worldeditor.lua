@@ -14,11 +14,15 @@ setmetatable(we, {__index = error})
 
 
 
-local followIsActive = true
 
-client.on("worldeditorSetMode", function(a)
-    _G.settings.editing = a
-    followIsActive = not a
+client.on("worldeditorSetMode", function(active)
+    _G.settings.editing = active
+end)
+
+
+
+umg.answer("isCameraPlayerFollowBlocked", function()
+    return _G.settings.editing
 end)
 
 

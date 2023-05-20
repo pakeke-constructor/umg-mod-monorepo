@@ -10,6 +10,7 @@ local control = {}
 
 
 
+local operators = require("shared.operators")
 local input = require("client.input")
 local State = require("shared.state.state")
 
@@ -126,11 +127,17 @@ end
 
 
 
-local followActive = true 
--- whether or not the camera is following players or not.
+local function shouldFollow()
+    local blocked = umg.ask("isCameraPlayerFollowBlocked", operators.OR)
+    return not blocked
+end
 
 
 function listener:update(dt)
+    if not shouldFollow() then
+        return
+    end
+
     local sum_x = 0
     local sum_y = 0
     local len = 0
@@ -147,8 +154,8 @@ function listener:update(dt)
             end
         end
     end
-    
-    if has_follow and followActive then
+
+    if has_follow and shouldFollow() then
         followAverage(sum_x, sum_y, len)
     end
 end
@@ -186,10 +193,6 @@ end)
 
 
 
-
-function control.setFollowActive(active)
-    followActive = active
-end
 
 
 
