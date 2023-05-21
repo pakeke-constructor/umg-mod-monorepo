@@ -9,11 +9,54 @@ local abilities = {}
 
 
 
-local function newAbilityProc(options)
-    assert(options.sourceEntity, "?")
+
+
+local abilityActionBuffer = base.Heap(function(a,b)
+    -- TODO: Do some checks to ensure that this is the right way around.
+    return a.activateTime > b.activateTime
+end)
+
+
+local bufferActionTc = typecheck.assert({
+    sourceEntity = umg.exists,
+    targetEntity = umg.exists,
+    action = "table"
+})
+
+local function bufferAction(bufAction)
+    --[[
+        buffers an ability, such that it will occur in the next X seconds,
+        instead of instantly.
+        This is a (crappy) way of avoiding infinite 
+
+        bufAction = {
+            sourceEntity = x,
+            targetEntity = y,
+            action = <Action>
+        }
+    ]]
+    bufferActionTc(bufAction)
+    if abilityActionBuffer:size() > constants.MAX_BUFFERED_ABILITIES then
+        -- Ok.... this is pretty bad, since in multiplayer, this will
+        -- block ALL players from activating abilities.
+        return
+    end
+
+    bufAction.activateTime = base.getGameTime() + constants.ABILITY_BUFFER_TIME
+    abilityActionBuffer:insert(bufAction)
 end
 
-local abilityActionBuffer = base.Heap()
+
+
+
+local function applyBufferedAction(bufAction)
+    local action = bufAction.action
+    local src = bufAction.sourceEntity
+    local targ = bufAction.targetEntity
+    if umg.exists(src) and umg.exists(targ) then
+        action:apply(src, targ)
+    end
+end
 
 
 
@@ -136,7 +179,11 @@ local function applyAbility(unitEnt, ability)
     local entities = target:getTargets(unitEnt)
     for _, ent in ipairs(entities) do
         if filtersOk(unitEnt, ent, filts) then
-            action:apply(unitEnt, ent)
+            bufferAction({
+                sourceEntity = unitEnt,
+                targetEntity = ent,
+                action = action
+            })
         end
     end
 end
@@ -232,13 +279,26 @@ end)
 
 
 umg.on("@tick", function()
-    --[[
-        since entities can change abilities dynamically, 
-        we update the ability mapping dynamically, just to make sure
-        everything is fine.
-    ]]
     for _, ent in ipairs(abilityGroup)do
+        --[[
+            since entities can change abilities dynamically, 
+            we update the ability mapping dynamically, just to make sure
+            everything is fine.
+        ]]
         updateAbilityMapping(ent)
+    end
+
+    -- Activate all ability
+    local time = base.getGameTime()
+    local bufAction = abilityActionBuffer:peek()
+    while bufAction do
+        if bufAction.activateTime <= time then
+            applyBufferedAction(bufAction)
+            abilityActionBuffer:pop()
+            bufAction = abilityActionBuffer:peek()
+        else
+            bufAction = nil
+        end
     end
 end)
 

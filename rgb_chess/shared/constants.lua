@@ -4,7 +4,8 @@ _G.constants = {
 
     MAX_INCOME = 20,
 
-    MAX_ACTION_DEPTH = 16,
+    MAX_BUFFERED_ABILITIES = 1600, -- how many abilities can be happening simultaneously.
+    ABILITY_BUFFER_TIME = 0.4, -- wait 0.4 seconds before we apply an ability action
 
     CARD_LIGHTNESS = 0.3,
     DEFAULT_CARD_IMAGE = "blank_card",
