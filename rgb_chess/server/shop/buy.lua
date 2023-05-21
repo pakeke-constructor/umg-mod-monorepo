@@ -1,6 +1,7 @@
 
 local Board = require("server.board")
 
+local abilities = require("server.abilities.abilities")
 local spawn = require("server.shop.spawn_entity")
 
 
@@ -30,15 +31,22 @@ end
 
 
 
+local function buySpellCard(card_ent)
+
+end
+
+
+
 function buy.buyCard(card_ent, cost)
     local board = Board.getBoard(card_ent.rgbTeam)
     cost = cost or buy.getCost(card_ent)
 
     local etype = card_ent.cardBuyTarget
-    if etype.cardInfo.type == constants.CARD_TYPES.UNIT then
+    local typ = etype.cardInfo.type 
+    if typ == constants.CARD_TYPES.UNIT then
         buyUnitCard(card_ent)
-    else 
-        -- TODO: Spell cards, and other stuff
+    elseif typ == constants.CARD_TYPES.SPELL then
+        buySpellCard(card_ent)
     end
 
     board:setMoney(board:getMoney() - cost)
@@ -77,6 +85,7 @@ end
 
 
 local function sellUnit(ent)
+    abilities.trigger("allySold", ent.rgbTeam)
     umg.call("sellUnit", ent)
     ent:delete()
 end

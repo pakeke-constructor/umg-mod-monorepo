@@ -47,6 +47,13 @@ end
 
 
 function Action:apply(sourceEnt, targetEnt, level)
+    --[[
+        BIG BIG WARNING:
+        In actions, `targetEnt` is guaranteed to exist.
+        However, `sourceEnt` IS NOT GUARANTEED TO EXIST!!!!
+        (i.e. it may have died 2 ticks ago, or something)
+        BEWARE OF THIS!!!! Always check if unsure!
+    ]]
     self.action(sourceEnt, targetEnt, level)
 end
 

@@ -10,8 +10,8 @@ local triggerTypeToDescription = {
     allyBuff = "When an ally is buffed:", -- done
     allyDebuff = "When an ally is debuffed:", -- done
 
-    allySummoned = "When an ally is summoned:",
-    allySold = "When an ally is sold:",
+    allySummoned = "When an ally is summoned:", -- done
+    allySold = "When an ally is sold:", -- done
  
     allyDamage = "When an ally takes damage:", -- done
     allyHeal = "When an ally is healed:", -- done
@@ -29,6 +29,9 @@ local triggerTypeToDescription = {
 
     startBattle = "On battle start:",
     endBattle = "On battle end:",
+
+    allyChangeColor = "When an ally changes color:",
+    selfChangeColor = "On color change:",
 
     allyAbility = "When an ally's ability activates:", -- done
     selfAbility = "On ability activation:" -- done

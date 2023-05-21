@@ -1,11 +1,44 @@
 
 local Board = require("server.board")
+local abilities = require("server.abilities.abilities")
 
 
 local spawn = {}
 
 
 local SPAWN_RANDOM_RAD = 300
+
+
+
+local spawnTc = typecheck.assert("table", {
+    x = "number",
+    y = "number",
+    rgbTeam = "string",
+    rgb = "table"
+})
+
+function spawn.spawn(etype, args)
+    spawnTc(etype, args)
+
+    local ent = etype(args.x, args.y)
+
+    ent.rgbTeam = args.rgbTeam
+    ent.category = args.rgbTeam
+
+    ent.rgb = args.rgb
+    ent.color = rgb.rgbToColor(args.rgb)
+
+    ent.attackDamage = ent.defaultAttackDamage
+    ent.health = ent.defaultHealth
+    ent.maxHealth = ent.defaultHealth
+    ent.attackSpeed = ent.defaultAttackSpeed
+    ent.speed = ent.defaultSpeed
+
+    umg.call("summonUnit", ent)
+    abilities.trigger("allySummoned", ent.rgbTeam)
+
+    return ent
+end
 
 
 
@@ -20,21 +53,13 @@ function spawn.spawnUnitFromCard(card_ent, spawnX, spawnY)
     spawnX = spawnX or x + w/2 + (math.random()-.5) * SPAWN_RANDOM_RAD
     spawnY = spawnY or y + h/2 + (math.random()-.5) * SPAWN_RANDOM_RAD
 
-    local ent = unit_etype(spawnX, spawnY)
+    local ent = spawn.spawn(unit_etype, {
+        x = spawnX, y = spawnY,
+        rgbTeam = card_ent.rgbTeam,
+        rgb = card_ent.rgb,
+        color = card_ent.color
+    })
 
-    ent.x = spawnX
-    ent.y = spawnY
-    ent.rgbTeam = card_ent.rgbTeam
-    ent.rgb = card_ent.rgb
-    ent.color = card_ent.color
-    ent.attackDamage = ent.defaultAttackDamage
-    ent.health = ent.defaultHealth
-    ent.maxHealth = ent.defaultHealth
-    ent.attackSpeed = ent.defaultAttackSpeed
-    ent.speed = ent.defaultSpeed
-    ent.category = card_ent.rgbTeam
-
-    umg.call("summonUnit", ent)
     return ent
 end
 

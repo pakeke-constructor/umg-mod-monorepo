@@ -60,6 +60,20 @@ function rgb.getColorString(rgbColor)
 end
 
 
+function rgb.rgbToColor(rgbColor)
+    --[[
+        converts an rgb color into a color that is adequate for displaying
+        (i.e. isn't too dark)
+    ]]
+    local cpy = {}
+    for i=1, 3 do
+        cpy[i] = math.max(constants.CARD_LIGHTNESS, rgbColor[i])
+    end
+    return cpy
+end
+
+
+
 function rgb.match(col1, col2)
     if col1.rgb and col2.rgb then
         local ent1, ent2 = col1, col2

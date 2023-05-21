@@ -8,23 +8,15 @@ require("shared.rgb")
 local generateCards = {}
 
 
-local function getCardColor(col)
-    local cpy = {}
-    for i=1, 3 do
-        cpy[i] = math.max(constants.CARD_LIGHTNESS, col[i])
-    end
-    return cpy
-end
-
 
 local rgbSelection = base.weightedRandom({
     -- [result]    =  probability weight
     [rgb.COLS.RED] =   0.3,
     [rgb.COLS.BLU] =   0.3,
     [rgb.COLS.GRN] =   0.3,
-    [rgb.COLS.YLO] =   0.05,
-    [rgb.COLS.MAG] =   0.05,
-    [rgb.COLS.AQU] =   0.05,
+    [rgb.COLS.YLO] =   0.035,
+    [rgb.COLS.MAG] =   0.035,
+    [rgb.COLS.AQU] =   0.035,
 })
 
 
@@ -120,7 +112,7 @@ function generateCards.spawnCard(board, shopIndex)
 
     cardEnt.image = cardEtype.cardInfo.image or constants.DEFAULT_CARD_IMAGE
     cardEnt.rgb = rgbSelection()
-    cardEnt.color = getCardColor(cardEnt.rgb)
+    cardEnt.color = rgb.rgbToColor(cardEnt.rgb)
     board.shop[shopIndex] = cardEnt
 
     return cardEnt

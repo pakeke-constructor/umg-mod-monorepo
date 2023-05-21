@@ -48,8 +48,7 @@ _G.constants = {
     
     CARD_TYPES = base.Enum({
         UNIT = "UNIT",
-        SPELL = "SPELL",
-        ITEM = "ITEM"
+        SPELL = "SPELL"
     }),
 
     UNIT_TYPES = base.Enum({
