@@ -115,7 +115,11 @@ local function parseTableType(tableType)
 
     for key, arg in pairs(tableType) do
         table.insert(keyList, key)
-        valueCheckers[key] = makeCheckFunction(arg)
+        local er0
+        valueCheckers[key], er0 = makeCheckFunction(arg)
+        if not valueCheckers[key] then
+            error("Couldn't create typecheck function for key: " .. key .. " : " .. er0)
+        end
     end
 
     local function check(x)
@@ -128,9 +132,11 @@ local function parseTableType(tableType)
             local val = x[key]
             local ok, err = valueCheckers[key](val)
             if not ok then
-                return nil, "Bad option value: " .. tostring(err)
+                return nil, "had bad value for '" .. tostring(key) .. "':\n" ..tostring(err)
             end
         end
+
+        return true -- else, we are goods
     end
 
     return check
@@ -157,8 +163,9 @@ local function parseArgCheckers(arr)
     for i=1, #arr do
         local func, err = makeCheckFunction(arr[i])
         if not func then
-            error("Error during parsing typecheck args:\n", tostring(err))
+            error(("Error during parsing typecheck arg num %d:\n"):format(i), tostring(err))
         end
+        arr[i] = func
     end
 end
 
