@@ -1,4 +1,7 @@
 
+local abilities = require("server.abilities.abilities")
+
+
 local shieldAPI = { }
 
 local function getBestShield(shields)
@@ -23,6 +26,7 @@ end
 
 local function breakShield(ent, shield)
     -- TODO: Get this working properly.
+    abilities.trigger("allyShieldBreak", ent.rgbTeam)
     umg.call("breakShield", ent, shield)    
 end
 
@@ -78,6 +82,7 @@ local function expireShields(ent)
         local endTime = sh.duration + sh.startTime
         if endTime > time then
             -- Remove the shield, it's expired.
+            abilities.trigger("allyShieldExpire", ent.rgbTeam)
             umg.call("shieldExpire", ent, sh.shieldSize)
             table.remove(shields, i)
         end

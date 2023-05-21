@@ -56,7 +56,16 @@ local function applyBufferedAction(bufAction)
     local src = bufAction.sourceEntity
     local targ = bufAction.targetEntity
     local level = bufAction.level
-    if umg.exists(src) and umg.exists(targ) then
+
+    if umg.exists(targ) then
+        if src == targ then
+            -- self triggered the ability, so emit `selfAbility` trigger
+            abilities.trigger("selfAbility", targ.rgbTeam)
+        elseif src.rgbTeam == targ.rgbTeam then
+            -- the ability was triggered by an ally instead
+            abilities.trigger("allyAbility", targ.rgbTeam)
+        end
+        
         action:apply(src, targ, level)
     end
 end
@@ -64,7 +73,7 @@ end
 
 
 
-local abilityGroup = umg.group("rgbUnit", "rgbAbilities")
+local abilityGroup = umg.group("rgbUnit", "abilities")
 
 
 
@@ -251,7 +260,7 @@ TODO: do some planning on how we should approach this API here
 ]]
 
 
-local triggerDirectlyTc = typecheck.assert("entity", "entity", "table")
+local triggerDirectlyTc = typecheck.assert("entity", "entity", "table", "number?")
 
 function abilities.activateDirectly(sourceEnt, targetEnt, ability, level)
     --[[
@@ -259,7 +268,7 @@ function abilities.activateDirectly(sourceEnt, targetEnt, ability, level)
         without applying the filter. 
         If level is not given, defaults to ability level.
     ]]
-    triggerDirectlyTc(sourceEnt, targetEnt, ability)
+    triggerDirectlyTc(sourceEnt, targetEnt, ability, level)
     assert(rgb.isUnit(sourceEnt), "?")
 
     level = level or ability.level
@@ -268,7 +277,7 @@ end
 
 
 
-function abilities.activate(ent)
+function abilities.activateAll(ent)
     --[[
         activates all abilities inside of `ent`,
         including items.
@@ -327,3 +336,6 @@ umg.on("@tick", function()
     end
 end)
 
+
+
+return abilities

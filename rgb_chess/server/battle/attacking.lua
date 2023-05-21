@@ -1,6 +1,7 @@
 
 local shieldAPI = require("server.engine.shields")
 local rgbAPI = require("server.engine.rgb_api")
+local abilities = require("server.abilities.abilities")
 
 
 umg.on("meleeAttack", function(ent, targetEnt)
@@ -32,6 +33,8 @@ umg.on("attack", function(attackerEnt, targetEnt, effectiveness)
     local damage = attackerEnt.attackDamage * effectiveness
     damage = shieldAPI.getDamage(targetEnt, damage)
     targetEnt.health = targetEnt.health - damage
+    abilities.trigger("allyDamage", targetEnt.rgbTeam)
+    abilities.trigger("allyAttack", attackerEnt.rgbTeam)
     umg.call("rgbAttack", attackerEnt, targetEnt, damage)
 end)
 

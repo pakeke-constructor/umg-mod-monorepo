@@ -1,5 +1,4 @@
 
-local abilities = require("shared.abilities.abilities")
 
 
 return {
@@ -7,7 +6,7 @@ return {
 
     maxStackSize = 1,
 
-    abilities = {abilities.test},
+    abilities = {},
 
     itemType = constants.ITEM_TYPES.PASSIVE,
 

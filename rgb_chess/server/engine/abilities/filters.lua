@@ -50,7 +50,7 @@ Filter({
     filter = function(sourceEnt, targetEnt)
         return sourceEnt.health > targetEnt.health
     end,
-    description = "If the target has more health than me,"
+    description = "If the target has more health than me"
 })
 
 
@@ -60,7 +60,7 @@ Filter({
     filter = function(sourceEnt, targetEnt)
         return sourceEnt.health < targetEnt.health
     end,
-    description = "If the target has less health than me,"
+    description = "If the target has less health than me"
 })
 
 
@@ -69,7 +69,7 @@ Filter({
     filter = function(sourceEnt, targetEnt)
         return sourceEnt.damage > targetEnt.damage
     end,
-    description = "If the target has more damage than me,"
+    description = "If the target has more damage than me"
 })
 
 
@@ -79,7 +79,7 @@ Filter({
     filter = function(sourceEnt, targetEnt)
         return sourceEnt.damage < targetEnt.damage
     end,
-    description = "If the target has less damage than me,"
+    description = "If the target has less damage than me"
 })
 
 

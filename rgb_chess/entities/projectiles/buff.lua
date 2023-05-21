@@ -1,6 +1,11 @@
 
 local abstractProjectile = require("shared.abstract.abstract_projectile")
 
+local abilities
+if server then
+    abilities = require("server.abilities.abiliites")
+end
+
 
 
 local BUFFTYPES = constants.BUFF_TYPES
@@ -41,6 +46,7 @@ return umg.extend(abstractProjectile, {
         local btype = projEnt.buffType
         local sourceEnt = projEnt.sourceEntity
         buffHandlers[btype](targetEnt, projEnt.buffAmount)
+        abilities.trigger("allyBuff", targetEnt.rgbTeam)
         umg.call("buff", targetEnt, btype, projEnt.buffAmount, sourceEnt, projEnt.depth)
     end,
 

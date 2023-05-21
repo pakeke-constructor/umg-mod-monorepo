@@ -51,8 +51,10 @@ end
 
 
 
+local randomItemTc = typecheck.assert("table", "number", "number")
 
 function itemPool.randomItem(board, x, y)
+    randomItemTc(board, x, y)
     local rgbTeam = board:getTeam()
     local turn = rgb.getTurn()
     local etype = randomItemEType(turn)
