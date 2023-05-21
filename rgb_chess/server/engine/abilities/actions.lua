@@ -46,8 +46,8 @@ function Action:drawSlabUI(level)
 end
 
 
-function Action:apply(sourceEnt, targetEnt)
-    self.action(sourceEnt, targetEnt)
+function Action:apply(sourceEnt, targetEnt, level)
+    self.action(sourceEnt, targetEnt, level)
 end
 
 
@@ -57,8 +57,8 @@ local HEAL_FACTOR = 4
 
 Action({
     name = "heal",
-    action = function(sourceEnt, targetEnt, level, depth)
-        rgbAPI.heal(targetEnt, level * HEAL_FACTOR, sourceEnt, depth)
+    action = function(sourceEnt, targetEnt, level)
+        rgbAPI.heal(targetEnt, level * HEAL_FACTOR, sourceEnt)
     end,
     description = function(level)
         return "Heal for " .. HEAL_FACTOR * level
@@ -72,8 +72,8 @@ local SHIELD_FACTOR = 5
 
 Action({
     name = "shield",
-    action = function(sourceEnt, targetEnt, level, depth)
-        rgbAPI.shield(targetEnt, level * SHIELD_FACTOR, SHIELD_DURATION,sourceEnt, depth)
+    action = function(sourceEnt, targetEnt, level)
+        rgbAPI.shield(targetEnt, level * SHIELD_FACTOR, SHIELD_DURATION,sourceEnt)
     end,
     description = function(level)
         return "Shield for " .. SHIELD_FACTOR * level
@@ -95,10 +95,10 @@ for magnitude = 1, 4 do
     for buffEnum, abilitySuffix in pairs(buffTypes)do
         Action({
             name = "buff" .. tostring(abilitySuffix) .. tostring(magnitude),
-            action = function(sourceEnt, targetEnt, level, depth)
+            action = function(sourceEnt, targetEnt, level)
                 local bType = constants.BUFF_TYPES[buffEnum]
                 local amount = level * magnitude
-                rgbAPI.buff(targetEnt, bType, amount, sourceEnt, depth)
+                rgbAPI.buff(targetEnt, bType, amount, sourceEnt)
             end,
             description = function(level)
                 local amount = level * magnitude
@@ -111,7 +111,7 @@ end
 
 Action({
     name = "reroll",
-    action = function(sourceEnt, targetEnt, level, depth)
+    action = function(sourceEnt, targetEnt, level)
         local board = rgb.getBoard(targetEnt.board)
         board:reroll()
     end,

@@ -20,8 +20,10 @@ end)
 local bufferActionTc = typecheck.assert({
     sourceEntity = umg.exists,
     targetEntity = umg.exists,
+    level = "number",
     action = "table"
 })
+
 
 local function bufferAction(bufAction)
     --[[
@@ -53,8 +55,9 @@ local function applyBufferedAction(bufAction)
     local action = bufAction.action
     local src = bufAction.sourceEntity
     local targ = bufAction.targetEntity
+    local level = bufAction.level
     if umg.exists(src) and umg.exists(targ) then
-        action:apply(src, targ)
+        action:apply(src, targ, level)
     end
 end
 
@@ -171,31 +174,33 @@ end
 
 
 
+
+local function applyActionTo(sourceEnt, targetEnt, ability, level)
+    local action = ability.action
+
+    bufferAction({
+        sourceEntity = sourceEnt,
+        targetEntity = targetEnt,
+        action = action,
+        level = level
+    })
+end
+
+
 local function applyAbility(unitEnt, ability)
     local target = targets.getTarget(ability.target)
     local action = actions.getAction(ability.action)
     local filts = ability.filters
+    local level = ability.level
 
     local entities = target:getTargets(unitEnt)
     for _, ent in ipairs(entities) do
         if filtersOk(unitEnt, ent, filts) then
-            bufferAction({
-                sourceEntity = unitEnt,
-                targetEntity = ent,
-                action = action
-            })
+            applyActionTo(unitEnt, ent, action, level)
         end
     end
 end
 
-
-
-
-error[[
-    TODO: 
-    passive item abilities aren't supported.
-    Add support for them here.
-]]
 
 
 
@@ -246,20 +251,40 @@ TODO: do some planning on how we should approach this API here
 ]]
 
 
-local triggerDirectlyTc = typecheck.assert("entity", "table")
+local triggerDirectlyTc = typecheck.assert("entity", "entity", "table")
 
-function abilities.activateAbilityDirectly(ent, ability)
-    triggerDirectlyTc(ent, ability)
-    assert(rgb.isUnit(ent), "?")
+function abilities.activateDirectly(sourceEnt, targetEnt, ability, level)
+    --[[
+        activates a specific ability action directly to an entity,
+        without applying the filter. 
+        If level is not given, defaults to ability level.
+    ]]
+    triggerDirectlyTc(sourceEnt, targetEnt, ability)
+    assert(rgb.isUnit(sourceEnt), "?")
 
-    applyAbility(ent, ability)
+    level = level or ability.level
+    applyActionTo(sourceEnt, targetEnt, ability, level)
 end
 
 
-function abilities.activateEntityAbilitiesDirectly(ent)
+
+function abilities.activate(ent)
+    --[[
+        activates all abilities inside of `ent`,
+        including items.
+    ]]
     assert(umg.exists(ent), "?")
     assert(rgb.isUnit(ent), "not a unit entity")
-    applyAbilities(ent)
+
+    applyAllAbilities(ent, ent.abilities or EMPTY)
+
+    if ent.inventory then
+        foreachPassiveItem(ent, function(_, item)
+            if item.abilities then
+                applyAllAbilities(ent, item.abilities)
+            end
+        end)
+    end
 end
 
 
@@ -288,7 +313,7 @@ umg.on("@tick", function()
         updateAbilityMapping(ent)
     end
 
-    -- Activate all ability
+    -- Activate all buffered abilities that have passed their activation time
     local time = base.getGameTime()
     local bufAction = abilityActionBuffer:peek()
     while bufAction do
