@@ -8,6 +8,16 @@ local filters = require("server.engine.abilities.filters")
 local abilities = {}
 
 
+
+local function newAbilityProc(options)
+    assert(options.sourceEntity, "?")
+end
+
+local abilityActionBuffer = base.Heap()
+
+
+
+
 local abilityGroup = umg.group("rgbUnit", "rgbAbilities")
 
 
@@ -96,11 +106,11 @@ end
 
 local function updateAbilityMapping(ent)
     --[[
-        todo: this is kinda inefficient and bad, to be calling every tick
-        who care! :)
+        todo: this is kinda inefficient and bad, to be calling every tick.
+        who cares! :)
     ]]
     removeFromAbilityMapping(ent)
-    addToAbilityMapping(ent, ent.abilities)
+    addToAbilityMapping(ent)
 end
 
 
@@ -162,18 +172,6 @@ end
 
 
 
-local function applyEntitiesAbilitiesOfType(ent, triggerType)
-
-end
-
-
-local function applyAllEntityAbilities(ent)
-
-end
-
-
-
-
 local triggerTc = typecheck.assert("string", "string")
 
 function abilities.trigger(triggerType, rgbTeam)
@@ -192,6 +190,15 @@ end
 
 
 
+
+
+--[[
+
+TODO: do some planning on how we should approach this API here
+
+]]
+
+
 local triggerDirectlyTc = typecheck.assert("entity", "table")
 
 function abilities.activateAbilityDirectly(ent, ability)
@@ -200,7 +207,6 @@ function abilities.activateAbilityDirectly(ent, ability)
 
     applyAbility(ent, ability)
 end
-
 
 
 function abilities.activateEntityAbilitiesDirectly(ent)

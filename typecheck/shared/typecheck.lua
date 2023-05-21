@@ -95,11 +95,8 @@ function parseToFunction(str)
     elseif str:find("%?") then
         -- if string contains question mark, treat the argument as optional.
         str = str:gsub("%?","")
-        if typecheck[str] then
-            return typecheck.optional(typecheck[str])
-        else
-            error("malformed typecheck string: " .. str)
-        end
+        local func = parseToFunction(str)
+        return typecheck.optional(func)
     elseif typecheck[str] then
         return typecheck[str]
     end
@@ -107,12 +104,61 @@ function parseToFunction(str)
 end
 
 
+
+-- Must define here for mutual recursion
+local makeCheckFunction
+
+
+local function parseTableType(tableType)
+    local keyList = {}
+    local valueCheckers = {}
+
+    for key, arg in pairs(tableType) do
+        table.insert(keyList, key)
+        valueCheckers[key] = makeCheckFunction(arg)
+    end
+
+    local function check(x)
+        local typeOk, er1 = typecheck.table(x) 
+        if not typeOk then
+            return nil, er1
+        end
+
+        for _, key in ipairs(keyList) do
+            local val = x[key]
+            local ok, err = valueCheckers[key](val)
+            if not ok then
+                return nil, "Bad option value: " .. tostring(err)
+            end
+        end
+    end
+
+    return check
+end
+
+
+
+function makeCheckFunction(arg)
+    if type(arg) == "string" then
+        return parseToFunction(arg)
+    end
+    if type(arg) == "table" then
+        return parseTableType(arg)
+    end
+    if type(arg) == "function" then
+        return arg
+    end
+    return nil, tostring(arg) .. " is NOT a valid typecheck value! Must be either function, string, or table"
+end
+
+
+
 local function parseArgCheckers(arr)
     for i=1, #arr do
-        if type(arr[i]) == "string" then
-            arr[i] = parseToFunction(arr[i])
+        local func, err = makeCheckFunction(arr[i])
+        if not func then
+            error("Error during parsing typecheck args:\n", tostring(err))
         end
-        assert(type(arr[i]) == "function", ("Type checker definition error: arg %d is not a valid typecheck function"):format(i))
     end
 end
 
