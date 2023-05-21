@@ -10,6 +10,21 @@ local buy = {}
 
 
 
+local function spawnUnitFromCard(card_ent)
+    -- spawns a squadron from a card.
+    -- spawnX, spawnY default to random position.
+    local unit_etype = card_ent.cardBuyTarget
+
+    local ent = spawn.spawn(unit_etype, {
+        rgbTeam = card_ent.rgbTeam,
+        rgb = card_ent.rgb,
+        color = card_ent.color
+    })
+
+    return ent
+end
+
+
 
 local function buyUnitCard(card_ent)
     --[[
