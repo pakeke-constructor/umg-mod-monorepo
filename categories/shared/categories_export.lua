@@ -25,7 +25,7 @@ end
 
 local isCategoryTc = typecheck.assert("entity", "string")
 
-function categories.isCategory(ent, category)
+function categories.entityHasCategory(ent, category)
     --[[
         returns true if ent has category `category`
     ]]

@@ -172,6 +172,23 @@ end
 
 
 
+
+function rgb.isItem(ent)
+    return ent.itemName
+end
+
+function rgb.isItemOfType(ent, enum)
+    return rgb.isItem(ent) and rgb.itemType == enum
+end
+
+function rgb.isPassiveItem(ent)
+    return rgb.isItemOfType(ent, constants.ITEM_TYPES.PASSIVE)
+end
+
+
+
+
+
 rgb.STATES = base.Enum({
     LOBBY_STATE = "LOBBY_STATE",
     BATTLE_STATE = "BATTLE_STATE",

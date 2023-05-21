@@ -32,8 +32,41 @@ local triggerTypeToDescription = {
     startBattle = "On battle start:",
     endBattle = "On battle end:",
 
-    ability = "When an ability is procs:"
+    allyAbility = "When an ally's ability activates:",
+    selfAbility = "On ability activation:"
+
 }
+
+
+
+local stringTc = typecheck.assert("string")
+
+function triggers.drawSlabUI(triggerType)
+    stringTc(triggerType)
+    local desc = triggerTypeToDescription[triggerType]
+    assert(desc, "invalid triggertype: " .. triggerType)
+
+    Slab.Text(desc)
+end
+
+
+
+
+function triggers.isValid(triggerType)
+    stringTc(triggerType)
+    return triggerTypeToDescription[triggerType]
+end
+
+
+
+function triggers.getAllTriggerTypes()
+    local buf = base.Array()
+    for trigger, _ in pairs(triggerTypeToDescription)do
+        buf:add(trigger)
+    end
+    return buf
+end
+
 
 
 return triggers

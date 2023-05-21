@@ -14,6 +14,9 @@ local abilityGroup = umg.group("rgbUnit", "rgbAbilities")
 
 local EMPTY = {}
 
+
+local allTriggerTypes = triggers.getAllTriggerTypes()
+
 local triggerMapping = {--[[
 
     [trigger1] -> { ent1, ent2, ent3 }
@@ -24,8 +27,33 @@ local triggerMapping = {--[[
 
 
 
-local function addToAbilityMapping(ent)
-    for _, ability in ipairs(ent.abilities) do
+local function foreachPassiveItem(ent, func)
+    -- applies a function for each passive item in inventory
+    local inv = ent.inventory
+    if not inv then
+        return
+    end
+
+    for x=1, inv.width do
+        for y=1, inv.height do
+            local item = inv:get(x,y)
+            if umg.exists(item) and rgb.isPassiveItem(item) then
+                func(ent, item)
+            end
+        end
+    end
+end
+
+
+
+
+
+local function addGivenAbilityList(ent, abilityList)
+    --[[
+        adds an entity to all appropriate abilityMapping arrays,
+        given a list of abilities.
+    ]]
+    for _, ability in ipairs(abilityList) do
         local trig = ability.trigger
         triggerMapping[trig] = triggerMapping[trig] or base.Set()
         triggerMapping[trig]:add(ent)
@@ -33,10 +61,31 @@ local function addToAbilityMapping(ent)
 end
 
 
+local function addToAbilityMapping(ent)
+    --[[
+        adds an entity to the abilityMapping.
+
+        Takes into account ent abilities, AND entity passive items.
+    ]]
+    addGivenAbilityList(ent, ent.abilities)
+
+    if ent.inventory then
+        foreachPassiveItem(ent, function(_, item)
+            if item.abilities then
+                addGivenAbilityList(ent, item.abilities)
+            end
+        end)
+    end
+end
+
+
 
 local function removeFromAbilityMapping(ent)
-    for _, ability in ipairs(ent.abilities) do
-        local trig = ability.trigger
+    --[[
+        TODO: This is kinda inefficient and bad...
+        But I don't see an alternative
+    ]]
+    for _, trig in ipairs(allTriggerTypes) do
         if triggerMapping[trig] then
             triggerMapping[trig]:remove(ent)
         end
@@ -50,8 +99,8 @@ local function updateAbilityMapping(ent)
         todo: this is kinda inefficient and bad, to be calling every tick
         who care! :)
     ]]
-    addToAbilityMapping(ent)
     removeFromAbilityMapping(ent)
+    addToAbilityMapping(ent, ent.abilities)
 end
 
 
@@ -83,11 +132,23 @@ local function applyAbility(unitEnt, ability)
 end
 
 
+
+
+error[[
+    TODO: 
+    passive item abilities aren't supported.
+    Add support for them here.
+]]
+
+
+
 local function applyAllAbilities(ent, abilityList)
+    assert(rgb.isUnit(ent), "?")
     for _, ability in ipairs(abilityList)do
         applyAbility(ent, ability)
     end
 end
+
 
 
 local function applyAbilitiesOfType(ent, abilityList, triggerType)
@@ -97,6 +158,19 @@ local function applyAbilitiesOfType(ent, abilityList, triggerType)
         end
     end
 end
+
+
+
+
+local function applyEntitiesAbilitiesOfType(ent, triggerType)
+
+end
+
+
+local function applyAllEntityAbilities(ent)
+
+end
+
 
 
 
@@ -120,14 +194,16 @@ end
 
 local triggerDirectlyTc = typecheck.assert("entity", "table")
 
-function abilities.triggerAbilityDirectly(ent, ability)
+function abilities.activateAbilityDirectly(ent, ability)
     triggerDirectlyTc(ent, ability)
+    assert(rgb.isUnit(ent), "?")
+
     applyAbility(ent, ability)
 end
 
 
 
-function abilities.triggerAbilitiesDirectly(ent)
+function abilities.activateEntityAbilitiesDirectly(ent)
     assert(umg.exists(ent), "?")
     assert(rgb.isUnit(ent), "not a unit entity")
     applyAbilities(ent)

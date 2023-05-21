@@ -151,7 +151,7 @@ umg.on("@tick", function()
         if ent.attackBehaviour then
             local targetCategory = ent.attackBehaviourTargetCategory or ent.attackBehaviour.target
             local target = ent.attackBehaviourTargetEntity
-            if (not umg.exists(target)) or (not categories.isCategory(ent, targetCategory)) then
+            if (not umg.exists(target)) or (not categories.entityHasCategory(ent, targetCategory)) then
                 -- if the entity has been deleted, or if it has changed category, reset state
                 ent.attackBehaviourTargetEntity = nil
                 target = nil
