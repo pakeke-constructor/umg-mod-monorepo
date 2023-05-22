@@ -4,6 +4,8 @@ local actions = require("server.engine.abilities.actions")
 local targets = require("server.engine.abilities.targets")
 local filters = require("server.engine.abilities.filters")
 
+local Board = require("server.board")
+
 
 local abilities = {}
 
@@ -247,6 +249,12 @@ function abilities.trigger(triggerType, rgbTeam)
     end
 end
 
+
+function abilities.triggerForAll(triggerType)
+    for rgbTeam, _board in Board.iterBoards() do
+        abilities.trigger(triggerType, rgbTeam)
+    end
+end
 
 
 

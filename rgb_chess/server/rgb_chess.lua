@@ -5,6 +5,8 @@ local Board = require("server.board")
 
 local matchmaking = require("server.battle.matchmaking")
 
+local abilities = require("server.abilities.abilities")
+
 local income = require("server.shop.income")
 
 local generatePVE = require("server.gen.generate_pve")
@@ -73,15 +75,6 @@ rgb.setState(rgb.STATES.LOBBY_STATE)
 
 
 
-local battleStartTime = love.timer.getTime()
-
-local function setupBattle()
-    battleStartTime = love.timer.getTime()
-    umg.call("endTurn")
-    umg.call("startBattle")
-    rgb.setState(rgb.STATES.BATTLE_STATE)
-    saveBoards()
-end
 
 
 
@@ -96,7 +89,6 @@ end
 
 
 local function startPvE()
-    setupBattle()
     for _, board in Board.iterBoards() do
         local enemyTeam = rgb.getPVEEnemyTeam(board:getTeam())
         board:setEnemyTeam(enemyTeam)
@@ -133,7 +125,6 @@ end
 
 
 local function startPvP()
-    setupBattle()
     local matches = matchmaking.makeMatches()
     for _, match in ipairs(matches)do
         if not match.bye then
@@ -174,32 +165,57 @@ end
 
 
 
+local battleStartTime = love.timer.getTime()
+
+local function startBattle()
+    battleStartTime = love.timer.getTime()
+
+    rgb.setState(rgb.STATES.BATTLE_STATE)
+    saveBoards()
+
+    abilities.triggerForAll("startBattle")
+    umg.call("startBattle")
+
+    if matchmaking.isPVE(rgb.getTurn()) then
+        chat.message("(SERVER) - starting PvE battle!")
+        startPvE()
+    else
+        chat.message("(SERVER) - starting Player PvP battle!")
+        startPvP()
+    end
+    readyUp.resetReady()
+    rgb.increaseTurnCount()
+end
+
+
+
+local function endTurn()
+    inTurnTransition = true
+    abilities.triggerForAll("endTurn")
+    umg.call("endTurn")
+
+    -- do a countdown in chat:
+    local DELAY = constants.END_TURN_DELAY 
+    for i=1, DELAY do
+        base.delay(DELAY - i, function(x)
+            chat.message("(SERVER) - starting battle in " .. tostring(x) .. " seconds.")
+        end, i)
+    end
+
+    -- start battle after X seconds:
+    base.delay(DELAY, startBattle)
+end
+
+
+
 local function updateTurn()
     if (not inTurnTransition) and readyUp.shouldStartBattle() then
-        inTurnTransition = true
-        for i=1, 10 do
-            base.delay(10 - i, function(x)
-                chat.message("(SERVER) - starting battle in " .. tostring(x) .. " seconds.")
-            end, i)
-        end
-
-        base.delay(10, function()
-            -- transition to battle state:
-            if matchmaking.isPVE(rgb.getTurn()) then
-                chat.message("(SERVER) - starting PvE battle!")
-                startPvE()
-            else
-                chat.message("(SERVER) - starting Player PvP battle!")
-                startPvP()
-            end
-            readyUp.resetReady()
-            rgb.increaseTurnCount()
-        end)
+        endTurn()
     end
 end
 
 
-local MINIMUM_BATTLE_DURATION = 5
+local MINIMUM_BATTLE_DURATION = constants.MINIMUM_BATTLE_DURATION
 
 local function updateBattle()
     -- check if all boards are done battle.
@@ -216,7 +232,8 @@ local function updateBattle()
     if isBattleOver then
         -- battle is over! Transition to `turn` state.
         chat.message("(SERVER) - battle round has completed.")
-        startTurn()
+
+        base.delay(constants.END_BATTLE_DELAY, startTurn)
     end
 end
 

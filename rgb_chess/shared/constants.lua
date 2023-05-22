@@ -12,6 +12,10 @@ _G.constants = {
 
     DEFAULT_RARITY = 1,
 
+    END_TURN_DELAY = 5, -- countdown X seconds before ending turn
+    END_BATTLE_DELAY = 3, -- countdown X seconds before ending turn
+    MINIMUM_BATTLE_DURATION = 5,
+
     REROLL_TIME = 0.15,
     REROLL_COST = 1,
 
