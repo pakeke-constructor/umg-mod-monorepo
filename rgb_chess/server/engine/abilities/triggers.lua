@@ -30,11 +30,12 @@ local triggerTypeToDescription = {
     startBattle = "On battle start:",
     endBattle = "On battle end:",
 
-    allyChangeColor = "When an ally changes color:",
-    selfChangeColor = "On color change:",
+    cardBought = "When a card is purchased:", -- done
 
-    allyAbility = "When an ally's ability activates:", -- done
-    selfAbility = "On ability activation:" -- done
+    allyChangeColor = "When an ally changes color:",
+
+    allyAbility = "When an ability activates:", -- done
+    selfAbility = "When an entity activates it's own ability:" -- done
 }
 
 

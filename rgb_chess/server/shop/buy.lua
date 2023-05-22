@@ -2,7 +2,7 @@
 local Board = require("server.board")
 
 local abilities = require("server.abilities.abilities")
-local spawn = require("server.shop.spawn_entity")
+local summon = require("server.engine.summon")
 
 
 
@@ -15,7 +15,7 @@ local function spawnUnitFromCard(card_ent)
     -- spawnX, spawnY default to random position.
     local unit_etype = card_ent.cardBuyTarget
 
-    local ent = spawn.spawn(unit_etype, {
+    local ent = summon.summon(unit_etype, {
         rgbTeam = card_ent.rgbTeam,
         rgb = card_ent.rgb,
         color = card_ent.color
@@ -35,7 +35,7 @@ local function buyUnitCard(card_ent)
     local info = unit_etype.cardInfo
     local numUnits = info.squadronSize or 1
     for _=1, numUnits do
-        local ent = spawn.spawnUnitFromCard(card_ent)
+        local ent = spawnUnitFromCard(card_ent)
         ent.squadron = squadron
         table.insert(squadron, ent)
     end
@@ -47,7 +47,7 @@ end
 
 
 local function buySpellCard(card_ent)
-
+    error("todo")
 end
 
 
@@ -63,6 +63,8 @@ function buy.buyCard(card_ent, cost)
     elseif typ == constants.CARD_TYPES.SPELL then
         buySpellCard(card_ent)
     end
+
+    abilities.trigger("cardBought", card_ent.rgbTeam)
 
     board:setMoney(board:getMoney() - cost)
 end
