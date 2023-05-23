@@ -2,10 +2,7 @@
 local abstractProjectile = require("shared.abstract.abstract_projectile")
 
 
-local abilities
-if server then
-    abilities = require("server.abilities.abilities")
-end
+local abilities = require("shared.abilities.abilities")
 
 
 local BUFFTYPES = constants.BUFF_TYPES

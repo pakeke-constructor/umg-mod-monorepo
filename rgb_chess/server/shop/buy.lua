@@ -1,7 +1,7 @@
 
 local Board = require("server.board")
 
-local abilities = require("server.abilities.abilities")
+local abilities = require("shared.abilities.abilities")
 local summon = require("server.engine.summon")
 
 

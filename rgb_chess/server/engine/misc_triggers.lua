@@ -1,5 +1,6 @@
 
-local abilities = require("server.abilities.abilities")
+local abilities = require("shared.abilities.abilities")
+
 
 
 umg.on("entityDeath", function(ent)

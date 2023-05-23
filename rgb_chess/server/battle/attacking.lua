@@ -1,7 +1,8 @@
 
 local shieldAPI = require("server.engine.shields")
 local rgbAPI = require("server.engine.rgb_api")
-local abilities = require("server.abilities.abilities")
+
+local abilities = require("shared.abilities.abilities")
 
 
 umg.on("meleeAttack", function(ent, targetEnt)

@@ -5,7 +5,7 @@ local Board = require("server.board")
 
 local matchmaking = require("server.battle.matchmaking")
 
-local abilities = require("server.abilities.abilities")
+local abilities = require("shared.abilities.abilities")
 
 local income = require("server.shop.income")
 

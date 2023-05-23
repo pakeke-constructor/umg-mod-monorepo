@@ -16,10 +16,13 @@ local abilities = {}
 
 
 
-local abilityActionBuffer = base.Heap(function(a,b)
-    -- TODO: Do some checks to ensure that this is the right way around.
-    return a.activateTime > b.activateTime
-end)
+local abilityActionBuffer
+if server then
+    abilityActionBuffer = base.Heap(function(a,b)
+        -- TODO: Do some checks to ensure that this is the right way around.
+        return a.activateTime > b.activateTime
+    end)
+end
 
 
 local bufferActionTc = typecheck.assert({
@@ -260,6 +263,7 @@ end
 
 
 function abilities.clearBuffers()
+    assert(server,"cant call on clientside")
     abilityActionBuffer:clear()
 end
 
@@ -282,7 +286,7 @@ function abilities.activateDirectly(sourceEnt, targetEnt, ability, level)
         without applying the filter. 
         If level is not given, defaults to ability level.
     ]]
-    assert(server,"not on clientside")
+    assert(server,"cant call on clientside")
     triggerDirectlyTc(sourceEnt, targetEnt, ability, level)
     assert(rgb.isUnit(sourceEnt), "?")
 
@@ -297,7 +301,7 @@ function abilities.activateAll(ent)
         activates all abilities inside of `ent`,
         including items.
     ]]
-    assert(server,"not on clientside")
+    assert(server,"cant call on clientside")
     assert(umg.exists(ent), "?")
     assert(rgb.isUnit(ent), "not a unit entity")
 
@@ -320,7 +324,12 @@ local function checkAbilitiesValid(ent)
 end
 
 
+
+
+
+
 if server then
+-- serverside API
 
 local abilityGroup = umg.group("rgbUnit", "abilities")
 

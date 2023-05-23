@@ -1,7 +1,6 @@
 
-local abilities = require("server.abilities.abilities")
+local abilities = require("shared.abilities.abilities")
 
-    abilities = require("server.abilities.abilities")
 
 local shieldAPI = { }
 

@@ -7,7 +7,7 @@ local itemPool = require("server.engine.item_pool")
 
 local abilities
 umg.on("@load", function()
-    abilities = require("server.abilities.abilities")
+    abilities = require("shared.abilities.abilities")
 end)
 
 
