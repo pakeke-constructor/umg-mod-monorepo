@@ -144,26 +144,37 @@ end
 
 
 
+local function updateEnt(ent, now)
+    local targetCategory = ent.attackBehaviourTargetCategory or ent.attackBehaviour.target
+    local target = ent.attackBehaviourTargetEntity
+
+    if not targetCategory then
+        -- if we don't have a valid target category, return
+        return nil
+    end
+
+    if (not umg.exists(target)) or (not categories.entityHasCategory(ent, targetCategory)) then
+        -- if the entity has been deleted, or if it has changed category, reset state
+        ent.attackBehaviourTargetEntity = nil
+        target = nil
+    end
+    if (not target) then
+        target = findClosestEntity(ent, targetCategory)
+    end
+    if umg.exists(target) and math.distance(target, ent) < ent.attackBehaviour.range then
+        ent.attackBehaviourTargetEntity = target -- we do a bit of cacheing
+        tryAttack(ent, target, now)
+    end
+    updateAttack(ent)
+end
+
+
 
 umg.on("@tick", function()
     local now = base.getGameTime()
     for _, ent in ipairs(attackGroup) do
         if ent.attackBehaviour then
-            local targetCategory = ent.attackBehaviourTargetCategory or ent.attackBehaviour.target
-            local target = ent.attackBehaviourTargetEntity
-            if (not umg.exists(target)) or (not categories.entityHasCategory(ent, targetCategory)) then
-                -- if the entity has been deleted, or if it has changed category, reset state
-                ent.attackBehaviourTargetEntity = nil
-                target = nil
-            end
-            if (not target) then
-                target = findClosestEntity(ent, targetCategory)
-            end
-            if umg.exists(target) and math.distance(target, ent) < ent.attackBehaviour.range then
-                ent.attackBehaviourTargetEntity = target -- we do a bit of cacheing
-                tryAttack(ent, target, now)
-            end
-            updateAttack(ent)
+            updateEnt(ent, now)
         end
     end
 end)
