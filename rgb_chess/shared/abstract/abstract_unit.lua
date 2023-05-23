@@ -8,8 +8,6 @@ end
 
 
 --[[
-    abstract melee entity
-
     entities that extend this will inherit these components:
 ]]
 return {
@@ -31,7 +29,8 @@ return {
 
     healthBar = {
         offset = 20,
-        color = {1,0,0}
+        color = {0.9,0.2,0.2},
+        shiny = true
     },
 
     openable = {

@@ -73,8 +73,6 @@ end
 
 
 attackGroup:onAdded(function(ent)
-    assert(ent:hasComponent("attackSpeed"), "attackBehaviour entities require an attackSpeed component!")
-    assert(ent:hasComponent("attackDamage"), "attackBehaviour entities require an attackDamage component!")
     if ent.attackBehaviour then
         local typ = ent.attackBehaviour.type
         if (not typ) or not (attackTypes[typ]) then

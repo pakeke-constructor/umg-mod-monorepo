@@ -135,7 +135,7 @@ function rgb.getDamageEstimate(attackDamage, attackSpeed)
 end
 
 
-function rgb.generatePVEEnemyTeam(rgbTeam)
+function rgb.getPVEEnemyTeamName(rgbTeam)
     -- generates a team ID for use by PVE enemies
     return constants.PVE_PREFIX .. rgbTeam
 end

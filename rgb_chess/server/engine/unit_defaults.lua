@@ -21,3 +21,12 @@ makeDefaultsGroup("defaultAttackSpeed", "attackSpeed")
 makeDefaultsGroup("defaultSpeed", "speed")
 makeDefaultsGroup("defaultSorcery", "sorcery")
 
+
+local defaultHealthGroup = umg.group("defaultHealth")
+
+defaultHealthGroup:onAdded(function(ent)
+    ent.maxHealth = ent.defaultHealth
+    ent.health = ent.defaultHealth
+end)
+
+

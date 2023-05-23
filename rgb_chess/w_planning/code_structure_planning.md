@@ -13,8 +13,8 @@ attack(atcker_ent, targ_ent, dmg) -- emitted by attackBehaviour mod
 
 reroll(rgbTeam) -- called when a board rerolls
 
-buff(unit, attackAmount, healthAmount, fromUnit, depth) 
-debuff(unit, attackAmount, healthAmount, fromUnit, depth)
+buff(unit, attackAmount, healthAmount, fromUnit) 
+debuff(unit, attackAmount, healthAmount, fromUnit)
 
 
 -- THE FOLLOW CALLBACKS

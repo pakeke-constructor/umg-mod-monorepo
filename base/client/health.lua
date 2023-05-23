@@ -52,8 +52,13 @@ umg.on("drawEntity", function(ent)
         love.graphics.rectangle("fill", x, y, w * ratio, h)
 
         if hb.shiny then
-            love.graphics.setColor(sqrt(hcol[1])+0.1, sqrt(hcol[2])+0.1, sqrt(hcol[3])+0.1)
-            love.graphics.rectangle("fill", x, y, w * ratio, h/2)
+            -- TODO: Do this properly with hue or something
+            local DIFF = 0.2
+            local H = h/3
+            love.graphics.setColor(hcol[1]+DIFF, hcol[2]+DIFF, hcol[3]+DIFF)
+            love.graphics.rectangle("fill", x, y, w * ratio, H)
+            love.graphics.setColor(hcol[1]-DIFF, hcol[2]-DIFF, hcol[3]-DIFF)
+            love.graphics.rectangle("fill", x, y + (h - H), w * ratio, H)
         end
 
         -- outline of health bar:

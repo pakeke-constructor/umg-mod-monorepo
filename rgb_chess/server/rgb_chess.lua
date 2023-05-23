@@ -90,7 +90,7 @@ end
 
 local function startPvE()
     for _, board in Board.iterBoards() do
-        local enemyTeam = rgb.getPVEEnemyTeam(board:getTeam())
+        local enemyTeam = rgb.getPVEEnemyTeamName(board:getTeam())
         board:setEnemyTeam(enemyTeam)
         local enemies = generatePVE.generateEnemies(rgb.getTurn())
         base.delay(1, finalizePvE, board, enemies)
@@ -139,6 +139,8 @@ end
 
 local inTurnTransition = false
 
+local inBattleTransition = false
+
 
 local function startTurn()
     inTurnTransition = false
@@ -169,6 +171,7 @@ end
 local battleStartTime = love.timer.getTime()
 
 local function startBattle()
+    inBattleTransition = false
     battleStartTime = love.timer.getTime()
 
     rgb.setState(rgb.STATES.BATTLE_STATE)
@@ -236,8 +239,9 @@ local function updateBattle()
         end
     end
 
-    if isBattleOver then
+    if isBattleOver and (not inBattleTransition) then
         -- battle is over! Transition to `turn` state.
+        inBattleTransition = true
         chat.message("(SERVER) - battle round has completed.")
         endBattle()
 

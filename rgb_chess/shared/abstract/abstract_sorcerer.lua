@@ -11,8 +11,7 @@ local SORCERER_RANGE = 1000
 ]]
 return umg.extend(abstractUnit, {
     unitType = constants.UNIT_TYPES.SORCERER,
-    attackSpeed = 1,
-    attackDamage = 0,
+    defaultAttackSpeed = 2,
 
     attackBehaviour = {
         range = SORCERER_RANGE,
