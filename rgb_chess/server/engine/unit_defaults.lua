@@ -1,4 +1,9 @@
 
+local triggers = require("shared.abilities.triggers")
+local actions = require("shared.abilities.actions")
+local targets = require("shared.abilities.targets")
+local filters = require("shared.abilities.filters")
+
 --[[
 
 Sets defaults for unit stats
@@ -29,4 +34,59 @@ defaultHealthGroup:onAdded(function(ent)
     ent.health = ent.defaultHealth
 end)
 
+
+
+
+
+
+
+
+
+local function checkAbilityValid(ability, etypeName)
+    -- quickly checks everything is valid
+    local targ = targets.getTarget(ability.target)
+    local act = actions.getAction(ability.action)
+
+    if ability.filters then
+        assert(type(ability.filters) == "table", etypeName)
+        for _, filt in ipairs(ability.filters)do
+            assert(filters.getFilter(filt), etypeName)
+        end
+    end
+    
+    assert(triggers.isValid(ability.trigger), etypeName)
+    assert(targ, etypeName)
+    assert(act, etypeName)
+end
+
+
+local defaultAbilityGroup = umg.group("defaultAbilities")
+
+local function clone(x, seen)
+    -- deepcopy impl
+    if type(x) ~= "table" then
+        return x
+    end
+    seen = seen or {}
+    local new = {}
+    for k,v in pairs(x)do
+        new[k] = clone(v, seen)
+    end
+    return new
+end
+
+--[[
+    copy default abilities over to entity
+]]
+defaultAbilityGroup:onAdded(function(ent)
+    ent.abilities = ent.abilities or {}
+    if ent.defaultAbilities.trigger then
+        error("Must define a list of abilities, not a single ability as a table.  " .. tostring(ent:type()))
+    end
+
+    for _, abil in ipairs(ent.defaultAbilities)do
+        checkAbilityValid(abil, ent:type())
+        table.insert(ent.abilities, clone(abil))
+    end
+end)
 

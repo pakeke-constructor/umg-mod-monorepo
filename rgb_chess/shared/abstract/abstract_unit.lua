@@ -29,7 +29,7 @@ return {
 
     healthBar = {
         offset = 20,
-        color = {0.9,0.2,0.2},
+        color = {0.8,0.8,0.8},
         shiny = true
     },
 
