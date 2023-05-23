@@ -14,7 +14,7 @@ return umg.extend(abstractMelee, {
         {
             trigger = "reroll",
             target = "allies",
-            action = "buff4",
+            action = "buffHealth2",
         }
     },
 

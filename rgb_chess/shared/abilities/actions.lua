@@ -105,7 +105,9 @@ for magnitude = 1, 4 do
             action = function(sourceEnt, targetEnt, level)
                 local bType = constants.BUFF_TYPES[buffEnum]
                 local amount = level * magnitude
-                rgbAPI.buff(targetEnt, bType, amount, sourceEnt)
+                if umg.exists(sourceEnt) then
+                    rgbAPI.buff(targetEnt, bType, amount, sourceEnt)
+                end
             end,
             description = function(level)
                 local amount = level * magnitude
