@@ -318,15 +318,6 @@ end
 
 
 
-local function checkAbilityValid(ability, etypeName)
-    local targ = targets.getTarget(ability.target)
-    local act = actions.getAction(ability.action)
-
-    assert(triggers.isValid(ability.trigger), etypeName)
-    assert(targ, etypeName)
-    assert(act, etypeName)
-end
-
 
 
 
@@ -335,12 +326,35 @@ end
 if server then
 -- serverside API
 
+local function checkAbilityValid(ability, etypeName)
+    -- quickly checks everything is valid
+    local targ = targets.getTarget(ability.target)
+    local act = actions.getAction(ability.action)
+
+    if ability.filters then
+        assert(type(ability.filters) == "table", etypeName)
+        for _, filt in ipairs(ability.filters)do
+            assert(filters.getFilter(filt), etypeName)
+        end
+    end
+    
+    assert(triggers.isValid(ability.trigger), etypeName)
+    assert(targ, etypeName)
+    assert(act, etypeName)
+end
+
+
 local defaultAbilityGroup = umg.group("defaultAbilities")
 
-local function clone(tab)
+local function clone(x, seen)
+    -- deepcopy impl
+    if type(x) ~= "table" then
+        return x
+    end
+    seen = seen or {}
     local new = {}
-    for k,v in pairs(tab)do
-        new[k] = v
+    for k,v in pairs(x)do
+        new[k] = clone(v, seen)
     end
     return new
 end

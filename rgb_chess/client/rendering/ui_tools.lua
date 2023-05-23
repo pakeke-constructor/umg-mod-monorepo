@@ -102,26 +102,22 @@ local function renderAbility(ability)
     renderAbilityTc(ability)
 
     local targ = targets.getTarget(ability.target)
-    local filt = ability.filter and filters.getFilter(ability.filter)
     local act = actions.getAction(ability.action)
 
-    --[[
-        TODO: this is TERRIBLE.
-        typecheckng should be done in abilities.lua.
-        Also, the `abilities` component needs to be a Regular component, not shared.
-        We should make a new component, `defaultAbilities` to account for this.
-    ]]
-    if not targ then
-        error("bad target: " .. ability.target)
-    end
-    if not act then
-        error("bad action: " .. ability.action)
+    -- triggers
+    triggers.drawSlabUI(ability.trigger)
+    -- targets
+    targ:drawSlabUI()
+
+    -- filters
+    if ability.filters then
+        for _, filtName in ipairs(ability.filters)do
+            local f = filters.getFilter(filtName)
+            f:drawSlabUI()
+        end
     end
 
-    -- now draw the slab ui:
-    triggers.drawSlabUI(ability.trigger)
-    targ:drawSlabUI()
-    if filt then filt:drawSlabUI() end
+    -- action
     act:drawSlabUI(ability.level or 1)
 end
 

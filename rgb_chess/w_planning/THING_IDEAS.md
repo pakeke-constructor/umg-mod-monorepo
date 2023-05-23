@@ -99,7 +99,7 @@ There is a maximum of 1 paragon unit for each army.
 - SORCIO:  Turn start:  Steals 15% SORC from all non-[color] units
 - CELESTION:  On buy: copies all abilities from [color] units
 - MYTHRUNE:  Has 36 inventory slots. Turn start: Gives 4 free [color] items
-- ZEPHYR:  During battle, mimic all [color] unit abilities when executed
+- ZEPHYR:  During battle, mimic all [color] unit abilities when they apply
 - HIVESWARM:  On buy:  Duplicates all [color] units with 70% stat reduction
 
 

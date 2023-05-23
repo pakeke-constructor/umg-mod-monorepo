@@ -1,6 +1,11 @@
 
 require("shared.constants")
 
+local Board
+if server then
+    Board = require("server.board")
+end
+
 
 local targets = {}
 
@@ -47,10 +52,13 @@ function Target:getTargets(sourceEnt)
 end
 
 
-local function getAllies(board)
+local function getAllies(sourceEnt)
+    local board = Board.getBoard(sourceEnt.rgbTeam)
     local buffer = base.Array()
     for _, ent in board:iterUnits() do
-        buffer:add(ent)
+        if ent ~= sourceEnt then
+            buffer:add(ent)
+        end
     end
     return buffer
 end
@@ -77,7 +85,30 @@ Target({
 })
 
 
+-- matching
+-- all same color allies
+Target({
+    name = "matching",
+    getTargets = function(sourceEnt)
+        return getAllies(sourceEnt):filter(function(ent)
+            return rgb.match(ent.rgb, sourceEnt.rgb)
+        end)
+    end,
+    description = "For all matching allies:"
+})
 
+
+-- different
+-- all different color allies
+Target({
+    name = "different",
+    getTargets = function(sourceEnt)
+        return getAllies(sourceEnt):filter(function(ent)
+            return not rgb.match(ent.rgb, sourceEnt.rgb)
+        end)
+    end,
+    description = "For all non matching allies:"
+})
 
 
 
