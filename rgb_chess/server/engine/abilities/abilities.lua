@@ -257,6 +257,10 @@ function abilities.triggerForAll(triggerType)
 end
 
 
+function abilities.clearBuffers()
+    abilityActionBuffer:clear()
+end
+
 
 
 

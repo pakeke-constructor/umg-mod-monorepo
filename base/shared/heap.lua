@@ -102,7 +102,7 @@ function Heap:toTable()
 end
 
 function Heap:clear()
-	for k in pairs(self) do
+	for k in ipairs(self) do
 		self[k] = nil
 	end
 end
