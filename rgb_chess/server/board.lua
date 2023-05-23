@@ -4,7 +4,13 @@ require("shared.constants")
 local genCards = require("server.gen.generate_cards")
 local itemPool = require("server.engine.item_pool")
 
-local abilities = require("server.abilities.abilities")
+
+local abilities
+umg.on("@load", function()
+    abilities = require("server.abilities.abilities")
+end)
+
+
 
 
 local BOARD_WIDTH = constants.BOARD_WIDTH

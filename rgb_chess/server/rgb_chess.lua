@@ -143,6 +143,7 @@ local inTurnTransition = false
 local function startTurn()
     inTurnTransition = false
     umg.call("startTurn")
+    abilities.clearBuffers()
     abilities.triggerForAll("startTurn")
     rgb.setState(rgb.STATES.TURN_STATE)
     for _, board in Board.iterBoards() do
@@ -173,6 +174,7 @@ local function startBattle()
     rgb.setState(rgb.STATES.BATTLE_STATE)
     saveBoards()
 
+    abilities.clearBuffers()
     abilities.triggerForAll("startBattle")
     umg.call("startBattle")
 

@@ -4,7 +4,7 @@ local abstractProjectile = require("shared.abstract.abstract_projectile")
 
 local abilities
 if server then
-    abilities = require("server.abilities.abiliites")
+    abilities = require("server.abilities.abilities")
 end
 
 

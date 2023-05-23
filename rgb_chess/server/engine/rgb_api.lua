@@ -92,13 +92,6 @@ function rgbAPI.damage(sourceEnt, targetEnt, damage)
 end
 
 
-
-
-
-rgbAPI.abilities = require("shared.abilities.abilities")
-
-
-
 umg.expose("rgbAPI", rgbAPI)
 _G.rgbAPI = rgbAPI
 

@@ -1,8 +1,11 @@
 
+require("shared.constants")
+
 
 local targets = {}
 
 local Target = base.Class("rgb-chess:Target")
+
 
 
 local nameToTarget = {--[[
@@ -53,6 +56,8 @@ local function getAllies(board)
 end
 
 
+-- allies:
+-- all allies.
 Target({
     name = "allies",
     getTargets = function(sourceEnt)
@@ -61,12 +66,12 @@ Target({
     description = "For all allies:"
 })
 
-
-
+-- self
+-- Affects self
 Target({
     name = "self",
     getTargets = function(sourceEnt)
-        return getAllies(sourceEnt)
+        return {sourceEnt}
     end,
     description = "Affect self:"
 })

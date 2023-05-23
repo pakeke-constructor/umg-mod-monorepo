@@ -1,10 +1,13 @@
 
-local triggers = require("server.engine.abilities.triggers")
-local actions = require("server.engine.abilities.actions")
-local targets = require("server.engine.abilities.targets")
-local filters = require("server.engine.abilities.filters")
+local triggers = require("shared.abilities.triggers")
+local actions = require("shared.abilities.actions")
+local targets = require("shared.abilities.targets")
+local filters = require("shared.abilities.filters")
 
-local Board = require("server.board")
+local Board
+if server then
+    Board = require("server.board")
+end
 
 
 local abilities = {}
@@ -75,7 +78,6 @@ end
 
 
 
-local abilityGroup = umg.group("rgbUnit", "abilities")
 
 
 
@@ -280,6 +282,7 @@ function abilities.activateDirectly(sourceEnt, targetEnt, ability, level)
         without applying the filter. 
         If level is not given, defaults to ability level.
     ]]
+    assert(server,"not on clientside")
     triggerDirectlyTc(sourceEnt, targetEnt, ability, level)
     assert(rgb.isUnit(sourceEnt), "?")
 
@@ -294,6 +297,7 @@ function abilities.activateAll(ent)
         activates all abilities inside of `ent`,
         including items.
     ]]
+    assert(server,"not on clientside")
     assert(umg.exists(ent), "?")
     assert(rgb.isUnit(ent), "not a unit entity")
 
@@ -310,19 +314,24 @@ end
 
 
 
+local function checkAbilitiesValid(ent)
+    local abils = ent.abilities
+    assert(not abils.trigger, "should be a list of abilities")
+end
+
+
+if server then
+
+local abilityGroup = umg.group("rgbUnit", "abilities")
 
 abilityGroup:onAdded(function(ent)
+    checkAbilitiesValid(ent)
     addToAbilityMapping(ent)
 end)
-
-
 
 abilityGroup:onRemoved(function(ent)
     removeFromAbilityMapping(ent)
 end)
-
-
-
 
 umg.on("@tick", function()
     for _, ent in ipairs(abilityGroup)do
@@ -347,6 +356,8 @@ umg.on("@tick", function()
         end
     end
 end)
+
+end
 
 
 

@@ -1,4 +1,3 @@
-local abilities = require("shared.abilities.abilities")
 
 local abstractMelee = require("shared.abstract.abstract_melee")
 
@@ -16,7 +15,13 @@ return umg.extend(abstractMelee, {
 
     maxHealth = 100,
 
-    abilities = {abilities.reroll},
+    abilities = {
+        {
+            trigger = "reroll",
+            target = "allies",
+            action = "buff4",
+        }
+    },
 
     cardInfo = {
         type = constants.CARD_TYPES.UNIT,

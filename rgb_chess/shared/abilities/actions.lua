@@ -33,7 +33,7 @@ end
 
 
 
-local drawSlabUITc = typecheck("table", "number")
+local drawSlabUITc = typecheck.assert("table", "number")
 
 function Action:drawSlabUI(level)
     drawSlabUITc(self, level)

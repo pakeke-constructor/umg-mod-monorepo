@@ -151,6 +151,7 @@ end
 
 function rgb.setTarget(ent, rgbTeam)
     -- sets a target for an entity
+    print("TARGET:", ent.rgbTeam, rgbTeam)
     ent.moveBehaviourTargetCategory = rgbTeam
     ent.attackBehaviourTargetCategory = rgbTeam
 end

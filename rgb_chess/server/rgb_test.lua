@@ -22,7 +22,7 @@ chat.handleCommand("spawnArmy", {
 local bruteGroup = umg.group("attackBehaviourTargetCategory")
 
 chat.handleCommand("testHeal", {
-    adminLevel = 1,
+    adminLevel = 1000,
     arguments = {},
 
     handler = function(sender)
@@ -37,7 +37,7 @@ chat.handleCommand("testHeal", {
 
 
 chat.handleCommand("spawnItems", {
-    adminLevel = 1,
+    adminLevel = 1000,
     arguments = {},
 
     handler = function(sender)
