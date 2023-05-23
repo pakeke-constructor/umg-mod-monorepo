@@ -318,9 +318,13 @@ end
 
 
 
-local function checkAbilitiesValid(ent)
-    local abils = ent.abilities
-    assert(not abils.trigger, "should be a list of abilities")
+local function checkAbilityValid(ability, etypeName)
+    local targ = targets.getTarget(ability.target)
+    local act = actions.getAction(ability.action)
+
+    assert(triggers.isValid(ability.trigger), etypeName)
+    assert(targ, etypeName)
+    assert(act, etypeName)
 end
 
 
@@ -331,10 +335,37 @@ end
 if server then
 -- serverside API
 
+local defaultAbilityGroup = umg.group("defaultAbilities")
+
+local function clone(tab)
+    local new = {}
+    for k,v in pairs(tab)do
+        new[k] = v
+    end
+    return new
+end
+
+--[[
+    copy default abilities over to entity
+]]
+defaultAbilityGroup:onAdded(function(ent)
+    ent.abilities = ent.abilities or {}
+    if ent.defaultAbilities.trigger then
+        error("Must define a list of abilities, not a single ability as a table.  " .. tostring(ent:type()))
+    end
+
+    for _, abil in ipairs(ent.defaultAbilities)do
+        checkAbilityValid(abil, ent:type())
+        table.insert(ent.abilities, clone(abil))
+    end
+end)
+
+
+
 local abilityGroup = umg.group("rgbUnit", "abilities")
 
 abilityGroup:onAdded(function(ent)
-    checkAbilitiesValid(ent)
+    assert(ent:isRegular("abilities"), "abilities can't be shared")
     addToAbilityMapping(ent)
 end)
 

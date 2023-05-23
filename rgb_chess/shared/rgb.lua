@@ -185,6 +185,12 @@ function rgb.isUnitOfType(ent, enum)
     return rgb.isUnit(ent) and rgb.unitType == enum
 end
 
+function rgb.isAttacker(ent)
+    local melee = constants.UNIT_TYPES.MELEE
+    local ranged = constants.UNIT_TYPES.RANGED
+    return rgb.isUnitOfType(ent, melee) and rgb.isUnitOfType(ent, ranged)
+end
+
 
 
 

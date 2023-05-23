@@ -7,6 +7,8 @@ return umg.extend(abstractRanged, {
     image = "red_player_up_1",
     bobbing = {},
 
+    defaultAbilities = {},
+
     projectileType = constants.PROJECTILE_TYPES.DAMAGE,
 
     defaultHealth = 100,

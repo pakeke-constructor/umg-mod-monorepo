@@ -76,10 +76,6 @@ function uiTools.renderBasicUnitInfo(unitEType, rgbColor)
     local cardInfo = unitEType.cardInfo
     Slab.Text("UNIT:")
     Slab.Text(cardInfo.name, {Color = rgbColor})
-     
-    Slab.Text(" ")
-    Slab.Separator()
-    uiTools.renderAbilityInfo(unitEType.abilities or {})
 end
 
 
@@ -104,8 +100,6 @@ local function renderAbility(ability)
         renders an ability assuming an existing Slab context.
     ]]
     renderAbilityTc(ability)
-
-    triggers.drawSlabUI(ability.trigger)
 
     local targ = targets.getTarget(ability.target)
     local filt = ability.filter and filters.getFilter(ability.filter)

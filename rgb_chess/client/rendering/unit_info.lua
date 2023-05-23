@@ -13,10 +13,9 @@ local function singleUnitStats(ent)
     Slab.Separator()
     uiTools.renderUnitHealth(ent.maxHealth)
    
-    -- todo: Make this more robust. perhaps rgb.isAttacker(ent)?
     if rgb.isSorcerer(ent) then
         uiTools.renderUnitSorcery(ent.sorcery)
-    else
+    elseif rgb.isAttacker(ent) then
         uiTools.renderUnitDamage(ent.attackDamage, ent.attackSpeed)
     end
 end

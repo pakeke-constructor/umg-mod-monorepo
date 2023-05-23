@@ -10,6 +10,8 @@ return umg.extend(abstractSorcerer, {
     defaultHealth = 30,
     defaultSorcery = 5,
 
+    defaultAbilities = {},
+
     cardInfo = {
         type = constants.CARD_TYPES.UNIT,
         cost = 3,
