@@ -4,6 +4,8 @@ require("shared.constants")
 local genCards = require("server.gen.generate_cards")
 local itemPool = require("server.engine.item_pool")
 
+local abilities = require("server.abilities.abilities")
+
 
 local BOARD_WIDTH = constants.BOARD_WIDTH
 local BOARD_HEIGHT = constants.BOARD_HEIGHT
@@ -365,7 +367,11 @@ end
 
 
 function Board:reroll()
-    local rgb_team = self:getTeam()
+    if rgb.getState() ~= rgb.STATES.TURN_STATE then
+        return
+    end
+
+    local rgbTeam = self:getTeam()
 
     for shopIndex=1, self.shopSize do
         local delay = (shopIndex/self.shopSize) * 0.3
@@ -374,7 +380,8 @@ function Board:reroll()
         end)
     end
 
-    umg.call("reroll", rgb_team)
+    abilities.trigger("reroll", rgbTeam)
+    umg.call("reroll", rgbTeam)
 end
 
 

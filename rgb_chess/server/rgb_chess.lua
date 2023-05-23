@@ -142,8 +142,8 @@ local inTurnTransition = false
 
 local function startTurn()
     inTurnTransition = false
-    umg.call("endBattle")
     umg.call("startTurn")
+    abilities.triggerForAll("startTurn")
     rgb.setState(rgb.STATES.TURN_STATE)
     for _, board in Board.iterBoards() do
         board:emplacePlayer(board:getTeam())
@@ -187,6 +187,11 @@ local function startBattle()
     rgb.increaseTurnCount()
 end
 
+
+local function endBattle()
+    umg.call("endBattle")
+    abilities.triggerForAll("endBattle")
+end
 
 
 local function endTurn()
@@ -232,6 +237,7 @@ local function updateBattle()
     if isBattleOver then
         -- battle is over! Transition to `turn` state.
         chat.message("(SERVER) - battle round has completed.")
+        endBattle()
 
         base.delay(constants.END_BATTLE_DELAY, startTurn)
     end

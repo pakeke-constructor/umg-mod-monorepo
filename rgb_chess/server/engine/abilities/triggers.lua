@@ -23,12 +23,12 @@ local triggerTypeToDescription = {
     allyShieldBreak = "When an ally's shield breaks:", -- done
     allyShieldExpire = "When an ally's shield expires:", -- done
  
-    reroll = "On reroll:",
-    startTurn = "On turn start:",
-    endTurn = "On turn end:",
+    reroll = "On reroll:", -- done
+    startTurn = "On turn start:", -- done
+    endTurn = "On turn end:", -- done
 
-    startBattle = "On battle start:",
-    endBattle = "On battle end:",
+    startBattle = "On battle start:", -- done
+    endBattle = "On battle end:", -- done
 
     cardBought = "When a card is purchased:", -- done
 
