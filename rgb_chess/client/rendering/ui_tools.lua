@@ -1,6 +1,13 @@
 
-local abilities = require("shared.abilities.abilities")
+
 require("shared.rgb")
+
+local triggers = require("shared.abilities.triggers")
+local targets = require("shared.abilities.targets")
+local filters = require("shared.abilities.filters")
+local actions = require("shared.abilities.actions")
+
+
 
 
 local uiTools = {}
@@ -59,7 +66,6 @@ end
 
 
 
-local descTextArgs = {Color = {0.6,0.6,0.6}}
 
 
 local renderEtypeUnitInfoTc = typecheck.assert("table", "table")
@@ -78,22 +84,47 @@ end
 
 
 
-local renderAbilityTc = typecheck.assert("table")
-local function renderAbility(ability)
-    renderAbilityTc(ability)
+--[[
+
+local function renderText(text)
     local f = love.graphics.getFont()
-    local _, txt_table = f:getWrap(ability.description, 600)
+    local _, txt_table = f:getWrap(text, 600)
     for _, txt in ipairs(txt_table) do
         Slab.Text(txt, descTextArgs)
     end
 end
 
+]]
+
+
+
+local renderAbilityTc = typecheck.assert("table")
+local function renderAbility(ability)
+    --[[
+        renders an ability assuming an existing Slab context.
+    ]]
+    renderAbilityTc(ability)
+
+    triggers.drawSlabUI(ability.trigger)
+
+    local targ = targets.getTarget(ability.target)
+    local filt = ability.filter and filters.getFilter(ability.filter)
+    local act = actions.getAction(ability.action)
+    assert(targ and act, "?")
+
+    -- now draw the slab ui:
+    triggers.drawSlabUI(ability.trigger)
+    targ:drawSlabUI()
+    if filt then filt:drawSlabUI() end
+    act:drawSlabUI()
+end
+
+
 
 function uiTools.renderAbilityInfo(abilityList)
     Slab.Text("Abilities:")
     Slab.Separator()
-    for _, abilityName in ipairs(abilityList)do
-        local ability = abilities.getAbilityObject(abilityName) 
+    for _, ability in ipairs(abilityList)do
         renderAbility(ability)
         Slab.Separator()
     end    

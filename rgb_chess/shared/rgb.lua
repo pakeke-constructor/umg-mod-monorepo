@@ -127,8 +127,10 @@ end
 
 
 
+local getDamageEstimateTc = typecheck.assert("number", "number")
 
 function rgb.getDamageEstimate(attackDamage, attackSpeed)
+    getDamageEstimateTc(attackDamage, attackSpeed)
     return attackDamage * attackSpeed
 end
 
@@ -151,7 +153,6 @@ end
 
 function rgb.setTarget(ent, rgbTeam)
     -- sets a target for an entity
-    print("TARGET:", ent.rgbTeam, rgbTeam)
     ent.moveBehaviourTargetCategory = rgbTeam
     ent.attackBehaviourTargetCategory = rgbTeam
 end
@@ -172,8 +173,7 @@ end
 
 function rgb.isUnit(ent)
     -- returns true if ent is a unit entity
-    return ent.cardInfo and ent.cardInfo.type == constants.CARD_TYPES.UNIT
-    -- This is a bit of a hacky way of doing things, but o well
+    return ent.rgbUnit
 end
 
 

@@ -9,10 +9,9 @@ return umg.extend(abstractRanged, {
 
     projectileType = constants.PROJECTILE_TYPES.DAMAGE,
 
-    attackSpeed = 0.1,
-    attackDamage = 0.5,
-
-    maxHealth = 100,
+    defaultHealth = 100,
+    defaultAttackSpeed = 1,
+    defaultAttackDamage = 8,
 
     init = base.initializers.initVxVy
 })

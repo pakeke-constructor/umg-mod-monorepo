@@ -10,11 +10,6 @@ return umg.extend(abstractMelee, {
     defaultAttackSpeed = 1,
     defaultAttackDamage = 8,
 
-    attackSpeed = 1,
-    attackDamage = 8,
-
-    maxHealth = 100,
-
     abilities = {
         {
             trigger = "reroll",

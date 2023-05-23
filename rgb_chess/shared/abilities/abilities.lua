@@ -244,7 +244,7 @@ local triggerTc = typecheck.assert("string", "string")
 
 function abilities.trigger(triggerType, rgbTeam)
     triggerTc(triggerType, rgbTeam)
-    assert(triggers.TYPES[triggerType], "?")
+    assert(triggers.isValid(triggerType), "invalid trigger: " .. triggerType)
 
     local arr = triggerMapping[triggerType] or EMPTY
     for _, ent in ipairs(arr)do
