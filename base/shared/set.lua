@@ -8,7 +8,7 @@ local Set = Class("base:Set")
 
 function Set:init(initial)
     self.pointers = {}
-    self.size     = 0
+    self.len     = 0
     if initial then
         for i=1, #initial do
             self:add(initial[i])
@@ -21,13 +21,13 @@ end
 function Set:clear()
     local obj
     local ptrs = self.pointers
-    for i=1, self.size do
+    for i=1, self.len do
         obj = self[i]
         ptrs[obj] = nil
         self[i] = nil    
     end
 
-    self.size = 0
+    self.len = 0
     return self
 end
 
@@ -39,11 +39,11 @@ function Set:add(obj)
       return self
    end
 
-   local size = self.size + 1
+   local sze = self.len + 1
 
-   self[size] = obj
-   self.pointers[obj] = size
-   self.size          = size
+   self[sze] = obj
+   self.pointers[obj] = sze
+   self.len          = sze
 
    return self
 end
@@ -63,29 +63,31 @@ function Set:remove(obj, index)
     end
 
     index = index or self.pointers[obj]
-    local size  = self.size
+    local sze  = self.len
 
-    if index == size then
-        self[size] = nil
+    if index == sze then
+        self[sze] = nil
     else
-        local other = self[size]
+        local other = self[sze]
 
         self[index]  = other
         self.pointers[other] = index
 
-        self[size] = nil
+        self[sze] = nil
     end
 
     self.pointers[obj] = nil
-    self.size = size - 1
+    self.len = sze - 1
 
     return self
 end
 
 
 function Set:length()
-    return self.size
+    return self.len
 end
+
+Set.size = Set.length -- alias
 
 
 

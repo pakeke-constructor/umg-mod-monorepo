@@ -64,10 +64,15 @@ Filter({
 })
 
 
+local function bothHasDamage(ent1, ent2)
+    -- returns true if both entities have attackDamage compoennt
+    return ent1.attackDamage and ent2.attackDamage
+end
+
 Filter({
     name = "hasMoreDamage",
     filter = function(sourceEnt, targetEnt)
-        return sourceEnt.damage > targetEnt.damage
+        return bothHasDamage(sourceEnt, targetEnt) and sourceEnt.attackDamage < targetEnt.attackDamage
     end,
     description = "If the target has more damage than me"
 })
@@ -77,7 +82,7 @@ Filter({
 Filter({
     name = "hasLessDamage",
     filter = function(sourceEnt, targetEnt)
-        return sourceEnt.damage < targetEnt.damage
+        return bothHasDamage(sourceEnt, targetEnt) and sourceEnt.attackDamage > targetEnt.attackDamage
     end,
     description = "If the target has less damage than me"
 })

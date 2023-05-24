@@ -116,7 +116,7 @@ local function setupPvPMatch(match)
         table.insert(allyArray, ent)
     end
     local enemyArray = {}
-    for _, ent in ipairs(board:getUnits()) do 
+    for _, ent in ipairs(awayBoard:getUnits()) do 
         table.insert(enemyArray, ent)
     end
     board:putAllies(allyArray)

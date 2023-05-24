@@ -58,8 +58,10 @@ local function getAllies(sourceEnt)
     ]]
     local board = Board.getBoard(sourceEnt.rgbTeam)
     local allies = board:getUnits()
-    for i, ent in ipairs(allies)do
-        if ent ~= sourceEnt then
+    for i=allies:size(), 1, -1 do
+        local ent = allies[i]
+        if ent == sourceEnt then
+            -- Remove `self` from allies array
             allies:quickPop(i)
         end
     end

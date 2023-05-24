@@ -25,11 +25,21 @@ if server then
 end
 
 
+local function getLevel(bufAction)
+    --[[
+        TODO: Do some thinking about how we should represent levels here.
+        Currently it just defaults to 1
+    ]]
+    return bufAction.level or 1
+end
+
+
+
 local bufferActionTc = typecheck.assert({
     sourceEntity = umg.exists,
     targetEntity = umg.exists,
-    level = "number",
-    action = "table"
+    action = "string",
+    level = "number?"
 })
 
 
@@ -37,11 +47,11 @@ local function bufferAction(bufAction)
     --[[
         buffers an ability, such that it will occur in the next X seconds,
         instead of instantly.
-        This is a (crappy) way of avoiding infinite 
+        This is a (crappy) way of avoiding infinite loops
 
         bufAction = {
-            sourceEntity = x,
-            targetEntity = y,
+            sourceEntity = entX,
+            targetEntity = entY,
             action = <Action>
         }
     ]]
@@ -52,6 +62,10 @@ local function bufferAction(bufAction)
         return
     end
 
+    bufAction.action = actions.getAction(bufAction.action)
+    assert(bufAction.action, "invalid action?")
+
+    bufAction.level = getLevel(bufAction)
     bufAction.activateTime = base.getGameTime() + constants.ABILITY_BUFFER_TIME
     abilityActionBuffer:insert(bufAction)
 end
@@ -216,6 +230,7 @@ local function applyAbility(unitEnt, ability)
     local entities = target:getTargetEntities(unitEnt)
     for _, ent in ipairs(entities) do
         if filtersOk(unitEnt, ent, filts) then
+            print("applying") 
             applyActionTo(unitEnt, ent, action, level)
         end
     end
