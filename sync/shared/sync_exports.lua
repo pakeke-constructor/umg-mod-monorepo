@@ -12,4 +12,10 @@ sync.filters = filterAPI.filters
 sync.defineFilter = filterAPI.defineFilter
 
 
+if server then
+    -- only available serverside.
+    sync.syncComponent = require("shared.manual_sync_component")
+end
+
+
 umg.expose("sync", sync)
