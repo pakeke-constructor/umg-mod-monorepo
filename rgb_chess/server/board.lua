@@ -323,15 +323,15 @@ function Board:isBattleOver()
         local enemies = categories.getSet(enemy_category)
         local allies = categories.getSet(self_category)
 
-        if enemies.size == 0 and allies.size == 0 then
+        if enemies:size() == 0 and allies:size() == 0 then
             setWinners(self, false, false)
             return true
         end
-        if enemies.size == 0 then
+        if enemies:size() == 0 then
             setWinners(self, true, false)
             return true
         end
-        if allies.size == 0 then
+        if allies:size() == 0 then
             setWinners(self, false, true)
             return true
         end

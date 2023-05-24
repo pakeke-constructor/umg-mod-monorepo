@@ -41,9 +41,11 @@ end
 
 
 
+local textArg = {Color = constants.ABILITY_UI_COLORS.TARGET}
+
 function Target:drawSlabUI()
     local txt = self.description
-    Slab.Text("Target: ")
+    Slab.Text("Target: ", textArg)
     Slab.SameLine()
     Slab.Text(txt)
 end

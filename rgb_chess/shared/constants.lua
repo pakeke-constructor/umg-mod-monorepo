@@ -64,7 +64,14 @@ _G.constants = {
     ITEM_TYPES = base.Enum({
         PASSIVE = "PASSIVE",
         USABLE = "USABLE"
-    })
+    }),
+
+    ABILITY_UI_COLORS = {
+        ACTION = {0.9,0.4,0.2},
+        TRIGGER = {0.3,0.9,0.1},
+        FILTER = {0.9,0.9,0.3},
+        TARGET = {0.3,0.6,0.9}
+    }
 }
 
 

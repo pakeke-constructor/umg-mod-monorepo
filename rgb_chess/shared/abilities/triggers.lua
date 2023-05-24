@@ -44,13 +44,14 @@ local triggerTypeToDescription = {
 
 
 local stringTc = typecheck.assert("string")
+local textArg = {Color = constants.ABILITY_UI_COLORS.TRIGGER}
 
 function triggers.drawSlabUI(triggerType)
     stringTc(triggerType)
     local desc = triggerTypeToDescription[triggerType]
     assert(desc, "invalid triggertype: " .. triggerType)
 
-    Slab.Text("Trigger: ")
+    Slab.Text("Trigger: ", textArg)
     Slab.SameLine()
     Slab.Text(desc)
 end

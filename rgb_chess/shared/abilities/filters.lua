@@ -31,8 +31,11 @@ end
 
 
 
+local textArg = {Color = constants.ABILITY_UI_COLORS.FILTER}
 
 function Filter:drawSlabUI()
+    Slab.Text("Filter: ", textArg)
+    Slab.SameLine()
     Slab.Text(self.description)
 end
 

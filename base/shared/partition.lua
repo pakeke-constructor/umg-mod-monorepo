@@ -172,9 +172,9 @@ function Partition:iterator(x, y)
     local currentChunk = tryGetChunk(self,ix+dx, iy+dy)
 
     return function()
-        if (not currentChunk) or chunkI > currentChunk.size then
+        if (not currentChunk) or chunkI > currentChunk:size() then
             currentChunk = nil
-            while (not currentChunk) or chunkI > currentChunk.size do
+            while (not currentChunk) or chunkI > currentChunk:size() do
                 -- We force search for a non-empty chunk
                 if dx < 1 then
                     dx = dx + 1

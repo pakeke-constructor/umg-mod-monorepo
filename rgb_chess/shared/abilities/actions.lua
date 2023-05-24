@@ -34,6 +34,7 @@ end
 
 
 local drawSlabUITc = typecheck.assert("table", "number")
+local textArg = {Color = constants.ABILITY_UI_COLORS.ACTION}
 
 function Action:drawSlabUI(level)
     drawSlabUITc(self, level)
@@ -43,7 +44,7 @@ function Action:drawSlabUI(level)
         txt = self.description(level)
     end
 
-    Slab.Text("Action: ")
+    Slab.Text("Action: ", textArg)
     Slab.SameLine()
     Slab.Text(txt)
 end
