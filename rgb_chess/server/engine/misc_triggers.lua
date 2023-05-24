@@ -4,6 +4,8 @@ local abilities = require("shared.abilities.abilities")
 
 
 umg.on("entityDeath", function(ent)
-    abilities.trigger("allyDeath", ent.rgbTeam)
+    if rgb.isUnit(ent) and ent.rgbTeam then
+        abilities.trigger("allyDeath", ent.rgbTeam)
+    end
 end)
 

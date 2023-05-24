@@ -43,6 +43,8 @@ end
 
 function Target:drawSlabUI()
     local txt = self.description
+    Slab.Text("Target: ")
+    Slab.SameLine()
     Slab.Text(txt)
 end
 

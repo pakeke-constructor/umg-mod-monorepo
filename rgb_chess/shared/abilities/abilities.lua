@@ -25,21 +25,14 @@ if server then
 end
 
 
-local function getLevel(bufAction)
-    --[[
-        TODO: Do some thinking about how we should represent levels here.
-        Currently it just defaults to 1
-    ]]
-    return bufAction.level or 1
-end
 
 
 
 local bufferActionTc = typecheck.assert({
     sourceEntity = umg.exists,
     targetEntity = umg.exists,
-    action = "string",
-    level = "number?"
+    action = "table",
+    level = "number"
 })
 
 
@@ -62,10 +55,6 @@ local function bufferAction(bufAction)
         return
     end
 
-    bufAction.action = actions.getAction(bufAction.action)
-    assert(bufAction.action, "invalid action?")
-
-    bufAction.level = getLevel(bufAction)
     bufAction.activateTime = base.getGameTime() + constants.ABILITY_BUFFER_TIME
     abilityActionBuffer:insert(bufAction)
 end
@@ -205,14 +194,20 @@ end
 
 
 
-local function applyActionTo(sourceEnt, targetEnt, ability, level)
-    local action = ability.action
+local applyActionToTc = typecheck.assert("entity", "entity", "table", "number?")
 
+local function applyActionTo(sourceEnt, targetEnt, action, level)
+    applyActionToTc(sourceEnt, targetEnt, action, level)
     bufferAction({
         sourceEntity = sourceEnt,
         targetEntity = targetEnt,
         action = action,
-        level = level
+        level = level or 1
+        --[[
+            TODO: Do some more thinking about level here.
+            Do we want level to be inherited from somewhere else?
+            Perhaps level could be inherited from the entity itself?
+        ]]
     })
 end
 
@@ -230,7 +225,6 @@ local function applyAbility(unitEnt, ability)
     local entities = target:getTargetEntities(unitEnt)
     for _, ent in ipairs(entities) do
         if filtersOk(unitEnt, ent, filts) then
-            print("applying") 
             applyActionTo(unitEnt, ent, action, level)
         end
     end
@@ -250,9 +244,7 @@ end
 
 local function applyAbilitiesOfType(ent, abilityList, triggerType)
     for _, ability in ipairs(abilityList)do
-        print("here: ", ability.trigger, triggerType)
         if ability.trigger == triggerType then
-            print("apply ability")
             applyAbility(ent, ability)
         end
     end

@@ -47,6 +47,8 @@ function triggers.drawSlabUI(triggerType)
     local desc = triggerTypeToDescription[triggerType]
     assert(desc, "invalid triggertype: " .. triggerType)
 
+    Slab.Text("Trigger: ")
+    Slab.SameLine()
     Slab.Text(desc)
 end
 

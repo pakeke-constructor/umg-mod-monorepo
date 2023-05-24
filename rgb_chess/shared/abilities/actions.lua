@@ -42,6 +42,9 @@ function Action:drawSlabUI(level)
     if type(txt) == "function" then
         txt = self.description(level)
     end
+
+    Slab.Text("Action: ")
+    Slab.SameLine()
     Slab.Text(txt)
 end
 
