@@ -251,25 +251,6 @@ end
 
 
 
-if server then
-function rgb.changeRGB(ent, newRGB)
-    if rgb.match(ent.rgb, newRGB) then
-        ent.rgb = newRGB
-        return
-    else
-        ent.rgb = newRGB
-        umg.call("changeRGB", ent, newRGB)
-    end
-end
-else
-umg.on("changeRGB", function(ent, newRGB)
-    ent.rgb = newRGB
-end)
-end
-
-sync.denoteEventProxy("changeRGB")
-
-
 
 
 if server then

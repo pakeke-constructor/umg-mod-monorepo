@@ -1,12 +1,12 @@
 
-
 --[[
 
 sync.syncComponent(ent, compName)
 
 
-Manually syncs a component directly.
+Manually syncs a component on serverside.
 Uses string -> id compression to compress the component name.
+(Doesn't care about delta compression or nils)
 
 
 ]]
@@ -50,6 +50,8 @@ local function updateCompIdCache()
 end
 
 umg.on("@join", function()
+    -- whenever a new player joins, send over the component id cache.
+    -- (Yes it's shit, but who cares)
     updateCompIdCache()
 end)
 

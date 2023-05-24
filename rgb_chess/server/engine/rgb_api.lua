@@ -109,6 +109,8 @@ end
 
 
 
+
+
 local changeAbilityTc = typecheck.assert("entity", "table", "number")
 
 function rgbAPI.changeAbility(ent, ability, i)
@@ -118,6 +120,7 @@ function rgbAPI.changeAbility(ent, ability, i)
     i = math.min(#ent.abilities, i)
     ent.abilities[i] = table.copy(ability, true) -- 2nd argument = deepcopy
     signalAbilityChange(ent)
+    sync.syncComponent(ent, "abilities")
 end
 
 
@@ -128,13 +131,22 @@ function rgbAPI.levelUpUnitEntity(ent)
 
     abilities.trigger("allyLevelUp", ent.rgbTeam)
     umg.call("levelUp", ent, ent.level)
+    sync.syncComponent(ent, "level")
 end
 
 
 
 
+local changeRGBTc = typecheck.assert("entity", "table")
 
-function rgbAPI.changeColor(ent, newRGB)
+function rgbAPI.changeRGB(ent, newRGB)
+    changeRGBTc(ent, newRGB)
+    if not rgb.exactMatch(ent.rgb, newRGB) then
+        ent.rgb = newRGB
+        sync.syncComponent(ent, "rgb")
+        umg.call("changeRGB", ent, newRGB)
+        abilities.trigger()
+    end
 end
 
 
