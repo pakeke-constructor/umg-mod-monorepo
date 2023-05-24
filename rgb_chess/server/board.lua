@@ -158,6 +158,11 @@ end
 
 function Board:iterUnits()
     -- iterates over all the units on a board.
+    --[[
+        TODO: THIS CODE IS FAKKEN BUSTED,
+        AND BROKEN.
+        WE ARE GETTING NILS FROM THIS
+    ]]
     local set = categories.getSet(self:getTeam())
     local i = 0
 

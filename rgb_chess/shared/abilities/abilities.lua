@@ -203,13 +203,17 @@ local function applyActionTo(sourceEnt, targetEnt, ability, level)
 end
 
 
+
+local applyAbilityTc = typecheck.assert("entity", "table")
+
 local function applyAbility(unitEnt, ability)
+    applyAbilityTc(unitEnt, ability)
     local target = targets.getTarget(ability.target)
     local action = actions.getAction(ability.action)
     local filts = ability.filters
     local level = ability.level
 
-    local entities = target:getTargets(unitEnt)
+    local entities = target:getTargetEntities(unitEnt)
     for _, ent in ipairs(entities) do
         if filtersOk(unitEnt, ent, filts) then
             applyActionTo(unitEnt, ent, action, level)
@@ -231,7 +235,9 @@ end
 
 local function applyAbilitiesOfType(ent, abilityList, triggerType)
     for _, ability in ipairs(abilityList)do
+        print("here: ", ability.trigger, triggerType)
         if ability.trigger == triggerType then
+            print("apply ability")
             applyAbility(ent, ability)
         end
     end
@@ -249,7 +255,7 @@ function abilities.trigger(triggerType, rgbTeam)
     local arr = triggerMapping[triggerType] or EMPTY
     for _, ent in ipairs(arr)do
         if ent.rgbTeam == rgbTeam then
-            applyAbilitiesOfType(ent, ent.abilities, triggerTc)
+            applyAbilitiesOfType(ent, ent.abilities, triggerType)
         end
     end
 end

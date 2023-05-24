@@ -24,6 +24,7 @@ end
 
 -- Adds item to array
 function Array:add(x)
+    assert(x ~= nil, "cannot add nil to array")
     self.len = self.len + 1
     self[self.len] = x
 end

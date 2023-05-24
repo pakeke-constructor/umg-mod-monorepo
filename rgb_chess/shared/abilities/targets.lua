@@ -47,7 +47,7 @@ function Target:drawSlabUI()
 end
 
 
-function Target:getTargets(sourceEnt)
+function Target:getTargetEntities(sourceEnt)
     return self.getTargets(sourceEnt)
 end
 
