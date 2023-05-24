@@ -62,18 +62,6 @@ end
 
 local defaultAbilityGroup = umg.group("defaultAbilities")
 
-local function clone(x, seen)
-    -- deepcopy impl
-    if type(x) ~= "table" then
-        return x
-    end
-    seen = seen or {}
-    local new = {}
-    for k,v in pairs(x)do
-        new[k] = clone(v, seen)
-    end
-    return new
-end
 
 --[[
     copy default abilities over to entity
@@ -86,7 +74,7 @@ defaultAbilityGroup:onAdded(function(ent)
 
     for _, abil in ipairs(ent.defaultAbilities)do
         checkAbilityValid(abil, ent:type())
-        table.insert(ent.abilities, clone(abil))
+        table.insert(ent.abilities, table.copy(abil, true))
     end
 end)
 

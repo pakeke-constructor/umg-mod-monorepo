@@ -86,3 +86,7 @@ globals:
   umg.serialize:
     args:
     - type: any
+  table.copy:
+    any: true
+
+  

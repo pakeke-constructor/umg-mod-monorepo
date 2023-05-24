@@ -281,14 +281,36 @@ function abilities.clearBuffers()
 end
 
 
+do
+local neededKeys = {
+    "trigger", "target", "action"
+}
 
+function abilities.isValidAbility(ability)
+    --[[
+        returns true if ability is a valid ability.
+    ]]
+    for _, key in ipairs(neededKeys)do
+        if not ability[key] then
+            return false
+        end
+    end
 
+    if not actions.getAction(ability.action) then
+        return false
+    end
+    if not targets.getTarget(ability.target) then
+        return false
+    end
+    if not triggers.isValid(ability.trigger) then
+        return false
+    end
 
---[[
+    return true
+end
 
-TODO: do some planning on how we should approach this API here
+end
 
-]]
 
 
 local triggerDirectlyTc = typecheck.assert("entity", "entity", "table", "number?")

@@ -33,6 +33,9 @@ local triggerTypeToDescription = {
     cardBought = "When a card is purchased:", -- done
 
     allyChangeColor = "When an ally changes color:",
+    allyChangeAbility = "When an ally changes abilities:", -- done
+
+    allyLevelUp = "When an ally levels up:", -- done
 
     allyAbility = "When an ability activates:", -- done
     selfAbility = "When an entity activates it's own ability:" -- done

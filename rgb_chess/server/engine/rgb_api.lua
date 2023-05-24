@@ -1,4 +1,7 @@
 
+local abilities = require("shared.abilities.abilities")
+
+
 local rgbAPI = {}
 
 
@@ -87,6 +90,53 @@ function rgbAPI.damage(sourceEnt, targetEnt, damage)
     -- When bullet collides, this will call rgbProjectileHit.
     return bullet
 end
+
+
+
+
+
+local function signalAbilityChange(ent)
+    abilities.trigger("allyChangeAbility", ent.rgbTeam)
+    umg.call("changeAbility", ent)
+end
+
+
+
+function rgbAPI.addAbility(ent, ability)
+    table.insert(ent.abilities, ability)
+    signalAbilityChange(ent)
+end
+
+
+
+local changeAbilityTc = typecheck.assert("entity", "table", "number")
+
+function rgbAPI.changeAbility(ent, ability, i)
+    changeAbilityTc(ent, ability, i)
+    assert(abilities.isValid(ability), "?")
+
+    i = math.min(#ent.abilities, i)
+    ent.abilities[i] = table.copy(ability, true) -- 2nd argument = deepcopy
+    signalAbilityChange(ent)
+end
+
+
+
+function rgbAPI.levelUpUnitEntity(ent)
+    assert(rgb.isUnit(ent), "?")
+    ent.level = (ent.level or 1) + 1
+
+    abilities.trigger("allyLevelUp", ent.rgbTeam)
+    umg.call("levelUp", ent, ent.level)
+end
+
+
+
+
+
+function rgbAPI.changeColor(ent, newRGB)
+end
+
 
 
 umg.expose("rgbAPI", rgbAPI)

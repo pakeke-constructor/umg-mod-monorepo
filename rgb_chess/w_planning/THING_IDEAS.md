@@ -45,7 +45,7 @@ TODO: Redo these cards!!! This whole paragon spawning thing is very one-dimensio
 MAKE THESE CARDS SOMEWHAT RARE:
 - `queen_of_spades_card`: Swap abilities between two random [color] allies
 - `queen_of_diamonds_card`: Instantly proc the abilities of [color] allies
-- `queen_of_hearts_card`: Shuffle the ability filters of all [color] allies
+- `queen_of_hearts_card`: Shuffle the ability actions of all [color] allies
 - `queen_of_clubs_card`: Shuffle the ability triggers of all [color] allies
 
 - `null_card`: Subtract [color] from a random [color] ally
