@@ -31,6 +31,21 @@ local function componentMatch(a,b)
 end
 
 
+function rgb.exactMatch(col1, col2)
+    if col1.rgb and col2.rgb then
+        local ent1, ent2 = col1, col2
+        return rgb.exactMatch(ent1.rgb, ent2.rgb)
+    end
+
+    local rOk = componentMatch(col1[1], col2[1])
+    local gOk = componentMatch(col1[2], col2[2])
+    local bOk = componentMatch(col1[3], col2[3])
+
+    return rOk and gOk and bOk
+end
+
+
+
 function rgb.invert(color)
     for _, invertCandidate in pairs(rgb.COLS) do
         local rOk = componentMatch(color[1], invertCandidate[1])
@@ -49,10 +64,7 @@ function rgb.getColorString(rgbColor)
         returns the name of the color, as a string.
     ]]
     for col, tabl in pairs(rgb.COLS) do
-        local rOk = componentMatch(tabl[1], rgbColor[1])
-        local gOk = componentMatch(tabl[2], rgbColor[2])
-        local bOk = componentMatch(tabl[3], rgbColor[3])
-        if rOk and gOk and bOk then
+        if rgb.exactMatch(rgbColor, tabl) then
             return col
         end
     end
@@ -71,6 +83,9 @@ function rgb.rgbToColor(rgbColor)
     end
     return cpy
 end
+
+
+
 
 
 
@@ -243,16 +258,17 @@ function rgb.changeRGB(ent, newRGB)
         return
     else
         ent.rgb = newRGB
-        server.broadcast("swapRGB", ent, newRGB)
-        umg.call("swapRGB", ent, newRGB)
+        umg.call("changeRGB", ent, newRGB)
     end
 end
 else
-client.on("swapRGB", function(ent, newRGB)
+umg.on("changeRGB", function(ent, newRGB)
     ent.rgb = newRGB
-    umg.call("swapRGB", ent, newRGB)
 end)
 end
+
+sync.denoteEventProxy("changeRGB")
+
 
 
 
