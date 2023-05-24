@@ -53,14 +53,17 @@ end
 
 
 local function getAllies(sourceEnt)
+    --[[
+        gets all allies, excluding `self`.
+    ]]
     local board = Board.getBoard(sourceEnt.rgbTeam)
-    local buffer = base.Array()
-    for _, ent in board:iterUnits() do
+    local allies = board:getUnits()
+    for i, ent in ipairs(allies)do
         if ent ~= sourceEnt then
-            buffer:add(ent)
+            allies:quickPop(i)
         end
     end
-    return buffer
+    return allies
 end
 
 

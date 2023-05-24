@@ -81,7 +81,7 @@ rgb.setState(rgb.STATES.LOBBY_STATE)
 local function finalizePvE(board, enemies)
     board:putEnemies(enemies)
     local allyArray = {}
-    for ent in board:iterUnits() do 
+    for _, ent in ipairs(board:getUnits()) do 
         table.insert(allyArray, ent)
     end
     board:putAllies(allyArray)
@@ -112,11 +112,11 @@ local function setupPvPMatch(match)
     -- TODO: Maybe delay this for cool effect?
     board:setEnemyTeam(match.away)
     local allyArray = {}
-    for ent in board:iterUnits() do 
+    for _, ent in ipairs(board:getUnits()) do 
         table.insert(allyArray, ent)
     end
     local enemyArray = {}
-    for ent in awayBoard:iterUnits() do 
+    for _, ent in ipairs(board:getUnits()) do 
         table.insert(enemyArray, ent)
     end
     board:putAllies(allyArray)
