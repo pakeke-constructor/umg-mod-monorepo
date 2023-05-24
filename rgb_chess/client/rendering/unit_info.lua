@@ -9,7 +9,7 @@ local UNIT_INFO_WINDOW_Y = 20
 
 
 
-local function singleUnitStats(ent)
+local function renderStats(ent)
     Slab.Separator()
     uiTools.renderUnitHealth(ent.maxHealth)
    
@@ -28,12 +28,12 @@ local function drawUnitInfo(ent)
     local unitEType = ent:getClass()
     uiTools.renderBasicUnitInfo(unitEType, ent.rgb)
 
-    for _, e in ipairs(ent.squadron) do
-        singleUnitStats(e)
-    end
-    
-    uiTools.renderRGBInfo(ent.rgb)
+    renderStats(ent)
 
+    Slab.Separator()
+    uiTools.renderAbilityInfo(ent.abilities or {})
+    Slab.Separator()
+    uiTools.renderRGBInfo(ent.rgb)
     Slab.EndWindow()
 end
 

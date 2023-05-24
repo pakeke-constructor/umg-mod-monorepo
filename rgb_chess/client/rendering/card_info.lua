@@ -24,6 +24,7 @@ local function drawUnitCardInfo(cardEnt)
         uiTools.renderUnitSorcery(unitEType.defaultSorcery)
     elseif rgb.isAttacker(unitEType) then
         -- it's ranged or melee, which means it has attack damage
+        print("Hi?")
         uiTools.renderUnitDamage(unitEType.defaultAttackDamage, unitEType.defaultAttackSpeed)
     end
 

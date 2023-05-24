@@ -182,13 +182,13 @@ function rgb.isSorcerer(ent)
 end
 
 function rgb.isUnitOfType(ent, enum)
-    return rgb.isUnit(ent) and rgb.unitType == enum
+    return rgb.isUnit(ent) and ent.unitType == enum
 end
 
 function rgb.isAttacker(ent)
     local melee = constants.UNIT_TYPES.MELEE
     local ranged = constants.UNIT_TYPES.RANGED
-    return rgb.isUnitOfType(ent, melee) and rgb.isUnitOfType(ent, ranged)
+    return rgb.isUnitOfType(ent, melee) or rgb.isUnitOfType(ent, ranged)
 end
 
 
