@@ -44,7 +44,7 @@ return umg.extend(abstractProjectile, {
         local sourceEnt = projEnt.sourceEntity
         buffHandlers[btype](targetEnt, -projEnt.buffAmount)
         abilities.trigger("allyDebuff", targetEnt.rgbTeam)
-        umg.call("debuff", targetEnt, btype, projEnt.buffAmount, sourceEnt, projEnt.depth)
+        umg.call("debuff", targetEnt, btype, projEnt.buffAmount, sourceEnt)
     end,
 
     init = function(ent, x, y, options)

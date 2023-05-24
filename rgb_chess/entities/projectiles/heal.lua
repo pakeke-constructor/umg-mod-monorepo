@@ -11,7 +11,7 @@ return umg.extend(abstractProjectile, {
         local healAmount = projEnt.healAmount
         targetEnt.health = math.min(targetEnt.maxHealth, targetEnt.health + healAmount)
         abilities.trigger("allyHeal", targetEnt.rgbTeam)
-        umg.call("heal", targetEnt, healAmount, projEnt.depth)
+        umg.call("heal", targetEnt, healAmount)
     end,
 
     init = function(ent, x, y, options)

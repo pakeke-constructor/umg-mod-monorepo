@@ -17,8 +17,8 @@ BUFF_TYPES = {
     SHIELD = "SHIELD"
 }
 
-call("buff", unit, BUFF_TYPE, amount, fromUnit=nil, depth=0)
-call("debuff", unit, BUFF_TYPE, amount, fromUnit=nil, depth=0)
+call("buff", unit, BUFF_TYPE, amount, fromUnit=nil, )
+call("debuff", unit, BUFF_TYPE, amount, fromUnit=nil, )
 
 
 call("rgbAttack", attacker_ent, target_ent, dmg) 

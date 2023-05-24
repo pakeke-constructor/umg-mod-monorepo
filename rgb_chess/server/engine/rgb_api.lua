@@ -26,10 +26,10 @@ end
 
 
 
-local buffTc = typecheck.assert("entity", "string", "number", "entity?", "number?")
+local buffTc = typecheck.assert("entity", "string", "number", "entity?")
 
-function rgbAPI.buff(ent, buffType, amount, sourceEnt, depth)
-    buffTc(ent, buffType, amount, sourceEnt, depth)
+function rgbAPI.buff(ent, buffType, amount, sourceEnt)
+    buffTc(ent, buffType, amount, sourceEnt)
     assert(constants.BUFF_TYPES[buffType], "Invalid bufftype")
 
     local x,y = getProjectileSpawn(ent, sourceEnt)
@@ -38,7 +38,6 @@ function rgbAPI.buff(ent, buffType, amount, sourceEnt, depth)
         buffType = buffType,
         targetEntity = ent,
         sourceEntity = sourceEnt,
-        depth = depth
     })
 end
 
@@ -46,24 +45,23 @@ end
 
 local healTc = typecheck.assert("entity", "number", "entity?", "number?")
 
-function rgbAPI.heal(ent, amount, sourceEnt, depth)
-    healTc(ent, amount, sourceEnt, depth)
+function rgbAPI.heal(ent, amount, sourceEnt)
+    healTc(ent, amount, sourceEnt)
 
     local x,y = getProjectileSpawn(ent, sourceEnt)
     server.entities.heal(x,y, {
         healAmount = amount,
         targetEntity = ent,
         sourceEntity = sourceEnt,
-        depth = depth
     })
 end
 
 
 
-local shieldTc = typecheck.assert("entity", "number", "number", "entity?", "number?")
+local shieldTc = typecheck.assert("entity", "number", "number", "entity?")
 
-function rgbAPI.shield(ent, amount, duration, sourceEnt, depth)
-    shieldTc(ent, amount, duration, sourceEnt, depth)
+function rgbAPI.shield(ent, amount, duration, sourceEnt)
+    shieldTc(ent, amount, duration, sourceEnt)
 
     local x,y = getProjectileSpawn(ent, sourceEnt)
     server.entities.shield(x,y, {
@@ -71,7 +69,6 @@ function rgbAPI.shield(ent, amount, duration, sourceEnt, depth)
         shieldDuration = duration,
         targetEntity = ent,
         sourceEntity = sourceEnt,
-        depth = depth
     })
 end
 
