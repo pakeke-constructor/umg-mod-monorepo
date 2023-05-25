@@ -29,8 +29,12 @@ client.on("setSyncComponentCache", function(cache)
 end)
 
 client.on("syncComponent", function(ent, id, compValue)
-    local compName = id
-    ent[compName] = compValue
+    local compName = componentIdCache[id]
+    if compName then
+        ent[compName] = compValue
+    else
+        print("[base.syncComponent()] WARNING: Unknown component id")
+    end
 end)
 
 end

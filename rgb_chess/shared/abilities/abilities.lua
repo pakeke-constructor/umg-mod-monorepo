@@ -199,14 +199,13 @@ local applyActionToTc = typecheck.assert("entity", "entity", "table", "number?")
 local function applyActionTo(sourceEnt, targetEnt, ability, level)
     applyActionToTc(sourceEnt, targetEnt, ability, level)
 
-    local maxActivations = ability.maxActivations or constants.MAX_ABILITY_ACTIVATIONS
-    local activationCount = ability.activationCount or 0
-    if activationCount > maxActivations then
+    local remainingActivations = abilities.getRemainingActivations(ability)
+    if remainingActivations <= 0 then
         -- too many activations have happened this cycle. return.
         return
     end
 
-    ability.activationCount = activationCount + 1
+    ability.activationCount = (ability.activationCount or 0) + 1
     local action = actions.getAction(ability.action)
 
     level = (level or sourceEnt.level) or constants.DEFAULT_UNIT_LEVEL
