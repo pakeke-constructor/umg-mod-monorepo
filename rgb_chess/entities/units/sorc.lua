@@ -10,7 +10,14 @@ return umg.extend(abstractSorcerer, {
     defaultHealth = 30,
     defaultSorcery = 5,
 
-    defaultAbilities = {},
+    defaultAbilities = {
+        {
+            trigger = "reroll",
+            filters = {}, -- {"hasLessDamage"},
+            target = "matching",
+            action = "buffAttackDamage2",
+        }
+    },
 
     cardInfo = {
         type = constants.CARD_TYPES.UNIT,

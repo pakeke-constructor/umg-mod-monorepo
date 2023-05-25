@@ -74,7 +74,7 @@ Action({
         rgbAPI.heal(targetEnt, level * HEAL_FACTOR, sourceEnt)
     end,
     description = function(level)
-        return "Heal for " .. HEAL_FACTOR * level
+        return "Heal for " .. HEAL_FACTOR .. " times level"
     end
 })
 

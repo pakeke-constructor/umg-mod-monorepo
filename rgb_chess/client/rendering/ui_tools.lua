@@ -7,6 +7,7 @@ local targets = require("shared.abilities.targets")
 local filters = require("shared.abilities.filters")
 local actions = require("shared.abilities.actions")
 
+local abilities = require("shared.abilities.abilities")
 
 
 
@@ -119,6 +120,11 @@ local function renderAbility(ability)
 
     -- action
     act:drawSlabUI(ability.level or 1)
+
+    -- remaining activations:
+    Slab.Text("Remaining activations:")
+    Slab.SameLine()
+    Slab.Text(tostring(abilities.getRemainingActivations(ability)))
 end
 
 

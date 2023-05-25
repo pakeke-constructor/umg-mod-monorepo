@@ -66,7 +66,7 @@ local function applyBufferedAction(bufAction)
     local action = bufAction.action
     local src = bufAction.sourceEntity
     local targ = bufAction.targetEntity
-    local level = bufAction.level
+    local level = src.level or constants.DEFAULT_UNIT_LEVEL
 
     if umg.exists(targ) then
         if src == targ then
@@ -196,18 +196,26 @@ end
 
 local applyActionToTc = typecheck.assert("entity", "entity", "table", "number?")
 
-local function applyActionTo(sourceEnt, targetEnt, action, level)
-    applyActionToTc(sourceEnt, targetEnt, action, level)
+local function applyActionTo(sourceEnt, targetEnt, ability, level)
+    applyActionToTc(sourceEnt, targetEnt, ability, level)
+
+    local maxActivations = ability.maxActivations or constants.MAX_ABILITY_ACTIVATIONS
+    local activationCount = ability.activationCount or 0
+    if activationCount > maxActivations then
+        -- too many activations have happened this cycle. return.
+        return
+    end
+
+    ability.activationCount = activationCount + 1
+    local action = actions.getAction(ability.action)
+
+    level = (level or sourceEnt.level) or constants.DEFAULT_UNIT_LEVEL
+
     bufferAction({
         sourceEntity = sourceEnt,
         targetEntity = targetEnt,
         action = action,
-        level = level or 1
-        --[[
-            TODO: Do some more thinking about level here.
-            Do we want level to be inherited from somewhere else?
-            Perhaps level could be inherited from the entity itself?
-        ]]
+        level = level
     })
 end
 
@@ -218,14 +226,12 @@ local applyAbilityTc = typecheck.assert("entity", "table")
 local function applyAbility(unitEnt, ability)
     applyAbilityTc(unitEnt, ability)
     local target = targets.getTarget(ability.target)
-    local action = actions.getAction(ability.action)
     local filts = ability.filters
-    local level = ability.level
 
     local entities = target:getTargetEntities(unitEnt)
     for _, ent in ipairs(entities) do
         if filtersOk(unitEnt, ent, filts) then
-            applyActionTo(unitEnt, ent, action, level)
+            applyActionTo(unitEnt, ent, ability)
         end
     end
 end
@@ -275,10 +281,14 @@ function abilities.triggerForAll(triggerType)
 end
 
 
-function abilities.clearBuffers()
-    assert(server,"cant call on clientside")
-    abilityActionBuffer:clear()
+
+function abilities.getRemainingActivations(ability)
+    local maxActivations = ability.maxActivations or constants.MAX_ABILITY_ACTIVATIONS
+    local usedActivations = ability.activationCount or 0
+    return maxActivations - usedActivations
 end
+
+
 
 
 do
@@ -319,13 +329,11 @@ function abilities.activateDirectly(sourceEnt, targetEnt, ability, level)
     --[[
         activates a specific ability action directly to an entity,
         without applying the filter. 
-        If level is not given, defaults to ability level.
     ]]
     assert(server,"cant call on clientside")
     triggerDirectlyTc(sourceEnt, targetEnt, ability, level)
     assert(rgb.isUnit(sourceEnt), "?")
 
-    level = level or ability.level
     applyActionTo(sourceEnt, targetEnt, ability, level)
 end
 
@@ -383,12 +391,22 @@ local function resetAbilities(abilityList)
 end
 
 
+
+local function clearBuffers()
+    assert(server,"cant call on clientside")
+    abilityActionBuffer:clear()
+end
+
+
+
 function abilities.reset()
+    clearBuffers()
+
     for _, ent in ipairs(abilityGroup)do
         if ent.abilities then
             resetAbilities(ent.abilities) 
         end
-        foreachPassiveItem(ent, function(ent, item)
+        foreachPassiveItem(ent, function(_ent, item)
             resetAbilities(item.abilities)
         end)
     end

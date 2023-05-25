@@ -12,7 +12,7 @@ return umg.extend(abstractMelee, {
 
     defaultAbilities = {
         {
-            trigger = "reroll",
+            trigger = "allyBuff",
             filters = {}, -- {"hasLessDamage"},
             target = "matching",
             action = "buffHealth2",
