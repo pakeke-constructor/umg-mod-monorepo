@@ -358,8 +358,9 @@ end
 
 
 
+
+
 if server then
--- serverside API
 
 
 local abilityGroup = umg.group("rgbUnit", "abilities")
@@ -372,6 +373,27 @@ end)
 abilityGroup:onRemoved(function(ent)
     removeFromAbilityMapping(ent)
 end)
+
+
+
+local function resetAbilities(abilityList)
+    for _, abil in ipairs(abilityList)do
+        abil.activationCount = 0
+    end
+end
+
+
+function abilities.reset()
+    for _, ent in ipairs(abilityGroup)do
+        if ent.abilities then
+            resetAbilities(ent.abilities) 
+        end
+        foreachPassiveItem(ent, function(ent, item)
+            resetAbilities(item.abilities)
+        end)
+    end
+end
+
 
 umg.on("@tick", function()
     for _, ent in ipairs(abilityGroup)do

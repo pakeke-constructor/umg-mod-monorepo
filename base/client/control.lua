@@ -134,10 +134,6 @@ end
 
 
 function listener:update(dt)
-    if not shouldFollow() then
-        return
-    end
-
     local sum_x = 0
     local sum_y = 0
     local len = 0

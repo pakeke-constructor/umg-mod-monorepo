@@ -13,14 +13,15 @@ ALL OF THESE ARE SUBJECT TO CHANGE.
 
 - `10 of clubs`: rerolls all non-[color] shop cards.
 - `10 of diamonds`: Change the color of all non-[color] shop cards
-- `joker`: if there are no [color] units on board, give 4 rerolls. Else, give 2 rerolls.
+- `joker`: if there are no [color] units on board, give 5 rerolls. Else, give 2 rerolls.
 
 TODO: These are probably too strong with swarm units.
 - `ace_of_diamonds`: give +2 SORC to all [color] allies
 - `ace_of_hearts`: give +3 HP to all [color] allies
 - `ace_of_spades`: give +2 ATK to all [color] allies
+- `ace of clubs`: give +1 HP, +1 ATK, +1 SORC to all [color] allies
 
-- `full_suit_card`: give +1 HP, +1 ATK, +1 SORC to all [color] allies
+- `full_suit_card`: **TODO**
 
 
 **CARDS BELOW THIS LINE ARE "ADVANCED", or more complicated:**
@@ -32,7 +33,8 @@ TODO: These are probably too strong with swarm units.
 - `flipped_duplicate_card`: copy the last card's effects as the inverse of [color]
 
 
-TODO: Redo these cards!!! This whole paragon spawning thing is very one-dimensional
+TODO: Redo these cards!!! These mechanics are very one-dimensional.
+We can spawn paragon units after turn 6 instead.
 - `face_down_card`: [color] paragon units will now spawn in the shop
 - `face_down_rainbow_card`: (SUPER RARE) Allows for another paragon unit
 

@@ -6,6 +6,7 @@ _G.constants = {
 
     MAX_BUFFERED_ABILITIES = 1600, -- how many abilities can be happening simultaneously.
     ABILITY_BUFFER_TIME = 0.4, -- wait 0.4 seconds before we apply an ability action
+    MAX_ABILITY_ACTIVATIONS = 400, -- maximum of 400 activations per turn, for each ability
 
     CARD_LIGHTNESS = 0.3,
     DEFAULT_CARD_IMAGE = "blank_card",

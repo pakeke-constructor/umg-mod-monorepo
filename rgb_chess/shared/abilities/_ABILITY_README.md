@@ -46,6 +46,12 @@ local ability = {
     filters = {"moreHealthThan", "notSelf"},
     -- if the target has less health than me, and is not self
     action = "buffAttackSpeed" --buff attack speed by X
+
+    -- optional fields:
+    maxActivations = 200 or constants.MAX_ABILITY_ACTIVATIONS
+
+    -- internally used fields:
+    activationCount = 0 -- set and used internally
 }
 
 

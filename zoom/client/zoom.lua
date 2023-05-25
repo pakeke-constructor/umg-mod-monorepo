@@ -127,6 +127,12 @@ end
 
 
 
+umg.answer("isCameraPlayerFollowBlocked", function()
+    return CAMERA_PAN_ACTIVE
+end)
+
+
+
 
 function listener:update(dt)
     if isCameraPanBlocked() then
