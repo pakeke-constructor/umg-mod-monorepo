@@ -1,7 +1,5 @@
 
 
-
-
 --[[
     Some small helper functions to help initialize entities easily
 ]]

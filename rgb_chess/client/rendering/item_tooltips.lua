@@ -4,9 +4,15 @@ local uiTools = require("client.rendering.ui_tools")
 
 umg.on("displayItemTooltip", function(itemEnt)
     local itemInfo = itemEnt.itemInfo
+    
+    print(#itemEnt.abilities)
 
-    -- TODO:
-    -- render item abilities here.
+
+    Slab.Separator()
+
+    if itemEnt.abilities then
+        uiTools.renderAbilityInfo(itemEnt.abilities)
+    end
 
     if itemEnt.rgb then
         Slab.Separator()

@@ -370,10 +370,22 @@ end
 if server then
 
 
+local allAbilityGroup = umg.group("abilities")
+
+
+allAbilityGroup:onAdded(function(ent)
+    assert(ent:isRegular("abilities"), "abilities can't be shared")
+    for _, ability in ipairs(ent.abilities) do
+        if not abilities.isValidAbility(ability) then
+            error("Invalid ability for ent: " .. ent:type())
+        end
+    end
+end)
+
+
 local abilityGroup = umg.group("rgbUnit", "abilities")
 
 abilityGroup:onAdded(function(ent)
-    assert(ent:isRegular("abilities"), "abilities can't be shared")
     addToAbilityMapping(ent)
 end)
 

@@ -5,6 +5,8 @@ Entities that can pick up items off the ground have a `canPickUpItems` component
 
 ]]
 
+local constants = require("shared.constants")
+
 
 local groundItemsHandler = {}
 
@@ -16,10 +18,13 @@ local pickUpGroup = umg.group("x", "y", "canPickUpItems", "inventory")
 local groundItemGroup = umg.group("x", "y", "groundItem", "inventory")
 
 
-local CHUNK_SIZE = 100
+
+
+local PICKUP_DISTANCE = constants.PICKUP_DISTANCE
+
+local CHUNK_SIZE = PICKUP_DISTANCE
 local groundItemPartition = base.Partition(CHUNK_SIZE)
 
-local PICKUP_DISTANCE = 24
 
 
 -- Wait X seconds before being able to pick up dropped items.

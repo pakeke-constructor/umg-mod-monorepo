@@ -6,7 +6,14 @@ return {
 
     maxStackSize = 1,
 
-    abilities = {},
+    defaultAbilities = {
+        {
+            trigger = "allyBuff",
+            filters = {}, -- {"hasLessDamage"},
+            target = "matching",
+            action = "buffHealth2",
+        }
+    },
 
     itemType = constants.ITEM_TYPES.PASSIVE,
 
