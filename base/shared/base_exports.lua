@@ -86,6 +86,8 @@ local function loadShared(base)
 
     base.physics = require("shared.physics")
 
+    base.runEvery = require("shared.run_every")
+
     base.defineExports = defineExports
 end
 
