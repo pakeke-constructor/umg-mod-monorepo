@@ -95,7 +95,10 @@ end
 
 
 
+local textArgs = {Color = constants.ABILITY_UI_COLORS.REMAINING_ACTIVATIONS}
+
 local renderAbilityTc = typecheck.assert("table")
+
 local function renderAbility(ability)
     --[[
         renders an ability assuming an existing Slab context.
@@ -122,7 +125,7 @@ local function renderAbility(ability)
     act:drawSlabUI(ability.level or 1)
 
     -- remaining activations:
-    Slab.Text("Remaining activations:")
+    Slab.Text("Activations:", textArgs)
     Slab.SameLine()
     Slab.Text(tostring(abilities.getRemainingActivations(ability)))
 end

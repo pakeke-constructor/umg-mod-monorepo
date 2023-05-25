@@ -73,7 +73,8 @@ _G.constants = {
         ACTION = {0.9,0.4,0.2},
         TRIGGER = {0.3,0.9,0.1},
         FILTER = {0.9,0.9,0.3},
-        TARGET = {0.3,0.6,0.9}
+        TARGET = {0.3,0.6,0.9},
+        REMAINING_ACTIVATIONS = {0.9,0.8,0.7}
     }
 }
 
