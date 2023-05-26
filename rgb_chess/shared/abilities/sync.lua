@@ -9,7 +9,7 @@
 if server then
 
 
-local abilityGroup = umg.group("rgbUnit", "abilities")
+local abilityGroup = umg.group("abilities")
 
 
 -- run this code every 6 ticks

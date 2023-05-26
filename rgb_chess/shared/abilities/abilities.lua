@@ -144,13 +144,11 @@ local function addToAbilityMapping(ent)
     ]]
     addGivenAbilityList(ent, ent.abilities)
 
-    if ent.inventory then
-        foreachPassiveItem(ent, function(_, item)
-            if item.abilities then
-                addGivenAbilityList(ent, item.abilities)
-            end
-        end)
-    end
+    foreachPassiveItem(ent, function(_, item)
+        if item.abilities then
+            addGivenAbilityList(ent, item.abilities)
+        end
+    end)
 end
 
 
@@ -267,7 +265,13 @@ function abilities.trigger(triggerType, rgbTeam)
     local arr = triggerMapping[triggerType] or EMPTY
     for _, ent in ipairs(arr)do
         if ent.rgbTeam == rgbTeam then
+            -- apply ents abilities
             applyAbilitiesOfType(ent, ent.abilities, triggerType)
+            -- apply passive item abilities
+            foreachPassiveItem(ent, function(_e, item)
+                print("yo: ", triggerType)
+                applyAbilitiesOfType(ent, item.abilities, triggerType)
+            end)
         end
     end
 end
@@ -349,13 +353,11 @@ function abilities.activateAll(ent)
 
     applyAllAbilities(ent, ent.abilities or EMPTY)
 
-    if ent.inventory then
-        foreachPassiveItem(ent, function(_, item)
-            if item.abilities then
-                applyAllAbilities(ent, item.abilities)
-            end
-        end)
-    end
+    foreachPassiveItem(ent, function(_, item)
+        if item.abilities then
+            applyAllAbilities(ent, item.abilities)
+        end
+    end)
 end
 
 

@@ -4,6 +4,8 @@
 return {
     image = "target",
 
+    itemName = "test",
+
     maxStackSize = 1,
 
     defaultAbilities = {
@@ -20,7 +22,6 @@ return {
     itemInfo = {
         rarity = 1,
         minimumTurn = 1,
-    },
-
-    itemName = "test"
+    }
 }
+

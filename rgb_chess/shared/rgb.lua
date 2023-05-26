@@ -214,7 +214,7 @@ function rgb.isItem(ent)
 end
 
 function rgb.isItemOfType(ent, enum)
-    return rgb.isItem(ent) and rgb.itemType == enum
+    return rgb.isItem(ent) and ent.itemType == enum
 end
 
 function rgb.isPassiveItem(ent)
