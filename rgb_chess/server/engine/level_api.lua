@@ -1,5 +1,6 @@
 
 local abilities = require("shared.abilities.abilities")
+local Board = require("server.board")
 
 local levelAPI = {}
 
@@ -34,6 +35,17 @@ end
 function levelAPI.levelDown(ent, amount)
     levelAPI.setLevel(ent, levelAPI.getLevel(ent) - amount)
 end
+
+
+
+umg.on("startTurn", function()
+    for _rgbTeam, board in Board.iterBoards() do
+        local units = board:getUnits()
+        for _, ent in ipairs(units)do
+            levelAPI.levelUp(ent, 1)
+        end
+    end
+end)
 
 
 

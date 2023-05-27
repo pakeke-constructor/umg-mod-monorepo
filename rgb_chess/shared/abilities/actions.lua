@@ -68,56 +68,62 @@ end
 
 local HEAL_FACTOR = 4
 
-Action({
-    name = "heal",
-    action = function(sourceEnt, targetEnt, level)
-        rgbAPI.heal(targetEnt, level * HEAL_FACTOR, sourceEnt)
-    end,
-    description = function(level)
-        return "Heal for " .. HEAL_FACTOR .. " times level"
-    end
-})
+for i = 1,4 do
+    local levelMultiplier = i * HEAL_FACTOR
+    Action({
+        name = "heal",
+        action = function(sourceEnt, targetEnt, level)
+            rgbAPI.heal(targetEnt, level * levelMultiplier, sourceEnt)
+        end,
+        description = function(level)
+            local amount = level * levelMultiplier
+            return ("Heal for %d x level (%d)"):format(levelMultiplier, amount)
+        end
+    })
+end
 
 
 
 local SHIELD_DURATION = 3
 local SHIELD_FACTOR = 5
 
-Action({
-    name = "shield",
-    action = function(sourceEnt, targetEnt, level)
-        rgbAPI.shield(targetEnt, level * SHIELD_FACTOR, SHIELD_DURATION,sourceEnt)
-    end,
-    description = function(level)
-        return "Shield for " .. SHIELD_FACTOR * level
-    end
-})
-
+for i = 1,4 do
+    local levelMultiplier = i * SHIELD_FACTOR
+    Action({
+        name = "shield",
+        action = function(sourceEnt, targetEnt, level)
+            rgbAPI.shield(targetEnt, level * levelMultiplier, SHIELD_DURATION, sourceEnt)
+        end,
+        description = function(level)
+            local amount = level * levelMultiplier
+            return ("Shield for %d x level (%d)"):format(levelMultiplier, amount)
+        end
+    })
+end
 
 
 
 local buffTypes = {
-    ATTACK_DAMAGE = "AttackDamage",
+    POWER = "Power",
     ATTACK_SPEED = "AttackSpeed",
     SPEED = "Speed",
     HEALTH = "Health",
-    SORCERY = "Sorcery",
 }
 
-for magnitude = 1, 4 do
+for levelMultiplier = 1, 4 do
     for buffEnum, abilitySuffix in pairs(buffTypes)do
         Action({
-            name = "buff" .. tostring(abilitySuffix) .. tostring(magnitude),
+            name = "buff" .. tostring(abilitySuffix) .. tostring(levelMultiplier),
             action = function(sourceEnt, targetEnt, level)
                 local bType = constants.BUFF_TYPES[buffEnum]
-                local amount = level * magnitude
+                local amount = level * levelMultiplier
                 if umg.exists(sourceEnt) then
                     rgbAPI.buff(targetEnt, bType, amount, sourceEnt)
                 end
             end,
             description = function(level)
-                local amount = level * magnitude
-                return "Buff " .. abilitySuffix .. " for " .. tostring(amount)
+                local amount = level * levelMultiplier
+                return ("Buff %s for %d x level (%d)"):format(abilitySuffix, levelMultiplier, amount)
             end
         })
     end

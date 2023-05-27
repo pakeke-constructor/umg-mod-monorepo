@@ -13,7 +13,7 @@ return umg.extend(abstractRanged, {
 
     defaultHealth = 100,
     defaultAttackSpeed = 1,
-    defaultAttackDamage = 8,
+    defaultPower = 8,
 
     init = base.initializers.initVxVy
 })

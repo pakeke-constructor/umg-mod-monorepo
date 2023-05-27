@@ -21,10 +21,10 @@ local function drawUnitCardInfo(cardEnt)
     uiTools.renderUnitHealth(unitEType.defaultHealth)
 
     if rgb.isSorcerer(unitEType) then
-        uiTools.renderUnitSorcery(unitEType.defaultSorcery)
+        uiTools.renderUnitPower(unitEType.defaultPower)
     elseif rgb.isAttacker(unitEType) then
-        -- it's ranged or melee, which means it has attack damage
-        uiTools.renderUnitDamage(unitEType.defaultAttackDamage, unitEType.defaultAttackSpeed)
+        -- it's ranged or melee, which means that attack speed counts
+        uiTools.renderUnitPowerAttackSpeed(unitEType.defaultPower, unitEType.defaultAttackSpeed)
     end
 
     Slab.Separator()

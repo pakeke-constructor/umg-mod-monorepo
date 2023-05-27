@@ -1,4 +1,5 @@
 
+local delayAPI = {}
 
 
 local times = {}
@@ -35,7 +36,7 @@ end
 local curTime = love.timer.getTime()
 
 
-local function delay(time, func, ...)
+function delayAPI.delay(time, func, ...)
     local obj = {
         func = func;
         endTime = curTime + time,
@@ -60,5 +61,29 @@ end)
 
 
 
-return delay
+
+
+
+local runningNextTick = base.Array()
+
+
+function delayAPI.nextTick(func, ...)
+    local obj = {
+        ...,
+        func = func
+    }
+    runningNextTick:add(obj)
+end
+
+
+umg.on("@tick", function()
+    for i, obj in ipairs(runningNextTick)do
+        obj.func(unpack(obj))
+    end
+    runningNextTick:clear()
+end)
+
+
+
+return delayAPI
 

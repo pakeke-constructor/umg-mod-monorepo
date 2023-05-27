@@ -15,7 +15,7 @@ return umg.extend(abstractSorcerer, {
             trigger = "reroll",
             filters = {}, -- {"hasLessDamage"},
             target = "matching",
-            action = "buffAttackDamage2",
+            action = "buffPower2",
         }
     },
 

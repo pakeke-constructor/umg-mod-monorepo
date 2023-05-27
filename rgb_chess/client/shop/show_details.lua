@@ -80,7 +80,7 @@ local function drawUnitDetails(ent)
     love.graphics.setColor(0,0,0,0.5)
 
     local maxHealthStr = FORMAT:format(ent.maxHealth)
-    local damageEstStr = FORMAT:format(rgb.getDamageEstimate(ent.attackDamage, ent.attackSpeed))
+    local damageEstStr = FORMAT:format(rgb.getDamageEstimate(ent.power, ent.attackSpeed))
     local mhsLen = #maxHealthStr
     local desLen = #damageEstStr
 

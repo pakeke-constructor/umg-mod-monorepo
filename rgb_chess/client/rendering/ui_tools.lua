@@ -154,18 +154,18 @@ function uiTools.renderUnitHealth(health)
 end
 
 
-function uiTools.renderUnitDamage(attackDamage, attackSpeed)
-    local damageEstimate = rgb.getDamageEstimate(attackDamage, attackSpeed)
+function uiTools.renderUnitPowerAttackSpeed(power, attackSpeed)
+    local damageEstimate = rgb.getDamageEstimate(power, attackSpeed)
     local damage = ("%.1f"):format(damageEstimate)
-    Slab.Text("DPS:    " .. damage, dpsTextArgs)
 
-    Slab.Text("DMG: " .. attackDamage, dmgTextArgs)
+    Slab.Text("DPS:    " .. damage, dpsTextArgs)
+    Slab.Text("POWER: " .. power, dmgTextArgs)
     Slab.Text("ATK SPD: " .. attackSpeed, dmgTextArgs)
 end
 
 
-function uiTools.renderUnitSorcery(sorcery)
-    Slab.Text("SORC: " .. sorcery, sorcTextArgs)
+function uiTools.renderUnitPower(sorcery)
+    Slab.Text("POWER: " .. sorcery, sorcTextArgs)
 end
 
 

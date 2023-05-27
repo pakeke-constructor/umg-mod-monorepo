@@ -40,11 +40,9 @@ local function assertUnitFields(etype, etypeName)
     local UNIT_TYPES = constants.UNIT_TYPES
     assertFor(UNIT_TYPES[etype.unitType], etypeName)
 
+    assertFor(etype.defaultPower, etypeName)
     if etype.unitType == UNIT_TYPES.MELEE or etype.unitType == UNIT_TYPES.RANGED then
-        assertFor(etype.defaultAttackDamage, etypeName)
         assertFor(etype.defaultAttackSpeed, etypeName)
-    elseif etype.unitType == UNIT_TYPES.SORCERER then
-        assertFor(etype.defaultSorcery, etypeName)
     end
 end
 

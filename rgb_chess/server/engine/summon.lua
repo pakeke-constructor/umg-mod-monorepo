@@ -46,7 +46,7 @@ function summon.summon(etype, args)
     ent.rgb = args.rgb
     ent.color = rgb.rgbToColor(args.rgb)
 
-    ent.attackDamage = ent.defaultAttackDamage
+    ent.attackDamage = ent.defaultPower
     ent.health = ent.defaultHealth
     ent.maxHealth = ent.defaultHealth
     ent.attackSpeed = ent.defaultAttackSpeed

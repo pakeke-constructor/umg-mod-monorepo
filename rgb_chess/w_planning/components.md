@@ -30,11 +30,8 @@ ent.speed = 20
 ent.defaultHealth = 100
 ent.health, ent.maxHealth
 
-ent.defaultAttackDamage = 10
-ent.attackDamage = 10
-
-ent.defaultSorcery = 5
-ent.sorcery = 5
+ent.defaultPower = 10
+ent.power = 10
 
 ent.defaultAttackSpeed = 0.5
 ent.attackSpeed = 0.5

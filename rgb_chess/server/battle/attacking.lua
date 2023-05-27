@@ -13,9 +13,9 @@ end)
 
 
 umg.on("rangedAttack", function(ent, targetEnt)
-    assert(ent.attackDamage,"?")
+    assert(ent.power,"?")
     if umg.exists(targetEnt) then
-        rgbAPI.damage(ent, targetEnt, ent.attackDamage)
+        rgbAPI.damage(ent, targetEnt, ent.power)
     end
 end)
 
@@ -31,7 +31,7 @@ end)
 
 umg.on("attack", function(attackerEnt, targetEnt, effectiveness)
     -- TODO: Add support for shielding, resistances, etc here.
-    local damage = attackerEnt.attackDamage * effectiveness
+    local damage = attackerEnt.power * effectiveness
     damage = shieldAPI.getDamage(targetEnt, damage)
     targetEnt.health = targetEnt.health - damage
     abilities.trigger("allyDamage", targetEnt.rgbTeam)

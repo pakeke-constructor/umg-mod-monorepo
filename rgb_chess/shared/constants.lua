@@ -46,11 +46,10 @@ _G.constants = {
     }),
 
     BUFF_TYPES = base.Enum({
-        ATTACK_DAMAGE = "ATTACK_DAMAGE",
+        POWER = "POWER",
         ATTACK_SPEED = "ATTACK_SPEED",
         SPEED = "SPEED",
-        HEALTH = "HEALTH",
-        SORCERY = "SORCERY"
+        HEALTH = "HEALTH"
     }),
     
     CARD_TYPES = base.Enum({

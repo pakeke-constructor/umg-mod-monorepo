@@ -21,37 +21,19 @@ local BUFFTYPES = constants.BUFF_TYPES
 
 
 local buffHandlers = {
-    [BUFFTYPES.ATTACK_DAMAGE] = function(target, amount)
-        if target.attackDamage then
-            target.attackDamage = target.attackDamage + amount
-            return true -- success
-        end
-    end,
     [BUFFTYPES.ATTACK_SPEED] = function(target, amount)
-        if target.attackSpeed then
-            target.attackSpeed = target.attackSpeed + amount
-            return true -- success
-        end
+        target.attackSpeed = target.attackSpeed + amount
     end,
     [BUFFTYPES.SPEED] = function(target, amount)
-        if target.speed then
-            target.speed = target.speed + amount
-            return true -- success
-        end
+        target.speed = target.speed + amount
     end,
     [BUFFTYPES.HEALTH] = function(target, amount)
-        if target.health and target.maxHealth then
-            target.health = target.health + amount 
-            target.maxHealth = target.maxHealth + amount 
-            return true -- success
-        end
+        target.health = target.health + amount 
+        target.maxHealth = target.maxHealth + amount 
     end,
-    [BUFFTYPES.SORCERY] = function(target, amount)
-        if target.sorcery then
-            target.sorcery = target.sorcery + amount 
-            return true -- success
-        end
-    end
+    [BUFFTYPES.POWER] = function(target, amount)
+        target.health = target.health + amount 
+    end,
 }
 
 
@@ -69,13 +51,9 @@ return umg.extend(abstractProjectile, {
     rgbProjectileOnHit = function(projEnt, targetEnt)
         local btype = projEnt.buffType
         local sourceEnt = projEnt.sourceEntity
-        local success = buffHandlers[btype](targetEnt, projEnt.buffAmount)
-        if success then
-            abilities.trigger("allyBuff", targetEnt.rgbTeam)
-            umg.call("buff", targetEnt, btype, projEnt.buffAmount, sourceEnt)
-        else
-            umg.call("buffFailed", targetEnt, btype, projEnt.buffAmount, sourceEnt)
-        end
+        buffHandlers[btype](targetEnt, projEnt.buffAmount)
+        abilities.trigger("allyBuff", targetEnt.rgbTeam)
+        umg.call("buff", targetEnt, btype, projEnt.buffAmount, sourceEnt)
     end,
 
     init = function(ent, x, y, options)

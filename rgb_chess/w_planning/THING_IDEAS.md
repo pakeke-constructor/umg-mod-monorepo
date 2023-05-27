@@ -3,8 +3,14 @@
 # SPELL_IDEAS
 
 
+
 ### CARD IDEAS:
 ALL OF THESE ARE SUBJECT TO CHANGE.
+
+Cool theme idea with card suits:<br>
+Hearts, Diamonds:  Regular plays. Basic stuff like rerolling, buffing
+Spades, Clubs:  Creative plays, rule bending, meta/introspective behaviour
+
 
 - `0 of clubs`: Removes [color] from all shop cards
 - `2 of clubs`: Adds [color] to all shop cards
@@ -12,7 +18,7 @@ ALL OF THESE ARE SUBJECT TO CHANGE.
 - `4 of clubs`: Set all shop cards to be [color]
 
 - `10 of clubs`: rerolls all non-[color] shop cards.
-- `10 of diamonds`: Change the color of all non-[color] shop cards
+- `10 of spades`: Change the color of all non-[color] shop cards
 - `joker`: if there are no [color] units on board, give 5 rerolls. Else, give 2 rerolls.
 
 TODO: These are probably too strong with swarm units.
@@ -21,7 +27,8 @@ TODO: These are probably too strong with swarm units.
 - `ace_of_spades`: give +2 ATK to all [color] allies
 - `ace of clubs`: give +1 HP, +1 ATK, +1 SORC to all [color] allies
 
-- `full_suit_card`: **TODO**
+- `full_suit_card`: Swap HP and SORC of all [color] allies
+
 
 
 **CARDS BELOW THIS LINE ARE "ADVANCED", or more complicated:**
@@ -38,8 +45,9 @@ We can spawn paragon units after turn 6 instead.
 - `face_down_card`: [color] paragon units will now spawn in the shop
 - `face_down_rainbow_card`: (SUPER RARE) Allows for another paragon unit
 
-- `jack_of_diamonds`: Swap HP and SORC of all [color] allies
-- `jack_of_spades`: Swap HP and ATK of all [color] allies
+- `jack_of_diamonds`: Level up all [color] allies
+- `jack_of_hearts`: Set the minimum level of [color] allies to 3
+- `jack_of_spades`: Set the 
 
 - `king_of_spades_card`: Delete the lowest health [color] ally. In return, gain 4 [color] items
 - `king_of_hearts_card`: Spawn 2 [color] items

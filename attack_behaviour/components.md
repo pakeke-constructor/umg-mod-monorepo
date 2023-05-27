@@ -14,7 +14,8 @@ Attacking entities:
 ]]
 ent.attackSpeed = 1 -- how long it takes to do an attack.
 
-ent.attackDamage = 10 -- the damage dealt per attack.
+ent.power = 10 -- the damage dealt per attack.
+-- in the case of sorcerers, this is the power of sorcery.
 
 
 local ATTACK_TYPES = {

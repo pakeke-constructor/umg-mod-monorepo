@@ -8,7 +8,7 @@ local filters = require("shared.abilities.filters")
 
 Sets defaults for unit stats
 
-attackDamage <- defaultAttackDamage
+health <- defaultHealth
 ... etc
 
 ]]
@@ -21,7 +21,7 @@ local function makeDefaultsGroup(defaultComponent, targetComponent)
 end
 
 
-makeDefaultsGroup("defaultAttackDamage", "attackDamage")
+makeDefaultsGroup("defaultPower", "power")
 makeDefaultsGroup("defaultAttackSpeed", "attackSpeed")
 makeDefaultsGroup("defaultSpeed", "speed")
 makeDefaultsGroup("defaultSorcery", "sorcery")

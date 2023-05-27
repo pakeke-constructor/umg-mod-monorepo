@@ -144,9 +144,10 @@ end
 
 local getDamageEstimateTc = typecheck.assert("number", "number")
 
-function rgb.getDamageEstimate(attackDamage, attackSpeed)
-    getDamageEstimateTc(attackDamage, attackSpeed)
-    return attackDamage * attackSpeed
+-- used for MELEE and RANGED unit types. sorcerers dont care about this.
+function rgb.getDamageEstimate(power, attackSpeed)
+    getDamageEstimateTc(power, attackSpeed)
+    return power * attackSpeed
 end
 
 

@@ -77,7 +77,8 @@ local function loadShared(base)
     
     base.components = require("shared.components")
 
-    base.delay = require("shared.delay")
+    base.delay = require("shared.delay").delay;
+    base.runNextTick = require("shared.delay").runNextTick;
     base.inspect = require("_libs.inspect");
 
     base.weightedRandom = require("shared.weighted_random");
