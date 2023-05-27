@@ -1,11 +1,12 @@
 
-# QUESTION: Why is all the code in this directory so trash?
+# QUESTION: Why is all the code in this directory so weird and trash?
 This originally used to be it's own mod. (`attack_behaviour` mod)<br>
 As such, it contains a lot of shitty abstractions to communicate with other
 mods. <br>
 I ended up binding this mod to rgb-chess directly, because quite frankly,
 the `attack_behaviour` mod was complete trash.<br>
 
+commit before attack_behaviour refactor: 4289121
 
 
 # general info:

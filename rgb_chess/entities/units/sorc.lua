@@ -8,7 +8,7 @@ return umg.extend(abstractSorcerer, {
     bobbing = {},
 
     defaultHealth = 30,
-    defaultSorcery = 5,
+    defaultPower = 5,
 
     defaultAbilities = {
         {

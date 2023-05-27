@@ -1,5 +1,11 @@
 
 
+local shieldAPI = require("server.engine.shields")
+local rgbAPI = require("server.engine.rgb_api")
+
+local abilities = require("shared.abilities.abilities")
+
+
 -- Damage falloffs for splash damage
 local falloffs = {
     none = function(x, y, rad) return 1 end;
@@ -14,18 +20,26 @@ local falloffs = {
 
 
 
-local function applyAttack(attacker_ent, victim_ent, effectiveness)
+local function applyAttack(attackerEnt, targetEnt, damage)
     --[[
         effectiveness is a value from 0-1, denoting how effective
         the attack is.
         Splash damage with falloff is less effective.
     ]]
-    umg.call("attack", attacker_ent, victim_ent, effectiveness)
-    server.broadcast("attack", attacker_ent, victim_ent, effectiveness)
+    umg.call("attack", attackerEnt, targetEnt, damage)
+    server.broadcast("attack", attackerEnt, targetEnt, damage)
+
+    damage = shieldAPI.getDamage(targetEnt, damage)
+    targetEnt.health = targetEnt.health - damage
+    abilities.trigger("allyDamage", targetEnt.rgbTeam)
+    abilities.trigger("allyAttack", attackerEnt.rgbTeam)
+    umg.call("rgbAttack", attackerEnt, targetEnt, damage)
 end
 
 
-local doSplashTc = typecheck.assert("entity", "number", "number", "string")
+
+
+local doSplashTc = typecheck.assert("entity", "number", "number", "string", "number")
 
 local function doSplash(ent, hitx, hity, category, damage)
     --[[
@@ -33,7 +47,7 @@ local function doSplash(ent, hitx, hity, category, damage)
         `target_ent` is where the attack will take place,
         however other entities may be hit too.
     ]]
-    doSplashTc(ent, hitx, hity, category)
+    doSplashTc(ent, hitx, hity, category, damage)
     local splash = ent.attackBehaviour.splash
     damage = damage or ent.power
     
@@ -43,10 +57,11 @@ local function doSplash(ent, hitx, hity, category, damage)
                 if e ~= ent then
                     -- we dont want the entity hitting itself!
                     local falloffType = splash.damageFalloff or "none"
-                    local dmg = falloffs[falloffType](
+                    local falloff = falloffs[falloffType](
                         e.x-hitx, e.y-hity,
                         splash.radius
                     )
+                    local dmg = damage * falloff
                     applyAttack(ent, e, dmg)
                 end
             end
@@ -62,19 +77,25 @@ end
 
 local attack = {}
 
+local attackTc = typecheck.assert("entity", "entity", "number?")
+
 function attack.attack(ent, target_ent, damage)
+    attackTc(ent, target_ent, damage)
     assert(ent.attackBehaviour, "Entity needs attackBehaviour to attack")
-    assert(umg.exists(ent), "Attempt to attack with a deleted entity")
-    assert(umg.exists(target_ent), "Attempt to attack a deleted entity")
+    damage = damage or ent.power
     if ent.attackBehaviour.splash then
         doSplash(ent, target_ent.x, target_ent.y, target_ent.category, damage)
     else
-        applyAttack(ent, target_ent, 1)
+        applyAttack(ent, target_ent, damage)
     end
 end
 
 
-function attack.splashAttack(ent, target_ent)
+
+function attack.splashAttack(ent, target_ent, damage)
+    attackTc(ent, target_ent, damage)
+    assert(ent.attackBehaviour, "Entity needs attackBehaviour to attack")
+    damage = damage or ent.power
     local category = target_ent.category
     doSplash(ent, target_ent.x, target_ent.y, category)
 end

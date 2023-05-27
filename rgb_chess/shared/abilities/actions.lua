@@ -64,14 +64,17 @@ function Action:apply(sourceEnt, targetEnt, level)
 end
 
 
+local NUM_LV_MODIFIERS = 5
+
+
 
 
 local HEAL_FACTOR = 4
 
-for i = 1,4 do
+for i = 1, NUM_LV_MODIFIERS do
     local levelMultiplier = i * HEAL_FACTOR
     Action({
-        name = "heal",
+        name = "heal" .. i,
         action = function(sourceEnt, targetEnt, level)
             rgbAPI.heal(targetEnt, level * levelMultiplier, sourceEnt)
         end,
@@ -87,10 +90,10 @@ end
 local SHIELD_DURATION = 3
 local SHIELD_FACTOR = 5
 
-for i = 1,4 do
+for i = 1,NUM_LV_MODIFIERS do
     local levelMultiplier = i * SHIELD_FACTOR
     Action({
-        name = "shield",
+        name = "shield" .. i,
         action = function(sourceEnt, targetEnt, level)
             rgbAPI.shield(targetEnt, level * levelMultiplier, SHIELD_DURATION, sourceEnt)
         end,
@@ -110,7 +113,7 @@ local buffTypes = {
     HEALTH = "Health",
 }
 
-for levelMultiplier = 1, 4 do
+for levelMultiplier = 1, NUM_LV_MODIFIERS do
     for buffEnum, abilitySuffix in pairs(buffTypes)do
         Action({
             name = "buff" .. tostring(abilitySuffix) .. tostring(levelMultiplier),

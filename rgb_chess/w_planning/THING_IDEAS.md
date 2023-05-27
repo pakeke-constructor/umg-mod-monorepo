@@ -21,13 +21,13 @@ Spades, Clubs:  Creative plays, rule bending, meta/introspective behaviour
 - `10 of spades`: Change the color of all non-[color] shop cards
 - `joker`: if there are no [color] units on board, give 5 rerolls. Else, give 2 rerolls.
 
-TODO: These are probably too strong with swarm units.
-- `ace_of_diamonds`: give +2 SORC to all [color] allies
-- `ace_of_hearts`: give +3 HP to all [color] allies
-- `ace_of_spades`: give +2 ATK to all [color] allies
-- `ace of clubs`: give +1 HP, +1 ATK, +1 SORC to all [color] allies
 
-- `full_suit_card`: Swap HP and SORC of all [color] allies
+- `ace_of_diamonds`: give +2 POW to all [color] allies
+- `ace_of_hearts`: give +3 HP to all [color] allies
+- `ace_of_spades`: shuffle POW stats between [color] allies
+- `ace of clubs`: shuffle HP stats between [color] allies
+
+- `full_suit_card`: Swap HP and POW of all [color] allies
 
 
 
@@ -79,7 +79,7 @@ Obviously, we will have the basic units:
 - Start battle: Instantly kill all non-[color] allys
 - Turn start: If there are no [color] allys, gain +3 income
 - Turn start: If there are no [color] allys, gain 2 rerolls
-- Turn start: If there are no [color] allys, give the best sorcery ally +15% SORC
+- Turn start: If there are no [color] allys, give allies +15% power
 - On reroll: If there are only [color] allys, gain +1/+1 
 - Turn start: If won previous battle, spawn a random [color] item
 - Turn start:  If there are only [color] allys, gain 1 reroll
@@ -124,7 +124,7 @@ There are also some items that can be given regardless of color.
 - Start battle: give +15% health
 - Start battle: give +15% damage
 - Start battle: give 20% hp shield
-- End turn: give +2 Sorcery
+- End turn: give +2 power
 - On reroll: give +1 HP
 
 - End of turn: unit becomes color [color], and this item is consumed
@@ -142,10 +142,10 @@ We want the items to be meshing with their own rules as much as possible.
 - Dagger, x2 damage to melee unit
 
 **Magic items**
-These are only usable by units with high enough `Sorcery`. 
+These are only usable by units with high enough `power`. 
 - Leaf staff, shields the strongest ally
-- Basic staff, deals damage equal to 100% Sorcery-Points
-- Splash staff, deals splash damage equal to 20% Sorcery-Points
+- Basic staff, deals damage equal to 100% power
+- Splash staff, deals splash damage equal to 20% power
 - Heal staff, heals the ally with the most missing health
 - Heal splash staff, splash heals allies
 - Moon staff, heals allies for 5% of their health

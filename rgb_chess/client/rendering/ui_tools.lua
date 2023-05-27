@@ -164,8 +164,8 @@ function uiTools.renderUnitPowerAttackSpeed(power, attackSpeed)
 end
 
 
-function uiTools.renderUnitPower(sorcery)
-    Slab.Text("POWER: " .. sorcery, sorcTextArgs)
+function uiTools.renderUnitPowerSorcerer(power)
+    Slab.Text("SORCERY POWER: " .. power, sorcTextArgs)
 end
 
 

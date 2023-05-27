@@ -14,7 +14,7 @@ local function renderStats(ent)
     uiTools.renderUnitHealth(ent.maxHealth)
    
     if rgb.isSorcerer(ent) then
-        uiTools.renderUnitPower(ent.power)
+        uiTools.renderUnitPowerSorcerer(ent.power)
     elseif rgb.isAttacker(ent) then
         uiTools.renderUnitPowerAttackSpeed(ent.power, ent.attackSpeed)
     end

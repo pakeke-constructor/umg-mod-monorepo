@@ -1,6 +1,11 @@
 
 local abstractProjectile = require("shared.abstract.abstract_projectile")
 
+local attack
+if server then
+    attack = require("server.battle.attack.attack")
+end
+
 
 return umg.extend(abstractProjectile, {
     rgbProjectileOnHit = function(projEnt, targetEnt)

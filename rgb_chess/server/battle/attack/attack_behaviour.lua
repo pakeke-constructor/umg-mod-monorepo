@@ -1,4 +1,5 @@
 
+local attack = require("server.battle.attack.attack")
 
 
 local attackGroup = umg.group("attackBehaviour", "x", "y")
@@ -41,16 +42,25 @@ end)
 local attackTypes = {}
 
 
-function attackTypes.melee(ent, target_ent)
-    umg.call("meleeAttack", ent, target_ent)
+function attackTypes.melee(ent, targetEnt)
+    if umg.exists(targetEnt) and umg.exists(ent) then
+        attack.attack(ent, targetEnt)
+    end
 end
 
-function attackTypes.item(ent, target_ent)
-    umg.call("itemAttack", ent, target_ent)
+
+function attackTypes.item(ent, targetEnt)
+    if ent.inventory and ent.inventory:getHoldItem() then
+        items.useHoldItem(ent, targetEnt)
+    end
 end
 
-function attackTypes.ranged(ent, target_ent)
-    umg.call("rangedAttack", ent, target_ent)
+
+function attackTypes.ranged(ent, targetEnt)
+    assert(ent.power,"?")
+    if umg.exists(targetEnt) then
+        rgbAPI.damage(ent, targetEnt, ent.power)
+    end
 end
 
 
