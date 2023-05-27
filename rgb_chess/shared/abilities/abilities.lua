@@ -94,8 +94,8 @@ local allTriggerTypes = triggers.getAllTriggerTypes()
 
 local triggerMapping = {--[[
 
-    [trigger1] -> { ent1, ent2, ent3 }
-    [trigger2] -> { ent1, ent2 }
+    [trigger1] -> Set({ ent1, ent2, ent3 })
+    [trigger2] -> Set({ ent1, ent2 })
 
 ]]}
 
@@ -262,14 +262,13 @@ function abilities.trigger(triggerType, rgbTeam)
     triggerTc(triggerType, rgbTeam)
     assert(triggers.isValid(triggerType), "invalid trigger: " .. triggerType)
 
-    local arr = triggerMapping[triggerType] or EMPTY
-    for _, ent in ipairs(arr)do
+    local set = triggerMapping[triggerType] or EMPTY
+    for _, ent in ipairs(set)do
         if ent.rgbTeam == rgbTeam then
             -- apply ents abilities
             applyAbilitiesOfType(ent, ent.abilities, triggerType)
             -- apply passive item abilities
             foreachPassiveItem(ent, function(_e, item)
-                print("yo: ", triggerType)
                 applyAbilitiesOfType(ent, item.abilities, triggerType)
             end)
         end
@@ -406,13 +405,13 @@ end
 
 
 local function clearBuffers()
-    assert(server,"cant call on clientside")
     abilityActionBuffer:clear()
 end
 
 
 
 function abilities.reset()
+    assert(server,"cant call on clientside")
     clearBuffers()
 
     for _, ent in ipairs(abilityGroup)do
