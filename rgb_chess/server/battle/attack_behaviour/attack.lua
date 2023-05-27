@@ -27,7 +27,7 @@ end
 
 local doSplashTc = typecheck.assert("entity", "number", "number", "string")
 
-local function doSplash(ent, hitx, hity, category)
+local function doSplash(ent, hitx, hity, category, damage)
     --[[
         executes a splash damage attack.
         `target_ent` is where the attack will take place,
@@ -35,6 +35,7 @@ local function doSplash(ent, hitx, hity, category)
     ]]
     doSplashTc(ent, hitx, hity, category)
     local splash = ent.attackBehaviour.splash
+    damage = damage or ent.power
     
     if category then
         for _, e in ipairs(categories.getSet(category)) do
@@ -43,7 +44,6 @@ local function doSplash(ent, hitx, hity, category)
                     -- we dont want the entity hitting itself!
                     local falloffType = splash.damageFalloff or "none"
                     local dmg = falloffs[falloffType](
-                        ent.attackDamage, 
                         e.x-hitx, e.y-hity,
                         splash.radius
                     )
@@ -62,12 +62,12 @@ end
 
 local attack = {}
 
-function attack.attack(ent, target_ent)
+function attack.attack(ent, target_ent, damage)
     assert(ent.attackBehaviour, "Entity needs attackBehaviour to attack")
     assert(umg.exists(ent), "Attempt to attack with a deleted entity")
     assert(umg.exists(target_ent), "Attempt to attack a deleted entity")
     if ent.attackBehaviour.splash then
-        doSplash(ent, target_ent)
+        doSplash(ent, target_ent.x, target_ent.y, target_ent.category, damage)
     else
         applyAttack(ent, target_ent, 1)
     end

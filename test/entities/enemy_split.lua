@@ -21,15 +21,6 @@ return {
         deactivateDistance = 900
     },
 
-    attackBehaviour = {
-        type = "melee",
-        target = "player",
-        range = 30
-    },
-
-    attackSpeed = 0.5,
-    attackDamage = 4,
-
     shadow = {
         size=6
     };

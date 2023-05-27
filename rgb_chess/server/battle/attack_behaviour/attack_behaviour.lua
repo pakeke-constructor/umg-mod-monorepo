@@ -1,5 +1,4 @@
 
-local attack = require("server.attack")
 
 
 local attackGroup = umg.group("attackBehaviour", "x", "y")

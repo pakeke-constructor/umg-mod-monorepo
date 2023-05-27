@@ -82,7 +82,7 @@ function rgbAPI.damage(sourceEnt, targetEnt, damage)
     damageTc(sourceEnt, targetEnt, damage)
     local bullet = server.entities.damage(sourceEnt.x, sourceEnt.y, {
         projectileType = constants.PROJECTILE_TYPES.DAMAGE,
-        attackDamage = damage,
+        damage = damage,
         targetEntity = targetEnt,
         sourceEntity = sourceEnt
     })
