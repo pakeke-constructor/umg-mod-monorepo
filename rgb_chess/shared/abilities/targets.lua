@@ -80,7 +80,7 @@ Target({
     getTargets = function(sourceEnt)
         return getAllies(sourceEnt)
     end,
-    description = "For all allies:"
+    description = "All allies"
 })
 
 -- self
@@ -90,7 +90,7 @@ Target({
     getTargets = function(sourceEnt)
         return {sourceEnt}
     end,
-    description = "Affect self:"
+    description = "Self"
 })
 
 
@@ -103,7 +103,7 @@ Target({
             return rgb.match(ent.rgb, sourceEnt.rgb)
         end)
     end,
-    description = "For all matching allies:"
+    description = "Matching allies"
 })
 
 
@@ -116,7 +116,7 @@ Target({
             return not rgb.match(ent.rgb, sourceEnt.rgb)
         end)
     end,
-    description = "For all non matching allies:"
+    description = "Non-matching allies"
 })
 
 
@@ -143,7 +143,7 @@ for _, enum in ipairs(constants.UNIT_TYPES)do
         getTargets = function(sourceEnt)
             return getAllies(sourceEnt):filter(filter)
         end,
-        description = "For all " .. enumLowered .. " allies:"
+        description = enumLowered .. " allies"
     })
 end
 

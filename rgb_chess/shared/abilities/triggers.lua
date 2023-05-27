@@ -6,24 +6,24 @@ local triggers = {}
 
 
 local triggerTypeToDescription = {
-    allyDeath = "When an ally dies:", -- done
+    allyDeath = "Ally dies:", -- done
     -- "enemyDeath", NYI
 
-    allyBuff = "When an ally is buffed:", -- done
-    allyDebuff = "When an ally is debuffed:", -- done
+    allyBuff = "Ally is buffed:", -- done
+    allyDebuff = "Ally is debuffed:", -- done
 
-    allySummoned = "When an ally is summoned:", -- done
-    allySold = "When an ally is sold:", -- done
+    allySummoned = "Ally is summoned:", -- done
+    allySold = "Ally is sold:", -- done
  
-    allyDamage = "When an ally takes damage:", -- done
-    allyHeal = "When an ally is healed:", -- done
-    allyAttack = "When an ally attacks:", -- done
+    allyDamage = "Ally takes damage:", -- done
+    allyHeal = "Ally is healed:", -- done
+    allyAttack = "Ally attacks:", -- done
 
     -- Stun system NYI.
-    -- allyStun = "When an ally is stunned:", 
+    -- allyStun = "ally is stunned:", 
 
-    allyShieldBreak = "When an ally's shield breaks:", -- done
-    allyShieldExpire = "When an ally's shield expires:", -- done
+    allyShieldBreak = "Ally's shield breaks:", -- done
+    allyShieldExpire = "Ally's shield expires:", -- done
  
     reroll = "On reroll:", -- done
     startTurn = "On turn start:", -- done
@@ -32,15 +32,16 @@ local triggerTypeToDescription = {
     startBattle = "On battle start:", -- done
     endBattle = "On battle end:", -- done
 
-    cardBought = "When a card is purchased:", -- done
+    cardBought = "Card is purchased:", -- done
 
-    allyChangeColor = "When an ally changes color:", -- done
-    allyChangeAbility = "When an ally changes abilities:", -- done
+    allyChangeColor = "Ally changes color:", -- done
+    allyChangeAbility = "Ally changes abilities:", -- done
 
-    allyLevelUp = "When an ally levels up:", -- done
+    allyLevelUp = "Ally levels up:", -- done
+    allyLevelDown = "Ally levels down:" -- 
 
-    allyAbility = "When an ability activates:", -- done
-    selfAbility = "When an entity activates it's own ability:" -- done
+    allyAbility = "Ability activates:", -- done
+    selfAbility = "entity activates it's own ability:" -- done
 }
 
 

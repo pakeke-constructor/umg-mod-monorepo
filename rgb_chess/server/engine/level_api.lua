@@ -15,11 +15,11 @@ function levelAPI.setLevel(ent, newLevel)
     local curLv = levelAPI.getLevel(ent)
     if curLv < newLevel then
         -- level up
-        abilities.trigger("levelUp", ent.rgbTeam)
+        abilities.trigger("allyLevelUp", ent.rgbTeam)
         umg.call("levelUp", ent, newLevel)
     elseif curLv > newLevel then
         -- level down
-        abilities.trigger("levelDown", ent.rgbTeam)
+        abilities.trigger("allyLevelDown", ent.rgbTeam)
         umg.call("levelDown", ent, newLevel)
     end
     -- else, we don't apply any triggers.

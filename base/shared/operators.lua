@@ -61,4 +61,14 @@ function operators.COLLECT(a, b)
 end
 
 
+
+function operators.TRUTHY()
+    return true
+end
+
+function operators.FALSEY()
+    return false
+end
+
+
 return operators

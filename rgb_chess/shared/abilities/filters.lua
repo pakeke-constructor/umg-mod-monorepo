@@ -55,7 +55,7 @@ Filter({
     filter = function(sourceEnt, targetEnt)
         return sourceEnt.health > targetEnt.health
     end,
-    description = "If the target has more health than me"
+    description = "Target has more health than me"
 })
 
 
@@ -65,7 +65,7 @@ Filter({
     filter = function(sourceEnt, targetEnt)
         return sourceEnt.health < targetEnt.health
     end,
-    description = "If the target has less health than me"
+    description = "Target has less health than me"
 })
 
 
@@ -91,12 +91,63 @@ Filter({
 
 
 
+local function itemMatches(ent, func)
+    local inv = ent.inventory
+    if not inv then
+        return
+    end
+    for x=1, inv.width do
+        for y=1, inv.height do
+            local item = inv:get(x,y)
+            if umg.exists(item) and func(item) then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+
+Filter({
+    name = "hasItem",
+    function(_sourceEnt, targetEnt)
+        return itemMatches(targetEnt, base.operators.TRUTHY)
+    end,
+    description = "Target has an item"
+})
+
+
+local function activeItem(item)
+    return rgb.isItemOfType(item, constants.ITEM_TYPES.USABLE)
+end
+
+Filter({
+    name = "hasActiveItem",
+    function(_sourceEnt, targetEnt)
+        return itemMatches(targetEnt, activeItem)
+    end,
+    description = "Target has an active item"
+})
+
+Filter({
+    name = "hasPassiveItem",
+    function(_sourceEnt, targetEnt)
+        return itemMatches(targetEnt, rgb.isPassiveItem)
+    end,
+    description = "Target has a passive item"
+})
+
+
+
+
+
+
 Filter({
     name = "hasInventorySpace",
-    filter = function(sourceEnt, targetEnt)
+    filter = function(_sourceEnt, targetEnt)
         return targetEnt.inventory and targetEnt.inventory:getEmptySlot()
     end,
-    description = "If the target has inventory space"
+    description = "Target has inventory space"
 })
 
 
@@ -106,7 +157,7 @@ Filter({
     filter = function(sourceEnt, targetEnt)
         return targetEnt.inventory
     end,
-    description = "If the target has an inventory"
+    description = "Target has an inventory"
 })
 
 
@@ -119,7 +170,7 @@ for enum, _ in pairs(constants.UNIT_TYPES) do
         filter = function(sourceEnt, targetEnt)
             return rgb.isUnitOfType(targetEnt, constants.UNIT_TYPES[enum])
         end,
-        description = "If the target is a " .. upperName
+        description = "Target is a " .. upperName
     })
 end
 
