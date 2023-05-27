@@ -144,7 +144,7 @@ local inBattleTransition = false
 
 local function startTurn()
     inTurnTransition = false
-    abilities.clearBuffers()
+    abilities.reset()
     rgb.setState(rgb.STATES.TURN_STATE)
     for _, board in Board.iterBoards() do
         board:emplacePlayer(board:getTeam())
@@ -154,7 +154,7 @@ local function startTurn()
     income.doAllIncome()
 
     -- we gotta delay here, as we gotta wait a tick for the entities to spawn
-    base.runNextTick(function()
+    base.nextTick(function()
         abilities.triggerForAll("startTurn")
         umg.call("startTurn")
     end)
@@ -181,7 +181,7 @@ local function startBattle()
     rgb.setState(rgb.STATES.BATTLE_STATE)
     saveBoards()
 
-    abilities.clearBuffers()
+    abilities.reset()
     abilities.triggerForAll("startBattle")
     umg.call("startBattle")
 
