@@ -1,4 +1,6 @@
 
+local attack = require("server.battle.attack_behaviour.attack")
+
 local shieldAPI = require("server.engine.shields")
 local rgbAPI = require("server.engine.rgb_api")
 
