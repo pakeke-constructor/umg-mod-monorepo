@@ -49,27 +49,23 @@ end
 
 
 
-local cardAPI
-umg.on("@load", function()
-    cardAPI = require("shared.cards.card_api") 
-end)
 
 local function playSpellCard(card_ent)
-    local board = Board.getBoard(card_ent.rgbTeam)
-    cardAPI.playSpellCard(card_ent.cardSpellType, board, card_ent.rgb)
+    local etype = card_ent.cardBuyTarget
+    etype.cardInfo.spellCast(etype)
 end
 
 
 
 function buy.playCard(card_ent)
     local board = Board.getBoard(card_ent.rgbTeam)
-    local etype = card_ent.cardBuyTarget
-    local typ = etype.cardInfo.type 
 
-    if typ == constants.CARD_TYPES.UNIT then
+    if rgb.isUnitCard(card_ent) then
         playUnitCard(card_ent)
-    elseif typ == constants.CARD_TYPES.SPELL then
+    elseif rgb.isSpellCard(card_ent) then
         playSpellCard(card_ent)
+    else
+        error("certified bruh moment")
     end
 
     board:setLastPlayedCard(card_ent)

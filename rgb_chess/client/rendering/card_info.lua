@@ -9,40 +9,50 @@ local CARD_INFO_WINDOW_Y = 30
 
 
 
-local function drawUnitCardInfo(cardEnt)
-    Slab.BeginWindow("cardInfoPopup", {X=CARD_INFO_WINDOW_X, Y=CARD_INFO_WINDOW_Y})
-    local unitEType = cardEnt.cardBuyTarget 
-    local rgbColor = cardEnt.rgb
 
-    uiTools.renderBasicUnitInfo(unitEType, cardEnt.rgb)
-    
+
+
+local function unitStats(etype, rgbColor)
+    uiTools.renderBasicUnitInfo(etype, rgbColor)
     Slab.Separator()
+    uiTools.renderUnitHealth(etype.defaultHealth)
 
-    uiTools.renderUnitHealth(unitEType.defaultHealth)
-
-    if rgb.isSorcerer(unitEType) then
-        uiTools.renderUnitPowerSorcerer(unitEType.defaultPower)
-    elseif rgb.isAttacker(unitEType) then
+    if rgb.isSorcerer(etype) then
+        -- it's a sorcerer, render sorcery
+        uiTools.renderUnitPowerSorcerer(etype.defaultPower)
+    elseif rgb.isAttacker(etype) then
         -- it's ranged or melee, which means that attack speed counts
-        uiTools.renderUnitPowerAttackSpeed(unitEType.defaultPower, unitEType.defaultAttackSpeed)
+        uiTools.renderUnitPowerAttackSpeed(etype.defaultPower, etype.defaultAttackSpeed)
     end
 
     Slab.Separator()
+    uiTools.renderAbilityInfo(etype.defaultAbilities or {})
+end
 
-    uiTools.renderAbilityInfo(unitEType.defaultAbilities or {})
 
-    Slab.Separator()
 
-    uiTools.renderRGBInfo(rgbColor)
+local function spellStats(etype, rgbColor)
 
-    Slab.EndWindow()
 end
 
 
 
 local function drawCardInfo(cardEnt)
-    drawUnitCardInfo(cardEnt)
-    --todo: support for spell cards.
+    Slab.BeginWindow("cardInfoPopup", {X=CARD_INFO_WINDOW_X, Y=CARD_INFO_WINDOW_Y})
+    local etype = cardEnt.cardBuyTarget 
+    local rgbColor = cardEnt.rgb
+
+    if rgb.isUnitCard(cardEnt) then
+        unitStats(etype, rgbColor)
+    elseif rgb.isSpellCard(cardEnt) then
+        spellStats(etype, rgbColor)
+    else
+        error("yo wat:" .. umg.inspect(etype.cardInfo))
+    end
+
+    Slab.Separator()
+    uiTools.renderRGBInfo(rgbColor)
+    Slab.EndWindow()
 end
 
 

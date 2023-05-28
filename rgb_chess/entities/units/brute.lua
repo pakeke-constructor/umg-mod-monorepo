@@ -24,6 +24,8 @@ return umg.extend(abstractMelee, {
         cost = 3,
         name = "Brute x 1",
         description = "on ally death,\nprint hi in console",
+        difficultyLevel = 0,
+
         unitInfo = {
             symbol = "dice",
             squadronSize = 1

@@ -57,10 +57,14 @@ local statComponents = {
 
 local function assertETypeOk(etype, etypeName)
     local cardInfo = etype.cardInfo
+    assertFor(cardInfo, etypeName)
     assertFor(constants.CARD_TYPES[cardInfo.type], etypeName) 
     assertFor(cardInfo.cost, etypeName)
     assertFor(cardInfo.name, etypeName)
     assertFor(cardInfo.description, etypeName)
+    assertFor(cardInfo.difficultyLevel, etypeName)
+    local diff = cardInfo.difficultyLevel
+    assertFor(diff <= constants.MAX_DIFFICULTY_LEVEL and diff >= constants.MIN_DIFFICULTY_LEVEL, etypeName)
 
     for _, comp in ipairs(statComponents) do
         -- All these components should be regular, not shared
@@ -71,7 +75,7 @@ local function assertETypeOk(etype, etypeName)
         assertUnitInfo(cardInfo.unitInfo, etypeName)
         assertUnitFields(etype, etypeName)
     elseif cardInfo.type == constants.CARD_TYPES.SPELL then
-        assertFor(cardInfo.spellInfo, etypeName)
+        assertFor(cardInfo.spellCast, etypeName)
     end
 end
 

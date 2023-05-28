@@ -24,6 +24,8 @@ return umg.extend(abstractSorcerer, {
         cost = 3,
         name = "Sorc x 1",
         description = "Basic sorcerer",
+        difficultyLevel = 0,
+
         unitInfo = {
             symbol = "wizard unit",
             squadronSize = 1

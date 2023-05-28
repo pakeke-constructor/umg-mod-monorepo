@@ -122,16 +122,26 @@ end
 
 
 
-local subtractTc = typecheck.assert("table")--, "table")
+local addSubTc = typecheck.assert("table", "table")
 
 function rgb.subtract(col, sub)
-    subtractTc(col,sub)
+    addSubTc(col,sub)
     return {
         math.max(0, col[1] - sub[1]),
         math.max(0, col[2] - sub[2]),
         math.max(0, col[3] - sub[3])
     }
 end
+
+function rgb.add(col, add)
+    addSubTc(col,add)
+    return {
+        math.min(1, col[1] + add[1]),
+        math.min(1, col[2] + add[2]),
+        math.min(1, col[3] + add[3])
+    }
+end
+
 
 
 function rgb.sameTeam(obj1, obj2)
@@ -205,6 +215,25 @@ function rgb.isAttacker(ent)
     local melee = constants.UNIT_TYPES.MELEE
     local ranged = constants.UNIT_TYPES.RANGED
     return rgb.isUnitOfType(ent, melee) or rgb.isUnitOfType(ent, ranged)
+end
+
+
+
+
+function rgb.isCardOfType(cardEnt, enum)
+    assert(constants.CARD_TYPES[enum], "?")
+    local buyTarget = cardEnt.cardBuyTarget
+    assert(buyTarget, "not a card entity")
+    local cardInfo = buyTarget.cardInfo
+    return cardInfo.type == enum
+end
+
+function rgb.isUnitCard(cardEnt)
+    return rgb.isCardOfType(cardEnt, constants.CARD_TYPES.UNIT)
+end
+
+function rgb.isSpellCard(cardEnt)
+    return rgb.isCardOfType(cardEnt, constants.CARD_TYPES.SPELL)
 end
 
 
