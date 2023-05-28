@@ -40,23 +40,25 @@ Spades, Clubs:  Creative plays, rule bending, meta/introspective behaviour
 - `flipped_duplicate_card`: copy the last card's effects as the inverse of [color]
 
 
-TODO: Redo these cards!!! These mechanics are very one-dimensional.
-We can spawn paragon units after turn 6 instead.
-- `face_down_card`: [color] paragon units will now spawn in the shop
-- `face_down_rainbow_card`: (SUPER RARE) Allows for another paragon unit
+THESE CARDS SHOULD BE VERY RARE:
+- `face_down_card`: Shuffle ability actions of all [color] allies
+- `face_down_dark_card`: Shuffle ability triggers of all [color] allies
+- `face_down_rainbow_card`: Shuffle ability triggers of all allies
 
 - `jack_of_diamonds`: Level up all [color] allies
 - `jack_of_hearts`: Set the minimum level of [color] allies to 3
-- `jack_of_spades`: Set the 
+- `jack_of_spades`: Reset [color] ally levels to 1, and gain triple the lost levels in income
+- `jack_of_clubs`: Reset [color] ally levels to 1, and gain double the lost levels in rerolls
 
-- `king_of_spades_card`: Delete the lowest health [color] ally. In return, gain 4 [color] items
 - `king_of_hearts_card`: Spawn 2 [color] items
+- `king_of_spades_card`: Delete the lowest health [color] ally. In return, gain 4 [color] items
+- `king_of_clubs_card`: Activate all [color] passive items
 
-MAKE THESE CARDS SOMEWHAT RARE:
+
+- `queen_of_diamonds_card`: Double the max-activations of abilities for [color] allies
+- `queen_of_hearts_card`: Instantly proc the abilities of [color] allies
+- `queen_of_clubs_card`: Reset ability activations for [color] allies
 - `queen_of_spades_card`: Swap abilities between two random [color] allies
-- `queen_of_diamonds_card`: Instantly proc the abilities of [color] allies
-- `queen_of_hearts_card`: Shuffle the ability actions of all [color] allies
-- `queen_of_clubs_card`: Shuffle the ability triggers of all [color] allies
 
 - `null_card`: Subtract [color] from a random [color] ally
 

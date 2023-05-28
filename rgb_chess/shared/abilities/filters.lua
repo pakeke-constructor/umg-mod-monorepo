@@ -1,4 +1,10 @@
 
+--[[
+
+This file is where all the filters are defined
+
+
+]]
 require("shared.constants")
 
 
@@ -91,7 +97,10 @@ Filter({
 
 
 
-local function itemMatches(ent, func)
+--[[
+    returns true if `ent` has an item that satisfies `func`
+]]
+local function hasItemWith(ent, func)
     local inv = ent.inventory
     if not inv then
         return
@@ -110,29 +119,24 @@ end
 
 Filter({
     name = "hasItem",
-    function(_sourceEnt, targetEnt)
-        return itemMatches(targetEnt, base.operators.TRUTHY)
+    filter = function(_sourceEnt, targetEnt)
+        return hasItemWith(targetEnt, base.operators.TRUTHY)
     end,
     description = "Target has an item"
 })
 
-
-local function activeItem(item)
-    return rgb.isItemOfType(item, constants.ITEM_TYPES.USABLE)
-end
-
 Filter({
     name = "hasActiveItem",
-    function(_sourceEnt, targetEnt)
-        return itemMatches(targetEnt, activeItem)
+    filter = function(_sourceEnt, targetEnt)
+        return hasItemWith(targetEnt, rgb.isUsableItem)
     end,
     description = "Target has an active item"
 })
 
 Filter({
     name = "hasPassiveItem",
-    function(_sourceEnt, targetEnt)
-        return itemMatches(targetEnt, rgb.isPassiveItem)
+    filter = function(_sourceEnt, targetEnt)
+        return hasItemWith(targetEnt, rgb.isPassiveItem)
     end,
     description = "Target has a passive item"
 })

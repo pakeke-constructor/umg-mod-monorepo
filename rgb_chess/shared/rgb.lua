@@ -222,6 +222,10 @@ function rgb.isPassiveItem(ent)
     return rgb.isItemOfType(ent, constants.ITEM_TYPES.PASSIVE)
 end
 
+function rgb.isUsableItem(ent)
+    return rgb.isItemOfType(ent, constants.ITEM_TYPES.USABLE)
+end
+
 
 
 

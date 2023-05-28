@@ -7,11 +7,13 @@ local levelAPI = {}
 
 
 function levelAPI.getLevel(ent)
-    return ent.level
+    return ent.level or 1
 end
 
+local entNumberTc = typecheck.assert("entity", "number")
 
 function levelAPI.setLevel(ent, newLevel)
+    entNumberTc(ent, newLevel)
     local curLv = levelAPI.getLevel(ent)
     if curLv < newLevel then
         -- level up
@@ -28,11 +30,13 @@ end
 
 
 function levelAPI.levelUp(ent, amount)
+    entNumberTc(ent, amount)
     levelAPI.setLevel(ent, levelAPI.getLevel(ent) + amount)
 end
 
 
 function levelAPI.levelDown(ent, amount)
+    entNumberTc(ent, amount)
     levelAPI.setLevel(ent, levelAPI.getLevel(ent) - amount)
 end
 

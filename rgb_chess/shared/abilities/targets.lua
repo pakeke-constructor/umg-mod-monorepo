@@ -121,6 +121,35 @@ Target({
 
 
 
+-- randomMatching
+-- selects a random matching ally
+Target({
+    name = "randomMatching",
+    getTargets = function(sourceEnt)
+        local buffer = getAllies(sourceEnt):filter(function(ent)
+            return rgb.match(ent.rgb, sourceEnt.rgb)
+        end)
+        return table.random(buffer)
+    end,
+    description = "Random matching ally"
+})
+
+
+-- random
+-- selects a random ally
+Target({
+    name = "random",
+    getTargets = function(sourceEnt)
+        local buffer = getAllies(sourceEnt)
+        return table.random(buffer)
+    end,
+    description = "Random ally"
+})
+
+
+
+
+
 --[[
     Creating a bunch of targets to target each ally type.
 

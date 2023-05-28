@@ -38,7 +38,7 @@ local triggerTypeToDescription = {
     allyChangeAbility = "Ally changes abilities:", -- done
 
     allyLevelUp = "Ally levels up:", -- done
-    allyLevelDown = "Ally levels down:" -- 
+    allyLevelDown = "Ally levels down:", -- done
 
     allyAbility = "Ability activates:", -- done
     selfAbility = "entity activates it's own ability:" -- done

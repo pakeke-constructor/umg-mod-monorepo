@@ -88,5 +88,7 @@ globals:
     - type: any
   table.copy:
     any: true
+  table.random:
+    any: true
 
   
