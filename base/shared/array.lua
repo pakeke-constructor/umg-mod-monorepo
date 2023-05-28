@@ -84,13 +84,29 @@ function Array:find(obj)
 end
 
 
+
+
+local funcTc = typecheck.assert("table", "function")
+
 function Array:filter(func)
+    funcTc(func)
     local newArray = Array()
     for i=1, self.len do
         local item = self[i]
         if func(item) then
             newArray:add(item)
         end
+    end
+    return newArray
+end
+
+
+function Array:map(func)
+    funcTc(func)
+    local newArray = Array()
+    for i=1, self.len do
+        local item = self[i]
+        newArray:add(func(item))
     end
     return newArray
 end

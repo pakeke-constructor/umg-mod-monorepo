@@ -232,6 +232,8 @@ function Board:reset()
     self.winner = nil
     self.enemyTeam = nil
 
+    self.lastPlayedCard = nil
+
     local arr = self:deserializeAllies()
     base.delay(0.4, function()
         for i=1, #arr do
@@ -373,7 +375,7 @@ function Board:reroll()
     for shopIndex=1, self.shopSize do
         local delay = (shopIndex/self.shopSize) * 0.3
         base.delay(delay, function()
-            self:rerollSlot(shopIndex)
+            self:rerollCard(shopIndex)
         end)
     end
 
@@ -383,7 +385,7 @@ end
 
 
 
-function Board:rerollSlot(shopIndex)
+function Board:rerollCard(shopIndex)
     local card = self:getCard(shopIndex)
     if umg.exists(card) and card.isLocked then
         return
@@ -398,6 +400,29 @@ function Board:rerollSlot(shopIndex)
     base.delay(constants.REROLL_TIME, function()
         genCards.spawnCard(self, shopIndex)
     end)
+end
+
+
+
+function Board:getShopCards()
+    local array = base.Array()
+    for i=1, self.shopSize do
+        local card = self:getCard(i)
+        if umg.exists(card) then
+            -- card should generally always exist... but if not, we are defensive.
+            array:add(card)
+        end
+    end
+    return array
+end
+
+
+function Board:setLastPlayed(card)
+    self.lastPlayedCard = card
+end
+
+function Board:getLastPlayed()
+    return self.lastPlayedCard
 end
 
 

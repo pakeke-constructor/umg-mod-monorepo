@@ -155,6 +155,7 @@ local function startTurn()
 
     -- we gotta delay here, as we gotta wait a tick for the entities to spawn
     base.nextTick(function()
+        abilities.reset()
         abilities.triggerForAll("startTurn")
         umg.call("startTurn")
     end)

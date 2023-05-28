@@ -143,9 +143,13 @@ function rgbAPI.changeRGB(ent, newRGB)
     changeRGBTc(ent, newRGB)
     if not rgb.exactMatch(ent.rgb, newRGB) then
         ent.rgb = newRGB
+        ent.color = rgb.rgbToColor(newRGB)
         sync.syncComponent(ent, "rgb")
+        sync.syncComponent(ent, "color")
         umg.call("changeRGB", ent, newRGB)
-        abilities.trigger()
+        if rgb.isUnit(ent) then
+            abilities.trigger("allyChangeColor", ent.rgbTeam)
+        end
     end
 end
 

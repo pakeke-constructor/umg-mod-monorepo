@@ -28,10 +28,8 @@ return {
                 if buy.canBuy(ent) then
                     buy.buyCard(ent)
                     local board = rgb.getBoard(ent.rgbTeam)
-                    board:rerollSlot(ent.shopIndex)
+                    board:rerollCard(ent.shopIndex)
                 end
-            elseif client then
-                -- idk, play sound here or something?
             end
         end
     end,

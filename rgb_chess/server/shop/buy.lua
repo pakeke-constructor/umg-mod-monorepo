@@ -26,7 +26,7 @@ end
 
 
 
-local function buyUnitCard(card_ent)
+local function playUnitCard(card_ent)
     --[[
         buys a squadron described by a card.
     ]]
@@ -46,8 +46,29 @@ end
 
 
 
-local function buySpellCard(card_ent)
-    error("todo")
+
+
+
+local cardAPI
+umg.on("@load", function()
+    cardAPI = require("shared.cards.card_api") 
+end)
+
+local function playSpellCard(card_ent)
+    local board = Board.getBoard(card_ent.rgbTeam)
+    cardAPI.playSpellCard(card_ent.cardSpellType, board, card_ent.rgb)
+end
+
+
+
+function buy.playCard(card_ent)
+    local etype = card_ent.cardBuyTarget
+    local typ = etype.cardInfo.type 
+    if typ == constants.CARD_TYPES.UNIT then
+        playUnitCard(card_ent)
+    elseif typ == constants.CARD_TYPES.SPELL then
+        playSpellCard(card_ent)
+    end
 end
 
 
@@ -56,13 +77,7 @@ function buy.buyCard(card_ent, cost)
     local board = Board.getBoard(card_ent.rgbTeam)
     cost = cost or buy.getCost(card_ent)
 
-    local etype = card_ent.cardBuyTarget
-    local typ = etype.cardInfo.type 
-    if typ == constants.CARD_TYPES.UNIT then
-        buyUnitCard(card_ent)
-    elseif typ == constants.CARD_TYPES.SPELL then
-        buySpellCard(card_ent)
-    end
+    buy.playCard(card_ent)
 
     abilities.trigger("cardBought", card_ent.rgbTeam)
 

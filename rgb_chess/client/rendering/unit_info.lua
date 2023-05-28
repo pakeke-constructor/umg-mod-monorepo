@@ -35,7 +35,7 @@ local function drawUnitInfo(ent)
     renderStats(ent)
 
     Slab.Separator()
-    uiTools.renderAbilityInfo(ent.abilities or {})
+    uiTools.renderAbilityInfo(ent.abilities or {}, ent)
     Slab.Separator()
     uiTools.renderRGBInfo(ent.rgb)
     Slab.EndWindow()

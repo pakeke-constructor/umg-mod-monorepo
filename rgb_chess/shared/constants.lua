@@ -11,6 +11,9 @@ _G.constants = {
     CARD_LIGHTNESS = 0.3,
     DEFAULT_CARD_IMAGE = "blank_card",
 
+    MIN_DIFFICULTY_LEVEL = 0, -- cards are given a 'difficulty level' to tell how complex they are.
+    MAX_DIFFICULTY_LEVEL = 4, -- This allows us to have a "learning mode."
+
     DEFAULT_RARITY = 1,
 
     DEFAULT_UNIT_LEVEL = 1,

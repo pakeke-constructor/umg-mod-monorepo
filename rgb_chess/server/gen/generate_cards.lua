@@ -47,12 +47,25 @@ local function assertUnitFields(etype, etypeName)
 end
 
 
+
+local statComponents = {
+    "health", "maxHealth",
+    "power", "attackSpeed",
+    "abilities"
+}
+
+
 local function assertETypeOk(etype, etypeName)
     local cardInfo = etype.cardInfo
     assertFor(constants.CARD_TYPES[cardInfo.type], etypeName) 
     assertFor(cardInfo.cost, etypeName)
     assertFor(cardInfo.name, etypeName)
     assertFor(cardInfo.description, etypeName)
+
+    for _, comp in ipairs(statComponents) do
+        -- All these components should be regular, not shared
+        assertFor(not etype[comp], etypeName)
+    end
 
     if cardInfo.type == constants.CARD_TYPES.UNIT then
         assertUnitInfo(cardInfo.unitInfo, etypeName)

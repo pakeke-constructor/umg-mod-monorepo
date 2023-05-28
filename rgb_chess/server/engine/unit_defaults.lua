@@ -16,7 +16,9 @@ health <- defaultHealth
 local function makeDefaultsGroup(defaultComponent, targetComponent)
     local group = umg.group(defaultComponent)
     group:onAdded(function(ent)
-        ent[targetComponent] = ent[defaultComponent]
+        if not ent[targetComponent] then
+            ent[targetComponent] = ent[defaultComponent]
+        end
     end)
 end
 
@@ -30,8 +32,12 @@ makeDefaultsGroup("defaultSorcery", "sorcery")
 local defaultHealthGroup = umg.group("defaultHealth")
 
 defaultHealthGroup:onAdded(function(ent)
-    ent.maxHealth = ent.defaultHealth
-    ent.health = ent.defaultHealth
+    if (not ent.maxHealth) then
+        ent.maxHealth = ent.defaultHealth
+    end
+    if (not ent.health) then
+        ent.health = ent.defaultHealth
+    end
 end)
 
 
@@ -67,7 +73,10 @@ local defaultAbilityGroup = umg.group("defaultAbilities")
     copy default abilities over to entity
 ]]
 defaultAbilityGroup:onAdded(function(ent)
-    ent.abilities = ent.abilities or {}
+    if ent.abilities then
+        return
+    end
+    ent.abilities = {}
     if ent.defaultAbilities.trigger then
         error("Must define a list of abilities, not a single ability as a table.  " .. tostring(ent:type()))
     end

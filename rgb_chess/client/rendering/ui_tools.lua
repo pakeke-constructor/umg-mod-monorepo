@@ -9,6 +9,7 @@ local actions = require("shared.abilities.actions")
 
 local abilities = require("shared.abilities.abilities")
 
+local levelAPI = require("shared.misc.level_api")
 
 
 local uiTools = {}
@@ -88,7 +89,7 @@ local textArgs = {Color = constants.ABILITY_UI_COLORS.REMAINING_ACTIVATIONS}
 
 local renderAbilityTc = typecheck.assert("table")
 
-local function renderAbility(ability)
+local function renderAbility(ability, sourceEnt)
     --[[
         renders an ability assuming an existing Slab context.
     ]]
@@ -111,7 +112,8 @@ local function renderAbility(ability)
     end
 
     -- action
-    act:drawSlabUI(ability.level or 1)
+    local level = (umg.exists(sourceEnt) and levelAPI.getLevel(sourceEnt)) or 1
+    act:drawSlabUI(level)
 
     -- remaining activations:
     Slab.Text("Activations:", textArgs)
@@ -121,11 +123,16 @@ end
 
 
 
-function uiTools.renderAbilityInfo(abilityList)
+local renderAbilityInfoTc = typecheck.assert("table", "entity?")
+
+function uiTools.renderAbilityInfo(abilityList, sourceEnt)
+    -- we need sourceEnt if we want to display the level.
+    -- Defaults to 1 if there's no sourceEnt, since the ability may be on a card.
+    renderAbilityInfoTc(abilityList, sourceEnt)
     Slab.Text("Abilities:")
     Slab.Separator()
     for _, ability in ipairs(abilityList)do
-        renderAbility(ability)
+        renderAbility(ability, sourceEnt)
         Slab.Separator()
     end    
 
