@@ -45,20 +45,26 @@ THESE CARDS SHOULD BE VERY RARE:
 - `face_down_dark_card`: Shuffle ability triggers of all [color] allies
 - `face_down_rainbow_card`: Shuffle ability triggers of all allies
 
+
+Jack cards are related to levels
 - `jack_of_diamonds`: Level up all [color] allies
 - `jack_of_hearts`: Set the minimum level of [color] allies to 3
 - `jack_of_spades`: Reset [color] ally levels to 1, and gain triple the lost levels in income
 - `jack_of_clubs`: Reset [color] ally levels to 1, and gain double the lost levels in rerolls
 
-- `king_of_hearts_card`: Spawn 2 [color] items
-- `king_of_spades_card`: Delete the lowest health [color] ally. In return, gain 4 [color] items
-- `king_of_clubs_card`: Activate all [color] passive items
 
-
+Queen cards are related to abilities
 - `queen_of_diamonds_card`: Double the max-activations of abilities for [color] allies
 - `queen_of_hearts_card`: Instantly proc the abilities of [color] allies
 - `queen_of_clubs_card`: Reset ability activations for [color] allies
 - `queen_of_spades_card`: Swap abilities between two random [color] allies
+
+
+King cards are related to items
+- `king_of_hearts_card`: Spawn 2 [color] items
+- `king_of_spades_card`: Delete the lowest health [color] ally. In return, gain 4 [color] items
+- `king_of_clubs_card`: Activate all [color] passive items
+
 
 - `null_card`: Subtract [color] from a random [color] ally
 

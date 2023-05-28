@@ -1,5 +1,6 @@
 
 local uiTools = require("client.rendering.ui_tools")
+local levelAPI = require("shared.misc.level_api")
 
 
 
@@ -10,7 +11,6 @@ local UNIT_INFO_WINDOW_Y = 20
 
 
 local function renderStats(ent)
-    Slab.Separator()
     uiTools.renderUnitHealth(ent.maxHealth)
    
     if rgb.isSorcerer(ent) then
@@ -27,6 +27,10 @@ local function drawUnitInfo(ent)
     
     local unitEType = ent:getClass()
     uiTools.renderBasicUnitInfo(unitEType, ent.rgb)
+
+    Slab.Separator()
+    uiTools.renderUnitLevel(levelAPI.getLevel(ent))
+    Slab.Separator()
 
     renderStats(ent)
 

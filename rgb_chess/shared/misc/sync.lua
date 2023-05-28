@@ -1,4 +1,9 @@
 
+--[[
+    basic syncing config
+]]
+
+
 sync.denoteEventProxy("buff")
 sync.denoteEventProxy("debuff")
 

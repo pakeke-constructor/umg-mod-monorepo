@@ -19,6 +19,7 @@ local healthTextArgs = {Color = {1,0.2,0.2}}
 local dmgTextArgs = {Color = {0.8,0.7,0.1}}
 local dpsTextArgs = {Color = {0.9,0.3,0.1}} 
 local sorcTextArgs = {Color = {0.1,0.3,0.9}}
+local levelTextArgs = {Color = {0.8,1,1}}
 
 
 
@@ -81,18 +82,6 @@ end
 
 
 
---[[
-
-local function renderText(text)
-    local f = love.graphics.getFont()
-    local _, txt_table = f:getWrap(text, 600)
-    for _, txt in ipairs(txt_table) do
-        Slab.Text(txt, descTextArgs)
-    end
-end
-
-]]
-
 
 
 local textArgs = {Color = constants.ABILITY_UI_COLORS.REMAINING_ACTIVATIONS}
@@ -148,6 +137,10 @@ end
 
 
 
+function uiTools.renderUnitLevel(level)
+    Slab.Text("Level: " .. level, levelTextArgs)
+end
+
 
 function uiTools.renderUnitHealth(health)
     Slab.Text("Health: " .. health, healthTextArgs)
@@ -158,14 +151,14 @@ function uiTools.renderUnitPowerAttackSpeed(power, attackSpeed)
     local damageEstimate = rgb.getDamageEstimate(power, attackSpeed)
     local damage = ("%.1f"):format(damageEstimate)
 
-    Slab.Text("DPS:    " .. damage, dpsTextArgs)
-    Slab.Text("POWER: " .. power, dmgTextArgs)
-    Slab.Text("ATK SPD: " .. attackSpeed, dmgTextArgs)
+    Slab.Text("DPS:   " .. damage, dpsTextArgs)
+    Slab.Text("Power: " .. power, dmgTextArgs)
+    Slab.Text("Attack Speed: " .. attackSpeed, dmgTextArgs)
 end
 
 
 function uiTools.renderUnitPowerSorcerer(power)
-    Slab.Text("SORCERY POWER: " .. power, sorcTextArgs)
+    Slab.Text("Sorcery Power:" .. power, sorcTextArgs)
 end
 
 

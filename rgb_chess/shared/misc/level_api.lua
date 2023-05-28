@@ -1,6 +1,11 @@
 
 local abilities = require("shared.abilities.abilities")
-local Board = require("server.board")
+
+local Board
+if server then
+    Board = require("server.board")
+end
+
 
 local levelAPI = {}
 
@@ -13,6 +18,7 @@ end
 local entNumberTc = typecheck.assert("entity", "number")
 
 function levelAPI.setLevel(ent, newLevel)
+    assert(server, "Only available on serverside")
     entNumberTc(ent, newLevel)
     local curLv = levelAPI.getLevel(ent)
     if curLv < newLevel then
@@ -29,28 +35,34 @@ function levelAPI.setLevel(ent, newLevel)
 end
 
 
+
 function levelAPI.levelUp(ent, amount)
+    assert(server, "Only available on serverside")
     entNumberTc(ent, amount)
     levelAPI.setLevel(ent, levelAPI.getLevel(ent) + amount)
 end
 
 
+
 function levelAPI.levelDown(ent, amount)
+    assert(server, "Only available on serverside")
     entNumberTc(ent, amount)
     levelAPI.setLevel(ent, levelAPI.getLevel(ent) - amount)
 end
 
 
 
-umg.on("startTurn", function()
-    for _rgbTeam, board in Board.iterBoards() do
-        local units = board:getUnits()
-        for _, ent in ipairs(units)do
-            levelAPI.levelUp(ent, 1)
-        end
-    end
-end)
 
+if server then
+    umg.on("startTurn", function()
+        for _rgbTeam, board in Board.iterBoards() do
+            local units = board:getUnits()
+            for _, ent in ipairs(units)do
+                levelAPI.levelUp(ent, 1)
+            end
+        end
+    end)
+end
 
 
 return levelAPI
