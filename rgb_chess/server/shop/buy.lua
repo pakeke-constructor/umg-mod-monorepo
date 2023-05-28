@@ -62,13 +62,17 @@ end
 
 
 function buy.playCard(card_ent)
+    local board = Board.getBoard(card_ent.rgbTeam)
     local etype = card_ent.cardBuyTarget
     local typ = etype.cardInfo.type 
+
     if typ == constants.CARD_TYPES.UNIT then
         playUnitCard(card_ent)
     elseif typ == constants.CARD_TYPES.SPELL then
         playSpellCard(card_ent)
     end
+
+    board:setLastPlayedCard(card_ent)
 end
 
 

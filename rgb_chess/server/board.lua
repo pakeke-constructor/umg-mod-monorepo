@@ -417,11 +417,11 @@ function Board:getShopCards()
 end
 
 
-function Board:setLastPlayed(card)
+function Board:setLastPlayedCard(card)
     self.lastPlayedCard = card
 end
 
-function Board:getLastPlayed()
+function Board:getLastPlayedCard()
     return self.lastPlayedCard
 end
 

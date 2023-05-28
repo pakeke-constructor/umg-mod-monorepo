@@ -117,7 +117,7 @@ Only show up in the shop after turn 6.
 There is a maximum of 1 paragon unit for each army.
 
 - SAIYO:  Turn start:  Steals 10% HP from all non-[color] units
-- SORCIO:  Turn start:  Steals 15% SORC from all non-[color] units
+- KYU:  Turn start:  Steals 10% POW from all non-[color] units
 - CELESTION:  On buy: copies all abilities from [color] units
 - MYTHRUNE:  Has 36 inventory slots. Turn start: Gives 4 free [color] items
 - ZEPHYR:  During battle, mimic all [color] unit abilities when they apply
