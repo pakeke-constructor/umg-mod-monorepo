@@ -73,46 +73,36 @@ umg.on("drawEntity", function(ent)
 
     local ox, oy = getQuadOffset(quad)
 
-    if ent.ox then
-        ox = ox + umg.ask("getOffsetX", operators.ADD, ent)
-    end
-    if ent.oy then
-        oy = oy + umg.ask("getOffsetY", operators.ADD, ent)
-    end
+    --[[
+        TODO: Bring all these umg.ask calls out into functions,
+        so that they can be used by other systems.
 
-    local scale, sx, sy = 1,1,1
-    if ent.scale then
-        scale = ent.scale * umg.ask("getScale", operators.MULT, ent)
-    end
+        They should also be exposed by the base mod api.
 
-    if ent.scaleX then
-        sx = ent.scaleX * umg.ask("getScaleX", operators.MULT, ent)
-    end
+        Also: TODO:
+        Do we need to be doing all the funky `if ent.ox` stuff?
+        Is the efficiency really worth it?
+        (I don't think so. We should change it.)
+    ]]
+    ox = ox + (ent.ox or 0) + umg.ask("getOffsetX", operators.ADD, ent)
+    oy = oy + (ent.oy or 0) + umg.ask("getOffsetY", operators.ADD, ent)
 
-    if ent.scaleY then
-        sy = ent.scaleY * umg.ask("getScaleY", operators.MULT, ent)
-    end
+    local scale, sx, sy
+    scale = (ent.scale or 1) * umg.ask("getScale", operators.MULT, ent)
+    sx = (ent.scaleX or 1) * umg.ask("getScaleX", operators.MULT, ent)
+    sy = (ent.scaleY or 1) * umg.ask("getScaleY", operators.MULT, ent)
 
-    local shx, shy = 0,0
-    if ent.shearX then
-        shx = ent.shearX * umg.ask("getShearX", operators.ADD, ent)
-    end
-    if ent.shearX then
-        shy = ent.shearY * umg.ask("getShearY", operators.ADD, ent)
-    end
-
-    local ent_ox, ent_oy = ent.ox or 0, ent.oy or 0
+    local shx, shy
+    shx = (ent.shearX or 1) * umg.ask("getShearX", operators.ADD, ent)
+    shy = (ent.shearY or 1) * umg.ask("getShearY", operators.ADD, ent)
 
     drawImage(
         ent.image, 
-        ent.x + ent_ox, getDrawY(ent.y + ent_oy,ent.z),
+        ent.x, getDrawY(ent.y, ent.z),
         ent.rot, 
-        scale * sx,
-        scale * sy,
-        ox,
-        oy,
-        shx,
-        shy
+        scale * sx, scale * sy,
+        ox, oy,
+        shx, shy
     )
 end)
 
