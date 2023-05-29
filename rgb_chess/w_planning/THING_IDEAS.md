@@ -13,9 +13,8 @@ Spades, Clubs:  Creative plays, rule bending, meta/introspective behaviour
 
 
 - `0 of clubs`: Removes [color] from all shop cards
-- `2 of clubs`: Adds [color] to all shop cards
-
-- `4 of clubs`: Set all shop cards to be [color]
+- `2 of clubs`: Set all shop cards to be [color]
+- `4 of clubs`: Adds [color] to all shop cards
 
 - `10 of clubs`: rerolls all non-[color] shop cards.
 - `10 of spades`: Change the color of all non-[color] shop cards
@@ -87,6 +86,7 @@ Obviously, we will have the basic units:
 
 *Here are some more unique ideas:*
 
+- On level up:  Copy the health of the strongest [color] ally
 - Start battle: Instantly kill all non-[color] allys
 - Turn start: If there are no [color] allys, gain +3 income
 - Turn start: If there are no [color] allys, gain 2 rerolls

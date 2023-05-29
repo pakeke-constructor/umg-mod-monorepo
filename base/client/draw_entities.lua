@@ -11,6 +11,8 @@ local camera = require("client.camera")
 local constants = require("shared.constants")
 local sort = require("_libs.sort")
 
+local operators = require("shared.operators")
+
 
 
 local drawGroup = umg.group("image", "x", "y")
@@ -226,6 +228,11 @@ end
 
 
 
+local function isHidden(ent)
+    return ent.hidden or umg.ask("isHidden", operators.OR, ent)
+end
+
+
 
 --[[
     main draw function
@@ -276,12 +283,17 @@ umg.on("drawEntities", function()
     local last_draw_dep = draw_dep
 
     while draw_ent and draw_dep < max_depth do
-        if entIsOnScreen(draw_ent, DEFAULT_LEIGHWAY, w, h) and (not draw_ent.hidden) then
-            setColor(1,1,1)
+        if entIsOnScreen(draw_ent, DEFAULT_LEIGHWAY, w, h) and not isHidden(draw_ent) then
             if draw_ent.image then
+                local r,g,b,a = 1,1,1,1
                 if draw_ent.color then
-                    setColor(draw_ent.color)
+                    local col = draw_ent.color 
+                    r,g,b,a = col[1], col[2], col[3], col[4]
                 end
+                if draw_ent.opacity then
+                    a = a * draw_ent.opacity * umg.ask("getOpacity", operators.MULT, draw_ent)
+                end
+                setColor(r,g,b,a)
                 umg.call("drawEntity", draw_ent)
                 if draw_ent.onDraw then
                     draw_ent:onDraw()
@@ -332,7 +344,9 @@ return {
     getEntityDrawDepth = getEntityDrawDepth;
 
     isOnScreen = isOnScreen;
-    entIsOnScreen = entIsOnScreen
+    entIsOnScreen = entIsOnScreen;
+
+    isHidden = isHidden
 }
 
 
