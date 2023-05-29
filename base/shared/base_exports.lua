@@ -51,6 +51,8 @@ local function loadClient(base)
 
     base.client.particles = require("client.particles");
 
+    base.client.Color = require("client.color")
+
     base.client.popups = require("client.popups")
 
     base.client.playSound = sound.playSound;

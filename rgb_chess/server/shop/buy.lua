@@ -52,7 +52,7 @@ end
 
 local function playSpellCard(card_ent)
     local etype = card_ent.cardBuyTarget
-    etype.cardInfo.spellCast(etype)
+    etype.cardInfo.spellCast(card_ent)
 end
 
 

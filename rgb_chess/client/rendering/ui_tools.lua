@@ -61,7 +61,7 @@ function uiTools.renderRGBInfo(rgbColor)
     end
 
     if count == 0 then
-        Slab.Text("Nothing", {Color = base.Color.GRAY})
+        Slab.Text("Nothing", {Color = base.client.Color.GRAY})
     end
 end
 

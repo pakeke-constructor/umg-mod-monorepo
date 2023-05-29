@@ -89,7 +89,7 @@ end
 local funcTc = typecheck.assert("table", "function")
 
 function Array:filter(func)
-    funcTc(func)
+    funcTc(self, func)
     local newArray = Array()
     for i=1, self.len do
         local item = self[i]
@@ -102,11 +102,13 @@ end
 
 
 function Array:map(func)
-    funcTc(func)
+    funcTc(self, func)
     local newArray = Array()
     for i=1, self.len do
-        local item = self[i]
-        newArray:add(func(item))
+        local item = func(self[i])
+        if item then
+            newArray:add(item)
+        end
     end
     return newArray
 end

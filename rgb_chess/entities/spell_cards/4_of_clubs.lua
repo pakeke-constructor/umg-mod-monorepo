@@ -6,19 +6,19 @@ end
 
 
 return {
-    image = "4_of_clubs_card",
 
     cardInfo = {
         type = constants.CARD_TYPES.SPELL,
         cost = 3,
         name = "4 of clubs",
+        image = "4_of_clubs_card",
         description = "Set all shop cards to [color]",
         difficultyLevel = 0,
 
-        spellCast = function(self)
-            local board = Board.getBoard(self.rgbTeam)
+        spellCast = function(card)
+            local board = Board.getBoard(card.rgbTeam)
             board:getShopCards():map(function(cardEnt)
-                rgbAPI.changeRGB(cardEnt, self.rgb)
+                rgbAPI.changeRGB(cardEnt, card.rgb)
             end)
         end
     },

@@ -117,6 +117,7 @@ function generateCards.spawnCard(board, shopIndex)
     local turn = rgb.getTurn()
     local cardEtype = randomCardEtype(turn)
     local x, y = board:getCardXY(shopIndex)
+    assert(board:getTeam(), "?")
 
     local cardEnt = server.entities.card(x, y, {
         rgbTeam = board:getTeam(),

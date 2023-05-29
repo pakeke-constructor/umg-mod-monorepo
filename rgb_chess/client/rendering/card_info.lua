@@ -32,7 +32,11 @@ end
 
 
 local function spellStats(etype, rgbColor)
-
+    local col = rgb.rgbToColor(rgbColor)
+    local cardInfo = etype.cardInfo
+    Slab.Text(cardInfo.name, col)
+    Slab.Separator()
+    Slab.Text(cardInfo.description)
 end
 
 
@@ -47,7 +51,7 @@ local function drawCardInfo(cardEnt)
     elseif rgb.isSpellCard(cardEnt) then
         spellStats(etype, rgbColor)
     else
-        error("yo wat:" .. umg.inspect(etype.cardInfo))
+        error("yo wat")
     end
 
     Slab.Separator()
