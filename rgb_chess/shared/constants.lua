@@ -34,6 +34,8 @@ _G.constants = {
     BOARD_HEIGHT = 700,
     BOARD_BORDER_LEIGHWAY = 80,
 
+    CARD_LOCK_Y_SPACING = 70,
+
     UNIT_SYMBOL_ALPHA = 0.8,
 
     COLOR_SUB_TAG = "%[color%]",

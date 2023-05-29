@@ -129,7 +129,7 @@ function generateCards.spawnCard(board, shopIndex)
     cardEnt.image = cardEtype.cardInfo.image or constants.DEFAULT_CARD_IMAGE
     cardEnt.rgb = rgbSelection()
     cardEnt.color = rgb.rgbToColor(cardEnt.rgb)
-    board.shop[shopIndex] = cardEnt
+    board:setCard(shopIndex, cardEnt)
 
     return cardEnt
 end

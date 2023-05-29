@@ -14,7 +14,7 @@ end
 local sf = sync.filters
 
 
-server.on("clickEntity", {
+server.on("entityClicked", {
     arguments = {sf.entity, sf.number, sf.number, sf.number},
     handler = function(sender_uname, ent, button, worldX, worldY)
         if not (ent.onClick) then
@@ -30,8 +30,8 @@ server.on("clickEntity", {
         if type(ent.onClick) == "function" then
             ent:onClick(sender_uname, button, worldX, worldY)
         end
-        umg.call("onClick", sender_uname, ent, button, worldX, worldY)
-        server.broadcast("clickEntity", ent, sender_uname, button, worldX, worldY)
+        umg.call("entityClicked", ent, sender_uname, button, worldX, worldY)
+        server.broadcast("entityClicked", ent, sender_uname, button, worldX, worldY)
     end
 })
 

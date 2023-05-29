@@ -73,7 +73,7 @@ end
 
 
 
-function buy.buyCard(card_ent, cost)
+local function buyCard(card_ent, cost)
     local board = Board.getBoard(card_ent.rgbTeam)
     cost = cost or buy.getCost(card_ent)
 
@@ -91,12 +91,16 @@ end
 
 
 
-function buy.canBuy(card_ent)
+local function canBuy(card_ent)
     local board = rgb.getBoard(card_ent.rgbTeam)
     local etype = card_ent.cardBuyTarget
 
     if rgb.state ~= rgb.STATES.TURN_STATE then
-        return false
+        return false -- not in play
+    end
+
+    if board:isCardLocked(card_ent.shopIndex) then
+        return false -- it's locked
     end
 
     if buy.getCost(card_ent) > board:getMoney() then
@@ -160,6 +164,28 @@ server.on("sellSquadron", {
         buy.sellSquadron(ent)
     end
 end})
+
+
+
+
+umg.on("entityClicked", function(ent, username, button)
+    --[[
+        code for buying cards
+    ]]
+    if not ent.rgbCard then
+        return -- not a card entity
+    end
+    if not (button == 1 and ent.rgbTeam == username) then
+        return -- bad!
+    end
+
+    if canBuy(ent) then
+        buyCard(ent)
+        local board = rgb.getBoard(ent.rgbTeam)
+        board:rerollCard(ent.shopIndex)
+    end
+end)
+
 
 
 

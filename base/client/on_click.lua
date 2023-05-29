@@ -33,7 +33,7 @@ function listener:mousepressed(mx, my, button, istouch, presses)
     end
 
     if bestEnt then
-        client.send("clickEntity", bestEnt, button, worldX, worldY)
+        client.send("entityClicked", bestEnt, button, worldX, worldY)
         self:lockMouseButton(button)
     end
 end
@@ -41,8 +41,8 @@ end
 
 
 
-client.on("clickEntity", function(ent, username, button, worldX, worldY)
-    umg.call("onClick", username, button, worldX, worldY)
+client.on("entityClicked", function(ent, username, button, worldX, worldY)
+    umg.call("entityClicked", ent, username, button, worldX, worldY)
     if type(ent.onClick) == "function" then
         ent:onClick(username, button, worldX, worldY)
     end

@@ -1,18 +1,10 @@
 
-local buy, reroll
-if server then
-    buy = require("server.shop.buy")
-end
-
-
-
 local function assertOptions(options)
     assert(options,"?")
     assert(options.rgbTeam, "needs rgbTeam")
     assert(options.cardBuyTarget, "needs cardBuyTarget")
     assert(options.shopIndex, "needs shopIndex")
 end
-
 
 
 --[[
@@ -22,17 +14,7 @@ return {
     rgbCard = true,
     scale = 2,
 
-    onClick = function(ent, username, button)
-        if button == 1 and ent.rgbTeam == username then
-            if server then
-                if buy.canBuy(ent) then
-                    buy.buyCard(ent)
-                    local board = rgb.getBoard(ent.rgbTeam)
-                    board:rerollCard(ent.shopIndex)
-                end
-            end
-        end
-    end,
+    onClick = true,
 
     init = function(e,x,y,options)
         assertOptions(options)
