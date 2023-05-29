@@ -290,6 +290,10 @@ umg.on("drawEntities", function()
         end
 
         for dep=last_draw_dep+1, draw_dep do
+            -- TODO: Since we don't check camera bounds, this is some HOT GARBAGE code.
+            -- If entities are very far apart, this loop may very well be called like 1 million times.
+            -- We should check if the Y pos is on screen before doing something stupid like this;
+            -- that way we won't hit a bajillion iterations in this loop
             umg.call("drawIndex", dep)
         end
         last_draw_dep = draw_dep
