@@ -2,7 +2,7 @@
 local operators = require("shared.operators")
 
 
-local entityStats = {}
+local drawStats = {}
 
 
 local ADD = operators.ADD
@@ -10,39 +10,46 @@ local MULT = operators.MULT
 
 
 
-function entityStats.getOffsetX(ent)
+function drawStats.getOffsetX(ent)
     return (ent.ox or 0) + (umg.ask("getOffsetX", ADD, ent) or 0)
 end
 
-function entityStats.getOffsetY(ent)
+function drawStats.getOffsetY(ent)
     return (ent.oy or 0) + (umg.ask("getOffsetY", ADD, ent) or 0)
 end
 
-function entityStats.getRotation(ent)
+function drawStats.getRotation(ent)
     return (ent.rot or 0) + (umg.ask("getRotation", ADD, ent) or 0)
 end
 
 
-function entityStats.getScale(ent)
+function drawStats.getScale(ent)
     return (ent.scale or 1) * (umg.ask("getScale", MULT, ent) or 1)
 end
 
-function entityStats.getScaleX(ent)
+function drawStats.getScaleX(ent)
     return (ent.scaleX or 1) * (umg.ask("getScaleX", MULT, ent) or 1)
 end
 
-function entityStats.getScaleY(ent)
+function drawStats.getScaleY(ent)
     return (ent.scaleY or 1) * (umg.ask("getScaleY", MULT, ent) or 1)
 end
 
 
-function entityStats.getShearX(ent)
+function drawStats.getShearX(ent)
     return (ent.shearX or 0) + (umg.ask("getShearX", ADD, ent) or 0)
 end
 
-function entityStats.getShearY(ent)
+function drawStats.getShearY(ent)
     return (ent.shearY or 0) + (umg.ask("getShearY", ADD, ent) or 0)
 end
 
 
-return entityStats
+
+function drawStats.getOpacity(ent)
+    return (ent.opacity or 1) * (umg.ask("getOpacity", MULT, ent) or 1)
+end
+
+
+
+return drawStats

@@ -11,6 +11,8 @@ local camera = require("client.camera")
 local constants = require("shared.constants")
 local sort = require("_libs.sort")
 
+local drawStats = require("client.image_helpers.draw_stats")
+
 local operators = require("shared.operators")
 
 
@@ -232,6 +234,7 @@ local function isHidden(ent)
     return ent.hidden or umg.ask("isHidden", operators.OR, ent)
 end
 
+local getOpacity = drawStats.getOpacity
 
 
 --[[
@@ -288,11 +291,9 @@ umg.on("drawEntities", function()
                 local r,g,b,a = 1,1,1,1
                 if draw_ent.color then
                     local col = draw_ent.color 
-                    r,g,b,a = col[1], col[2], col[3], col[4]
+                    r,g,b,a = col[1], col[2], col[3], col[4] or 1
                 end
-                if draw_ent.opacity then
-                    a = a * draw_ent.opacity * umg.ask("getOpacity", operators.MULT, draw_ent)
-                end
+                a = a * getOpacity(draw_ent)
                 setColor(r,g,b,a)
                 umg.call("drawEntity", draw_ent)
                 if draw_ent.onDraw then

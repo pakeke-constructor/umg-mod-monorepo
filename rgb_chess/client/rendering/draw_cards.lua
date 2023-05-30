@@ -15,6 +15,30 @@ local function drawCard(cardEnt)
 end
 
 
+local function lockBelongsToCard(lockEnt, cardEnt)
+    return lockEnt.rgbTeam == cardEnt.rgbTeam
+        and lockEnt.shopIndex == cardEnt.shopIndex
+end
+
+
+
+local cardLockGroup = umg.group("rgbCardLock")
+
+umg.answer("getOpacity", function(ent)
+    -- this is a bit hacky and bad, oh well tho
+    if ent.rgbCard then
+        for _, cardLockEnt in ipairs(cardLockGroup) do
+            if lockBelongsToCard(cardLockEnt, ent) then
+                if cardLockEnt.isLocked then
+                    return constants.CARD_LOCK_OPACITY
+                end
+            end
+        end
+    end
+    return 1
+end)
+
+
 
 
 umg.on("drawEntity", function(ent)

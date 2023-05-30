@@ -102,11 +102,29 @@ function Board:setCard(shopIndex, card)
 end
 
 
+
+local isLockedTc = typecheck.assert("table", "entity | number")
+
+function Board:isLocked(card_or_shopIndex)
+    -- returns true/false whether card is locked or not
+    isLockedTc(self, card_or_shopIndex)
+    local shopIndex
+    if type(card_or_shopIndex) == "number" then
+        shopIndex = card_or_shopIndex
+    else
+        shopIndex = card_or_shopIndex.shopIndex
+    end
+
+    local lockEnt = self:getLockEntity(shopIndex)
+    return lockEnt.isLocked
+end
+
+
 function Board:getLockEntity(shopIndex)
     return self.shopLocks[shopIndex]
 end
 
-function Board:setLock(shopIndex, bool)
+function Board:setLocked(shopIndex, bool)
     local lockEnt = self:getLockEntity(shopIndex)
     lockEnt.isLocked = bool
 end
