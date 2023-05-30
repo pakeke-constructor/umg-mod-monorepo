@@ -39,6 +39,8 @@ local function loadClient(base)
     base.client.getDrawY = drawEntities.getDrawY;
     base.client.getDrawDepth = drawEntities.getDrawDepth;
 
+    base.client.drawStats = require("client.image_helpers.draw_stats")
+
     base.client.getQuadOffsets = require("client.image_helpers.quad_offsets");
     base.client.drawImage = require("client.image_helpers.draw_image");
     

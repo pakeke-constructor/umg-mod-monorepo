@@ -16,9 +16,11 @@ Spades, Clubs:  Creative plays, rule bending, meta/introspective behaviour
 - `2 of clubs`: Set all shop cards to be [color]
 - `4 of clubs`: Adds [color] to all shop cards
 
-- `10 of clubs`: rerolls all non-[color] shop cards.
-- `10 of spades`: Change the color of all non-[color] shop cards
-- `joker`: if there are no [color] units on board, give 5 rerolls. Else, give 2 rerolls.
+
+- `10 of clubs`: All [color] shop cards go half price
+- `10 of spades`: Reroll all cards, and set all rerolls to [color]
+
+- `joker`: if there are no [color] units on board, give 6 rerolls. Else, give 2 rerolls.
 
 
 - `ace_of_diamonds`: give +2 POW to all [color] allies

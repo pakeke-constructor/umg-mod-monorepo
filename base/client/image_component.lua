@@ -58,6 +58,23 @@ end)
 
 
 
+local entityStats = require("client.image_helpers.entity_stats")
+
+local getOffsetX = entityStats.getOffsetX
+local getOffsetY = entityStats.getOffsetY
+
+local getRotation = entityStats.getRotation
+
+local getScale = entityStats.getScale
+local getScaleX = entityStats.getScaleX
+local getScaleY = entityStats.getScaleY
+
+local getShearX = entityStats.getShearX
+local getShearY = entityStats.getShearY
+
+
+
+
 --[[
     currently, any entity that is drawn will have an image
     (may not stay this way!)
@@ -73,33 +90,23 @@ umg.on("drawEntity", function(ent)
 
     local ox, oy = getQuadOffset(quad)
 
-    --[[
-        TODO: Bring all these umg.ask calls out into functions,
-        so that they can be used by other systems.
+    ox = ox + getOffsetX(ent)
+    oy = oy + getOffsetY(ent)
 
-        They should also be exposed by the base mod api.
+    local rot = getRotation(ent)
 
-        Also: TODO:
-        Do we need to be doing all the funky `if ent.ox` stuff?
-        Is the efficiency really worth it?
-        (I don't think so. We should change it.)
-    ]]
-    ox = ox + (ent.ox or 0) + umg.ask("getOffsetX", operators.ADD, ent)
-    oy = oy + (ent.oy or 0) + umg.ask("getOffsetY", operators.ADD, ent)
-
-    local scale, sx, sy
-    scale = (ent.scale or 1) * umg.ask("getScale", operators.MULT, ent)
-    sx = (ent.scaleX or 1) * umg.ask("getScaleX", operators.MULT, ent)
-    sy = (ent.scaleY or 1) * umg.ask("getScaleY", operators.MULT, ent)
+    local scale = getScale(ent)
+    local sx = getScaleX(ent)
+    local sy = getScaleY(ent)
 
     local shx, shy
-    shx = (ent.shearX or 1) * umg.ask("getShearX", operators.ADD, ent)
-    shy = (ent.shearY or 1) * umg.ask("getShearY", operators.ADD, ent)
+    shx = getShearX(ent)
+    shy = getShearY(ent)
 
     drawImage(
         ent.image, 
         ent.x, getDrawY(ent.y, ent.z),
-        ent.rot, 
+        rot, 
         scale * sx, scale * sy,
         ox, oy,
         shx, shy

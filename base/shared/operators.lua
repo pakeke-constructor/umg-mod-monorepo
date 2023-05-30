@@ -36,6 +36,8 @@ function operators.ADD(a,b)
     return a + b
 end
 
+operators.SUM = operators.ADD
+
 
 function operators.MULT(a,b)
     return a * b
@@ -50,7 +52,7 @@ operators.MAX = math.max
 
 function operators.COLLECT(a, b)
     --[[
-        Collects all inputs into an array.
+        Reducer function that collects all inputs into an array.
     ]]
     local ret = a
     if getmetatable(ret) ~= Array then
