@@ -2,14 +2,8 @@
 
 local getQuadOffset = require("client.image_helpers.quad_offsets")
 
-local bobbing = require("client.image_helpers.bobbing")
-local spinning = require("client.image_helpers.spinning")
-local swaying = require("client.image_helpers.swaying")
-
 local drawEntities = require("client.draw_entities")
 local drawImage = require("client.image_helpers.draw_image")
-
-local operators = require("shared.operators")
 
 
 local getDrawY = drawEntities.getDrawY
@@ -22,7 +16,7 @@ local images = client.assets.images
 --[[
     currently, any entity that is drawn will have an image
     (may not stay this way!)
-]]
+
 umg.on("drawEntity", function(ent)
     local quad = images[ent.image]
     if not quad then
@@ -56,9 +50,9 @@ umg.on("drawEntity", function(ent)
     )
 end)
 
+]]
 
-
-local entityStats = require("client.image_helpers.entity_stats")
+local entityStats = require("client.image_helpers.draw_stats")
 
 local getOffsetX = entityStats.getOffsetX
 local getOffsetY = entityStats.getOffsetY
