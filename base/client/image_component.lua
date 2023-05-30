@@ -1,6 +1,5 @@
 
-
-local getQuadOffset = require("client.image_helpers.quad_offsets")
+local getQuadOffsets = require("client.image_helpers.quad_offsets")
 
 local drawEntities = require("client.draw_entities")
 local drawImage = require("client.image_helpers.draw_image")
@@ -10,7 +9,6 @@ local getDrawY = drawEntities.getDrawY
 
 
 local images = client.assets.images
-
 
 
 local entityStats = require("client.image_helpers.draw_stats")
@@ -43,10 +41,9 @@ umg.on("drawEntity", function(ent)
         error(("Unknown ent.image value: %s\nMake sure you put all images in the assets folder and name them!"):format(tostring(ent.image)))
     end
 
-    local ox, oy = getQuadOffset(quad)
 
-    ox = ox + getOffsetX(ent)
-    oy = oy + getOffsetY(ent)
+    local ox = getOffsetX(ent)
+    local oy = getOffsetY(ent)
 
     local rot = getRotation(ent)
 

@@ -37,11 +37,12 @@ end
 
 umg.answer("getOffsetX", function(ent)
     if ent.swaying then
-        local ox, _oy = getQuadOffsets(ent)
-        local quad_width = ox * 2 -- as defined by quad_offsets.lua
+        local ox, _oy = getQuadOffsets(ent.image)
+        local quad_width = ox * 2
         local sway_factor = getSwayFactor(ent)
         return quad_width * sway_factor
     end
+    return 0
 end)
 
 
