@@ -7,8 +7,8 @@ local cardLockTc = typecheck.assert({
 })
 
 
-local LOCKED_IMG = "locked"
-local UNLOCKED_IMG = "unlocked"
+local LOCKED_IMG = "card_locked"
+local UNLOCKED_IMG = "card_unlocked"
 
 
 
@@ -19,6 +19,8 @@ return {
     
     LOCKED_IMG = LOCKED_IMG,
     UNLOCKED_IMG = UNLOCKED_IMG,
+
+    scale = 3,
 
     init = function(e, options)
         cardLockTc(options)

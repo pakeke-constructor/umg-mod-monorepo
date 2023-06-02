@@ -17,8 +17,10 @@ Spades, Clubs:  Creative plays, rule bending, meta/introspective behaviour
 - `4 of clubs`: Adds [color] to all shop cards
 
 
+TODO: Do we need these?  These two cards kinda seem pointless and a waste of space kinda.
 - `10 of clubs`: All [color] shop cards go half price
 - `10 of spades`: Reroll all cards, and set all rerolls to [color]
+
 
 - `joker`: if there are no [color] units on board, give 6 rerolls. Else, give 2 rerolls.
 
