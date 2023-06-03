@@ -41,6 +41,31 @@ end)
 
 
 
+-- how much health and power scale with size
+local POWER_SIZE_SCALE_RATE = 0.5
+local HEALTH_SIZE_SCALE_RATE = 1
+
+local function getUnitSize(ent)
+    local hp_diff = (ent.health - ent.defaultHealth) * HEALTH_SIZE_SCALE_RATE
+    local pow_diff = (ent.power - ent.defaultPower) * POWER_SIZE_SCALE_RATE
+
+    local scale = math.max(1, math.sqrt(hp_diff + pow_diff))
+    return scale
+end
+
+
+--[[
+    entities get bigger if they are more powerful
+]]
+umg.answer("getScale", function(ent)
+    if rgb.isUnit(ent) then
+        return getUnitSize(ent)
+    end
+    return 1
+end)
+
+
+
 umg.on("drawEntity", function(ent)
     if rgb.state == rgb.STATES.TURN_STATE then
         if ent.cardBuyTarget then
