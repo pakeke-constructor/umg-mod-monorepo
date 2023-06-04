@@ -75,7 +75,7 @@ return function()
         aRecv, bRecv = str, 2
         client.send("send_to_server", aRecv, bRecv)
     end
-    zenith.tick()
+    zenith.tick(2)
     zenith.assert(aRecv==str and bRecv==2, "Didn't pick up packet even tho valid")
     zenith.tick()
 end

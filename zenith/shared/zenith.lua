@@ -33,6 +33,13 @@ function zenith.assert(bool, err)
 end
 
 
+function zenith.assertEquals(a, b, err)
+    if a ~= b then
+        zenith.fail(err .. "  :: not equal: " .. tostring(a) .. ", " .. tostring(b))
+    end
+end
+
+
 
 function zenith.tick(ticks)
     ticks = ticks or 1

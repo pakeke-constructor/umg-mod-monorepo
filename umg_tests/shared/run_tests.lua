@@ -2,7 +2,8 @@
 
 local tests = {
     "component_rem_add",
-    "broadcast"
+    "broadcast",
+    "entity"
 }
 
 

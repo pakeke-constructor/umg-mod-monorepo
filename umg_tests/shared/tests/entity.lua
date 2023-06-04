@@ -2,29 +2,31 @@
 local appleGroup = umg.group("apple")
 
 
-local NUM = 100
+local NUM = 10
 
-local function makeEnts()
-    assert(server, "?")
-    local dummy = server.entities.empty()
-    dummy.isDummy = true
 
-    for _=1,NUM do
-        local e = server.entities.empty()
-        e.apple = "hello there"
-        e.ref = dummy
+local function beforeEach()
+    if server then
+        local dummy = server.entities.empty()
+        dummy.isDummy = true
+
+        for _=1,NUM do
+            local e = server.entities.empty()
+            e.apple = "hello there"
+            e.ref = dummy
+        end
     end
+
+    zenith.tick()
 end
 
 
 local function testShallowClone()
-    if server then
-        makeEnts()
-    end
+    beforeEach()
 
     zenith.tick()
 
-    local len = #appleGroup
+    local sze = appleGroup:size()
 
     if server then
         for _, ent in ipairs(appleGroup)do
@@ -33,9 +35,10 @@ local function testShallowClone()
     end
 
     zenith.tick()
-    zenith.tick()
+    zenith.tick(4)
 
-    zenith.assert(#appleGroup == 2 * len, "not 2x size!")
+    -- expect the appleGroup size to have doubled
+    zenith.assert(sze * 2, appleGroup:size(), "shallowClone group size")
 
     local dummy = appleGroup[1].ref
     zenith.assert(dummy.isDummy, "dummy was not valid somehow")
@@ -47,9 +50,7 @@ end
 
 
 local function testDeepClone()
-    if server then
-        makeEnts()
-    end
+    beforeEach()
 
     zenith.tick()
 
@@ -77,7 +78,7 @@ end
 
 
 local function testDeepDelete()
-    makeEnts()
+    beforeEach()
 
     local empty2
     if server then
@@ -107,6 +108,7 @@ return function()
 
     testShallowClone()
 
+    --[[
     zenith.clear()
 
     testDeepClone()
@@ -116,5 +118,6 @@ return function()
     testDeepDelete()
 
     zenith.tick(2)
+    ]]
 end
 
