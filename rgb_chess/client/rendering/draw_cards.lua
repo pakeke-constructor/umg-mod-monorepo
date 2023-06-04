@@ -55,7 +55,7 @@ end
 
 
 --[[
-    entities get bigger if they are more powerful
+    units get bigger if they are more powerful
 ]]
 umg.answer("getScale", function(ent)
     if rgb.isUnit(ent) then
