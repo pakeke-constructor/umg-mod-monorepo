@@ -82,11 +82,12 @@ end
 local allGroup = umg.group()
 
 function zenith.clear()
-    if not server then return end
-
-    for _, ent in ipairs(allGroup)do
-        ent:delete()
+    if server then 
+        for _, ent in ipairs(allGroup)do
+            ent:delete()
+        end
     end
+
     zenith.tick()
 end
 

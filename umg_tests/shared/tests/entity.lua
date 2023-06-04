@@ -2,10 +2,13 @@
 local appleGroup = umg.group("apple")
 
 
-local NUM = 10
+local NUM = 3
 
 
 local function beforeEach()
+    zenith.clear()
+    zenith.tick(2)
+
     if server then
         local dummy = server.entities.empty()
         dummy.isDummy = true
@@ -17,7 +20,7 @@ local function beforeEach()
         end
     end
 
-    zenith.tick()
+    zenith.tick(2)
 end
 
 
@@ -54,23 +57,33 @@ local function testDeepClone()
 
     zenith.tick()
 
-    local len = #appleGroup
+    local sze = #appleGroup
 
     if server then
         for _, ent in ipairs(appleGroup)do
+            -- clone twice, and then delete the original
             ent:deepClone()
+            ent:deepClone()
+            ent:delete()
         end
     end
 
     zenith.tick()
     zenith.tick()
 
-    zenith.assert(#appleGroup == 2 * len, "deepClone: not 2x size!")
+    -- expect the appleGroup size to have doubled
+    zenith.assertEquals(sze * 2, appleGroup:size(), "deepClone group size")
 
-    local dummy = appleGroup[1].ref
-    zenith.assert(dummy.isDummy, "deepClone: dummy was not valid somehow")
+    local seenDummys = {}
     for _, ent in ipairs(appleGroup)do
-        zenith.assert(ent.ref ~= dummy, "deepClone: entity didn't reference dummy")
+        local dummy = ent.ref
+        if seenDummys[dummy] then
+            print(seenDummys[dummy])
+            print(ent)
+            zenith.fail("dummy wasn't deepcopied!")
+        end
+        zenith.assert(umg.exists(dummy) and dummy.isDummy, "deepClone: entity didn't reference dummy")
+        seenDummys[dummy] = ent
     end
 end
 
@@ -98,26 +111,18 @@ local function testDeepDelete()
 
     zenith.tick(2)
 
-    zenith.assert(#appleGroup, "Nested entities not deleted")
+    zenith.assert(appleGroup:size() == 0, "Nested entities not deleted")
 end
 
 
 
 return function()
-    zenith.clear()
-
     testShallowClone()
-
-    --[[
-    zenith.clear()
 
     testDeepClone()
     
-    zenith.clear()
-
     testDeepDelete()
 
     zenith.tick(2)
-    ]]
 end
 
