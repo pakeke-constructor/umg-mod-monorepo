@@ -1,5 +1,5 @@
 
-local appleGroup = umg.group("apple")
+local entGroup = umg.group("mycomp")
 
 
 local NUM = 3
@@ -15,7 +15,7 @@ local function beforeEach()
 
         for _=1,NUM do
             local e = server.entities.empty()
-            e.apple = "hello there"
+            e.mycomp = "hello there"
             e.ref = dummy
         end
     end
@@ -29,10 +29,10 @@ local function testShallowClone()
 
     zenith.tick()
 
-    local sze = appleGroup:size()
+    local sze = entGroup:size()
 
     if server then
-        for _, ent in ipairs(appleGroup)do
+        for _, ent in ipairs(entGroup)do
             ent:shallowClone()
         end
     end
@@ -40,12 +40,12 @@ local function testShallowClone()
     zenith.tick()
     zenith.tick(4)
 
-    -- expect the appleGroup size to have doubled
-    zenith.assert(sze * 2, appleGroup:size(), "shallowClone group size")
+    -- expect the entGroup size to have doubled
+    zenith.assert(sze * 2, entGroup:size(), "shallowClone group size")
 
-    local dummy = appleGroup[1].ref
+    local dummy = entGroup[1].ref
     zenith.assert(dummy.isDummy, "dummy was not valid somehow")
-    for _, ent in ipairs(appleGroup)do
+    for _, ent in ipairs(entGroup)do
         zenith.assert(ent.ref == dummy, "entity didn't reference dummy")
     end
 end
@@ -57,10 +57,10 @@ local function testDeepClone()
 
     zenith.tick()
 
-    local sze = #appleGroup
+    local sze = #entGroup
 
     if server then
-        for _, ent in ipairs(appleGroup)do
+        for _, ent in ipairs(entGroup)do
             -- clone twice, and then delete the original
             ent:deepClone()
             ent:deepClone()
@@ -71,11 +71,11 @@ local function testDeepClone()
     zenith.tick()
     zenith.tick()
 
-    -- expect the appleGroup size to have doubled
-    zenith.assertEquals(sze * 2, appleGroup:size(), "deepClone group size")
+    -- expect the entGroup size to have doubled
+    zenith.assertEquals(sze * 2, entGroup:size(), "deepClone group size")
 
     local seenDummys = {}
-    for _, ent in ipairs(appleGroup)do
+    for _, ent in ipairs(entGroup)do
         local dummy = ent.ref
         if seenDummys[dummy] then
             print(seenDummys[dummy])
@@ -98,7 +98,7 @@ local function testDeepDelete()
         empty2 = server.entities.empty()
         empty2.arr = {}
 
-        for _, ent in ipairs(appleGroup) do
+        for _, ent in ipairs(entGroup) do
             table.insert(empty2.arr, ent)
         end
     end
@@ -111,7 +111,7 @@ local function testDeepDelete()
 
     zenith.tick(2)
 
-    zenith.assert(appleGroup:size() == 0, "Nested entities not deleted")
+    zenith.assert(entGroup:size() == 0, "Nested entities not deleted")
 end
 
 

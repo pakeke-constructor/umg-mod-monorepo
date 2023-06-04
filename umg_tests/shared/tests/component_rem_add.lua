@@ -63,7 +63,7 @@ local function addThenRemoveInstant()
         end
     end
 
-    zenith.tick(4)
+    zenith.tick(3)
     zenith.assert(#appleGroup == 0, "appleGroup size not 0 (3rd time)")
 end
 

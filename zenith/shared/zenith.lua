@@ -88,7 +88,7 @@ function zenith.clear()
         end
     end
 
-    zenith.tick()
+    zenith.tick(2)
 end
 
 
