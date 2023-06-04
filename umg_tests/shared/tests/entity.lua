@@ -8,7 +8,6 @@ local NUM = 3
 local function beforeEach()
     zenith.clear()
     zenith.tick(2)
-
     if server then
         local dummy = server.entities.empty()
         dummy.isDummy = true
@@ -19,15 +18,12 @@ local function beforeEach()
             e.ref = dummy
         end
     end
-
     zenith.tick(2)
 end
 
 
 local function testShallowClone()
     beforeEach()
-
-    zenith.tick()
 
     local sze = entGroup:size()
 
@@ -37,7 +33,6 @@ local function testShallowClone()
         end
     end
 
-    zenith.tick()
     zenith.tick(4)
 
     -- expect the entGroup size to have doubled
@@ -54,8 +49,6 @@ end
 
 local function testDeepClone()
     beforeEach()
-
-    zenith.tick()
 
     local sze = #entGroup
 
@@ -122,7 +115,5 @@ return function()
     testDeepClone()
     
     testDeepDelete()
-
-    zenith.tick(2)
 end
 
