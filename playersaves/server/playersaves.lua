@@ -6,8 +6,13 @@ local control_ents = umg.group("controllable", "controller")
 
 
 
+local PATH = "playersaves/"
+local EXTEN = ".playersaves_data"
+
+
+
 local function get_filename(username)
-    return username .. ".playersaves_data"
+    return PATH .. username .. EXTEN
     -- Just some arbitrary extension so it's identifiable, and so
     -- that there are no filename collisions.
 end
@@ -22,13 +27,13 @@ umg.on("@playerJoin", function(username)
         local res, err = umg.deserialize(entity_data)
         if ((not res) and err) then
             print("[playersaves]: couldn't deserialize player: ", err)
-            umg.call("newPlayer", username)
+            umg.call("createPlayer", username)
         end
     else
         -- Welp, this player has no savedata!
         -- A newPlayer event is emitted, and a player should be created
         -- from that event somewhere.
-        umg.call("newPlayer", username)
+        umg.call("createPlayer", username)
     end
 end)
 

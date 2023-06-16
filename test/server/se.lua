@@ -81,8 +81,16 @@ server.on("CONGLOMERATE", {
 
 
 
-umg.on("newPlayer", function(uname)
-    make_player(uname)
-end)
+if server.isWorldPersistent() then
+    -- use playersaves API
+    umg.on("createPlayer", function(uname)
+        make_player(uname)
+    end)
+else
+    -- just spawn a temp player
+    umg.on("@playerJoin", function(uname)
+        make_player(uname)
+    end)
+end
 
 

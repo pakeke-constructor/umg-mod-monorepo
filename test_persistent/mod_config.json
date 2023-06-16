@@ -1,0 +1,8 @@
+{
+    "uses": [
+        "test",
+        "playersaves"
+    ],
+
+    "isWorldPersistent": true
+}
