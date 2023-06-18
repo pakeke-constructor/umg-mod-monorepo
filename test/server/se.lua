@@ -56,7 +56,7 @@ end)
 
 local sf = sync.filters
 
-local e1
+
 server.on("spawn", {
     arguments = {sf.number, sf.number},
     handler = function(u, x,y)
