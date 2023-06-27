@@ -50,6 +50,17 @@ function drawStats.getOpacity(ent)
     return (ent.opacity or 1) * (umg.ask("getOpacity", MULT, ent) or 1)
 end
 
+function drawStats.getRed(ent)
+    return umg.ask("getRed", MULT, ent) or 1
+end
+
+function drawStats.getGreen(ent)
+    return umg.ask("getGreen", MULT, ent) or 1
+end
+
+function drawStats.getBlue(ent)
+    return umg.ask("getBlue", MULT, ent) or 1
+end
 
 
 return drawStats

@@ -23,7 +23,7 @@ end
     this is a temporary table that keeps track of all players
     that have been in the game.
     It's only used if the world is NOT persistent;
-    (if world is persistent, players are saved to disk instead)
+    (if world is persistent, player-save-data is saved to disk instead)
 ]]
 local player_data_cache = {--[[
     [ username ] -> player_pckr_data

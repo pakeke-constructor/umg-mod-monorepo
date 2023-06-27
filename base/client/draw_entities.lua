@@ -234,7 +234,24 @@ local function isHidden(ent)
     return ent.hidden or umg.ask("isHidden", operators.OR, ent)
 end
 
-local getOpacity = drawStats.getOpacity
+local getOpacity, getRed, getGreen, getBlue = drawStats.getOpacity, drawStats.getRed, drawStats.getGreen, drawStats.getBlue
+
+
+
+local function setColorOfEnt(ent)
+    local r,g,b,a = 1,1,1,1
+    if ent.color then
+        local col = ent.color 
+        r,g,b,a = col[1], col[2], col[3], col[4] or 1
+    end
+    r = r * getRed(ent)
+    g = g * getGreen(ent)
+    b = b * getBlue(ent)
+    a = a * getOpacity(ent)
+    setColor(r,g,b,a)
+end
+
+
 
 
 --[[
@@ -288,13 +305,7 @@ umg.on("drawEntities", function()
     while draw_ent and draw_dep < max_depth do
         if entIsOnScreen(draw_ent, DEFAULT_LEIGHWAY, w, h) and not isHidden(draw_ent) then
             if draw_ent.image then
-                local r,g,b,a = 1,1,1,1
-                if draw_ent.color then
-                    local col = draw_ent.color 
-                    r,g,b,a = col[1], col[2], col[3], col[4] or 1
-                end
-                a = a * getOpacity(draw_ent)
-                setColor(r,g,b,a)
+                setColorOfEnt(draw_ent)
                 umg.call("drawEntity", draw_ent)
                 if draw_ent.onDraw then
                     draw_ent:onDraw()
@@ -346,6 +357,8 @@ return {
 
     isOnScreen = isOnScreen;
     entIsOnScreen = entIsOnScreen;
+
+    setColorOfEnt = setColorOfEnt;
 
     isHidden = isHidden
 }
