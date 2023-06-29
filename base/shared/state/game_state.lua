@@ -15,14 +15,18 @@ local gameState = State("game")
 
 
 local constants = require("shared.constants")
+local operators = require("shared.operators")
 
+
+local MULT = operators.MULT
 local MAX_DT = constants.MAX_DT
 local MIN_DT = constants.MIN_DT
 local max, min = math.max, math.min
 
 
+
 gameState:on("@update", function(dt)
-    local modif = umg.ask("getDeltaTimeModifier")
+    local modif = umg.ask("getDeltaTimeModifier", MULT) or 1
     dt = min(MAX_DT, max(MIN_DT, dt * modif))
 
     umg.call("gamePreUpdate", dt)
