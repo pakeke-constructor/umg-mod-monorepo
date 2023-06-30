@@ -34,11 +34,9 @@ function common.add(args, argName, array, tiling)
         -- then it's a random list of images
         assert(isImageArray(img, argName))
         tiling.images = img
-    elseif isImage(img, argName) then
+    else
         assert(isImage(img, argName))
         tiling.image = img
-    else
-        error("Expected an image, or a list of images. Not the case for: " .. tostring(argName))
     end
 
     table.insert(array, tiling)

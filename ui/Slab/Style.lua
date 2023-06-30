@@ -107,9 +107,10 @@ function API.Initialize()
 		API.SetStyle(StyleName)
 	end
 
-	Style.Font = love.graphics.newFont(Style.FontSize)
-	API.PushFont(Style.Font)
-	Cursor.SetNewLineSize(Style.Font:getHeight())
+	-- PAKEKE-MONKEYPATCH: Removed newFont call
+	-- Style.Font = love.graphics.newFont(Style.FontSize)
+	-- API.PushFont(Style.Font)
+	-- Cursor.SetNewLineSize(Style.Font:getHeight())
 end
 
 function API.LoadStyle(Path, Set, IsDefault)
