@@ -46,7 +46,7 @@ end
 local function open(inv)
     local opn = inv.owner.openable
     if opn.openSound then
-        base.client.playSound(opn.openSound, 1, 1.4, nil, 0, 0.3)
+        base.client.sound.playSound(opn.openSound, 1, 1.4, nil, 0, 0.3)
     end
     inv:open()
 end
@@ -61,7 +61,7 @@ local function tryOpenInv(player, inv_ent)
     else
         if opn.closeSound then
             -- locked!
-            base.client.playSound(opn.closeSound, 1, 0.7, nil, 0, 0.15)
+            base.client.sound.playSound(opn.closeSound, 1, 0.7, nil, 0, 0.15)
         end
     end
 end

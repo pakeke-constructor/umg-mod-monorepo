@@ -70,7 +70,9 @@ function listener:keypressed(key, scancode, isrepeat)
         e.y = y
         base.client.particles.emit("smoke", x, y, 8, 10)
     end
-    if scancode == "y" then error("t") end
+    if scancode == "y" then
+        error("test")
+    end
     if scancode == "space" then
         local e = base.getPlayer()
         if base.gravity.isOnGround(e) then

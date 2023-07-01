@@ -20,7 +20,7 @@ return {
         local x,y = holderEnt.x + dx*START_DIST, holderEnt.y + dy*START_DIST
 
         if client then
-            base.client.playSound("boom_main1")
+            base.client.sound.playSound("boom_main1")
             base.client.particles.emit("musket_smoke", x,y,nil,10)
         else
             if type(dx) == "number" and type(dy) == "number" then        

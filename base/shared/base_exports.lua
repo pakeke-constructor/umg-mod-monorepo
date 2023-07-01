@@ -57,8 +57,7 @@ local function loadClient(base)
 
     base.client.popups = require("client.popups")
 
-    base.client.playSound = sound.playSound;
-    base.client.playMusic = sound.playMusic;
+    base.client.sound = sound
 
     base.client.title = require("client.title");
 end
