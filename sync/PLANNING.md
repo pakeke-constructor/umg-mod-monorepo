@@ -4,7 +4,7 @@
 
 ```lua
 
-sync.denoteEventProxy("hello") 
+sync.proxyEventToClient("hello") 
 -- automatically routes umg.call("hello", ...) on server to a 
 -- umg.call("hello", ...) on clientside.
 

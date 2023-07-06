@@ -4,12 +4,12 @@
 ]]
 
 
-sync.denoteEventProxy("buff")
-sync.denoteEventProxy("debuff")
+sync.proxyEventToClient("buff")
+sync.proxyEventToClient("debuff")
 
 
-sync.denoteEventProxy("levelDown")
-sync.denoteEventProxy("levelUp")
+sync.proxyEventToClient("levelDown")
+sync.proxyEventToClient("levelUp")
 
 
 sync.autoSyncComponent("level")

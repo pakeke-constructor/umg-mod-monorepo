@@ -13,7 +13,7 @@ end
 end
 
 
-sync.denoteEventProxy("entityDeath")
+sync.proxyEventToClient("entityDeath")
 
 
 
