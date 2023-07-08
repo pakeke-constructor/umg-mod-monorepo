@@ -36,6 +36,8 @@ local function loadClient(base)
     base.client.isOnScreen = drawEntities.isOnScreen
     base.client.entIsOnScreen = drawEntities.entIsOnScreen
 
+    base.client.drawEntity = drawEntities.drawEntity
+
     base.client.getDrawY = drawEntities.getDrawY;
     base.client.getDrawDepth = drawEntities.getDrawDepth;
 

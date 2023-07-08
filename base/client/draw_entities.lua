@@ -85,7 +85,9 @@ end
 
 
 
-local function entIsOnScreen(ent, leighway, w, h)
+local screenWidth, screenHeight = love.graphics.getWidth(), love.graphics.getHeight()
+
+local function entIsOnScreen(ent, leighway)
     --[[
         `ent` the entity to be checked if on screen
 
@@ -100,7 +102,7 @@ local function entIsOnScreen(ent, leighway, w, h)
         of "leighway" we can give each object before it's counted as offscreen
     ]]
     leighway = leighway or DEFAULT_LEIGHWAY
-    w, h = w or love.graphics.getWidth(), h or love.graphics.getHeight()
+    local w,h = screenWidth, screenHeight
     local screen_y = getDrawY(ent.y, ent.z)
     local x, y = camera:toCameraCoords(ent.x, screen_y)
 
@@ -111,13 +113,14 @@ local function entIsOnScreen(ent, leighway, w, h)
 end
 
 
-local function isOnScreen(x, y, leighway, w, h)
+local function isOnScreen(x, y, leighway)
     --[[
         same as above, but for a direct x,y position as opposed to
         an entity.
 
         Assumes z = 0
     ]]
+    local w,h = screenWidth, screenHeight
     leighway = leighway or DEFAULT_LEIGHWAY
     w, h = w or love.graphics.getWidth(), h or love.graphics.getHeight()
     x, y = camera:toCameraCoords(x, y)
@@ -253,6 +256,18 @@ end
 
 
 
+local function drawEntity(ent)
+    if entIsOnScreen(ent) and not isHidden(ent) then
+        if ent.image then
+            setColorOfEnt(ent)
+            umg.call("drawEntity", ent)
+            if ent.onDraw then
+                ent:onDraw()
+            end
+        end
+    end
+end
+
 
 --[[
     main draw function
@@ -303,15 +318,7 @@ umg.on("drawEntities", function()
     local last_draw_dep = draw_dep
 
     while draw_ent and draw_dep < max_depth do
-        if entIsOnScreen(draw_ent, DEFAULT_LEIGHWAY, w, h) and not isHidden(draw_ent) then
-            if draw_ent.image then
-                setColorOfEnt(draw_ent)
-                umg.call("drawEntity", draw_ent)
-                if draw_ent.onDraw then
-                    draw_ent:onDraw()
-                end
-            end
-        end
+        drawEntity(draw_ent)
 
         for dep=last_draw_dep+1, draw_dep do
             -- TODO: Since we don't check camera bounds, this is some HOT GARBAGE code.
@@ -359,6 +366,8 @@ return {
     entIsOnScreen = entIsOnScreen;
 
     setColorOfEnt = setColorOfEnt;
+
+    drawEntity = drawEntity,
 
     isHidden = isHidden
 }

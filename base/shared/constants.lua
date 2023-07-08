@@ -6,7 +6,7 @@ return {
     DEFAULT_SPEED = 200;
 
     DEFAULT_ZOOM = 3;
-    SCREEN_LEIGHWAY = 400; -- used by graphics.isOnScreen
+    SCREEN_LEIGHWAY = 800; -- used by isOnScreen
 
     DEFAULT_UI_SCALE = 3;
 
