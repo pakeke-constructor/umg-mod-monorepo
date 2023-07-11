@@ -1,1 +1,1 @@
-{"uses":["base","categories"],"baseMod":true}
+{"uses":["base","categories","typecheck"],"baseMod":true}
