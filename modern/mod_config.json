@@ -1,1 +1,7 @@
-{"baseMod":true,"uses":["base","categories","worldeditor","chunks","chat","ui","grids"]}
+{
+    "type":"addon",
+
+    "needs": ["base"],
+
+    "uses": ["base","categories","worldeditor","chunks","chat","ui","grids"]
+}

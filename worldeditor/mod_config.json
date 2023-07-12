@@ -1,5 +1,7 @@
 {
   "uses": ["base","chat","ui","chunks"],
+
+  "needs": ["base", "chat"],
   
-  "baseMod": true
+  "type": "addon"
 }

@@ -1,1 +1,4 @@
-{"uses":["chat","base","ui"],"baseMod":true}
+{
+    "uses":["chat","base","ui"],
+    "type":"base"
+}

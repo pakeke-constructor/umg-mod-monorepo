@@ -3,5 +3,5 @@
     "base",
     "items"
   ],
-  "baseMod": true
+  "type": "base"
 }

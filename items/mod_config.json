@@ -1,5 +1,5 @@
 {
     "uses": ["base","ui"],
     
-    "baseMod": true
+    "type": "base"
 }
