@@ -1,3 +1,4 @@
 {
-    "uses": ["zenith"]
+    "uses": ["zenith"],
+    "type": "playable"
 }

@@ -12,5 +12,7 @@
       "ui",
       "commands",
       "worldborder"
-    ]
+    ],
+
+    "type": "playable"
 }

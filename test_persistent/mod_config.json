@@ -4,5 +4,7 @@
         "playersaves"
     ],
 
-    "isWorldPersistent": true
+    "isWorldPersistent": true,
+
+    "type": "playable"
 }
