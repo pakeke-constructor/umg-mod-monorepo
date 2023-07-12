@@ -1,10 +1,13 @@
 {
+    "needs": [
+        "test"
+    ],
+
     "uses": [
-        "test",
         "playersaves"
     ],
 
     "isWorldPersistent": true,
 
-    "type": "playable"
+    "type": "addon"
 }
