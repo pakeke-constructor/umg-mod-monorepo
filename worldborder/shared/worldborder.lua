@@ -1,7 +1,7 @@
 
 
 
-local Border = base.Class("worldborder:Border")
+local Border = data.Class("worldborder:Border")
 
 local WHITE = {1,1,1,1}
 

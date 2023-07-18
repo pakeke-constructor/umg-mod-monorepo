@@ -23,7 +23,7 @@ local CARD_LOCK_Y_SPACING = constants.CARD_LOCK_Y_SPACING -- how far down card l
 
 
 
-local Board = base.Class("rgb_chess:board")
+local Board = data.Class("rgb_chess:board")
 
 local usernameToBoard = {
 --[[

@@ -14,7 +14,7 @@ local toolEditor = {}
 
 
 
-local ToolNode = base.Class("worldeditor:ToolNode")
+local ToolNode = data.Class("worldeditor:ToolNode")
 
 function ToolNode:init(params)
     for k,v in pairs(params) do
@@ -33,17 +33,17 @@ end
 
 
 
-local NumberNode = base.Class("worldeditor:NumberNode", ToolNode)
-local StringNode = base.Class("worldeditor:StringNode", ToolNode)
-local SelectionNode = base.Class("worldeditor:SelectionNode", ToolNode)
-local ETypeNode = base.Class("worldeditor:ETypeNode", ToolNode)
+local NumberNode = data.Class("worldeditor:NumberNode", ToolNode)
+local StringNode = data.Class("worldeditor:StringNode", ToolNode)
+local SelectionNode = data.Class("worldeditor:SelectionNode", ToolNode)
+local ETypeNode = data.Class("worldeditor:ETypeNode", ToolNode)
 
 -- this is what all the tools use:
-local CustomNode = base.Class("worldeditor:CustomNode", ToolNode)
+local CustomNode = data.Class("worldeditor:CustomNode", ToolNode)
 
 -- These represent a class of similar tools.
 -- (this is what customNodes are contained inside)
-local CustomNodeGroup = base.Class("worldeditor:CustomNodeGroup", ToolNode)
+local CustomNodeGroup = data.Class("worldeditor:CustomNodeGroup", ToolNode)
 
 
 local paramColor = {0.6,0.6,1}

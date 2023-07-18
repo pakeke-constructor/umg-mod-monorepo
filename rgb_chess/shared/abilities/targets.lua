@@ -9,7 +9,7 @@ end
 
 local targets = {}
 
-local Target = base.Class("rgb-chess:Target")
+local Target = data.Class("rgb-chess:Target")
 
 
 

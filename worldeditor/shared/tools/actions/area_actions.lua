@@ -1,17 +1,17 @@
 
 
 -- ABSTRACT BASE CLASS
-local AreaAction = base.Class("worldeditor:AreaAction")
+local AreaAction = data.Class("worldeditor:AreaAction")
 
 AreaAction.toolType = "AreaAction"
 
 
-local AreaScriptAction = base.Class("worldeditor:AreaScriptAction", AreaAction)
-local AreaEntityAction = base.Class("worldeditor:AreaEntityAction", AreaAction)
-local AreaRandomPointAction = base.Class("worldeditor:AreaRandomPointAction", AreaAction)
-local AreaGridPointAction = base.Class("worldeditor:AreaGridPointAction", AreaAction)
-local AreaSelection = base.Class("worldeditor:AreaSelection", AreaAction)
-local AreaCommand = base.Class("worldeditor:AreaCommand", AreaAction)
+local AreaScriptAction = data.Class("worldeditor:AreaScriptAction", AreaAction)
+local AreaEntityAction = data.Class("worldeditor:AreaEntityAction", AreaAction)
+local AreaRandomPointAction = data.Class("worldeditor:AreaRandomPointAction", AreaAction)
+local AreaGridPointAction = data.Class("worldeditor:AreaGridPointAction", AreaAction)
+local AreaSelection = data.Class("worldeditor:AreaSelection", AreaAction)
+local AreaCommand = data.Class("worldeditor:AreaCommand", AreaAction)
 
 
 local areaActions = {

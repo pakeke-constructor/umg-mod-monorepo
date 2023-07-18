@@ -7,9 +7,6 @@ TODO: Allow for even more custom stuff, like joysticks
 
 ]]
 
-local Array = require("shared.array")
-local Class = require("shared.class")
-
 
 
 -- The input mapping can be defined as anything,
@@ -130,7 +127,7 @@ end
 
 
 
-local Listener = Class("base:Listener")
+local Listener = data.Class("base:Listener")
 input.Listener = Listener
 
 local DEFAULT_LISTENER_PRIORITY = 0
@@ -322,7 +319,7 @@ input.setControls(DEFAULT_INPUT_MAPPING)
 
 
 
-local eventBuffer = Array()
+local eventBuffer = data.Array()
 
 
 

@@ -4,7 +4,7 @@ require("shared.constants")
 
 local actions = {}
 
-local Action = base.Class("rgb-chess:Action")
+local Action = data.Class("rgb-chess:Action")
 
 
 local nameToAction = {--[[

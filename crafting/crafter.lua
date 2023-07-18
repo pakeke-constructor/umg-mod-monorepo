@@ -2,7 +2,7 @@
 
 -- crafting table object:
 
-local Crafter = base.Class("chest_mod:Crafter")
+local Crafter = data.Class("chest_mod:Crafter")
 
 
 function Crafter:addRecipe(ingredients, result)

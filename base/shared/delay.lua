@@ -1,6 +1,4 @@
 
-local Array = require("shared.array")
-
 
 local delayAPI = {}
 
@@ -67,7 +65,7 @@ end)
 
 
 
-local runningNextTick = Array()
+local runningNextTick = data.Array()
 
 
 function delayAPI.nextTick(func, ...)

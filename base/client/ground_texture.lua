@@ -1,6 +1,5 @@
 
 
-local Array = require("shared.array")
 local camera = require("client.camera")
 local drawImage = require("client.image_helpers.draw_image")
 
@@ -29,7 +28,7 @@ end
 
 
 function groundTexture.setTextureList(arr)
-    local buffer = Array()
+    local buffer = data.Array()
     for _,tilename in ipairs(arr) do
         if not (client.assets.images[tilename]) then
             error("unknown image: " .. tostring(tilename))

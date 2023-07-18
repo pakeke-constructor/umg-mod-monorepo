@@ -8,7 +8,7 @@ Inventory objects
 
 
 
-local Inventory = base.Class("items_mod:inventory")
+local Inventory = data.Class("items_mod:inventory")
 
 local updateStackSize
 if server then

@@ -16,13 +16,10 @@ also its kinda a bad way of doing things.
 local owners = umg.group("owns")
 
 
--- Need to make sure this is loaded; it may not be loaded yet
-local Set = require("shared.set")
-
 
 owners:onAdded(function(ent)
     if not ent.owns then
-        ent.owns = Set()
+        ent.owns = data.Set()
     end
 end)
 

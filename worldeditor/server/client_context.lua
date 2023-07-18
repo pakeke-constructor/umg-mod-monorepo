@@ -1,5 +1,5 @@
 
-local ClientContext = base.Class("worldeditor:ClientContext")
+local ClientContext = data.Class("worldeditor:ClientContext")
 
 
 function ClientContext:init(username)    

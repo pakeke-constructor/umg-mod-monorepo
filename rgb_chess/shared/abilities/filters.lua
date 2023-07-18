@@ -10,7 +10,7 @@ require("shared.constants")
 
 local filters = {}
 
-local Filter = base.Class("rgb-chess:Filter")
+local Filter = data.Class("rgb-chess:Filter")
 
 
 local nameToFilter = {--[[

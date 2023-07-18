@@ -1,3 +1,4 @@
 {
-    "type": "base"
+    "type": "base",
+    "uses": ["typecheck"]
 }

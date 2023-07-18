@@ -2,7 +2,7 @@
 local terrainIds = require("terrain_ids")
 
 
-local Terrain = base.Class("terrain_mod:terrain")
+local Terrain = data.Class("terrain_mod:terrain")
 
 
 local finalizeCallback = function(_) end

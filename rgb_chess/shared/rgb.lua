@@ -259,7 +259,7 @@ end
 
 
 
-rgb.STATES = base.Enum({
+rgb.STATES = data.Enum({
     LOBBY_STATE = "LOBBY_STATE",
     BATTLE_STATE = "BATTLE_STATE",
     TURN_STATE = "TURN_STATE"

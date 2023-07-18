@@ -5,14 +5,14 @@
 
 
 -- ABSTRACT BASE CLASS
-local PointAction = base.Class("worldeditor:PointAction")
+local PointAction = data.Class("worldeditor:PointAction")
 
 PointAction.toolType = "PointAction"
 
 
 
-local PointSpawn = base.Class("worldeditor:PointSpawnAction", PointAction)
-local PointScript = base.Class("worldeditor:PointScriptAction", PointAction)
+local PointSpawn = data.Class("worldeditor:PointSpawnAction", PointAction)
+local PointScript = data.Class("worldeditor:PointScriptAction", PointAction)
 
 local pointActions = {
     PointSpawn
