@@ -1,7 +1,4 @@
 
-local Heap = require("shared.heap")
-
-
 
 local DEFAULT_TITLE_TIME = 3
 local DEFAULT_FADE_TIME = 0.4
@@ -23,7 +20,7 @@ local function compare(a,b)
 end
 
 
-local titleObjs = Heap(compare)
+local titleObjs = data.Heap(compare)
 
 
 local curTime = love.timer.getTime() -- current time

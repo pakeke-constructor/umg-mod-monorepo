@@ -4,8 +4,6 @@ local getGameTime = require("shared.get_game_time")
 local drawImage = require("client.image_helpers.draw_image")
 
 
-local Heap = require("shared.heap")
-
 
 local function endTimeComparator(a,b)
     return a.endTime < b.endTime
@@ -20,7 +18,7 @@ local DEFAULT_FADE_TIME = 0.1
 local popups = {}
 
 
-local imageHeap = Heap(endTimeComparator)
+local imageHeap = data.Heap(endTimeComparator)
 
 
 local imageTc = typecheck.assert("string", "number", "number", "table?")
@@ -58,7 +56,7 @@ local DEFAULT_BACKDROP_DISTANCE = 1
 local DEFAULT_BACKDROP_COLOR_SHIFT = -0.8
 
 
-local textHeap = Heap(endTimeComparator)
+local textHeap = data.Heap(endTimeComparator)
 
 
 local textTc = typecheck.assert("string", "number", "number", "table?")
