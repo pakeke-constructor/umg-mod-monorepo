@@ -54,7 +54,7 @@ local function siftDown(heap, index)
 	end
 end
 
-function Heap:new(comparator)
+function Heap:init(comparator)
 	self.compare = comparator or defaultCompare
 end
 
@@ -128,5 +128,4 @@ end
 
 
 
-return Heap.new
-
+return Heap

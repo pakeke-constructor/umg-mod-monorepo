@@ -20,7 +20,9 @@ local name_to_class = {
 local function newObj(class, ...)
     local obj = {}
     setmetatable(obj, class)
-    obj:init(...)
+    if type(obj.init) == "function" then
+        obj:init(...)
+    end
     return obj
 end
 
