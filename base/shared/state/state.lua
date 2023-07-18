@@ -12,13 +12,8 @@ or when the game is in an alternative state,
 
 ]]
 
-local Class = require("shared.class")
 
-
-
-
-
-local State = Class("base:State")
+local State = data.Class("data:State")
 
 
 

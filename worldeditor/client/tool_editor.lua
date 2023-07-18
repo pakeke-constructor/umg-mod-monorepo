@@ -267,7 +267,7 @@ local function customNodeGenerator(args)
     return function(options)
         local id = options.id
         assert(type(id) == "number", "?")
-        local children = base.Array()
+        local children = data.Array()
         for _, arg in ipairs(args.params) do
             id = id + 1
             assert(typeMapping[arg.type], "invalid type: " .. tostring(arg.type))

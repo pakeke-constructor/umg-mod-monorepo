@@ -3,9 +3,10 @@
 	heap data structure
 ]]
 
+local Class = require("shared.class")
 
-local Heap = {}
-local Heap_mt = {__index = Heap}
+local Heap = Class("data:Heap")
+
 
 
 local floor = math.floor
@@ -53,12 +54,8 @@ local function siftDown(heap, index)
 	end
 end
 
-function Heap.new(comparator)
-	local newHeap = { }
-	setmetatable(newHeap, Heap_mt)
-	newHeap.compare = comparator or defaultCompare
-	
-	return newHeap
+function Heap:new(comparator)
+	self.compare = comparator or defaultCompare
 end
 
 function Heap:insert(newValue)

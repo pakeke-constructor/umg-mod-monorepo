@@ -10,13 +10,14 @@ local gravityValue = 1300 -- this seems reasonable, lol.
 
 local function groundTest(ent)
     -- default behaviour is that ground is at z=0
+
+    --[[
+        TODO: use asking protocol here!
+        Something like `umg.ask("isOnGround", ent)`
+    ]]
     return (ent.z or 0) <= 0
 end
 
-
-function gravity.setGroundTest(func)
-    groundTest = func
-end
 
 
 function gravity.setGravity(dy)

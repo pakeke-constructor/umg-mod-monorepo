@@ -3,7 +3,7 @@
 local Class = require("shared.class")
 
 
-local Set = Class("base:Set")
+local Set = Class("data:Set")
 
 
 function Set:init(initial)

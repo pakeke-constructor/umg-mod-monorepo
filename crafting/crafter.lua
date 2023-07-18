@@ -38,7 +38,7 @@ function Crafter:addRecipe(ingredients, result)
         if recipe.ingredientCounts[name] then
             error("Duplicate ingredient: " .. tostring(name))
         end
-        local i2rl = self.ingredientToRecipeList[name] or base.Array()
+        local i2rl = self.ingredientToRecipeList[name] or data.Array()
         i2rl:add(recipe)
         recipe.ingredientCounts[ingre.ingredient] = ingre.count or 1
         self.ingredientToRecipeList[name] = i2rl
@@ -51,7 +51,7 @@ end
 
 
 function Crafter:init()
-    self.recipes = base.Array()
+    self.recipes = data.Array()
     self.ingredientToRecipeList = {}
 end
 

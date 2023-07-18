@@ -125,7 +125,7 @@ end
 
 
 local function closeAllInventories()
-    local buffer = base.Array()
+    local buffer = data.Array()
     -- gotta buffer it, since we are removing during iter
     for _, inv in ipairs(openInventories.getOpenInventories())do
         buffer:add(inv)

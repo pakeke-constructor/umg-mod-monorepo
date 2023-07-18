@@ -23,7 +23,7 @@ local groundItemGroup = umg.group("x", "y", "groundItem", "inventory")
 local PICKUP_DISTANCE = constants.PICKUP_DISTANCE
 
 local CHUNK_SIZE = PICKUP_DISTANCE
-local groundItemPartition = base.Partition(CHUNK_SIZE)
+local groundItemPartition = data.Partition(CHUNK_SIZE)
 
 
 

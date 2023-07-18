@@ -27,7 +27,7 @@ local levelTextArgs = {Color = {0.8,1,1}}
 
 local COLS_PER_LINE = 3 -- How many colors displayed per line
 
-local COL_KEYS = base.Array()
+local COL_KEYS = data.Array()
 do
 for key, _ in pairs(rgb.COLS) do
     COL_KEYS:add(key)

@@ -9,7 +9,7 @@ local constants = require("shared.constants")
     This is the "main" chunk,
     i.e. a chunk of all entities that exist in the game
 ]]
-local globalChunk = base.Partition(constants.CHUNK_SIZE)
+local globalChunk = data.Partition(constants.CHUNK_SIZE)
 
 
 

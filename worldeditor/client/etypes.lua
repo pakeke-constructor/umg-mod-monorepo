@@ -9,7 +9,7 @@ local etypes = {
 
 client.on("worldeditorSetEntityTypes", function(entities)
     etypes.entities = entities
-    etypes.etypeList = base.Array()
+    etypes.etypeList = data.Array()
     for etypeName, _ in pairs(entities) do
         etypes.etypeList:add(etypeName)
     end

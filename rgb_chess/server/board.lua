@@ -215,7 +215,7 @@ function Board:getUnits()
     -- iterates over all the units on a board.
     local set = categories.getSet(self:getTeam())
 
-    local buffer = base.Array()
+    local buffer = data.Array()
 
     for _, e in ipairs(set)do
         if rgb.isUnit(e) then
@@ -461,7 +461,7 @@ end
 
 
 function Board:getShopCards()
-    local array = base.Array()
+    local array = data.Array()
     for i=1, self.shopSize do
         local card = self:getCard(i)
         if umg.exists(card) then

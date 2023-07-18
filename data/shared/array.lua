@@ -1,7 +1,7 @@
 
 local Class = require("shared.class")
 
-local Array = Class("base_mod:Array")
+local Array = Class("data:Array")
 
 
 

@@ -73,12 +73,6 @@ local function loadShared(base)
     
     base.getGameTime = require("shared.get_game_time")
 
-    base.Class = require("shared.class");
-    base.Set = require("shared.set");
-    base.Array = require("shared.array");
-    base.Heap = require("shared.heap");
-    base.Partition = require("shared.partition");
-    base.Enum = require("shared.enum")
     
     base.components = require("shared.components")
 

@@ -1,4 +1,14 @@
 
+--[[
+
+Basic class object.
+
+Usage:
+
+
+
+
+]]
 
 local name_to_class = {
 --[[

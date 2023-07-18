@@ -108,7 +108,7 @@ function AreaRandomPointAction:apply(area, excludeArea)
     assert(server, "?")
     local x,y,w,h = area.x, area.y, area.w, area.h
     assertNumbers4(x,y,w,h)
-    local pointBuffer = base.Array()
+    local pointBuffer = data.Array()
     for _=1, self.numPoints do
         for _=1, MAX_TRIES do
             local px, py = generateRandomPoint(self, x, y, w, h)
@@ -153,7 +153,7 @@ function AreaGridPointAction:apply(area, excludeArea)
     local x,y,w,h = area.x, area.y, area.w, area.h
     assertNumbers4(x,y,w,h)
 
-    local pointBuffer = base.Array()
+    local pointBuffer = data.Array()
     for xx = x, x+w, math.max(1, self.pointGapX) do
         for yy = y, y+h, math.max(1, self.pointGapY) do
             pointBuffer:add({xx,yy})

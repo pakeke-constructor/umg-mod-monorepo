@@ -140,12 +140,12 @@ local positionGroup = umg.group("x","y")
 
 
 
-local sortedBorderBuffer = base.Array()
+local sortedBorderBuffer = data.Array()
 
 
 local function getBorderBuffer()
     -- sort orders by size, its more efficient to check biggest borders first.
-    local borderBuffer = base.Array()
+    local borderBuffer = data.Array()
     for _, ent in ipairs(borderGroup) do
         borderBuffer:add(ent.border)
     end

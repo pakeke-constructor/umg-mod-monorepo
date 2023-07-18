@@ -4,7 +4,7 @@ local getAllCategories = require("shared.get_all_categories")
 
 local categoryMap = setmetatable({}, {
     __index = function(t,k)
-        t[k] = base.Set()
+        t[k] = data.Set()
         return t[k]
     end
 })

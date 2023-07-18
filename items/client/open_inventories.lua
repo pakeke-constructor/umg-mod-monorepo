@@ -3,7 +3,7 @@
 local openInventories = {}
 
 
-local invArray = base.Array()
+local invArray = data.Array()
 
 
 function openInventories.open(inventory)

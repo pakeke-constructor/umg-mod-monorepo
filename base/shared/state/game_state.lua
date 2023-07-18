@@ -1,5 +1,4 @@
 
-local State = require("shared.state.state")
 
 --[[
 
@@ -10,6 +9,7 @@ When the game is running, it should be in this state.
 
 ]]
 
+local State = require("shared.state.state")
 
 local gameState = State("game")
 

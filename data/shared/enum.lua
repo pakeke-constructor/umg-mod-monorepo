@@ -10,7 +10,7 @@ local ENUM_MT = {
 }
 
 
-umg.register(ENUM_MT, "base:Enum")
+umg.register(ENUM_MT, "data:Enum")
 
 
 local function assertString(x)

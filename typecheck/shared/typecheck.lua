@@ -211,6 +211,15 @@ function typecheck.check(...)
 end
 
 
+local addTypeTc = typecheck.assert("string", "function")
+function typecheck.addType(typeName, check)
+    addTypeTc(typeName, check)
+    assert(not typecheck[typeName], "Overwriting existing type!")
+
+    typecheck[typeName] = check
+end
+
+
 
 
 return typecheck
