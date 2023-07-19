@@ -5,7 +5,7 @@ local rain = {}
 
 
 
-local rainDrops = data.Array()
+local rainDrops = objects.Array()
 
 
 --[[

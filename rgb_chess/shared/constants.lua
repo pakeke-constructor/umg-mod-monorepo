@@ -43,7 +43,7 @@ _G.constants = {
 
     PVE_PREFIX = "@pve_enemy_", -- concat this with another rgbTeam to get the category.,
     
-    PROJECTILE_TYPES = data.Enum({
+    PROJECTILE_TYPES = objects.Enum({
         DAMAGE = "DAMAGE",
         HEAL = "HEAL",
         SHIELD = "SHIELD",
@@ -53,25 +53,25 @@ _G.constants = {
         DEBUFF = "DEBUFF"
     }),
 
-    BUFF_TYPES = data.Enum({
+    BUFF_TYPES = objects.Enum({
         POWER = "POWER",
         ATTACK_SPEED = "ATTACK_SPEED",
         SPEED = "SPEED",
         HEALTH = "HEALTH"
     }),
     
-    CARD_TYPES = data.Enum({
+    CARD_TYPES = objects.Enum({
         UNIT = "UNIT",
         SPELL = "SPELL"
     }),
 
-    UNIT_TYPES = data.Enum({
+    UNIT_TYPES = objects.Enum({
         MELEE = "MELEE",
         RANGED = "RANGED",
         SORCERER = "SORCERER" -- sorcerers can hold items
     }),
 
-    ITEM_TYPES = data.Enum({
+    ITEM_TYPES = objects.Enum({
         PASSIVE = "PASSIVE",
         USABLE = "USABLE"
     }),

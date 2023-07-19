@@ -28,7 +28,7 @@ end
 
 
 function groundTexture.setTextureList(arr)
-    local buffer = data.Array()
+    local buffer = objects.Array()
     for _,tilename in ipairs(arr) do
         if not (client.assets.images[tilename]) then
             error("unknown image: " .. tostring(tilename))

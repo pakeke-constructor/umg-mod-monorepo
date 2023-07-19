@@ -9,7 +9,7 @@ Also contains it's name, and whether the server is updated about it's state.
 
 ]]
 
-local ToolInfo = data.Class("worldeditor:ClientSideToolInfo")
+local ToolInfo = objects.Class("worldeditor:ClientSideToolInfo")
 
 function ToolInfo:init(options)
     self.editNode = options.editNode

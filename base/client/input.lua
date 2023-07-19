@@ -127,7 +127,7 @@ end
 
 
 
-local Listener = data.Class("base:Listener")
+local Listener = objects.Class("base:Listener")
 input.Listener = Listener
 
 local DEFAULT_LISTENER_PRIORITY = 0
@@ -319,7 +319,7 @@ input.setControls(DEFAULT_INPUT_MAPPING)
 
 
 
-local eventBuffer = data.Array()
+local eventBuffer = objects.Array()
 
 
 

@@ -19,7 +19,7 @@ local owners = umg.group("owns")
 
 owners:onAdded(function(ent)
     if not ent.owns then
-        ent.owns = data.Set()
+        ent.owns = objects.Set()
     end
 end)
 

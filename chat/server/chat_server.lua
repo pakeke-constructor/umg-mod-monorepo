@@ -51,7 +51,7 @@ local VALID_TYPES = {
 }
 
 local function getArgsTypechecker(arguments)
-    local typeBuffer = data.Array()
+    local typeBuffer = objects.Array()
     for _, arg in ipairs(arguments) do
         assert(VALID_TYPES[arg.type], "arg type invalid: " .. tostring(arg.type))
         assert(type(arg.name) == "string", "arg.name needs to be string")
@@ -149,7 +149,7 @@ end
 
 
 function chat.getCommands()
-    local buffer = data.Array()
+    local buffer = objects.Array()
     for _, handler in pairs(commandToHandler) do
         buffer:add(handler) 
     end

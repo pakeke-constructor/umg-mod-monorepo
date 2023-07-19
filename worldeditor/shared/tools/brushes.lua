@@ -13,12 +13,12 @@ local constants = require("shared.constants")
 
 
 
-local Brush = data.Class("worldeditor:Brush")
+local Brush = objects.Class("worldeditor:Brush")
 Brush.toolType = "Brush"
 
 
-local PointBrush = data.Class("wordeditor:PointBrush", Brush)
-local SquareBrush = data.Class("worldeditor:SquareBrush", Brush)
+local PointBrush = objects.Class("wordeditor:PointBrush", Brush)
+local SquareBrush = objects.Class("worldeditor:SquareBrush", Brush)
 
 local brushes = {
     SquareBrush, PointBrush

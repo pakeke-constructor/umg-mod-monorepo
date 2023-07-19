@@ -9,7 +9,7 @@ local availableSourceClones = setmetatable({
     --  {  [src] = set()   }
     -- to allow us to play the same sound
     -- multiple times at the same time
-}, {__index = function(t,k) t[k] = data.Set() return t[k] end})
+}, {__index = function(t,k) t[k] = objects.Set() return t[k] end})
 
 
 

@@ -13,7 +13,7 @@ or when the game is in an alternative state,
 ]]
 
 
-local State = data.Class("data:State")
+local State = objects.Class("data:State")
 
 
 

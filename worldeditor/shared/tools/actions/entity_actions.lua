@@ -3,15 +3,15 @@
 
 
 -- ABSTRACT BASE CLASS
-local EntityAction = data.Class("worldeditor:EntityAction")
+local EntityAction = objects.Class("worldeditor:EntityAction")
 
 EntityAction.toolType = "EntityAction"
 
 
 
-local EntityDelete = data.Class("worldeditor:EntityDeleteAction", EntityAction)
-local EntityScript = data.Class("worldeditor:EntityScriptAction", EntityAction)
-local EntityChangeComponent = data.Class("worldeditor:EntityChangeComponent", EntityAction)
+local EntityDelete = objects.Class("worldeditor:EntityDeleteAction", EntityAction)
+local EntityScript = objects.Class("worldeditor:EntityScriptAction", EntityAction)
+local EntityChangeComponent = objects.Class("worldeditor:EntityChangeComponent", EntityAction)
 
 
 

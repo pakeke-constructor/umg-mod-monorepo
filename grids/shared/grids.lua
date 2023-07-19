@@ -7,7 +7,7 @@ local gridGroup = umg.group("grid", "x", "y")
 
 
 
-local Grid = data.Class("grid:Grid")
+local Grid = objects.Class("grid:Grid")
 
 
 

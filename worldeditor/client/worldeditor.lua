@@ -42,7 +42,7 @@ for i=0,9 do
 end
 
 
-local hotkeyList = data.Array()
+local hotkeyList = objects.Array()
 for hk, _ in pairs(validHotKeys) do
     hotkeyList:add(hk)
 end

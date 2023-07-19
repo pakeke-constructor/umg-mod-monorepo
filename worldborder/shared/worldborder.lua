@@ -1,7 +1,7 @@
 
 
 
-local Border = data.Class("worldborder:Border")
+local Border = objects.Class("worldborder:Border")
 
 local WHITE = {1,1,1,1}
 
@@ -140,12 +140,12 @@ local positionGroup = umg.group("x","y")
 
 
 
-local sortedBorderBuffer = data.Array()
+local sortedBorderBuffer = objects.Array()
 
 
 local function getBorderBuffer()
     -- sort orders by size, its more efficient to check biggest borders first.
-    local borderBuffer = data.Array()
+    local borderBuffer = objects.Array()
     for _, ent in ipairs(borderGroup) do
         borderBuffer:add(ent.border)
     end

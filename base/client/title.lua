@@ -20,7 +20,7 @@ local function compare(a,b)
 end
 
 
-local titleObjs = data.Heap(compare)
+local titleObjs = objects.Heap(compare)
 
 
 local curTime = love.timer.getTime() -- current time

@@ -18,7 +18,7 @@ local abilities = {}
 
 local abilityActionBuffer
 if server then
-    abilityActionBuffer = data.Heap(function(a,b)
+    abilityActionBuffer = objects.Heap(function(a,b)
         -- TODO: Do some checks to ensure that this is the right way around.
         return a.activateTime > b.activateTime
     end)
@@ -130,7 +130,7 @@ local function addGivenAbilityList(ent, abilityList)
     ]]
     for _, ability in ipairs(abilityList) do
         local trig = ability.trigger
-        triggerMapping[trig] = triggerMapping[trig] or data.Set()
+        triggerMapping[trig] = triggerMapping[trig] or objects.Set()
         triggerMapping[trig]:add(ent)
     end
 end

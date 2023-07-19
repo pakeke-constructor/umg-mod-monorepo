@@ -1,17 +1,17 @@
 
 
 -- ABSTRACT BASE CLASS
-local AreaAction = data.Class("worldeditor:AreaAction")
+local AreaAction = objects.Class("worldeditor:AreaAction")
 
 AreaAction.toolType = "AreaAction"
 
 
-local AreaScriptAction = data.Class("worldeditor:AreaScriptAction", AreaAction)
-local AreaEntityAction = data.Class("worldeditor:AreaEntityAction", AreaAction)
-local AreaRandomPointAction = data.Class("worldeditor:AreaRandomPointAction", AreaAction)
-local AreaGridPointAction = data.Class("worldeditor:AreaGridPointAction", AreaAction)
-local AreaSelection = data.Class("worldeditor:AreaSelection", AreaAction)
-local AreaCommand = data.Class("worldeditor:AreaCommand", AreaAction)
+local AreaScriptAction = objects.Class("worldeditor:AreaScriptAction", AreaAction)
+local AreaEntityAction = objects.Class("worldeditor:AreaEntityAction", AreaAction)
+local AreaRandomPointAction = objects.Class("worldeditor:AreaRandomPointAction", AreaAction)
+local AreaGridPointAction = objects.Class("worldeditor:AreaGridPointAction", AreaAction)
+local AreaSelection = objects.Class("worldeditor:AreaSelection", AreaAction)
+local AreaCommand = objects.Class("worldeditor:AreaCommand", AreaAction)
 
 
 local areaActions = {
@@ -108,7 +108,7 @@ function AreaRandomPointAction:apply(area, excludeArea)
     assert(server, "?")
     local x,y,w,h = area.x, area.y, area.w, area.h
     assertNumbers4(x,y,w,h)
-    local pointBuffer = data.Array()
+    local pointBuffer = objects.Array()
     for _=1, self.numPoints do
         for _=1, MAX_TRIES do
             local px, py = generateRandomPoint(self, x, y, w, h)
@@ -153,7 +153,7 @@ function AreaGridPointAction:apply(area, excludeArea)
     local x,y,w,h = area.x, area.y, area.w, area.h
     assertNumbers4(x,y,w,h)
 
-    local pointBuffer = data.Array()
+    local pointBuffer = objects.Array()
     for xx = x, x+w, math.max(1, self.pointGapX) do
         for yy = y, y+h, math.max(1, self.pointGapY) do
             pointBuffer:add({xx,yy})

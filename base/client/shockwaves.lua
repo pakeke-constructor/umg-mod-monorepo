@@ -5,7 +5,7 @@ local newShockWave = require("_libs.shockwave")
 
 
 -- a Set for all shockwave objects that are being drawn
-local shockwaveSet = data.Set()
+local shockwaveSet = objects.Set()
 
 
 

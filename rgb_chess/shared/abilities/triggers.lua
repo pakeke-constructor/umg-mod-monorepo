@@ -70,7 +70,7 @@ end
 
 
 function triggers.getAllTriggerTypes()
-    local buf = data.Array()
+    local buf = objects.Array()
     for trigger, _ in pairs(triggerTypeToDescription)do
         buf:add(trigger)
     end

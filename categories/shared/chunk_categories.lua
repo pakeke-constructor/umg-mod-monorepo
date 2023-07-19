@@ -14,7 +14,7 @@ local categoryToChunk = {}
 
 local function getCategoryChunk(category)
     if not categoryToChunk[category] then
-        categoryToChunk[category] = data.Partition(chunks.getChunkSize())
+        categoryToChunk[category] = objects.Partition(chunks.getChunkSize())
     end
     return categoryToChunk[category]
 end

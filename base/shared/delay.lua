@@ -65,7 +65,7 @@ end)
 
 
 
-local runningNextTick = data.Array()
+local runningNextTick = objects.Array()
 
 
 function delayAPI.nextTick(func, ...)

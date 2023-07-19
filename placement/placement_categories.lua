@@ -3,7 +3,7 @@
 
 local placementCategories = setmetatable({}, {
     __index = function(t,k)
-        t[k] = data.Set()
+        t[k] = objects.Set()
         return t[k]
     end
 })

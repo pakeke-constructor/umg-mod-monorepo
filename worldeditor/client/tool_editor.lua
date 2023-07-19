@@ -14,7 +14,7 @@ local toolEditor = {}
 
 
 
-local ToolNode = data.Class("worldeditor:ToolNode")
+local ToolNode = objects.Class("worldeditor:ToolNode")
 
 function ToolNode:init(params)
     for k,v in pairs(params) do
@@ -33,17 +33,17 @@ end
 
 
 
-local NumberNode = data.Class("worldeditor:NumberNode", ToolNode)
-local StringNode = data.Class("worldeditor:StringNode", ToolNode)
-local SelectionNode = data.Class("worldeditor:SelectionNode", ToolNode)
-local ETypeNode = data.Class("worldeditor:ETypeNode", ToolNode)
+local NumberNode = objects.Class("worldeditor:NumberNode", ToolNode)
+local StringNode = objects.Class("worldeditor:StringNode", ToolNode)
+local SelectionNode = objects.Class("worldeditor:SelectionNode", ToolNode)
+local ETypeNode = objects.Class("worldeditor:ETypeNode", ToolNode)
 
 -- this is what all the tools use:
-local CustomNode = data.Class("worldeditor:CustomNode", ToolNode)
+local CustomNode = objects.Class("worldeditor:CustomNode", ToolNode)
 
 -- These represent a class of similar tools.
 -- (this is what customNodes are contained inside)
-local CustomNodeGroup = data.Class("worldeditor:CustomNodeGroup", ToolNode)
+local CustomNodeGroup = objects.Class("worldeditor:CustomNodeGroup", ToolNode)
 
 
 local paramColor = {0.6,0.6,1}
@@ -267,7 +267,7 @@ local function customNodeGenerator(args)
     return function(options)
         local id = options.id
         assert(type(id) == "number", "?")
-        local children = data.Array()
+        local children = objects.Array()
         for _, arg in ipairs(args.params) do
             id = id + 1
             assert(typeMapping[arg.type], "invalid type: " .. tostring(arg.type))

@@ -16,7 +16,7 @@ local terrainIds = {}
 
 
 
-local terrainObjects = data.Set()
+local terrainObjects = objects.Set()
 
 local id_to_terrainObj = {}
 local terrainObj_to_id = {}

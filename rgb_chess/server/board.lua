@@ -23,7 +23,7 @@ local CARD_LOCK_Y_SPACING = constants.CARD_LOCK_Y_SPACING -- how far down card l
 
 
 
-local Board = data.Class("rgb_chess:board")
+local Board = objects.Class("rgb_chess:board")
 
 local usernameToBoard = {
 --[[
@@ -215,7 +215,7 @@ function Board:getUnits()
     -- iterates over all the units on a board.
     local set = categories.getSet(self:getTeam())
 
-    local buffer = data.Array()
+    local buffer = objects.Array()
 
     for _, e in ipairs(set)do
         if rgb.isUnit(e) then
@@ -461,7 +461,7 @@ end
 
 
 function Board:getShopCards()
-    local array = data.Array()
+    local array = objects.Array()
     for i=1, self.shopSize do
         local card = self:getCard(i)
         if umg.exists(card) then

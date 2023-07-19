@@ -14,7 +14,7 @@ local function pushQuads(quad, indexToQuads, indexToWallQuads, height)
     ]]
     assert(quad.centerX and quad.centerY, "???")
     local i = base.client.getDrawDepth(quad.centerY, 0)
-    indexToQuads[i] = indexToQuads[i] or data.Array()
+    indexToQuads[i] = indexToQuads[i] or objects.Array()
     local verts = {
         {quad.a.x, quad.a.y}, {quad.b.x, quad.b.y}, 
         {quad.c.x, quad.c.y}, {quad.d.x, quad.d.y}
@@ -28,7 +28,7 @@ local function pushQuads(quad, indexToQuads, indexToWallQuads, height)
         {quad.c.x, quad.c.y}, {quad.d.x, quad.d.y}
     }
     local iwall = base.client.getDrawDepth(quad.centerY, -height)
-    indexToWallQuads[iwall] = indexToWallQuads[i] or data.Array()
+    indexToWallQuads[iwall] = indexToWallQuads[i] or objects.Array()
     for _, v in ipairs(verts_wall) do
         indexToWallQuads[iwall]:add(v)
     end
@@ -49,7 +49,7 @@ local function pushGreedyQuads(gquad, indexToGreedyQuads, height)
     }
 
     local i = base.client.getDrawDepth(gquad.y + gquad.height, height)
-    indexToGreedyQuads[i] = indexToGreedyQuads[i] or data.Array()
+    indexToGreedyQuads[i] = indexToGreedyQuads[i] or objects.Array()
     for _, v in ipairs(verts) do
         indexToGreedyQuads[i]:add(v)
     end

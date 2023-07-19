@@ -18,7 +18,7 @@ local DEFAULT_FADE_TIME = 0.1
 local popups = {}
 
 
-local imageHeap = data.Heap(endTimeComparator)
+local imageHeap = objects.Heap(endTimeComparator)
 
 
 local imageTc = typecheck.assert("string", "number", "number", "table?")
@@ -56,7 +56,7 @@ local DEFAULT_BACKDROP_DISTANCE = 1
 local DEFAULT_BACKDROP_COLOR_SHIFT = -0.8
 
 
-local textHeap = data.Heap(endTimeComparator)
+local textHeap = objects.Heap(endTimeComparator)
 
 
 local textTc = typecheck.assert("string", "number", "number", "table?")

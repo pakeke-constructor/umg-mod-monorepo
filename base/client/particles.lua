@@ -18,17 +18,17 @@ local availablePSyses = setmetatable(
     [name] = array_of_available_psyses
 ]]
 }, 
-{__index = function(t,k) t[k] = data.Array() return t[k] end}
+{__index = function(t,k) t[k] = objects.Array() return t[k] end}
 )
 
 
 local drawingPSyses = setmetatable(
     -- 2d array of particle systems that are being drawn, keyed by draw index.
-    {}, {__index = function(t,k) t[k] = data.Set() return t[k] end}
+    {}, {__index = function(t,k) t[k] = objects.Set() return t[k] end}
 )
 
 
-local in_use = data.Set()
+local in_use = objects.Set()
 
 
 local floor = math.floor
@@ -119,7 +119,7 @@ function particles.newParticleSystem(images, buffer_size)
         error("Attempted to define a particleSystem with no particle images")
     end
     local psys = love.graphics.newParticleSystem(client.atlas.image, buffer_size or DEFAULT_BUFFER_SIZE)
-    local buffer = data.Array()
+    local buffer = objects.Array()
     local _,pW,pH
     for _,img in ipairs(images) do
         local quad = client.assets.images[img]
