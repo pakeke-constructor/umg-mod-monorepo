@@ -8,9 +8,9 @@
 ]]
 
 
-local State = require("shared.state").State
+local state = require("shared.state")
 
-local pauseState = State("pause")
+local pauseState = state.State("pause")
 
 
 

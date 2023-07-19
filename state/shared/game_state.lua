@@ -9,9 +9,9 @@ When the game is running, it should be in this state.
 
 ]]
 
-local State = require("shared.state").State
+local state = require("shared.state")
 
-local gameState = State("game")
+local gameState = state.State("game")
 
 
 local MAX_DT = 0.16
@@ -45,6 +45,6 @@ end)
 
 -- and set to gamestate if we are on serverside
 if server then
-    State.setState("game")
+    state.setState("game")
 end
 
