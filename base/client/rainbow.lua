@@ -1,4 +1,15 @@
 
+--[[
+
+Makes entities become a rainbow color.
+
+
+TODO: use OKLab color space for this,
+instead of regular RGB.
+
+
+]]
+
 local getGameTime = require("shared.get_game_time")
 
 

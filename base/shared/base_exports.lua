@@ -72,7 +72,6 @@ local function loadShared(base)
     base.operators = require("shared.operators")
     
     base.getGameTime = require("shared.get_game_time")
-
     
     base.components = require("shared.components")
 

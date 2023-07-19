@@ -4,14 +4,13 @@
 
 `state` mod:
 gameState, state, pauseState
+`getGameTime()` method
+
 
 
 `objects` mod:
 color, set, array, heap, partition, enum, class
 
-
-`input` mod:
-Input object
 
 
 
@@ -24,6 +23,10 @@ drawStats
 `isOnScreen`, `entIsOnScreen`
 
 
+
+
+`input` mod:
+Input object
 
 `control` mod:
 controllable component
@@ -47,14 +50,18 @@ sound
 - allow for proximity sounds, mixing, special effects api, etc
 - have a `Sound` object, that represents the playing of a sound:::
     - can either play 1 sound,
-    - or a random sound from a list. (Sound objects can be nested)
+    - or a random sound from a list of other Sound objects.  (nested)
 
 
 
 `mortality` mod:
 health, maxHealth
 handles `onDeath`, `onDamage` callbacks
+handles damage modifiers.
 
+
+
+`physics` mod
 
 
 TODO:
