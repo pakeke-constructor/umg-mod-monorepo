@@ -57,7 +57,7 @@ function state.setState(name)
 end
 
 umg.on("@playerJoin", function(username)
-    server.unicast(username, "baseModSetState", currentStateName)
+    server.unicast(username, "stateModSetState", currentStateName)
 end)
 
 
