@@ -28,10 +28,14 @@ drawStats
 `input` mod:
 Input object
 
-`control` mod:
-controllable component
-Input class
 
+
+`control` mod:
+- Handles control of players, AND control of non-player entities.
+controllable component
+control component
+lookX, lookY components
+moveX, moveY components
 
 
 
@@ -71,13 +75,13 @@ TODO:
 
 Where should `onClick` component go?
 
-where should `lookX`, `lookY` components go?
 
 
 Where should `initializers` go?
-TODO: We should delete `initializers`, and replace it with 
+A: We should delete `initializers`, and replace it with 
 the `@entityInit` stuff.
 
 
 Where should `operators` go? Should we even keep this?
+A: no, we shouldnt keep operators
 
