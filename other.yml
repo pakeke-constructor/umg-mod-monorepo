@@ -32,5 +32,7 @@ globals:
     any: true
   light:
     any: true
+  objects:
+    any: true
 
 

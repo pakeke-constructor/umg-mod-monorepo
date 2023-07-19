@@ -1,5 +1,11 @@
 
 
+--[[
+    rotates entities in their direction of motion.
+
+    Great for bullets and stuff.
+]]
+
 local moveRotationGroup = umg.group("vx", "vy", "moveRotation")
 
 
