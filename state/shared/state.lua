@@ -153,8 +153,11 @@ function state.setState(name_or_nil)
 end
 
 
+
+
 state.State = State
 
 
-umg.expose("state", State)
+umg.expose("state", state)
 
+return state

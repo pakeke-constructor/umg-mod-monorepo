@@ -9,7 +9,7 @@ When the game is running, it should be in this state.
 
 ]]
 
-local State = require("shared.state.state")
+local State = require("shared.state").State
 
 local gameState = State("game")
 
