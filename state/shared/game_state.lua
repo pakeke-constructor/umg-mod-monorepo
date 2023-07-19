@@ -14,13 +14,15 @@ local State = require("shared.state.state")
 local gameState = State("game")
 
 
-local constants = require("shared.constants")
-local operators = require("shared.operators")
+local MAX_DT = 0.16
+local MIN_DT = -0.16
 
 
-local MULT = operators.MULT
-local MAX_DT = constants.MAX_DT
-local MIN_DT = constants.MIN_DT
+local MULT = function(x,y)
+    return x * y
+end
+
+
 local max, min = math.max, math.min
 
 

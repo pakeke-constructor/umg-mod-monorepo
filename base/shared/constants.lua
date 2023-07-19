@@ -10,8 +10,6 @@ return {
 
     DEFAULT_UI_SCALE = 3;
 
-    MAX_DT = 0.16,
-    MIN_DT = -0.16,
     
     SYNC_LEIGHWAY = 0.5; -- Can be 0.5 position of a difference before 
                          -- an update is passed.

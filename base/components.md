@@ -82,8 +82,6 @@ ent.scaleX = 1
 ent.scaleY = 1
 
 
-ent.riding = horse_ent
-
 
 
 ent.friction = 3.15 -- friction number. (default is roughtly 3.15)

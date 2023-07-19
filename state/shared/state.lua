@@ -13,7 +13,10 @@ or when the game is in an alternative state,
 ]]
 
 
-local State = objects.Class("data:State")
+local state = {}
+
+
+local State = objects.Class("state:State")
 
 
 
@@ -45,11 +48,11 @@ end
 
 if server then
 
-function State.setState(name)
+function state.setState(name)
     if (not name) or (not stateTable[name]) then
         error("Invalid state: " .. tostring(name))
     end
-    server.broadcast("baseModSetState", name)
+    server.broadcast("stateModSetState", name)
     changeState(name)
 end
 
@@ -60,7 +63,7 @@ end)
 
 else -- we on client side
 
-client.on("baseModSetState", function(name)
+client.on("stateModSetState", function(name)
     changeState(name)
 end)
 
@@ -132,7 +135,7 @@ end
 
 
 
-function State.getCurrentState()
+function state.getCurrentState()
     return currentStateName
 end
 
@@ -142,14 +145,16 @@ end
 --[[
     this function should be called from a static context
     i.e.
-    State.setState("game")
+    state.setState("game")
 ]]
-function State.setState(name_or_nil)
+function state.setState(name_or_nil)
     assertStringArg(name_or_nil)
     currentStateName = name_or_nil
 end
 
 
+state.State = State
 
 
-return State
+umg.expose("state", State)
+

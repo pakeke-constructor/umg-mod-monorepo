@@ -11,8 +11,6 @@ this means that modified clients can teleport anywhere on the screen
 
 local constants = require("shared.constants")
 
-local State = require("shared.state.state")
-
 
 local controlAdmin = {}
 
@@ -30,7 +28,7 @@ end
 
 local function filterPlayerPosition(sender, ent, x,y,z)
     z = z or 0
-    if State.getCurrentState() ~= "game" then
+    if state.getCurrentState() ~= "game" then
         return false -- game is probably paused
         -- TODO: This is kinda hacky and shitty
     end
@@ -57,7 +55,7 @@ end
 
 
 local function filterPlayerVelocity(sender, ent, vx,vy,vz)
-    if State.getCurrentState() ~= "game" then
+    if state.getCurrentState() ~= "game" then
         return false -- game is probably paused
         -- TODO: This is kinda hacky and shitty
     end

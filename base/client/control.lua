@@ -12,7 +12,6 @@ local control = {}
 
 local operators = require("shared.operators")
 local input = require("client.input")
-local State = require("shared.state.state")
 
 
 local controllableGroup = umg.group("controllable", "controller", "x", "y")
@@ -41,7 +40,7 @@ end
 
 
 function listener:keypressed(key, scancode, isrepeat)
-    if State.getCurrentState() ~= "game" then
+    if state.getCurrentState() ~= "game" then
         return
     end
 
@@ -67,7 +66,7 @@ end
 
 
 function listener:mousepressed(button, x, y)
-    if State.getCurrentState() ~= "game" then
+    if state.getCurrentState() ~= "game" then
         return
     end
 
@@ -165,7 +164,7 @@ end
       if it thinks we are cheating!!!)
 ]]
 umg.on("@tick", function(dt)
-    if State.getCurrentState() ~= "game" then
+    if state.getCurrentState() ~= "game" then
         return
     end
 

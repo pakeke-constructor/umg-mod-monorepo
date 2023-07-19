@@ -64,14 +64,20 @@ handles damage modifiers.
 `physics` mod
 
 
+
+
+
 TODO:
 
 Where should `onClick` component go?
 
 where should `lookX`, `lookY` components go?
 
+
 Where should `initializers` go?
-Do we even need this file....?
+TODO: We should delete `initializers`, and replace it with 
+the `@entityInit` stuff.
+
 
 Where should `operators` go? Should we even keep this?
 
