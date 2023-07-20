@@ -1,6 +1,4 @@
 
-local getQuadOffsets = require("client.image_helpers.quad_offsets")
-
 
 local sin = math.sin
 
@@ -37,7 +35,7 @@ end
 
 umg.answer("getOffsetX", function(ent)
     if ent.swaying then
-        local ox, _oy = getQuadOffsets(ent.image)
+        local ox, _oy = rendering.getImageOffsets(ent.image)
         local quad_width = ox * 2
         local sway_factor = getSwayFactor(ent)
         return quad_width * sway_factor

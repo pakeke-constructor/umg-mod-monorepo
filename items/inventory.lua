@@ -107,10 +107,6 @@ end
 
 
 local floor = math.floor
-local getUIScale
-if client then
-    getUIScale = base.client.getUIScale
-end
 
 
 
@@ -639,7 +635,7 @@ Read at your own risk!  :-)
 function Inventory:withinBounds(mouse_x, mouse_y)
     -- returns true/false, depending on whether mouse_x or mouse_y is
     -- within the inventory interface
-    local ui_scale = getUIScale()
+    local ui_scale = rendering.getUIScale()
     local mx, my = mouse_x / ui_scale, mouse_y / ui_scale
     local x,y,w,h = self:getDrawBounds()
     local x_valid = (x <= mx) and (mx <= x+w)
@@ -649,7 +645,7 @@ end
 
 
 function Inventory:getSlot(mouse_x, mouse_y)
-    local ui_scale = getUIScale()
+    local ui_scale = rendering.getUIScale()
     local x, y = mouse_x / ui_scale, mouse_y / ui_scale
     local norm_x = x - self.draw_x 
     local norm_y = y - self.draw_y
@@ -712,7 +708,7 @@ local function updateInventoryUI(self)
         local ent_id = ent.id
         local windowName = "inventory:" .. tostring(ent_id) .. "_" .. tostring(i)
         -- we must generate a unique string identifier due to Slab
-        local scale = Slab.GetScale() / getUIScale()
+        local scale = Slab.GetScale() / rendering.getUIScale()
         local winX = (self.draw_x + (ui.x-1) * self.totalSlotSize) / scale
         local winY = (self.draw_y + (ui.y-1) * self.totalSlotSize) / scale
         local winWidth = (self.totalSlotSize * ui.width) / scale
@@ -857,7 +853,7 @@ end
 function Inventory:withinExitButtonBounds(mouse_x, mouse_y)
     -- returns true/false, depending on whether mouse_x or mouse_y is
     -- within the exit button region
-    local ui_scale = getUIScale()
+    local ui_scale = rendering.getUIScale()
     local mx, my = mouse_x / ui_scale, mouse_y / ui_scale
     local x,y,w,h = getExitButtonBounds(self)
     local x_valid = (x <= mx) and (mx <= x+w)
@@ -980,7 +976,7 @@ function Inventory:drawHoverWidget(x, y)
     local item = self:get(x, y)
     if not umg.exists(item) then return end
     local mx, my = love.mouse.getPosition()
-    local ui_scale = getUIScale()
+    local ui_scale = rendering.getUIScale()
     mx, my = mx / ui_scale, my / ui_scale
     love.graphics.push("all")
     love.graphics.setLineWidth(3)

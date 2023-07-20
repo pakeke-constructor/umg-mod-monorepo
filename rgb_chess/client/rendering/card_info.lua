@@ -88,8 +88,8 @@ umg.on("preDrawUI", function()
         love.graphics.setColor(1,1,1,0.3)
         love.graphics.setLineWidth(5)
        
-        local x, y = rendering.toScreenCoords(entBeingHovered.x, base.client.getDrawY(entBeingHovered.y, entBeingHovered.z))
-        local scale = base.client.getUIScale()
+        local x, y = rendering.toScreenCoords(entBeingHovered.x, rendering.getDrawY(entBeingHovered.y, entBeingHovered.z))
+        local scale = rendering.getUIScale()
  
         local circle_size = 3 * (2 + math.sin(base.getGameTime() * 3))
         love.graphics.circle("line", x/scale, y/scale, circle_size)

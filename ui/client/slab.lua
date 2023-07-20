@@ -65,7 +65,7 @@ local SLAB_SCALE_RATIO = 1/3
 
 function listener:update(dt)
     Slab.Update(dt)
-    Slab.SetScale(base.client.getUIScale() * SLAB_SCALE_RATIO)
+    Slab.SetScale(rendering.getUIScale() * SLAB_SCALE_RATIO)
     Slab.DisableDocks(docks)
 
     umg.call("slabUpdate", self)

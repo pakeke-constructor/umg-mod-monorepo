@@ -31,7 +31,7 @@ umg.on("drawEntity", function(ent)
         
         love.graphics.push("all")
     
-        local y = base.client.getDrawY(ent.y,ent.z)
+        local y = rendering.getDrawY(ent.y,ent.z)
 
         local color = text.color or ent.color or WHITE
 

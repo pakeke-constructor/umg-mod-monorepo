@@ -327,7 +327,7 @@ end
 function listener:mousemoved(mx,my, dx, dy)
     -- used for dragging inventories around
     if dragging_inv then
-        local ui_scale = base.client.getUIScale()
+        local ui_scale = rendering.getUIScale()
         dx, dy = dx / ui_scale, dy / ui_scale
         dragging_inv.draw_x = dragging_inv.draw_x + dx
         dragging_inv.draw_y = dragging_inv.draw_y + dy

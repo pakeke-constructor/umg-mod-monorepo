@@ -1,6 +1,4 @@
 
-local getQuadOffsets = require("client.image_helpers.quad_offsets")
-
 
 local sin = math.sin
 
@@ -36,7 +34,7 @@ end
 
 umg.answer("getOffsetY", function(ent)
     if ent.bobbing then
-        local _ox, oy = getQuadOffsets(ent.image)
+        local _ox, oy = rendering.getQuadOffsets(ent.image)
         local quad_height = oy * 2 -- as defined by quad_offsets.lua
         local bob_factor = getBobFactor(ent)
         return quad_height * bob_factor

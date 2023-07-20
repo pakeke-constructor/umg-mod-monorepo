@@ -1,5 +1,4 @@
 
-local getQuadOffsets = require("client.helpers.quad_offsets")
 
 local drawEntities = require("client.draw_entities")
 local drawImage = require("client.helpers.draw_image")
@@ -11,19 +10,19 @@ local getDrawY = drawEntities.getDrawY
 local images = client.assets.images
 
 
-local entityStats = require("client.helpers.draw_stats")
+local drawStats = require("client.helpers.draw_stats")
 
-local getOffsetX = entityStats.getOffsetX
-local getOffsetY = entityStats.getOffsetY
+local getOffsetX = drawStats.getOffsetX
+local getOffsetY = drawStats.getOffsetY
 
-local getRotation = entityStats.getRotation
+local getRotation = drawStats.getRotation
 
-local getScale = entityStats.getScale
-local getScaleX = entityStats.getScaleX
-local getScaleY = entityStats.getScaleY
+local getScale = drawStats.getScale
+local getScaleX = drawStats.getScaleX
+local getScaleY = drawStats.getScaleY
 
-local getShearX = entityStats.getShearX
-local getShearY = entityStats.getShearY
+local getShearX = drawStats.getShearX
+local getShearY = drawStats.getShearY
 
 
 

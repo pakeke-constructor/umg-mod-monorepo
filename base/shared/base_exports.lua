@@ -21,6 +21,8 @@ local function loadClientRendering(base)
     base.client.isHovered = require("client.mouse_hover")
     
     base.client.getUIScale = draw.getUIScale
+
+    -- TODO: Are these functions used?
     base.client.setUIScale = draw.setUIScale
     base.client.getUIMousePosition = draw.getUIMousePosition
 
@@ -35,6 +37,8 @@ local function loadClientRendering(base)
     base.client.drawStats = require("client.image_helpers.draw_stats")
 
     base.client.getQuadOffsets = require("client.image_helpers.quad_offsets");
+    -- ^^^ This has been renamed to `getImageOffsets`
+
     base.client.drawImage = require("client.image_helpers.draw_image");
 
     base.client.animate = animate.animate;
