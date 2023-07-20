@@ -9,7 +9,7 @@ Will emit draw calls based on position, and in correct order.
 local camera = require("client.camera")
 
 local constants = require("shared.constants")
-local sort = require("_libs.sort")
+local sort = require("libs.sort")
 
 local drawStats = require("client.image_helpers.draw_stats")
 

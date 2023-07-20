@@ -1,4 +1,8 @@
 
+--[[
+    global camera instance.
+]]
+
 
 local constants = require("shared.constants")
 local newCamera = require("libs.camera") -- HUMP Camera for love2d.

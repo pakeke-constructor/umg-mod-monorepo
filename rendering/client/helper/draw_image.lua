@@ -1,5 +1,5 @@
 
-local getQuadOffset = require("client.image_helpers.quad_offsets")
+local getQuadOffset = require("client.helper.quad_offsets")
 local images = client.assets.images
 
 
