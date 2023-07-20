@@ -10,21 +10,14 @@ local defineExports = require("shared.define_exports")
 
 
 
-local function loadClient(base)
-    base.client = {}
-
+local function loadClientRendering(base)
     local draw = require("client.draw")
     local drawEntities = require("client.draw_entities")
-    local shockwave = require("client.shockwaves")
-    local sound = require("client.sound")
     local animate = require("client.animate")
     local camera = require("client.camera")
-    local control = require("client.control")
     
     base.client.camera = camera;
 
-    base.client.control = control -- TODO: Should we remove this API? It's kinda weird.
-    
     base.client.isHovered = require("client.mouse_hover")
     
     base.client.getUIScale = draw.getUIScale
@@ -43,21 +36,32 @@ local function loadClient(base)
 
     base.client.getQuadOffsets = require("client.image_helpers.quad_offsets");
     base.client.drawImage = require("client.image_helpers.draw_image");
-    
-    base.client.groundTexture = require("client.ground_texture")
 
     base.client.animate = animate.animate;
     base.client.animateEntity = animate.animateEntity;
+end
 
+
+local function loadClient(base)
+    base.client = {}
+
+    loadClientRendering()
+
+    base.client.groundTexture = require("client.ground_texture")
+
+
+    local control = require("client.control")
+    base.client.control = control -- TODO: Should we remove this API? It's kinda weird.
+    -- (actually, its doing nothing)
+
+    local shockwave = require("client.shockwaves")
     base.client.shockwave = shockwave;
 
     base.client.particles = require("client.particles");
 
-    base.client.Color = require("client.color")
-
     base.client.popups = require("client.popups")
 
-    base.client.sound = sound
+    base.client.sound = require("client.sound")
 
     base.client.title = require("client.title");
 end

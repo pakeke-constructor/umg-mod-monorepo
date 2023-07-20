@@ -2,7 +2,6 @@
 
 local DEFAULT = "UNNAMED"
 
-local quadOffsets = require("client.image_helpers.quad_offsets")
 local images = client.assets.images
 
 local font = love.graphics.getFont()
@@ -25,7 +24,7 @@ local EXTRA_OY = 10
 
 umg.on("drawEntity", function(ent)
     if ent.nametag then
-        local ox, oy = quadOffsets(images[ent.image])
+        local ox, oy = rendering.quadOffsets(images[ent.image])
         local text = ent.nametag.value or ent.controller or DEFAULT
 
         local width = text_to_width[text] or font:getWidth(text)
@@ -38,7 +37,7 @@ umg.on("drawEntity", function(ent)
         
         love.graphics.setColor(0.2,0.2,0.2, 0.5)
 
-        local y = base.client.getDrawY(ent.y,ent.z)
+        local y = rendering.getDrawY(ent.y,ent.z)
 
         love.graphics.rectangle(
             "fill", 

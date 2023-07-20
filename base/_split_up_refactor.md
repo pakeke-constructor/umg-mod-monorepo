@@ -70,11 +70,15 @@ handles damage modifiers.
 
 
 
+
 TODO:
 
 Where should `onClick` component go?
 Where should mouse_hover (`isHovered` func) go?
-(both these mods need `input` and `rendering` mod)
+(both these things need `input` and `rendering` mod)
+
+SOLUTION: keep it in the `base` mod for now.
+
 
 
 

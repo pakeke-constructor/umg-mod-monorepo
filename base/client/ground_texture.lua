@@ -1,10 +1,5 @@
 
 
-local camera = require("client.camera")
-local drawImage = require("client.image_helpers.draw_image")
-
-
-
 
 local groundTileWidth, groundTileHeight
 local groundTiles;
@@ -62,6 +57,7 @@ umg.on("drawGround", function()
     if groundTiles then
         local w,h = love.graphics.getDimensions()
 
+        local camera = rendering.getCamera()
         local start_x, start_y = camera:toWorldCoords(0,0)
         local endx, endy = camera:toWorldCoords(w,h)
 
@@ -82,7 +78,7 @@ umg.on("drawGround", function()
                 local tile = groundTiles[index]
                 local drawx = math.floor(normx * tw)
                 local drawy = math.floor(normy * th)
-                drawImage(tile, drawx, drawy)
+                rendering.drawImage(tile, drawx, drawy)
             end
         end
     end

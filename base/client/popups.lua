@@ -1,7 +1,6 @@
 
-local Color = require("client.color")
+
 local getGameTime = require("shared.get_game_time")
-local drawImage = require("client.image_helpers.draw_image")
 
 
 
@@ -31,7 +30,7 @@ function popups.image(image, x, y, options)
 
     local obj = {}
     options = options or {}
-    obj.color = options.color or Color.WHITE
+    obj.color = options.color or objects.Color.WHITE
     obj.fade = options.fade or DEFAULT_FADE_TIME
     obj.duration = options.duration or DEFAULT_POPUP_DURATION
     obj.rotation = options.rotation or 0
@@ -71,7 +70,7 @@ function popups.text(text, x, y, options)
     
     local obj = {}
     options = options or {}
-    obj.color = options.color or Color.WHITE
+    obj.color = options.color or objects.Color.WHITE
     obj.fadeTime = options.fadeTime or DEFAULT_FADE_TIME
     obj.duration = options.duration or DEFAULT_POPUP_DURATION
 
@@ -80,7 +79,7 @@ function popups.text(text, x, y, options)
     obj.backdropColor = options.backdropColor or nil
 
     obj.outline = options.outline
-    obj.outlineColor = options.outlineColor or Color.BLACK
+    obj.outlineColor = options.outlineColor or objects.Color.BLACK
 
     obj.rotation = options.rotation or 0
     obj.rotationSpeed = options.rotationSpeed or 0
@@ -172,7 +171,7 @@ local function drawImageObj(imageObj)
 
     local col = imageObj.color
     love.graphics.setColor(col.r, col.g, col.b, a)
-    drawImage(imageObj.image, x, y, rot, sx, sy) 
+    rendering.drawImage(imageObj.image, x, y, rot, sx, sy) 
 end
 
 

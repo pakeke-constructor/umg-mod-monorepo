@@ -1,5 +1,4 @@
 
-local getQuadOffsets = require("client.image_helpers.quad_offsets")
 
 local abs = math.abs
 
@@ -13,7 +12,7 @@ local function isHovered(ent)
 
     if ent.image then
         -- check image dimensions
-        local ox,oy = getQuadOffsets(ent.image)
+        local ox,oy = rendering.getQuadOffsets(ent.image)
         local sc = ent.scale or 1
         local sx, sy = (ent.scaleX or 1) * sc, (ent.scaleY or 1) * sc
 

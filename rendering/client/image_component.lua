@@ -1,8 +1,8 @@
 
-local getQuadOffsets = require("client.image_helpers.quad_offsets")
+local getQuadOffsets = require("client.helpers.quad_offsets")
 
 local drawEntities = require("client.draw_entities")
-local drawImage = require("client.image_helpers.draw_image")
+local drawImage = require("client.helpers.draw_image")
 
 
 local getDrawY = drawEntities.getDrawY
@@ -11,7 +11,7 @@ local getDrawY = drawEntities.getDrawY
 local images = client.assets.images
 
 
-local entityStats = require("client.image_helpers.draw_stats")
+local entityStats = require("client.helpers.draw_stats")
 
 local getOffsetX = entityStats.getOffsetX
 local getOffsetY = entityStats.getOffsetY
