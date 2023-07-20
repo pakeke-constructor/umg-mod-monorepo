@@ -59,7 +59,7 @@ end)
 
 
 
-local listener = base.client.input.Listener({priority = 2})
+local listener = input.Listener({priority = 2})
 
 function listener:keypressed(key, scancode, isrepeat)
     if scancode == "q" then

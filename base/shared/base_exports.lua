@@ -18,13 +18,11 @@ local function loadClient(base)
     local shockwave = require("client.shockwaves")
     local sound = require("client.sound")
     local animate = require("client.animate")
-    local input = require("client.input")
     local camera = require("client.camera")
     local control = require("client.control")
     
     base.client.camera = camera;
 
-    base.client.input = input
     base.client.control = control -- TODO: Should we remove this API? It's kinda weird.
     
     base.client.isHovered = require("client.mouse_hover")

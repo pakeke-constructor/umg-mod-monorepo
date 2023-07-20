@@ -142,11 +142,10 @@ end)
 
 
 
-local listener = base.client.input.Listener({priority = 1})
+local listener = input.Listener({priority = 1})
 
 
 local CAMERA_SPEED = 800
-local input = base.client.input
 
 local function moveCamera(dt)
     local dx = 0

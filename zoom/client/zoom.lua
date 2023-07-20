@@ -36,7 +36,7 @@ end
 
 
 
-local listener = base.client.input.Listener({priority = 0})
+local listener = input.Listener({priority = 0})
 
 
 function listener:wheelmoved(dx,dy)
@@ -95,8 +95,6 @@ end
 local CAMERA_PAN_ACTIVE = false
 
 
-
-local input = base.client.input
 
 
 function listener:keypressed(key, scancode, isrepeat)

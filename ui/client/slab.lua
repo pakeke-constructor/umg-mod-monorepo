@@ -28,7 +28,7 @@ local docks = {
 
 
 
-local listener = base.client.input.Listener({priority = 100})
+local listener = input.Listener({priority = 100})
 
 
 function listener:keypressed(key, scancode, isrepeat)

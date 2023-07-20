@@ -11,7 +11,6 @@ local control = {}
 
 
 local operators = require("shared.operators")
-local input = require("client.input")
 
 
 local controllableGroup = umg.group("controllable", "controller", "x", "y")

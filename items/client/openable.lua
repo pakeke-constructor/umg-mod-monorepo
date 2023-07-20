@@ -70,7 +70,7 @@ end
 
 
 
-local listener = base.client.input.Listener({priority = 2})
+local listener = input.Listener({priority = 2})
 
 
 function listener:mousepressed(mx, my, button)
@@ -140,7 +140,7 @@ end
 function listener:keypressed(key, scancode, isrepeat)
     local inputEnum = self:getInputEnum(scancode)
     -- TODO: Allow for controls to be set
-    if inputEnum == base.client.input.BUTTON_2 then
+    if inputEnum == input.BUTTON_2 then
         if areMostInventoriesOpen() then
             -- most player inventories are open, close all inventories
             closeAllInventories()

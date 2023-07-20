@@ -1,5 +1,4 @@
 
-local input = require("client.input")
 local isHovered = require("client.mouse_hover")
 
 local clickEnts = umg.group("x", "y", "onClick")
