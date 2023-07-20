@@ -2,11 +2,12 @@
 local draw = {}
 
 
-local camera = require("client.camera")
-local constants = require("shared.constants")
+local currentCamera = require("client.current_camera")
+local constants = require("client.constants")
 
 
 umg.on("drawWorld", function()
+    local camera = currentCamera.getCamera()
     camera:draw()
     camera:attach()
 

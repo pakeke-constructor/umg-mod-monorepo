@@ -1,7 +1,9 @@
 
 --[[
-    global camera instance.
+    currnet camera module.
 ]]
+
+local currentCamera = {}
 
 
 local constants = require("shared.constants")
@@ -9,6 +11,21 @@ local newCamera = require("libs.camera") -- HUMP Camera for love2d.
 
 local DEFAULT_ZOOM = constants.DEFAULT_ZOOM
 
-local camera = newCamera(0, 0, nil, nil, DEFAULT_ZOOM, 0)
+local default_cam = newCamera(0, 0, nil, nil, DEFAULT_ZOOM, 0)
 
-return camera
+
+function currentCamera.getCamera()
+    --[[
+        TODO: we may want to override this function in the
+        future, to allow for hotswapping cameras and stuff.
+    ]]
+    return default_cam
+end
+
+
+-- TODO:
+-- create a `setCamera()` function or something...? idk
+
+
+
+return currentCamera

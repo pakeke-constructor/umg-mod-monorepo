@@ -9,17 +9,11 @@ local draw = require("client.draw")
 local drawEntities = require("client.draw_entities")
 
 
-local camera_instance = require("client.current_camera")
+local currentCamera = require("client.current_camera")
 
 
 
-function rendering.getCamera()
-    --[[
-        TODO: we may want to override this function in the
-        future, to allow for hotswapping cameras and stuff.
-    ]]
-    return camera_instance
-end
+rendering.getCamera = currentCamera.getCamera
 
 
 rendering.getUIScale = draw.getUIScale

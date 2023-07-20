@@ -6,12 +6,12 @@ Will emit draw calls based on position, and in correct order.
 
 ]]
 
-local camera = require("client.current_camera")
+local currentCamera = require("client.current_camera")
 
-local constants = require("shared.constants")
+local constants = require("client.constants")
 local sort = require("libs.sort")
 
-local drawStats = require("client.image_helpers.draw_stats")
+local drawStats = require("client.helpers.draw_stats")
 
 local operators = require("shared.operators")
 
@@ -102,6 +102,7 @@ local function entIsOnScreen(ent, leighway)
         of "leighway" we can give each object before it's counted as offscreen
     ]]
     leighway = leighway or DEFAULT_LEIGHWAY
+    local camera = currentCamera.getCamera()
     local w,h = screenWidth, screenHeight
     local screen_y = getDrawY(ent.y, ent.z)
     local x, y = camera:toCameraCoords(ent.x, screen_y)
@@ -121,6 +122,7 @@ local function isOnScreen(x, y, leighway)
         Assumes z = 0
     ]]
     local w,h = screenWidth, screenHeight
+    local camera = currentCamera.getCamera()
     leighway = leighway or DEFAULT_LEIGHWAY
     w, h = w or love.graphics.getWidth(), h or love.graphics.getHeight()
     x, y = camera:toCameraCoords(x, y)
@@ -134,11 +136,13 @@ end
 local CAMERA_DEPTH_LEIGHWAY = 600
 
 local function cameraTopDepth()
+    local camera = currentCamera.getCamera()
     local _, y = camera:toWorldCoords(0,-CAMERA_DEPTH_LEIGHWAY)
     return getDrawDepth(y - CAMERA_DEPTH_LEIGHWAY, 0)
 end
 
 local function cameraBotDepth()
+    local camera = currentCamera.getCamera()
     local _, y = camera:toWorldCoords(0,love.graphics.getHeight() + CAMERA_DEPTH_LEIGHWAY)
     return getDrawDepth(y + CAMERA_DEPTH_LEIGHWAY, 0)
 end
@@ -189,6 +193,7 @@ end
 
 umg.on("@resize", function()
     local w,h = love.graphics.getDimensions()
+    local camera = currentCamera.getCamera()
     camera.w = w
     camera.h = h
 end)
@@ -227,6 +232,7 @@ local function update()
 
     sort.stable_sort(sortedMoveEnts, less)
     sortFrozenEnts()
+    local camera = currentCamera.getCamera()
     camera:update()
 end
 
@@ -356,8 +362,6 @@ end)
 
 
 return {
-    camera = camera;
-
     getDrawY = getDrawY;
     getDrawDepth = getDrawDepth;
     getEntityDrawDepth = getEntityDrawDepth;
