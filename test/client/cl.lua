@@ -64,7 +64,7 @@ local listener = input.Listener({priority = 2})
 function listener:keypressed(key, scancode, isrepeat)
     if scancode == "q" then
         local e = base.getPlayer()
-        local x, y = base.client.camera:getMousePosition()
+        local x, y = rendering.getMousePositionInWorld()
         base.client.particles.emit("smoke", e.x, e.y, 8, 10, {0.2,0.8,0.9})
         e.x = x
         e.y = y
@@ -92,10 +92,10 @@ function listener:mousepressed(x, y, button, istouch, presses)
         for _, p in ipairs(controlInventoryGroup) do
             items.useHoldItem(p)
         end
-        local wx,wy = base.client.camera:toWorldCoords(x,y)
+        local wx,wy = rendering.toWorldCoords(x,y)
         base.client.popups.text("Hello", wx, wy)
     elseif button == 2 then
-        local wx,wy = base.client.camera:toWorldCoords(x,y)
+        local wx,wy = rendering.toWorldCoords(x,y)
         client.send("spawn",wx,wy)
     end
 end

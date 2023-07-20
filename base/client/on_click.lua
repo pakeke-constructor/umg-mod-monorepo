@@ -15,7 +15,7 @@ local listener = input.Listener({priority = 0})
 function listener:mousepressed(mx, my, button, istouch, presses)
     -- TODO: This is kinda trash.
     -- this needs to be spatial partitioned probably.
-    local worldX, worldY = base.client.camera:toWorldCoords(mx, my)
+    local worldX, worldY = rendering.toWorldCoords(mx, my)
 
     local bestDist = math.huge
     local bestEnt = nil

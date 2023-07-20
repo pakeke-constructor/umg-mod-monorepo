@@ -8,7 +8,7 @@ local MAX_ZOOM = 10
 local MIN_ZOOM = 0.1
 
 
-local camera = base.client.camera
+local camera = rendering.camera
 
 local zoom = {}
 

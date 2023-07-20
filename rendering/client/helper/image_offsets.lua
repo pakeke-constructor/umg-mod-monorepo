@@ -31,14 +31,16 @@ quad_to_oy = setmetatable({}, {
 })
 
 
-return function(quad_or_name)
+local function getImageOffsets(quad_or_name)
     local quad = quad_or_name
     if type(quad_or_name) == "string" then
         quad = client.assets.images[quad_or_name]
     end
-    assert(quad, "base.client.getQuadOffsets(quad) expects a valid quad (or name) as 1st arg")
+    assert(quad, "getImageOffsets(quad) expects a valid quad (or name) as 1st arg")
     local ox = quad_to_ox[quad]
     local oy = quad_to_oy[quad]
     return ox, oy
 end
 
+
+return getImageOffsets

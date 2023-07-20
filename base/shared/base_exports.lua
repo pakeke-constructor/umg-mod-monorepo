@@ -94,6 +94,8 @@ local function loadServer(base)
     local controlAdmin = require("server.control_admin")
     
     base.server = {}
+    
+    -- TODO: move to `mortality` mod
     base.server.kill = require("shared.death")
     base.server.forceSetPlayerPosition = controlAdmin.forceSetPlayerPosition 
 end

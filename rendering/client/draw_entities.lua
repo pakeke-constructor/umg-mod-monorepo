@@ -6,7 +6,7 @@ Will emit draw calls based on position, and in correct order.
 
 ]]
 
-local camera = require("client.camera")
+local camera = require("client.current_camera")
 
 local constants = require("shared.constants")
 local sort = require("libs.sort")

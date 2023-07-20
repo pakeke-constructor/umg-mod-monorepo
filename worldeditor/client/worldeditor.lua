@@ -132,7 +132,7 @@ umg.on("postDrawWorld", function()
         local tinfo = we.getCurrentToolInfo()
         if tinfo and tinfo.tool and tinfo.tool.draw then
             local tool = tinfo.tool
-            local x, y = base.client.camera:getMousePosition()
+            local x, y = rendering.getMousePositionInWorld()
             tool:draw(x,y)
         end
         love.graphics.pop()
@@ -150,7 +150,7 @@ local CAMERA_SPEED = 800
 local function moveCamera(dt)
     local dx = 0
     local dy = 0
-    local delta = CAMERA_SPEED * dt / base.client.camera.scale
+    local delta = CAMERA_SPEED * dt / rendering.camera.scale
 
     if listener:isControlDown(input.UP) then
         dy = dy - delta
@@ -165,8 +165,8 @@ local function moveCamera(dt)
         dx = dx + delta
     end
 
-    local x,y = base.client.camera.x + dx, base.client.camera.y + dy
-    base.client.camera:follow(x,y)
+    local x,y = rendering.camera.x + dx, rendering.camera.y + dy
+    rendering.camera:follow(x,y)
 end
 
 
@@ -186,7 +186,7 @@ end)
 
 local function applyTool(toolInfo)
     if (not DONE_THIS_TICK) then
-        local worldX, worldY = base.client.camera:getMousePosition()
+        local worldX, worldY = rendering.getMousePositionInWorld()
         ensureServerKnowsTool(toolInfo)
         client.send("worldeditorSetTool", toolInfo.name)
         client.send("worldeditorUseTool", toolInfo.name, worldX, worldY, BUTTON_1)

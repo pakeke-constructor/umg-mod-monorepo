@@ -11,5 +11,4 @@ local DEFAULT_ZOOM = constants.DEFAULT_ZOOM
 
 local camera = newCamera(0, 0, nil, nil, DEFAULT_ZOOM, 0)
 
-
 return camera
