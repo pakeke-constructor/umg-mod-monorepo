@@ -127,7 +127,9 @@ end
 
 
 
-local Listener = objects.Class("base:Listener")
+
+local Listener = objects.Class("input:Listener")
+
 input.Listener = Listener
 
 local DEFAULT_LISTENER_PRIORITY = 0
