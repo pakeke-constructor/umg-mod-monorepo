@@ -28,6 +28,11 @@ local m_max, m_min, m_abs, m_floor, m_sqrt = math.max, math.min, math.abs, math.
 local color = {}
 setmetatable(color, color)
 
+-- OLI monkeypatch
+umg.register("objects:Color", color)
+
+
+
 -- https://docs.microsoft.com/en-us/dotnet/api/system.drawing.color?view=net-5.0
 local predefined_colors = {
     BLACK = 0xFF000000, WHITE = 0xFFFFFFFF, RED = 0xFFFF0000, GREEN = 0xFF00FF00, BLUE = 0xFF0000FF, YELLOW = 0xFFFFFF00, GRAY = 0xFF808080,

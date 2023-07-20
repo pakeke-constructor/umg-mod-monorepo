@@ -34,5 +34,9 @@ globals:
     any: true
   objects:
     any: true
+  input:
+    any: true
+  state:
+    any: true
 
 

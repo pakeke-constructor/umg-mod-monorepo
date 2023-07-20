@@ -27,6 +27,7 @@ end)
 
 
 -- Oli's personal screen width and height (used in fudgeUIScale)
+-- todo: this is dumb
 local OLI_WIDTH, OLI_HEIGHT = 1536, 793
 local OLI_DISPLAY_SIZE = math.sqrt(OLI_WIDTH^2 + OLI_HEIGHT^2)
 
