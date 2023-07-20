@@ -150,7 +150,8 @@ local CAMERA_SPEED = 800
 local function moveCamera(dt)
     local dx = 0
     local dy = 0
-    local delta = CAMERA_SPEED * dt / rendering.camera.scale
+    local camera = rendering.getCamera()
+    local delta = CAMERA_SPEED * dt / camera.scale
 
     if listener:isControlDown(input.UP) then
         dy = dy - delta
@@ -165,8 +166,8 @@ local function moveCamera(dt)
         dx = dx + delta
     end
 
-    local x,y = rendering.camera.x + dx, rendering.camera.y + dy
-    rendering.camera:follow(x,y)
+    local x,y = camera.x + dx, camera.y + dy
+    camera:follow(x,y)
 end
 
 

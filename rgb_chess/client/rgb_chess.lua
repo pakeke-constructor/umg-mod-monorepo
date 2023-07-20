@@ -8,7 +8,7 @@ require("shared.rgb")
 
 
 client.on("rgbEmplacePlayer",function(x,y,w,h)
-    rendering.camera:setBounds(x,y, w,h)
+    rendering.getCamera():setBounds(x,y, w,h)
 end)
 
 

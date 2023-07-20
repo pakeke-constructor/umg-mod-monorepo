@@ -8,7 +8,6 @@ local MAX_ZOOM = 10
 local MIN_ZOOM = 0.1
 
 
-local camera = rendering.camera
 
 local zoom = {}
 
@@ -26,10 +25,12 @@ function zoom.setZoomSpeed(speed)
 end
 
 function zoom.setZoom(zoomValue)
+    local camera = rendering.getCamera()
     camera.scale = math.max(MIN_ZOOM, math.min(MAX_ZOOM, zoomValue))
 end
 
 function zoom.getZoom()
+    local camera = rendering.getCamera()
     return camera.scale
 end
 
@@ -40,6 +41,7 @@ local listener = input.Listener({priority = 0})
 
 
 function listener:wheelmoved(dx,dy)
+    local camera = rendering.getCamera()
     local speed = zoom_speed or DEFAULT_ZOOM_SPEED
     if dy > 0 then
         camera.scale = camera.scale * (1+(1/speed))
@@ -57,7 +59,7 @@ end
 
 
 
-local last_camx, last_camy = camera.x or 0, camera.y or 0
+local last_camx, last_camy = 0, 0
 
 
 
@@ -71,6 +73,7 @@ local function moveCam(dt)
     local dx,dy = 0,0
     local x, y = love.mouse.getPosition()
     local w, h = love.graphics.getWidth(), love.graphics.getHeight()
+    local camera = rendering.getCamera()
     local speed = (DEFAULT_PAN_SPEED * dt) / camera.scale
 
     if x < MOUSE_PAN_THRESHOLD then
@@ -136,6 +139,7 @@ function listener:update(dt)
     if isCameraPanBlocked() then
         return
     end
+    local camera = rendering.getCamera()
 
     if CAMERA_PAN_ACTIVE then
         camera.x = last_camx
@@ -153,6 +157,7 @@ local MIDDLE_MOUSE_BUTTON = 3
 
 function listener:mousemoved(x,y,dx,dy)
     if CAMERA_PAN_ACTIVE and love.mouse.isDown(MIDDLE_MOUSE_BUTTON) then
+        local camera = rendering.getCamera()
         local wx1, wy1 = camera:toWorldCoords(x-dx,y-dy)
         local wx2, wy2 = camera:toWorldCoords(x,y)
         local wdx, wdy = wx2-wx1, wy1-wy2

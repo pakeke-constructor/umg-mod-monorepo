@@ -37,7 +37,8 @@ local DIAGONAL_SIZE = 80
 
 local function drawDiagonalBars()
     love.graphics.rotate(math.pi/4)
-    local cx, cy = rendering.camera.x, rendering.camera.y
+    local cam = rendering.getCamera()
+    local cx, cy = cam.x, cam.y
     local dy = (cy - cx) / math.sqrt(2) 
     for i=-50, 50 do
         love.graphics.rectangle(

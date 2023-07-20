@@ -18,7 +18,6 @@ color, set, array, heap, partition, enum, class
 animations
 draw
 camera
-hover (`isHovered` func)
 drawStats
 `isOnScreen`, `entIsOnScreen`
 
@@ -74,6 +73,8 @@ handles damage modifiers.
 TODO:
 
 Where should `onClick` component go?
+Where should mouse_hover (`isHovered` func) go?
+(both these mods need `input` and `rendering` mod)
 
 
 

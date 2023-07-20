@@ -4,16 +4,23 @@ local rendering = {}
 
 
 local animate = require("client.animate")
-local camera = require("client.current_camera")
 
 local draw = require("client.draw")
 local drawEntities = require("client.draw_entities")
 
 
-rendering.camera = camera;
+local camera_instance = require("client.current_camera")
 
 
-rendering.isHovered = require("client.mouse_hover")
+
+function rendering.getCamera()
+    --[[
+        TODO: we may want to override this function in the
+        future, to allow for hotswapping cameras and stuff.
+    ]]
+    return camera_instance
+end
+
 
 rendering.getUIScale = draw.getUIScale
 rendering.setUIScale = draw.setUIScale
@@ -36,17 +43,20 @@ rendering.drawImage = require("client.helpers.draw_image");
 
 
 function rendering.toScreenCoords(world_x, world_y)
-    return camera:toCameraCoords(world_x, world_y)
+    local cam = rendering.getCamera()
+    return cam:toCameraCoords(world_x, world_y)
 end
 
 
 function rendering.toWorldCoords(x,y)
-    return camera:toWorldCoords(x,y)
+    local cam = rendering.getCamera()
+    return cam:toWorldCoords(x,y)
 end
 
 
 function rendering.getMousePositionInWorld()
-    return camera:getMousePosition()
+    local cam = rendering.getCamera()
+    return cam:getMousePosition()
 end
 
 

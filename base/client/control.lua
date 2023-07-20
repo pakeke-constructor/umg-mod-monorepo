@@ -120,7 +120,7 @@ local function followAverage(sum_x, sum_y, len)
         avg_x = sum_x / len
         avg_y = sum_y / len
     end
-    rendering.camera:follow(avg_x, avg_y)
+    rendering.getCamera():follow(avg_x, avg_y)
 end
 
 
