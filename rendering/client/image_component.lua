@@ -10,19 +10,19 @@ local getDrawY = drawEntities.getDrawY
 local images = client.assets.images
 
 
-local drawStats = require("client.helpers.draw_stats")
+local entityProperties = require("client.helpers.entity_properties")
 
-local getOffsetX = drawStats.getOffsetX
-local getOffsetY = drawStats.getOffsetY
+local getOffsetX = entityProperties.getOffsetX
+local getOffsetY = entityProperties.getOffsetY
 
-local getRotation = drawStats.getRotation
+local getRotation = entityProperties.getRotation
 
-local getScale = drawStats.getScale
-local getScaleX = drawStats.getScaleX
-local getScaleY = drawStats.getScaleY
+local getScale = entityProperties.getScale
+local getScaleX = entityProperties.getScaleX
+local getScaleY = entityProperties.getScaleY
 
-local getShearX = drawStats.getShearX
-local getShearY = drawStats.getShearY
+local getShearX = entityProperties.getShearX
+local getShearY = entityProperties.getShearY
 
 
 

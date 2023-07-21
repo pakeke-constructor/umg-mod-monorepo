@@ -39,7 +39,9 @@ local function loadClientRendering(base)
     base.client.getDrawY = drawEntities.getDrawY;
     base.client.getDrawDepth = drawEntities.getDrawDepth;
 
+
     base.client.drawStats = require("client.image_helpers.draw_stats")
+    -- ^^^ this has been renamed to `getEntityProperties`
 
     base.client.getQuadOffsets = require("client.image_helpers.quad_offsets");
     -- ^^^ This has been renamed to `getImageOffsets`

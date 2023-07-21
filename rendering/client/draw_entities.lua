@@ -11,7 +11,7 @@ local currentCamera = require("client.current_camera")
 local constants = require("client.constants")
 local sort = require("libs.sort")
 
-local drawStats = require("client.helpers.draw_stats")
+local entityProperties = require("client.helpers.entity_properties")
 
 local operators = require("shared.operators")
 
@@ -244,7 +244,7 @@ local function isHidden(ent)
     return ent.hidden or umg.ask("isHidden", operators.OR, ent)
 end
 
-local getOpacity, getRed, getGreen, getBlue = drawStats.getOpacity, drawStats.getRed, drawStats.getGreen, drawStats.getBlue
+local getOpacity, getRed, getGreen, getBlue = entityProperties.getOpacity, entityProperties.getRed, entityProperties.getGreen, entityProperties.getBlue
 
 
 

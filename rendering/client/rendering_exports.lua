@@ -32,17 +32,8 @@ rendering.getDrawDepth = drawEntities.getDrawDepth;
 
 
 
---[[
-    TODO: 
-    Rename this. `drawStats` is terrible naming!!!
-    Perhaps we could just export the functions inside of drawStats
-    to the `rendering` table directly?
-    Or maybe change the name to `info`?
-    `rendering.info.getScaleX`..?
-    ^^^ I like this a lot more than "drawStats" tbh.
-]]
-local drawStats = require("client.helpers.draw_stats")
-rendering.drawStats = drawStats
+local entityProperties = require("client.helpers.entity_properties")
+rendering.entityProperties = entityProperties
 
 
 local imageSizes = require("client.helpers.image_offsets");
@@ -55,12 +46,19 @@ rendering.drawImage = require("client.helpers.draw_image");
 
 
 
-function rendering.getEntitySize(ent)
+function rendering.getEntityDisplaySize(ent)
     --[[
-        returns the dimensions of an entity
+        returns (roughly) the (width, height) of an entity
     ]]
-    local sx = drawStats.getScaleX(ent)
-    local sy = drawStats.getScaleY(ent)
+    local scale = entityProperties.getScale(ent)
+
+    local sx = entityProperties.getScaleX(ent) * scale
+    local sy = entityProperties.getScaleY(ent) * scale
+
+    assert(ent.image, "Entity had no image component!")
+    local size_x, size_y = rendering.getImageSize(ent)
+
+    return sx * size_x, sy * size_y
 end
 
 
