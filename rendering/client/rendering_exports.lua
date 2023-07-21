@@ -91,5 +91,7 @@ rendering.animate = animate.animate;
 rendering.animateEntity = animate.animateEntity;
 
 
+umg.expose("rendering", rendering)
+
 return rendering
 
