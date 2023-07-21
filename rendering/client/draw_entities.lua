@@ -13,8 +13,6 @@ local sort = require("libs.sort")
 
 local entityProperties = require("client.helpers.entity_properties")
 
-local operators = require("shared.operators")
-
 
 
 local drawGroup = umg.group("image", "x", "y")
@@ -241,7 +239,7 @@ end
 
 
 local function isHidden(ent)
-    return ent.hidden or umg.ask("isHidden", operators.OR, ent)
+    return ent.hidden or umg.ask("isHidden", reducers.OR, ent)
 end
 
 local getOpacity, getRed, getGreen, getBlue = entityProperties.getOpacity, entityProperties.getRed, entityProperties.getGreen, entityProperties.getBlue

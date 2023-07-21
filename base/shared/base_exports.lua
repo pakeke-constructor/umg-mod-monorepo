@@ -82,7 +82,6 @@ local function loadShared(base)
     base.gravity = require("shared.gravity");
 
     base.initializers = require("shared.initializers")
-    base.operators = require("shared.operators")
     
     base.getGameTime = require("shared.get_game_time")
     

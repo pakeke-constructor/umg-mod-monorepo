@@ -1,12 +1,11 @@
 
-local operators = require("shared.operators")
 
 
 local drawStats = {}
 
 
-local ADD = operators.ADD
-local MULT = operators.MULT
+local ADD = reducers.ADD
+local MULT = reducers.MULT
 
 
 

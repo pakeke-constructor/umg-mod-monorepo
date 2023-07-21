@@ -122,7 +122,7 @@ end
 
 
 local function isCameraPanBlocked()
-    local blocked = umg.ask("cameraPanBlocked", base.operators.OR)
+    local blocked = umg.ask("cameraPanBlocked", reducers.OR)
     return blocked
 end
 

@@ -117,10 +117,16 @@ local function hasItemWith(ent, func)
 end
 
 
+local function truthy()
+    return true
+end
+
+
+
 Filter({
     name = "hasItem",
     filter = function(_sourceEnt, targetEnt)
-        return hasItemWith(targetEnt, base.operators.TRUTHY)
+        return hasItemWith(targetEnt, truthy)
     end,
     description = "Target has an item"
 })

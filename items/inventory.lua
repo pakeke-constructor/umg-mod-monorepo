@@ -263,7 +263,7 @@ end
 
 
 
-local OR = base.operators.OR
+local OR = reducers.OR
 
 local hasRemoveAuthorityTc = typecheck.assert("entity", "number", "number")
 
@@ -506,9 +506,9 @@ function Inventory:canBeOpenedBy(ent)
     ]]
     assert(umg.exists(ent), "takes an entity as first argument. (Where the entity is the one opening the inventory)")
 
-    local canOpen = umg.ask("canOpenInventory", base.operators.OR, ent, self)
+    local canOpen = umg.ask("canOpenInventory", reducers.OR, ent, self)
     if canOpen then
-        local isLocked = umg.ask("isInventoryLocked", base.operators.OR, ent, self)
+        local isLocked = umg.ask("isInventoryLocked", reducers.OR, ent, self)
         if not isLocked then
             return true
         end

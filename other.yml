@@ -40,5 +40,7 @@ globals:
     any: true
   rendering:
     any: true
+  reducers:
+    any: true
 
 

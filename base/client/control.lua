@@ -10,9 +10,6 @@ local control = {}
 
 
 
-local operators = require("shared.operators")
-
-
 local controllableGroup = umg.group("controllable", "controller", "x", "y")
 
 
@@ -113,7 +110,7 @@ end
 
 
 local function shouldFollow()
-    local blocked = umg.ask("isCameraPlayerFollowBlocked", operators.OR)
+    local blocked = umg.ask("isCameraPlayerFollowBlocked", reducers.OR)
     return not blocked
 end
 

@@ -35,8 +35,7 @@ function itemUsageShared.canUseHoldItem(holder_ent, ...)
         return false
     end
 
-    local OR = base.operators.OR
-    local usageBlocked = umg.ask("itemUsageBlocked", OR, holder_ent, item)
+    local usageBlocked = umg.ask("itemUsageBlocked", reducers.OR, holder_ent, item)
     if usageBlocked then
         return false
     end
