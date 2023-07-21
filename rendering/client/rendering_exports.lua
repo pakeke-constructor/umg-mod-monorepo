@@ -21,8 +21,6 @@ rendering.setUIScale = draw.setUIScale
 
 
 
--- TODO: Is this function needed???
-rendering.getUIMousePosition = draw.getUIMousePosition
 
 
 
@@ -66,10 +64,15 @@ function rendering.toWorldCoords(x,y)
 end
 
 
-function rendering.getMousePositionInWorld()
+function rendering.getWorldMousePosition()
     local cam = rendering.getCamera()
     return cam:getMousePosition()
 end
+
+
+-- TODO: Is this function needed???
+rendering.getUIMousePosition = draw.getUIMousePosition
+
 
 
 rendering.animate = animate.animate;

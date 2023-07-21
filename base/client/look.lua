@@ -9,8 +9,6 @@ lookX and lookY
 
 local lookGroup = umg.group("controller", "lookAtMouse")
 
-local camera = require("client.camera")
-
 
 
 
@@ -29,7 +27,7 @@ umg.on("@tick", function()
     for _, ent in ipairs(lookGroup) do
         if ent.controller == client.getUsername() then
             if ent.lookAtMouse then
-                local lx, ly = camera:getMousePosition()
+                local lx, ly = rendering.getWorldMousePosition()
                 ent.lookX, ent.lookY = lx, ly
             else
                 ent.lookX, ent.lookY = nil, nil

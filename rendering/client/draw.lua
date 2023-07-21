@@ -8,12 +8,13 @@ local constants = require("client.constants")
 
 
 local function getCameraPosition()
-    local x = umg.ask("cameraPositionX")
-    local y = umg.ask("cameraPositionY")
+    local x = umg.ask("getCameraOffsetX")
+    local y = umg.ask("getCameraOffsetY")
     return x, y
 end
 
 draw.getCameraPosition = getCameraPosition
+
 
 
 

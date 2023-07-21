@@ -6,7 +6,7 @@ local DEFAULT_SIZE = 10
 
 
 local function isHovered(ent)
-    local mx, my = rendering.getMousePositionInWorld()
+    local mx, my = rendering.getWorldMousePosition()
     
     local dx, dy = abs(ent.x - mx), abs(ent.y - my)
 

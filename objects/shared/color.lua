@@ -29,7 +29,7 @@ local color = {}
 setmetatable(color, color)
 
 -- OLI monkeypatch
-umg.register("objects:Color", color)
+umg.register(color, "objects:Color")
 
 
 

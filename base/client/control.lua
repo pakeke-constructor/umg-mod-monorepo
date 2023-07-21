@@ -148,11 +148,11 @@ function listener:update(dt)
 end
 
 
-umg.answer("cameraOffsetX", function()
+umg.answer("getCameraOffsetX", function()
     return follow_x
 end)
 
-umg.answer("cameraOffsetY", function()
+umg.answer("getCameraOffsetY", function()
     return follow_y
 end)
 

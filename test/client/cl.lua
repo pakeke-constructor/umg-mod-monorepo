@@ -64,7 +64,7 @@ local listener = input.Listener({priority = 2})
 function listener:keypressed(key, scancode, isrepeat)
     if scancode == "q" then
         local e = base.getPlayer()
-        local x, y = rendering.getMousePositionInWorld()
+        local x, y = rendering.getWorldMousePosition()
         base.client.particles.emit("smoke", e.x, e.y, 8, 10, {0.2,0.8,0.9})
         e.x = x
         e.y = y
