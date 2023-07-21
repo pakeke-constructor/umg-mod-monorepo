@@ -61,6 +61,8 @@ end
 
 
 
+
+
 -- gets the "screen" Y from y and z position.
 local function getDrawY(y, z)
     return y - (z or 0)/2
@@ -232,9 +234,8 @@ local function update()
 
     sort.stable_sort(sortedMoveEnts, less)
     sortFrozenEnts()
-    local camera = currentCamera.getCamera()
-    camera:update()
 end
+
 
 
 
@@ -289,7 +290,6 @@ umg.on("drawEntities", function()
         and take the entity with the biggest screen Y.
     ]]
     update()
-    local w, h = love.graphics.getWidth(), love.graphics.getHeight()
     
     local draw_dep
     local draw_ent

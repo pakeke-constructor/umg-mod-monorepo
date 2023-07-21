@@ -6,9 +6,24 @@ local currentCamera = require("client.current_camera")
 local constants = require("client.constants")
 
 
+
+local function getCameraPosition()
+    local x = umg.ask("cameraPositionX")
+    local y = umg.ask("cameraPositionY")
+    return x, y
+end
+
+draw.getCameraPosition = getCameraPosition
+
+
+
+
 umg.on("drawWorld", function()
     local camera = currentCamera.getCamera()
-    camera:draw()
+
+    local x, y = getCameraPosition()
+    camera:follow(x, y)
+
     camera:attach()
 
     umg.call("preDrawWorld")
@@ -16,6 +31,8 @@ umg.on("drawWorld", function()
     umg.call("drawGround")
     umg.call("drawEntities")
     umg.call("drawEffects")
+
+    camera:draw()
 
     umg.call("postDrawWorld")
 

@@ -111,24 +111,16 @@ end
 
 
 
-local function followAverage(sum_x, sum_y, len)
-    --[[
-        follows the camera based on average positions
-    ]]
-    local avg_x, avg_y = 0, 0
-    if len > 0 then
-        avg_x = sum_x / len
-        avg_y = sum_y / len
-    end
-    rendering.getCamera():follow(avg_x, avg_y)
-end
-
-
 
 local function shouldFollow()
     local blocked = umg.ask("isCameraPlayerFollowBlocked", operators.OR)
     return not blocked
 end
+
+
+
+local follow_x = 0
+local follow_y = 0
 
 
 function listener:update(dt)
@@ -150,9 +142,21 @@ function listener:update(dt)
     end
 
     if has_follow and shouldFollow() then
-        followAverage(sum_x, sum_y, len)
+        follow_x = sum_x / len
+        follow_y = sum_y / len
     end
 end
+
+
+umg.answer("cameraOffsetX", function()
+    return follow_x
+end)
+
+umg.answer("cameraOffsetY", function()
+    return follow_y
+end)
+
+
 
 
 
