@@ -22,9 +22,6 @@ rendering.setUIScale = draw.setUIScale
 
 
 
-
-
-
 rendering.isOnScreen = drawEntities.isOnScreen
 rendering.entIsOnScreen = drawEntities.entIsOnScreen
 
@@ -44,12 +41,29 @@ rendering.getDrawDepth = drawEntities.getDrawDepth;
     `rendering.info.getScaleX`..?
     ^^^ I like this a lot more than "drawStats" tbh.
 ]]
-rendering.drawStats = require("client.helpers.draw_stats")
+local drawStats = require("client.helpers.draw_stats")
+rendering.drawStats = drawStats
 
 
-rendering.getImageOffsets = require("client.helpers.image_offsets");
+local imageSizes = require("client.helpers.image_offsets");
+rendering.getImageOffsets = imageSizes.getImageOffsets
+rendering.getImageSize = imageSizes.getImageSize
+
 
 rendering.drawImage = require("client.helpers.draw_image");
+
+
+
+
+function rendering.getEntitySize(ent)
+    --[[
+        returns the dimensions of an entity
+    ]]
+    local sx = drawStats.getScaleX(ent)
+    local sy = drawStats.getScaleY(ent)
+end
+
+
 
 
 function rendering.toScreenCoords(world_x, world_y)

@@ -9,6 +9,8 @@ Offsets in Y will always be     height_of_quad / 2
 
 ]]
 
+local imageSizes = {}
+
 
 local quad_to_ox
 quad_to_ox = setmetatable({}, {
@@ -31,16 +33,29 @@ quad_to_oy = setmetatable({}, {
 })
 
 
-local function getImageOffsets(quad_or_name)
+
+function imageSizes.getImageOffsets(quad_or_name)
     local quad = quad_or_name
     if type(quad_or_name) == "string" then
         quad = client.assets.images[quad_or_name]
     end
-    assert(quad, "getImageOffsets(quad) expects a valid quad (or name) as 1st arg")
+    if not quad then
+        error("Invalid or unknown image: ", quad_or_name)
+    end
     local ox = quad_to_ox[quad]
     local oy = quad_to_oy[quad]
     return ox, oy
 end
 
 
-return getImageOffsets
+local getImageOffsets = imageSizes.getImageOffsets
+
+function imageSizes.getImageSize(quad_or_name)
+    local ox, oy = getImageOffsets(quad_or_name)
+    return ox * 2, oy * 2
+end
+
+
+
+return imageSizes
+

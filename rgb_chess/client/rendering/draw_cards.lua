@@ -10,7 +10,7 @@ local function drawCard(cardEnt)
     if cardInfo.unitInfo then
         -- draw symbol
         love.graphics.setColor(0,0,0, constants.UNIT_SYMBOL_ALPHA)
-        base.client.drawImage(cardInfo.unitInfo.symbol, cardEnt.x, cardEnt.y + SYMBOL_Y_DELTA, 0,2,2)
+        rendering.drawImage(cardInfo.unitInfo.symbol, cardEnt.x, cardEnt.y + SYMBOL_Y_DELTA, 0,2,2)
     end
 end
 

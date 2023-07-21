@@ -679,7 +679,7 @@ function Inventory:drawItem(item_ent, x, y)
 
     local drawX, drawY = X + w/2, Y + w/2
     local scale = self.slotSize / w
-    base.client.drawImage(quad, drawX, drawY, 0, scale, scale)
+    rendering.drawImage(quad, drawX, drawY, 0, scale, scale)
 
     local holder_ent = self.owner
     umg.call("drawInventoryItem", holder_ent, item_ent, drawX, drawY, self.slotSize)

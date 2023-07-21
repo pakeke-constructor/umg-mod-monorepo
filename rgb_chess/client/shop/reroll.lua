@@ -9,7 +9,7 @@ end
 
 client.on("rerollCard", function(card_ent)
     -- play sound here!
-    base.client.animate(breakFrames, constants.REROLL_TIME, card_ent.x, card_ent.y, card_ent.z, card_ent.color)
+    rendering.animate(breakFrames, constants.REROLL_TIME, card_ent.x, card_ent.y, card_ent.z, card_ent.color)
 end)
 
 

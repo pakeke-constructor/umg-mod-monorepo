@@ -11,6 +11,11 @@ local defineExports = require("shared.define_exports")
 
 
 local function loadClientRendering(base)
+    --[[
+        
+        (all of this stuff has been exported to rendering mod)
+
+    ]]
     local draw = require("client.draw")
     local drawEntities = require("client.draw_entities")
     local animate = require("client.animate")
@@ -49,7 +54,7 @@ end
 local function loadClient(base)
     base.client = {}
 
-    loadClientRendering()
+    --loadClientRendering()
 
     base.client.groundTexture = require("client.ground_texture")
 
