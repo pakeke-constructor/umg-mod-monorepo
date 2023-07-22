@@ -31,6 +31,7 @@ local EMPTY = {}
 
 
 
+-- This is hacky! Oh well!!!! 
 local EVENT_PREFIX = "_sync_"
 
 
@@ -193,6 +194,11 @@ local function setupClientNumberLerp(compName, options)
 
     local lerpBuffer = {}
     compNameToLerpBuffer[compName] = lerpBuffer
+
+    group:onRemoved(function(ent)
+        -- ensure to clear lerp buffer when entities are removed
+        lerpBuffer[ent] = nil
+    end)
 
     umg.on("@update", function(dt)
         local time = love.timer.getTime()

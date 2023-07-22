@@ -20,6 +20,19 @@ sync.autoSyncComponent("x", {
 
 
 
+-- Automatically syncs component `lookX` bidirectionally from
+-- client --> server when the ent is being controlled by the client,
+-- and from server --> client when the ent is NOT being controlled.
+sync.autoSyncControllableComponent("lookX", {
+    syncWhenNil = false,
+    lerp = false, -- only works for numbers
+    numberSyncThreshold = 0.05, -- difference between numbers to sync
+    noDeltaCompression = false, -- turns off delta-compression
+
+    
+})
+
+
 
 
 --[[
