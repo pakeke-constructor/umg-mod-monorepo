@@ -51,7 +51,6 @@ shouldForceSyncClientside(ent, new_value) -> boolean
 - controllable entities on client-side.
 
 
-
 EXAMPLE, for x position component:
 {
     shouldAcceptServerside = function(ent, x1)
@@ -69,6 +68,4 @@ and the packet will be denied.
 
 
 ]]
-
-
 
