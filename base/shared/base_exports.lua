@@ -14,10 +14,6 @@ local function loadClient(base)
 
     base.client.groundTexture = require("client.ground_texture")
 
-    local control = require("client.control")
-    base.client.control = control -- TODO: Should we remove this API? It's kinda weird.
-    -- (actually, its doing nothing, lets remove it)
-
     local shockwave = require("client.shockwaves")
     base.client.shockwave = shockwave;
 
@@ -59,13 +55,10 @@ end
 
 
 local function loadServer(base)
-    local controlAdmin = require("server.control_admin")
-    
     base.server = {}
     
     -- TODO: move to `mortality` mod
     base.server.kill = require("shared.death")
-    base.server.forceSetPlayerPosition = controlAdmin.forceSetPlayerPosition 
 end
 
 

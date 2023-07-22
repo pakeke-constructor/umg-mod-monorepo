@@ -4,43 +4,20 @@
 Automatic component syncing facilities.
 
 usage:
-
 sync.autoSyncComponent(<compName>, options)
 
 
-Options allows us to configure delta compression, extra components required,
-lerp for clientside to make number changes more smooth, etc.
-
-
-------------------------------------------
-
-Example with all options:
-
-sync.autoSyncComponent("x", {
-    lerp = true, -- whether we lerp numbers
-    numberSyncThreshold = 0.5, -- threshold for numbers to be lerped
-    requiredComponents = {"vx"}, -- extra required components for sync
-    noDeltaCompression = false, -- 
-
-    syncWhenNil = true,
-
-    controllable = {
-        shouldAcceptServerside = function()
-
-        end,
-        shouldForceSyncClientside = function()
-
-        end
-    }
-})
+See auto_sync_component.md for example!
 
 ]]
 
 local constants = require("constants")
 
-local helper = require("shared.auto_sync_helper")
+
+local filters = require("shared.filters")
 
 local isControllable = require("shared.is_controllable")
+
 
 
 local VALID_OPTIONS = {
@@ -367,12 +344,39 @@ end
 
 
 
+
+
+local function setupServerReciever(compName, options)
+    --[[
+        receives packets from server
+    ]]
+    local eventSyncName = makeSyncName(compName)
+    local shouldAcceptServerside = options.controllable.shouldAcceptServerside
+    server.on(eventSyncName, {
+        arguments = {filters.controlEntity, filters.any},
+        handler = function(ent, compVal)
+            if shouldAcceptServerside(ent, compVal) then
+                ent[compName] = compVal
+            end
+        end
+    }
+)
+
+    if options.lerp then
+        setupClientNumberLerper(compName, options)
+    end
+end
+
+
+
+
+
 local function autoSyncComponent(compName, options)
     --[[
         NOTE: This function MUST be called within a shared context
             to work properly!!! (i.e, it must be called on BOTH client/server)
     ]]
-    helper.registerNewComponent(compName)
+    registerNewComponent(compName)
 
     options = options or {}
     for opt, _ in pairs(options)do
@@ -380,6 +384,9 @@ local function autoSyncComponent(compName, options)
     end
 
     if server then
+        if options.controllable then
+            setupServerReciever(compName, options)
+        end
         setupSender(compName, trySendServerPacket, options)
     else
         if options.controllable then

@@ -45,7 +45,6 @@ local function filterPlayerPosition(sender, ent, x,y,z)
         -- Perhaps we should instead mark this entity as "should force sync"
         -- and then sync once on the next tick?
         -- with this setup, hacked clients could send multiple position packets per frame and ddos the server
-        controlAdmin.forceSetPlayerPosition(ent, ent.x, ent.y, ent.z)
         return false -- ent moving too fast!
     end
 

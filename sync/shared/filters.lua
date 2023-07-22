@@ -29,6 +29,7 @@ local funcs2Tc = typecheck.assert("function", "function")
 local funcTc = typecheck.assert("function")
 
 local defaults = {
+    any = function(x, sender) return true end,
     number = function(x, sender) return type(x) == "number" end,
     string = function(x, sender) return type(x) == "string" end,
     table = function(x, sender) return type(x) == "table" end,

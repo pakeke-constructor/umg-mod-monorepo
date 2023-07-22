@@ -5,6 +5,13 @@
 
 local allGroup = umg.group()
 
+
+local EPSILON = 0.001
+local function roughlyEqual(a, b)
+    return math.abs(a - b) < EPSILON
+end
+
+
 return function()
     zenith.clear()
 
@@ -37,7 +44,7 @@ return function()
         ent.stringComponent = "abc"
         ent.numberComponent = 1
         ent.numberComponentNoDelta = 150.0
-        ent.numberComponentLerp = 1
+        ent.numberComponentLerp = 5.0
     end
 
     zenith.tick(2)
@@ -49,7 +56,7 @@ return function()
         zenith.assert(ent.stringComponent == "abc", "string component")
         zenith.assert(ent.numberComponent == 1, "number component")
         zenith.assert(ent.numberComponentNoDelta == 150.0, "number component, no delta")
-        zenith.assert(ent.numberComponentLerp == 150.0, "number component, no lerp")
+        zenith.assert(roughlyEqual(ent.numberComponentLerp, 5.0), "number component, no lerp")
     end
 
     local NUM = 150.0001
