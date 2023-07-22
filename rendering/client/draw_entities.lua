@@ -265,7 +265,9 @@ local function drawEntity(ent)
     if entIsOnScreen(ent) and not isHidden(ent) then
         if ent.image then
             setColorOfEnt(ent)
+            umg.call("preDrawEntity", ent)
             umg.call("drawEntity", ent)
+            umg.call("postDrawEntity", ent)
             if ent.onDraw then
                 ent:onDraw()
             end

@@ -110,6 +110,8 @@ end
 
 
 local function shouldFollow()
+    -- TODO: Should we keep this?
+    -- we already use reducers.LAST on the camera position question.
     local blocked = umg.ask("isCameraPlayerFollowBlocked", reducers.OR)
     return not blocked
 end

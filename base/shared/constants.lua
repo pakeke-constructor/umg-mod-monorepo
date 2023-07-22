@@ -12,4 +12,3 @@ return {
     -- faster.  However it also means that legitimate players won't get lagged back
 }
 
-

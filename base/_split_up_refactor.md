@@ -81,6 +81,13 @@ SOLUTION: keep it in the `base` mod for now.
 
 
 
+IDEA:
+Currently, camera-following is implemented in `control`.
+How about we remove this, and abstract it to the `zoom` mod.
+Then, we rename the `zoom` mod to be `follow`.
+This way, `control` wouldn't need to inherit `rendering`.
+
+
 
 Where should `initializers` go?
 A: We should delete `initializers`, and replace it with 
