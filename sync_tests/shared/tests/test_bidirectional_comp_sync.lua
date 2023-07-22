@@ -12,28 +12,31 @@ local function roughlyEqual(a, b)
 end
 
 
+
+local max_speed = 5
+-- test bidirectional component
+sync.autoSyncComponent("bidirectionalComponent", {
+    bidirectional = {
+        shouldAcceptServerside = function(ent, val)
+            return type(val) == "number" and math.abs(ent.bidirectionalComponent - val) < max_speed
+        end,
+        shouldForceSyncClientside = function(ent, val)
+            return math.abs(ent.bidirectionalComponent - val) > max_speed * 2
+        end
+    }
+})
+
+
+umg.answer("isControllable", function(ent, user)
+    -- For this test, any entity with a controllable component is
+    -- controllable by ANY user.
+    return ent.controllable
+end)
+
+
+
 return function()
     zenith.clear()
-
-    local max_speed = 5
-    -- test bidirectional component
-    sync.autoSyncComponent("bidirectionalComponent", {
-        bidirectional = {
-            shouldAcceptServerside = function(ent, val)
-                return type(val) == "number" and math.abs(ent.bidirectionalComponent - val) < max_speed
-            end,
-            shouldForceSyncClientside = function(ent, val)
-                return math.abs(ent.bidirectionalComponent - val) < max_speed
-            end
-        }
-    })
-
-    umg.on("isControllable", function(ent, user)
-        -- For this test, any entity with a controllable component is
-        -- controllable by ANY user.
-        return ent.controllable
-    end)
-
 
     local ent
     local ectrl
@@ -83,7 +86,7 @@ return function()
         ent.bidirectionalComponent = 5000
     end
 
-    zenith.tick(1)
+    zenith.tick(2)
 
     if client then
         -- check that a forceSync has gone through (ie. shouldForceSyncClientside was called)

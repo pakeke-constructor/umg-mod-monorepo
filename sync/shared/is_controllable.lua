@@ -26,12 +26,13 @@ on clientside, the client must loop over all entities per tick to check for sync
 
 
 local function isControllable(ent, user)
-    local ok = ent.controllable == user or umg.ask("isControllable", reducers.OR, ent, user)
+    local ok = (ent.controllable == user) or umg.ask("isControllable", reducers.OR, ent, user)
 
     if ok then
         local blocked = umg.ask("isControlBlocked", reducers.OR, ent, user)
         return not blocked
     end
+
     return false
 end
 

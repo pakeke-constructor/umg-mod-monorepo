@@ -361,7 +361,7 @@ local function setupServerReciever(compName, options)
     local shouldAcceptServerside = options.bidirectional.shouldAcceptServerside
     server.on(eventSyncName, {
         arguments = {filters.controlEntity, filters.any},
-        handler = function(ent, compVal)
+        handler = function(sender, ent, compVal)
             if shouldAcceptServerside(ent, compVal) then
                 ent[compName] = compVal
             end
