@@ -9,61 +9,14 @@ base mod API export
 local defineExports = require("shared.define_exports")
 
 
-
-local function loadClientRendering(base)
-    --[[
-        
-        (all of this stuff has been exported to rendering mod)
-
-    ]]
-    local draw = require("client.draw")
-    local drawEntities = require("client.draw_entities")
-    local animate = require("client.animate")
-    local camera = require("client.camera")
-    
-    base.client.camera = camera;
-
-    base.client.isHovered = require("client.mouse_hover")
-    
-    base.client.getUIScale = draw.getUIScale
-
-    -- TODO: Are these functions used?
-    base.client.setUIScale = draw.setUIScale
-    base.client.getUIMousePosition = draw.getUIMousePosition
-
-    base.client.isOnScreen = drawEntities.isOnScreen
-    base.client.entIsOnScreen = drawEntities.entIsOnScreen
-
-    base.client.drawEntity = drawEntities.drawEntity
-
-    base.client.getDrawY = drawEntities.getDrawY;
-    base.client.getDrawDepth = drawEntities.getDrawDepth;
-
-
-    base.client.drawStats = require("client.image_helpers.draw_stats")
-    -- ^^^ this has been renamed to `getEntityProperties`
-
-    base.client.getQuadOffsets = require("client.image_helpers.quad_offsets");
-    -- ^^^ This has been renamed to `getImageOffsets`
-
-    base.client.drawImage = require("client.image_helpers.draw_image");
-
-    base.client.animate = animate.animate;
-    base.client.animateEntity = animate.animateEntity;
-end
-
-
 local function loadClient(base)
     base.client = {}
 
-    --loadClientRendering()
-
     base.client.groundTexture = require("client.ground_texture")
-
 
     local control = require("client.control")
     base.client.control = control -- TODO: Should we remove this API? It's kinda weird.
-    -- (actually, its doing nothing)
+    -- (actually, its doing nothing, lets remove it)
 
     local shockwave = require("client.shockwaves")
     base.client.shockwave = shockwave;
@@ -95,7 +48,8 @@ local function loadShared(base)
     
     base.getPlayer = require("shared.get_player");
 
-    base.physics = require("shared.physics")
+    -- removed!
+    -- base.physics = require("shared.physics")
 
     base.runEvery = require("shared.run_every")
 

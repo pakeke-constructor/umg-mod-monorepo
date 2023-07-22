@@ -4,7 +4,7 @@ local physicsGroup = umg.group("physics", "x", "y")
 
 --[[
 
-Handles all entities that require physics in the game.
+Handles all entities that need physics in the game.
 
 
 ]]
@@ -173,11 +173,10 @@ end)
 
 
 
-
-
 function physics.getWorld()
     return world
 end
 
 
-return physics
+umg.expose("physics", physics)
+

@@ -2,6 +2,6 @@
     "type": "base",
     "uses": [
         "typecheck", "sync", "objects", "state",
-        "input", "rendering", "reducers"
+        "input", "rendering", "reducers", "physics"
     ]
 }

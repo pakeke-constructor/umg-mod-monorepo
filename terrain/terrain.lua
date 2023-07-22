@@ -552,7 +552,7 @@ local function newPhysicsRectangle(x,y,w,h)
         (x,y) is top left.
         w,h is width and height of the block.
     ]]
-    local world = base.physics.getWorld()
+    local world = physics.getWorld()
     local body = love.physics.newBody(world,x+w/2,y+h/2,"static")
     local shape = love.physics.newRectangleShape(w,h)
     local fixture = love.physics.newFixture(body,shape)
@@ -562,7 +562,7 @@ end
 
 local function newPhysicsPolygon(cX, cY, a,b,c,d)
     -- cX and cY are centerX and centerY
-    local world = base.physics.getWorld()
+    local world = physics.getWorld()
     local body = love.physics.newBody(world, cX, cY, "static") 
     local shape = love.physics.newPolygonShape(
         a.x-cX, a.y-cY, 
