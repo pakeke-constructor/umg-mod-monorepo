@@ -1,5 +1,4 @@
 
-
 --[[
 
 
@@ -7,9 +6,17 @@ Helper module for
 `auto_sync_component` and `auto_sync_controllable`
 
 
+WARNING:
+Although the code here is very clean, this module is hard to understand.
+If you are diving in, grab a cup of hot tea.
+
+
 ]]
 
-local helper = {}
+
+local helper = setmetatable({}, {__index = error})
+-- __index=error so can't accidentally access nils
+
 
 
 local abs = math.abs
@@ -36,22 +43,34 @@ local compsBeingSynced = {
 local EVENT_PREFIX = "_sync_"
 
 
-
-
 local function makeSyncName(compName)
     return EVENT_PREFIX .. compName
 end
 
 
 
-function helper.registerNewComponent(compName)
-    assert(not compsBeingSynced[compName], "This component is already being synced!")
+
+
+local function isDifferent(compVal, lastVal, options)
+    if type(compVal) == "number" and type(lastVal) == "number" then
+        local syncThresh = options.numberSyncThreshold or constants.DEFAULT_NUMBER_SYNC_THRESHOLD
+        return abs(compVal - lastVal) >= syncThresh
+    end
+    return compVal ~= lastVal
+end
+
+
+
+local function registerNewComponent(compName)
+    if compsBeingSynced[compName] then
+        error("This component is already being synced: " .. tostring(compName))
+    end
     compsBeingSynced[compName] = true
 end
 
 
 
-function helper.getRequiredComponents(compName, options)
+local function getRequiredComponents(compName, options)
     local requiredComponents = {compName}
     local extraComps = options.requiredComponents or EMPTY
     for _, comp in ipairs(extraComps)do
@@ -59,12 +78,6 @@ function helper.getRequiredComponents(compName, options)
     end
     return requiredComponents
 end
-
-
-
-
-
-
 
 
 
@@ -95,7 +108,7 @@ local compNameToLerpBuffer = {--[[
 ]]}
 
 
-function helper.setLerpValue(ent, compName, compVal)
+function setLerpValue(ent, compName, compVal)
     local lerpBuf = compNameToLerpBuffer[compName]
     if lerpBuf[ent] then
         -- If there's a lerp value that we are currently lerping,
@@ -139,9 +152,11 @@ end
 
 
 
-
-
-local function setupClientNumberLerp(compName, options)
+function setupClientNumberLerper(compName, options)
+    --[[
+        creates a lerp buffer that keeps track of all entities,
+        and lerps 
+    ]]
     assert(client, "Should only be called on client side!")
     local requiredComponents = getRequiredComponents(compName, options)
     local group = umg.group(unpack(requiredComponents))
@@ -164,8 +179,6 @@ local function setupClientNumberLerp(compName, options)
         end
     end)
 end
-
-
 
 
 

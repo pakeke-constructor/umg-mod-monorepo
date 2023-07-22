@@ -8,13 +8,39 @@ usage:
 sync.autoSyncComponent(<compName>, options)
 
 
-Can configure delta compression, extra components required for syncing,
-lerp for clientside to make number changes more smooth
+Options allows us to configure delta compression, extra components required,
+lerp for clientside to make number changes more smooth, etc.
 
+
+------------------------------------------
+
+Example with all options:
+
+sync.autoSyncComponent("x", {
+    lerp = true, -- whether we lerp numbers
+    numberSyncThreshold = 0.5, -- threshold for numbers to be lerped
+    requiredComponents = {"vx"}, -- extra required components for sync
+    noDeltaCompression = false, -- 
+
+    syncWhenNil = true,
+
+    controllable = {
+        shouldAcceptServerside = function()
+
+        end,
+        shouldForceSyncClientside = function()
+
+        end
+    }
+})
 
 ]]
 
 local constants = require("constants")
+
+local helper = require("shared.auto_sync_helper")
+
+local isControllable = require("shared.is_controllable")
 
 
 local VALID_OPTIONS = {
@@ -23,6 +49,7 @@ local VALID_OPTIONS = {
     noDeltaCompression = true,
     numberSyncThreshold = true,
     requiredComponents = true,
+    controllable = true
 }
 
 
@@ -32,17 +59,10 @@ local abs = math.abs
 local type = type
 local max, min = math.max, math.min
 
-local function isDifferent(compVal, lastVal, options)
-    if type(compVal) == "number" and type(lastVal) == "number" then
-        local syncThresh = options.numberSyncThreshold or constants.DEFAULT_NUMBER_SYNC_THRESHOLD
-        return abs(compVal - lastVal) >= syncThresh
-    end
-    return compVal ~= lastVal
-end
 
 
 
-local function serverSyncEntity(ent, eventSyncName, compName, options)
+local function trySendServerPacket(ent, eventSyncName, compName, options)
     local compVal = ent[compName]
     local deltaStore = options.deltaStore
 
@@ -66,7 +86,11 @@ end
 
 
 
-local function setupServerSync(compName, options)
+local function setupSender(compName, sendFunc, options)
+    --[[
+        sets up a sender loop that continuously sends updates
+        over the network.
+    ]]
     local requiredComponents = getRequiredComponents(compName, options)
 
     if not options.noDeltaCompression then
@@ -80,8 +104,8 @@ local function setupServerSync(compName, options)
     local eventSyncName = makeSyncName(compName)
     umg.on("@tick", function()
         for _, ent in ipairs(group) do
-            serverSyncEntity(ent, eventSyncName, compName, options)
-       end
+            sendFunc(ent, eventSyncName, compName, options)
+        end
     end)
 end
 
@@ -92,6 +116,35 @@ end
 
 
 
+--[[
+    used for controllable entities.
+]]
+local function trySendClientPacket(ent, eventSyncName, compName, options)
+    local clientId = client.getUsername()
+    if not isControllable(ent, clientId) then
+        -- If we aren't controlling this entity, return.
+        return
+    end
+
+    local compVal = ent[compName]
+    local deltaStore = options.deltaStore
+
+    if deltaStore then
+        local lastVal = deltaStore[ent]
+        if not isDifferent(compVal, lastVal, options) then
+            return -- The values are not different enough to warrant a sync.
+        end
+    end
+
+    -- gotta do explicit nil check, to ensure `false` will get synced
+    if (compVal ~= nil) or (options.syncWhenNil) then
+        -- update component.
+        client.send(eventSyncName, ent, compVal)
+        if deltaStore then
+            deltaStore[ent] = compVal
+        end
+    end
+end
 
 
 
@@ -101,7 +154,33 @@ end
 
 
 
-local function setupClientSync(compName, options)
+local function setupClientSender(compName, options)
+    --[[
+        sends packets to server to update controllable entities
+    ]]
+    local requiredComponents = getRequiredComponents(compName, options)
+
+    if not options.noDeltaCompression then
+        options.deltaStore = {--[[
+            [ent] -> last_seen_comp_value
+        ]]}
+    end
+
+    local group = umg.group(unpack(requiredComponents))
+    local eventSyncName = makeSyncName(compName)
+    umg.on("@tick", function()
+        for _, ent in ipairs(group) do
+            trySendServerPacket(ent, eventSyncName, compName, options)
+       end
+    end)
+end
+
+
+
+local function setupClientReceiver(compName, options)
+    --[[
+        receives packets from server
+    ]]
     local eventSyncName = makeSyncName(compName)
     client.on(eventSyncName, function(ent, compVal)
         if options.lerp and type(compVal) == "number" then
@@ -112,9 +191,10 @@ local function setupClientSync(compName, options)
     end)
 
     if options.lerp then
-        setupClientNumberLerp(compName, options)
+        setupClientNumberLerper(compName, options)
     end
 end
+
 
 
 local function autoSyncComponent(compName, options)
@@ -130,9 +210,12 @@ local function autoSyncComponent(compName, options)
     end
 
     if server then
-        setupServerSync(compName, options)
+        setupSender(compName, trySendServerPacket, options)
     else
-        setupClientSync(compName, options)
+        if options.controllable then
+            setupSender(compName, trySendClientPacket, options)
+        end
+        setupClientReceiver(compName, options)
     end
 end
 
