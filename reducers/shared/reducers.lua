@@ -85,8 +85,8 @@ function reducers.LAST(a, b)
         returns the LAST non-nil result
         (This will be the last umg.answer that is loaded)
 
-        If you want a definitive answer to a question, (i.e. a question
-        where results can't really be combined,)
+        If you want a definitive answer to a question, 
+        (i.e. a question where results can't really be combined,)
         this is probably the best reducer to use.
     ]]
     if b then

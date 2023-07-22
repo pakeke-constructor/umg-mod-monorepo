@@ -121,46 +121,32 @@ end
 
 
 
-local function isCameraPanBlocked()
-    local blocked = umg.ask("cameraPanBlocked", reducers.OR)
-    return blocked
-end
 
-
-
-umg.answer("isCameraPlayerFollowBlocked", function()
-    return CAMERA_PAN_ACTIVE
-end)
-
-
-umg.answer("getCameraOffsetX", function()
+umg.answer("getCameraPositionX", function()
     if CAMERA_PAN_ACTIVE then
         return last_camx
     end
-    return 0
+    return nil -- allow for another system to take control
 end)
 
-umg.answer("getCameraOffsetY", function()
+
+umg.answer("getCameraPositionY", function()
     if CAMERA_PAN_ACTIVE then
         return last_camy
     end
-    return 0
+    return nil -- allow for another system to take control
 end)
 
 
 
 
 function listener:update(dt)
-    if isCameraPanBlocked() then
-        return
-    end
-    local camera = rendering.getCamera()
-
     if CAMERA_PAN_ACTIVE then
         -- use middle mouse button to pan camera
         panCamera(dt)
     end
 
+    local camera = rendering.getCamera()
     last_camx = camera.x
     last_camy = camera.y
 end

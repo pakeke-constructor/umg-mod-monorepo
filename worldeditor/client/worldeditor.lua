@@ -21,14 +21,6 @@ end)
 
 
 
-umg.answer("isCameraPlayerFollowBlocked", function()
-    return _G.settings.editing
-end)
-
-
-
-
-
 
 
 local validHotKeys = {
@@ -150,20 +142,21 @@ local CAMERA_SPEED = 800
 local camera_x, camera_y = 0, 0
 
 
-umg.answer("getCameraOffsetX", function()
+umg.answer("getCameraPositionX", function()
     if _G.settings.editing then
         return camera_x
     end
-    return 0
+    return nil -- let another system take over
 end)
 
 
-umg.answer("getCameraOffsetY", function()
+umg.answer("getCameraPositionY", function()
     if _G.settings.editing then
         return camera_y
     end
-    return 0
+    return nil -- let another system take over
 end)
+
 
 
 local function updateCameraPosition(dt)
