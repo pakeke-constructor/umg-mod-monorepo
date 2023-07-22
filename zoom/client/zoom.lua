@@ -69,7 +69,7 @@ local DEFAULT_PAN_SPEED = 900
 local MOUSE_PAN_THRESHOLD = 50 -- X pixels from the screen border to move.
 
 
-local function panCamera(dt)
+local function followMouseNearEdge(dt)
     local dx,dy = 0,0
     local x, y = love.mouse.getPosition()
     local w, h = love.graphics.getWidth(), love.graphics.getHeight()
@@ -142,13 +142,9 @@ end)
 
 function listener:update(dt)
     if CAMERA_PAN_ACTIVE then
-        -- use middle mouse button to pan camera
-        panCamera(dt)
+        -- move the camera if the mouse is near edge of screen
+        followMouseNearEdge(dt)
     end
-
-    local camera = rendering.getCamera()
-    last_camx = camera.x
-    last_camy = camera.y
 end
 
 
@@ -157,14 +153,18 @@ local MIDDLE_MOUSE_BUTTON = 3
 
 function listener:mousemoved(x,y,dx,dy)
     if CAMERA_PAN_ACTIVE and love.mouse.isDown(MIDDLE_MOUSE_BUTTON) then
-        local camera = rendering.getCamera()
-        local wx1, wy1 = camera:toWorldCoords(x-dx,y-dy)
-        local wx2, wy2 = camera:toWorldCoords(x,y)
+        -- use middle mouse button to pan camera
+        local wx1, wy1 = rendering.toWorldCoords(x-dx,y-dy)
+        local wx2, wy2 = rendering.toWorldCoords(x,y)
         local wdx, wdy = wx2-wx1, wy1-wy2
         last_camx = last_camx - wdx
         last_camy = last_camy + wdy
 
         self:lockMouseButton(MIDDLE_MOUSE_BUTTON)
+    else
+        local camera = rendering.getCamera()
+        last_camx = camera.x
+        last_camy = camera.y
     end
 end
 

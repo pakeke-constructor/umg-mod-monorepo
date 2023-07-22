@@ -20,9 +20,20 @@ local function getCameraPosition()
     return x + dx, y + dy
 end
 
-draw.getCameraPosition = getCameraPosition
 
 
+
+
+function draw.getCameraPosition()
+    --[[
+        This provides cacheing, as opposed to polling the reverse
+        event buses every single time.
+        The "downside" of this is that it has the potential to be one
+        frame delayed.
+    ]]
+    local camera = currentCamera.getCamera()
+    return camera.x, camera.y
+end
 
 
 
