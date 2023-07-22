@@ -41,7 +41,7 @@ sync.autoSyncComponent("x", {
             Else, return true.
         ]]
         end,
-        shouldForceControllableSyncClientside = function(ent, compVal)
+        shouldForceSyncClientside = function(ent, compVal)
         --[[
             By default, client-syncing discards packets for entities that
             the client is controlling.

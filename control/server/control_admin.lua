@@ -82,6 +82,7 @@ server.on("setPlayerPosition", {
 
 
 
+local DEFAULT_SPEED = 100
 
 server.on("setPlayerVelocity", {
     arguments = {sf.controlEntity, sf.number, sf.number, sf.Optional(sf.number)},
@@ -89,7 +90,7 @@ server.on("setPlayerVelocity", {
         if not filterPlayerVelocity(sender, ent, vx, vy, vz) then
             return
         end
-        local max_spd = (ent.speed or constants.DEFAULT_SPEED) 
+        local max_spd = (ent.speed or DEFAULT_SPEED) 
         if max_spd >= vx and max_spd >= vy then
             -- check that the player aint cheating.
             -- Note that the player can cheat by "flying" though, haha.

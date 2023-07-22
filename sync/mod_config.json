@@ -1,1 +1,1 @@
-{"uses":["typecheck"],"type":"base"}
+{"uses":["typecheck", "reducers"],"type":"base"}

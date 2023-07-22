@@ -33,9 +33,31 @@ return function()
         lerp = true
     })
 
+    local max_speed = 5
+    -- test bidirectional component
+    sync.autoSyncComponent("bidirectionalComponent", {
+        bidirectional = {
+            shouldAcceptServerside = function(ent, val)
+                return type(val) == "number" and math.abs(ent.bidirectionalComponent - val) < max_speed
+            end,
+            shouldForceSyncClientside = function(ent, val)
+                return math.abs(ent.bidirectionalComponent - val) < max_speed
+            end
+        }
+    })
+
+    umg.on("isControllable", function(ent, user)
+        -- For this test, any entity with a controllable component is
+        -- controllable by ANY user.
+        return ent.controllable
+    end)
+
+
     local ent
+    local ent2
     if server then
         ent = server.entities.empty()
+        ent2 = server.entities.empty()
     end
 
     zenith.tick(2)
@@ -45,18 +67,26 @@ return function()
         ent.numberComponent = 1
         ent.numberComponentNoDelta = 150.0
         ent.numberComponentLerp = 5.0
+        ent.bidirectionalComponent = 50
+        ent.controller = true
+
+        ent2.bidirectionalComponent = 50
     end
 
     zenith.tick(2)
 
     -- then we all good!
     if client then
-        -- there's only 1 entity that exists
+        -- there's only 2 entities
         ent = allGroup[1]
+        ent2 = allGroup[2]
+        -- TODO: This ^^^^ is fucking dumb!!!!
         zenith.assert(ent.stringComponent == "abc", "string component")
         zenith.assert(ent.numberComponent == 1, "number component")
         zenith.assert(ent.numberComponentNoDelta == 150.0, "number component, no delta")
         zenith.assert(roughlyEqual(ent.numberComponentLerp, 5.0), "number component, no lerp")
+        zenith.assert(ent.bidirectionalComponent == 50, "bidirectional component 1")
+        zenith.assert(ent2.bidirectionalComponent == 50, "bidirectional component 2")
     end
 
     local NUM = 150.0001

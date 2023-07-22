@@ -3,6 +3,25 @@
 
 Determines whether an entity is controllable by the client, or not.
 
+
+pros / cons of this setup:
+
+
+
+PROS:
+allows for more dynamic changes
+
+allows for swift changes in control
+
+
+
+
+CONS:
+entities could be controlled by multiple players at once, causing bugs
+
+on clientside, the client must loop over all entities per tick to check for syncs.
+- as opposed to only looping over entities with `controllable` component
+
 ]]
 
 

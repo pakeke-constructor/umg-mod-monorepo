@@ -1,6 +1,7 @@
 
 
 local tests = {
+    "test_bidirectional_comp_sync",
     "test_comp_sync",
 }
 
