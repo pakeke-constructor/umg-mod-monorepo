@@ -88,6 +88,7 @@ local function moveCam(dt)
         dy = speed
     end
 
+    last_camx = last_camx + dx
     camera.x = camera.x + dx
     camera.y = camera.y + dy 
 end

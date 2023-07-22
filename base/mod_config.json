@@ -1,4 +1,7 @@
 {
     "type": "base",
-    "uses": ["typecheck", "sync", "objects", "state", "input", "rendering"]
+    "uses": [
+        "typecheck", "sync", "objects", "state",
+        "input", "rendering", "reducers"
+    ]
 }

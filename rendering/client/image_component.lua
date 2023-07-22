@@ -1,7 +1,7 @@
 
 
 local drawEntities = require("client.draw_entities")
-local drawImage = require("client.helpers.draw_image")
+local drawImage = require("client.helper.draw_image")
 
 
 local getDrawY = drawEntities.getDrawY
@@ -10,7 +10,7 @@ local getDrawY = drawEntities.getDrawY
 local images = client.assets.images
 
 
-local entityProperties = require("client.helpers.entity_properties")
+local entityProperties = require("client.helper.entity_properties")
 
 local getOffsetX = entityProperties.getOffsetX
 local getOffsetY = entityProperties.getOffsetY

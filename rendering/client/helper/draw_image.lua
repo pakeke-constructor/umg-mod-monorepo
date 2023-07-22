@@ -1,5 +1,7 @@
 
-local getQuadOffset = require("client.helper.image_offsets")
+local imageOffsets = require("client.helper.image_offsets")
+local getImageOffsets = imageOffsets.getImageOffsets
+
 local images = client.assets.images
 
 
@@ -9,7 +11,7 @@ local function drawImage(quadName_or_quad, x, y, rot, sx, sy, ox, oy, kx, ky)
     if not (quad and type(quad) == "userdata") then
         error(("Unknown quadName: %s\nMake sure you put all images in the assets folder and name them!"):format(tostring(quadName_or_quad)))
     end    
-    local oxx, oyy = getQuadOffset(quad)
+    local oxx, oyy = getImageOffsets(quad)
     
     client.atlas:draw(
         quad, 

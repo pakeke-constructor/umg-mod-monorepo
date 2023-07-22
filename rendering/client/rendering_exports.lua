@@ -32,16 +32,16 @@ rendering.getDrawDepth = drawEntities.getDrawDepth;
 
 
 
-local entityProperties = require("client.helpers.entity_properties")
+local entityProperties = require("client.helper.entity_properties")
 rendering.entityProperties = entityProperties
 
 
-local imageSizes = require("client.helpers.image_offsets");
+local imageSizes = require("client.helper.image_offsets");
 rendering.getImageOffsets = imageSizes.getImageOffsets
 rendering.getImageSize = imageSizes.getImageSize
 
 
-rendering.drawImage = require("client.helpers.draw_image");
+rendering.drawImage = require("client.helper.draw_image");
 
 
 

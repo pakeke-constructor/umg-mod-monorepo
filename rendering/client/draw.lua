@@ -8,8 +8,8 @@ local constants = require("client.constants")
 
 
 local function getCameraPosition()
-    local x = umg.ask("getCameraOffsetX")
-    local y = umg.ask("getCameraOffsetY")
+    local x = umg.ask("getCameraOffsetX", reducers.ADD)
+    local y = umg.ask("getCameraOffsetY", reducers.ADD)
     return x, y
 end
 
@@ -24,6 +24,7 @@ umg.on("drawWorld", function()
 
     local x, y = getCameraPosition()
     camera:follow(x, y)
+    camera:update(love.timer.getDelta())
 
     camera:attach()
 

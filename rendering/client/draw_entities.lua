@@ -11,7 +11,7 @@ local currentCamera = require("client.current_camera")
 local constants = require("client.constants")
 local sort = require("libs.sort")
 
-local entityProperties = require("client.helpers.entity_properties")
+local entityProperties = require("client.helper.entity_properties")
 
 
 

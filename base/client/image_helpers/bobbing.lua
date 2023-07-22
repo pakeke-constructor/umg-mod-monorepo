@@ -34,8 +34,7 @@ end
 
 umg.answer("getOffsetY", function(ent)
     if ent.bobbing then
-        local _ox, oy = rendering.getQuadOffsets(ent.image)
-        local quad_height = oy * 2 -- as defined by quad_offsets.lua
+        local _quad_w, quad_height = rendering.getImageSize(ent.image)
         local bob_factor = getBobFactor(ent)
         return quad_height * bob_factor
     end

@@ -17,17 +17,6 @@ export interface baseClient {
 
     isHovered(ent: Entity): boolean;
 
-    getUIScale(): number;
-    setUIScale(uiScale: number): void;
-
-    isOnScreen(x: number, y: number): boolean;
-    entIsOnScreen(ent: Entity): boolean;
-    
-    getDrawY(y: number, z: number | undefined): number;
-    getDrawDepth(y: number, z: number | undefined): number;
-    getQuadOffsets(image: BaseImage): LuaMultiReturn<[number, number]>;
-    drawImage(image: BaseImage, x: number, y: number, rot?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): void;
-
     readonly groundTexture: {
         setColor(color: Color): void;
         setTextureList(textures: string[]): void;

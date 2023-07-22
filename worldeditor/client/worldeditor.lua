@@ -147,7 +147,26 @@ local listener = input.Listener({priority = 1})
 
 local CAMERA_SPEED = 800
 
-local function moveCamera(dt)
+local camera_x, camera_y = 0, 0
+
+
+umg.answer("getCameraOffsetX", function()
+    if _G.settings.editing then
+        return camera_x
+    end
+    return 0
+end)
+
+
+umg.answer("getCameraOffsetY", function()
+    if _G.settings.editing then
+        return camera_y
+    end
+    return 0
+end)
+
+
+local function updateCameraPosition(dt)
     local dx = 0
     local dy = 0
     local camera = rendering.getCamera()
@@ -167,7 +186,8 @@ local function moveCamera(dt)
     end
 
     local x,y = camera.x + dx, camera.y + dy
-    camera:follow(x,y)
+
+    camera_x, camera_y = x, y
 end
 
 
@@ -200,7 +220,7 @@ end
 
 function listener:update(dt)
     if _G.settings.editing then
-        moveCamera(dt)
+        updateCameraPosition(dt)
         local tinfo = we.getCurrentToolInfo()
         if tinfo and tinfo.tool.useType == constants.USE_TYPE.CONTINUOUS then
             if listener:isMouseButtonDown(BUTTON_1) then

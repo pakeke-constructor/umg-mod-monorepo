@@ -35,6 +35,11 @@ quad_to_oy = setmetatable({}, {
 
 
 function imageSizes.getImageOffsets(quad_or_name)
+    --[[
+        technically, we aren't getting image offsets, we are getting
+        quad offsets.
+        It's just that "image" is a more user-friendly name.
+    ]]
     local quad = quad_or_name
     if type(quad_or_name) == "string" then
         quad = client.assets.images[quad_or_name]
