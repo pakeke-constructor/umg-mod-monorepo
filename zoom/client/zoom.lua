@@ -69,7 +69,7 @@ local DEFAULT_PAN_SPEED = 900
 local MOUSE_PAN_THRESHOLD = 50 -- X pixels from the screen border to move.
 
 
-local function moveCam(dt)
+local function panCamera(dt)
     local dx,dy = 0,0
     local x, y = love.mouse.getPosition()
     local w, h = love.graphics.getWidth(), love.graphics.getHeight()
@@ -89,8 +89,7 @@ local function moveCam(dt)
     end
 
     last_camx = last_camx + dx
-    camera.x = camera.x + dx
-    camera.y = camera.y + dy 
+    last_camy = last_camy + dy
 end
 
 
@@ -134,6 +133,21 @@ umg.answer("isCameraPlayerFollowBlocked", function()
 end)
 
 
+umg.answer("getCameraOffsetX", function()
+    if CAMERA_PAN_ACTIVE then
+        return last_camx
+    end
+    return 0
+end)
+
+umg.answer("getCameraOffsetY", function()
+    if CAMERA_PAN_ACTIVE then
+        return last_camy
+    end
+    return 0
+end)
+
+
 
 
 function listener:update(dt)
@@ -143,9 +157,8 @@ function listener:update(dt)
     local camera = rendering.getCamera()
 
     if CAMERA_PAN_ACTIVE then
-        camera.x = last_camx
-        camera.y = last_camy
-        moveCam(dt)
+        -- use middle mouse button to pan camera
+        panCamera(dt)
     end
 
     last_camx = camera.x

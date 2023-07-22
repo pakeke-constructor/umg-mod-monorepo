@@ -23,6 +23,22 @@ function currentCamera.getCamera()
 end
 
 
+function currentCamera.getCameraPosition()
+    local dx = umg.ask("getCameraOffsetX", reducers.ADD)
+    local dy = umg.ask("getCameraOffsetY", reducers.ADD)
+    -- The camera offset, (i.e. camera is offset 10 pixels to the right)
+
+    local x = umg.ask("getCameraPositionX", reducers.LAST)
+    local y = umg.ask("getCameraPositionY", reducers.LAST)
+    -- The global camera position in the world
+
+    return x + dx, y + dy
+end
+
+
+
+
+
 -- TODO:
 -- create a `setCamera()` function or something...? idk
 

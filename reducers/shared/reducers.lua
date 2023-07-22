@@ -68,6 +68,35 @@ end
 
 
 
+function reducers.FIRST(a, b)
+    --[[
+        returns the FIRST non-nil result
+        (This will be the first umg.answer that is loaded)
+    ]]
+    if a then
+        return a
+    end
+    return b
+end
+
+
+function reducers.LAST(a, b)
+    --[[
+        returns the LAST non-nil result
+        (This will be the last umg.answer that is loaded)
+
+        If you want a definitive answer to a question, (i.e. a question
+        where results can't really be combined,)
+        this is probably the best reducer to use.
+    ]]
+    if b then
+        return b
+    end
+    return a
+end
+
+
+
 function reducers.SINGLE_COLLECT(a, b)
     --[[
         Reducer function that collects all single inputs into an array.
