@@ -11,7 +11,7 @@ return {
     option, is because sync.autoSyncComponent MUST be called before
     entities are loaded, since it generates groups.
     ]]
-    NUMBER_SYNC_THRESHOLD = 0.5
+    NUMBER_SYNC_THRESHOLD = 0.5,
 }
 
 

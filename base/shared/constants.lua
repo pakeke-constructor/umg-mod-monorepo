@@ -1,6 +1,5 @@
 
 return {
-    FRICTION_CONSTANT = 1.9;
 
     DEFAULT_SPEED = 200;
     

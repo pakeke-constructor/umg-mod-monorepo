@@ -48,6 +48,7 @@ local dropItemHandler = dropItem
 local dropItemTc = typecheck.assert("table", "number", "number")
 
 function groundItemsHandler.drop(itemEnt, x, y)
+    -- TODO: We will need to do something about the dimension here.
     dropItemTc(itemEnt, x, y)
     dropItemHandler(itemEnt, x, y)
 end

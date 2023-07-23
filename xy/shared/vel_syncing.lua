@@ -1,10 +1,11 @@
 
 local constants = require("shared.constants")
-
-local getSpeed = require("shared.speed")
+local getSpeed = require("shared.get_speed")
 
 
 local NUMBER_SYNC_THRESHOLD = constants.NUMBER_SYNC_THRESHOLD
+
+local abs = math.abs
 
 
 
@@ -26,8 +27,8 @@ sync.autoSyncComponent("vy", {
             return abs(vy) <= getSpeed(ent)
         end,
 
-        shouldForceSyncClientside = function(ent, vy)
-            -- TODO: What TF do we do here?
+        shouldForceSyncClientside = function()
+            -- TODO: What do we do here?
             -- I guess we just deny the packet?
             -- There's no possibility for "jumps" for velocities...
             return false

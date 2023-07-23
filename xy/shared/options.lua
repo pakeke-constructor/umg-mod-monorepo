@@ -6,8 +6,10 @@ local VALID_OPTIONS = {
     SYNC_LEIGHWAY = 1.5, --[[
         players have 50% sync leighway. This essentially means that
         hacked clients can technically move-hack to go 50% faster;
-        but on the positive side, legit clients won't be lagged backwards.
+        (but on the positive side, legit clients won't be lagged backwards.)
     ]]
+
+    DEFAULT_FRICTION = 6;
 }
 
 

@@ -1,4 +1,4 @@
 {
     "type": "base",
-    "uses": ["sync", "typecheck"]
+    "uses": ["sync", "typecheck", "state", "reducers"]
 }
