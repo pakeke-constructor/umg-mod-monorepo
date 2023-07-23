@@ -27,13 +27,6 @@ sync.autoSyncComponent("bidirectionalComponent", {
 })
 
 
-umg.answer("isControllable", function(ent, user)
-    -- For this test, any entity with a controllable component is
-    -- controllable by ANY user.
-    return ent.controllable
-end)
-
-
 
 return function()
     zenith.clear()
@@ -52,6 +45,7 @@ return function()
 
         ectrl.bidirectionalComponent = 50
         ectrl.controllable = true
+        ectrl.controller = server.getHostUsername()
     end
 
     zenith.tick(2)

@@ -35,6 +35,12 @@ end
 
 
 
+
+
+--[[
+    TODO:
+    use the FRICKEN sync mod for this!!!
+]]
 local function isInControlOf(player)
     return player.controller == client.getUsername()
 end

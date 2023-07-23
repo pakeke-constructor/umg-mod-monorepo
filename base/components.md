@@ -173,7 +173,7 @@ ent.controllable = {
     onClick = function(ent, x, y) end;
 }
 
-ent.controller = "player_username" -- whoever is controlling this entity
+ent.controller = "client_id" -- whoever is controlling this entity
 
 ent.follow = false -- Whether the camera should follow this ent or not.
 

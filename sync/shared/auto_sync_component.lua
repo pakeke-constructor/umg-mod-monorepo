@@ -15,9 +15,11 @@ local constants = require("constants")
 
 
 local filters = require("shared.filters")
-local isControllable = require("shared.is_controllable")
+local control = require("shared.control")
 local tickDelta = require("shared.tick_delta")
 
+
+local isControlledBy = control.isControlledBy
 
 
 local VALID_OPTIONS = {
@@ -182,7 +184,7 @@ end
 ]]
 local function trySendClientPacket(ent, eventSyncName, compName, options)
     local clientId = client.getUsername()
-    if not isControllable(ent, clientId) then
+    if not isControlledBy(ent, clientId) then
         -- If we aren't controlling this entity, return.
         return
     end
@@ -311,10 +313,10 @@ local function setupClientBidirectionalReceiver(compName, options)
     ]]
     local eventSyncName = makeSyncName(compName)
     local shouldForceSync = options.bidirectional.shouldForceSyncClientside
-    local user = client.getUsername()
+    local userId = client.getUsername()
 
     client.on(eventSyncName, function(ent, compVal)
-        if isControllable(ent, user) then
+        if isControlledBy(ent, userId) then
             -- then discard the packet!
             -- This entity is being controlled; we don't want to lag them backwards.
             if shouldForceSync(ent, compVal) then
