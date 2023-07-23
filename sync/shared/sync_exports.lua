@@ -19,7 +19,6 @@ sync.getTimeOfLastTick = tickDelta.getTimeOfLastTick
 
 local control = require("shared.control")
 
-sync.isControllable = control.isControllable
 sync.isControlledBy = control.isControlledBy
 sync.getController = control.getController
 
