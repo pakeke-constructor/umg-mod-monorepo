@@ -1,4 +1,4 @@
 {
     "type": "base",
-    "uses": ["input", "rendering"]
+    "uses": ["input", "rendering", "xy"]
 }

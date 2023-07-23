@@ -1,19 +1,12 @@
 
 
 local options = require("shared.options")
+local constants = require("shared.constants")
 
 local getSpeed = require("shared.speed")
 
 
-
-
---  need to differ by more than 0.5 before a sync is enacted.
--- TODO: Play around with this number!
-local XY_SYNC_THRESHOLD = 0.5
---[[
-TODO: This number should also be configurable.
-When mod launch options are supported, this should be a configurable value.
-]]
+local NUMBER_SYNC_THRESHOLD = constants.NUMBER_SYNC_THRESHOLD
 
 
 
@@ -25,17 +18,18 @@ local getTickDelta = sync.getTickDelta
 
 sync.autoSyncComponent("x", {
     lerp = true,
-    numberSyncThreshold = XY_SYNC_THRESHOLD,
+    numberSyncThreshold = NUMBER_SYNC_THRESHOLD,
     
     controllable = {
         shouldAcceptServerside = function(ent, x)
-            -- Only accept packets that
+            -- Only accept positions of players that aren't moving TOO fast.
             local dt = getTickDelta()
             local max_delta = getSpeed(ent) * options.SYNC_LEIGHWAY * dt
             return abs(ent.x - x) <= max_delta
         end,
 
         shouldForceSyncClientside = function(ent, x)
+            -- Only accept positions of players that aren't moving TOO fast.
             local dt = getTickDelta()
             local max_delta = getSpeed(ent) * options.SYNC_LEIGHWAY * dt
             -- If the actual delta is greater than expected, force a sync.
@@ -48,7 +42,7 @@ sync.autoSyncComponent("x", {
 
 sync.autoSyncComponent("y", {
     lerp = true,
-    numberSyncThreshold = XY_SYNC_THRESHOLD,
+    numberSyncThreshold = NUMBER_SYNC_THRESHOLD,
     
     controllable = {
         shouldAcceptServerside = function(ent, y)
@@ -67,12 +61,6 @@ sync.autoSyncComponent("y", {
     }
 })
 
-
-
-sync.autoSyncComponent("y", {
-    lerp = true,
-    numberSyncThreshold = XY_SYNC_THRESHOLD,
-})
 
 
 
