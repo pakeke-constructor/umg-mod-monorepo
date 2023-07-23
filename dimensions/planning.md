@@ -82,6 +82,14 @@ end)
 
 
 
+
+## IDEA 4:
+Scrap all previous ideas.
+We don't need anything fancy;
+dimensions are just the same as (x,y) position; and we don't really
+have anything fancy for x,y.
+
+
 ## Design considerations:
 What happens if an entity is moved to a non-existant dimension?
 - The dimension is automatically created.

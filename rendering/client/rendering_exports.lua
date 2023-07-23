@@ -10,8 +10,11 @@ local drawEntities = require("client.draw_entities")
 
 
 local currentCamera = require("client.current_camera")
+local cameraLib = require("libs.camera")
 
 
+-- access to custom cameras
+rendering.Camera = cameraLib
 
 rendering.getCamera = currentCamera.getCamera
 

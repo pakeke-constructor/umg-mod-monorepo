@@ -37,8 +37,14 @@ end
 
 
 
-umg.on("drawWorld", function()
-    local camera = currentCamera.getCamera()
+umg.on("drawWorld", function(customCamera)
+    --[[
+        customCamera is an optional argument.
+        should be left nil, most of the time, unless we want something custom.
+        
+        ALSO: This callback is *highly expensive*. Try to only call once or twice.
+    ]]
+    local camera = customCamera or currentCamera.getCamera()
 
     local x, y = getCameraPosition()
     camera:follow(x, y)
@@ -61,6 +67,9 @@ end)
 
 
 
+function draw.drawWorld(customCamera)
+
+end
 
 
 
