@@ -15,8 +15,8 @@ local constants = require("constants")
 
 
 local filters = require("shared.filters")
-
 local isControllable = require("shared.is_controllable")
+local tickDelta = require("shared.tick_delta")
 
 
 
@@ -97,7 +97,7 @@ end
 
 
 
-
+--[[
 local lastTickDelta = 0.1 -- this value is pretty arbitrary and does matter
 local timeOfLastTick = love.timer.getTime()
 
@@ -108,7 +108,7 @@ umg.on("@tick", function()
     lastTickDelta = max(MIN_TICK_DELTA, time - timeOfLastTick)
     timeOfLastTick = time
 end)
-
+]]
 
 
 
@@ -246,11 +246,14 @@ end
 
 
 
+local getTickDelta = tickDelta.getTickDelta
+local getTimeOfLastTick = tickDelta.getTimeOfLastTick
+
 
 local function updateEntityWithLerp(ent, compName, targetVal, time)
     local currVal = ent[compName]
 
-    local t = min(1, max(0, (time - timeOfLastTick) / lastTickDelta))
+    local t = min(1, max(0, (time - getTimeOfLastTick()) / getTickDelta()))
     local delta = (targetVal - currVal) * (1-t)
 
     ent[compName] = targetVal - delta
