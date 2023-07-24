@@ -46,7 +46,7 @@ sync.autoSyncComponent("x", {
     Possible workaround for this:
         who cares!! :-)
     ]]
-    controllable = {
+    bidirectional = {
         shouldAcceptServerside = function(ent, x)
             -- Only accept positions of players that aren't moving TOO fast.
             local dt = getTickDelta()
@@ -70,7 +70,7 @@ sync.autoSyncComponent("y", {
     lerp = true,
     numberSyncThreshold = NUMBER_SYNC_THRESHOLD,
     
-    controllable = {
+    bidirectional = {
         shouldAcceptServerside = function(ent, y)
             -- Only accept packets that
             local dt = getTickDelta()

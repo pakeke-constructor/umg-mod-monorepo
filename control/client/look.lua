@@ -10,6 +10,14 @@ lookX and lookY
 local lookGroup = umg.group("controller", "lookAtMouse")
 
 
+--[[
+
+todo:
+
+we need to get rid of this, 
+and replace it with sync.autoSyncComponent
+
+]]
 
 
 client.on("setLookDirection", function(ent, lookX, lookY)

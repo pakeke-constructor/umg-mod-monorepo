@@ -165,10 +165,18 @@ end)
     (Note that the server can choose to deny our player position 
       if it thinks we are cheating!!!)
 ]]
+
+
+--[[
+
+old syncing code:
+
+
 umg.on("@tick", function(dt)
     if state.getCurrentState() ~= "game" then
         return
     end
+
 
     for i, ent in ipairs(controllableGroup) do
         if ent.controller == client.getUsername() then
@@ -178,8 +186,8 @@ umg.on("@tick", function(dt)
             end
         end
     end
-end)
 
+end)
 
 
 client.on("forceSetPlayerPosition", function(player, x, y, z)
@@ -188,6 +196,7 @@ client.on("forceSetPlayerPosition", function(player, x, y, z)
     player.z = z
 end)
 
+]]
 
 
 

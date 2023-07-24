@@ -1,6 +1,6 @@
 
 
-local VALID_OPTIONS = {
+local options = {
     DEFAULT_SPEED = 100,
 
     SYNC_LEIGHWAY = 1.5, --[[
@@ -14,7 +14,13 @@ local VALID_OPTIONS = {
 
 
 
-local options = {}
+local VALID_OPTIONS = {
+    DEFAULT_SPEED = true,
+    SYNC_LEIGHWAY = true,
+    DEFAULT_FRICTION = true;
+}
+
+
 
 
 function options.setOption(opt, val)

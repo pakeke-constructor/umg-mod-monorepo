@@ -30,7 +30,12 @@ function control.getController(ent)
         return ent.controller
     end
 
-    -- else, poll thru rev ev bus
+    -- else, poll thru question bus
+    --[[
+        TODO: Use a better reducer for this. 
+        when multi-return question buses get supported, perhaps
+        return (client-id, priority)
+    ]]
     return umg.ask("getController", reducers.LAST, ent)
 end
 

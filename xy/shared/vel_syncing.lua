@@ -14,7 +14,7 @@ sync.autoSyncComponent("vy", {
     lerp = true,
     numberSyncThreshold = NUMBER_SYNC_THRESHOLD,
     
-    controllable = {
+    bidirectional = {
         shouldAcceptServerside = function(ent, vy)
             -- we should accept the velocity, iff the velocity is lower
             -- than the maximum.
@@ -45,7 +45,7 @@ sync.autoSyncComponent("vx", {
     lerp = true,
     numberSyncThreshold = NUMBER_SYNC_THRESHOLD,
     
-    controllable = {
+    bidirectional = {
         shouldAcceptServerside = function(ent, vx)
             return abs(vx) <= getSpeed(ent)
         end,

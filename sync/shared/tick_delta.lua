@@ -27,4 +27,4 @@ function tickDelta.getTimeOfLastTick()
 end
 
 
-return {}
+return tickDelta
