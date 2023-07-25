@@ -8,6 +8,7 @@ return {
     maxHealth = 100,
 
     lookAtMouse = true,
+    cameraFollow = true;
 
     healthBar = {
         offset = 20,
@@ -16,8 +17,6 @@ return {
     },
 
     category = "player",
-
-    follow = true;
 
     canPickUpItems = true,
     autoHoldItem = true,

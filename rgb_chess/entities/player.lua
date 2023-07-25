@@ -24,7 +24,7 @@ end
 
 
 return {
-    follow = true;
+    followCamera = true;
     canPickUpItems = true,
 
     color = {0.9,0.9,0.9,0.7},

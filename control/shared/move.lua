@@ -48,40 +48,6 @@ sync.autoSyncComponent("moveY", {
 
 
 
---[[
-
-Now, we set entity velocity based on their moveX, moveY values.
-
-TODO::: should we allow for question-buses to map different velocity
-values in the future?
-this would allow for potential pathfinding.
-
-]]
-
-
-
-
-
---[[
-
-
-Ok::::
-Lets do some planning of this.
-
-We want to be able to configure different accelleration rates
-for our entities.
-So, there are 2 parameters here:
-- speed (max speed, obtained via `xy.getSpeed(ent)` )
-- and accelleration. (agility?)
-
-agility determines how quickly the entity can change direction,
-and determins how much "intertia" the entity has.
-
-So, perhaps we create a question: `getAgility(ent)` that gets
-the agility for an entity...?
-
-
-]]
 
 
 
@@ -92,6 +58,13 @@ local max, min = math.max, math.min
 
 local moveGroup = umg.group("moveX", "moveY", "x", "y")
 
+--[[
+
+Now, we set entity velocity based on their moveX, moveY values.
+
+
+
+]]
 
 local function setVelFromMove(ent, dt)
     local agility = getAgility(ent)
@@ -111,8 +84,14 @@ local function setVelFromMove(ent, dt)
     
     dx = dx * agility * dt
     dy = dy * agility * dt
-    
-    ent.vx = min(speed, max(-speed, ent.vx + dy))
+
+    --[[
+    TODO::: in the future, we should allow for question-buses to
+    do custom velocity mappings.
+        Perhaps use reducer:  reducers.PRIORITY_VECTOR
+    this would allow for potential pathfinding.
+    ]]
+    ent.vx = min(speed, max(-speed, ent.vx + dx))
     ent.vy = min(speed, max(-speed, ent.vy + dy))
 end
 

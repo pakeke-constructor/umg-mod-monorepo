@@ -78,30 +78,36 @@ end
 
 
 
-local DEFAULT_SPEED = 200
 
-local SPEED_AGILITY_SCALE = 0.6
-
-
-local max, min = math.max, math.min
+local DELTA = 100
+-- this number ^^^ is pretty arbitrary, we just need it to be sufficiently big
 
 
-local function updateEnt(ent, dt)
-    local speed = ent.speed or DEFAULT_SPEED
-    local agility = ent.agility or (speed * SPEED_AGILITY_SCALE)
-    local delta = agility * dt
+local function updateEnt(ent)
+    ent.moveX = ent.x
+    ent.moveY = ent.y
 
     if listener:isControlDown(input.UP) then
-        ent.vy = max(-speed, ent.vy - delta)
+        ent.moveY = ent.y - DELTA
     end
     if listener:isControlDown(input.DOWN) then
-        ent.vy = min(speed, ent.vy + delta)
+        ent.moveY = ent.y + DELTA
     end
     if listener:isControlDown(input.LEFT) then
-        ent.vx = max(-speed, ent.vx - delta)
+        ent.moveX = ent.x - DELTA
     end
     if listener:isControlDown(input.RIGHT) then
-        ent.vx = min(speed, ent.vx + delta)
+        ent.moveX = ent.x + DELTA
+    end
+end
+
+
+
+function listener:update()
+    for _, ent in ipairs(controllableGroup) do
+        if sync.isClientControlling(ent) and ent.x and ent.y then
+            updateEnt(ent)
+        end
     end
 end
 
@@ -109,38 +115,40 @@ end
 
 
 
+--[[
+    TODO: extrapolate this to the `follow` mod
+]]
+
+local CAMERA_PRIORITY = 0
 
 local follow_x = 0
 local follow_y = 0
 
+local followGroup = umg.group("cameraFollow")
 
-function listener:update(dt)
+
+umg.on("@update", function()
     local sum_x = 0
     local sum_y = 0
     local len = 0
-    local has_follow = false
-    
-    for _, ent in ipairs(controllableGroup) do
-        if sync.isClientControlling(ent) and ent.x and ent.vx then
-            updateEnt(ent, dt)
-            if ent.follow then
-                has_follow = true
-                sum_x = sum_x + ent.x
-                sum_y = sum_y + ent.y - (ent.z or 0) / 2
-                len = len + 1
-            end
+
+    for _, ent in ipairs(followGroup) do
+        if ent.x and ent.y then
+            sum_x = sum_x + ent.x
+            sum_y = sum_y + ent.y - (ent.z or 0) / 2
+            len = len + 1
         end
     end
 
-    if has_follow then
+    if len > 0 then
         follow_x = sum_x / len
         follow_y = sum_y / len
     end
-end
+end)
 
 
 umg.answer("getCameraPosition", function()
-    return follow_x, follow_y, 0
+    return follow_x, follow_y, CAMERA_PRIORITY
 end)
 
 
