@@ -8,7 +8,7 @@ local itemUsageShared = require("shared.item_usage")
 
 
 client.on("useItem", function(holder_ent, item, ...)
-    if holder_ent and holder_ent.controller == client.getUsername() then
+    if holder_ent and sync.isClientControlling(holder_ent) then
         return -- ignore; we have already called `useItem`, 
         -- since we are the ones who sent the event!
     end
@@ -18,7 +18,7 @@ end)
 
 
 local function canUse(holder_ent)
-    return holder_ent.controller == client.getUsername()
+    return sync.isClientControlling(holder_ent)
         and itemUsageShared.canUseHoldItem(holder_ent)
 end
 

@@ -1,6 +1,6 @@
 
 
-light.setBaseLighting(0,0,0)
+light.setBaseLighting(1,1,1)
 
 
 weather.rain.setOptions({

@@ -103,9 +103,8 @@ end
 
 
 local function getControlEntity(inv)
-    local slf = client.getUsername()
     for _, ent in ipairs(controlInventoryGroup) do
-        if ent.controller == slf then
+        if sync.isClientControlling(ent) then
             if inv:canBeOpenedBy(ent) then
                 return ent
             end
@@ -124,9 +123,8 @@ local function getControlTransferEntity(inv1, inv2)
         the ones controlled by the client, and return any that
         are able to make the transfer between inv1 and inv2.
     ]]
-    local slf = client.getUsername()
     for _, ent in ipairs(controlInventoryGroup) do
-        if ent.controller == slf then
+        if sync.isClientControlling(ent) then
             if inv1:canBeOpenedBy(ent) then
                 if inv2 == inv1 or inv2:canBeOpenedBy(ent) then
                     return ent

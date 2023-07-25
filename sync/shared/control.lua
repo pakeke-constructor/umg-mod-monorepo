@@ -58,4 +58,11 @@ function control.isControlledBy(ent, clientId)
 end
 
 
+
+function control.isClientControlling(ent)
+    assert(client, "Can't be called on server!")
+    return control.isControlledBy(ent, client.getUsername())
+end
+
+
 return control

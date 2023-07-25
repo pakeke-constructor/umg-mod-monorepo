@@ -20,7 +20,7 @@ local listener = input.Listener({priority = -1})
 
 local function pollControllableGroup(func_key,a,b,c)
     for _, ent in ipairs(controllableGroup) do
-        if ent.controller == client.getUsername() then
+        if sync.isClientControlling(ent) then
             -- if this ent is being controlled by the player:
             if ent.controllable[func_key] then
                 -- and if the callback exists:
@@ -129,7 +129,7 @@ function listener:update(dt)
     local has_follow = false
     
     for _, ent in ipairs(controllableGroup) do
-        if ent.controller == client.getUsername() and ent.x and ent.vx then
+        if sync.isClientControlling(ent) and ent.x and ent.vx then
             updateEnt(ent, dt)
             if ent.follow then
                 has_follow = true
@@ -179,7 +179,7 @@ umg.on("@tick", function(dt)
 
 
     for i, ent in ipairs(controllableGroup) do
-        if ent.controller == client.getUsername() then
+        if sync.isClientControlling(ent) then
             client.send("setPlayerPosition", ent, ent.x, ent.y, ent.z)
             if ent.vx and ent.vy then
                 client.send("setPlayerVelocity", ent, ent.vx, ent.vy, ent.vz)

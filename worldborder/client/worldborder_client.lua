@@ -113,7 +113,7 @@ umg.on("gameUpdate", function(dt)
         local closestBorder = nil
         local closestBorderDistance = math.huge
     
-        if ent.controller == client.getUsername() then
+        if sync.isClientControlling(ent) then
             for _, borderEnt in ipairs(borderGroup) do
                 local border = borderEnt.border
                 local distance = border:distanceFromBorderEdge(ent.x, ent.y)

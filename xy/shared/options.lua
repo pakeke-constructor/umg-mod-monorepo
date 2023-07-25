@@ -3,9 +3,9 @@
 local options = {
     DEFAULT_SPEED = 100,
 
-    SYNC_LEIGHWAY = 1.5, --[[
-        players have 50% sync leighway. This essentially means that
-        hacked clients can technically move-hack to go 50% faster;
+    SYNC_LEIGHWAY = 2, --[[
+        players have X times sync leighway. This essentially means that
+        hacked clients can technically move-hack to go X times as fast;
         (but on the positive side, legit clients won't be lagged backwards.)
     ]]
 

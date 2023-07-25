@@ -23,6 +23,12 @@ sync.isControlledBy = control.isControlledBy
 sync.getController = control.getController
 
 
+if client then
+    sync.client = {}
+    sync.isClientControlling = control.isClientControlling
+end
+
+
 
 if server then
     -- only available serverside.

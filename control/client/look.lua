@@ -21,7 +21,7 @@ and replace it with sync.autoSyncComponent
 
 
 client.on("setLookDirection", function(ent, lookX, lookY)
-    if ent.controller == client.getUsername() then
+    if sync.isClientControlling(ent) then
         return -- we have more up to date data
     end
     ent.lookX = lookX

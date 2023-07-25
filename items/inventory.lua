@@ -599,6 +599,8 @@ function Inventory:hold(slotX, slotY)
 
     if client then
         local owner_ent = umg.exists(self.owner) and self.owner
+
+
         if owner_ent.controller == client.getUsername() then
             client.send("setInventoryHoldSlot", owner_ent, slotX, slotY)
         end
