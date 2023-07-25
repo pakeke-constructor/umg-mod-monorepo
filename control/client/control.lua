@@ -157,47 +157,4 @@ end)
 
 
 
-
-
---[[
-    When we recieve a `tick` from the server,
-    send the server our player's position.
-    (Note that the server can choose to deny our player position 
-      if it thinks we are cheating!!!)
-]]
-
-
---[[
-
-old syncing code:
-
-
-umg.on("@tick", function(dt)
-    if state.getCurrentState() ~= "game" then
-        return
-    end
-
-
-    for i, ent in ipairs(controllableGroup) do
-        if sync.isClientControlling(ent) then
-            client.send("setPlayerPosition", ent, ent.x, ent.y, ent.z)
-            if ent.vx and ent.vy then
-                client.send("setPlayerVelocity", ent, ent.vx, ent.vy, ent.vz)
-            end
-        end
-    end
-
-end)
-
-
-client.on("forceSetPlayerPosition", function(player, x, y, z)
-    player.x = x
-    player.y = y
-    player.z = z
-end)
-
-]]
-
-
-
 return control

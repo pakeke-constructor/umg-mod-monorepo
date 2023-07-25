@@ -43,6 +43,54 @@ end
 
 
 
+function reducers.ADD_VECTOR(x1,x2, y1,y2)
+    --[[
+        combines vectors together by adding.
+        (Only works when the answers return 2 numbers.)
+
+        For example:
+
+        umg.answer("getOffset", function()
+            return x, y
+        end)
+    ]]
+    return x1 + x2, y1 + y2
+end
+
+function reducers.MULT_VECTOR(x1,x2, y1,y2)
+    --[[
+        combines vectors together by multiplying.
+        (Only works when the answers return 2 numbers.)
+    ]]
+    return x1 * x2, y1 * y2
+end
+
+
+
+function reducers.PRIORITY(a, b, prio_a, prio_b)
+    --[[
+        Treats the 2nd argument as the priority.
+        Returns the answer with the highest priority.
+        (If priorities are equal, returns the most recently defined answer)
+    ]]
+    if (prio_a or 0) > (prio_b or 0) then
+        return a, prio_a
+    end
+    return b, prio_b
+end
+
+
+
+function reducers.PRIORITY_VECTOR(x1,x2, y1,y2, prio_1, prio_2)
+    if (prio_1 or 0) > (prio_2 or 0) then
+        return x1, y1, prio_1
+    end
+    return x2, y2, prio_2
+end
+
+
+
+
 reducers.MIN = math.min
 
 reducers.MAX = math.max

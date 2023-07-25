@@ -9,12 +9,11 @@ local constants = require("client.constants")
 
 local function getCameraPosition()
     -- The camera offset, (i.e. camera is offset 10 pixels to the right)
-    local dx = umg.ask("getCameraOffsetX", reducers.ADD) or 0
-    local dy = umg.ask("getCameraOffsetY", reducers.ADD) or 0
+    local dx, dy = umg.ask("getCameraOffset", reducers.ADD_VECTOR) or 0, 0
 
     -- The global camera position in the world
     -- (We take the last non-nil value for this)
-    local x = umg.ask("getCameraPositionX", reducers.LAST) or 0
+    local x = umg.ask("getCameraPosition", reducers.PRIORITY_VECTOR) or 0
     local y = umg.ask("getCameraPositionY", reducers.LAST) or 0
 
     return x + dx, y + dy
