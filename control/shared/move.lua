@@ -87,11 +87,13 @@ the agility for an entity...?
 
 local getAgility = require("shared.get_agility")
 
+local max, min = math.max, math.min
+
 
 local moveGroup = umg.group("moveX", "moveY", "x", "y")
 
 
-local function setVelFromMove(ent)
+local function setVelFromMove(ent, dt)
     local agility = getAgility(ent)
     local speed = xy.getSpeed(ent)
 
@@ -107,19 +109,18 @@ local function setVelFromMove(ent)
         dy = 0
     end
     
-    --[[
-    TODO: we aint using agility here!!!!
-    Come up with a nice algorithm to use it.
-    ]]
-    ent.vx = dx * speed
-    ent.vy = dy * speed
+    dx = dx * agility * dt
+    dy = dy * agility * dt
+    
+    ent.vx = min(speed, max(-speed, ent.vx + dy))
+    ent.vy = min(speed, max(-speed, ent.vy + dy))
 end
 
 
 
-umg.on("@update", function()
+umg.on("@update", function(dt)
     for _, ent in ipairs(moveGroup) do
-        setVelFromMove(ent)
+        setVelFromMove(ent, dt)
     end
 end)
 

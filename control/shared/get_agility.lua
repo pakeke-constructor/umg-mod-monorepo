@@ -1,6 +1,6 @@
 
 
-local DEFAULT_AGILITY = 10
+local DEFAULT_AGILITY = 1
 
 
 local function getAgility(ent)
@@ -11,7 +11,6 @@ local function getAgility(ent)
 
     return (agility + agility_add) * agility_multiplier
 end
-
 
 
 return getAgility

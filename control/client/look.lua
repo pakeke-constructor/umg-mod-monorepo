@@ -18,9 +18,6 @@ umg.on("@tick", function()
             else
                 ent.lookX, ent.lookY = nil, nil
             end
-
-            -- TODO: delta compression
-            client.send("setLookDirection", ent, ent.lookX, ent.lookY)
         end
     end
 end)

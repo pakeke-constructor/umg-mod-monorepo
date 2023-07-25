@@ -80,7 +80,7 @@ end
 
 local DEFAULT_SPEED = 200
 
-local SPEED_AGILITY_SCALE = 12
+local SPEED_AGILITY_SCALE = 0.6
 
 
 local max, min = math.max, math.min
