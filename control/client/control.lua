@@ -9,8 +9,8 @@ Handles player control
 local control = {}
 
 
+local controllableGroup = umg.group("controllable")
 
-local controllableGroup = umg.group("controllable", "controller", "x", "y")
 
 
 
@@ -18,14 +18,9 @@ local listener = input.Listener({priority = -1})
 
 
 
-local function pollControllableGroup(func_key,a,b,c)
+local function pollControllableGroup(func_key)
     for _, ent in ipairs(controllableGroup) do
         if sync.isClientControlling(ent) then
-            -- if this ent is being controlled by the player:
-            if ent.controllable[func_key] then
-                -- and if the callback exists:
-                ent.controllable[func_key](ent, a,b,c)        
-            end
         end
     end
 end

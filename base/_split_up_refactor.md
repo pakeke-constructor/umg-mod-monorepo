@@ -98,4 +98,5 @@ the `@entityInit` stuff.
 Where should `operators` go? Should we even keep this?
 A: no, we shouldnt keep operators
 Or, we could put operators in the base UMG api?
+A2: Create `reducers` mod.
 

@@ -89,7 +89,8 @@ local function setVelFromMove(ent, dt)
     TODO::: in the future, we should allow for question-buses to
     do custom velocity mappings.
         Perhaps use reducer:  reducers.PRIORITY_VECTOR
-    this would allow for potential pathfinding.
+    this would allow for potential pathfinding, as opposed to just
+    blindly moving towards the target.
     ]]
     ent.vx = min(speed, max(-speed, ent.vx + dx))
     ent.vy = min(speed, max(-speed, ent.vy + dy))

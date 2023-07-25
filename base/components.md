@@ -162,16 +162,12 @@ ent.physics = {
 
 
 -- this entity can be controlled by a player.
--- (WASD is move by default)
 ent.controllable = {
-    -- callbacks when buttons are pressed:
-    onLeftButton = function(ent) end; -- `Q` by default
-    onRightButton = function(ent) end;-- `E` by default
-    onSpaceButton = function(ent) end;-- `space bar` by default
-    ... -- same callbacks for all stuff defined with b.c.input
-
-    onClick = function(ent, x, y) end;
+    -- (WASD is move by default)
+    wasd = true
 }
+
+
 
 ent.controller = "client_id" -- whoever is controlling this entity
 

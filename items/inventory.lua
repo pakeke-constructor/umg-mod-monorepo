@@ -301,6 +301,7 @@ function Inventory:hasAddAuthority(controlEnt, itemToBeAdded, slotX, slotY)
         return
     end
 
+    -- TODO: rename this question, it's terribly named
     local isBlocked = umg.ask("isItemAdditionBlocked", OR, controlEnt, self.owner, itemToBeAdded, slotX, slotY)
     return not isBlocked
 end
