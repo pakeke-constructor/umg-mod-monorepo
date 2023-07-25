@@ -56,6 +56,7 @@ function reducers.ADD_VECTOR(x1,x2, y1,y2)
     return x1 + x2, y1 + y2
 end
 
+
 function reducers.MULTIPLY_VECTOR(x1,x2, y1,y2)
     --[[
         combines vectors together by multiplying.
