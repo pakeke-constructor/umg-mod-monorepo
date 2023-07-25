@@ -142,21 +142,12 @@ local CAMERA_SPEED = 800
 local camera_x, camera_y = 0, 0
 
 
-umg.answer("getCameraPositionX", function()
+umg.answer("getCameraPosition", function()
     if _G.settings.editing then
-        return camera_x
+        return camera_x, camera_y
     end
     return nil -- let another system take over
 end)
-
-
-umg.answer("getCameraPositionY", function()
-    if _G.settings.editing then
-        return camera_y
-    end
-    return nil -- let another system take over
-end)
-
 
 
 local function updateCameraPosition(dt)

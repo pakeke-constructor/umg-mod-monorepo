@@ -10,14 +10,17 @@ local constants = require("client.constants")
 local function getCameraPosition()
     -- The camera offset, (i.e. camera is offset 10 pixels to the right)
     local dx, dy = umg.ask("getCameraOffset", reducers.ADD_VECTOR) or 0, 0
+    -- previously: getCameraOffsetX, getCameraOffsetY
 
     -- The global camera position in the world
-    -- (We take the last non-nil value for this)
-    local x = umg.ask("getCameraPosition", reducers.PRIORITY_VECTOR) or 0
-    local y = umg.ask("getCameraPositionY", reducers.LAST) or 0
+    local x, y = umg.ask("getCameraPosition", reducers.PRIORITY_VECTOR)
+    -- previously: getCameraPositionX, getCameraPositionY
+
+    error("TODO: change all the answers to use the new multi-answer format!")
 
     return x + dx, y + dy
 end
+
 
 
 

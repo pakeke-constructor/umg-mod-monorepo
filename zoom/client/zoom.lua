@@ -121,22 +121,12 @@ end
 
 
 
-
-umg.answer("getCameraPositionX", function()
+umg.answer("getCameraPosition", function()
     if CAMERA_PAN_ACTIVE then
-        return last_camx
+        return last_camx, last_camy
     end
     return nil -- allow for another system to take control
 end)
-
-
-umg.answer("getCameraPositionY", function()
-    if CAMERA_PAN_ACTIVE then
-        return last_camy
-    end
-    return nil -- allow for another system to take control
-end)
-
 
 
 

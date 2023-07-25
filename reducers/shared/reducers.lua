@@ -67,13 +67,27 @@ end
 
 
 
+-- default priority
+local D_PRIO = -1
+
 function reducers.PRIORITY(a, b, prio_a, prio_b)
     --[[
-        Treats the 2nd argument as the priority.
+        Treats the 2nd answer-value as the priority.
         Returns the answer with the highest priority.
         (If priorities are equal, returns the most recently defined answer)
+
+        Example:
+        -- answering image for an entity:
+        umg.answer("getImage", function(ent)
+            if ent.animation then
+                -- return
+                local img = ent.animation.frame
+                local priority = 1
+                return img, priority
+            end
+        end)
     ]]
-    if (prio_a or 0) > (prio_b or 0) then
+    if (prio_a or D_PRIO) > (prio_b or D_PRIO) then
         return a, prio_a
     end
     return b, prio_b
@@ -82,7 +96,7 @@ end
 
 
 function reducers.PRIORITY_VECTOR(x1,x2, y1,y2, prio_1, prio_2)
-    if (prio_1 or 0) > (prio_2 or 0) then
+    if (prio_1 or D_PRIO) > (prio_2 or D_PRIO) then
         return x1, y1, prio_1
     end
     return x2, y2, prio_2
