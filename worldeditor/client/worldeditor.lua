@@ -141,10 +141,13 @@ local CAMERA_SPEED = 800
 
 local camera_x, camera_y = 0, 0
 
+-- worldedit camera should have a pretty high priority:
+local WORLDEDIT_CAMERA_PRIORITY = 100
+
 
 umg.answer("getCameraPosition", function()
     if _G.settings.editing then
-        return camera_x, camera_y
+        return camera_x, camera_y, WORLDEDIT_CAMERA_PRIORITY
     end
     return nil -- let another system take over
 end)

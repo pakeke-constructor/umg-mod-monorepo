@@ -120,10 +120,11 @@ function listener:keyreleased(key, scancode, isrepeat)
 end
 
 
+local CAMERA_PAN_PRIORITY = 50
 
 umg.answer("getCameraPosition", function()
     if CAMERA_PAN_ACTIVE then
-        return last_camx, last_camy
+        return last_camx, last_camy, CAMERA_PAN_PRIORITY
     end
     return nil -- allow for another system to take control
 end)

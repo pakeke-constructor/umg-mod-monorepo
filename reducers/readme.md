@@ -11,13 +11,14 @@ Reducers are used in question-buses.
 
 ## Explanation of reducers:
 
-
 There are multiple answers to questions when asking a question through a question bus.
 But we want only 1 answer in total.
 
 Reducers what we use to combine multiple answers into one.
 
-For example:<br>
+
+# Example:
+
 Lets say we want to get the speed multiplier for an entity:
 ```lua
 
@@ -39,15 +40,12 @@ umg.answer("getSpeedMultiplier", function(ent)
 end)
 
 
-
-
 --[[
-    be careful not to define question-answers multiple times:
-    Now, whenever an entity has `superSpeed` component, it will
-    travel 50 TIMES AS FAST.
+    be careful not to define answers multiple times:
+    If we define this, entities with a `superSpeed` component will
+    actually travel 50 TIMES AS FAST. (5 times 10)
 
-    This is because the reducer multiplies this answer with
-    the previous answer too.
+    (This is because the previous answer is still active.)
 ]]
 umg.answer("getSpeedMultiplier", function(ent)
     if ent.superSpeed then
@@ -71,7 +69,6 @@ local speed = umg.ask("getSpeedMultiplier", MULT, ent)
 --      (we can pass as many args as we want though.)
 
 print("The speed multiplier of ent is: ", speed)
-
 
 ```
 

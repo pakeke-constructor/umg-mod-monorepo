@@ -5,7 +5,7 @@ local drawStats = {}
 
 
 local ADD = reducers.ADD
-local MULT = reducers.MULT
+local MULT = reducers.MULTIPLY
 
 
 

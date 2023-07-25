@@ -30,15 +30,20 @@ function reducers.EXISTS(a,b)
 end
 
 
+
+-- TODO: Should we have the defaults (or 0) here?
+-- It's (slightly) less efficient.
 function reducers.ADD(a,b)
-    return a + b
+    return (a or 0) + (b or 0)
 end
 
 reducers.SUM = reducers.ADD
 
 
-function reducers.MULT(a,b)
-    return a * b
+-- TODO: Should we have the defaults (or 1) here?
+-- It's (slightly) less efficient.
+function reducers.MULTIPLY(a,b)
+    return (a or 1) * (b or 1)
 end
 
 
@@ -46,18 +51,12 @@ end
 function reducers.ADD_VECTOR(x1,x2, y1,y2)
     --[[
         combines vectors together by adding.
-        (Only works when the answers return 2 numbers.)
-
-        For example:
-
-        umg.answer("getOffset", function()
-            return x, y
-        end)
+        (Answers must return 2 numbers)
     ]]
     return x1 + x2, y1 + y2
 end
 
-function reducers.MULT_VECTOR(x1,x2, y1,y2)
+function reducers.MULTIPLY_VECTOR(x1,x2, y1,y2)
     --[[
         combines vectors together by multiplying.
         (Only works when the answers return 2 numbers.)
@@ -74,7 +73,14 @@ function reducers.PRIORITY(a, b, prio_a, prio_b)
     --[[
         Treats the 2nd answer-value as the priority.
         Returns the answer with the highest priority.
+
+        The first argument can be any type- only the priority matters for resolution.
+
         (If priorities are equal, returns the most recently defined answer)
+
+        If you want a definitive answer to a question, 
+        (i.e. a question where results can't really be combined,)
+        this is probably the best reducer to use.
 
         Example:
         -- answering image for an entity:
@@ -95,7 +101,20 @@ end
 
 
 
-function reducers.PRIORITY_VECTOR(x1,x2, y1,y2, prio_1, prio_2)
+function reducers.PRIORITY_DOUBLE(x1,x2, y1,y2, prio_1, prio_2)
+    --[[
+        same as PRIORITY, but for 2 arguments, not 1.
+
+        Argument visualization:
+
+        umg.answer(... function()
+            return x1, y1, prio_1
+        end)
+
+        umg.answer(... function()
+            return x2, y2, prio_2
+        end)
+    ]]
     if (prio_1 or D_PRIO) > (prio_2 or D_PRIO) then
         return x1, y1, prio_1
     end
@@ -146,10 +165,6 @@ function reducers.LAST(a, b)
     --[[
         returns the LAST non-nil result
         (This will be the last umg.answer that is loaded)
-
-        If you want a definitive answer to a question, 
-        (i.e. a question where results can't really be combined,)
-        this is probably the best reducer to use.
     ]]
     if b then
         return b
