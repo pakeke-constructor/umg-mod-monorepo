@@ -40,9 +40,8 @@ function draw.getCameraPosition()
 end
 
 
-
-umg.on("drawWorld", function(customCamera)
-    --[[
+function draw.drawWorld(customCamera)
+     --[[
         customCamera is an optional argument.
         should be left nil, most of the time, unless we want something custom.
         
@@ -67,13 +66,14 @@ umg.on("drawWorld", function(customCamera)
     umg.call("postDrawWorld")
 
     camera:detach()
+end
+
+
+
+umg.on("drawWorld", function()
+    draw.drawWorld()
 end)
 
-
-
-function draw.drawWorld(customCamera)
-
-end
 
 
 

@@ -49,6 +49,9 @@ sync.autoSyncComponent("x", {
     bidirectional = {
         shouldAcceptServerside = function(ent, x)
             -- Only accept positions of players that aren't moving TOO fast.
+            if type(x) ~= "number" then
+                return false
+            end
             local dt = getTickDelta()
             local max_delta = getSpeed(ent) * options.SYNC_LEIGHWAY * dt
             return abs(ent.x - x) <= max_delta
@@ -72,7 +75,10 @@ sync.autoSyncComponent("y", {
     
     bidirectional = {
         shouldAcceptServerside = function(ent, y)
-            -- Only accept packets that
+            -- Only accept packets that are not too fast
+            if type(y) ~= "number" then
+                return false
+            end
             local dt = getTickDelta()
             local max_delta = getSpeed(ent) * options.SYNC_LEIGHWAY * dt
             return abs(ent.y - y) <= max_delta

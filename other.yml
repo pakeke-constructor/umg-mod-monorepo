@@ -42,5 +42,6 @@ globals:
     any: true
   reducers:
     any: true
-
+  xy:
+    any: true
 

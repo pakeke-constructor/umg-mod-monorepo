@@ -109,14 +109,6 @@ end
 
 
 
-local function shouldFollow()
-    -- TODO: Should we keep this?
-    -- we already use reducers.LAST on the camera position question.
-    local blocked = umg.ask("isCameraPlayerFollowBlocked", reducers.OR)
-    return not blocked
-end
-
-
 
 local follow_x = 0
 local follow_y = 0
@@ -140,7 +132,7 @@ function listener:update(dt)
         end
     end
 
-    if has_follow and shouldFollow() then
+    if has_follow then
         follow_x = sum_x / len
         follow_y = sum_y / len
     end

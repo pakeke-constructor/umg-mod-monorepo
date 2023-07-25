@@ -28,7 +28,7 @@ local max, min = math.max, math.min
 
 
 gameState:on("@update", function(dt)
-    local modif = umg.ask("getDeltaTimeModifier", MULT) or 1
+    local modif = umg.ask("getDeltaTimeMultiplier", MULT) or 1
     dt = min(MAX_DT, max(MIN_DT, dt * modif))
 
     umg.call("gamePreUpdate", dt)

@@ -1,39 +1,17 @@
 
 --[[
-automatic syncing for entity look directions
 
-lookX and lookY
-]]
-
-
-
-local lookGroup = umg.group("controller", "lookAtMouse")
-
-
---[[
-
-todo:
-
-we need to get rid of this, 
-and replace it with sync.autoSyncComponent
+Entities that are being controlled will automatically look at the mouse.
 
 ]]
 
 
-client.on("setLookDirection", function(ent, lookX, lookY)
-    if sync.isClientControlling(ent) then
-        return -- we have more up to date data
-    end
-    ent.lookX = lookX
-    ent.lookY = lookY
-end)
-
-
+local lookAtMouseGroup = umg.group("controllable", "lookAtMouse")
 
 
 umg.on("@tick", function()
-    for _, ent in ipairs(lookGroup) do
-        if ent.controller == client.getUsername() then
+    for _, ent in ipairs(lookAtMouseGroup) do
+        if sync.isClientControlling(ent) then
             if ent.lookAtMouse then
                 local lx, ly = rendering.getWorldMousePosition()
                 ent.lookX, ent.lookY = lx, ly
