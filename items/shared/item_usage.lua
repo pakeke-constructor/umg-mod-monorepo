@@ -28,7 +28,7 @@ function itemUsageShared.canUseHoldItem(holder_ent, ...)
         return false
     end
 
-    local time = base.getGameTime()
+    local time = state.getGameTime()
     local time_since_use = time - (item.itemLastUseTime or 0)
     local cooldown = (item.itemCooldown or DEFAULT_ITEM_COOLDOWN)
     if math.abs(time_since_use) < cooldown then

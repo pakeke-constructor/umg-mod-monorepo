@@ -14,6 +14,12 @@ Each `delay` object is represented as a table:
 ]]
 
 
+
+
+--[[
+    TODO: We shouldn't need to binarySearch here,
+    we should be using a heap instead.
+]]
 local function binarySearch(arr, target_time)
     --[[
         returns what the index should be for a target time in `arr`.

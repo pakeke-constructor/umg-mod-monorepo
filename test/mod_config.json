@@ -1,6 +1,7 @@
 {
     "uses": [
       "base",
+      "drawfx",
       "chat",
       "light",
       "items",

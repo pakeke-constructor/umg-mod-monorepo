@@ -14,16 +14,7 @@ local function loadClient(base)
 
     base.client.groundTexture = require("client.ground_texture")
 
-    local shockwave = require("client.shockwaves")
-    base.client.shockwave = shockwave;
-
-    base.client.particles = require("client.particles");
-
-    base.client.popups = require("client.popups")
-
     base.client.sound = require("client.sound")
-
-    base.client.title = require("client.title");
 end
 
 
@@ -31,8 +22,6 @@ local function loadShared(base)
     base.gravity = require("shared.gravity");
 
     base.initializers = require("shared.initializers")
-    
-    base.getGameTime = require("shared.get_game_time")
     
     base.components = require("shared.components")
 

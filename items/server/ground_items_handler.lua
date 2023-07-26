@@ -64,7 +64,7 @@ end
 
 groundItemGroup:onAdded(function(e)
     groundItemPartition:addEntity(e)
-    e.groundItemSpawnTime = base.getGameTime()
+    e.groundItemSpawnTime = state.getGameTime()
 end)
 
 
@@ -81,7 +81,7 @@ local function canBePickedUp(dist, item)
     end
 
     if item.groundItemSpawnTime then
-        local time = base.getGameTime() - item.groundItemSpawnTime
+        local time = state.getGameTime() - item.groundItemSpawnTime
         if time < PICKUP_DELAY_TIME then
             return false
         end

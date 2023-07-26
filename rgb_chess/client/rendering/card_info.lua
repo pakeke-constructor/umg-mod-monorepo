@@ -91,7 +91,7 @@ umg.on("preDrawUI", function()
         local x, y = rendering.toScreenCoords(entBeingHovered.x, rendering.getDrawY(entBeingHovered.y, entBeingHovered.z))
         local scale = rendering.getUIScale()
  
-        local circle_size = 3 * (2 + math.sin(base.getGameTime() * 3))
+        local circle_size = 3 * (2 + math.sin(state.getGameTime() * 3))
         love.graphics.circle("line", x/scale, y/scale, circle_size)
         love.graphics.pop()
     end

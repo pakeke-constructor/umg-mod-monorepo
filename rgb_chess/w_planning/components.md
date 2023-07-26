@@ -12,7 +12,7 @@ ent.moveBehaviour = {...}
 ent.attackBehaviour = {...}
 
 ent.shields = {
-    {startTime = base.getGameTime(), duration = 4, shieldSize = 10}
+    {startTime = state.getGameTime(), duration = 4, shieldSize = 10}
     ...
 }
 

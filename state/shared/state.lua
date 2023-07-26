@@ -158,6 +158,9 @@ end
 state.State = State
 
 
+state.getGameTime = require("shared.get_game_time")
+
+
 umg.expose("state", state)
 
 return state

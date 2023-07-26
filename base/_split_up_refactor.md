@@ -81,6 +81,31 @@ SOLUTION: keep it in the `base` mod for now.
 
 
 
+Where should `initializers` go?
+A: We should delete `initializers`, and replace it with 
+the `@entityInit` stuff.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 IDEA:
 Currently, camera-following is implemented in `control`.
 How about we remove this, and abstract it to the `zoom` mod.
@@ -88,12 +113,7 @@ Then, we rename the `zoom` mod to be `follow`.
 This way, `control` wouldn't need to inherit `rendering`.
 FUTURE-OLI: ^^^ woops, it still needs to inherit `rendering` because
 it needs a translation from screen-coords to world-coords.
-
-
-
-Where should `initializers` go?
-A: We should delete `initializers`, and replace it with 
-the `@entityInit` stuff.
+(DONE)
 
 
 
@@ -101,4 +121,5 @@ Where should `operators` go? Should we even keep this?
 A: no, we shouldnt keep operators
 Or, we could put operators in the base UMG api?
 A2: Create `reducers` mod.
+(DONE)
 

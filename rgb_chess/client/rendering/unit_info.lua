@@ -78,7 +78,7 @@ umg.on("preDrawUI", function()
             x / scale, y / scale
         )
         
-        local circle_size = 3 * (2 + math.sin(base.getGameTime() * 3))
+        local circle_size = 3 * (2 + math.sin(state.getGameTime() * 3))
         love.graphics.circle("line", x/scale, y/scale, circle_size)
         love.graphics.pop()
     end

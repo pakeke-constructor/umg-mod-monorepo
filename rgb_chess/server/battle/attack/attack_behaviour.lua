@@ -178,7 +178,7 @@ end
 
 
 umg.on("@tick", function()
-    local now = base.getGameTime()
+    local now = state.getGameTime()
     for _, ent in ipairs(attackGroup) do
         if ent.attackBehaviour then
             updateEnt(ent, now)

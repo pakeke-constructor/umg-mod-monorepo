@@ -58,7 +58,7 @@ local createShieldTc = typecheck.assert("entity", "number", "number")
 function shieldAPI.createShield(targetEnt, size, duration)
     createShieldTc(targetEnt, size, duration)
     local shield = {
-        startTime = base.getGameTime(),
+        startTime = state.getGameTime(),
         shieldSize = size,
         duration = duration
     }
@@ -77,7 +77,7 @@ local shieldGroup = umg.group("shields")
 
 local function expireShields(ent)
     local shields = ent.shields
-    local time = base.getGameTime()
+    local time = state.getGameTime()
     for i, sh in ipairs(shields)do
         local endTime = sh.duration + sh.startTime
         if endTime > time then

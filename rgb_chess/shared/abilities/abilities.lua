@@ -55,7 +55,7 @@ local function bufferAction(bufAction)
         return
     end
 
-    bufAction.activateTime = base.getGameTime() + constants.ABILITY_BUFFER_TIME
+    bufAction.activateTime = state.getGameTime() + constants.ABILITY_BUFFER_TIME
     abilityActionBuffer:insert(bufAction)
 end
 
@@ -436,7 +436,7 @@ umg.on("@tick", function()
     end
 
     -- Activate all buffered abilities that have passed their activation time
-    local time = base.getGameTime()
+    local time = state.getGameTime()
     local bufAction = abilityActionBuffer:peek()
     while bufAction do
         if bufAction.activateTime <= time then

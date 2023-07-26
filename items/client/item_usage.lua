@@ -13,7 +13,7 @@ client.on("useItem", function(holder_ent, item, ...)
         -- since we are the ones who sent the event!
     end
     item:useItem(holder_ent, ...)
-    item.itemLastUseTime = base.getGameTime()
+    item.itemLastUseTime = state.getGameTime()
 end)
 
 
@@ -35,7 +35,7 @@ function itemUsage.useHoldItem(holder_ent, ...)
         if type(item.useItem) == "function" then
             item:useItem(holder_ent or false, ...)
         end
-        item.itemLastUseTime = base.getGameTime()
+        item.itemLastUseTime = state.getGameTime()
     elseif item and item.useItemDeny then
         item:useItemDeny(holder_ent, ...)
     end
