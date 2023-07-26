@@ -123,7 +123,7 @@ ent.text = {
 -- please note that entities with particles break auto batching.
 -- Don't use particles EVERYWHERE; it'll be slow
 ent.particles = {
-    type = "dust", -- `dust` is defined by base.client.particles.define()
+    type = "dust", -- `dust` is defined by drawfx.particles.define()
     
     -- OPTIONAL FIELDS:
     rate = 5, -- emits 5 particles per second (default = 5)

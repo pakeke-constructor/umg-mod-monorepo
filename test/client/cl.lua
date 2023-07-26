@@ -25,12 +25,12 @@ base.client.groundTexture.setTextureList({"ground_texture_final4"})
 love.graphics.clear()
 
 
-local psys = base.client.particles.newParticleSystem({
+local psys = drawfx.particles.newParticleSystem({
     "circ4", "circ3", "circ2", "circ1"
 })
 
 
-base.client.particles.define("smoke", psys)
+drawfx.particles.define("smoke", psys)
 
 
 --[[
@@ -65,10 +65,10 @@ function listener:keypressed(key, scancode, isrepeat)
     if scancode == "q" then
         local e = base.getPlayer()
         local x, y = rendering.getWorldMousePosition()
-        base.client.particles.emit("smoke", e.x, e.y, 8, 10, {0.2,0.8,0.9})
+        drawfx.particles.emit("smoke", e.x, e.y, 8, 10, {0.2,0.8,0.9})
         e.x = x
         e.y = y
-        base.client.particles.emit("smoke", x, y, 8, 10)
+        drawfx.particles.emit("smoke", x, y, 8, 10)
     end
     if scancode == "y" then
         error("test")
@@ -96,7 +96,7 @@ end)
 function listener:mousepressed(x, y, button, istouch, presses)
     if button == 1 then
         local wx,wy = rendering.toWorldCoords(x,y)
-        base.client.popups.text("Hello", wx, wy)
+        drawfx.popups.text("Hello", wx, wy)
     elseif button == 2 then
         local wx,wy = rendering.toWorldCoords(x,y)
         client.send("spawn",wx,wy)

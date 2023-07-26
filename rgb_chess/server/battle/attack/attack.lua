@@ -68,7 +68,7 @@ local function doSplash(ent, hitx, hity, category, damage)
         end
 
         if splash.shockwave then
-            base.client.shockwave(hitx, hity, 0, splash.radius, 2, 0.4)
+            drawfx.shockwave(hitx, hity, 0, splash.radius, 2, 0.4)
         end
     end
 end

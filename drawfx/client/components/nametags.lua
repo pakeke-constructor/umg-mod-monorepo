@@ -33,7 +33,7 @@ local function getNametagText(ent)
 end
 
 
-umg.on("drawEntity", function(ent)
+umg.on("postDrawEntity", function(ent)
     if ent.nametag then
         local _ox, oy = rendering.getImageOffsets(images[ent.image])
         local text = getNametagText(ent)

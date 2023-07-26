@@ -21,7 +21,7 @@ return {
 
         if client then
             base.client.sound.playSound("boom_main1")
-            base.client.particles.emit("musket_smoke", x,y,nil,10)
+            drawfx.particles.emit("musket_smoke", x,y,nil,10)
         else
             if type(dx) == "number" and type(dy) == "number" then        
                 local e = server.entities.player(x,y)

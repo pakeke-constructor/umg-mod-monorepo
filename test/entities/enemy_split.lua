@@ -34,7 +34,7 @@ return {
 
     onDeath = function(ent)
         if client then
-            base.client.particles.emit("smoke", ent.x, ent.y, ent.z, 5, {0.9,0.9,0})
+            drawfx.particles.emit("smoke", ent.x, ent.y, ent.z, 5, {0.9,0.9,0})
         elseif server then
             server.entities.enemy_split(ent.x, ent.y - 5)
             server.entities.enemy_split(ent.x, ent.y + 5)

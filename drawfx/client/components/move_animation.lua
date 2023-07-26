@@ -5,8 +5,15 @@ Handles moving animation of entities.
 
 TODO:
 Currently, all move animation entities have the exact same cycle.
-Change this by having a table that maps `[ent] --> current_cycle` 
-to offset each entity animation
+Change this by adding ent's id to the offset.
+
+
+TODO:
+Currently, only 4-directional animations are supported.
+Support 2-directional animations please!!!!
+(There are a lot of assets with only left-right animations.)
+
+
 
 ]]
 
