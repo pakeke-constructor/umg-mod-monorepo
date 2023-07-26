@@ -62,9 +62,13 @@ local moveGroup = umg.group("moveX", "moveY", "x", "y")
 
 Now, we set entity velocity based on their moveX, moveY values.
 
-
-
 ]]
+
+
+local MOVE_THRESHOLD = 0.1
+-- The distance that an entity "move" position must be away from an
+-- entity before it actually tries to move there.
+
 
 local function setVelFromMove(ent, dt)
     if (not ent.moveX or not ent.moveY) then
@@ -79,7 +83,7 @@ local function setVelFromMove(ent, dt)
     local dy = (ent.moveY - ent.y)
     local mag = math.distance(dx, dy)
 
-    if mag > 0 then
+    if mag > MOVE_THRESHOLD then
         dx = dx / mag
         dy = dy / mag
     else

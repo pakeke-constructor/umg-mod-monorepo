@@ -62,8 +62,8 @@ local DELTA = 100
 
 
 local function updateEnt(ent)
-    ent.moveX = nil
-    ent.moveY = nil
+    ent.moveX = ent.x
+    ent.moveY = ent.y
 
     if listener:isControlDown(input.UP) then
         ent.moveY = ent.y - DELTA
