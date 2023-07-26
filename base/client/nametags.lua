@@ -22,11 +22,21 @@ local EXTRA_OY = 10
 
 
 
+local function getNametagText(ent)
+    if ent.nametag.value then
+        return ent.nametag.value
+    end
+
+    local txt = umg.ask("getNametagText", reducers.PRIORITY, ent)
+
+    return (txt or ent.controller) or ""
+end
+
+
 umg.on("drawEntity", function(ent)
     if ent.nametag then
         local _ox, oy = rendering.getImageOffsets(images[ent.image])
-        local text = ent.nametag.value or ent.controller or DEFAULT
-
+        local text = getNametagText(ent)
         local width = text_to_width[text] or font:getWidth(text)
         text_to_width[text] = width
 

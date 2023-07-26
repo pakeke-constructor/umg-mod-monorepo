@@ -87,6 +87,10 @@ end
 local controlInventoryGroup = umg.group("inventory", "controllable")
 
 
+umg.on("input", function(ent, inputEnum)
+    
+end)
+
 function listener:mousepressed(x, y, button, istouch, presses)
     if button == 1 then
         for _, p in ipairs(controlInventoryGroup) do

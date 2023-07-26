@@ -31,12 +31,25 @@ local DEFAULT_INPUT_MAPPING =  {
 }
 
 
+local DEFAULT_MOUSE_MAPPING = {
+    MOUSE_1 = 1,
+    MOUSE_2 = 1,
+    MOUSE_3 = 1,
+    MOUSE_4 = 1
+}
+
+
 
 local validInputEnums = {}
 
 for enum,_ in pairs(DEFAULT_INPUT_MAPPING) do
     validInputEnums[enum] = true
 end
+
+for enum,_ in pairs(DEFAULT_MOUSE_MAPPING) do
+    validInputEnums[enum] = true
+end
+
 
 
 local function invert(mapping)
@@ -50,12 +63,29 @@ end
 
 
 
+local function newInputEnums()
+    return setmetatable({}, {
+        __index = function(t,k)
+            error("Unknown function, or unknown input enum: " .. k)
+        end
+    })
+end
+
+
 
 local inputMapping = DEFAULT_INPUT_MAPPING 
 -- { [inputEnum] -> scancode }
-local scancodeMapping = invert(inputMapping)
+
+local scancodeMapping = invert(DEFAULT_INPUT_MAPPING)
 -- { [scancode] -> inputEnum }
-local inputEnums = {}
+
+local mouseInputMapping = DEFAULT_MOUSE_MAPPING
+-- { [inputEnum] -> mouseButton }
+
+local mouseButtonMapping = invert(DEFAULT_MOUSE_MAPPING)
+-- { [mousebutton] -> inputEnum }
+
+local inputEnums = newInputEnums()
 -- { [inputEnum] -> inputEnum } used by input table.
 -- i.e.  input.BUTTON_1
 
@@ -89,7 +119,7 @@ local mouseMovementIsLocked = false
 
 local input = setmetatable({}, {
     __index = function(t,k)
-        if inputEnums[k] then
+        if rawget(inputEnums, k) then
             return inputEnums[k]
         else
             error("Accessed an undefined key in input table: " .. tostring(k))
@@ -182,6 +212,10 @@ function Listener:getInputEnum(scancode)
     return scancodeMapping[scancode]
 end
 
+function Listener:getMouseInputEnum(button)
+    return mouseButtonMapping[button]
+end
+
 
 function Listener:isKeyLocked(scancode)
     return lockedScancodes[scancode] and (lockedScancodes[scancode] ~= self)
@@ -200,8 +234,15 @@ end
 function Listener:isControlDown(inputEnum)
     assert(isValidInputEnum(inputEnum), "Invalid input enum: " .. inputEnum)
     local scancode = self:getKey(inputEnum)
-    return self:isKeyDown(scancode)
+    if scancode then
+        return self:isKeyDown(scancode)
+    end
+    local mousebutton = self:getMouseButton(inputEnum)
+    if mousebutton then
+        return self:isMouseButtonDown(mousebutton)
+    end
 end
+
 
 function Listener:isKeyDown(scancode)
     if self:isKeyLocked(scancode) then
@@ -213,6 +254,8 @@ function Listener:isKeyDown(scancode)
     return love.keyboard.isScancodeDown(scancode)
 end
 
+
+
 function Listener:isMouseButtonDown(mousebutton)
     if mouseButtonsAreLocked then
         return false
@@ -221,6 +264,11 @@ function Listener:isMouseButtonDown(mousebutton)
         return false
     end
     return love.mouse.isDown(mousebutton)
+end
+
+
+function Listener:getMouseButton(inputEnum)
+    return mouseButtonMapping[inputEnum]
 end
 
 
@@ -275,7 +323,7 @@ local inputList
 local function updateTables(inpMapping)
     inputMapping = inpMapping
     scancodeMapping = invert(inpMapping)
-    inputEnums = {}
+    inputEnums = newInputEnums()
     inputList = {}
 
     for inpEnum, _ in pairs(inpMapping)do

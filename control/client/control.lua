@@ -18,9 +18,11 @@ local listener = input.Listener({priority = -1})
 
 
 
-local function pollControllableGroup(func_key)
+local function callInput(inputEnum)
     for _, ent in ipairs(controllableGroup) do
         if sync.isClientControlling(ent) then
+            -- todo: do we need to lock the listener here?
+            umg.call("input", ent, inputEnum)
         end
     end
 end
@@ -36,22 +38,7 @@ function listener:keypressed(key, scancode, isrepeat)
     end
 
     local inputEnum = self:getInputEnum(scancode)
-
-    if inputEnum == input.BUTTON_LEFT then
-        pollControllableGroup("onLeftButton")
-    elseif inputEnum == input.BUTTON_RIGHT then
-        pollControllableGroup("onRightButton")
-    elseif inputEnum == input.BUTTON_SPACE then
-        pollControllableGroup("onSpaceButton")
-    elseif inputEnum == input.BUTTON_1 then
-        pollControllableGroup("onButton1")
-    elseif inputEnum == input.BUTTON_2 then
-        pollControllableGroup("onButton2")    
-    elseif inputEnum == input.BUTTON_3 then
-        pollControllableGroup("onButton3")
-    elseif inputEnum == input.BUTTON_4 then
-        pollControllableGroup("onButton4")
-    end
+    callInput(inputEnum)
 end
 
 
@@ -61,11 +48,7 @@ function listener:mousepressed(button, x, y)
         return
     end
 
-    -- TODO: This aint working!!! Maybe it's mousedown??? idk 
-    if button == 1 then
-        pollControllableGroup("onClick", x, y)
-    end
-
+    callInput()
     listener:lockMouseButtons()
 end
 
