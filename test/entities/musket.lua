@@ -4,12 +4,12 @@ local START_DIST = 30
 
 
 if client then
-    local psys = drawfx.particles.newParticleSystem({"circ3", "circ2", "circ1"})
+    local psys = visualfx.particles.newParticleSystem({"circ3", "circ2", "circ1"})
     psys:setColors(
         {0.6,0.6,0.6},
         {0.2,0.2,0.2}
     )
-    drawfx.particles.define("musket_smoke", psys)
+    visualfx.particles.define("musket_smoke", psys)
 end
 
 
@@ -29,7 +29,7 @@ return {
 
         if client then
             base.client.sound.playSound("boom_main1")
-            drawfx.particles.emit("musket_smoke", x,y,nil,10)
+            visualfx.particles.emit("musket_smoke", x,y,nil,10)
         else
             if type(dx) == "number" and type(dy) == "number" then        
                 local e = server.entities.player(x, y, holderEnt.controller)

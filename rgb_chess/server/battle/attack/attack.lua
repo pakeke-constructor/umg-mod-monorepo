@@ -68,7 +68,7 @@ local function doSplash(ent, hitx, hity, category, damage)
         end
 
         if splash.shockwave then
-            drawfx.shockwave(hitx, hity, 0, splash.radius, 2, 0.4)
+            visualfx.shockwave(hitx, hity, 0, splash.radius, 2, 0.4)
         end
     end
 end
