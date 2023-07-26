@@ -101,7 +101,7 @@ local CAMERA_PAN_ACTIVE = false
 
 
 function listener:keypressed(key, scancode, isrepeat)
-    local inputEnum = self:getInputEnum(scancode)
+    local inputEnum = self:getKeyboardInputEnum(scancode)
     if inputEnum == input.BUTTON_SHIFT then
         -- camera is panning / in free mode
         CAMERA_PAN_ACTIVE = true
@@ -112,7 +112,7 @@ end
 
 
 function listener:keyreleased(key, scancode, isrepeat)
-    local inputEnum = self:getInputEnum(scancode)
+    local inputEnum = self:getKeyboardInputEnum(scancode)
     if inputEnum == input.BUTTON_SHIFT then
         -- Camera is no longer panning
         CAMERA_PAN_ACTIVE = false

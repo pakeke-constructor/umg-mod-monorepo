@@ -84,18 +84,16 @@ end
 
 
 
-local controlInventoryGroup = umg.group("inventory", "controllable")
-
 
 umg.on("input", function(ent, inputEnum)
-    
+    if inputEnum == input.MOUSE_1 then
+        items.useHoldItem(ent)
+    end
 end)
+
 
 function listener:mousepressed(x, y, button, istouch, presses)
     if button == 1 then
-        for _, p in ipairs(controlInventoryGroup) do
-            items.useHoldItem(p)
-        end
         local wx,wy = rendering.toWorldCoords(x,y)
         base.client.popups.text("Hello", wx, wy)
     elseif button == 2 then

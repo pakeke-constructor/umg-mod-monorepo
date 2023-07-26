@@ -37,7 +37,7 @@ function listener:keypressed(key, scancode, isrepeat)
         return
     end
 
-    local inputEnum = self:getInputEnum(scancode)
+    local inputEnum = self:getKeyboardInputEnum(scancode)
     callInput(inputEnum)
 end
 
@@ -62,8 +62,8 @@ local DELTA = 100
 
 
 local function updateEnt(ent)
-    ent.moveX = ent.x
-    ent.moveY = ent.y
+    ent.moveX = nil
+    ent.moveY = nil
 
     if listener:isControlDown(input.UP) then
         ent.moveY = ent.y - DELTA

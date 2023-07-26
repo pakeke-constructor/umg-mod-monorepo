@@ -144,7 +144,7 @@ end
 
 
 function listener:keypressed(key, scancode, isrepeat)
-    local inputEnum = self:getInputEnum(scancode)
+    local inputEnum = self:getKeyboardInputEnum(scancode)
     -- TODO: Allow for controls to be set
     if inputEnum == input.BUTTON_2 then
         if areMostInventoriesOpen() then

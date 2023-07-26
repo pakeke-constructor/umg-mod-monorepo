@@ -5,11 +5,13 @@ type InputEnum = 'UP'|'LEFT'|'DOWN'|'RIGHT'|'BUTTON_SPACE'|'BUTTON_SHIFT'|'BUTTO
 type MouseButton = 1 | 2 | 3 | 4 | 5 
 
 
+/**
+ * TODO: Some of this needs to be updated.
+ */
 interface Listener {
     lockKey(scancode: Scancode): void;
     lockMouseButton(button: MouseButton): void;
     getKey(inputEnum: InputEnum): Scancode | undefined;
-    getInputEnum(scancode: Scancode): InputEnum | undefined;
     isKeyLocked(scancode: Scancode): boolean;
     isMouseButtonLocked(button: MouseButton): boolean;
     isControlDown(inputEnum: InputEnum): boolean;

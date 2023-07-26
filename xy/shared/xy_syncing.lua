@@ -24,7 +24,7 @@ sync.autoSyncComponent("x", {
     
     --[[
     TODO:
-    There's a big(ish) issue with this verification.
+    There's a little issue with this verification.
     Currently, we simply check that the distance is not too big.
     But... this doesn't account for the fact that the entity will
     have already been moved on the server.

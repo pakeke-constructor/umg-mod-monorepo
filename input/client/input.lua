@@ -33,9 +33,9 @@ local DEFAULT_INPUT_MAPPING =  {
 
 local DEFAULT_MOUSE_MAPPING = {
     MOUSE_1 = 1,
-    MOUSE_2 = 1,
-    MOUSE_3 = 1,
-    MOUSE_4 = 1
+    MOUSE_2 = 2,
+    MOUSE_3 = 3,
+    MOUSE_4 = 4
 }
 
 
@@ -73,7 +73,7 @@ end
 
 
 
-local inputMapping = DEFAULT_INPUT_MAPPING 
+local keyboardInputMapping = DEFAULT_INPUT_MAPPING 
 -- { [inputEnum] -> scancode }
 
 local scancodeMapping = invert(DEFAULT_INPUT_MAPPING)
@@ -205,16 +205,25 @@ end
 
 
 function Listener:getKey(inputEnum)
-    return inputMapping[inputEnum]
+    return keyboardInputMapping[inputEnum]
 end
 
-function Listener:getInputEnum(scancode)
+function Listener:getMouseButton(inputEnum)
+    return mouseInputMapping[inputEnum]
+end
+
+
+
+function Listener:getKeyboardInputEnum(scancode)
+    -- gets input enum from keyboard scancode
     return scancodeMapping[scancode]
 end
 
 function Listener:getMouseInputEnum(button)
+    -- gets input enum from keyboard scancode
     return mouseButtonMapping[button]
 end
+
 
 
 function Listener:isKeyLocked(scancode)
@@ -227,7 +236,7 @@ end
 
 
 local function isValidInputEnum(value)
-    return value and inputMapping[value]  
+    return value and (keyboardInputMapping[value] or mouseInputMapping[value])
 end
 
 
@@ -266,10 +275,6 @@ function Listener:isMouseButtonDown(mousebutton)
     return love.mouse.isDown(mousebutton)
 end
 
-
-function Listener:getMouseButton(inputEnum)
-    return mouseButtonMapping[inputEnum]
-end
 
 
 --[[
@@ -318,30 +323,51 @@ end
 
 
 
-local inputList
 
-local function updateTables(inpMapping)
-    inputMapping = inpMapping
-    scancodeMapping = invert(inpMapping)
+local function updateTables(keyboardMapping, mouseMapping)
     inputEnums = newInputEnums()
-    inputList = {}
 
-    for inpEnum, _ in pairs(inpMapping)do
+    keyboardInputMapping = keyboardMapping
+    scancodeMapping = invert(keyboardMapping)
+
+    mouseInputMapping = mouseMapping
+    mouseButtonMapping = invert(mouseMapping)
+
+    -- Add input enums:
+    for inpEnum, _ in pairs(keyboardMapping)do
         inputEnums[inpEnum] = inpEnum
-        table.insert(inputList, inpEnum)
+    end
+    for inpEnum, _ in pairs(mouseMapping) do
+        inputEnums[inpEnum] = inpEnum
     end
 end
 
 
 
-local function assertValid(inpMapping)
-    for inputEnum, scancode in pairs(inpMapping) do
+local function assertKeysValid(keyMapping)
+    for inputEnum, scancode in pairs(keyMapping) do
         if not validInputEnums[inputEnum] then
             error("invalid input enum: " .. inputEnum, 2)
         end
-        love.keyboard.getKeyFromScancode(scancode) -- this just assets that the scancode is valid.
+        love.keyboard.getKeyFromScancode(scancode) -- this just asserts that the scancode is valid.
     end
 end
+
+
+local VALID_MOUSE_BUTTONS = {
+    1,2,3,4,5
+}
+
+local function assertMousebuttonsValid(mouseMapping)
+    for inputEnum, mousebutton in pairs(mouseMapping) do
+        if not validInputEnums[inputEnum] then
+            error("invalid input enum: " .. inputEnum, 2)
+        end
+        assert(VALID_MOUSE_BUTTONS[mousebutton], "Invalid mouse button:" .. mousebutton)
+    end
+end
+
+
 
 
 
@@ -354,13 +380,19 @@ end
 
 
 
-function input.setControls(inpMapping)
-    assertValid(inpMapping)
-    updateTables(inpMapping)
+
+local setControlsTc = typecheck.assert("table", "table")
+
+
+function input.setControls(keyboardMapping, mouseMapping)
+    setControlsTc(keyboardMapping, mouseMapping)
+    assertKeysValid(keyboardMapping)
+    assertMousebuttonsValid(mouseMapping)
+    updateTables(keyboardMapping, mouseMapping)
 end
 
 
-input.setControls(DEFAULT_INPUT_MAPPING)
+input.setControls(DEFAULT_INPUT_MAPPING, DEFAULT_MOUSE_MAPPING)
 
 
 

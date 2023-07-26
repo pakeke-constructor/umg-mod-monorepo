@@ -67,6 +67,11 @@ Now, we set entity velocity based on their moveX, moveY values.
 ]]
 
 local function setVelFromMove(ent, dt)
+    if (not ent.moveX or not ent.moveY) then
+        -- If we don't have moveX or moveY, return early.
+        return
+    end
+
     local agility = getAgility(ent)
     local speed = xy.getSpeed(ent)
 
