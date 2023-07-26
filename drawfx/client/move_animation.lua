@@ -22,6 +22,14 @@ local DEFAULT_ANIM_SPEED = 2 -- seconds to complete animation loop
 
 local DEFAULT_ANIM_ACTIVATION_SPEED = 5
 
+
+--[[
+
+TODO: we should change this.
+Directions should ideally be a question bus,
+rather than being cached here weirdly.
+
+]]
 local ent_to_direction = {
     --[[
         [ent] = current_direction_of_this_ent

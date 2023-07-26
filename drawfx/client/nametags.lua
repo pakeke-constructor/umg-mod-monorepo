@@ -29,7 +29,7 @@ local function getNametagText(ent)
 
     local txt = umg.ask("getNametagText", reducers.PRIORITY, ent)
 
-    return (txt or ent.controller) or ""
+    return (txt or ent.controller) or DEFAULT
 end
 
 
