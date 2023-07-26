@@ -1,6 +1,6 @@
 
 
-local newShockWave = require("_libs.shockwave")
+local newShockWave = require("client.shockwave_object")
 
 
 

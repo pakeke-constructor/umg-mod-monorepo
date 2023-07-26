@@ -1,6 +1,7 @@
 {
     "type": "base",
     "uses": [
-        "rendering", "reducers", "typecheck"
+        "state", "rendering", 
+        "reducers", "typecheck"
     ]
 }

@@ -81,6 +81,28 @@ SOLUTION: keep it in the `base` mod for now.
 
 
 
+Where does `gravity` go? (gravity mod?)
+
+
+
+Where does `delay`, `nextTick`, and `runEvery` go? 
+(scheduling mod?)
+
+
+
+Do we get rid of `base.defineExports`?
+(Probably, yes.)
+
+
+
+Do we need `components.lua`?
+That's the thing; `components` module is probably going to be very useful
+in the future; (i.e. worldediting.)
+but for now, it's not really needed.
+I say, best to wait. YAGNI.
+
+
+
 Where should `initializers` go?
 A: We should delete `initializers`, and replace it with 
 the `@entityInit` stuff.
@@ -106,7 +128,6 @@ the `@entityInit` stuff.
 
 
 
-IDEA:
 Currently, camera-following is implemented in `control`.
 How about we remove this, and abstract it to the `zoom` mod.
 Then, we rename the `zoom` mod to be `follow`.

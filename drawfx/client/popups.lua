@@ -1,6 +1,6 @@
 
 
-local getGameTime = require("shared.get_game_time")
+local getGameTime = state.getGameTime
 
 
 

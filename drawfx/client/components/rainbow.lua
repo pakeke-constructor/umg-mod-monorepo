@@ -10,7 +10,7 @@ instead of regular RGB.
 
 ]]
 
-local getGameTime = require("shared.get_game_time")
+local getGameTime = state.getGameTime
 
 
 local rainbowGroup = umg.group("rainbow") 
