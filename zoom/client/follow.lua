@@ -120,17 +120,6 @@ function listener:keyreleased(key, scancode, isrepeat)
 end
 
 
-local CAMERA_PAN_PRIORITY = 50
-
-umg.answer("getCameraPosition", function()
-    if CAMERA_PAN_ACTIVE then
-        return last_camx, last_camy, CAMERA_PAN_PRIORITY
-    end
-    return nil -- allow for another system to take control
-end)
-
-
-
 function listener:update(dt)
     if CAMERA_PAN_ACTIVE then
         -- move the camera if the mouse is near edge of screen
@@ -160,4 +149,19 @@ function listener:mousemoved(x,y,dx,dy)
 end
 
 
-return zoom
+
+local CAMERA_PAN_PRIORITY = 50
+
+umg.answer("getCameraPosition", function()
+    if CAMERA_PAN_ACTIVE then
+        return last_camx, last_camy, CAMERA_PAN_PRIORITY
+    end
+    return nil -- allow for another system to take control
+end)
+
+
+
+
+
+umg.expose("follow", )
+
