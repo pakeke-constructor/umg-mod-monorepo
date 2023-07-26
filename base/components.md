@@ -31,51 +31,6 @@ ent.ox = 0 -- draw offsets for x and y.  (defaults to 0)
 ent.oy = 0
 
 
-ent.animation = {
-    frames = {"img1", "img2", "img3"}, 
-    speed = 3
-}
-
-
-ent.moveAnimation = {
-    up = {"up1", "up2", ...},
-    down = ...,  left = ..., right = ...
-    speed = 3;
-
-    activation = 10 -- moveAnimation activates when entity is travelling at 
-    -- at least 10 units per second.
-}
-
-
-
-ent.shadow = {
-    size = 10; -- default value is the size of the entity image / 2.
-    color = {0,0,0,0.4} -- <--- default value; this is the color of the shadow.
-}
-
-
-ent.rainbow = {
-    period = 5, -- has a default value
-    brightness = 0.2 -- has a default value
-}
-
-
-ent.swaying = {
-    magnitude = 1;
-    period = 2
-}
-
-ent.bobbing = {
-    period = 0.8;
-    magnitude = 0.15
-}
-
-ent.spinning = {
-    period = 2;
-    magnitude = 1
-}
-
-
 -- changing ent sizes!
 ent.scale = 1
 ent.scaleX = 1
@@ -138,12 +93,6 @@ ent.particles = {
     { type = "dust", offset = {x = 0, y = 20} }
     -- ^^^ these take same args as above.
 }
-
-ent.shouldEmitParticles = function(ent)
-    return true -- whether this entity should emit particles or not.
-    -- for example, good for running. If entity speed > X, return true,
-end 
-
 
 
 

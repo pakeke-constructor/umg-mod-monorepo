@@ -6,7 +6,8 @@ local DCOL = 0.4
 local WHITE = {1,1,1}
 
 
-umg.on("drawEntity", function(ent)
+
+umg.on("postDrawEntity", function(ent)
     --[[
         text = {
             value = "hello",
