@@ -86,6 +86,8 @@ Currently, camera-following is implemented in `control`.
 How about we remove this, and abstract it to the `zoom` mod.
 Then, we rename the `zoom` mod to be `follow`.
 This way, `control` wouldn't need to inherit `rendering`.
+FUTURE-OLI: ^^^ woops, it still needs to inherit `rendering` because
+it needs a translation from screen-coords to world-coords.
 
 
 

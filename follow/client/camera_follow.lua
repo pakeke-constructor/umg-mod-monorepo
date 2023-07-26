@@ -1,6 +1,5 @@
 
 
-
 local CAMERA_PRIORITY = 0
 
 local follow_x = 0
@@ -32,5 +31,4 @@ end)
 umg.answer("getCameraPosition", function()
     return follow_x, follow_y, CAMERA_PRIORITY
 end)
-
 

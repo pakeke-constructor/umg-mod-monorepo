@@ -1,5 +1,0 @@
-{
-    "uses": ["base", "control", "rendering", "typecheck"],
-    
-    "type": "base"
-}

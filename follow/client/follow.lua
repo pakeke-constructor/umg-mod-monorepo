@@ -1,5 +1,9 @@
 
 
+local follow = {}
+
+
+
 local zoom_speed = nil
 
 local DEFAULT_ZOOM_SPEED = 22
@@ -9,29 +13,17 @@ local MIN_ZOOM = 0.1
 
 
 
-local zoom = {}
 
-
-function zoom.setMaxZoom(max_zoom)
+function follow.setMaxZoom(max_zoom)
     MAX_ZOOM = max_zoom
 end
 
-function zoom.setMinZoom(min_zoom)
+function follow.setMinZoom(min_zoom)
     MIN_ZOOM = min_zoom
 end
 
-function zoom.setZoomSpeed(speed)
+function follow.setZoomSpeed(speed)
     zoom_speed = speed
-end
-
-function zoom.setZoom(zoomValue)
-    local camera = rendering.getCamera()
-    camera.scale = math.max(MIN_ZOOM, math.min(MAX_ZOOM, zoomValue))
-end
-
-function zoom.getZoom()
-    local camera = rendering.getCamera()
-    return camera.scale
 end
 
 
@@ -163,5 +155,5 @@ end)
 
 
 
-umg.expose("follow", )
+umg.expose("follow", follow)
 
