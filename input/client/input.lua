@@ -203,6 +203,21 @@ function Listener:lockMouseButton(mousebutton)
 end
 
 
+function Listener:lockInputEnum(inputEnum)
+    local key = self:getKey(inputEnum)
+    if key then
+        self:lockKey(key)
+        return
+    end
+
+    local mousebutton = self:getMouseButton(inputEnum)
+    if mousebutton then
+        self:lockMouseButton(mousebutton)
+        return
+    end
+end
+
+
 
 function Listener:getKey(inputEnum)
     return keyboardInputMapping[inputEnum]

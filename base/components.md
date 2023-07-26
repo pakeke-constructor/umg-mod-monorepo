@@ -163,8 +163,12 @@ ent.physics = {
 
 -- this entity can be controlled by a player.
 ent.controllable = {
-    -- (WASD is move by default)
-    wasd = true
+    -- Enables the entity to move
+    movement = true
+
+    -- ... etc.
+    -- There are other extra options in here that may be specified
+    -- by other, external systems
 }
 
 

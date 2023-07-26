@@ -85,9 +85,10 @@ end
 
 
 
-umg.on("input", function(ent, inputEnum)
+umg.on("input", function(ent, inputEnum, listenr)
     if inputEnum == input.MOUSE_1 then
         items.useHoldItem(ent)
+        listenr:lockInputEnum(inputEnum)
     end
 end)
 

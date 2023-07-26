@@ -18,15 +18,13 @@ local listener = input.Listener({priority = -1})
 
 
 
-local function callInput(inputEnum)
+local function callInput(lis, inputEnum)
     for _, ent in ipairs(controllableGroup) do
         if sync.isClientControlling(ent) then
-            -- todo: do we need to lock the listener here?
-            umg.call("input", ent, inputEnum)
+            umg.call("input", ent, inputEnum, lis)
         end
     end
 end
-
 
 
 
@@ -38,18 +36,19 @@ function listener:keypressed(key, scancode, isrepeat)
     end
 
     local inputEnum = self:getKeyboardInputEnum(scancode)
-    callInput(inputEnum)
+    callInput(self, inputEnum)
 end
 
 
 
-function listener:mousepressed(button, x, y)
+function listener:mousepressed(x, y, button)
     if state.getCurrentState() ~= "game" then
         return
     end
 
-    callInput()
-    listener:lockMouseButtons()
+    local inputEnum = self:getMouseInputEnum(button)
+    assert(inputEnum, "No inputEnum for button" .. button)
+    callInput(self, inputEnum)
 end
 
 
@@ -61,7 +60,7 @@ local DELTA = 100
 -- this number ^^^ is pretty arbitrary, we just need it to be sufficiently big
 
 
-local function updateEnt(ent)
+local function updateMoveEnt(ent)
     ent.moveX = ent.x
     ent.moveY = ent.y
 
@@ -84,7 +83,9 @@ end
 function listener:update()
     for _, ent in ipairs(controllableGroup) do
         if sync.isClientControlling(ent) and ent.x and ent.y then
-            updateEnt(ent)
+            if ent.controllable and ent.controllable.movement then
+                updateMoveEnt(ent)
+            end
         end
     end
 end

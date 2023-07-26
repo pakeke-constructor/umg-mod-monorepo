@@ -27,7 +27,9 @@ return {
 
     bobbing = {},
     
-    controllable = {};
+    controllable = {
+        movement = true
+    };
 
     nametag = {};
 

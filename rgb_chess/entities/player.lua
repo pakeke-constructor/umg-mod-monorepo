@@ -30,7 +30,9 @@ return {
     color = {0.9,0.9,0.9,0.7},
 
     bobbing = {},
-    controllable = {};
+    controllable = {
+        movement = true
+    };
     nametag = {};
 
     openable = {};
