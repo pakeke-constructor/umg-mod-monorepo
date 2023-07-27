@@ -62,7 +62,6 @@ end
 
 
 
-local playSoundTc = typecheck.assert("string", "number?", "number?", "string?")
 
 function play.playSound(name, volume, pitch, effect)
     --[[
@@ -71,7 +70,6 @@ function play.playSound(name, volume, pitch, effect)
         pitch : number
         effect : string
     ]]
-    playSoundTc(name, volume, pitch, effect)
     volume = volume or 1
     pitch = pitch or 1
 
@@ -117,5 +115,4 @@ end)
 
 
 return play
-
 
