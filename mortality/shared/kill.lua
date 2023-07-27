@@ -1,9 +1,9 @@
 
-
 local kill
 
 
 if server then
+-- Only the server has the authority to kill entities.
 
 function kill(ent)
     umg.call("entityDeath", ent)
@@ -26,4 +26,3 @@ end)
 
 
 return kill
-
