@@ -7,6 +7,13 @@ local physicsGroup = umg.group("physics", "x", "y")
 Handles all entities that need physics in the game.
 
 
+TODO: 
+We should really look into using question buses inside of
+world:setCallbacks(...) to determine whether a collision goes
+through or not.
+I think there's a way to turn collisions on/off, but I'm not sure.
+
+
 ]]
 
 local physics = {}
@@ -39,6 +46,9 @@ local function newWorld()
         world:destroy()
     end
     world = love.physics.newWorld(0,0)
+    --[[
+        TODO: should we be using the other callbacks here???
+    ]]
     world:setCallbacks(beginContact, nil, nil, nil)
 end
 
