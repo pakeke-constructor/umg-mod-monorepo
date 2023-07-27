@@ -1,8 +1,5 @@
 
 
-local delayAPI = {}
-
-
 local times = {}
 --[[
 Each `delay` object is represented as a table:
@@ -12,7 +9,6 @@ Each `delay` object is represented as a table:
     time = time
 }
 ]]
-
 
 
 
@@ -43,17 +39,6 @@ end
 local curTime = love.timer.getTime()
 
 
-function delayAPI.delay(time, func, ...)
-    local obj = {
-        func = func;
-        endTime = curTime + time,
-        ...
-    }
-    local index = binarySearch(times, obj.endTime)
-    table.insert(times, index, obj)
-end
-
-
 
 umg.on("gameUpdate", function(dt)
     curTime = curTime + dt
@@ -68,29 +53,17 @@ end)
 
 
 
-
-
-
-local runningNextTick = objects.Array()
-
-
-function delayAPI.nextTick(func, ...)
+local function delay(time, func, ...)
     local obj = {
-        ...,
-        func = func
+        func = func;
+        endTime = curTime + time,
+        ...
     }
-    runningNextTick:add(obj)
+    local index = binarySearch(times, obj.endTime)
+    table.insert(times, index, obj)
 end
 
 
-umg.on("@tick", function()
-    for i, obj in ipairs(runningNextTick)do
-        obj.func(unpack(obj))
-    end
-    runningNextTick:clear()
-end)
 
-
-
-return delayAPI
+return delay
 
