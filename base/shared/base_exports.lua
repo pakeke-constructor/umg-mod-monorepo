@@ -13,8 +13,6 @@ local function loadClient(base)
     base.client = {}
 
     base.client.groundTexture = require("client.ground_texture")
-
-    base.client.sound = require("client.sound")
 end
 
 

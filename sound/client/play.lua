@@ -1,6 +1,6 @@
 
 
-local sound = {}
+local play = {}
 
 
 
@@ -41,10 +41,15 @@ local function musicVol()
 end
 
 
+local function useEffects()
+    return love.audio.isEffectsSupported()
+end
 
-local function playSound(src, vol, pitch, effect, vol_v, p_v)
+
+
+local function playSound(src, vol, pitch, effect)
     src = getFreeSource(src)
-    if effect then
+    if effect and useEffects() then
         src:setEffect(effect)
     end
     vol = math.min(1, vol) * sfxVol()
@@ -57,14 +62,16 @@ end
 
 
 
+local playSoundTc = typecheck.assert("string", "number?", "number?", "string?")
 
-function sound.playSound(name, volume, pitch, effect)
+function play.playSound(name, volume, pitch, effect)
     --[[
         name : string
         volume : 0 no sound   ->   1 max vol
-        volume_variance : 0.2 => sound vol will vary by 0.2 (default 0)
-        pitch_variance  : 0.1 => pitch will vary by 0.1     (default 0)
+        pitch : number
+        effect : string
     ]]
+    playSoundTc(name, volume, pitch, effect)
     volume = volume or 1
     pitch = pitch or 1
 
@@ -79,7 +86,7 @@ local current_music = nil
 local current_music_volume_modifier = 1
 
 
-function sound.playMusic(name, start_time, music_volume_modifier)
+function play.playMusic(name, start_time, music_volume_modifier)
     assert(client.assets.sounds[name], "unknown music:  "..name)
     local src = client.assets.sounds[name]
     
@@ -109,6 +116,6 @@ end)
 
 
 
-return sound
+return play
 
 
