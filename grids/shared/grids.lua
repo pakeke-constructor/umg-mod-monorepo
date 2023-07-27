@@ -111,7 +111,7 @@ gridGroup:onAdded(function(ent)
     local y = math.floor(ent.y / h)
     local grd = getGrid(gridType, w, h)
     if grd:get(x,y) and server then
-        base.server.kill(grd:get(x,y)) -- kill old entity
+        mortality.server.kill(grd:get(x,y)) -- kill old entity
     end
     grd:_set(x,y,ent)
     ent.x = math.floor(x) * w

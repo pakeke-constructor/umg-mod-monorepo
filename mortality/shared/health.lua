@@ -16,7 +16,7 @@ end)
 
 
 
-local kill = require("shared.death")
+local kill = require("shared.kill")
 
 
 

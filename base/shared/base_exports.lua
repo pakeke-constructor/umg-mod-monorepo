@@ -44,9 +44,6 @@ end
 
 local function loadServer(base)
     base.server = {}
-    
-    -- TODO: move to `mortality` mod
-    base.server.kill = require("shared.death")
 end
 
 

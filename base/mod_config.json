@@ -3,6 +3,7 @@
     "uses": [
         "typecheck", "sync", "objects", "state",
         "input", "rendering", "reducers", "physics",
-        "control", "xy", "follow", "drawfx", "sound"
+        "control", "xy", "follow", "drawfx", "sound",
+        "mortality"
     ]
 }

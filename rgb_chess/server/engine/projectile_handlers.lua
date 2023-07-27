@@ -3,7 +3,7 @@
 local function done(projectileEnt)
     -- called when a projectile is done it's journey
     -- TODO: Maybe offload sfx or something?
-    base.server.kill(projectileEnt)
+    mortality.server.kill(projectileEnt)
 end
 
 

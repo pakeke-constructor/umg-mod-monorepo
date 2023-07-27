@@ -44,4 +44,11 @@ globals:
     any: true
   xy:
     any: true
-
+  drawfx:
+    any: true
+  follow:
+    any: true
+  sound:
+    any: true
+  mortality:
+    any: true
