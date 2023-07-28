@@ -297,7 +297,8 @@ function listener:mousepressed(mx, my, button)
         local inv = openInvs[i]
         if inv:withinBounds(mx, my) then
             loop_used = true
-            if inv:withinExitButtonBounds(mx, my) then
+            if button == ALPHA_BUTTON and inv:withinExitButtonBounds(mx, my) then
+                self:lockMouseButton(ALPHA_BUTTON)
                 inv:close()
             else
                 inventoryMousePress(self, inv, mx, my, button)

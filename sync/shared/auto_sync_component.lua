@@ -210,19 +210,23 @@ end
 
 
 function setLerpValue(ent, compName, compVal, options)
-    local lerpBuf = options.lerpBuffer
-    if lerpBuf[ent] then
+    local lerpValues = options.lerpValues
+    local previousLerpValues = options.previousLerpValues
+
+    if lerpValues[ent] then
         -- If there's a lerp value that we are currently lerping,
         -- set the entity comp value to that value.
         -- (i.e.  "jump" to the old value directly)
-        ent[compName] = lerpBuf[ent]
+        local oldValue = lerpValues[ent]
+        ent[compName] = oldValue
     else
         -- Else there's no old value, so just jump directly to the sent value.
         -- (This should only happen when an entity is first created.)
         ent[compName] = compVal
     end
 
-    lerpBuf[ent] = compVal
+    previousLerpValues[ent] = ent[compName]
+    lerpValues[ent] = compVal
 end
 
 
@@ -231,13 +235,10 @@ local getTickDelta = tickDelta.getTickDelta
 local getTimeOfLastTick = tickDelta.getTimeOfLastTick
 
 
-local function updateEntityWithLerp(ent, compName, targetVal, time)
-    local currVal = ent[compName]
+local function getLerpValue(oldVal, targetVal, t)
+    local delta = (targetVal - oldVal) * (1-t)
 
-    local t = min(1, max(0, (time - getTimeOfLastTick()) / getTickDelta()))
-    local delta = (targetVal - currVal) * (1-t)
-
-    ent[compName] = targetVal - delta
+    return targetVal - delta
 end
 
 
@@ -251,20 +252,29 @@ local function setupClientNumberLerper(compName, options)
     local requiredComponents = getRequiredComponents(compName, options)
     local group = umg.group(unpack(requiredComponents))
 
-    local lerpBuffer = {}
-    options.lerpBuffer = lerpBuffer
+    local previousLerpValues = {--[[
+        [ent] -> previous lerp value
+    ]]}
+    local lerpValues = {--[[
+        [ent] -> previous lerp value
+    ]]}
+    options.lerpValues = lerpValues
+    options.previousLerpValues = previousLerpValues
 
     group:onRemoved(function(ent)
         -- ensure to clear lerp buffer when entities are removed
-        lerpBuffer[ent] = nil
+        lerpValues[ent] = nil
+        previousLerpValues[ent] = nil
     end)
 
     umg.on("@update", function(dt)
         local time = love.timer.getTime()
+        local t = min(1, max(0, (time - getTimeOfLastTick()) / getTickDelta()))
         for _, ent in ipairs(group) do
-            if lerpBuffer and lerpBuffer[ent] then
-                local targetVal = lerpBuffer[ent]
-                updateEntityWithLerp(ent, compName, targetVal, time)
+            if lerpValues and lerpValues[ent] then
+                local oldVal = previousLerpValues[ent] or ent[compName]
+                local targetVal = lerpValues[ent]
+                ent[compName] = getLerpValue(oldVal, targetVal, t)
             end
         end
     end)
