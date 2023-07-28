@@ -13,7 +13,7 @@ local abilityGroup = umg.group("abilities")
 
 
 -- run this code every 6 ticks
-base.runEvery(6, "@tick", function()
+scheduling.runEvery(6, "@tick", function()
     for _, ent in ipairs(abilityGroup) do
         sync.syncComponent(ent, "abilities")
     end

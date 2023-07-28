@@ -290,7 +290,7 @@ function Board:reset()
     self.lastPlayedCard = nil
 
     local arr = self:deserializeAllies()
-    base.delay(0.4, function()
+    scheduling.delay(0.4, function()
         for i=1, #arr do
             rgb.setTeam(arr[i], self:getTeam())
         end
@@ -429,7 +429,7 @@ function Board:reroll()
 
     for shopIndex=1, self.shopSize do
         local delay = (shopIndex/self.shopSize) * 0.3
-        base.delay(delay, function()
+        scheduling.delay(delay, function()
             self:rerollCard(shopIndex)
         end)
     end
@@ -454,7 +454,7 @@ function Board:rerollCard(shopIndex)
         card:delete()
     end
 
-    base.delay(constants.REROLL_TIME, function()
+    scheduling.delay(constants.REROLL_TIME, function()
         genCards.spawnCard(self, shopIndex)
     end)
 end

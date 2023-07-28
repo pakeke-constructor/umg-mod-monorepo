@@ -93,7 +93,7 @@ local function startPvE()
         local enemyTeam = rgb.getPVEEnemyTeamName(board:getTeam())
         board:setEnemyTeam(enemyTeam)
         local enemies = generatePVE.generateEnemies(rgb.getTurn())
-        base.delay(1, finalizePvE, board, enemies)
+        scheduling.delay(1, finalizePvE, board, enemies)
     end
 end
 
@@ -154,7 +154,7 @@ local function startTurn()
     income.doAllIncome()
 
     -- we gotta delay here, as we gotta wait a tick for the entities to spawn
-    base.nextTick(function()
+    scheduling.nextTick(function()
         abilities.reset()
         abilities.triggerForAll("startTurn")
         umg.call("startTurn")
@@ -212,13 +212,13 @@ local function endTurn()
     -- do a countdown in chat:
     local DELAY = constants.END_TURN_DELAY 
     for i=1, DELAY do
-        base.delay(DELAY - i, function(x)
+        scheduling.delay(DELAY - i, function(x)
             chat.message("(SERVER) - starting battle in " .. tostring(x) .. " seconds.")
         end, i)
     end
 
     -- start battle after X seconds:
-    base.delay(DELAY, startBattle)
+    scheduling.delay(DELAY, startBattle)
 end
 
 
@@ -250,7 +250,7 @@ local function updateBattle()
         chat.message("(SERVER) - battle round has completed.")
         endBattle()
 
-        base.delay(constants.END_BATTLE_DELAY, startTurn)
+        scheduling.delay(constants.END_BATTLE_DELAY, startTurn)
     end
 end
 

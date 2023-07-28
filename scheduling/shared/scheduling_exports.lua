@@ -9,4 +9,4 @@ scheduling.nextTick = require("shared.next_tick")
 scheduling.runEvery = require("shared.run_every")
 
 
-return scheduling
+umg.expose("scheduling", scheduling)
