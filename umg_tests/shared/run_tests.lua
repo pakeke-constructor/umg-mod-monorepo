@@ -1,6 +1,7 @@
 
 
 local tests = {
+    "buses",
     "component_rem_add",
     "broadcast",
     "entity"

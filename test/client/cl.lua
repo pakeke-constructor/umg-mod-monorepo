@@ -48,7 +48,7 @@ client.on("spin", function()
     spinning = not spinning
 end)
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     if spinning then
         for _, ent in ipairs(imgGroup) do
             ent.rot = ent.rot or (math.random() * 6)
@@ -84,8 +84,7 @@ end
 
 
 
-
-umg.on("input", function(ent, inputEnum, listenr)
+umg.on("controllableInput", function(ent, inputEnum, listenr)
     if inputEnum == input.MOUSE_1 then
         items.useHoldItem(ent)
         listenr:lockInputEnum(inputEnum)

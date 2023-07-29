@@ -25,6 +25,14 @@ end
 
 local max, min = math.max, math.min
 
+umg.defineEvent("gamePreUpdate")
+umg.defineEvent("gameUpdate")
+umg.defineEvent("gamePostUpdate")
+
+umg.defineEvent("drawWorld")
+umg.defineEvent("drawUI")
+
+
 
 
 gameState:on("@update", function(dt)

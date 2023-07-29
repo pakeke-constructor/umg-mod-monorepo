@@ -79,6 +79,16 @@ globals:
     - type: string
     - required: false
       type: '...'
+  umg.defineEvent:
+    args:
+    - type: string
+    - required: false
+      type: table
+  umg.defineQuestion:
+    args:
+    - type: string
+    - required: false
+      type: table
   umg.save:
     args:
     - type: string

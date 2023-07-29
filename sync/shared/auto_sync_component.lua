@@ -267,12 +267,12 @@ local function setupClientNumberLerper(compName, options)
         previousLerpValues[ent] = nil
     end)
 
-    umg.on("@update", function(dt)
+    umg.on("@update", function()
         local time = love.timer.getTime()
         local t = min(1, max(0, (time - getTimeOfLastTick()) / getTickDelta()))
         for _, ent in ipairs(group) do
             if lerpValues and lerpValues[ent] then
-                local oldVal = previousLerpValues[ent] or ent[compName]
+                local oldVal = previousLerpValues[ent]
                 local targetVal = lerpValues[ent]
                 ent[compName] = getLerpValue(oldVal, targetVal, t)
             end

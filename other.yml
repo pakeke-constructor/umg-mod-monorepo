@@ -44,7 +44,7 @@ globals:
     any: true
   xy:
     any: true
-  drawfx:
+  visualfx:
     any: true
   follow:
     any: true

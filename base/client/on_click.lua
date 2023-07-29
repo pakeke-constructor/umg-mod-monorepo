@@ -39,6 +39,8 @@ end
 
 
 
+umg.defineEvent("entityClicked")
+
 
 client.on("entityClicked", function(ent, username, button, worldX, worldY)
     umg.call("entityClicked", ent, username, button, worldX, worldY)

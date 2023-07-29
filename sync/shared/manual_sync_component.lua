@@ -53,7 +53,7 @@ local function updateCompIdCache()
     server.broadcast("setSyncComponentCache", componentIdCache)
 end
 
-umg.on("@join", function()
+umg.on("@playerJoin", function()
     -- whenever a new player joins, send over the component id cache.
     -- (Yes it's shit, but who cares)
     updateCompIdCache()
