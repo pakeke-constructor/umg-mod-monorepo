@@ -8,6 +8,7 @@ When the game is running, it should be in this state.
 
 
 ]]
+require("state_events")
 
 local state = require("shared.state")
 
@@ -24,14 +25,6 @@ end
 
 
 local max, min = math.max, math.min
-
-umg.defineEvent("state:gamePreUpdate")
-umg.defineEvent("state:gameUpdate")
-umg.defineEvent("state:gamePostUpdate")
-
-umg.defineEvent("state:drawWorld")
-umg.defineEvent("state:drawUI")
-
 
 
 

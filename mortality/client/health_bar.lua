@@ -67,7 +67,7 @@ end
 
 
 
-umg.on("drawEntity", function(ent)
+umg.on("rendering:drawEntity", function(ent)
     if ent.healthBar and ent.health then
         drawHealthBar(ent)
     end

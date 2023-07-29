@@ -1,4 +1,6 @@
 
+require("physics_events")
+
 
 local physicsGroup = umg.group("physics", "x", "y")
 
@@ -28,16 +30,14 @@ local constants = require("shared.constants")
 
 
 
-local function dispatch(name, fix_a, fix_b, contact_obj)
-    local ent_A = fixture_to_ent[fix_a]
-    local ent_B = fixture_to_ent[fix_b]
-    umg.call(name, ent_A, ent_B, contact_obj)
-    umg.call(name, ent_B, ent_A, contact_obj)
-end
 
 local function beginContact(fixture_A, fixture_B, contact_obj)
-    dispatch("collide", fixture_A, fixture_B, contact_obj)
+    local ent_A = fixture_to_ent[fixture_A]
+    local ent_B = fixture_to_ent[fixture_B]
+    umg.call("collide", ent_A, ent_B, contact_obj)
+    umg.call("collide", ent_B, ent_A, contact_obj)
 end
+
 
 local world
 
@@ -57,6 +57,9 @@ newWorld() -- The box2d physics world used by entities
 
 
 
+--[[
+    : Must be changed when dimensions mod is made!
+]]
 umg.on("@createWorld", newWorld)
 
 

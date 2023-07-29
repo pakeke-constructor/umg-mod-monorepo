@@ -57,7 +57,7 @@ end
 --[[
     units get bigger if they are more powerful
 ]]
-umg.answer("getScale", function(ent)
+umg.answer("rendering:getScale", function(ent)
     if rgb.isUnit(ent) then
         return getUnitSize(ent)
     end
@@ -66,7 +66,7 @@ end)
 
 
 
-umg.on("drawEntity", function(ent)
+umg.on("rendering:drawEntity", function(ent)
     if rgb.state == rgb.STATES.TURN_STATE then
         if ent.cardBuyTarget then
             drawCard(ent)

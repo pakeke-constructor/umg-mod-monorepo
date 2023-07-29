@@ -109,7 +109,7 @@ local function drawParticleTable(ent, ptable)
 end
 
 
-umg.on("drawEntity", function(ent)
+umg.on("rendering:drawEntity", function(ent)
     local ent_particles = ent.particles
     if ent.particles then
         if ent_particles.type then

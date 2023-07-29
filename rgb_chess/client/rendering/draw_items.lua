@@ -3,7 +3,7 @@
 local BOX_W, BOX_H = 18,18
 
 -- Drawing within world
-umg.on("drawEntity", function(ent)
+umg.on("rendering:drawEntity", function(ent)
     if ent.groundItem and ent.rgb then
         love.graphics.setLineWidth(2)
         love.graphics.setColor(ent.rgb)
@@ -15,7 +15,7 @@ end)
 
 
 -- Drawing within inventory
-umg.on("drawInventoryItem", function(ent, itemEnt, drawX, drawY, slotSize)
+umg.on("items:drawInventoryItem", function(ent, itemEnt, drawX, drawY, slotSize)
     if itemEnt.rgb then
         local w,h = slotSize - 1, slotSize - 1
         love.graphics.setLineWidth(2)
