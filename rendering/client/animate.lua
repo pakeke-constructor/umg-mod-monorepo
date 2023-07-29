@@ -20,7 +20,7 @@ local drawIndexToAnimObj = {} -- [draw_index] -> anim_object
 
 
 local entToAnimObj = {} -- [ent] -> anim_object
-local entAnimations = {} -- array of anim_object
+local entAnimations = {} -- list of animation objects
 
 
 
@@ -79,6 +79,68 @@ end
 
 
 
+
+
+umg.on("@update", function(dt)
+    curTime = state.getGameTime()
+end)
+
+
+
+local ANIMATION_PRIORITY = 5
+
+umg.answer("rendering:getImage", function(ent)
+    local obj = entToAnimObj[ent]
+    if obj then
+        local i = math.floor(((curTime - obj.startTime) / obj.time) * (#obj.frames)) + 1
+        local imgName = obj.frames[i]
+        return imgName, ANIMATION_PRIORITY
+    end
+end)
+
+
+
+umg.on("@update", function()
+    --[[
+        remove animation objects that are completed.
+    ]]
+    for i=#entAnimations,1,-1 do
+        local obj = entAnimations[i]
+        if isFinished(obj) then
+            -- remove from array
+            local arr = entAnimations
+            arr[i] = arr[#arr]
+            arr[#arr] = nil
+            obj.ent.image = obj.old_image
+            entToAnimObj[obj.ent] = nil
+        end
+    end
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--[[
+
+regular animations objects:
+
+]]
+
 local function drawAnimObj(animObj)
     local add_x = 0
     local add_y = 0
@@ -106,50 +168,8 @@ end
 
 
 
-local function updateEntAnimationObject(obj)
-    local i = math.floor(((curTime - obj.startTime) / obj.time) * (#obj.frames)) + 1
-    local quadName = obj.frames[i]
-    obj.ent.image = quadName
-end
 
-
-
-umg.on("@update", function(dt)
-    curTime = state.getGameTime()
-end)
-
-
-
-
-umg.on("preDraw", function()
-    --[[
-    Updates entity animations from `animateEntity(...)`
-
-    we aren't actually drawing anything here, we are updating stuff.
-    The reason we are updating here is so it doesn't get overridden by 
-    other systems;  like moveAnimation component or animation component.
-    
-    If we update directly before drawing, nothing can override it.
-    ]]
-    for i=#entAnimations,1,-1 do
-        local obj = entAnimations[i]
-        if isFinished(obj) then
-            -- remove from array
-            local arr = entAnimations
-            arr[i] = arr[#arr]
-            arr[#arr] = nil
-            obj.ent.image = obj.old_image
-            entToAnimObj[obj.ent] = nil
-        else
-            updateEntAnimationObject(obj)
-        end
-    end
-end)
-
-
-
-
-umg.on("drawIndex", function(indx)
+umg.on("rendering:drawIndex", function(indx)
     if drawIndexToAnimObj[indx] then
         local arr = drawIndexToAnimObj[indx]
         local len = #arr

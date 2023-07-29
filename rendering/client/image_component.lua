@@ -24,22 +24,24 @@ local getScaleY = entityProperties.getScaleY
 local getShearX = entityProperties.getShearX
 local getShearY = entityProperties.getShearY
 
+local getImage = entityProperties.getImage
 
 
 
---[[
-    currently, any entity that is drawn will have an image
-    (may not stay this way!)
-]]
+
 umg.on("drawEntity", function(ent)
-    local quad = images[ent.image]
+    local img = getImage(ent)
+    if not img then
+        return -- no image, don't draw.
+    end
+
+    local quad = images[img]
     if not quad then
-        if type(ent.image) ~= "string" then
-            error(("Incorrect type for ent.image. Expected string, got: %s"):format(type(ent.image)))
+        if type(img) ~= "string" then
+            error(("Incorrect type for entity image. Expected string, got: %s"):format(type(ent.image)))
         end
         error(("Unknown ent.image value: %s\nMake sure you put all images in the assets folder and name them!"):format(tostring(ent.image)))
     end
-
 
     local ox = getOffsetX(ent)
     local oy = getOffsetY(ent)
@@ -55,7 +57,7 @@ umg.on("drawEntity", function(ent)
     shy = getShearY(ent)
 
     drawImage(
-        ent.image, 
+        img, 
         ent.x, getDrawY(ent.y, ent.z),
         rot, 
         scale * sx, scale * sy,

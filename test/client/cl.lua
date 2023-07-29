@@ -33,12 +33,6 @@ local psys = visualfx.particles.newParticleSystem({
 visualfx.particles.define("smoke", psys)
 
 
---[[
-umg.on("preDraw", function()
-    love.graphics.clear(0.2,0.9,0.2)
-end)
-]]
-
 
 
 local imgGroup = umg.group("x", "y", "image")

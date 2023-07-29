@@ -1,6 +1,5 @@
 
 
-
-umg.defineQuestion("getAgilityModifier", reducers.ADD) 
-umg.defineQuestion("getAgilityMultiplier", reducers.MULTIPLY)
+umg.defineQuestion("control:getAgilityModifier", reducers.ADD) 
+umg.defineQuestion("control:getAgilityMultiplier", reducers.MULTIPLY)
 

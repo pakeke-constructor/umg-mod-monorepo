@@ -1,4 +1,6 @@
 
+require("ui_events")
+
 
 local Slab = require("Slab.Slab")
 
@@ -68,7 +70,7 @@ function listener:update(dt)
     Slab.SetScale(rendering.getUIScale() * SLAB_SCALE_RATIO)
     Slab.DisableDocks(docks)
 
-    umg.call("slabUpdate", self)
+    umg.call("ui:slabUpdate", self)
 
     if not Slab.IsVoidHovered() then
         self:lockMouseButtons()
@@ -80,7 +82,7 @@ end
 
 
 
-umg.on("postDrawUI", function()
+umg.on("rendering:postDrawUI", function()
 	love.graphics.push("all")
 	love.graphics.setLineWidth(1)
     Slab.Draw()
