@@ -6,7 +6,8 @@ Inventory objects
 
 ]]
 
-require("item_events")
+require("items_events")
+require("items_questions")
 
 
 local Inventory = objects.Class("items_mod:inventory")
@@ -263,7 +264,6 @@ end
 
 
 
-local OR = reducers.OR
 
 local hasRemoveAuthorityTc = typecheck.assert("entity", "number", "number")
 
@@ -283,7 +283,7 @@ function Inventory:hasRemoveAuthority(controlEnt, slotX, slotY)
         return false 
     end
 
-    local isBlocked = umg.ask("isItemRemovalBlocked", OR, controlEnt, self.owner, slotX, slotY)
+    local isBlocked = umg.ask("isItemRemovalBlocked", controlEnt, self.owner, slotX, slotY)
     return not isBlocked
 end
 
@@ -302,7 +302,7 @@ function Inventory:hasAddAuthority(controlEnt, itemToBeAdded, slotX, slotY)
     end
 
     -- TODO: rename this question, it's terribly named
-    local isBlocked = umg.ask("isItemAdditionBlocked", OR, controlEnt, self.owner, itemToBeAdded, slotX, slotY)
+    local isBlocked = umg.ask("isItemAdditionBlocked", controlEnt, self.owner, itemToBeAdded, slotX, slotY)
     return not isBlocked
 end
 
@@ -507,9 +507,9 @@ function Inventory:canBeOpenedBy(ent)
     ]]
     assert(umg.exists(ent), "takes an entity as first argument. (Where the entity is the one opening the inventory)")
 
-    local canOpen = umg.ask("canOpenInventory", reducers.OR, ent, self)
+    local canOpen = umg.ask("canOpenInventory", ent, self)
     if canOpen then
-        local isLocked = umg.ask("isInventoryLocked", reducers.OR, ent, self)
+        local isLocked = umg.ask("isInventoryLocked", ent, self)
         if not isLocked then
             return true
         end

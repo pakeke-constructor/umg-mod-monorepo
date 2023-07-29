@@ -5,6 +5,8 @@ Handles player control
 
 
 ]]
+require("control_events")
+
 
 local control = {}
 
@@ -17,10 +19,6 @@ local controllableGroup = umg.group("controllable")
 local listener = input.Listener({priority = -1})
 
 
-
-umg.defineEvent("controllableInput", {
-    description = "Called when a player presses an input whilst controlling a controllable entity, (mousepress or keypress)",
-})
 
 local function callInput(lis, inputEnum)
     for _, ent in ipairs(controllableGroup) do

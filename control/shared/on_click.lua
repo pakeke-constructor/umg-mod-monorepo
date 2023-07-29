@@ -1,12 +1,10 @@
 
 
 
-local RANGE_ACCEPTANCE = 40 
+local RANGE_ACCEPTANCE = 80
 
 
 
-
-umg.defineEvent("control:entityClicked")
 
 sync.proxyEventToClient("control:entityClicked")
 
