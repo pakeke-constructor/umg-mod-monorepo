@@ -520,7 +520,7 @@ end
 
 function Inventory:open()
     assert(client, "Only available client-side")
-    umg.call("openInventory", self.owner)
+    umg.call("items:openInventory", self.owner)
     openInventories.open(self)
     self.is_open = true
 end
@@ -528,7 +528,7 @@ end
 
 function Inventory:close()
     assert(client, "Only available client-side")
-    umg.call("closeInventory", self.owner)
+    umg.call("items:closeInventory", self.owner)
     openInventories.close(self)
     self.is_open = false
 end

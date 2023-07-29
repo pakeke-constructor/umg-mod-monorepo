@@ -1,4 +1,6 @@
 
+require("control_questions")
+
 
 local DEFAULT_AGILITY = 1
 

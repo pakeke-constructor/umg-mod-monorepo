@@ -5,7 +5,7 @@ require("items_questions")
 local constants = require("shared.constants")
 
 
-umg.answer("canOpenInventory", function(ent, inventory)
+umg.answer("items:canOpenInventory", function(ent, inventory)
     --[[
         entities can always open inventories if they own the inventory
     ]]
@@ -25,7 +25,7 @@ end)
 
 
 
-umg.answer("canOpenInventory", function(ent, inventory)
+umg.answer("items:canOpenInventory", function(ent, inventory)
     --[[
         entities can open inventories if they are public,
         and are within range in terms of position.
@@ -44,7 +44,7 @@ end)
 
 
 
-umg.answer("canOpenInventory", function(ent, inventory)
+umg.answer("items:canOpenInventory", function(ent, inventory)
     --[[
         entities can also open inventories if the
         `canOpen` callback says so!

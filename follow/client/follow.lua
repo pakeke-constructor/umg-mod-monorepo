@@ -116,6 +116,10 @@ function listener:update(dt)
     if CAMERA_PAN_ACTIVE then
         -- move the camera if the mouse is near edge of screen
         followMouseNearEdge(dt)
+    else
+        local camera = rendering.getCamera()
+        last_camx = camera.x
+        last_camy = camera.y
     end
 end
 
@@ -133,10 +137,6 @@ function listener:mousemoved(x,y,dx,dy)
         last_camy = last_camy + wdy
 
         self:lockMouseButton(MIDDLE_MOUSE_BUTTON)
-    else
-        local camera = rendering.getCamera()
-        last_camx = camera.x
-        last_camy = camera.y
     end
 end
 

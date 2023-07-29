@@ -20,6 +20,16 @@ local listener = input.Listener({priority = -1})
 
 
 
+--[[
+
+Do some more thinking about this commented-out api.
+
+I don't *think* it's a good idea to keep it...
+but lowkey, this API was onto something.
+
+I'm going to keep it around, since it was a decent idea.
+
+
 local function callInput(lis, inputEnum)
     for _, ent in ipairs(controllableGroup) do
         if sync.isClientControlling(ent) then
@@ -27,10 +37,6 @@ local function callInput(lis, inputEnum)
         end
     end
 end
-
-
-
-
 
 function listener:keypressed(key, scancode, isrepeat)
     if state.getCurrentState() ~= "game" then
@@ -41,8 +47,6 @@ function listener:keypressed(key, scancode, isrepeat)
     callInput(self, inputEnum)
 end
 
-
-
 function listener:mousepressed(x, y, button)
     if state.getCurrentState() ~= "game" then
         return
@@ -52,7 +56,7 @@ function listener:mousepressed(x, y, button)
     assert(inputEnum, "No inputEnum for button" .. button)
     callInput(self, inputEnum)
 end
-
+]]
 
 
 
