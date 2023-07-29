@@ -4,9 +4,9 @@
 
 ```lua
 
-sync.proxyEventToClient("hello") 
--- automatically routes umg.call("hello", ...) on server to a 
--- umg.call("hello", ...) on clientside.
+sync.proxyEventToClient("modname:hello") 
+-- automatically routes umg.call("modname:hello", ...) on server to a 
+-- umg.call("modname:hello", ...) on clientside.
 
 
 -- automatically syncs component `x` in a server-authoritative fashion
@@ -28,8 +28,6 @@ sync.autoSyncControllableComponent("lookX", {
     lerp = false, -- only works for numbers
     numberSyncThreshold = 0.05, -- difference between numbers to sync
     noDeltaCompression = false, -- turns off delta-compression
-
-    
 })
 
 

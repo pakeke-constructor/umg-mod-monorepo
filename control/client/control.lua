@@ -19,13 +19,13 @@ local listener = input.Listener({priority = -1})
 
 
 umg.defineEvent("controllableInput", {
-    description = "Called when a player presses an input on a controllable entity, (mousepress or keypress)",
+    description = "Called when a player presses an input whilst controlling a controllable entity, (mousepress or keypress)",
 })
 
 local function callInput(lis, inputEnum)
     for _, ent in ipairs(controllableGroup) do
         if sync.isClientControlling(ent) then
-            umg.call("controllableInput", ent, inputEnum, lis)
+            umg.call("control:entityAction", ent, inputEnum, lis)
         end
     end
 end

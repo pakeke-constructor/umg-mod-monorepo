@@ -27,10 +27,12 @@ end
 
 function itemUsage.useHoldItem(holder_ent, ...)
     local item = getHoldItem(holder_ent)
-    if itemUsageShared.canUseHoldItem(holder_ent) then
-        itemUsage.useItemDirectly(holder_ent, item, ...)
-    elseif item and item.useItemDeny then
-        useItemDeny(item, holder_ent, ...)
+    if item then
+        if itemUsageShared.canUseHoldItem(holder_ent) then
+            itemUsage.useItemDirectly(holder_ent, item, ...)
+        else
+            useItemDeny(item, holder_ent, ...)
+        end
     end
 end
 

@@ -6,6 +6,7 @@ Inventory objects
 
 ]]
 
+require("item_events")
 
 
 local Inventory = objects.Class("items_mod:inventory")
@@ -118,12 +119,11 @@ end
 
 
 
-
 function Inventory:setHover(slotX, slotY)
     assert2Numbers(slotX, slotY)
     self.hovering_x, self.hovering_y = slotX, slotY
 
-    umg.call("inventoryHover", self.owner, slotX, slotY)
+    umg.call("hoverInventorySlot", self.owner, slotX, slotY)
 
     if self.owner.autoHoldItem then
         self:hold(slotX, slotY)
