@@ -389,7 +389,7 @@ end)
     Automatically close any inventories that can no longer
     be accessed by the player
 ]]
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     for _, inv in ipairs(openInventories.getOpenInventories())do
         local keepOpen = false
         for _, player in ipairs(controlInventoryGroup)do

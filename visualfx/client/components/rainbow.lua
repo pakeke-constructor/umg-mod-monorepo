@@ -38,7 +38,7 @@ local DEFAULT_PERIOD = 5
 local DEFAULT_BRIGHTNESS = 0.2
 
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     for _, ent in ipairs(rainbowGroup) do
         local pi = math.pi
         local period = ent.rainbow.period or DEFAULT_PERIOD

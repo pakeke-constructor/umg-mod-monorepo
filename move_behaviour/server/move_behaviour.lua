@@ -118,7 +118,7 @@ local moveBehaviours = {
 
 local ct = 0
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     -- This function runes once every 50 frames:
     ct = ct + 1
     if ct < 50 then
@@ -138,7 +138,7 @@ end)
 
 
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     for _, ent in ipairs(moveBehaviourGroup) do
         local mb = ent.moveBehaviour
         if not (moveBehaviours[mb.type]) then 

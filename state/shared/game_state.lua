@@ -25,12 +25,12 @@ end
 
 local max, min = math.max, math.min
 
-umg.defineEvent("gamePreUpdate")
-umg.defineEvent("gameUpdate")
-umg.defineEvent("gamePostUpdate")
+umg.defineEvent("state:gamePreUpdate")
+umg.defineEvent("state:gameUpdate")
+umg.defineEvent("state:gamePostUpdate")
 
-umg.defineEvent("drawWorld")
-umg.defineEvent("drawUI")
+umg.defineEvent("state:drawWorld")
+umg.defineEvent("state:drawUI")
 
 
 
@@ -39,14 +39,14 @@ gameState:on("@update", function(dt)
     local modif = umg.ask("getDeltaTimeMultiplier", MULT) or 1
     dt = min(MAX_DT, max(MIN_DT, dt * modif))
 
-    umg.call("gamePreUpdate", dt)
-    umg.call("gameUpdate", dt)
-    umg.call("gamePostUpdate", dt)
+    umg.call("state:gamePreUpdate", dt)
+    umg.call("state:gameUpdate", dt)
+    umg.call("state:gamePostUpdate", dt)
 end)
 
 gameState:on("@draw", function(dt)
-    umg.call("drawWorld")
-    umg.call("drawUI")
+    umg.call("state:drawWorld")
+    umg.call("state:drawUI")
 end)
 
 

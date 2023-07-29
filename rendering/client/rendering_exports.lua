@@ -49,22 +49,6 @@ rendering.drawImage = require("client.helper.draw_image");
 
 
 
-function rendering.getEntityDisplaySize(ent)
-    --[[
-        returns (roughly) the (width, height) of an entity
-    ]]
-    local scale = entityProperties.getScale(ent)
-
-    local sx = entityProperties.getScaleX(ent) * scale
-    local sy = entityProperties.getScaleY(ent) * scale
-
-    assert(ent.image, "Entity had no image component!")
-    local size_x, size_y = rendering.getImageSize(ent)
-
-    return sx * size_x, sy * size_y
-end
-
-
 
 
 function rendering.toScreenCoords(world_x, world_y)
@@ -92,6 +76,10 @@ rendering.getUIMousePosition = draw.getUIMousePosition
 
 rendering.animate = animate.animate;
 rendering.animateEntity = animate.animateEntity;
+
+
+rendering.isHovered = require("client.helper.is_hovered")
+rendering.getEntityDisplaySize = require("client.helper.entity_display_size")
 
 
 umg.expose("rendering", rendering)

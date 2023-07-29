@@ -103,7 +103,7 @@ end)
 
 local EPSILON = 0.01
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     --[[
         we restrict controllable entities to the border,
         just so it's more responsive on client-side.

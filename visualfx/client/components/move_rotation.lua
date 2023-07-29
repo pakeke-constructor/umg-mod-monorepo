@@ -13,7 +13,7 @@ local moveRotationGroup = umg.group("vx", "vy", "moveRotation")
 local DEFAULT_START_ANGLE = 0 -- radians
 
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     --[[
         moveRotation = {
             startAngle = 0 or nil

@@ -128,7 +128,7 @@ local function getHoldItem(ent)
 end
 
 
-umg.on("gameUpdate", function()
+umg.on("state:gameUpdate", function()
     for _, ent in ipairs(holdingItemGroup) do
         local item_ent = getHoldItem(ent)
         if item_ent and holdable(item_ent) then

@@ -1,6 +1,4 @@
 
-local isHovered = require("client.mouse_hover")
-
 local clickEnts = umg.group("x", "y", "onClick")
 
 
@@ -24,7 +22,7 @@ function listener:mousepressed(mx, my, button, istouch, presses)
         local x, y = ent.x, rendering.getDrawY(ent.y, ent.z)
         local dist = math.distance(x-worldX, y-worldY)
         if dist < bestDist then
-            if isHovered(ent) then
+            if rendering.isHovered(ent) then
                 bestEnt = ent
                 bestDist = dist
             end

@@ -40,7 +40,7 @@ local curTime = love.timer.getTime()
 
 
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     curTime = curTime + dt
     local i = #times
     while (i>0) and (curTime >= times[i].endTime) do

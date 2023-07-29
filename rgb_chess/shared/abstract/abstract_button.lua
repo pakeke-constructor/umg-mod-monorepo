@@ -14,7 +14,7 @@ return {
 
     onUpdate = function(ent)
         if client then
-            if base.client.isHovered(ent) then
+            if rendering.isHovered(ent) then
                 ent.color = ent.hoverColor or GRAY
             else
                 ent.color = ent.normalColor or WHITE

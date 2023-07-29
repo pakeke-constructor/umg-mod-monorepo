@@ -36,7 +36,7 @@ function gravity.isOnGround(ent)
 end
 
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     for _, ent in ipairs(gravityGroup) do
         if groundTest(ent) then
             -- force the entity to stop moving downwards.

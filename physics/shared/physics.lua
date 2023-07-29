@@ -97,7 +97,7 @@ end
 
 
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     for _, ent in ipairs(physicsGroup) do
         preUpdateEnt(ent)
     end

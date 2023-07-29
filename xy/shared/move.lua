@@ -84,7 +84,7 @@ end
     We could instead run this code every tick instead...
     clients won't see a difference.
 ]]
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     for _, ent in ipairs(moveGroup) do
         updateEnt(ent, dt)
     end

@@ -69,7 +69,7 @@ local function updateParticleTable(ent, ptable, dt)
 end
 
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     frameCount = frameCount + 1
     for _, ent in ipairs(particleEntities)do
         local ent_particles = ent.particles

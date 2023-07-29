@@ -267,7 +267,7 @@ local updates = {
     [rgb.STATES.TURN_STATE] = updateTurn
 }
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     updates[rgb.state](dt)
 end)
 

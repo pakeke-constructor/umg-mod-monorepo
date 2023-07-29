@@ -72,7 +72,7 @@ umg.on("slabUpdate", function()
     entBeingHovered = nil
     for _, ent in ipairs(rgbGroup) do
         if ent.rgbTeam == client.getUsername() then
-            if base.client.isHovered(ent) then
+            if rendering.isHovered(ent) then
                 drawCardInfo(ent)
                 entBeingHovered = ent
             end

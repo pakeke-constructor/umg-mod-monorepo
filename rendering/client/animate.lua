@@ -114,8 +114,8 @@ end
 
 
 
-umg.on("gameUpdate", function(dt)
-    curTime = curTime + dt
+umg.on("@update", function(dt)
+    curTime = state.getGameTime()
 end)
 
 

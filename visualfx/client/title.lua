@@ -25,7 +25,7 @@ local titleObjs = objects.Heap(compare)
 
 local curTime = love.timer.getTime() -- current time
 
-umg.on("gameUpdate",function(dt)
+umg.on("state:gameUpdate",function(dt)
     curTime = curTime + dt
     local obj = titleObjs:peek()
     while obj and obj.endTime <= curTime do

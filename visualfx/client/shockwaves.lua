@@ -9,7 +9,7 @@ local shockwaveSet = objects.Set()
 
 
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     for _,sw in ipairs(shockwaveSet) do
         sw:update(dt)
         if sw.isFinished then

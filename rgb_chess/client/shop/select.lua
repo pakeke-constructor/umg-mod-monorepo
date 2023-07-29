@@ -59,7 +59,7 @@ function select.getSelectedRGB()
 end
 
 
-umg.on("gameUpdate", function()
+umg.on("state:gameUpdate", function()
     for ent,_ in pairs(selectedEnts) do
         if not umg.exists(ent) then
             select.deselect()

@@ -80,7 +80,7 @@ local function isFinished(emitter)
     end
 end
 
-umg.on("gameUpdate", function(dt)
+umg.on("state:gameUpdate", function(dt)
     for _, emitr in ipairs(in_use) do
         emitr.psys:update(dt)
         emitr.runtime = emitr.runtime + dt
