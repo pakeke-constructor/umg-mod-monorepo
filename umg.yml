@@ -89,6 +89,12 @@ globals:
     - type: string
     - required: false
       type: table
+  umg.getQuestionInfo:
+    args:
+    - type: string
+  umg.getEventInfo:
+    args:
+    - type: string
   umg.save:
     args:
     - type: string

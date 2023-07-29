@@ -6,9 +6,9 @@ local RANGE_ACCEPTANCE = 40
 
 
 
-umg.defineEvent("entityClicked")
+umg.defineEvent("control:entityClicked")
 
-sync.proxyEventToClient("entityClicked")
+sync.proxyEventToClient("control:entityClicked")
 
 
 
