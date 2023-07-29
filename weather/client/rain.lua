@@ -116,7 +116,7 @@ end)
 
 
 
-umg.on("drawEffects", function()
+umg.on("rendering:drawEffects", function()
     for _,rd in ipairs(rainDrops) do
         drawRainDrop(rd)
     end

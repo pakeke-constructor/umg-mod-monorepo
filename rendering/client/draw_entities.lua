@@ -6,6 +6,10 @@ Will emit draw calls based on position, and in correct order.
 
 ]]
 
+require("rendering_questions")
+require("rendering_events")
+
+
 local currentCamera = require("client.current_camera")
 
 local constants = require("client.constants")
@@ -239,7 +243,7 @@ end
 
 
 local function isHidden(ent)
-    return ent.hidden or umg.ask("isHidden", reducers.OR, ent)
+    return ent.hidden or umg.ask("rendering:isHidden", ent)
 end
 
 local getOpacity, getRed, getGreen, getBlue = entityProperties.getOpacity, entityProperties.getRed, entityProperties.getGreen, entityProperties.getBlue

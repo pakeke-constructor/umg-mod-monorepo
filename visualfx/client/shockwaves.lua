@@ -22,7 +22,7 @@ end)
 
 
 
-umg.on("drawEffects", function()
+umg.on("rendering:drawEffects", function()
     for _,sw in ipairs(shockwaveSet) do
         sw:draw()
     end

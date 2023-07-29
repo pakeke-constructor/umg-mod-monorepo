@@ -9,13 +9,13 @@ local constants = require("client.constants")
 
 local function getCameraPosition()
     -- The camera offset, (i.e. camera is offset 10 pixels to the right)
-    local dx, dy = umg.ask("getCameraOffset", reducers.ADD_VECTOR) 
+    local dx, dy = umg.ask("rendering:getCameraOffset") 
     if not dx then
         dx, dy = 0, 0
     end
 
     -- The global camera position in the world
-    local x, y = umg.ask("getCameraPosition", reducers.PRIORITY_DOUBLE) 
+    local x, y = umg.ask("rendering:getCameraPosition") 
     if not x then
         x, y = 0, 0
     end
@@ -55,22 +55,22 @@ function draw.drawWorld(customCamera)
 
     camera:attach()
 
-    umg.call("preDrawWorld")
+    umg.call("rendering:preDrawWorld")
 
-    umg.call("drawGround")
-    umg.call("drawEntities")
-    umg.call("drawEffects")
+    umg.call("rendering:drawGround")
+    umg.call("rendering:drawEntities")
+    umg.call("rendering:drawEffects")
 
     camera:draw()
 
-    umg.call("postDrawWorld")
+    umg.call("rendering:postDrawWorld")
 
     camera:detach()
 end
 
 
 
-umg.on("drawWorld", function()
+umg.on("state:drawWorld", function()
     draw.drawWorld()
 end)
 
@@ -121,11 +121,11 @@ end
 
 
 
-umg.on("drawUI", function()
+umg.on("state:drawUI", function()
     love.graphics.scale(scaleUI)
-    umg.call("preDrawUI")
-    umg.call("mainDrawUI")
-    umg.call("postDrawUI")
+    umg.call("rendering:preDrawUI")
+    umg.call("rendering:drawUI")
+    umg.call("rendering:postDrawUI")
 end)
 
 

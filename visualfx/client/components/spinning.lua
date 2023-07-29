@@ -16,7 +16,7 @@ local DEFAULT_SPIN_MAGNITUDE = 1;
 local PI2 = math.pi * 2
 
 
-umg.answer("getScaleX", function(ent)
+umg.answer("rendering:getScaleX", function(ent)
     --[[
         returns the scale_x multiplier for spinning component.
         Default is 1.

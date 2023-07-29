@@ -2,7 +2,7 @@
 
 local defaultColor = {0,0,0,0.6}
 
-umg.on("preDrawEntity", function(ent)
+umg.on("rendering:preDrawEntity", function(ent)
     if ent.shadow and ent.image then
         local r,b,g,a = love.graphics.getColor()
         local size = ent.shadow.size

@@ -27,13 +27,11 @@ local function getNametagText(ent)
         return ent.nametag.value
     end
 
-    local txt = umg.ask("getNametagText", reducers.PRIORITY, ent)
-
-    return (txt or ent.controller) or DEFAULT
+    return ent.controller or DEFAULT
 end
 
 
-umg.on("postDrawEntity", function(ent)
+umg.on("rendering:postDrawEntity", function(ent)
     if ent.nametag then
         local _ox, oy = rendering.getImageOffsets(images[ent.image])
         local text = getNametagText(ent)

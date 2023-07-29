@@ -117,7 +117,7 @@ end
 
 
 
-umg.on("postDrawWorld", function()
+umg.on("rendering:postDrawWorld", function()
     if _G.settings.editing then
         love.graphics.push("all")
         love.graphics.setLineWidth(3)
@@ -145,7 +145,7 @@ local camera_x, camera_y = 0, 0
 local WORLDEDIT_CAMERA_PRIORITY = 100
 
 
-umg.answer("getCameraPosition", function()
+umg.answer("rendering:getCameraPosition", function()
     if _G.settings.editing then
         return camera_x, camera_y, WORLDEDIT_CAMERA_PRIORITY
     end
@@ -239,7 +239,7 @@ end
 
 worldeditUI.init(we)
 
-umg.on("slabUpdate", function()
+umg.on("ui:slabUpdate", function()
     worldeditUI.render()
 end)
 

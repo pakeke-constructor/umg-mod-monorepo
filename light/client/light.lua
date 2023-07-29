@@ -87,7 +87,7 @@ local function drawCanvas()
 end
 
 
-umg.on("postDrawWorld", function()
+umg.on("rendering:postDrawWorld", function()
     setupCanvas()
     local mode, alphamode = love.graphics.getBlendMode( )
     drawCanvas()

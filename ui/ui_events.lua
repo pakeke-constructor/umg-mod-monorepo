@@ -1,4 +1,4 @@
 
 
-umg.defineEvent("slabUpdate")
+umg.defineEvent("ui:slabUpdate")
 

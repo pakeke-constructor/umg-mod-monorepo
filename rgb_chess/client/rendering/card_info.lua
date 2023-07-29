@@ -68,7 +68,7 @@ local rgbGroup = umg.group("rgb", "rgbCard")
 
 local entBeingHovered = nil
 
-umg.on("slabUpdate", function()
+umg.on("ui:slabUpdate", function()
     entBeingHovered = nil
     for _, ent in ipairs(rgbGroup) do
         if ent.rgbTeam == client.getUsername() then

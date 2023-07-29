@@ -138,7 +138,7 @@ end)
 
 
 
-umg.on("drawIndex", function(drawIndex)
+umg.on("rendering:drawIndex", function(drawIndex)
     for _, terrain in ipairs(terrainIds.getTerrainObjects()) do
         local ditgm = terrain.drawIndexToGreedyMesh
         if ditgm and ditgm[drawIndex] then

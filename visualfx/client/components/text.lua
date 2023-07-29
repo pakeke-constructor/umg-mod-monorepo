@@ -7,7 +7,7 @@ local WHITE = {1,1,1}
 
 
 
-umg.on("postDrawEntity", function(ent)
+umg.on("rendering:postDrawEntity", function(ent)
     --[[
         text = {
             value = "hello",

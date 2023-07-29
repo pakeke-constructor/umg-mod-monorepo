@@ -84,7 +84,7 @@ end
 
 
 
-umg.on("slabUpdate", function()
+umg.on("ui:slabUpdate", function()
     if currentScript then
         scriptRunner.scriptUI(currentScript)
     end

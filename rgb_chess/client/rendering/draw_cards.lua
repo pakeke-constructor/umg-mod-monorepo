@@ -24,7 +24,7 @@ end
 
 local cardLockGroup = umg.group("rgbCardLock")
 
-umg.answer("getOpacity", function(ent)
+umg.answer("rendering:getOpacity", function(ent)
     -- this is a bit hacky and bad, oh well tho
     if ent.rgbCard then
         for _, cardLockEnt in ipairs(cardLockGroup) do

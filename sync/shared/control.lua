@@ -5,6 +5,9 @@ Determines whether an entity is controllable by the client, or not.
 
 ]]
 
+require("sync_questions")
+
+
 
 local control = {}
 
@@ -30,7 +33,7 @@ function control.getController(ent)
         return ent.controller
     end
 
-    return umg.ask("getController", reducers.PRIORITY, ent)
+    return umg.ask("sync:getController", ent)
 end
 
 
@@ -46,7 +49,7 @@ function control.isControlledBy(ent, clientId)
 
     if ok then
         -- check that it's not blocked
-        local blocked = umg.ask("isControlBlocked", reducers.OR, ent, clientId)
+        local blocked = umg.ask("sync:isControlBlocked", ent, clientId)
         return not blocked
     end
 end

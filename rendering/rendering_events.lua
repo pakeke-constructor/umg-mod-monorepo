@@ -31,7 +31,7 @@ umg.defineEvent("rendering:postDrawWorld")
 
 
 -- rendering 
-umg.call("rendering:preDrawUI")
-umg.call("rendering:mainDrawUI")
-umg.call("rendering:postDrawUI")
+umg.defineEvent("rendering:preDrawUI")
+umg.defineEvent("rendering:drawUI")
+umg.defineEvent("rendering:postDrawUI")
 

@@ -28,7 +28,7 @@ umg.on("@update", function()
 end)
 
 
-umg.answer("getCameraPosition", function()
+umg.answer("rendering:getCameraPosition", function()
     return follow_x, follow_y, CAMERA_PRIORITY
 end)
 

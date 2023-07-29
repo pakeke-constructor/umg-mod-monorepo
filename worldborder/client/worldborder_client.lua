@@ -82,7 +82,7 @@ local function drawCanvas()
 end
 
 
-umg.on("postDrawWorld", function()
+umg.on("rendering:postDrawWorld", function()
     if #borderGroup > 0 then
         setupCanvas()
 

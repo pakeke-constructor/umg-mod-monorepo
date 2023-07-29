@@ -189,7 +189,7 @@ end
 
 
 
-umg.on("drawEffects", function()
+umg.on("rendering:drawEffects", function()
     cleanHeap(textHeap)
     cleanHeap(imageHeap)
 

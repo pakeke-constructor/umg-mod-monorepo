@@ -64,7 +64,7 @@ end
 
 
 
-umg.on("drawIndex", function( z_dep )
+umg.on("rendering:drawIndex", function( z_dep )
     for _, emtr in ipairs(drawingPSyses[z_dep]) do
         drawEmitter(emtr)
     end

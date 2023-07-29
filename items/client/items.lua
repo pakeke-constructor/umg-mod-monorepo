@@ -339,7 +339,7 @@ function listener:mousereleased(mx,my, button)
 end
 
 
-umg.on("slabUpdate", function()
+umg.on("ui:slabUpdate", function()
     for _, inv in ipairs(openInventories.getOpenInventories()) do
         if inv.is_open then
             inv:updateSlabUI()
@@ -348,7 +348,7 @@ umg.on("slabUpdate", function()
 end)
 
 
-umg.on("mainDrawUI", function()
+umg.on("rendering:drawUI", function()
     for _, inv in ipairs(openInventories.getOpenInventories()) do
         inv:drawUI()
     end
