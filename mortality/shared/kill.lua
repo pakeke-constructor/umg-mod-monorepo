@@ -1,7 +1,10 @@
 
+require("mortality_events")
+
+
+
 local kill
 
-umg.defineEvent("mortality:entityDeath")
 
 
 if server then

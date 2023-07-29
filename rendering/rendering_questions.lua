@@ -21,24 +21,24 @@ local MULT = reducers.MULTIPLY
     Also, try to keep answers for these questions to a minimum, as to
     not put a strain on performance.
 ]]
-umg.defineQuestion("getOffsetX", ADD)
-umg.defineQuestion("getOffsetY", ADD)
-umg.defineQuestion("getRotation", ADD)
+umg.defineQuestion("rendering:getOffsetX", ADD)
+umg.defineQuestion("rendering:getOffsetY", ADD)
+umg.defineQuestion("rendering:getRotation", ADD)
 
-umg.defineQuestion("getScale", MULT)
-umg.defineQuestion("getScaleX", MULT)
-umg.defineQuestion("getScaleY", MULT)
+umg.defineQuestion("rendering:getScale", MULT)
+umg.defineQuestion("rendering:getScaleX", MULT)
+umg.defineQuestion("rendering:getScaleY", MULT)
 
-umg.defineQuestion("getShearX", ADD)
-umg.defineQuestion("getShearY", ADD)
+umg.defineQuestion("rendering:getShearX", ADD)
+umg.defineQuestion("rendering:getShearY", ADD)
 
-umg.defineQuestion("getShearX", ADD)
-umg.defineQuestion("getShearY", ADD)
+umg.defineQuestion("rendering:getShearX", ADD)
+umg.defineQuestion("rendering:getShearY", ADD)
 
-umg.defineQuestion("getRed", MULT)
-umg.defineQuestion("getBlue", MULT)
-umg.defineQuestion("getGreen", MULT)
-umg.defineQuestion("getOpacity", MULT)
+umg.defineQuestion("rendering:getRed", MULT)
+umg.defineQuestion("rendering:getBlue", MULT)
+umg.defineQuestion("rendering:getGreen", MULT)
+umg.defineQuestion("rendering:getOpacity", MULT)
 
-umg.defineQuestion("getImage", reducers.PRIORITY)
+umg.defineQuestion("rendering:getImage", reducers.PRIORITY)
 

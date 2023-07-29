@@ -1,4 +1,5 @@
 
+require("control_events")
 
 
 local RANGE_ACCEPTANCE = 80
@@ -76,7 +77,7 @@ end
 
 
 
-umg.on("entityClicked", function(ent, username, button, worldX, worldY)
+umg.on("control:entityClicked", function(ent, username, button, worldX, worldY)
     if type(ent.onClick) == "function" then
         ent:onClick(username, button, worldX, worldY)
     end

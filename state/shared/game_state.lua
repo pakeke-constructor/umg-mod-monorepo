@@ -9,6 +9,8 @@ When the game is running, it should be in this state.
 
 ]]
 require("state_events")
+require("state_questions")
+
 
 local state = require("shared.state")
 
@@ -19,17 +21,13 @@ local MAX_DT = 0.16
 local MIN_DT = -0.16
 
 
-local MULT = function(x,y)
-    return x * y
-end
-
 
 local max, min = math.max, math.min
 
 
 
 gameState:on("@update", function(dt)
-    local modif = umg.ask("getDeltaTimeMultiplier", MULT) or 1
+    local modif = umg.ask("getDeltaTimeMultiplier") or 1
     dt = min(MAX_DT, max(MIN_DT, dt * modif))
 
     umg.call("state:gamePreUpdate", dt)

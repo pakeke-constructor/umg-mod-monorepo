@@ -24,6 +24,9 @@ local function proxyEventToClient(eventName)
         error("Expected string as first argument")
     end
     local evname = getFullName(eventName)
+    if not evname then
+        error("Unknown event: " .. tostring(eventName))
+    end
     if proxiedEvents[evname] then
         error("This event is already being proxied: " .. eventName)
     end

@@ -1,4 +1,6 @@
 
+require("xy_questions")
+
 
 local options = require("shared.options")
 
