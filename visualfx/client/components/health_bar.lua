@@ -1,18 +1,13 @@
 
---[[
-
-TODO:
-This code probably belongs in the drawfx mod!!
-
-]]
-
-
 
 --[[
 
-drawing health bars:
+.healthBar component
+
+:-)
 
 ]]
+
 
 local DEFAULT_DRAW_HEIGHT = 5
 local DEFAULT_DRAW_WIDTH = 20
