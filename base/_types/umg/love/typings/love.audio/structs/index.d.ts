@@ -1,2 +1,0 @@
-﻿import "./EffectSettings";
-import "./FilterSettings";

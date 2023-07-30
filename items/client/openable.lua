@@ -37,16 +37,6 @@ end
 
 
 
---[[
-    TODO:
-    use the FRICKEN sync mod for this!!!
-]]
-local function isInControlOf(player)
-    return player.controller == client.getUsername()
-end
-
-
-
 
 
 local function open(inv)
@@ -59,6 +49,7 @@ end
 
 
 local function tryOpenInv(player, inv_ent)
+    print('hi?')
     local opn = inv_ent.openable
     local inv = inv_ent.inventory
     if inv:canBeOpenedBy(player) then
@@ -83,7 +74,7 @@ function listener:mousepressed(mx, my, button)
     if button == OPEN_BUTTON then
         -- Try open inventories
         for _, player in ipairs(controlInventoryGroup)do
-            if isInControlOf(player) then
+            if sync.isClientControlling(player) then
                 local inv_ent = searchForOpenable(player, mx, my)
                 if inv_ent then
                     tryOpenInv(player, inv_ent)
@@ -104,7 +95,7 @@ local function areMostInventoriesOpen()
     local ct = 0
     local tot_ct = 0
     for _, player in ipairs(controlInventoryGroup)do
-        if isInControlOf(player) then
+        if sync.isClientControlling(player) then
             local inv = player.inventory
             tot_ct = tot_ct + 1
             if inv:isOpen() then
@@ -122,7 +113,7 @@ end
 
 local function openAllPlayerInventories()
     for _, player in ipairs(controlInventoryGroup)do
-        if isInControlOf(player) then
+        if sync.isClientControlling(player) then
             local inv = player.inventory
             inv:open()
         end

@@ -33,12 +33,12 @@ umg.defineQuestion("rendering:getCameraPosition", reducers.PRIORITY_DOUBLE)
     Do NOT include complex code in your answers!!!
     Every answer should be a fast, simple O(1) check.
 
-    Also, try to keep answers for these questions to a minimum, as to
-    not put a strain on performance.
+    Also, try to not answers questions like these *too* many times,
+    as it will cause a slight performance hit.
 ]]
 
 -- Is the entity hidden? answers should return true or false
-umg.defineQuestion("isHidden", reducers.OR)
+umg.defineQuestion("rendering:isHidden", reducers.OR)
 
 -- gets offsets of an entity for draw position
 umg.defineQuestion("rendering:getOffsetX", ADD)
