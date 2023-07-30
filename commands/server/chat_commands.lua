@@ -84,3 +84,35 @@ chat.handleCommand("spawn", {
 })
 
 
+
+
+local values = require("shared.values")
+
+
+chat.handleCommand("set", {
+    arguments = {
+        {name = "key", type = "string"},
+        {name = "value", type = "string"}
+        -- ^^^ TODO: We should allow for setting of numbers here too
+    },
+    adminLevel = 50,
+
+    handler = function(sender, key, value)
+        values[key] = value
+    end
+})
+
+
+
+chat.handleCommand("get", {
+    arguments = {
+        {name = "key", type = "string"},
+    },
+    adminLevel = 50,
+
+    handler = function(sender, key)
+        local msg = key .. ": " .. tostring(values[key])
+        chat.privateMessage(sender, msg)
+    end
+})
+
