@@ -12,33 +12,26 @@ then umg.call("hello", 1, 3) will be called automatically on the client.
 local proxiedEvents = {}
 
 
-local function getFullName(eventName)
-    local info = umg.getEventInfo(eventName)
-    return info and info.eventName
-end
-
-
 
 local function proxyEventToClient(eventName)
     if type(eventName) ~= "string" then
         error("Expected string as first argument")
     end
-    local evname = getFullName(eventName)
-    if not evname then
+    if not eventName then
         error("Unknown event: " .. tostring(eventName))
     end
-    if proxiedEvents[evname] then
+    if proxiedEvents[eventName] then
         error("This event is already being proxied: " .. eventName)
     end
 
-    local networkEventName = "proxy_" .. evname
+    local networkEventName = "proxy_" .. eventName
     if server then
-        umg.on(evname, function(...)
+        umg.on(eventName, function(...)
             server.broadcast(networkEventName, ...)
         end)
     elseif client then
         client.on(networkEventName, function(...)
-            umg.call(evname, ...) 
+            umg.call(eventName, ...) 
         end)
     end
 end

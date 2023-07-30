@@ -36,13 +36,13 @@ local function load_data(username, entity_data)
         local res, err = umg.deserialize(entity_data)
         if ((not res) and err) then
             print("[playersaves]: couldn't deserialize player: ", err)
-            umg.call("createPlayer", username)
+            umg.call("playersaves:createPlayer", username)
         end
     else
         -- Welp, this player has no savedata!
         -- A newPlayer event is emitted, and a player should be created
         -- from that event somewhere.
-        umg.call("createPlayer", username)
+        umg.call("playersaves:createPlayer", username)
     end   
 end
 

@@ -44,13 +44,13 @@ end
 
 
 -- An item is used
-umg.defineEvent("useItem")
+umg.defineEvent("items:useItem")
 
 
 
 -- item dropped on ground
-umg.defineEvent("dropGroundItem")
+umg.defineEvent("items:dropGroundItem")
 
 -- item picked up from ground
-umg.defineEvent("pickupGroundItem")
+umg.defineEvent("items:pickupGroundItem")
 

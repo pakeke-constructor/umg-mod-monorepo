@@ -85,7 +85,7 @@ function reducers.PRIORITY(a, b, prio_a, prio_b)
 
         Example:
         -- answering image for an entity:
-        umg.answer("getImage", function(ent)
+        umg.answer("modname:getImage", function(ent)
             if ent.animation then
                 -- return
                 local img = ent.animation.frame

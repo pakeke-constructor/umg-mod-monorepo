@@ -124,7 +124,7 @@ function Inventory:setHover(slotX, slotY)
     assert2Numbers(slotX, slotY)
     self.hovering_x, self.hovering_y = slotX, slotY
 
-    umg.call("hoverInventorySlot", self.owner, slotX, slotY)
+    umg.call("items:hoverInventorySlot", self.owner, slotX, slotY)
 
     if self.owner.autoHoldItem then
         self:hold(slotX, slotY)
@@ -170,12 +170,12 @@ function Inventory:_rawset(x, y, item_ent)
     if item_ent then
         assertItem(item_ent)
         if item_ent ~= self.inventory[i] then
-            umg.call("itemAdded", self.owner, item_ent)
+            umg.call("items:itemAdded", self.owner, item_ent)
         end
         self.inventory[i] = item_ent
     else
         if self.inventory[i] then
-            umg.call("itemRemoved", self.owner, self.inventory[i])
+            umg.call("items:itemRemoved", self.owner, self.inventory[i])
         end
         self.inventory[i] = nil
     end
@@ -283,7 +283,7 @@ function Inventory:hasRemoveAuthority(controlEnt, slotX, slotY)
         return false 
     end
 
-    local isBlocked = umg.ask("isItemRemovalBlocked", controlEnt, self.owner, slotX, slotY)
+    local isBlocked = umg.ask("items:isItemRemovalBlocked", controlEnt, self.owner, slotX, slotY)
     return not isBlocked
 end
 
@@ -302,7 +302,7 @@ function Inventory:hasAddAuthority(controlEnt, itemToBeAdded, slotX, slotY)
     end
 
     -- TODO: rename this question, it's terribly named
-    local isBlocked = umg.ask("isItemAdditionBlocked", controlEnt, self.owner, itemToBeAdded, slotX, slotY)
+    local isBlocked = umg.ask("items:isItemAdditionBlocked", controlEnt, self.owner, itemToBeAdded, slotX, slotY)
     return not isBlocked
 end
 
@@ -507,9 +507,9 @@ function Inventory:canBeOpenedBy(ent)
     ]]
     assert(umg.exists(ent), "takes an entity as first argument. (Where the entity is the one opening the inventory)")
 
-    local canOpen = umg.ask("canOpenInventory", ent, self)
+    local canOpen = umg.ask("items:canOpenInventory", ent, self)
     if canOpen then
-        local isLocked = umg.ask("isInventoryLocked", ent, self)
+        local isLocked = umg.ask("items:isInventoryLocked", ent, self)
         if not isLocked then
             return true
         end
@@ -578,12 +578,12 @@ function Inventory:_setHoldSlot(slotX, slotY)
     
     if umg.exists(prevItem) then
         clearPreviousHoldItem(self)
-        umg.call("unequipItem", ownerEnt, prevItem)
+        umg.call("items:unequipItem", ownerEnt, prevItem)
     end
 
     if umg.exists(newItem) then
         self.holdItem = newItem
-        umg.call("equipItem", ownerEnt, newItem)
+        umg.call("items:equipItem", ownerEnt, newItem)
     end
 end
 
@@ -685,7 +685,7 @@ function Inventory:drawItem(item_ent, x, y)
     rendering.drawImage(quad, drawX, drawY, 0, scale, scale)
 
     local holder_ent = self.owner
-    umg.call("drawInventoryItem", holder_ent, item_ent, drawX, drawY, self.slotSize)
+    umg.call("items:drawInventoryItem", holder_ent, item_ent, drawX, drawY, self.slotSize)
 
     if (item_ent.stackSize or 1) > 1 then
         -- Draw stack number
@@ -745,7 +745,7 @@ local function updateItemTooltip(itemEnt, mx, my)
         Slab.Text(itemEnt.itemDescription, descriptionArgs)
     end
 
-    umg.call("displayItemTooltip", itemEnt)
+    umg.call("items:displayItemTooltip", itemEnt)
 
     Slab.EndWindow()
 end
@@ -968,7 +968,7 @@ function Inventory:drawUI()
 
     drawExitButton(self)
 
-    umg.call("drawInventory", self.owner)
+    umg.call("items:drawInventory", self.owner)
     
     love.graphics.pop()
 end

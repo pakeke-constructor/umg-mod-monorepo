@@ -20,7 +20,7 @@ end
 
 local function useItemDeny(item, holder_ent, ...)
     item:useItemDeny(holder_ent, ...)
-    umg.call("useItemDeny", holder_ent, item, ...)
+    umg.call("items:useItemDeny", holder_ent, item, ...)
 end
 
 
@@ -46,7 +46,7 @@ function itemUsage.useItemDirectly(holder_ent, item, ...)
     if type(item.useItem) == "function" then
         item:useItem(holder_ent or false, ...)
     end
-    umg.call("useItem", holder_ent, item, ...)
+    umg.call("items:useItem", holder_ent, item, ...)
     server.broadcast("useItem", holder_ent, item, ...)
     item.itemLastUseTime = state.getGameTime()
 end

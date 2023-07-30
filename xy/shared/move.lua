@@ -21,7 +21,7 @@ local function shouldMoveShared(ent)
     -- Allow future mods to disable velocity.
     -- This comes in handy when we want to have velocity components,
     -- but we don't want them to actually work. (i.e. physics system)
-    local blocked = umg.ask("isVelocityDisabled", ent)
+    local blocked = umg.ask("xy:isVelocityDisabled", ent)
     return not blocked
 end
 
@@ -57,7 +57,7 @@ local function shouldMoveZ(ent)
     if (not ent.z) or (not ent.vz) then
         return
     end
-    local blocked = umg.ask("disableVerticalVelocity", ent)
+    local blocked = umg.ask("xy:disableVerticalVelocity", ent)
     return not blocked
 end
 

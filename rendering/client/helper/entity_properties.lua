@@ -26,10 +26,10 @@ function entityProperties.getScale(ent)
     return (ent.scale or 1) * (umg_ask("rendering:getScale", ent) or 1)
 end
 
+
 function entityProperties.getScaleX(ent)
     return (ent.scaleX or 1) * (umg_ask("rendering:getScaleX", ent) or 1)
 end
-
 function entityProperties.getScaleY(ent)
     return (ent.scaleY or 1) * (umg_ask("rendering:getScaleY", ent) or 1)
 end
@@ -38,7 +38,6 @@ end
 function entityProperties.getShearX(ent)
     return (ent.shearX or 0) + (umg_ask("rendering:getShearX", ent) or 0)
 end
-
 function entityProperties.getShearY(ent)
     return (ent.shearY or 0) + (umg_ask("rendering:getShearY", ent) or 0)
 end
@@ -48,6 +47,8 @@ end
 function entityProperties.getOpacity(ent)
     return (ent.opacity or 1) * (umg_ask("rendering:getOpacity", ent) or 1)
 end
+
+
 
 function entityProperties.getRed(ent)
     return umg_ask("rendering:getRed", ent) or 1

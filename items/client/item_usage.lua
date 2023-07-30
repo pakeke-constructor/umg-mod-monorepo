@@ -31,7 +31,7 @@ function itemUsage.useHoldItem(holder_ent, ...)
     if canUse(holder_ent) then
         asserter(holder_ent)
         client.send("useItem", holder_ent, ...)
-        umg.call("useItem", holder_ent, item, ...)
+        umg.call("items:useItem", holder_ent, item, ...)
         if type(item.useItem) == "function" then
             item:useItem(holder_ent or false, ...)
         end

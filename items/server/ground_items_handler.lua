@@ -39,7 +39,7 @@ local function dropItem(itemEnt, x, y)
     local e = server.entities.items_ground_item(x, y)
     e.inventory:set(1,1,itemEnt)
     e.image = itemEnt.image
-    umg.call("dropGroundItem", e, itemEnt)
+    umg.call("items:dropGroundItem", e, itemEnt)
 end
 
 
@@ -135,7 +135,7 @@ local function tryPickUp(ent, picked)
             -- realistically, `success` should always be true, (since we used findAvailableSlot)
             -- but its better to be safe than sorry
             picked[best_ent] = true
-            umg.call("pickupGroundItem", ent, item)
+            umg.call("items:pickupGroundItem", ent, item)
             -- delete the item on ground
             best_ent:delete()
         end

@@ -41,6 +41,7 @@ umg.defineQuestion("rendering:getCameraPosition", reducers.PRIORITY_DOUBLE)
 umg.defineQuestion("rendering:isHidden", reducers.OR)
 
 -- gets offsets of an entity for draw position
+-- TODO: Change these to to getOffsetXY?
 umg.defineQuestion("rendering:getOffsetX", ADD)
 umg.defineQuestion("rendering:getOffsetY", ADD)
 
@@ -50,19 +51,27 @@ umg.defineQuestion("rendering:getRotation", ADD)
 
 -- visual scale of entity
 umg.defineQuestion("rendering:getScale", MULT)
+-- TODO: Change these two to getScaleXY?
 umg.defineQuestion("rendering:getScaleX", MULT)
 umg.defineQuestion("rendering:getScaleY", MULT)
 
 -- shear of entity
+-- TODO: Change these two to getShearXY?
 umg.defineQuestion("rendering:getShearX", ADD)
 umg.defineQuestion("rendering:getShearY", ADD)
 
 
 -- color of entity
+--[[
+    TODO: Remove getRed, getGreen, getBlue to a single question:
+    getColor
+]]
 umg.defineQuestion("rendering:getRed", MULT)
 umg.defineQuestion("rendering:getBlue", MULT)
 umg.defineQuestion("rendering:getGreen", MULT)
+
 umg.defineQuestion("rendering:getOpacity", MULT)
+
 
 -- ability to override image
 umg.defineQuestion("rendering:getImage", reducers.PRIORITY)

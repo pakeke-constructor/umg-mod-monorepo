@@ -269,9 +269,9 @@ local function drawEntity(ent)
     if entIsOnScreen(ent) and not isHidden(ent) then
         if ent.image then
             setColorOfEnt(ent)
-            umg.call("preDrawEntity", ent)
-            umg.call("drawEntity", ent)
-            umg.call("postDrawEntity", ent)
+            umg.call("rendering:preDrawEntity", ent)
+            umg.call("rendering:drawEntity", ent)
+            umg.call("rendering:postDrawEntity", ent)
             if ent.onDraw then
                 ent:onDraw()
             end
@@ -283,7 +283,7 @@ end
 --[[
     main draw function
 ]]
-umg.on("drawEntities", function()
+umg.on("rendering:drawEntities", function()
     --[[
         explanation:
         We have two sorted lists of entities:
@@ -335,7 +335,7 @@ umg.on("drawEntities", function()
             -- If entities are very far apart, this loop may very well be called like 1 million times.
             -- We should check if the Y pos is on screen before doing something stupid like this;
             -- that way we won't hit a bajillion iterations in this loop
-            umg.call("drawIndex", dep)
+            umg.call("rendering:drawIndex", dep)
         end
         last_draw_dep = draw_dep
 

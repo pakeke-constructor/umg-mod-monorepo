@@ -38,7 +38,7 @@ server.on("entityClicked", {
         if type(ent.onClick) == "function" then
             ent:onClick(sender_uname, button, worldX, worldY)
         end
-        umg.call("entityClicked", ent, sender_uname, button, worldX, worldY)
+        umg.call("control:entityClicked", ent, sender_uname, button, worldX, worldY)
     end
 })
 

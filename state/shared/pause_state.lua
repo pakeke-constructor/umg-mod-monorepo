@@ -15,7 +15,7 @@ local pauseState = state.State("pause")
 
 
 pauseState:on("@draw", function(dt)
-    umg.call("drawWorld")
-    umg.call("drawUI")
+    umg.call("state:drawWorld")
+    umg.call("state:drawUI")
 end)
 

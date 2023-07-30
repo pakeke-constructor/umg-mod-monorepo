@@ -50,9 +50,9 @@ Array.length = Array.size -- alias
 
 
 
--- Pops item from array at index
+-- Removes item from array at index
 -- (if index is nil, pops from the end of array.)
-function Array:pop(i)
+function Array:remove(i)
     if i and (not (1 <= i and i <= self.len)) then
         error("Array index out of range: " .. tostring(i))
     end
@@ -60,15 +60,20 @@ function Array:pop(i)
     self.len = self.len - 1
 end
 
+-- alias
+Array.pop = Array.remove
+
 
 -- Pops item from array by swapping it with the last item
 -- this operation is O(1)
 -- WARNING: This operation DOES NOT preserve array order!!!
-function Array:quickPop(i)
+function Array:quickRemove(i)
     local obj = self[self.len]
     self[i], self[self.len] = obj, nil
     self.len = self.len - 1
 end
+
+Array.quickPop = Array.quickRemove
 
 
 

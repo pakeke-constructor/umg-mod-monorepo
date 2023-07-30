@@ -22,7 +22,7 @@ Reducers what we use to combine multiple answers into one.
 Lets say we want to get the speed multiplier for an entity:
 ```lua
 
-umg.answer("getSpeedMultiplier", function(ent)
+umg.answer("modname:getSpeedMultiplier", function(ent)
     -- if entity has superSpeed component, increase speed by 10 times!
     if ent.superSpeed then
         return 10
@@ -31,7 +31,7 @@ umg.answer("getSpeedMultiplier", function(ent)
 end)
 
 
-umg.answer("getSpeedMultiplier", function(ent)
+umg.answer("modname:getSpeedMultiplier", function(ent)
     if ent.potionEffect == "slowness" then
         -- if entity has slowness potion effect, decrease speed by half.
         return 0.5
@@ -47,7 +47,7 @@ end)
 
     (This is because the previous answer is still active.)
 ]]
-umg.answer("getSpeedMultiplier", function(ent)
+umg.answer("modname:getSpeedMultiplier", function(ent)
     if ent.superSpeed then
         return 5
     end
@@ -63,7 +63,7 @@ local function MULT(a, b)
 end
 
 
-local speed = umg.ask("getSpeedMultiplier", MULT, ent)
+local speed = umg.ask("modname:getSpeedMultiplier", MULT, ent)
 -- MULT is our reducer.
 -- `ent` is passed as an argument to the answerers.
 --      (we can pass as many args as we want though.)
