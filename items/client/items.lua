@@ -64,7 +64,7 @@ end)
 
 
 
-umg.on("closeInventory", function(owner_ent)
+umg.on("items:closeInventory", function(owner_ent)
     -- todo: This is slightly hacky?
     -- We shouldn't be using callbacks to determine critical state like this.
     local inv = owner_ent.inventory

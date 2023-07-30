@@ -2,7 +2,7 @@
 local uiTools = require("client.rendering.ui_tools")
 
 
-umg.on("displayItemTooltip", function(itemEnt)
+umg.on("items:displayItemTooltip", function(itemEnt)
     local itemInfo = itemEnt.itemInfo
     
     Slab.Separator()

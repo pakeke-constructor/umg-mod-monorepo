@@ -29,7 +29,7 @@ local getImage = entityProperties.getImage
 
 
 
-umg.on("drawEntity", function(ent)
+umg.on("rendering:drawEntity", function(ent)
     local img = getImage(ent)
     if not img then
         return -- no image, don't draw.

@@ -19,6 +19,10 @@ end
 
 
 local function useItemDeny(item, holder_ent, ...)
+    --[[
+        todo, this needs to be called on BOTH client/server.
+        currently it's only server.
+    ]]
     item:useItemDeny(holder_ent, ...)
     umg.call("items:useItemDeny", holder_ent, item, ...)
 end

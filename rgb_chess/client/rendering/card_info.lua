@@ -82,7 +82,7 @@ end)
 
 
 
-umg.on("preDrawUI", function()
+umg.on("rendering:preDrawUI", function()
     if entBeingHovered then
         love.graphics.push("all")
         love.graphics.setColor(1,1,1,0.3)
