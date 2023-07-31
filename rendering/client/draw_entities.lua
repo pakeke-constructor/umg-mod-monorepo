@@ -246,20 +246,13 @@ local function isHidden(ent)
     return ent.hidden or umg.ask("rendering:isHidden", ent)
 end
 
-local getOpacity, getRed, getGreen, getBlue = entityProperties.getOpacity, entityProperties.getRed, entityProperties.getGreen, entityProperties.getBlue
+local getOpacity, getColor = entityProperties.getOpacity, entityProperties.getColor
 
 
 
 local function setColorOfEnt(ent)
-    local r,g,b,a = 1,1,1,1
-    if ent.color then
-        local col = ent.color 
-        r,g,b,a = col[1], col[2], col[3], col[4] or 1
-    end
-    r = r * getRed(ent)
-    g = g * getGreen(ent)
-    b = b * getBlue(ent)
-    a = a * getOpacity(ent)
+    local r,g,b = getColor(ent)
+    local a = getOpacity(ent)
     setColor(r,g,b,a)
 end
 

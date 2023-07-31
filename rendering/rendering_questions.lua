@@ -61,15 +61,18 @@ umg.defineQuestion("rendering:getShearX", ADD)
 umg.defineQuestion("rendering:getShearY", ADD)
 
 
--- color of entity
 --[[
-    TODO: Remove getRed, getGreen, getBlue to a single question:
-    getColor
+    TODO: do we really want to multiplicitively combine like this?
+    Would it be possible to combine through OKLAB, or HSV or something?
 ]]
-umg.defineQuestion("rendering:getRed", MULT)
-umg.defineQuestion("rendering:getBlue", MULT)
-umg.defineQuestion("rendering:getGreen", MULT)
+local function colorReducer(r1,r2, g1,g2, b1,b2)
+    return ((r1 or 1)*(r2 or 1)), ((g1 or 1)*(g2 or 1)), ((b1 or 1)*(b2 or 1))
+end
 
+-- color of entity
+umg.defineQuestion("rendering:getColor", colorReducer)
+
+-- Opacity of entity
 umg.defineQuestion("rendering:getOpacity", MULT)
 
 

@@ -48,7 +48,6 @@ local function isInstance(x, class, extends)
     --[[
         checks if `x` is an instance of `class`
     ]]
-    assert(x ~= class, "Call like Cls.isInstance(x), not Cls:isInstance(x)")
     if type(x) ~= "table" then
         return false
     end
@@ -77,6 +76,7 @@ local function newClass(name, extends)
     class.__index = class
 
     function class.isInstance(x)
+        assert(x ~= class, "Call like Cls.isInstance(x), not Cls:isInstance(x)")
         return isInstance(x, class, extends)
     end
 

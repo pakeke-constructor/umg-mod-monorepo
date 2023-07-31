@@ -45,23 +45,27 @@ end
 
 
 function entityProperties.getOpacity(ent)
-    return (ent.opacity or 1) * (umg_ask("rendering:getOpacity", ent) or 1)
+    local a = 1
+    if ent.color and ent.color[4] then
+        a = ent.color[4]
+    end
+    return a * (ent.opacity or 1) * (umg_ask("rendering:getOpacity", ent) or 1)
 end
 
 
 
-function entityProperties.getRed(ent)
-    return umg_ask("rendering:getRed", ent) or 1
-end
+function entityProperties.getColor(ent)
+    local r,g,b = umg_ask("rendering:getColor", ent)
+    if not r then
+        r,g,b = 1,1,1
+    end
 
-function entityProperties.getGreen(ent)
-    return umg_ask("rendering:getGreen", ent) or 1
+    local color = ent.color
+    if color then
+        return r*color[1], g*color[2], b*color[3]
+    end
+    return r,g,b
 end
-
-function entityProperties.getBlue(ent)
-    return umg_ask("rendering:getBlue", ent) or 1
-end
-
 
 
 function entityProperties.getImage(ent)
