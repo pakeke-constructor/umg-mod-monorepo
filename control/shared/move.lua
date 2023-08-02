@@ -55,7 +55,7 @@ sync.autoSyncComponent("moveY", {
 
 local getAgility = require("shared.get_agility")
 
-local max, min = math.max, math.min
+local max, min, distance = math.max, math.min, math.distance
 
 
 local moveGroup = umg.group("moveX", "moveY", "x", "y")
@@ -71,24 +71,23 @@ local MOVE_THRESHOLD = 0.1
 -- The distance that an entity "move" position must be away from an
 -- entity before it actually tries to move there.
 
-local distance = math.distance
 
 
 local function setVelFromMove(ent, dt)
-    if (not ent.moveX or not ent.moveY) then
+    if (not ent.moveX) and (not ent.moveY) then
         -- If we don't have moveX or moveY, return early.
         return
     end
 
     local x, y = ent.x, ent.y
-    local moveX, moveY = ent.moveX, ent.moveY
+    local moveX, moveY = ent.moveX or x, ent.moveY or y
 
     local agility = getAgility(ent)
     local speed = xy.getSpeed(ent)
 
     local dvx = (moveX - x)
     local dvy = (moveY - y)
-    local mag = math.distance(dvx, dvy)
+    local mag = distance(dvx, dvy)
 
     if mag > MOVE_THRESHOLD then
         dvx = dvx / mag
@@ -108,33 +107,8 @@ local function setVelFromMove(ent, dt)
     this would allow for potential pathfinding, as opposed to just
     blindly moving towards the target.
     ]]
-    local vx = min(speed, max(-speed, ent.vx + dvx))
-    local vy = min(speed, max(-speed, ent.vy + dvy))
-
-    -- this code assumes that the move system uses the same delta time as this system.
-    local dx, dy = vx*dt, vy*dt
-
-    local mdelta = distance(dx,dy)
-    local actual_delta = distance(x-moveX, y-moveY) 
-
-    if mdelta > actual_delta and actual_delta > 0 then
-        -- We don't want the entity to overshoot, so we cap the velocity.
-        -- This ensures that the velocity is capped if we are really close to the object.
-        -- (Or if there is a really high dt value.)
-        -- if the position after velocity addition is further away than move target,
-        -- reduce the velocity such that the entity doesn't overshoot.
-
-        -- TODO: This is quite hacky!!! This system should not be
-        -- Changing the position of entities like this!!!
-        assert(actual_delta > 0, "Wot")
-        ent.x = ent.moveX
-        ent.y = ent.moveY
-        ent.vx = 0
-        ent.vy = 0
-    else
-        ent.vx = vx
-        ent.vy = vy
-    end
+    ent.vx = min(speed, max(-speed, ent.vx + dvx))
+    ent.vy = min(speed, max(-speed, ent.vy + dvy))
 end
 
 
