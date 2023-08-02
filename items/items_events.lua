@@ -18,12 +18,6 @@ umg.defineEvent("items:closeInventory")
 
 
 
--- an entity equips an item
-umg.defineEvent("items:equipItem")
-
--- an entity un-equips an item
-umg.defineEvent("items:unequipItem")
-
 
 
 
@@ -39,12 +33,6 @@ umg.defineEvent("items:displayItemTooltip")
 umg.defineEvent("items:drawInventory")
 
 end
-
-
-
-
--- An item is used
-umg.defineEvent("items:useItem")
 
 
 
