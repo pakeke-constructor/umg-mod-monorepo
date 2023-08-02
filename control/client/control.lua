@@ -62,7 +62,7 @@ end
 
 
 
-local DELTA = 100
+local DELTA = 1000
 -- this number ^^^ is pretty arbitrary, we just need it to be sufficiently big
 
 
