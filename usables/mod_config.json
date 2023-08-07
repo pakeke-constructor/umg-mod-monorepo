@@ -1,4 +1,0 @@
-{
-    "type": "base",
-    "uses": ["items", "state"]
-}

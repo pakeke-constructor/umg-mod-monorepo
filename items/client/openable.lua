@@ -49,6 +49,7 @@ end
 
 
 local function tryOpenInv(player, inv_ent)
+    print('hi?')
     local opn = inv_ent.openable
     local inv = inv_ent.inventory
     if inv:canBeOpenedBy(player) then

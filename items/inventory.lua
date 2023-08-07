@@ -578,12 +578,12 @@ function Inventory:_setHoldSlot(slotX, slotY)
     
     if umg.exists(prevItem) then
         clearPreviousHoldItem(self)
-        umg.call("usables:unequipItem", ownerEnt, prevItem)
+        umg.call("items:unequipItem", ownerEnt, prevItem)
     end
 
     if umg.exists(newItem) then
         self.holdItem = newItem
-        umg.call("usables:equipItem", ownerEnt, newItem)
+        umg.call("items:equipItem", ownerEnt, newItem)
     end
 end
 
