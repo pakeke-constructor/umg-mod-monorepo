@@ -1,12 +1,6 @@
 
 
-local holding = {}
-
-
-
-
-local holdingItemGroup = umg.group("holdItem", "x", "y")
-
+local holdingItemGroup = umg.group("inventory", "x", "y")
 
 
 
@@ -130,7 +124,7 @@ end
 
 
 local function getHoldItem(ent)
-    return ent.holdItem
+    return ent.inventory and ent.inventory:getHoldItem()
 end
 
 

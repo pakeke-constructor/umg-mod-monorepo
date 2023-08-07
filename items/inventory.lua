@@ -9,8 +9,6 @@ Inventory objects
 require("items_events")
 require("items_questions")
 
-local umg_exists = umg.exists
-
 
 local Inventory = objects.Class("items_mod:inventory")
 
@@ -218,7 +216,7 @@ function Inventory:count(item_or_itemName)
     for x=1, self.width do
         for y=1, self.height do
             local check_item = self:get(x,y)
-            if umg_exists(check_item) then
+            if umg.exists(check_item) then
                 -- if its nil, there is no item there.
                 if itemName == check_item.itemName then
                     count = count + check_item.stackSize
@@ -234,7 +232,7 @@ function Inventory:contains(item_or_itemName)
     for x=1, self.width do
         for y=1, self.height do
             local check_item = self:get(x,y)
-            if umg_exists(check_item) then
+            if umg.exists(check_item) then
                 -- if its nil, there is no item there.
                 if item_or_itemName == check_item.itemName or item_or_itemName == check_item then
                     return true, x, y
@@ -253,9 +251,9 @@ function Inventory:getEmptySlot()
         for y=1, self.height do
             local i = self:getIndex(x, y)
             if self:slotExists(x, y) then
-                if not umg_exists(self.inventory[i]) then
+                if not umg.exists(self.inventory[i]) then
                     assert(self:getIndex(x,y) == i, "bug with inventory mod")--sanity check
-                    assert(not umg_exists(self:get(x,y)), "bug with inventory mod")
+                    assert(not umg.exists(self:get(x,y)), "bug with inventory mod")
                     return x,y
                 end
             end
@@ -325,7 +323,7 @@ function Inventory:canAddToSlot(slotX, slotY, item, count)
     count = (count or item.stackSize) or 1
 
     local i = self:getIndex(slotX, slotY)
-    local item_ent = umg_exists(self.inventory[i]) and self.inventory[i]
+    local item_ent = umg.exists(self.inventory[i]) and self.inventory[i]
     if item_ent then
         if item_ent.itemName == item.itemName then
             local remainingStackSize = (item_ent.maxStackSize or 1) - count
@@ -507,7 +505,7 @@ function Inventory:canBeOpenedBy(ent)
 
         This provides a lot of flexibility.
     ]]
-    assert(umg_exists(ent), "takes an entity as first argument. (Where the entity is the one opening the inventory)")
+    assert(umg.exists(ent), "takes an entity as first argument. (Where the entity is the one opening the inventory)")
 
     local canOpen = umg.ask("items:canOpenInventory", ent, self)
     if canOpen then
@@ -559,7 +557,7 @@ local function clearPreviousHoldItem(self)
     -- When items are held, they are granted a position in the world.
     local item = self.holdItem
     self.holdItem = nil
-    if server and umg_exists(item) then
+    if server and umg.exists(item) then
         -- removeComponent should be server-authoritative generally
         item:removeComponent("x")
         item:removeComponent("y")
@@ -578,12 +576,12 @@ function Inventory:_setHoldSlot(slotX, slotY)
 
     local ownerEnt = self.owner
     
-    if umg_exists(prevItem) then
+    if umg.exists(prevItem) then
         clearPreviousHoldItem(self)
         umg.call("usables:unequipItem", ownerEnt, prevItem)
     end
 
-    if umg_exists(newItem) then
+    if umg.exists(newItem) then
         self.holdItem = newItem
         umg.call("usables:equipItem", ownerEnt, newItem)
     end
@@ -601,7 +599,7 @@ function Inventory:hold(slotX, slotY)
     assert2Numbers(slotX, slotY)
 
     if client then
-        local owner_ent = umg_exists(self.owner) and self.owner
+        local owner_ent = umg.exists(self.owner) and self.owner
 
 
         if owner_ent.controller == client.getUsername() then
@@ -609,7 +607,7 @@ function Inventory:hold(slotX, slotY)
         end
     elseif server then
         self:_setHoldSlot(slotX, slotY)
-        local owner_ent = umg_exists(self.owner) and self.owner
+        local owner_ent = umg.exists(self.owner) and self.owner
         if owner_ent then
             server.broadcast("setInventoryHoldSlot", owner_ent, slotX, slotY)
         end
@@ -766,7 +764,7 @@ function Inventory:updateSlabUI()
     local slotx, sloty = self:getSlot(mx,my)
     if slotx then
         local item = self:get(slotx, sloty)
-        if umg_exists(item) then
+        if umg.exists(item) then
             updateItemTooltip(item, mx, my)
         end
     end
@@ -827,7 +825,7 @@ local function drawSlot(self, inv_x, inv_y, offset, color)
 
     if self:get(inv_x, inv_y) then
         local item = self:get(inv_x, inv_y)
-        if umg_exists(item) then
+        if umg.exists(item) then
             -- only draw the item if it exists.
             self:drawItem(item, inv_x, inv_y)
         else
@@ -979,7 +977,7 @@ end
 
 function Inventory:drawHoverWidget(x, y)
     local item = self:get(x, y)
-    if not umg_exists(item) then return end
+    if not umg.exists(item) then return end
     local mx, my = love.mouse.getPosition()
     local ui_scale = rendering.getUIScale()
     mx, my = mx / ui_scale, my / ui_scale

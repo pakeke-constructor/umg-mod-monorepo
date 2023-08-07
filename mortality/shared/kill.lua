@@ -12,7 +12,7 @@ if server then
 
 function kill(ent)
     umg.call("mortality:entityDeath", ent)
-    ent:deepDelete()
+    ent:delete()
 end
 
 end
