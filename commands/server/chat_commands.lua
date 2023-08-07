@@ -89,6 +89,13 @@ chat.handleCommand("spawn", {
 local values = require("shared.values")
 
 
+
+--[[
+
+Think of these like getting/setting global "config" variables
+
+]]
+
 chat.handleCommand("set", {
     arguments = {
         {name = "key", type = "string"},

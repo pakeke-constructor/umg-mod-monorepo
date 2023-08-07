@@ -1,45 +1,25 @@
 
 
+local commands = {}
 
-local commandToHandler = {}
+--[[
 
+Commands exist on BOTH clientside AND serverside.
 
-
-
-local DEFAULT_ADMIN_LEVEL = 0
-
-
-local ADMIN_LEVELS = {}
-
-ADMIN_LEVELS[server.getHostUsername()] = math.huge
+If a command is declared on clientside, it will work on clientside only.
+If a command is declared on serverside, it will work on serverside only.
+If declared on both, it will work on both.
 
 
+]]
 
 
 
-local chat = {}
+local commandToHandler = {--[[
+    [commandName] -> handler_object
+]]}
 
 
-function chat.getAdminLevel(username)
-    return ADMIN_LEVELS[username] or DEFAULT_ADMIN_LEVEL
-end
-
-local setAdminLevelAssert = typecheck.assert("string", "number")
-function chat.setAdminLevel(username, level)
-    setAdminLevelAssert(username, level)
-    ADMIN_LEVELS[username] = level
-end
-
-
-
-function chat.message(message)
-    server.broadcast("chatMessage", message)
-end
-
-
-function chat.privateMessage(username, message)
-    server.unicast( username, "chatMessage", message)
-end
 
 
 
@@ -65,7 +45,7 @@ end
 local handleCommandTypecheck = typecheck.assert("string", "table")
 
 
-function chat.handleCommand(commandName, handler)
+function commands.handleCommand(commandName, handler)
     --[[
         {
             handler = function(sender, etype, x, y)
@@ -100,6 +80,9 @@ end
 
 local sf = sync.filters
 
+
+if server then
+
 server.on("commandMessage", {
     arguments = {sf.string},
     handler = function(sender_uname, commandName, ...)
@@ -130,25 +113,32 @@ server.on("commandMessage", {
         end
 
         cmdHandler.handler(sender_uname, ...)
+        server.broadcast("commandMessage", commandName, ...)
     end 
 })
 
-
-
-local function formatCommand(handler)
-    local str = handler.commandName .. "("
-    for _, arg in ipairs(handler.arguments) do
-        str = str .. arg.name .. ":" .. arg.type .. "  "
-    end
-    str = str .. ")"
-    if handler.description then
-        str = str .. "\n   " .. handler.description
-    end
-    return str
 end
 
 
-function chat.getCommands()
+
+
+if client then
+
+client.on("commandMessage", function(commandName, ...)
+        local cmdHandler = commandToHandler[commandName]
+        if cmdHandler then
+            -- there may not be a handler for client.
+            cmdHandler.handler(commandName, ...)
+        end
+    end 
+)
+
+end
+
+
+
+
+function commands.getCommands()
     local buffer = objects.Array()
     for _, handler in pairs(commandToHandler) do
         buffer:add(handler) 
@@ -157,65 +147,4 @@ function chat.getCommands()
 end
 
 
-
-
-chat.handleCommand("help", {
-    arguments = {},
-    adminLevel = 0,
-
-    handler = function(sender)
-        local adminLevel = chat.getAdminLevel(sender)
-        local commands = chat.getCommands()
-        chat.privateMessage(sender, "COMMAND LIST:")
-        for _, handler in ipairs(commands)do
-            if handler.adminLevel <= adminLevel then
-                local str = formatCommand(handler)
-                chat.privateMessage(sender, str)
-            end
-        end
-    end
-})
-
-
-
-chat.handleCommand("promote", {
-    arguments = {
-        {name = "user", type = "string"}, {name = "level", type = "number"}
-    },
-
-    adminLevel = 1,
-
-    handler = function(sender, user, level)
-        local adminLv = chat.getAdminLevel(sender)
-        local targetAdminLv = chat.getAdminLevel(user)
-        level = math.max(targetAdminLv, level)
-        if adminLv > level and adminLv > targetAdminLv then
-            chat.setAdminLevel(user, level)
-        end
-    end
-})
-
-
-
-
-chat.handleCommand("demote", {
-    arguments = {
-        {name = "user", type = "string"}, {name = "level", type = "number"}
-    },
-
-    adminLevel = 1,
-
-    handler = function(sender, user, level)
-        local adminLv = chat.getAdminLevel(sender)
-        local targetAdminLv = chat.getAdminLevel(user)
-        level = math.min(targetAdminLv, level)
-        if adminLv > level and adminLv > targetAdminLv then
-            chat.setAdminLevel(user, level)
-        end
-    end
-})
-
-
-
-umg.expose("chat", chat)
-
+return commands
