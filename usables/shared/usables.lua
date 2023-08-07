@@ -9,9 +9,6 @@ Handles usage of items.
 
 local usables = {}
 
-require("usables_events")
-require("usables_questions")
-
 
 
 
@@ -155,7 +152,7 @@ function usables.useHoldItem(holder_ent, ...)
     end
 end
 
-umg.on("usables:useItem", function(holder_ent, item, ...)
+umg.on("useItem", function(holder_ent, item, ...)
     if holder_ent and sync.isClientControlling(holder_ent) then
         return -- ignore; we have already called `useItem`, 
         -- since we are the ones who sent the event!
