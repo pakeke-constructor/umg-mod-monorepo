@@ -24,8 +24,7 @@ local function proxyEventToClient(eventName)
         error("This event is already being proxied: " .. eventName)
     end
 
-    -- network event name is the same as the event name.
-    local networkEventName = eventName
+    local networkEventName = "proxy_" .. eventName
     if server then
         umg.on(eventName, function(...)
             server.broadcast(networkEventName, ...)
