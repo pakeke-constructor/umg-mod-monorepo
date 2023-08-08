@@ -68,7 +68,7 @@ end
 
 
 -- default priority
-local D_PRIO = -1
+local D_PRIO = -9999
 
 function reducers.PRIORITY(a, b, prio_a, prio_b)
     --[[

@@ -1,0 +1,7 @@
+
+
+
+umg.defineQuestion("guns:getProjectileType")
+
+
+

@@ -1,0 +1,9 @@
+{
+    "type": "base",
+    "uses": [
+        "typecheck", "sync", "objects", "state",
+        "input", "rendering", "reducers", "physics",
+        "items", "control", "xy", "drawfx", "sound",
+        "mortality"
+    ]
+}
