@@ -1,13 +1,13 @@
 
+require("guns_questions")
+
 
 local launcher = {}
 
 
 
 function launcher.getProjectileType(item, holderEnt, ...)
-    --[[
-        assumes `item` has `projectileLauncher` component
-    ]]
+    -- assumes `item` has `projectileLauncher` component
     local plauncher = item.projectileLauncher
     assert(plauncher, "no projectileLauncher..?")
 
@@ -34,26 +34,40 @@ end
 local DEFAULT_PROJECTILE_SPEED = 300 -- this seems reasonable
 
 function launcher.getProjectileSpeed(item, projectileEnt, holderEnt)
-    --[[
-        assumes `item` has `projectileLauncher` component
-    ]]
+    -- assumes `item` has `projectileLauncher` component
     local plauncher = item.projectileLauncher
     assert(plauncher, "no projectileLauncher..?")
 
-    local projSpeed = umg.ask("guns:getProjectileSpeed", item, projectileEnt, holderEnt)
-    if projSpeed then
-        return projSpeed
-    end
+    local speedMod = umg.ask("guns:getProjectileSpeed", item, projectileEnt, holderEnt) or 0
 
     if plauncher.projectileSpeed then
-        return plauncher.projectileSpeed
+        return plauncher.projectileSpeed + speedMod
     end
 
     if projectileEnt.speed then
-        return projectileEnt.speed
+        return projectileEnt.speed + speedMod
     end
 
-    return DEFAULT_PROJECTILE_SPEED
+    return DEFAULT_PROJECTILE_SPEED + speedMod
+end
+
+
+
+
+
+local DEFAULT_ACCURACY = 0
+
+function launcher.getProjectileAccuracy(item, projectileEnt, holderEnt)
+    local plauncher = item.projectileLauncher
+    assert(plauncher, "no projectileLauncher..?")
+
+    local accuracyMod = umg.ask("guns:getProjectileAccuracy", item, projectileEnt, holderEnt) or 0
+
+    if plauncher.projectileSpeed then
+        return plauncher.projectileSpeed + accuracyMod
+    end
+
+    return DEFAULT_ACCURACY + accuracyMod
 end
 
 

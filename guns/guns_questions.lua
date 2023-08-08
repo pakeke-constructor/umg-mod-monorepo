@@ -1,9 +1,8 @@
 
 
 
-umg.defineQuestion("guns:getProjectileType")
+umg.defineQuestion("guns:getProjectileType", reducers.PRIORITY)
 
-
-umg.defineQuestion("guns:getProjectileSpeed")
+umg.defineQuestion("guns:getProjectileSpeed", reducers.ADD)
 
 

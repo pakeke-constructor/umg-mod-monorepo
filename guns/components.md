@@ -8,8 +8,9 @@
 
 
 ent.projectileLauncher = {
-    projectileType = "my_projectile", -- projectile entity
+    projectileType = "my_projectile", -- projectile entity type
 
+    -- alternatively, we can define a `spawnProjectile` function:
     spawnProjectile = function(holderEnt, gunEnt, i)
         -- `i` is the projectile number.
         return entities.my_projectile()
@@ -17,6 +18,14 @@ ent.projectileLauncher = {
         -- dimension values by the system.
     end,
 
+    speed = 20, -- speed of projectiles
+    count = 1, -- num fired
+
+    accuracy = 1 -- 1=100% accuracy,  0%=not accurate at all
+
+    --[[
+        TODO: Put more stuff here afterwards.
+    ]]
 }
 
 
