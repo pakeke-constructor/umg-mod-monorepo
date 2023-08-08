@@ -52,3 +52,5 @@ globals:
     any: true
   mortality:
     any: true
+  scheduling:
+    any: true

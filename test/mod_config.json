@@ -16,7 +16,8 @@
       "commands",
       "modern",
       "weather",
-      "vignette"
+      "vignette",
+      "scheduling"
     ],
     "type": "playable"
 }

@@ -40,7 +40,8 @@ local curTime = love.timer.getTime()
 
 
 
-umg.on("state:gameUpdate", function(dt)
+-- TODO: Should this be using state:gameUpdate???
+umg.on("@update", function(dt)
     curTime = curTime + dt
     local i = #times
     while (i>0) and (curTime >= times[i].endTime) do
