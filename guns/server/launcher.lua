@@ -10,6 +10,10 @@ local function getProjectileCount(item, holderEnt, ...)
     -- assumes `item` has `projectileLauncher` component
     local plauncher = item.projectileLauncher
 
+    --[[
+        TODO: Do more complex stuff here,
+        like a question bus for multiple bullets?
+    ]]
     return plauncher.count
 end
 
@@ -82,6 +86,12 @@ end
 
 local DEFAULT_SPREAD = math.pi / 4
 
+-- spread shouldn't be bigger than 180 degrees.
+-- that... would be dumb
+local MAX_SPREAD = math.pi
+
+
+
 local function getProjectileSpread(item, projectileEnt, holderEnt)
     local plauncher = item.projectileLauncher
     assert(plauncher, "no projectileLauncher..?")
@@ -89,6 +99,9 @@ local function getProjectileSpread(item, projectileEnt, holderEnt)
     local spreadMod = umg.ask("guns:getProjectileSpread", item, projectileEnt, holderEnt) or 0
 
     if plauncher.spread then
+        if plauncher.spread > MAX_SPREAD then
+            error("radian spread too big for entity: " .. tostring(item))
+        end
         return plauncher.spread + spreadMod
     end
 
@@ -126,10 +139,47 @@ end
 
 
 
-local function setupProjectile(item, projectileEnt, holderEnt, i)
-    local speed = getProjectileSpeed(item, projectileEnt, holderEnt)
-    local inaccuracy = getProjectileInaccuracy(item, projectileEnt, holderEnt)
-    local spread = getProjectileSpread(item, projectileEnt, holderEnt)
+local DEFAULT_START_DISTANCE = 30
+
+local function getStartDistance(item, holderEnt)
+    return item.projectileLauncher.startDistance or DEFAULT_START_DISTANCE
+end
+
+
+
+
+
+local random = love.math.random
+local sin, cos = math.sin, math.cos
+
+
+local function setupProjectile(item, projEnt, holderEnt, spreadFactor)
+    local speed = getProjectileSpeed(item, projEnt, holderEnt)
+    local inaccuracy = getProjectileInaccuracy(item, projEnt, holderEnt)
+    local spread = getProjectileSpread(item, projEnt, holderEnt)
+
+    local startDistance = getStartDistance(item, holderEnt)
+
+    local dx,dy = holderEnt.lookX - holderEnt.x, holderEnt.lookY - holderEnt.y
+    local mag = math.distance(dx,dy)
+    if mag ~= 0 then
+        dx = dx/mag; dy=dy/mag
+    end
+
+    projEnt.x, projEnt.y = holderEnt.x + dx*startDistance, holderEnt.y + dy*startDistance
+
+    local inaccuracyAngle = (random()-0.5) * inaccuracy
+    local spreadAngle = spreadFactor * spread
+    -- angle shift of direction of bullet
+    local angle = inaccuracyAngle + spreadAngle
+
+    -- shift by angle:
+    local dx2 = dx*cos(angle) - dy*sin(angle)
+    local dy2 = dx*sin(angle) + dy*cos(angle)
+
+    -- amplify by speed:
+    projEnt.vx = dx2 * speed
+    projEnt.vy = dy2 * speed     
 end
 
 
@@ -140,26 +190,16 @@ function launcher.launchProjectile(item, holderEnt, ...)
 
     local num_to_shoot = getProjectileCount(item, holderEnt, ...)
 
-    for i=1, num_to_shoot do
+    for i=0, num_to_shoot-1 do
         local projEnt = spawnProjectileEntity(item, holderEnt, ...)
         if projEnt then
-            setupProjectile(item, projEnt, holderEnt, i)
+            -- spreadFactor = number from -0.5 to 0.5 that represents
+            -- the current "spread" of the bullet.
+            local spreadFactor = (i / (num_to_shoot-1)) - 0.5
+            setupProjectile(item, projEnt, holderEnt, spreadFactor)
         end
     end
-
 end
-
-
-
-
-function launchProjectileClient(holderEnt, item, ...)
-
-end
-
-
-
-
-
 
 
 return launcher
