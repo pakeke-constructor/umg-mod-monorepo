@@ -4,10 +4,14 @@
 
 chat.handleCommand("lighting", {
     adminLevel = 50,
-    arguments = {{name = "level", type = "number"}},
-    handler = function(sender, level)
+    arguments = {
+        {name = "r", type = "number"},
+        {name = "g", type = "number"},
+        {name = "b", type = "number"},
+    },
+    handler = function(sender, r,g,b)
         if client then
-            light.setBaseLighting(level, level, level)
+            light.setBaseLighting(r,g,b)
         end
     end
 })

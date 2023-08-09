@@ -21,10 +21,18 @@ ent.projectileLauncher = {
     speed = 20, -- speed of projectiles
     count = 1, -- num fired
 
-    accuracy = 1 -- 1=100% accuracy,  0%=not accurate at all
+    -- 0 = fully accurate
+    -- math.pi = bullets may change direction by up to 90 degrees!!!
+    inaccuracy = 0,
+
+    -- Spread of projectiles, used if multiple are shot.
+    -- angle in radians.
+    spread = math.pi/4
 
     --[[
         TODO: Put more stuff here afterwards.
+
+        We want fire-rate,
     ]]
 }
 
