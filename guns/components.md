@@ -47,6 +47,20 @@ ent.projectileLauncher = {
 
 
 
+-- This entity serves as a projectile
+ent.projectile = {
+    onHit = function(projEnt, targetEnt, contact)
+        -- custom logic here
+    end,
+
+    size = 10, -- the hitbox size
+    damage = 10, -- deals 10 damage on hit, (if the target has health)
+    sound = "hit", -- plays this sound on hit
+}
+
+
+
+
 --[[
 
 TODO: 

@@ -2,12 +2,15 @@
 
 local mortality = {}
 
--- server-side only API
-mortality.server = {}
+if server then
+    -- server-side only API
+    mortality.server = {}
+end
 
 
 
 local kill = require("shared.kill")
+local damage = require("share.damage")
 
 
 
@@ -22,8 +25,13 @@ end
 
 
 function mortality.server.kill(ent)
-    -- have a `mortality.server` table.
+    -- only callable by server
     kill(ent)
+end
+
+
+function mortality.server.damage(ent, dmg)
+    damage(ent, dmg)
 end
 
 
