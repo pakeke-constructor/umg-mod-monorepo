@@ -12,6 +12,7 @@ return {
 
     init = function(ent,x,y)
         base.initializers.initVxVy(ent,x,y,0,0)
+        ent.health = 100
         ent.healthBar = {
             color = {math.random(), math.random(), math.random()};
             offset = 20

@@ -16,8 +16,8 @@ We need:
 local function hit(projEnt, targetEnt)
     if targetEnt.health then
         local dmg = 0
-        if projEnt.damage then
-            dmg = projEnt.damage
+        if projEnt.projectile.damage then
+            dmg = projEnt.projectile.damage
         end
         -- TODO: Do extra stuff here!!!
         -- We need a question for damage modifiers!

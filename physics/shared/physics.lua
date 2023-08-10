@@ -164,11 +164,18 @@ physicsGroup:onAdded(function(ent)
     if (not ent.x) or (not ent.y) then
         error("Physics entities must be given x and y components as numbers.")
     end
+    local pc = ent.physics
+    if type(pc) ~= "table" then
+        error("Physics component must be a table")
+    end
 
     local body = love.physics.newBody(world, ent.x, ent.y, getBodyType(ent))
+    if pc.mass then
+        body:setMass(pc.mass)
+    end
     local fixture = love.physics.newFixture(body, getShape(ent))
 
-    body:setLinearDamping(ent.physics.friction or DEFAULT_FRICTION)
+    body:setLinearDamping(pc.friction or DEFAULT_FRICTION)
 
     fixture_to_ent[fixture] = ent
     ent_to_fixture[ent] = fixture

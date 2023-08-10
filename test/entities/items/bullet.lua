@@ -1,5 +1,8 @@
 
 
+local SHAPE = love.physics.newCircleShape(1)
+
+
 return {
     moveRotation = true,
     image = "bullet",
@@ -10,7 +13,11 @@ return {
 
     physics = {
         friction = 0,
+        shape = SHAPE,
+        mass = 0.01,
         type = "kinematic"
-    }
+    },
+
+    light = {}
 }
 

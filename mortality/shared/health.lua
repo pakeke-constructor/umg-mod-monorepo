@@ -14,6 +14,12 @@ maxHpGroup:onAdded(function(ent)
 end)
 
 
+sync.autoSyncComponent("health", {
+    lerp = false
+})
+
+
+
 
 
 local kill = require("shared.kill")

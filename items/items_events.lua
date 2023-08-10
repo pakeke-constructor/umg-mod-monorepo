@@ -46,6 +46,10 @@ end
 -- An item is used
 umg.defineEvent("items:useItem")
 
+-- Item usage is denied
+-- TODO: Rename this? we can do better.
+umg.defineEvent("items:useItemDeny")
+
 
 
 -- item dropped on ground
