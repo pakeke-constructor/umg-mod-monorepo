@@ -47,6 +47,11 @@ globals:
     - type: string
     - required: false
       type: '...'
+  umg.rawcall:
+    args:
+    - type: string
+    - required: false
+      type: '...'
   umg.ask:
     args:
     - type: '...'

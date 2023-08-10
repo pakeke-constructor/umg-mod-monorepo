@@ -10,6 +10,11 @@ local constants = require("shared.constants")
 
 
 local function doFriction(ent, dt)
+    local noFriction = umg.ask("xy:isFrictionDisabled", ent)
+    if noFriction then
+        return
+    end
+
     local fric = (ent.friction or options.DEFAULT_FRICTION)
     local divisor = 1 + fric * dt
     ent.vx = ent.vx / divisor
@@ -57,7 +62,7 @@ local function shouldMoveZ(ent)
     if (not ent.z) or (not ent.vz) then
         return
     end
-    local blocked = umg.ask("xy:disableVerticalVelocity", ent)
+    local blocked = umg.ask("xy:isVerticalVelocityDisabled", ent)
     return not blocked
 end
 

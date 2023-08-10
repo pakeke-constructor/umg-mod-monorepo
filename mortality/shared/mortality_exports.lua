@@ -1,4 +1,7 @@
 
+require("mortality_events")
+
+
 
 local mortality = {}
 

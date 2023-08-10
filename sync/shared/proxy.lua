@@ -31,7 +31,7 @@ local function proxyEventToClient(eventName)
         end)
     elseif client then
         client.on(networkEventName, function(...)
-            umg.call(eventName, ...) 
+            umg.rawcall(eventName, ...) 
         end)
     end
 end

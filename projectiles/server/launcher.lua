@@ -182,23 +182,36 @@ end
 
 
 
+local function shoot(item, holderEnt, spreadFactor, ...)
+    local projEnt = spawnProjectileEntity(item, holderEnt, ...)
+    if projEnt then
+        setupProjectile(item, projEnt, holderEnt, spreadFactor)
+    end
+end
+
 
 function launcher.useItem(item, holderEnt, ...)
     assert(server, "not on server")
     assert(type(item.projectileLauncher) == "table", "wot wot???")
 
     local num_to_shoot = getProjectileCount(item, holderEnt, ...)
+    
+    -- we need these checks here so that we don't get NaNs w/ div by 0.
+    if num_to_shoot <= 0 then
+        return
+    end
 
-    print("Im here...?")
+    if num_to_shoot <= 1 then
+        -- shoot one bullet.
+        shoot(item, holderEnt, 0, ...)
+        return
+    end
 
     for i=0, num_to_shoot-1 do
-        local projEnt = spawnProjectileEntity(item, holderEnt, ...)
-        if projEnt then
-            -- spreadFactor = number from -0.5 to 0.5 that represents
-            -- the current "spread" of the bullet.
-            local spreadFactor = (i / (num_to_shoot-1)) - 0.5
-            setupProjectile(item, projEnt, holderEnt, spreadFactor)
-        end
+        -- spreadFactor = number from -0.5 to 0.5 that represents
+        -- the current "spread" of the bullet.
+        local spreadFactor = (i / (num_to_shoot-1)) - 0.5
+        shoot(item, holderEnt, spreadFactor, ...)
     end
 end
 

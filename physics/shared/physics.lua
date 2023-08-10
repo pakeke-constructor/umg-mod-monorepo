@@ -176,6 +176,13 @@ end)
 
 
 
+umg.answer("xy:isFrictionDisabled", function(ent)
+    -- physics entities shouldnt be bound by friction
+    return ent.physics
+end)
+
+
+
 
 
 physicsGroup:onRemoved(function(ent)

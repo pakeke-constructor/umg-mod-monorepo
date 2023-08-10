@@ -4,7 +4,10 @@
 umg.defineQuestion("xy:isVelocityDisabled", reducers.OR)
 
 -- Is vertical velocity disabled for this entity?
-umg.defineQuestion("xy:disableVerticalVelocity", reducers.OR)
+umg.defineQuestion("xy:isVerticalVelocityDisabled", reducers.OR)
+
+-- Is friction disabled? 
+umg.defineQuestion("xy:isFrictionDisabled", reducers.OR)
 
 
 
