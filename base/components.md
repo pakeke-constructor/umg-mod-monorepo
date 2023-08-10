@@ -112,7 +112,6 @@ ent.controllable = {
 
 ent.controller = "client_id" -- whoever is controlling this entity
 
-ent.follow = false -- Whether the camera should follow this ent or not.
 
 
 ent.speed = 100 -- The speed the ent moves at

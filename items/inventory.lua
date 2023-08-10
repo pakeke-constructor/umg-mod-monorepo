@@ -679,9 +679,9 @@ function Inventory:drawItem(item_ent, x, y)
     local Y = self.totalSlotSize * (y-1) + offset + self.draw_y
 
     local drawX, drawY = X + w/2, Y + w/2
-    local scaleX = self.slotSize / w
-    local scaleY = self.slotSize / h
-    rendering.drawImage(quad, drawX, drawY, 0, scaleX, scaleY)
+    local maxSize = math.max(w, h)
+    local scale = self.slotSize / maxSize
+    rendering.drawImage(quad, drawX, drawY, 0, scale, scale)
 
     local holder_ent = self.owner
     umg.call("items:drawInventoryItem", holder_ent, item_ent, drawX, drawY, self.slotSize)

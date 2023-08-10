@@ -5,7 +5,7 @@
 
 local Class = require("shared.class")
 
-local Heap = Class("data:Heap")
+local Heap = Class("objects:Heap")
 
 
 

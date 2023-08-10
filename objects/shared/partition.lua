@@ -17,7 +17,7 @@ local Set = require("shared.set")
 
 
 
-local Partition = Class("data:Partition")
+local Partition = Class("objects:Partition")
 
 
 function Partition:init(chunkSize)    

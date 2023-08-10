@@ -76,6 +76,9 @@ globals:
     args:
     - required: false
       type: '...'
+  umg.getEntity:
+    args:
+    - type: number
   umg.load:
     args:
     - type: string
