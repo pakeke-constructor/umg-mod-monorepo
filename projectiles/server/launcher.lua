@@ -120,8 +120,8 @@ local function spawnProjectileEntity(item, holderEnt, ...)
     ]]
     -- spawns a projectile entity (bullet.) Does not set position or anything.
     local ent
-    if holderEnt.spawnProjectile then
-        ent = holderEnt.spawnProjectile(holderEnt, item)
+    if item.projectileLauncher.spawnProjectile then
+        ent = item.projectileLauncher.spawnProjectile(item, holderEnt)
         if ent then
             return ent
         end

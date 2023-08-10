@@ -34,6 +34,10 @@ umg.on("@createWorld", function()
     end
 
     for i=1, 4 do
+        newItem(ents.clone_gun, 1)
+    end
+
+    for i=1, 4 do
         newItem(ents.musket, 1)
     end
 

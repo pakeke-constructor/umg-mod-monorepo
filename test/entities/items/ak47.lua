@@ -13,7 +13,7 @@ return {
 
         inaccuracy = 0,
 
-        startDistance = 30,
+        startDistance = 50,
     },
 
     itemCooldown = 0.1,
