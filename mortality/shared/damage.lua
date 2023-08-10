@@ -1,8 +1,11 @@
 
 
 
+local damageTc = typecheck.assert("entity", "number")
+
 local function damage(ent, dmg)
-    local dmgMult = umg.ask("mortality:getDamageTakenModifier", ent)
+    damageTc(ent, dmg)
+    local dmgMult = umg.ask("mortality:getDamageTakenModifier", ent) or 1
 
     --[[
         TODO: Should we do a question for invincibility / invulnerability?

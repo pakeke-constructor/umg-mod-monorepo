@@ -1,7 +1,7 @@
 
 
 
-# gun components
+# projectile components
 
 
 ```lua

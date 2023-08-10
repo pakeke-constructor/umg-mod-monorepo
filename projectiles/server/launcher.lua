@@ -25,7 +25,7 @@ end
 
 local function getProjectileType(item, holderEnt, ...)
     -- assumes `item` has `projectileLauncher` component
-    local projType = umg.ask("guns:getProjectileType", holderEnt, item, ...)
+    local projType = umg.ask("projectiles:getProjectileType", holderEnt, item, ...)
     if projType then
         -- allow for override
         return projType
@@ -49,7 +49,7 @@ end
 local DEFAULT_PROJECTILE_SPEED = 300 -- this seems reasonable
 
 local function getProjectileSpeed(item, projectileEnt, holderEnt)
-    local speedMod = umg.ask("guns:getProjectileSpeed", item, projectileEnt, holderEnt) or 0
+    local speedMod = umg.ask("projectiles:getProjectileSpeed", item, projectileEnt, holderEnt) or 0
 
     local plauncher = item.projectileLauncher
     if plauncher and plauncher.projectileSpeed then
@@ -70,7 +70,7 @@ end
 local DEFAULT_ACCURACY = 0
 
 local function getProjectileInaccuracy(item, projectileEnt, holderEnt)
-    local inaccuracyMod = umg.ask("guns:getProjectileInaccuracy", item, projectileEnt, holderEnt) or 0
+    local inaccuracyMod = umg.ask("projectiles:getProjectileInaccuracy", item, projectileEnt, holderEnt) or 0
 
     local plauncher = item.projectileLauncher
     if plauncher and plauncher.inaccuracy then
@@ -92,7 +92,7 @@ local MAX_SPREAD = math.pi
 
 
 local function getProjectileSpread(item, projectileEnt, holderEnt)
-    local spreadMod = umg.ask("guns:getProjectileSpread", item, projectileEnt, holderEnt) or 0
+    local spreadMod = umg.ask("projectiles:getProjectileSpread", item, projectileEnt, holderEnt) or 0
 
     local plauncher = item.projectileLauncher
     if plauncher and plauncher.spread then
