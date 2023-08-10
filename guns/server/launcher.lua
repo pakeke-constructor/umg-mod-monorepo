@@ -12,9 +12,12 @@ local function getProjectileCount(item, holderEnt, ...)
 
     --[[
         TODO: Do more complex stuff here,
-        like a question bus for multiple bullets?
+        like a question bus..?
     ]]
-    return plauncher.count
+    if plauncher and plauncher.count then
+        return plauncher.count
+    end
+    return 1 -- default is 1.
 end
 
 
@@ -22,15 +25,14 @@ end
 
 local function getProjectileType(item, holderEnt, ...)
     -- assumes `item` has `projectileLauncher` component
-    local plauncher = item.projectileLauncher
-
     local projType = umg.ask("guns:getProjectileType", holderEnt, item, ...)
     if projType then
         -- allow for override
         return projType
     end
 
-    if plauncher.projectileType then
+    local plauncher = item.projectileLauncher
+    if plauncher and plauncher.projectileType then
         return plauncher.projectileType
     end
 
@@ -47,12 +49,10 @@ end
 local DEFAULT_PROJECTILE_SPEED = 300 -- this seems reasonable
 
 local function getProjectileSpeed(item, projectileEnt, holderEnt)
-    -- assumes `item` has `projectileLauncher` component
-    local plauncher = item.projectileLauncher
-
     local speedMod = umg.ask("guns:getProjectileSpeed", item, projectileEnt, holderEnt) or 0
 
-    if plauncher.projectileSpeed then
+    local plauncher = item.projectileLauncher
+    if plauncher and plauncher.projectileSpeed then
         return plauncher.projectileSpeed + speedMod
     end
 
@@ -70,15 +70,14 @@ end
 local DEFAULT_ACCURACY = 0
 
 local function getProjectileInaccuracy(item, projectileEnt, holderEnt)
+    local inaccuracyMod = umg.ask("guns:getProjectileInaccuracy", item, projectileEnt, holderEnt) or 0
+
     local plauncher = item.projectileLauncher
-
-    local accuracyMod = umg.ask("guns:getProjectileInaccuracy", item, projectileEnt, holderEnt) or 0
-
-    if plauncher.projectileSpeed then
-        return plauncher.projectileSpeed + accuracyMod
+    if plauncher and plauncher.inaccuracy then
+        return plauncher.inaccuracy + inaccuracyMod
     end
 
-    return DEFAULT_ACCURACY + accuracyMod
+    return DEFAULT_ACCURACY + inaccuracyMod
 end
 
 
@@ -93,12 +92,10 @@ local MAX_SPREAD = math.pi
 
 
 local function getProjectileSpread(item, projectileEnt, holderEnt)
-    local plauncher = item.projectileLauncher
-    assert(plauncher, "no projectileLauncher..?")
-
     local spreadMod = umg.ask("guns:getProjectileSpread", item, projectileEnt, holderEnt) or 0
 
-    if plauncher.spread then
+    local plauncher = item.projectileLauncher
+    if plauncher and plauncher.spread then
         if plauncher.spread > MAX_SPREAD then
             error("radian spread too big for entity: " .. tostring(item))
         end
@@ -119,8 +116,6 @@ local function spawnProjectileEntity(item, holderEnt, ...)
         this function may return nil!!!
     ]]
     -- spawns a projectile entity (bullet.) Does not set position or anything.
-    local type = launcher.getProjectileType(item, holderEnt, ...)
-
     local ent
     if holderEnt.spawnProjectile then
         ent = holderEnt.spawnProjectile(holderEnt, item)
@@ -129,7 +124,7 @@ local function spawnProjectileEntity(item, holderEnt, ...)
         end
     end
 
-    local etype = launcher.getProjectileType(item, holderEnt)
+    local etype = getProjectileType(item, holderEnt)
     if server.entities[etype] then
         ent = server.entities[etype]()
     end
@@ -184,8 +179,9 @@ end
 
 
 
-function launcher.launchProjectile(item, holderEnt, ...)
-    assert(server, "wot wot")
+
+function launcher.useItem(item, holderEnt, ...)
+    assert(server, "not on server")
     assert(type(item.projectileLauncher) == "table", "wot wot???")
 
     local num_to_shoot = getProjectileCount(item, holderEnt, ...)
@@ -199,6 +195,20 @@ function launcher.launchProjectile(item, holderEnt, ...)
             setupProjectile(item, projEnt, holderEnt, spreadFactor)
         end
     end
+end
+
+
+
+local launchProjectileTc = typecheck.assert("entity", "entity", "entity")
+
+function launcher.launchProjectile(item, projEnt, holderEnt)
+    launchProjectileTc(item, projEnt, holderEnt)
+    assert(server, "not on server")
+    --[[
+        launches a projectile from an item entity in a 
+    ]]
+    -- spreadFactor is 0 by default.
+    setupProjectile(item, projEnt, holderEnt, 0)
 end
 
 

@@ -1,15 +1,15 @@
 
 
-local launcher
+local launcherServer
 if server then
-    launcher = require("server.launcher")
+    launcherServer = require("server.launcher")
 end
 
 
 
 --[[
     TODO:
-    we should prolly change this argument order.
+    we should prolly change argument order for this event.
     Why should `holderEnt` be first?? does it even matter?
 ]]
 umg.on("items:useItem", function(holderEnt, item, ...)
@@ -17,10 +17,13 @@ umg.on("items:useItem", function(holderEnt, item, ...)
     if (not targX) or (not targY) then
         return
     end
+    if (not holderEnt.x) or (not holderEnt.y) then
+        return
+    end
 
     if item.projectileLauncher then
         if server then
-            launchProjectileServer(holderEnt, item, ...)
+            launcherServer.useItem(holderEnt, item, ...)
         end
         if client then
             launchProjectileClient(holderEnt, item, ...)

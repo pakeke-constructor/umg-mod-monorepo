@@ -27,13 +27,36 @@ ent.projectileLauncher = {
 
     -- Spread of projectiles, used if multiple are shot.
     -- angle in radians.
-    spread = math.pi/4
+    spread = math.pi/4,
+
+    -- the distance away that the projectiles spawn at
+    startDistance = 20,
+
+
 
     --[[
         TODO: Put more stuff here afterwards.
-
-        We want fire-rate,
+        We want fire-rate, canShoot question/callbacks,
     ]]
+    -- TODO: Not yet implemented:
+    firerate = 3, -- 3 projectiles per second
+    canShoot = function() end,
+    -- etc etc.
+}
+
+
+
+
+--[[
+
+TODO: 
+gun component that provides a bunch of sensible defaults.
+Also plays a default sound, and emits default particles.
+Afterwards, provides a bunch of default sounds/particles to choose from.
+
+]]
+ent.gun = {
+    bulletType
 }
 
 
