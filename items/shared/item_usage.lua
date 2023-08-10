@@ -24,9 +24,13 @@ function itemUsageShared.canUseHoldItem(holder_ent, ...)
     end
 
     local item = getHoldItem(holder_ent)
-    if not item.useItem then
-        return false
-    end
+
+    --[[
+        TODO: Do we need to check if items can be used?
+        Currently, we are treating all items as usable.
+
+        Maybe we should have a `canUseItem` question?
+    ]]
 
     local time = state.getGameTime()
     local time_since_use = time - (item.itemLastUseTime or 0)

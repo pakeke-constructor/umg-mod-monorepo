@@ -189,6 +189,8 @@ function launcher.useItem(item, holderEnt, ...)
 
     local num_to_shoot = getProjectileCount(item, holderEnt, ...)
 
+    print("Im here...?")
+
     for i=0, num_to_shoot-1 do
         local projEnt = spawnProjectileEntity(item, holderEnt, ...)
         if projEnt then

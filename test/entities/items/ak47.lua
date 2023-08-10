@@ -2,7 +2,7 @@
 
 return {
     maxStackSize = 1;
-    image="ak47";
+    image="suppressed_gun";
     itemName = "ak47";
 
     projectileLauncher = {

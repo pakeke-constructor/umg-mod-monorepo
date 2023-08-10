@@ -29,7 +29,7 @@ local kill = require("shared.kill")
 
 
 umg.on("state:gameUpdate", function(dt)
-    for ent in ipairs(lifetimeGroup) do
+    for _, ent in ipairs(lifetimeGroup) do
         ent.lifetime = ent.lifetime - dt
 
         if ent.lifetime <= 0 then

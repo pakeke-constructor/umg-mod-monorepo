@@ -79,12 +79,14 @@ end
 
 
 
-local controllableGroup = umg.group("inventory", "controllable")
+local controllableGroup = umg.group("inventory", "clickToUseItems", "controllable")
 
 local function useItems()
     for _, ent in ipairs(controllableGroup) do
-        if sync.isClientControlling(ent) then
-            items.useHoldItem(ent)
+        if ent.clickToUseItems then
+            if sync.isClientControlling(ent) then
+                items.useHoldItem(ent)
+            end
         end
     end
 end

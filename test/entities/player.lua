@@ -21,6 +21,8 @@ return {
     canPickUpItems = true,
     autoHoldItem = true,
 
+    clickToUseItems = true,
+
     shadow = {
         size=6
     };

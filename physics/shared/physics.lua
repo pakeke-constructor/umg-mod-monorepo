@@ -139,6 +139,21 @@ end
 
 
 
+local DEFAULT_SIZE = 16
+local DEFAULT_SHAPE = love.physics.newCircleShape(DEFAULT_SIZE)
+
+
+local function getShape(ent)
+    if ent.physics.shape then
+        return ent.physics.shape
+    end
+
+    return DEFAULT_SHAPE
+end
+
+
+
+
 local DEFAULT_FRICTION = constants.DEFAULT_FRICTION
 
 
@@ -147,11 +162,11 @@ physicsGroup:onAdded(function(ent)
         error("World was locked! This is a bug on my behalf, sorry")  
     end
     if (not ent.x) or (not ent.y) then
-        error("Physics entities must be given x and y values upon creation.")
+        error("Physics entities must be given x and y components as numbers.")
     end
 
     local body = love.physics.newBody(world, ent.x, ent.y, getBodyType(ent))
-    local fixture = love.physics.newFixture(body, ent.physics.shape)
+    local fixture = love.physics.newFixture(body, getShape(ent))
 
     body:setLinearDamping(ent.physics.friction or DEFAULT_FRICTION)
 
