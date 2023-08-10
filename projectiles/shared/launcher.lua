@@ -24,9 +24,10 @@ umg.on("items:useItem", function(holderEnt, item, ...)
     if item.projectileLauncher then
         if server then
             launcherServer.useItem(holderEnt, item, ...)
-        end
-        if client then
-            launchProjectileClient(holderEnt, item, ...)
+        elseif client then
+            -- TODO: wtf do we do here?
+            -- perhaps emit particles? provide api for playing sounds?
+            -- Or we could just emit an event?
         end
     end
 end)

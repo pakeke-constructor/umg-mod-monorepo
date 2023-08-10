@@ -673,16 +673,15 @@ function Inventory:drawItem(item_ent, x, y)
 
     local quad = client.assets.images[item_ent.image]
     local _,_, w,h = quad:getViewport()
-    if (w ~= h) then
-        error("Image width-height for items must be equal! Not the case for this entity:\n" .. tostring(item_ent))
-    end
+
     local offset = (self.totalSlotSize - w) / 2
     local X = self.totalSlotSize * (x-1) + offset + self.draw_x
     local Y = self.totalSlotSize * (y-1) + offset + self.draw_y
 
     local drawX, drawY = X + w/2, Y + w/2
-    local scale = self.slotSize / w
-    rendering.drawImage(quad, drawX, drawY, 0, scale, scale)
+    local scaleX = self.slotSize / w
+    local scaleY = self.slotSize / h
+    rendering.drawImage(quad, drawX, drawY, 0, scaleX, scaleY)
 
     local holder_ent = self.owner
     umg.call("items:drawInventoryItem", holder_ent, item_ent, drawX, drawY, self.slotSize)

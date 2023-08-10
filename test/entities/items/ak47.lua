@@ -14,8 +14,9 @@ return {
         inaccuracy = 0,
 
         startDistance = 30,
-
     },
+
+    itemCooldown = 0.1,
    
     itemHoldType = "recoil",
 }

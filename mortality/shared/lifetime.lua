@@ -1,7 +1,12 @@
 
 --[[
 
-    lifetime component
+    lifetime component.
+
+    Gives entities a max time to be alive.
+
+    Great for temporary entities, such as bullets, fog effects,
+    entity particles, etc.
 
 ]]
 
@@ -21,8 +26,6 @@ if server then
 local lifetimeGroup = umg.group("lifetime")
 
 local kill = require("shared.kill")
-
-
 
 
 umg.on("state:gameUpdate", function(dt)

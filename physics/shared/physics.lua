@@ -133,11 +133,7 @@ local function getBodyType(ent)
         end
         return ent.physics.type
     else
-        if ent.vx and ent.vy then
-            return "dynamic"
-        else
-            return "static"
-        end
+        return "dynamic"
     end
 end
 

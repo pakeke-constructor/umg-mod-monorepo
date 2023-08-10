@@ -10,7 +10,7 @@ end
 
 
 local kill = require("shared.kill")
-local damage = require("share.damage")
+local damage = require("shared.damage")
 
 
 
@@ -24,14 +24,20 @@ function mortality.getRegeneration(ent)
 end
 
 
+
+if server then
+-- server-side only API
+mortality.server = {}
+
 function mortality.server.kill(ent)
     -- only callable by server
     kill(ent)
 end
 
-
 function mortality.server.damage(ent, dmg)
     damage(ent, dmg)
+end
+
 end
 
 

@@ -37,6 +37,10 @@ umg.on("@createWorld", function()
         newItem(ents.musket, 1)
     end
 
+    for i=1, 4 do
+        newItem(ents.ak47, 1)
+    end
+
     for i=1, 30 do
         local MAG = 250
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)

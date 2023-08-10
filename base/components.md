@@ -96,18 +96,6 @@ ent.particles = {
 
 
 
-ent.physics = {
-    shape = love.physics.Shape(...), -- some shape object (compulsory)
-
-    -- OPTIONAL FIELDS:
-    friction = 6, -- friction number.  (default is 6),
-
-    type = "kinematic" -- The bodyType of the entity. 
-    -- Default is `static` or `dynamic`, depending on whether the 
-        -- ent has vx and vy components.
-}
-
-
 
 
 -- this entity can be controlled by a player.

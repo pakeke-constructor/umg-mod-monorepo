@@ -31,6 +31,11 @@ function itemUsage.useHoldItem(holder_ent, ...)
     if canUse(holder_ent) then
         asserter(holder_ent)
         client.send("useItem", holder_ent, ...)
+        --[[
+            TODO:
+            we should prolly change argument order for this event.
+            Why should `holderEnt` be first? hmmm do some thinking
+        ]]
         umg.call("items:useItem", holder_ent, item, ...)
         if type(item.useItem) == "function" then
             item:useItem(holder_ent or false, ...)

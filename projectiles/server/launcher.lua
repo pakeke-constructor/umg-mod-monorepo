@@ -1,5 +1,6 @@
 
-require("guns_questions")
+require("projectiles_questions")
+require("projectiles_events")
 
 
 local launcher = {}
@@ -7,7 +8,9 @@ local launcher = {}
 
 
 local function getProjectileCount(item, holderEnt, ...)
-    -- assumes `item` has `projectileLauncher` component
+    --[[
+        Returns the number of projectiles that should be shot
+    ]]
     local plauncher = item.projectileLauncher
 
     --[[
