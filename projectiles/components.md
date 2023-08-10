@@ -56,6 +56,8 @@ ent.projectile = {
     size = 10, -- the hitbox size
     damage = 10, -- deals 10 damage on hit, (if the target has health)
     sound = "hit", -- plays this sound on hit
+
+    lifetime = 3 -- projectile lifetime in seconds
 }
 
 

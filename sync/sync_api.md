@@ -1,6 +1,6 @@
 
 
-# SYNC MOD PLANNING:
+# SYNC MOD:
 
 ```lua
 
