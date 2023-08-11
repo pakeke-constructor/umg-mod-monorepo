@@ -51,10 +51,6 @@ umg.on("@createWorld", function()
         ents.block(x,y)
     end
 
-    ents.yellowzone(-200, 0)
-    ents.magzone(200, 0)
-    ents.cyanzone(0, 200)
-
     for i=1, 160 do
         local MAG = 150
         ents.grass(math.random(-MAG, MAG), math.random(-MAG, MAG))

@@ -74,7 +74,7 @@ local function updateEnt(ent, dt)
     -- (although we do handle the Z component regardless)
     if shouldMove(ent) then
         doFriction(ent, dt)
-        local velMod = umg.ask("xy:getVelocityMultiplier", ent)
+        local velMod = umg.ask("xy:getVelocityMultiplier", ent) or 1
         local dtt = velMod * dt
         ent.x = ent.x + ent.vx * dtt
         ent.y = ent.y + ent.vy * dtt

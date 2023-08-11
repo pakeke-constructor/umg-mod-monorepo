@@ -5,10 +5,11 @@ local yellowZone, cyanZone, magZone
 
 if server then
 
+local ents = server.entities
 umg.on("@load", function()
-    yellowZone = server.entities.yellowzone()
-    cyanZone = server.entities.cyanzone()
-    magZone = server.entities.magzone()
+    ents.yellowzone(-200, 0)
+    ents.magzone(200, 0)
+    ents.cyanzone(0, 200)
 end)
 
 end
@@ -47,12 +48,13 @@ if client then
 
 local C = 0.3
 
-umg.on("rendering:getScale", function(ent)
+
+umg.answer("rendering:getScale", function(ent)
     if inRangeOf(ent, yellowZone) then
         return 2
     end
 end)
-umg.on("rendering:getColor", function(ent)
+umg.answer("rendering:getColor", function(ent)
     if inRangeOf(ent, yellowZone) then
         return 1,1,C
     end
@@ -61,12 +63,12 @@ end)
 
 
 
-umg.on("rendering:getScaleX", function(ent)
+umg.answer("rendering:getScaleX", function(ent)
     if inRangeOf(ent, magZone) then
         return -1
     end
 end)
-umg.on("rendering:getColor", function(ent)
+umg.answer("rendering:getColor", function(ent)
     if inRangeOf(ent, magZone) then
         return 1,C,1
     end
@@ -76,16 +78,18 @@ end)
 
 
 
-
-umg.on("rendering:getSpeed", function(ent)
-    if inRangeOf(ent, cyanZone) then
-        return 0.6
-    end
-end)
-umg.on("rendering:getColor", function(ent)
+umg.answer("rendering:getColor", function(ent)
     if inRangeOf(ent, magZone) then
         return 1,1,C
     end
 end)
 
 end
+
+
+
+umg.answer("xy:getSpeed", function(ent)
+    if inRangeOf(ent, cyanZone) then
+        return 0.6
+    end
+end)

@@ -18,7 +18,9 @@
       "weather",
       "vignette",
       "scheduling",
-      "projectiles"
+      "projectiles",
+      "rendering",
+      "xy"
     ],
     "type": "playable"
 }

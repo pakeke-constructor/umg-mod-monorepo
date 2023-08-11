@@ -1,4 +1,6 @@
 
+require("xy_questions")
+
 
 local getSpeed = require("shared.get_speed")
 
