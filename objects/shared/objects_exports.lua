@@ -8,7 +8,6 @@ objects.Heap = require("shared.heap");
 objects.Partition = require("shared.partition");
 objects.Enum = require("shared.enum")
 objects.Color = require("shared.color")
-objects.EntityRef = require("shared.entityref")
 
 umg.expose("objects", objects)
 
