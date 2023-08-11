@@ -6,10 +6,16 @@ local yellowZone, cyanZone, magZone
 if server then
 
 local ents = server.entities
+
+local OX, OY = 400, 0
+local D = 200
+
+
+
 umg.on("@load", function()
-    ents.yellowzone(-200, 0)
-    ents.magzone(200, 0)
-    ents.cyanzone(0, 200)
+    ents.yellowzone(OX-D, OY)
+    ents.magzone(OX+D, OY)
+    ents.cyanzone(OX, OY+D)
 end)
 
 end
@@ -18,8 +24,8 @@ end
 
 
 local yelGroup = umg.group("yellowZone")
-local cyanGroup = umg.group("magentaZone")
-local magGroup = umg.group("cyanZone")
+local magGroup = umg.group("magentaZone")
+local cyanGroup = umg.group("cyanZone")
 
 umg.on("@tick", function()
     yellowZone = yelGroup[1]
@@ -65,7 +71,7 @@ end)
 
 umg.answer("rendering:getScaleX", function(ent)
     if inRangeOf(ent, magZone) then
-        return -1
+        return 2
     end
 end)
 umg.answer("rendering:getColor", function(ent)
@@ -79,8 +85,8 @@ end)
 
 
 umg.answer("rendering:getColor", function(ent)
-    if inRangeOf(ent, magZone) then
-        return 1,1,C
+    if inRangeOf(ent, cyanZone) then
+        return C,1,1
     end
 end)
 
@@ -90,6 +96,6 @@ end
 
 umg.answer("xy:getSpeed", function(ent)
     if inRangeOf(ent, cyanZone) then
-        return 0.6
+        return 2
     end
 end)

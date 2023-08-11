@@ -19,7 +19,7 @@ local entityProperties = require("client.helper.entity_properties")
 
 
 
-local drawGroup = umg.group("image", "x", "y")
+local drawGroup = umg.group("draw", "x", "y")
 
 
 local floor = math.floor
@@ -260,15 +260,13 @@ end
 
 local function drawEntity(ent)
     if entIsOnScreen(ent) and not isHidden(ent) then
-        if ent.image then
-            setColorOfEnt(ent)
-            umg.call("rendering:preDrawEntity", ent)
-            umg.call("rendering:drawEntity", ent)
-            umg.call("rendering:postDrawEntity", ent)
-            if ent.onDraw then
-                ent:onDraw()
-            end
+        setColorOfEnt(ent)
+        umg.call("rendering:preDrawEntity", ent)
+        umg.call("rendering:drawEntity", ent)
+        if ent.onDraw then
+            ent:onDraw()
         end
+        umg.call("rendering:postDrawEntity", ent)
     end
 end
 

@@ -28,6 +28,16 @@ local getImage = entityProperties.getImage
 
 
 
+local imageGroup = umg.group("image")
+
+imageGroup:onAdded(function(ent)
+    if not ent.draw then
+        ent.draw = true
+    end
+end)
+
+
+
 
 umg.on("rendering:drawEntity", function(ent)
     local img = getImage(ent)
