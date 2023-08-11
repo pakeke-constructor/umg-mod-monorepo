@@ -21,7 +21,7 @@ particleEntities:onAdded(function(ent)
         if (type(ent.particles) ~= "table") then
             error("ent.particles needs to be table. Not the case for: " .. ent:type())
         end
-        if (not ent.particles.type) or (ent.particles[1] and ent.particles[1].type) then
+        if (not ent.particles.type) and (not (ent.particles[1] and ent.particles[1].type)) then
             error("ent.particles table needs to have a `type` value. Not the case for: " .. ent:type())
         end
     end

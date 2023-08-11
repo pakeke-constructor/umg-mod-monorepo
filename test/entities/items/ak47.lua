@@ -11,7 +11,7 @@ return {
         speed = 400, -- speed of projectiles
         count = 1, -- num fired
 
-        inaccuracy = 0,
+        inaccuracy = 1,
 
         startDistance = 50,
     },

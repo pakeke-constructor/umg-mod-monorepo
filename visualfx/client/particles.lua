@@ -167,7 +167,7 @@ function particles.emit(name, x, y, z, num_particles, color)
     z = z or 0
     
     if not nameToPsys[name] then
-        error("Unrecognised particle name: "..tostring(name) .. ".\nMake sure to register particles with `base.defineParticles()!`")
+        error("Unrecognised particle name: "..tostring(name) .. ".\nMake sure to register particles with `.define()!`")
     end
 
     local emitter = getEmitter(name)
@@ -199,7 +199,11 @@ end
 
 
 
+
 function particles.getParticleSystem(name)
+    if not name then
+        error("Undefined particle system: " .. tostring(name))
+    end
     return nameToPsys[name]
 end
 

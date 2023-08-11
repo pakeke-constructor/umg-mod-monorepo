@@ -40,6 +40,7 @@ local function drawHealthBar(ent)
     
     -- health bar:
     local ratio = ent.health / (ent.maxHealth or 0xfffffffff)
+    ratio = math.max(0, ratio)
     love.graphics.setColor(hcol)
     love.graphics.rectangle("fill", x, y, w * ratio, h)
 

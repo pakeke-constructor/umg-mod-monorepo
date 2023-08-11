@@ -17,7 +17,7 @@ end
 
 
 local function newItem(ctor, stackSize)
-    local MAG = 200
+    local MAG = 400
     local e = ctor()
     e.stackSize = stackSize
     items.drop(e, math.random(-MAG, MAG), math.random(-MAG, MAG))
@@ -30,7 +30,7 @@ umg.on("@createWorld", function()
     end
 
     for i=1, 4 do
-        newItem(ents.pickaxe, 1)
+        newItem(ents.flare_gun, 1)
     end
 
     for i=1, 4 do
