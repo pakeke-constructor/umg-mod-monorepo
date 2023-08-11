@@ -48,9 +48,9 @@ end)
 
 
 umg.on("@playerLeave", function(username)
-    local player = base.getPlayer(username)
+    local player = control.getPlayer(username)
     if player then
-        base.getPlayer(username):delete()
+        control.getPlayer(username):delete()
         local b = Board.getBoard(username)
         if b then
             b:delete()

@@ -57,7 +57,7 @@ local listener = input.Listener({priority = 2})
 
 function listener:keypressed(key, scancode, isrepeat)
     if scancode == "q" then
-        local e = base.getPlayer()
+        local e = control.getPlayer()
         local x, y = rendering.getWorldMousePosition()
         visualfx.particles.emit("smoke", e.x, e.y, 8, 10, {0.2,0.8,0.9})
         e.x = x
@@ -68,7 +68,7 @@ function listener:keypressed(key, scancode, isrepeat)
         error("test")
     end
     if scancode == "space" then
-        local e = base.getPlayer()
+        local e = control.getPlayer()
         if base.gravity.isOnGround(e) then
             e.vz = 400
         end

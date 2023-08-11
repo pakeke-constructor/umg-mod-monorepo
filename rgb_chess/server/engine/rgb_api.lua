@@ -17,7 +17,7 @@ local function getProjectileSpawn(targetEnt, sourceEnt)
     if umg.exists(sourceEnt) and sourceEnt.x then
         return sourceEnt.x, sourceEnt.y
     else
-        local player = base.getPlayer(targetEnt.rgbTeam)
+        local player = control.getPlayer(targetEnt.rgbTeam)
         if player then
             return player.x, player.y
         else

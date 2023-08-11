@@ -27,7 +27,6 @@ local function loadShared(base)
 
     base.weightedRandom = require("shared.weighted_random");
     
-    base.getPlayer = require("shared.get_player");
 
     base.defineExports = defineExports
 end

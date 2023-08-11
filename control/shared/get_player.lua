@@ -72,7 +72,7 @@ local function getPlayer(uname)
 
     if username_to_ent[uname] then
         local candidate_ent = username_to_ent[uname]
-        if candidate_ent.controller == uname then
+        if sync.isControlledBy(candidate_ent, uname) then
             return candidate_ent
         end
         -- Else:

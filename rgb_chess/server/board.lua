@@ -405,7 +405,7 @@ end
 function Board:emplacePlayer(player_uname)
     local x,y = self:getXY()
     local w,h = self:getWH()
-    local player_ent = base.getPlayer(player_uname)
+    local player_ent = control.getPlayer(player_uname)
     player_ent.x = x+w/2
     player_ent.y = y+h/2
     server.unicast(player_uname, "rgbEmplacePlayer", x,y, w,h)

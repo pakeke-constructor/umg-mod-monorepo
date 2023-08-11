@@ -54,3 +54,5 @@ globals:
     any: true
   scheduling:
     any: true
+  control:
+    any: true

@@ -47,7 +47,7 @@ chat.handleCommand("tickrate", {
 
 chat.handleCommand("position", {
     handler = function(sender)
-        local player = base.getPlayer(sender)
+        local player = control.getPlayer(sender)
         if player and player.x and player.y then
             chat.privateMessage(sender, ("(%.1f, %.1f)"):format(player.x, player.y))
         else
@@ -71,7 +71,7 @@ chat.handleCommand("spawn", {
 
     handler = function(sender, entType)
         if server.entities[entType] then
-            local p = base.getPlayer(sender)
+            local p = control.getPlayer(sender)
             local x,y = 0,0
             if p then
                 x,y = p.x, p.y + PLAYER_SPAWN_OFFSET

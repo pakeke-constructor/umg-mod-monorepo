@@ -8,7 +8,7 @@ chat.handleCommand("spawnArmy", {
     arguments = {},
 
     handler = function(sender)
-        local p = base.getPlayer(sender)
+        local p = control.getPlayer(sender)
         if not p then return end
         for i=1, 50 do
             local dx,dy = math.random(-200,200),math.random(-200,200)

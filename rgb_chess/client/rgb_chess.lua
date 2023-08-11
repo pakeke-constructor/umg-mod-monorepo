@@ -16,7 +16,7 @@ end)
 client.on("setupPvPMatch", function(opponent)
     -- TODO: Play a sound here,  change music, etc.
 
-    local p = base.getPlayer()
+    local p = control.getPlayer()
     if p then
         visualfx.shockwave(p.x, p.y, 10, 600, 10, 0.6)
     end
