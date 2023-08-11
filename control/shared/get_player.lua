@@ -64,7 +64,7 @@ end
 local function getPlayer(uname)
     if not uname then
         if server then
-            error("getPlayer expects a username as first argument.")            
+            uname = server.getHostUsername()
         else
             uname = client.getUsername()
         end

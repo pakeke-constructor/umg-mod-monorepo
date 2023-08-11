@@ -10,4 +10,6 @@ control.getAgility = getAgility
 control.getPlayer = require("shared.get_player");
 
 
+umg.expose("control", control)
+
 return control

@@ -2,7 +2,7 @@
 require("control_questions")
 
 
-local DEFAULT_AGILITY = 1
+local DEFAULT_AGILITY = 100
 
 
 local function getAgility(ent)

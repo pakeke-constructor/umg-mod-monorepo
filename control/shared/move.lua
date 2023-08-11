@@ -82,6 +82,10 @@ local function setVelFromMove(ent, dt)
     local x, y = ent.x, ent.y
     local moveX, moveY = ent.moveX or x, ent.moveY or y
 
+    -- ensure that entity actually has velocity components
+    ent.vx = ent.vx or 0
+    ent.vy = ent.vy or 0
+
     local agility = getAgility(ent)
     local speed = xy.getSpeed(ent)
 

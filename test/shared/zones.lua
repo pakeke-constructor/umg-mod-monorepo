@@ -7,15 +7,15 @@ if server then
 
 local ents = server.entities
 
-local OX, OY = 400, 0
-local D = 200
+local OX, OY = 1200, 0
+local D = 220
 
 
 
 umg.on("@load", function()
     ents.yellowzone(OX-D, OY)
     ents.magzone(OX+D, OY)
-    ents.cyanzone(OX, OY+D)
+    ents.cyanzone(OX, OY+D*(1.55))
 end)
 
 end
@@ -94,7 +94,7 @@ end
 
 
 
-umg.answer("xy:getSpeed", function(ent)
+umg.answer("xy:getSpeedMultiplier", function(ent)
     if inRangeOf(ent, cyanZone) then
         return 2
     end
