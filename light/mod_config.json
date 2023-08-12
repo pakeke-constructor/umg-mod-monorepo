@@ -1,5 +1,5 @@
 {
-    "needs": ["base"],
+    "needs": ["rendering", "reducers"],
     
     "type": "base"
 }

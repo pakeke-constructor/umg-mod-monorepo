@@ -9,7 +9,7 @@ local DEFAULT = {0.55,0.55,0.7,1} --{0.85,0.85,0.85}
     This image is stored OUTSIDE of assets/images,
     which means that it won't be loaded by the texture atlas.
 ]]
-local DEFAULT_LIGHT_IMAGE = "default_light.png"
+local DEFAULT_LIGHT_IMAGE = "lights/default_light.png"
 
 
 local base_lighting = DEFAULT
@@ -63,11 +63,14 @@ local function setupCanvas()
 
     for _, ent in ipairs(lightGroup) do
         -- TODO: Check if entity is on the screen
-        local l = ent.light
-        local size = l.size or DEFAULT_SIZE
-        local scale = size / W
-        love.graphics.setColor(l.color or DEFAULT_COLOR)
-        love.graphics.draw(light_image, ent.x, ent.y, 0, scale, scale, W/2, H/2)
+        if rendering.isOnScreen(ent) then
+            local l = ent.light
+            local size = l.size or DEFAULT_SIZE
+            local sizeMod = umg.ask("light:getLightSizeMultiplier", ent) or 1
+            local scale = (size / W) * sizeMod
+            love.graphics.setColor(l.color or DEFAULT_COLOR)
+            love.graphics.draw(light_image, ent.x, ent.y, 0, scale, scale, W/2, H/2)
+        end
     end
 
     love.graphics.setCanvas()
