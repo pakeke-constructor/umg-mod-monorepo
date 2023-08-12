@@ -1,7 +1,4 @@
 
-local BULLET_SPEED = 400
-local START_DIST = 30
-
 
 if client then
     local psys = visualfx.particles.newParticleSystem({"circ3", "circ2", "circ1"})
@@ -16,30 +13,23 @@ end
 
 return {
     maxStackSize = 1;
+
     image="musket";
     itemName = "musket";
 
-    useItem = function(self, holderEnt)
-        local dx,dy = holderEnt.lookX - holderEnt.x, holderEnt.lookY - holderEnt.y
-        local mag = math.distance(dx,dy)
-        if mag ~= 0 then
-            dx = dx/mag; dy=dy/mag
-        end
-        local x,y = holderEnt.x + dx*START_DIST, holderEnt.y + dy*START_DIST
+    projectileLauncher = {
+        projectileType = "bullet",
 
-        if client then
-            sound.playSound("boom_main1")
-            visualfx.particles.emit("musket_smoke", x,y,nil,10)
-        else
-            if type(dx) == "number" and type(dy) == "number" then        
-                local e = server.entities.player(x, y, holderEnt.controller)
-                e.vx = dx*BULLET_SPEED
-                e.vy = dy*BULLET_SPEED     
-            end
-        end
-    end;
-    
+        speed = 400, -- speed of projectiles
+        count = 5, -- num fired
+
+        inaccuracy = 0.1,
+
+        startDistance = 20,
+    },
+
+    itemCooldown = 1,
+   
     itemHoldType = "recoil",
 }
-
 

@@ -13,7 +13,7 @@ if client then
         1,1,1,1,
         0.6,0.6,0.6,0.5
     )
-    psys:setEmissionRate(100)
+    psys:setEmissionRate(100) -- TODO: this doesn't FRICKEN work!!!!
     psys:setEmissionArea("uniform", 1, 1, 0)
     visualfx.particles.define("flare", psys)
 end
