@@ -31,6 +31,10 @@ return {
         color = {0.7,0,0}
     },
 
+    controllable = {
+        movement = true
+    };
+
     maxHealth = 70,
 
     physics = {

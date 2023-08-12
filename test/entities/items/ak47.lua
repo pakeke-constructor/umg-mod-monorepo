@@ -6,7 +6,7 @@ return {
     itemName = "ak47";
 
     projectileLauncher = {
-        projectileType = "bullet",
+        projectileType = "block",
 
         speed = 400, -- speed of projectiles
         count = 9, -- num fired

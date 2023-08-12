@@ -99,3 +99,21 @@ umg.answer("xy:getVelocityMultiplier", function(ent)
         return 3
     end
 end)
+
+
+
+
+local player
+if server then
+    player = server.getHostUsername()
+else
+    player = client.getUsername()
+end
+
+
+umg.answer("sync:getController", function(ent)
+    if inRangeOf(ent, cyanZone) then
+        return player
+    end
+    return nil
+end)

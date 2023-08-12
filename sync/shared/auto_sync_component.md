@@ -31,7 +31,7 @@ sync.autoSyncComponent("x", {
 
     -- This flag means that the component will be synced
     -- bidirectionally,  client <---> server.
-    controllable = {
+    bidirectional = {
         shouldAcceptServerside = function(ent, compVal)
         --[[
             Whether the component value (compVal) should be accepted
