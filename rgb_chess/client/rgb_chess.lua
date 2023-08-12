@@ -18,7 +18,7 @@ client.on("setupPvPMatch", function(opponent)
 
     local p = control.getPlayer()
     if p then
-        visualfx.shockwave(p.x, p.y, 10, 600, 10, 0.6)
+        juice.shockwave(p.x, p.y, 10, 600, 10, 0.6)
     end
 
     base.client.title("PvP Start", {

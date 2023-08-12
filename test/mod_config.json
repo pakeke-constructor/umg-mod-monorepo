@@ -1,7 +1,7 @@
 {
     "uses": [
       "base",
-      "visualfx",
+      "juice",
       "chat",
       "light",
       "items",

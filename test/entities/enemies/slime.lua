@@ -1,6 +1,6 @@
 
 if client then
-    local psys = visualfx.particles.newParticleSystem({
+    local psys = juice.particles.newParticleSystem({
         "circ4", "circ3", "circ2", "circ1"
     })
     psys:setParticleLifetime(0.4,0.9)
@@ -9,7 +9,7 @@ if client then
     )
     psys:setEmissionRate(0) -- TODO: this doesn't FRICKEN work!!!!
     psys:setEmissionArea("uniform", 1, 1, 0)
-    visualfx.particles.define("slime", psys)
+    juice.particles.define("slime", psys)
 end
 
 

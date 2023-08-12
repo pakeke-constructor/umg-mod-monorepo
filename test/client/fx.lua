@@ -10,7 +10,7 @@ umg.on("mortality:entityDeath", function(ent)
 
     if ent.deathParticles then
         local name, amount = ent.deathParticles.name, ent.deathParticles.amount
-        visualfx.particles.emit(name, ent.x, ent.y, ent.z, amount)
+        juice.particles.emit(name, ent.x, ent.y, ent.z, amount)
     end
 end)
 
@@ -18,7 +18,7 @@ end)
 umg.on("mortality:damage", function(ent)
     if ent.slime then
         sound.playSound("splat2", 0.15)
-        visualfx.particles.emit("slime", ent.x, ent.y, ent.z, 2)
+        juice.particles.emit("slime", ent.x, ent.y, ent.z, 2)
     end
 end)
 

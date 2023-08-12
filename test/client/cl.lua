@@ -26,12 +26,12 @@ base.client.groundTexture.setTextureList({"ground_texture_final4"})
 love.graphics.clear()
 
 
-local psys = visualfx.particles.newParticleSystem({
+local psys = juice.particles.newParticleSystem({
     "circ4", "circ3", "circ2", "circ1"
 })
 
 
-visualfx.particles.define("smoke", psys)
+juice.particles.define("smoke", psys)
 
 
 
@@ -60,10 +60,10 @@ function listener:keypressed(key, scancode, isrepeat)
     if scancode == "q" then
         local e = control.getPlayer()
         local x, y = rendering.getWorldMousePosition()
-        visualfx.particles.emit("smoke", e.x, e.y, 8, 10, {0.2,0.8,0.9})
+        juice.particles.emit("smoke", e.x, e.y, 8, 10, {0.2,0.8,0.9})
         e.x = x
         e.y = y
-        visualfx.particles.emit("smoke", x, y, 8, 10)
+        juice.particles.emit("smoke", x, y, 8, 10)
     end
     if scancode == "space" then
         local e = control.getPlayer()

@@ -38,7 +38,7 @@ moveX, moveY components
 
 
 
-`visualfx` mod: (previously called drawfx mod)
+`juice` mod: (previously called drawfx mod)
 entity_shadows
 particles
 nametags

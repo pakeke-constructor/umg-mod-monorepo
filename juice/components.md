@@ -1,5 +1,5 @@
 
-# visualfx components
+# juice components
 
 ```lua
 
@@ -28,7 +28,7 @@ ent.text = {
 -- please note that entities with particles break auto batching.
 -- Don't use particles EVERYWHERE; it'll be slow
 ent.particles = {
-    type = "dust", -- `dust` is defined by visualfx.particles.define()
+    type = "dust", -- `dust` is defined by juice.particles.define()
     
     -- OPTIONAL FIELDS:
     rate = 5, -- emits 5 particles per second (default = 5)
