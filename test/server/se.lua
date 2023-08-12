@@ -45,10 +45,10 @@ umg.on("@createWorld", function()
         newItem(ents.ak47, 1)
     end
 
-    for i=1,1 do
-        local MAG = 250
+    for i=1,30 do
+        local MAG = 100
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
-        ents.slime(x,y)
+        ents.slime3(x,y - 1000)
     end
 
     for i=1, 30 do
@@ -57,26 +57,25 @@ umg.on("@createWorld", function()
         ents.block(x,y)
     end
 
-    for i=1, 160 do
-        local MAG = 150
+    for i=1, 1000 do
+        local MAG = 800
         ents.grass(math.random(-MAG, MAG), math.random(-MAG, MAG))
+    end
+
+    for i=1, 5 do
+        local MAG = 1000
+        ents.pine(math.random(-MAG, MAG), math.random(-MAG, MAG))
     end
 
     ents.crate(0,-100)
     ents.crate_button(100, 100)
     ents.crafting_table(-100, 100)
+
 end)
 
 
 local sf = sync.filters
 
-
-server.on("spawn", {
-    arguments = {sf.number, sf.number},
-    handler = function(u, x,y)
-        server.entities.opacity_test(x,y)
-    end
-})
 
 
 local controlGroup = umg.group("controllable", "x", "y")

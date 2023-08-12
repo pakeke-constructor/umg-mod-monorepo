@@ -1,5 +1,10 @@
 
 
+require("mortality_events")
+
+sync.proxyEventToClient("mortality:damage")
+
+
 
 local damageTc = typecheck.assert("entity", "number")
 

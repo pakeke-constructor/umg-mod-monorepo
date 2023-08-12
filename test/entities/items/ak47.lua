@@ -9,7 +9,7 @@ return {
         projectileType = "bullet",
 
         speed = 400, -- speed of projectiles
-        count = 1, -- num fired
+        count = 9, -- num fired
 
         inaccuracy = 0,
 

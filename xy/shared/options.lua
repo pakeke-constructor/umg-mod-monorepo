@@ -3,7 +3,7 @@
 local options = {
     DEFAULT_SPEED = 100,
 
-    SYNC_LEIGHWAY = 4, --[[
+    SYNC_LEIGHWAY = 40, --[[
         players have X times sync leighway. This essentially means that
         hacked clients can technically move-hack to go X times as fast;
         (but on the positive side, legit clients won't be lagged backwards.)

@@ -4,6 +4,8 @@
 local moveToPlayerGroup = umg.group("testMoveToPlayer", "x", "y")
 
 
+local CHASE_DISTANCE = 500
+
 
 umg.on("@tick", function()
     --[[
@@ -18,8 +20,14 @@ umg.on("@tick", function()
     end
 
     for _, ent in ipairs(moveToPlayerGroup) do
-        ent.moveX = player.x
-        ent.moveY = player.y
+        local d = math.distance(ent.x-player.x, ent.y-player.y)
+        if d < CHASE_DISTANCE then
+            ent.moveX = player.x
+            ent.moveY = player.y
+        else
+            ent.moveX = nil
+            ent.moveY = nil
+        end
     end
 end)
 

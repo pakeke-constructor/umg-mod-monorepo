@@ -15,6 +15,14 @@ umg.on("mortality:entityDeath", function(ent)
 end)
 
 
+umg.on("mortality:damage", function(ent)
+    if ent.slime then
+        sound.playSound("splat2", 0.15)
+        visualfx.particles.emit("slime", ent.x, ent.y, ent.z, 2)
+    end
+end)
+
+
 umg.on("items:useItem", function(holderEnt, item, ...)
     if item.projectileLauncher then
         sound.playSound("pew_main3", 0.6)

@@ -18,6 +18,11 @@ end
 return {
     testMoveToPlayer = true,
     draw = true,
+    slime = true,
+
+    spawnOnDeath = {
+        {type = "slime", chance = 0.13, count = 2}
+    },
 
     deathParticles = {
         name = "slime",

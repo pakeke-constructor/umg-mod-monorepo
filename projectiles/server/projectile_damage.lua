@@ -40,8 +40,3 @@ umg.on("physics:collide", function(projEnt, targetEnt, contact)
 end)
 
 
-
---[[
-
-]]
-

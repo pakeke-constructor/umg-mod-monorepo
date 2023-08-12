@@ -9,7 +9,12 @@ local PINES = {"pine4", "pine5", "pine6"}
 
 
 return {
-    swaying = {},
+    bobbing = {
+        magnitude = 0.1,
+        period = 10
+    },
+
+    drawDepth = 205,
 
     oy = -100,
 

@@ -14,7 +14,7 @@ return {
         type = "static"
     },
 
-    oy = -16,
+    oy = 16,
 
     init = function(ent,x,y)
         ent.x = x

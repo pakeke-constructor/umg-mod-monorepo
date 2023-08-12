@@ -65,9 +65,6 @@ function listener:keypressed(key, scancode, isrepeat)
         e.y = y
         visualfx.particles.emit("smoke", x, y, 8, 10)
     end
-    if scancode == "y" then
-        error("test")
-    end
     if scancode == "space" then
         local e = control.getPlayer()
         if base.gravity.isOnGround(e) then
@@ -97,9 +94,6 @@ function listener:mousepressed(x, y, button, istouch, presses)
     if button == 1 then
         useItems()
         self:lockMouseButton(button)
-    elseif button == 2 then
-        local wx,wy = rendering.toWorldCoords(x,y)
-        client.send("spawn",wx,wy)
     end
 end
 
