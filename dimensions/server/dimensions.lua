@@ -55,6 +55,13 @@ local function removeFromDimension(ent)
 
     if dimensionToEntityCount[ent] <= 0 then
         -- dimensions are culled if there are no entities inside it
+        --[[
+            TODO: we should add an option to allow dimensions
+            to persist, instead of being instantly deleted.
+            perhaps:
+            options.DELETE_EMPTY_DIMENSIONS = true
+            something like this..?? ^^^
+        ]]
         umg.call("dimensions:dimensionDestroyed")
     end
 end

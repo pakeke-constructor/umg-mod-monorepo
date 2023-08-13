@@ -36,6 +36,9 @@ the entity instead!!! (Amazing.)
 partition data structure should contain positions,
 AND dimension values for entities.
 
+- items mod
+should use new dimension setup
+
 - rendering
 we need to create Z-indexers for each dimension.
 camera should contain dimension too. 

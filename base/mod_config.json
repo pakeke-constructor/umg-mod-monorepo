@@ -4,6 +4,6 @@
         "typecheck", "sync", "objects", "state",
         "input", "rendering", "reducers", "physics",
         "control", "xy", "follow", "juice", "sound",
-        "mortality", "scheduling"
+        "mortality", "scheduling", "dimensions"
     ]
 }

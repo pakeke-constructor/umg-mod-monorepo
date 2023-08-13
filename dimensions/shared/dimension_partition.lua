@@ -3,12 +3,7 @@
     
 Spatial partition object, counting x,y,dimension values.
 
-
-Each spatial partition object has a big map of chunks that
-contain entities.
-Think of each "chunk" as like a big bucket where entities are kept.
-
-unlike regular Partitions,
+Unlike regular Partitions,
 entities are separated by dimensions AND x,y values.
 
 
@@ -43,7 +38,11 @@ end
 
 
 function DimensionPartition:removeEmptyChunks()
+    for _, partition in pairs(self.dimensionToPartition) do
+        partition:removeEmptyChunks()
+    end
 end
+
 
 
 function getPartition(self, dimension)
@@ -103,7 +102,8 @@ function DimensionPartition:updateEntity(ent)
         removeEntity(self, ent)
         addEntity(self, ent)
     else
-        -- the entity hasn't changed dimensions, so just keep as is
+        -- the entity hasn't changed dimensions,
+        -- so update within existing dimension partition.
         local partition = getPartition(self, dim)
         partition:updateEntity(ent)
     end
