@@ -62,7 +62,8 @@ local function setupCanvas()
     love.graphics.push("all")
     love.graphics.setCanvas(canvas)
     love.graphics.clear(base_lighting)
-    --love.graphics.setBlendMode("add")
+
+    local globalSizeMod = umg.ask("light:getGlobalLightSizeMultiplier") or 1
 
     for _, ent in ipairs(lightGroup) do
         -- TODO: Check if entity is on the screen
@@ -70,7 +71,7 @@ local function setupCanvas()
         local l = ent.light
         local size = l.size or DEFAULT_SIZE
         local sizeMod = umg.ask("light:getLightSizeMultiplier", ent) or 1
-        local scale = (size / W) * sizeMod
+        local scale = (size / W) * sizeMod * globalSizeMod
         love.graphics.setColor(l.color or DEFAULT_COLOR)
         love.graphics.draw(light_image, ent.x, ent.y, 0, scale, scale, W/2, H/2)
     end

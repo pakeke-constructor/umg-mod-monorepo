@@ -1,3 +1,6 @@
+ 
+
+require("dimensions_events")
 
 
 local getDimension = require("shared.get_dimension")

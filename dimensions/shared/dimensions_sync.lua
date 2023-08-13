@@ -1,7 +1,11 @@
 
+require("dimensions_events")
 
--- nuff said!
-sync.autoSyncComponent("dimension")
+
+
+sync.autoSyncComponent("dimension", {
+    syncWhenNil = true
+})
 
 
 
