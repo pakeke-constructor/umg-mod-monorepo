@@ -12,5 +12,5 @@ juice.popups = require("client.popups")
 juice.title = require("client.title");
 
 
-umg.expose("juice", visualfx)
+umg.expose("juice", juice)
 

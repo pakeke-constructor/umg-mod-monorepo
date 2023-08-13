@@ -1,4 +1,7 @@
 
+require("light_questions")
+
+
 
 local DEFAULT = {0.55,0.55,0.7,1} --{0.85,0.85,0.85}
 
@@ -63,14 +66,13 @@ local function setupCanvas()
 
     for _, ent in ipairs(lightGroup) do
         -- TODO: Check if entity is on the screen
-        if rendering.isOnScreen(ent) then
-            local l = ent.light
-            local size = l.size or DEFAULT_SIZE
-            local sizeMod = umg.ask("light:getLightSizeMultiplier", ent) or 1
-            local scale = (size / W) * sizeMod
-            love.graphics.setColor(l.color or DEFAULT_COLOR)
-            love.graphics.draw(light_image, ent.x, ent.y, 0, scale, scale, W/2, H/2)
-        end
+        -- (it's harder than you think)
+        local l = ent.light
+        local size = l.size or DEFAULT_SIZE
+        local sizeMod = umg.ask("light:getLightSizeMultiplier", ent) or 1
+        local scale = (size / W) * sizeMod
+        love.graphics.setColor(l.color or DEFAULT_COLOR)
+        love.graphics.draw(light_image, ent.x, ent.y, 0, scale, scale, W/2, H/2)
     end
 
     love.graphics.setCanvas()
