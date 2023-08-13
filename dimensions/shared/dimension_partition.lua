@@ -9,6 +9,9 @@ entities are separated by dimensions AND x,y values.
 
 ]]
 
+
+require("shared.dimension_vector") -- we need typecheck defs
+
 local getDimension = require("shared.get_dimension")
 
 
@@ -81,6 +84,9 @@ end
 --[[
     call this whenever a dimension gets destroyed
     (:dimensionDestroyed event)
+
+    If this isnt called, it's not the end of the world....
+    we will just leak some memory when dimensions are created
 ]]
 function DimensionPartition:destroyDimension(dimension)
     self.dimensionToPartition[dimension] = nil
@@ -159,7 +165,7 @@ local EMPTY = {}
 local iteratorTc = typecheck.assert("table", "dvector")
 
 function DimensionPartition:iterator(dVec)
-    iteratorTc(dVec)
+    iteratorTc(self, dVec)
     local dim = getDimension(dVec)
 
     if rawget(self.dimensionToPartition, dim) then
@@ -171,4 +177,4 @@ end
 
 
 
-return Partition
+return DimensionPartition

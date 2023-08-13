@@ -47,13 +47,16 @@ end
 
 local function removeFromDimension(ent)
     local dim = entToDimension[ent]
-    if dim then
+
+    if not dim then
         -- ensures that removing twice doesn't break stuff
-        dimensionToEntityCount[dim] = dimensionToEntityCount[dim] - 1
-        entToDimension[ent] = nil
+        return
     end
 
-    if dimensionToEntityCount[ent] <= 0 then
+    dimensionToEntityCount[dim] = dimensionToEntityCount[dim] - 1
+    entToDimension[ent] = nil
+
+    if dimensionToEntityCount[dim] <= 0 then
         -- dimensions are culled if there are no entities inside it
         --[[
             TODO: we should add an option to allow dimensions

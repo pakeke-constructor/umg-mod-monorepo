@@ -56,3 +56,5 @@ globals:
     any: true
   control:
     any: true
+  dimensions:
+    any: true

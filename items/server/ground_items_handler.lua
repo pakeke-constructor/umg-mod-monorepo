@@ -22,8 +22,11 @@ local groundItemGroup = umg.group("x", "y", "groundItem", "inventory")
 
 local PICKUP_DISTANCE = constants.PICKUP_DISTANCE
 
+
+
 local CHUNK_SIZE = PICKUP_DISTANCE
-local groundItemPartition = objects.Partition(CHUNK_SIZE)
+
+local groundItemPartition = dimensions.DimensionPartition(CHUNK_SIZE)
 
 
 
@@ -108,7 +111,7 @@ local function tryPickUp(ent, picked)
     local best_ent -- the best ground ent to pick up
     local best_dist = math.huge
 
-    for _, groundEnt in groundItemPartition:iterator(ent.x, ent.y) do
+    for _, groundEnt in groundItemPartition:iterator(ent) do
         --[[
             `groundEnt` has a 1x1 inventory, holding an item entity.
             We want to pick up that item.   
@@ -149,6 +152,11 @@ local function updatePartition()
         groundItemPartition:updateEntity(ent)
     end
 end
+
+
+umg.on("dimensions:dimensionDestroyed", function(dim)
+    groundItemPartition:destroyDimension(dim)
+end)
 
 
 

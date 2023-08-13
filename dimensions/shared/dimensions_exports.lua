@@ -1,5 +1,5 @@
 
-
+require("dimensions_events")
 local getDimension = require("shared.get_dimension")
 
 
@@ -33,10 +33,11 @@ end
 
 
 
-local DimVector = require("shared.dimension_vector")
+local DimensionVector = require("shared.dimension_vector")
+dimensions.DimensionVector = DimensionVector
 
-dimensions.DimensionVector = DimVector.DimensionVector
-dimensions.isDimensionVector = DimVector.isDimensionVector
+local DimensionPartition = require("shared.dimension_partition")
+dimensions.DimensionPartition = DimensionPartition
 
 
 --[[
