@@ -1,4 +1,4 @@
 {
     "type": "base",
-    "uses": ["objects", "typecheck", "reducers", "state"]
+    "uses": ["objects", "typecheck", "reducers", "state", "dimensions"]
 }

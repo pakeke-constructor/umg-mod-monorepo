@@ -130,9 +130,6 @@ umg.on("dimensions:entityMoved", function(ent, oldDim, newDim)
     ... -- called when an entity moves dimensions
 end)
 
-
-
-
 umg.on("dimensions:dimensionCreated", function(dim_name)
     ... -- Called when a new dimension is created
 end)
@@ -237,6 +234,8 @@ CONS:
 - if no entities exist in a dimension, what happens to the dimension?
     - we could add an option to automatically delete dimensions that dont
         contain any entities?
+- how do we detect if no entities exist in a dimension?
+    - perhaps the dimension mod could keep track of an entity count per dimension for us? (This is free, since we already keep track of entities moving dimensions)
 
 
 
