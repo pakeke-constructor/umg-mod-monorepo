@@ -13,4 +13,3 @@ sync.proxyEventToClient("dimensions:entityMoved")
 sync.proxyEventToClient("dimensions:dimensionCreated")
 sync.proxyEventToClient("dimensions:dimensionDestroyed")
 
-
