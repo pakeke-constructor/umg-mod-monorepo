@@ -112,6 +112,19 @@ function Camera:move(dx, dy)
 end
 
 
+-- UMG monkeypatch 
+function Camera:setDimension(dimension)
+    self.dimension = dimension
+end
+
+-- UMG monkeypatch 
+function Camera:getDimension()
+    return self.dimension
+end
+
+
+
+
 function Camera:toWorldCoords(x, y)
     -- PAKEKE MONKEYPATCH: New function:
     local c, s = math.cos(self.rotation), math.sin(self.rotation)

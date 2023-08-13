@@ -6,6 +6,8 @@ require("dimensions_events")
 local getDimension = require("shared.get_dimension")
 
 
+local dimensions = {}
+
 
 
 
@@ -52,6 +54,7 @@ local function removeFromDimension(ent)
     end
 
     if dimensionToEntityCount[ent] <= 0 then
+        -- dimensions are culled if there are no entities inside it
         umg.call("dimensions:dimensionDestroyed")
     end
 end

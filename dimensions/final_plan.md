@@ -12,9 +12,7 @@
 
 
 ```lua
-local dim = dimensions.getDimension(ent) -- "new_dim"
-local dim = dimensions.getDimension(ent.dimension) -- same thing
-
+local dim = dimensions.getDimension(ent.dimension)
 
 
 -- If entities aren't assigned a dimension, they will end up here.

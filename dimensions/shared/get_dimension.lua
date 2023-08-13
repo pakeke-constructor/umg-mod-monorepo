@@ -1,8 +1,8 @@
 
+local constants = require("shared.constants")
 
--- this cant be changed.
--- if we allow for changing of default dimension, that opens a whole can o worms
-local DEFAULT_DIMENSION = "overworld"
+
+local DEFAULT_DIMENSION = constants.DEFAULT_DIMENSION
 
 
 local function getDimension(ent)
