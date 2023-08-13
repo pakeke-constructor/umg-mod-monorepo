@@ -18,7 +18,6 @@ local getDimension = require("shared.get_dimension")
 
 
 
-local Array = objects.Array
 local Partition = objects.Partition
 
 
@@ -26,61 +25,105 @@ local DimensionPartition = objects.Class("dimensions:DimensionPartition")
 
 
 
-function DimensionPartition:init(chunkSize)    
-    self.chunks = setmetatable({--[[
-        [dimension] --> Partition
-    ]]})
+local initTc = typecheck.assert("number")
 
-    self.chunkList = Array()
+function DimensionPartition:init(chunkSize)
+    initTc(chunkSize)
     self.chunkSize = chunkSize
 
-    self.entityToLastX = {--[[
-        [ent] --> lastX
+    self.dimensionToPartition = {--[[
+        [dimension] --> Partition
     ]]}
-    self.entityToLastY = {--[[
-        [ent] --> lastY
+
+    self.entityToDimension = {--[[
+        [entity] -> dimension
     ]]}
 end
 
 
 
-function Partition:getChunkIndexes(x, y)
-    return math.floor(x / self.chunkSize), math.floor(y / self.chunkSize)
+function DimensionPartition:removeEmptyChunks()
 end
 
 
-function Partition:removeEmptyChunks()
+function getPartition(self, dimension)
+    if self.dimensionToPartition[dimension] then
+        return self.dimensionToPartition[dimension]
+    end
+
+    local partition = Partition(self.chunkSize)
+    self.dimensionToPartition[dimension] = partition
+    return partition
 end
+
+
+
+local function addEntity(self, ent)
+    local dim = getDimension(ent)
+    self.entityToDimension[ent] = dim
+    local partition = getPartition(self, dim)
+    partition:addEntity(ent)
+end
+
+
+
+local function removeEntity(self, ent)
+    local dim = self.entityToDimension[ent]
+    self.entityToDimension[ent] = nil
+    local partition = getPartition(self, dim)
+    partition:removeEntity(ent)
+end
+
+
+
+
+
+
+--[[
+    call this whenever a dimension gets destroyed
+    (:dimensionDestroyed event)
+]]
+function DimensionPartition:destroyDimension(dimension)
+    self.dimensionToPartition[dimension] = nil
+end
+
+
+
 
 --[[
     moves an entity into a different chunk if required
 ]]
-function Partition:updateEntity(ent)
+function DimensionPartition:updateEntity(ent)
+    local lastDim = self.entityToDimension[ent]
+    local dim = getDimension(ent)
+    assert(lastDim, "?")
+    
+    if lastDim ~= dim then
+        -- then the entity has changed dimensions
+        removeEntity(self, ent)
+        addEntity(self, ent)
+    else
+        -- the entity hasn't changed dimensions, so just keep as is
+        local partition = getPartition(self, dim)
+        partition:updateEntity(ent)
+    end
 end
 
 
 
 --[[
-:addEntity and :removeEntity should be executed atomically,
+:addEntity and :removeEntity need to be executed atomically,
 i.e. between frames.
 
 Tagging onto group's onRemoved and onAdded is what should be done in the ideal case.
 ]]
-function Partition:addEntity(ent)
+function DimensionPartition:addEntity(ent)
+    addEntity(self, ent)
 end
 
 
-function Partition:removeEntity(ent)
-end
-
-
-
-
-
-
-local forEachAssert = typecheck.assert("number", "number", "function")
-
-function Partition:forEach(x, y, func)
+function DimensionPartition:removeEntity(ent)
+    removeEntity(self, ent)
 end
 
 
@@ -89,46 +132,41 @@ end
 
 
 
+local forEachAssert = typecheck.assert("dvector", "function")
 
-function Partition:contains(ent)
-end
+function DimensionPartition:forEach(dVec, func)
+    forEachAssert(dVec, func)
+    local dim = getDimension(dVec)
 
-
-
-
-
-
-function Partition:iterator(dVec)
-    assertDimensionVector(dVec)
-    local ix, iy = self:getChunkIndexes(x, y)
-    local dx = -1
-    local dy = -1
-
-    local chunkI = 1
-    local currentChunk = tryGetChunk(self,ix+dx, iy+dy)
-
-    return function()
-        if (not currentChunk) or chunkI > currentChunk:size() then
-            currentChunk = nil
-            while (not currentChunk) or chunkI > currentChunk:size() do
-                -- We force search for a non-empty chunk
-                if dx < 1 then
-                    dx = dx + 1
-                elseif dy < 1 then
-                    dy = dy + 1
-                    dx = -1
-                else
-                    return nil -- done iteration. Searched all chunks.
-                end
-                currentChunk = tryGetChunk(self,ix+dx, iy+dy)
-                chunkI = 1
-            end
-        end
-
-        local ent = currentChunk[chunkI]
-        chunkI = chunkI + 1
-        return chunkI, ent
+    if rawget(self.dimensionToPartition, dim) then
+        local partition = self.dimensionToPartition[dim]
+        return partition:forEach(dVec.x, dVec.y, func)
     end
+end
+
+
+
+
+function DimensionPartition:contains(ent)
+    return self.entToDimension[ent]
+end
+
+
+
+
+local EMPTY = {}
+
+local iteratorTc = typecheck.assert("table", "dvector")
+
+function DimensionPartition:iterator(dVec)
+    iteratorTc(dVec)
+    local dim = getDimension(dVec)
+
+    if rawget(self.dimensionToPartition, dim) then
+        local partition = self.dimensionToPartition[dim]
+        return partition:iterator(dVec.x, dVec.y)
+    end
+    return ipairs(EMPTY)
 end
 
 
