@@ -11,13 +11,9 @@ dimensions.getDimension = getDimension
 
 local dimensionSet = objects.Set()
 
-
-
-
 umg.on("dimensions:dimensionCreated", function(dim)
     dimensionSet:add(dim)
 end)
-
 
 umg.on("dimensions:dimensionDestroyed", function(dim)
     dimensionSet:remove(dim)
@@ -34,6 +30,13 @@ end
 function dimensions.exists(dim)
     return dimensionSet:has(dim)
 end
+
+
+
+local DimVector = require("shared.dimension_vector")
+
+dimensions.DimensionVector = DimVector.DimensionVector
+dimensions.isDimensionVector = DimVector.isDimensionVector
 
 
 --[[

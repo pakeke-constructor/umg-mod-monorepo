@@ -49,4 +49,7 @@ each dimension needs a physics world
 particles, sfx, etc use `dimensionVector`
 
 
+- light mod
+check dimension of light before rendering
+
 

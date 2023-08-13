@@ -1,7 +1,7 @@
 
 --[[
     
-Spatial partition object.
+Spatial partition object, across the x,y plane
 
 
 Each spatial partition object has a big map of chunks that
@@ -56,10 +56,14 @@ end
 
 
 function Partition:removeEmptyChunks()
-    for i=#self.chunksList, 1, -1 do
-        local c = self.chunksList[i]
+    --[[
+        TODO: this doesn't work.
+        We need to also be removing from `self.chunks` too!
+    ]]
+    for i=#self.chunkList, 1, -1 do
+        local c = self.chunkList[i]
         if c:isEmpty() then
-            self.chunksList:quickPop(i)
+            self.chunkList:quickPop(i)
         end
     end
 end

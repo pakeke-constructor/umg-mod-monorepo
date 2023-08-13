@@ -69,7 +69,29 @@ local function newDimensionVector(tabl_or_x, y, dimension, z_or_nil)
             dimension = e.dimension,
         }
     end
+
+    error("invalid input to DimensionVector ctor: " .. tostring(tabl_or_x))
 end
+
+
+
+
+
+local MSG = "expected DimensionVector"
+
+local function check(dvec)
+    if type(dvec) ~= "table" then
+        return false, MSG
+    end
+    return dvec.x and dvec.y, MSG
+end
+
+--[[
+    typecheck interoperability
+]]
+typecheck.addType("dvector", check)
+typecheck.addType("dimensionvector", check)
+
 
 
 return newDimensionVector
