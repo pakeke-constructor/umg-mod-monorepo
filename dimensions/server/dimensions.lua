@@ -117,7 +117,8 @@ end
 
 
 umg.on("@tick", function()
-    for _, ent in ipairs(dimensionGroup) do
+    for i=1, #dimensionGroup do
+        local ent = dimensionGroup[i]
         updateEnt(ent)
     end
 end)

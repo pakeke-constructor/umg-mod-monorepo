@@ -19,7 +19,6 @@ animations
 draw
 camera
 drawStats
-`isOnScreen`, `entIsOnScreen`
 
 
 

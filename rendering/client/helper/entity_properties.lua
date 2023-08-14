@@ -73,6 +73,9 @@ function entityProperties.getImage(ent)
 end
 
 
+function entityProperties.isHidden(ent)
+    return ent.hidden or umg.ask("rendering:isHidden", ent)
+end
+
 
 return entityProperties
-

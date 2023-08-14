@@ -82,9 +82,6 @@ umg.on("@createWorld", function()
 end)
 
 
-local sf = sync.filters
-
-
 
 local controlGroup = umg.group("controllable", "x", "y")
 

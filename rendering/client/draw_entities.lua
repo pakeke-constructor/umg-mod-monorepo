@@ -15,7 +15,6 @@ local currentCamera = require("client.current_camera")
 local constants = require("client.constants")
 local sort = require("libs.sort")
 
-local entityProperties = require("client.helper.entity_properties")
 
 
 
@@ -36,9 +35,7 @@ local sortedMoveEnts = {} -- for ents that move
 
 
 
-local setColor = love.graphics.setColor
 
-local DEFAULT_LEIGHWAY = constants.SCREEN_LEIGHWAY
 
 
 
@@ -64,76 +61,6 @@ end
 
 
 
-
--- gets the "screen" Y from y and z position.
-local function getDrawY(y, z)
-    return y - (z or 0)/2
-end
-
-
-local function getDrawDepth(y,z)
-    return floor(y + (z or 0))
-end
-
-
-local function getEntityDrawDepth(ent)
-    local depth = ent.drawDepth or 0
-    --[[
-        the reason we must have a default value for ent.y here,
-        is because `y` may be nil.
-        (If a component is deleted, AND an entity is added the same frame, then 
-            binarySearch is called whilst the "dead" entity is still in the list.)
-    ]]
-    return getDrawDepth((ent.y or 0) + depth, ent.z)
-end
-
-
-
-local screenWidth, screenHeight = love.graphics.getWidth(), love.graphics.getHeight()
-
-local function entIsOnScreen(ent, leighway)
-    --[[
-        `ent` the entity to be checked if on screen
-
-        OPTIONAL:
-        `leighway` the leighway given. If not supplied, a sensible
-            default is provided.
-        `w` and `h` are the width and height of the screen. 
-            If these aren't supplied, they will be automatically given.
-            It's slightly faster if they are supplied though.
-
-        leighway is just a constant that determines how many pixels
-        of "leighway" we can give each object before it's counted as offscreen
-    ]]
-    leighway = leighway or DEFAULT_LEIGHWAY
-    local camera = currentCamera.getCamera()
-    local w,h = screenWidth, screenHeight
-    local screen_y = getDrawY(ent.y, ent.z)
-    local x, y = camera:toCameraCoords(ent.x, screen_y)
-
-    local ret = -leighway <= x and x <= w + leighway
-                and -leighway <= y and y <= h + leighway
-
-    return ret
-end
-
-
-local function isOnScreen(x, y, leighway)
-    --[[
-        same as above, but for a direct x,y position as opposed to
-        an entity.
-
-        Assumes z = 0
-    ]]
-    local w,h = screenWidth, screenHeight
-    local camera = currentCamera.getCamera()
-    leighway = leighway or DEFAULT_LEIGHWAY
-    w, h = w or love.graphics.getWidth(), h or love.graphics.getHeight()
-    x, y = camera:toCameraCoords(x, y)
-
-    return -leighway <= x and x <= w + leighway
-            and -leighway <= y and y <= h + leighway
-end
 
 
 
@@ -183,17 +110,6 @@ drawGroup:onRemoved(function(ent)
 end)
 
 
-local function pollRemoveBuffer(array, removeBuffer)
-    for i=#array,1,-1 do
-        local ent = array[i]
-        if removeBuffer[ent] then
-            table.remove(array, i)
-            removeBuffer[ent] = nil
-        end
-    end
-end
-
-
 
 umg.on("@resize", function()
     local w,h = love.graphics.getDimensions()
@@ -206,69 +122,24 @@ end)
 
 
 
-local function less(ent_a, ent_b)
-    return getEntityDrawDepth(ent_a) < getEntityDrawDepth(ent_b)
-end
 
 
 
-local froz_ct = 0
 
 local function sortFrozenEnts()
-    -- This function runes once every 50 frames:
-    froz_ct = froz_ct + 1
-    if froz_ct < 50 then
-        return -- return early
-    else
-        froz_ct = 0 -- else, we run function
-    end
-    -- ==========
-    -- The reason we don't need to sort every frame is because these entities
-    -- dont have velocity components, so they probably aren't moving.
     sort.stable_sort(sortedFrozenEnts, less)
 end
 
 
-
-local function update()
-    pollRemoveBuffer(sortedFrozenEnts, removeBufferFrozen)
-    pollRemoveBuffer(sortedMoveEnts, removeBufferMove)
-
-    sort.stable_sort(sortedMoveEnts, less)
-    sortFrozenEnts()
-end
+-- The reason we don't need to sort every frame is because these entities
+-- dont have velocity components, so they probably aren't moving.
+-- we still want to sort them some-times tho, hence why we sort them every 50 frames
+scheduling.runEvery(50, "@update", sortFrozenEnts)
+error("^^^ move this to ZIndexer")
 
 
 
 
-
-local function isHidden(ent)
-    return ent.hidden or umg.ask("rendering:isHidden", ent)
-end
-
-local getOpacity, getColor = entityProperties.getOpacity, entityProperties.getColor
-
-
-
-local function setColorOfEnt(ent)
-    local r,g,b = getColor(ent)
-    local a = getOpacity(ent)
-    setColor(r,g,b,a)
-end
-
-
-
-local function drawEntity(ent)
-    if entIsOnScreen(ent) and not isHidden(ent) then
-        setColorOfEnt(ent)
-        umg.call("rendering:preDrawEntity", ent)
-        umg.call("rendering:drawEntity", ent)
-        if ent.onDraw then
-            ent:onDraw()
-        end
-        umg.call("rendering:postDrawEntity", ent)
-    end
-end
 
 
 --[[
@@ -350,25 +221,4 @@ umg.on("rendering:drawEntities", function()
 
     client.atlas:flush()
 end)
-
-
-
-
-
-
-return {
-    getDrawY = getDrawY;
-    getDrawDepth = getDrawDepth;
-    getEntityDrawDepth = getEntityDrawDepth;
-
-    isOnScreen = isOnScreen;
-    entIsOnScreen = entIsOnScreen;
-
-    setColorOfEnt = setColorOfEnt;
-
-    drawEntity = drawEntity,
-
-    isHidden = isHidden
-}
-
 

@@ -2,6 +2,6 @@
     "type": "base",
     "uses": [
         "objects", "typecheck", "reducers",
-        "state", "dimensions"
+        "state", "dimensions", "scheduling"
     ]
 }

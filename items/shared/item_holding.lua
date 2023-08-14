@@ -120,6 +120,7 @@ local function updateHoldItem(ent, item_ent)
         error("unknown itemHoldType " .. tostring(item_ent.itemHoldType) .. " for entity " .. tostring(item_ent))
     end
     itemHoldPositioning[item_ent.itemHoldType](item_ent, ent)   
+    item_ent.dimension = ent.dimension
 end
 
 
