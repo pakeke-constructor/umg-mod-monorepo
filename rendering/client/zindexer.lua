@@ -1,7 +1,7 @@
 
 --[[
 
-data structure for ordered drawing of entities
+data structure for ordered drawing of entities.
 
 ]]
 
@@ -10,32 +10,38 @@ local constants = require("client.constants")
 local sort = require("libs.sort")
 
 local misc = require("client.misc")
-local getDrawY = misc.getDrawY
 local getDrawDepth = misc.getDrawDepth
 local getEntityDrawDepth = misc.getEntityDrawDepth
-local isOnScreen = misc.isOnScreen
 local drawEntity = misc.drawEntity
 
 
 local floor = math.floor
-local max, min = math.max, math.min
+local max = math.max
 
 
 
 
 
-
-local ZIndexer = objects.class("rendering:ZIndexer")
-
+local HEAVY_UPDATE_FRAMES = 50
 
 
-function ZIndexer:init()
+local ZIndexer = objects.Class("rendering:ZIndexer")
+
+
+function ZIndexer:init(dimension)
+    --[[
+        each ZIndexer uses
+    ]]
+    self.dimension = dimension
+
     -- Ordered drawing lists:
     self.sortedFrozenEnts = objects.Array() -- for ents that dont move
     self.sortedMoveEnts = objects.Array() -- for ents that move
 
     -- { [ent] = true } a set of entities to be removed next flush
     self.removeBuffer = {}
+
+    self.framesSinceLastHeavyUpdate = 0
 end
 
 
@@ -92,9 +98,18 @@ end
 
 
 
-
 local function less(ent_a, ent_b)
     return getEntityDrawDepth(ent_a) < getEntityDrawDepth(ent_b)
+end
+
+
+
+-- computationally expensive update
+local function heavyUpdate(self)
+    -- The reason we don't need to sort every frame is because these entities
+    -- dont have velocity components, so they probably aren't moving.
+    -- we still want to sort them some-times tho, hence why we sort them every 50 frames
+    sort.stable_sort(self.sortedFrozenEnts, less)
 end
 
 
@@ -106,23 +121,20 @@ local function update(self)
     self.removeBuffer = {}
 
     sort.stable_sort(self.sortedMoveEnts, less)
+
+    if self.framesSinceLastHeavyUpdate > HEAVY_UPDATE_FRAMES then
+        self.framesSinceLastHeavyUpdate = 0
+        heavyUpdate(self)
+    else
+        self.framesSinceLastHeavyUpdate = self.framesSinceLastHeavyUpdate + 1
+    end
 end
-
-
-
-function ZIndexer:heavyUpdate(dt)
-    -- computationally expensive update
-    sort.stable_sort(self.sortedFrozenEnts, less)
-end
-
-
 
 
 
 local function canMove(ent)
-    return ent:hasComponent("vy")
+    return ent:hasComponent("vy") or ent:hasComponent("vz")
 end
-
 
 
 
@@ -148,7 +160,7 @@ end
 
 
 
-function ZIndexer:drawEntities()
+function ZIndexer:drawEntities(camera)
     --[[
         explanation:
         We have two sorted lists of entities:
@@ -165,8 +177,8 @@ function ZIndexer:drawEntities()
     local sortedFrozenEnts = self.sortedFrozenEnts
     local sortedMoveEnts = self.sortedMoveEnts
 
-    local min_depth = cameraTopDepth() -- top depth = smaller screenY
-    local max_depth = cameraBotDepth() -- bot depth is bigger screenY
+    local min_depth = cameraTopDepth(camera) -- top depth = smaller screenY
+    local max_depth = cameraBotDepth(camera) -- bot depth is bigger screenY
 
     -- we start at the bottom of the screen, and work up.
     local frozen_i = max(1, binarySearch(sortedFrozenEnts, min_depth, getEntityDrawDepth))
@@ -228,6 +240,4 @@ function ZIndexer:drawEntities()
 end
 
 
-
-
-
+return ZIndexer

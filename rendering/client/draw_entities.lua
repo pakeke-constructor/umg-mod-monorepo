@@ -13,49 +13,90 @@ require("rendering_events")
 local currentCamera = require("client.current_camera")
 
 local constants = require("client.constants")
-local sort = require("libs.sort")
 
-
-
-
-local drawGroup = umg.group("draw", "x", "y")
-
-
-local floor = math.floor
+local ZIndexer = require("client.zindexer")
 
 
 
 
 
+local dimensionToZIndexer = {}
 
-
-
-
-
-
-
-
-
-
-drawGroup:onAdded(function( ent )
-    -- Callback for entity addition
-    if ent:hasComponent("vy") or ent:hasComponent("vz") then
-        -- then the entity moves, add it to move array
-        local i = binarySearch(sortedMoveEnts, getEntityDrawDepth(ent), getEntityDrawDepth)
-        table.insert(sortedMoveEnts, i, ent)
-    else
-        -- the entity doesn't move, add it to frozen array
-        local i = binarySearch(sortedFrozenEnts, getEntityDrawDepth(ent), getEntityDrawDepth)
-        table.insert(sortedFrozenEnts, i, ent)
+local function getZIndexer(dim)
+    dim = dimensions.getDimension(dim)
+    if not dimensionToZIndexer[dim] then
+        dimensionToZIndexer[dim] = ZIndexer(dim)
     end
+
+    return dimensionToZIndexer[dim]
+end
+
+
+
+
+umg.on("dimensions:dimensionDestroyed", function(dim)
+    dimensionToZIndexer[dim] = nil
 end)
 
 
+
+local function isDrawEntity(ent)
+    if ent.draw and ent.x and ent.y then
+        return true
+    end
+    return false
+end
+
+
+
+
+
+local function addToZIndexer(ent)
+    local dim = dimensions.getDimension(ent)
+    local zindexer = getZIndexer(dim)
+    zindexer:addEntity(ent)
+end
+
+
+local function removeFromZIndexer(ent, dim)
+    -- removes entity from the ZIndexer for the specified dimension
+    local zindexer = getZIndexer(dim)
+    zindexer:removeEntity(ent)
+end
+
+
+
+
+
+local drawGroup = umg.group("x", "y", "draw")
+
+
+drawGroup:onAdded(function(ent)
+    addToZIndexer(ent)
+end)
 
 drawGroup:onRemoved(function(ent)
-    removeBufferMove[ent] = true
-    removeBufferFrozen[ent] = true
+    removeFromZIndexer(ent, ent.dimension)
 end)
+
+
+
+
+
+
+umg.on("dimensions:entityMoved", function(ent, oldDimension, _newDim)
+    if not isDrawEntity(ent) then
+        return
+    end
+
+    if oldDimension then
+        removeFromZIndexer(ent, oldDimension)
+    end
+
+    addToZIndexer(ent)
+end)
+
+
 
 
 
@@ -69,33 +110,14 @@ end)
 
 
 
-
-
-
-
-
-local function sortFrozenEnts()
-    error([[
-        for each ZIndexer zind:
-            zind:heavyUpdate()
-    ]])
-end
-
-
--- The reason we don't need to sort every frame is because these entities
--- dont have velocity components, so they probably aren't moving.
--- we still want to sort them some-times tho, hence why we sort them every 50 frames
-scheduling.runEvery(50, "@update", sortFrozenEnts)
-error("^^^ move this to ZIndexer")
-
-
-
-
-
-
 --[[
     main draw function
 ]]
-umg.on("rendering:drawEntities", function()
+umg.on("rendering:drawEntities", function(camera)
+    local dim = dimensions.getDimension(camera:getDimension())
+    local zindexer = dimensionToZIndexer[dim]
+    if zindexer then
+        zindexer:drawEntities(camera)
+    end
 end)
 

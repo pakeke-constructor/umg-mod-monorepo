@@ -9,8 +9,8 @@ allows us to manually make calls to animate entities.
 
 require("rendering_events")
 
-local drawEntities = require("client.draw_entities")
-local getDrawY = drawEntities.getDrawY
+local misc = require("client.misc")
+local getDrawY = misc.getDrawY
 
 
 local drawImage = require("client.helper.draw_image")

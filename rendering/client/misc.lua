@@ -10,6 +10,8 @@ A bunch of useful functions that don't really belong elsewhere.
 local currentCamera = require("client.current_camera")
 local entityProperties = require("client.helper.entity_properties")
 
+local constants = require("client.constants")
+
 
 local floor = math.floor
 

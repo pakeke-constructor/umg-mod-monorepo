@@ -72,7 +72,13 @@ function listener:keypressed(key, scancode, isrepeat)
         end
     end
     if scancode == "y" then
-        client.send("swapdimension")
+        local cam = rendering.getCamera()
+        local dim = "overworld"
+        if cam:getDimension() == "overworld" then
+            dim = "other"
+        end
+        client.send("swapdimension", dim)
+        cam:setDimension(dim)
     end
 end
 

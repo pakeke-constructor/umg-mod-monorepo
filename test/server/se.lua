@@ -82,20 +82,18 @@ umg.on("@createWorld", function()
 end)
 
 
+local sf = sync.filters
+
 
 local controlGroup = umg.group("controllable", "x", "y")
 
 
 server.on("swapdimension", {
-    arguments = {},
-    handler = function(username, ent)
+    arguments = {sf.string},
+    handler = function(username, dim)
         for _,e in ipairs(controlGroup)do
             if e.controller == username then
-                if e.dimension == dim1 then
-                    e.dimension = dim2
-                else
-                    e.dimension = dim1
-                end
+                e.dimension = dim
             end
         end
     end

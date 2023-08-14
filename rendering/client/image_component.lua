@@ -1,10 +1,10 @@
 
 
-local drawEntities = require("client.draw_entities")
+local misc = require("client.misc")
 local drawImage = require("client.helper.draw_image")
 
 
-local getDrawY = drawEntities.getDrawY
+local getDrawY = misc.getDrawY
 
 
 local images = client.assets.images

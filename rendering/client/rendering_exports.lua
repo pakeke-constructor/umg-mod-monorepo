@@ -9,7 +9,7 @@ require("rendering_events")
 local animate = require("client.animate")
 
 local draw = require("client.draw")
-local drawEntities = require("client.draw_entities")
+local misc = require("client.misc")
 
 
 local currentCamera = require("client.current_camera")
@@ -28,13 +28,14 @@ rendering.setUIScale = draw.setUIScale
 
 
 
-rendering.isOnScreen = drawEntities.isOnScreen
-rendering.entIsOnScreen = drawEntities.entIsOnScreen
+rendering.isOnScreen = misc.isOnScreen
 
-rendering.drawEntity = drawEntities.drawEntity
+rendering.drawEntity = misc.drawEntity
 
-rendering.getDrawY = drawEntities.getDrawY;
-rendering.getDrawDepth = drawEntities.getDrawDepth;
+rendering.getDrawY = misc.getDrawY
+rendering.getDrawDepth = misc.getDrawDepth
+
+rendering.getEntityDrawDepth = misc.getEntityDrawDepth
 
 
 
