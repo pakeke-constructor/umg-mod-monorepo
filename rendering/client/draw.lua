@@ -55,15 +55,15 @@ function draw.drawWorld(customCamera)
 
     camera:attach()
 
-    umg.call("rendering:preDrawWorld")
+    umg.call("rendering:preDrawWorld", camera)
 
-    umg.call("rendering:drawGround")
-    umg.call("rendering:drawEntities")
-    umg.call("rendering:drawEffects")
+    umg.call("rendering:drawGround", camera)
+    umg.call("rendering:drawEntities", camera)
+    umg.call("rendering:drawEffects", camera)
 
     camera:draw()
 
-    umg.call("rendering:postDrawWorld")
+    umg.call("rendering:postDrawWorld", camera)
 
     camera:detach()
 end
