@@ -71,8 +71,19 @@ function listener:keypressed(key, scancode, isrepeat)
             e.vz = 400
         end
     end
+    if scancode == "y" then
+        client.send("swapdimension")
+    end
 end
 
+
+umg.on("@draw", function()
+    local p = control.getPlayer()
+    if p then
+        love.graphics.setColor(0,0,0)
+        love.graphics.print(dimensions.getDimension(p))
+    end
+end)
 
 
 

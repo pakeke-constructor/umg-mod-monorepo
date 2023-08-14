@@ -43,6 +43,7 @@ local function dropItem(itemEnt, x, y)
     e.inventory:set(1,1,itemEnt)
     e.image = itemEnt.image
     umg.call("items:dropGroundItem", e, itemEnt)
+    return e
 end
 
 
@@ -53,7 +54,7 @@ local dropItemTc = typecheck.assert("table", "number", "number")
 function groundItemsHandler.drop(itemEnt, x, y)
     -- TODO: We will need to do something about the dimension here.
     dropItemTc(itemEnt, x, y)
-    dropItemHandler(itemEnt, x, y)
+    return dropItemHandler(itemEnt, x, y)
 end
 
 

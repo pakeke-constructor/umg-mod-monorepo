@@ -20,13 +20,21 @@ local function newItem(ctor, stackSize)
     local MAG = 400
     local e = ctor()
     e.stackSize = stackSize
-    items.drop(e, math.random(-MAG, MAG), math.random(-MAG, MAG))
+    local gItem = items.drop(e, math.random(-MAG, MAG), math.random(-MAG, MAG))
+    return gItem
 end
+
+
+
+local dim1 = "overworld"
+local dim2 = "other"
+
 
 
 umg.on("@createWorld", function()
     for i=1, 30 do
-        newItem(ents.item, 1)
+        local e = newItem(ents.item, 1)
+        e.dimension = dim2
     end
 
     for i=1, 4 do
@@ -80,13 +88,17 @@ local sf = sync.filters
 
 local controlGroup = umg.group("controllable", "x", "y")
 
-server.on("CONGLOMERATE", {
-    arguments = {sf.table},
+
+server.on("swapdimension", {
+    arguments = {},
     handler = function(username, ent)
         for _,e in ipairs(controlGroup)do
             if e.controller == username then
-                e.x = ent.x
-                e.y = ent.y
+                if e.dimension == dim1 then
+                    e.dimension = dim2
+                else
+                    e.dimension = dim1
+                end
             end
         end
     end
