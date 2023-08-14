@@ -3,12 +3,6 @@
 light.setBaseLighting(1,1,1)
 
 
-weather.rain.setOptions({
-    rainRate = 800,
-    rainDrift = 0.1
-})
-
-
 vignette.setStrength(0.65)
 
 
@@ -56,6 +50,10 @@ end)
 
 local listener = input.Listener({priority = 2})
 
+
+local DEFAULT_DIMENSION = dimensions.getDefaultDimension()
+
+
 function listener:keypressed(key, scancode, isrepeat)
     if scancode == "q" then
         local e = control.getPlayer()
@@ -73,8 +71,8 @@ function listener:keypressed(key, scancode, isrepeat)
     end
     if scancode == "y" then
         local cam = rendering.getCamera()
-        local dim = "overworld"
-        if cam:getDimension() == "overworld" then
+        local dim = DEFAULT_DIMENSION
+        if cam:getDimension() == DEFAULT_DIMENSION then
             dim = "other"
         end
         client.send("swapdimension", dim)

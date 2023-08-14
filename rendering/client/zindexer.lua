@@ -35,8 +35,8 @@ function ZIndexer:init(dimension)
     self.dimension = dimension
 
     -- Ordered drawing lists:
-    self.sortedFrozenEnts = objects.Array() -- for ents that dont move
-    self.sortedMoveEnts = objects.Array() -- for ents that move
+    self.sortedFrozenEnts = {} -- for ents that dont move
+    self.sortedMoveEnts = {} -- for ents that move
 
     -- { [ent] = true } a set of entities to be removed next flush
     self.removeBuffer = {}
@@ -90,7 +90,7 @@ local function pollRemoveBuffer(array, removeBuffer)
     for i=#array,1,-1 do
         local ent = array[i]
         if removeBuffer[ent] then
-            array:quickPop(i)
+            table.remove(array, i)
             removeBuffer[ent] = nil
         end
     end

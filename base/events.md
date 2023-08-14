@@ -46,6 +46,8 @@ tick  :  when there is a server tick
 ### These are emitted internally, i.e. NOT by the base mod!
 
 
+# @load()
+Called after mods have loaded
 
 
 # @update(dt)

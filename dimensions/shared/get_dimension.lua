@@ -3,6 +3,7 @@ local constants = require("shared.constants")
 
 
 local DEFAULT_DIMENSION = constants.DEFAULT_DIMENSION
+local type = type
 
 
 local function getDimension(ent)
