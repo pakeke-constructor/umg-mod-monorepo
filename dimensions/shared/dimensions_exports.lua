@@ -2,35 +2,13 @@
 require("dimensions_events")
 local getDimension = require("shared.get_dimension")
 
+local api = require("shared.dimensions")
+
 
 local dimensions = {}
 
 
 dimensions.getDimension = getDimension
-
-
-local dimensionSet = objects.Set()
-
-umg.on("dimensions:dimensionCreated", function(dim)
-    dimensionSet:add(dim)
-end)
-
-umg.on("dimensions:dimensionDestroyed", function(dim)
-    dimensionSet:remove(dim)
-end)
-
-
-
-function dimensions.getAllDimensions()
-    return dimensionSet
-end
-
-
-
-function dimensions.exists(dim)
-    return dimensionSet:has(dim)
-end
-
 
 
 local DimensionVector = require("shared.dimension_vector")
@@ -68,6 +46,17 @@ function dimensions.generateUniqueDimension(name)
     end
 end
 
+
+if server then
+--[[
+    creating / destroying is only available on server
+]]
+dimensions.server = {}
+
+dimensions.server.createDimension = api.createDimension
+dimensions.server.destroyDimension = api.destroyDimension
+
+end
 
 
 

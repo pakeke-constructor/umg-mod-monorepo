@@ -72,6 +72,17 @@ end)
 
 
 
+local function tryMoveToDimension(ent, oldDim, newDim)
+    -- tries to move an entity to a dimension.
+    -- If this operation fails, returns false. Else true
+    if dimensions.exists(newDim) then
+        entToDimension[ent] = newDim
+        umg.call("dimensions:entityMoved", ent, oldDim, newDim)
+        return true
+    end
+end
+
+
 
 local function updateEnt(ent)
     --[[
@@ -85,8 +96,23 @@ local function updateEnt(ent)
     local oldDim = getDimension(entToDimension[ent])
     if oldDim ~= dim then
         local newDim = dim
-        entToDimension[ent] = dim
-        umg.call("dimensions:entityMoved", ent, oldDim, newDim)
+        local success = tryMoveToDimension(ent, oldDim, newDim)
+        if not success then
+            -- if the new dimension doesn't exist,
+            -- emit an event telling the system that an entity tried to move into void.
+            umg.call("dimensions:entityMovedIntoVoid", ent, newDim, oldDim)
+            -- try move again. (the dimension may exist now)
+            --[[
+                TODO: this may not work properly!
+                the idea is to allow for the above callback to generate
+                a dimension if needed,
+                but if dimensions are represented as `dimensionController`
+                entities, there will be one frame of buffering before
+                the dimensionController actually exists....
+                do some thinking!!!!
+            ]]
+            tryMoveToDimension(ent, oldDim, newDim)
+        end
     end
 end
 
@@ -119,7 +145,7 @@ umg.on("@playerJoin", function(clientId)
     server.unicast(clientId, "dimensions:setDimensions", buf)
 end)
 
-else
+else-- client:
 
 client.on("dimensions:setDimensions", function(buf)
     for _, dim in ipairs(buf) do
@@ -136,3 +162,5 @@ umg.on("@load", function()
     dimensions.createDimension(constants.DEFAULT_DIMENSION)
 end)
 
+
+return dimensions

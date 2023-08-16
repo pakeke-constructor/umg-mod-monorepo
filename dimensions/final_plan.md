@@ -46,9 +46,9 @@ end)
 
 
 
-dimensions.createDimension(dimName) -- creates a new dimension
+dimensions.server.createDimension(dimName) -- creates a new dimension
 
-dimensions.destroyDimension(dimName) -- destroys a dimension
+dimensions.server.destroyDimension(dimName) -- destroys a dimension
 
 ```
 

@@ -49,3 +49,22 @@ chat.handleCommand("spin", {
 })
 
 
+
+local dtMod = 1
+
+chat.handleCommand("dt", {
+    adminLevel = 50,
+    arguments = {{
+        type = "number",
+        name = "dt"
+    }},
+    handler = function(sender, a)
+        dtMod = a
+    end
+})
+
+
+umg.answer("state:getDeltaTimeMultiplier", function()
+    return dtMod
+end)
+

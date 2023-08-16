@@ -33,7 +33,7 @@ return {
     maxHealth = 40,
 
     physics = {
-        shape = love.physics.newCircleShape(15);
+        shape = love.physics.newCircleShape(5);
         friction = 7
     },
 
