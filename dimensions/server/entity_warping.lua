@@ -5,7 +5,7 @@ Handles entities changing dimensions
 
 ]]
 
-
+local constants = require("shared.constants")
 local getDimension = require("shared.get_dimension")
 
 
@@ -18,13 +18,35 @@ local entToDimension = {--[[
 
 
 
+local DEFAULT_DIMENSION = constants.DEFAULT_DIMENSION
+
 
 local dimensionGroup = umg.group("dimension")
+
+
+local function moveDimensions(ent, oldDim, newDim)
+    if dimensions.getOverseer(newDim) then
+        -- then the dimension exists:
+        entToDimension[ent] = newDim
+        umg.call("dimensions:entityMoved", ent, oldDim, newDim)
+    else
+        -- if the new dimension doesn't exist,
+        -- emit an event telling the system that an entity tried to move into void.
+        ent.dimension = oldDim
+        umg.call("dimensions:entityMoveFailed", ent, oldDim, newDim)
+    end
+end
+
 
 
 dimensionGroup:onAdded(function(ent)
     local dim = getDimension(ent)
     entToDimension[ent] = dim
+    if dim ~= DEFAULT_DIMENSION then
+        -- then this entity has moved dimensions!
+        -- Since ent.dimension == nil implies that the entity is in DEFAULT dimension
+        moveDimensions(ent, DEFAULT_DIMENSION, dim)
+    end
 end)
 
 
@@ -43,19 +65,10 @@ local function updateEnt(ent)
         This allows any code on server-side to change dimensions on the fly,
         and have no weird issues.
     ]]
-    local dim = getDimension(ent)
+    local newDim = getDimension(ent)
     local oldDim = getDimension(entToDimension[ent])
-    if oldDim ~= dim then
-        local newDim = dim
-        if dimensions.getOverseer(newDim) then
-            entToDimension[ent] = newDim
-            umg.call("dimensions:entityMoved", ent, oldDim, newDim)
-            print("WARP :: ", ent, oldDim, newDim)
-        else
-            -- if the new dimension doesn't exist,
-            -- emit an event telling the system that an entity tried to move into void.
-            umg.call("dimensions:entityMoveFailed", ent, oldDim, newDim)
-        end
+    if oldDim ~= newDim then
+        moveDimensions(ent, oldDim, newDim)
     end
 end
 
