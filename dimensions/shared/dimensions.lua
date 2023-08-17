@@ -41,7 +41,7 @@ local createDimTc = typecheck.assert("string", "table?")
 function dimensions.createDimension(dimension, ent_or_nil)
     createDimTc(dimension, ent_or_nil)
     if dimensionToControllerEnt[dimension] then
-        -- what do we do? error?
+        error("Duplicate dimension created: " .. tostring(dimension))
     end
 
     -- create a dimension handler entity if one wasn't passed in
