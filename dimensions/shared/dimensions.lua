@@ -12,7 +12,7 @@ local dimensions = {}
 
 
 
-local dimensionControllerGroup = umg.group("dimensionController")
+local controllingDimensionGroup = umg.group("controllingDimension")
 
 
 local dimensionToControllerEnt = {--[[
@@ -39,16 +39,18 @@ local function destroyDimension(dimension)
 end
 
 
-dimensionControllerGroup:onAdded(function(ent)
-    assert(ent.dimensionController, "wot wot?")
-    dimensionToControllerEnt[ent.dimensionController] = ent
-    controllerEntToDimension[ent] = ent.dimensionController
+controllingDimensionGroup:onAdded(function(ent)
+    assert(ent.controllingDimension, "wot wot?")
+    local dim = ent.controllingDimension
+    dimensionToControllerEnt[dim] = ent
+    controllerEntToDimension[ent] = dim
+    umg.call("dimensions:dimensionCreated", dim, ent)
 end)
 
 
-dimensionControllerGroup:onRemoved(function(ent)
-    if server and ent.dimensionController then
-        destroyDimension(ent.dimensionController)
+controllingDimensionGroup:onRemoved(function(ent)
+    if server and ent.controllingDimension then
+        destroyDimension(ent.controllingDimension)
     end
 end)
 
@@ -67,11 +69,9 @@ function dimensions.createDimension(dimension, ent_or_nil)
 
     -- create a dimension handler entity if one wasn't passed in
     local ent = ent_or_nil or server.entities.dimension_controller()
-    -- Set the dimension
+    ent.controllingDimension = dimension
 
-    ent.dimensionController = dimension
     dimensionToControllerEnt[dimension] = ent
-    umg.call("dimensions:dimensionCreated", dimension, ent)
     return ent
 end
 
@@ -86,7 +86,7 @@ end
 
 
 
-function dimensions.getController(dim)
+function dimensions.getOverseer(dim)
     -- gets the controller entity for a dimension.
     -- If the dimension doesn't exist, nil is returned.
     return dimensionToControllerEnt[dim]

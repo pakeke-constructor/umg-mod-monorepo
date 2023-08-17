@@ -547,12 +547,13 @@ end
 
 
 
-local function newPhysicsRectangle(x,y,w,h)
+local function newPhysicsRectangle(dvec, w, h)
     --[[
         (x,y) is top left.
         w,h is width and height of the block.
     ]]
-    local world = physics.getWorld()
+    local x, y = dvec.x, dvec.y
+    local world = physics.getWorld(dvec.dimension)
     local body = love.physics.newBody(world,x+w/2,y+h/2,"static")
     local shape = love.physics.newRectangleShape(w,h)
     local fixture = love.physics.newFixture(body,shape)
@@ -560,9 +561,10 @@ local function newPhysicsRectangle(x,y,w,h)
 end
 
 
-local function newPhysicsPolygon(cX, cY, a,b,c,d)
+local function newPhysicsPolygon(dvec, a,b,c,d)
     -- cX and cY are centerX and centerY
-    local world = physics.getWorld()
+    local cX, cY = dvec.x, dvec.y
+    local world = physics.getWorld(dvec.dimension)
     local body = love.physics.newBody(world, cX, cY, "static") 
     local shape = love.physics.newPolygonShape(
         a.x-cX, a.y-cY, 

@@ -39,28 +39,57 @@ local function beginContact(fixture_A, fixture_B, contact_obj)
 end
 
 
-local world
+local dimensionToWorld = {--[[
+    [dimension] -> box2d world
+]]}
 
-local function newWorld()
-    if world then
-        world:destroy()
-    end
-    world = love.physics.newWorld(0,0)
-    --[[
-        TODO: should we be using the other callbacks here???
-    ]]
+
+
+local strTc = typecheck.assert("string")
+
+
+local function createPhysicsWorld(dimension)
+    strTc(dimension)
+    local world = love.physics.newWorld(0,0)
+    -- TODO: should we be using the other callbacks here???
     world:setCallbacks(beginContact, nil, nil, nil)
+    dimensionToWorld[dimension] = world
 end
 
 
-newWorld() -- The box2d physics world used by entities
+
+
+local function destroyPhysicsWorld(dimension)
+    strTc(dimension)
+    local world = dimensionToWorld[dimension]
+    if world then
+        world:destroy()
+        dimensionToWorld[dimension] = nil
+    end
+end
 
 
 
---[[
-    : Must be changed when dimensions mod is made!
-]]
-umg.on("@createWorld", newWorld)
+local function getPhysicsWorld(dimension)
+    dimension = dimensions.getDimension(dimension)
+    local world = dimensionToWorld[dimension]
+    if not world then
+        createPhysicsWorld(dimension)
+        world = dimensionToWorld[dimension]
+    end
+    return world
+end
+
+
+
+umg.on("dimensions:dimensionCreated", function(dimension, ent)
+    createPhysicsWorld(dimension)
+end)
+
+
+umg.on("dimensions:dimensionDestroyed", function(dimension, ent)
+    destroyPhysicsWorld(dimension)
+end)
 
 
 
@@ -104,7 +133,11 @@ umg.on("state:gameUpdate", function(dt)
     for _, ent in ipairs(physicsGroup) do
         preUpdateEnt(ent)
     end
-    world:update(dt)
+
+    for _dim, world in pairs(dimensionToWorld) do
+        world:update(dt)
+    end
+
     for _, ent in ipairs(physicsGroup) do
         postUpdateEnt(ent)
     end
@@ -158,7 +191,8 @@ local DEFAULT_FRICTION = constants.DEFAULT_FRICTION
 
 
 physicsGroup:onAdded(function(ent)
-    if world:isLocked( ) then 
+    local world = getPhysicsWorld(ent.dimension)
+    if world:isLocked() then 
         error("World was locked! This is a bug on my behalf, sorry")  
     end
     if (not ent.x) or (not ent.y) then
@@ -211,9 +245,12 @@ end)
 
 
 
-function physics.getWorld()
-    return world
+function physics.getWorld(dimension)
+    dimension = dimensions.getDimension(dimension)
+    strTc(dimension)
+    return dimensionToWorld[dimension]
 end
+
 
 
 umg.expose("physics", physics)

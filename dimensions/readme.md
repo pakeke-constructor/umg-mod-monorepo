@@ -67,9 +67,9 @@ dimensions.createDimension("my_dimension", portalEnt)
 
 -----------------------
 
-We can get the controller entity for a dimension with `dimensions.getController`:
+We can get the controller entity for a dimension with `dimensions.getOverseer`:
 ```lua
-local ent = dimensions.getController(dimension)
+local ent = dimensions.getOverseer(dimension)
 if ent == nil then
     print("dimension doesn't exist: ", dimension)
 end

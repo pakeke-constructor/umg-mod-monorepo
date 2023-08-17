@@ -1,4 +1,4 @@
 {
-    "uses": ["state", "xy"],
+    "uses": ["state", "dimensions", "xy"],
     "type": "base"
 }

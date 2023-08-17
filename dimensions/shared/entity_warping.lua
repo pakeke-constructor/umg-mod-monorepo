@@ -47,9 +47,10 @@ local function updateEnt(ent)
     local oldDim = getDimension(entToDimension[ent])
     if oldDim ~= dim then
         local newDim = dim
-        if dimensions.getController(newDim) then
+        if dimensions.getOverseer(newDim) then
             entToDimension[ent] = newDim
             umg.call("dimensions:entityMoved", ent, oldDim, newDim)
+            print("WARP :: ", ent, oldDim, newDim)
         else
             -- if the new dimension doesn't exist,
             -- emit an event telling the system that an entity tried to move into void.

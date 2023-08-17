@@ -47,7 +47,7 @@ local function isOnScreen(dVec, leighway)
     local x, y, dimension = dVec.x, getDrawY(dVec.y), dVec.dimension
     local w,h = screenWidth, screenHeight
     local camera = currentCamera.getCamera()
-    if (camera:getDimension() or DEFAULT_DIMENSION) ~= (dimension or DEFAULT_DIMENSION) then
+    if camera:getDimension() ~= (dimension or DEFAULT_DIMENSION) then
         return false -- camera is looking at a different dimension
     end
     leighway = leighway or DEFAULT_LEIGHWAY

@@ -45,7 +45,7 @@ end)
 
 local ent = dimensions.server.createDimension(dimName, ent?)
 -- creates a new dimension.
--- If an entity is passed in, this entity is the dimensionController
+-- If an entity is passed in, this entity is the controller for this dim
 
 dimensions.server.destroyDimension(dimName)
 -- destroys a dimension

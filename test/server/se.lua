@@ -93,6 +93,7 @@ server.on("swapdimension", {
     handler = function(username, dim)
         for _,e in ipairs(controlGroup)do
             if e.controller == username then
+                print("going to: ", dim)
                 e.dimension = dim
             end
         end

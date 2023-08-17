@@ -248,7 +248,7 @@ CONS:
 # question B:
 How are dimensions persisted to disk?
 
-IDEA: `dimensionController` component.
+IDEA: `controllingDimension` component.
 This component signifies that this entity owns/controls this dimension.
 
 That way, when we mutate dimensions, we can simply change the 
@@ -274,7 +274,7 @@ With this setup, we could write code like so:
 ```lua
 function lighting.setBaseLighting(dim, color)
     strTc(dim)
-    local ent = dimensions.getDimensionController(dim)
+    local ent = dimensions.getOverseer(dim)
     if ent then
         ent.baseLighting = color
         sync.syncComponent(ent, "dimensionLighting")
