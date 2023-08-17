@@ -186,11 +186,10 @@ end
 
 
 
-
 local DEFAULT_FRICTION = constants.DEFAULT_FRICTION
 
 
-physicsGroup:onAdded(function(ent)
+local function addToPhysicsWorld(ent)
     local world = getPhysicsWorld(ent.dimension)
     if world:isLocked() then 
         error("World was locked! This is a bug on my behalf, sorry")  
@@ -213,20 +212,11 @@ physicsGroup:onAdded(function(ent)
 
     fixture_to_ent[fixture] = ent
     ent_to_fixture[ent] = fixture
-end)
+end
 
 
 
-umg.answer("xy:isFrictionDisabled", function(ent)
-    -- physics entities shouldnt be bound by friction
-    return ent.physics
-end)
-
-
-
-
-
-physicsGroup:onRemoved(function(ent)
+local function removeFromPhysicsWorld(ent, dimension)
     local fixture = ent_to_fixture[ent]
     local body = fixture:getBody()
     fixture_to_ent[fixture] = nil
@@ -241,6 +231,37 @@ physicsGroup:onRemoved(function(ent)
     end
     -- Dont need to destroy the shape, 
     -- as it is shared between all ent instances.
+end
+
+
+
+umg.on("dimensions:entityMoved", function(ent, oldDim, newDim)
+    removeFromPhysicsWorld(ent)
+    addToPhysicsWorld(ent)
+end)
+
+
+
+
+
+
+physicsGroup:onAdded(function(ent)
+    addToPhysicsWorld(ent)
+end)
+
+
+
+umg.answer("xy:isFrictionDisabled", function(ent)
+    -- physics entities shouldnt be bound by friction
+    return ent.physics
+end)
+
+
+
+
+
+physicsGroup:onRemoved(function(ent)
+    removeFromPhysicsWorld(ent)
 end)
 
 

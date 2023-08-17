@@ -28,13 +28,10 @@ local function moveDimensions(ent, oldDim, newDim)
     if dimensions.getOverseer(newDim) then
         -- then the dimension exists:
         entToDimension[ent] = newDim
-        print("WARPED", ent.id, oldDim, newDim)
         umg.call("dimensions:entityMoved", ent, oldDim, newDim)
     else
         -- if the new dimension doesn't exist,
         -- emit an event telling the system that an entity tried to move into void.
-        print("warp failed: ", ent.id, oldDim, newDim)
-        print(umg.inspect(dimensions.getAllDimensions()))
         ent.dimension = oldDim
         umg.call("dimensions:entityMoveFailed", ent, oldDim, newDim)
     end
