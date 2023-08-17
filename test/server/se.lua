@@ -32,6 +32,8 @@ local dim2 = "other"
 
 
 umg.on("@createWorld", function()
+    dimensions.server.createDimension(dim2)
+
     for i=1, 30 do
         local e = newItem(ents.item, 1)
         e.dimension = dim2

@@ -28,10 +28,13 @@ local function moveDimensions(ent, oldDim, newDim)
     if dimensions.getOverseer(newDim) then
         -- then the dimension exists:
         entToDimension[ent] = newDim
+        print("WARPED", ent.id, oldDim, newDim)
         umg.call("dimensions:entityMoved", ent, oldDim, newDim)
     else
         -- if the new dimension doesn't exist,
         -- emit an event telling the system that an entity tried to move into void.
+        print("warp failed: ", ent.id, oldDim, newDim)
+        print(umg.inspect(dimensions.getAllDimensions()))
         ent.dimension = oldDim
         umg.call("dimensions:entityMoveFailed", ent, oldDim, newDim)
     end
@@ -41,11 +44,12 @@ end
 
 dimensionGroup:onAdded(function(ent)
     local dim = getDimension(ent)
-    entToDimension[ent] = dim
     if dim ~= DEFAULT_DIMENSION then
         -- then this entity has moved dimensions!
         -- Since ent.dimension == nil implies that the entity is in DEFAULT dimension
         moveDimensions(ent, DEFAULT_DIMENSION, dim)
+    else
+        entToDimension[ent] = DEFAULT_DIMENSION
     end
 end)
 
