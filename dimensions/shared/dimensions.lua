@@ -3,7 +3,6 @@
 require("dimensions_events")
 
 
-local getDimension = require("shared.get_dimension")
 local constants = require("shared.constants")
 
 
@@ -13,102 +12,68 @@ local dimensions = {}
 
 
 
-local dimensionSet = objects.Set()
+local dimensionControllerGroup = umg.group("dimensionController")
 
 
+local dimensionToControllerEnt = {--[[
+    [dimension] -> controllerEnt
+]]}
 
 
-local entToDimension = {--[[
-    keeps track of what dimension entities are in.
-
-    [ ent ] -> dimension
+local controllerEntToDimension = {--[[
+    [controllerEnt] -> dimension
 ]]}
 
 
 
 
-
-local strTc = typecheck.assert("string")
-
-function dimensions.createDimension(dim)
-    -- creates a dimension (if it doesnt exist)
-    strTc(dim)
-    if not dimensionSet:has(dim) then
-        dimensionSet:add(dim)
-        umg.call("dimensions:dimensionCreated", dim)
-    end
-end
-
-
-function dimensions.destroyDimension(dim)
-    -- destroys a dimension (if it exists)
-    strTc(dim)
-    if dimensionSet:has(dim) then
-        dimensionSet:remove(dim)
-        umg.call("dimensions:dimensionDestroyed", dim)
-    end
-end
-
-
-function dimensions.exists(dim)
-    return dimensionSet:has(dim)
-end
-
-
-
-
-local dimensionGroup = umg.group("dimension")
-
-
-dimensionGroup:onAdded(function(ent)
-    local dim = getDimension(ent)
-    entToDimension[ent] = dim
-end)
-
-
-dimensionGroup:onRemoved(function(ent)
-    entToDimension[ent] = nil
+dimensionControllerGroup:onAdded(function(ent)
+    assert(ent.dimensionController, "wot wot?")
+    dimensionToControllerEnt[ent.dimensionController] = ent
+    controllerEntToDimension[ent] = ent.dimensionController
 end)
 
 
 
+local createDimTc = typecheck.assert("string", "table?")
 
-local function updateEnt(ent)
-    --[[
-        checks if the entity has changed dimensions.
-        if so, emit a `entityMoved` callback.
 
-        This allows any code on server-side to change dimensions on the fly,
-        and have no weird issues.
-    ]]
-    local dim = getDimension(ent)
-    local oldDim = getDimension(entToDimension[ent])
-    if oldDim ~= dim then
-        local newDim = dim
-        if dimensions.exists(newDim) then
-            entToDimension[ent] = newDim
-            umg.call("dimensions:entityMoved", ent, oldDim, newDim)
-        else
-            -- if the new dimension doesn't exist,
-            -- emit an event telling the system that an entity tried to move into void.
-            umg.call("dimensions:entityMoveFailed", ent, oldDim, newDim)
-        end
+function dimensions.createDimension(dimension, ent_or_nil)
+    createDimTc(dimension, ent_or_nil)
+    if dimensionToControllerEnt[dimension] then
+        -- what do we do? error?
     end
+
+    -- create a dimension handler entity if one wasn't passed in
+    local ent = ent_or_nil or server.entities.dimension_controller()
+    -- Set the dimension
+
+    ent.dimensionController = dimension
+    dimensionToControllerEnt[dimension] = dimension
+    umg.call("dimensions:dimensionCreated", dimension, ent)
+    return ent
 end
 
 
 
-if server then
-
-umg.on("@tick", function()
-    for i=1, #dimensionGroup do
-        local ent = dimensionGroup[i]
-        updateEnt(ent)
-    end
-end)
+function dimensions.destroyDimension(dimension)
 
 end
 
+
+
+function dimensions.getController(dim)
+    -- gets the controller entity for a dimension.
+    -- If the dimension doesn't exist, nil is returned.
+    return dimensionToControllerEnt[dim]
+end
+
+
+
+
+function dimensions.getAllDimensionControllers()
+    return dimensionControllerGroup
+end
 
 
 
