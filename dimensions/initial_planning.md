@@ -252,7 +252,7 @@ IDEA: `dimensionController` component.
 This component signifies that this entity owns/controls this dimension.
 
 That way, when we mutate dimensions, we can simply change the 
-components within the dimensionOverseer entity.
+components within the controller entity.
 
 This is a great idea, because dimension properties will be automatically
 propagated to clients when they join the server.

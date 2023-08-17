@@ -19,7 +19,7 @@ local dim = dimensions.getDimension(ent.dimension)
 local dim = dimensions.getDefaultDimension() -- "overworld"
 
 
-local my_dim = dimensions.server.generateUniqueDimension("name") 
+local my_dim = dimensions.generateUniqueDimension("name") 
 -- generates a new unique dimension name containing the word "name",
 -- like `name_30948945845` or something.  Great for temporary dimensions.
 

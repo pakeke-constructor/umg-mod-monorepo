@@ -6,6 +6,21 @@ Allows separation of entities via keyword.
 Think of a "dimension" as a realm where entities can exist in.
 
 
+To put an entity inside a dimension, simply change the `.dimension` component:
+```lua
+ent.dimension = "my_dimension"
+-- now `ent` is inside of `my_dimension`
+-- If `my_dimension` doesn'
+```
+If `ent.dimension` is nil, the entity is in the default dimension.
+
+We can also create/destroy dimensions:
+```lua
+local ent = dimensions.createDimension("nether")
+
+dimensions.createDimension("yomi")
+```
+
 
 
 ### DimensionVectors:
@@ -25,25 +40,27 @@ They are just a table of the following shape:
 
 
 ### Dimension controllers:
-Each dimension has an entity that is controlling it.
-This is the "controller" for that dimension.
+Dimensions are represented by a single entity internally.
 
-
-A controller entity is created automatically when we create a dimension:
+It is created automatically when we create a dimension:
 ```lua
 local ent = dimensions.createDimension("my_dimension")
 -- `ent` is the controller entity for `my_dimension`
 ```
 
-If the controller entity is deleted, then that dimension is destroyed.
+If the "controller entity" is deleted, then that dimension is destroyed.
 
-We can also specify our own controller entities, by passing them in.
+We can also specify our own controller entities, by passing them in:
 ```lua
 local portalEnt = entities.server.newPortal(...)
+
+-- generate a unique dimension name. This is guaranteed to be unique,
+-- and is guaranteed to contain the string passed in:
+local dimensionName = dimensions.generateUniqueDimension("portal")
+-- dimensionName:  portal_3894495845845453489
+
 dimensions.createDimension("my_dimension", portalEnt)
---[[
-    now, if the portal entity is deleted, the dimension is destroyed too.
-]]
+-- now, if portalEnt is deleted, the dimension is destroyed too.
 ```
 
 -----------------------
@@ -53,12 +70,14 @@ dimensions.createDimension("my_dimension", portalEnt)
 We can get the controller entity for a dimension with `dimensions.getController`:
 ```lua
 local ent = dimensions.getController(dimension)
+if ent == nil then
+    print("dimension doesn't exist: ", dimension)
+end
 ```
-If the dimension doesn't exist, `nil` is returned.
 
 We can store any data we want in this entity. For example:
-- light level of the dimension.
-- fog level
+- light level of the dimension
+- fog density
 - ground texture
 
 

@@ -10,6 +10,8 @@ local dimensions = {}
 
 dimensions.getDimension = getDimension
 
+dimensions.getController = api.getController
+
 
 local DimensionVector = require("shared.dimension_vector")
 dimensions.DimensionVector = DimensionVector

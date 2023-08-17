@@ -47,7 +47,7 @@ local function updateEnt(ent)
     local oldDim = getDimension(entToDimension[ent])
     if oldDim ~= dim then
         local newDim = dim
-        if dimensions.exists(newDim) then
+        if dimensions.getController(newDim) then
             entToDimension[ent] = newDim
             umg.call("dimensions:entityMoved", ent, oldDim, newDim)
         else

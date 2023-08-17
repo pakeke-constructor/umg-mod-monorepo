@@ -39,6 +39,7 @@ local screenWidth, screenHeight = love.graphics.getWidth(), love.graphics.getHei
 
 
 
+local DEFAULT_DIMENSION = dimensions.getDefaultDimension()
 
 local function isOnScreen(dVec, leighway)
     -- Returns true if a dimensionVector is on screen
@@ -46,7 +47,7 @@ local function isOnScreen(dVec, leighway)
     local x, y, dimension = dVec.x, getDrawY(dVec.y), dVec.dimension
     local w,h = screenWidth, screenHeight
     local camera = currentCamera.getCamera()
-    if camera:getDimension() ~= dimension then
+    if (camera:getDimension() or DEFAULT_DIMENSION) ~= (dimension or DEFAULT_DIMENSION) then
         return false -- camera is looking at a different dimension
     end
     leighway = leighway or DEFAULT_LEIGHWAY

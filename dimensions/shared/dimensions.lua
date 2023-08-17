@@ -27,11 +27,31 @@ local controllerEntToDimension = {--[[
 
 
 
+local function destroyDimension(dimension)
+    assert(server, "?")
+    local ent = dimensionToControllerEnt[dimension]
+    if ent then
+        dimensionToControllerEnt[dimension] = nil
+        controllerEntToDimension[ent] = nil
+        umg.call("dimensions:dimensionDestroyed", dimension, ent)
+        ent:delete()
+    end
+end
+
+
 dimensionControllerGroup:onAdded(function(ent)
     assert(ent.dimensionController, "wot wot?")
     dimensionToControllerEnt[ent.dimensionController] = ent
     controllerEntToDimension[ent] = ent.dimensionController
 end)
+
+
+dimensionControllerGroup:onRemoved(function(ent)
+    if server and ent.dimensionController then
+        destroyDimension(ent.dimensionController)
+    end
+end)
+
 
 
 
@@ -40,6 +60,7 @@ local createDimTc = typecheck.assert("string", "table?")
 
 function dimensions.createDimension(dimension, ent_or_nil)
     createDimTc(dimension, ent_or_nil)
+    assert(server, "?")
     if dimensionToControllerEnt[dimension] then
         error("Duplicate dimension created: " .. tostring(dimension))
     end
@@ -49,15 +70,18 @@ function dimensions.createDimension(dimension, ent_or_nil)
     -- Set the dimension
 
     ent.dimensionController = dimension
-    dimensionToControllerEnt[dimension] = dimension
+    dimensionToControllerEnt[dimension] = ent
     umg.call("dimensions:dimensionCreated", dimension, ent)
     return ent
 end
 
 
 
-function dimensions.destroyDimension(dimension)
+local strTc = typecheck.assert("string")
 
+function dimensions.destroyDimension(dimension)
+    strTc(dimension)
+    destroyDimension(dimension)
 end
 
 
@@ -71,8 +95,12 @@ end
 
 
 
-function dimensions.getAllDimensionControllers()
-    return dimensionControllerGroup
+function dimensions.getAllDimensions()
+    local allDimensions = objects.Array()
+    for _, dim in pairs(controllerEntToDimension) do
+        allDimensions:add(dim)
+    end
+    return allDimensions
 end
 
 

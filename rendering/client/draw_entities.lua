@@ -52,8 +52,7 @@ end
 
 
 local function addToZIndexer(ent)
-    local dim = dimensions.getDimension(ent)
-    local zindexer = getZIndexer(dim)
+    local zindexer = getZIndexer(ent.dimension)
     zindexer:addEntity(ent)
 end
 
@@ -86,6 +85,7 @@ end)
 
 umg.on("dimensions:entityMoved", function(ent, oldDimension, _newDim)
     if not isDrawEntity(ent) then
+        -- This is hacky and dumb, but oh well.
         return
     end
 
@@ -115,7 +115,7 @@ end)
 ]]
 umg.on("rendering:drawEntities", function(camera)
     local dim = dimensions.getDimension(camera:getDimension())
-    local zindexer = dimensionToZIndexer[dim]
+    local zindexer = getZIndexer(dim)
     if zindexer then
         zindexer:drawEntities(camera)
     end
