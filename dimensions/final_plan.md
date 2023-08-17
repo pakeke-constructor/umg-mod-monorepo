@@ -24,9 +24,6 @@ local my_dim = dimensions.server.generateUniqueDimension("name")
 -- like `name_30948945845` or something.  Great for temporary dimensions.
 
 
-dimensions.exists(dim) -- true/false, whether `dim` exists as a dimension
-
-
 local arr = dimensions.getAllDimensions() -- gets all dimensions
 
 
@@ -46,9 +43,15 @@ end)
 
 
 
-dimensions.server.createDimension(dimName) -- creates a new dimension
+local ent = dimensions.server.createDimension(dimName, ent?)
+-- creates a new dimension.
+-- If an entity is passed in, this entity is the dimensionController
 
-dimensions.server.destroyDimension(dimName) -- destroys a dimension
+dimensions.server.destroyDimension(dimName)
+-- destroys a dimension
+
+
+
 
 ```
 
