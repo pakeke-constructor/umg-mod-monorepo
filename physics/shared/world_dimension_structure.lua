@@ -14,7 +14,7 @@ Inherits from DimensionStructure.
 local WorldDimensionStructure = objects.Class("physics:WorldDimensionStructure", dimensions.DimensionStructure)
 
 
-local DEFAULT_FRICTION = constants.DEFAULT_FRICTION
+local constants = require("shared.constants")
 
 
 
@@ -30,12 +30,12 @@ end
 
 
 function WorldDimensionStructure:getEntity(fixture)
-    return self.ent_to_fixture[fixture]
+    return self.fixture_to_ent[fixture]
 end
 
 
 function WorldDimensionStructure:getFixture(ent)
-    return self.fixture_to_ent[ent]
+    return self.ent_to_fixture[ent]
 end
 
 
@@ -75,7 +75,7 @@ end
 
 
 
-function DimensionStructure:addEntityToObject(world, ent)
+function WorldDimensionStructure:addEntityToObject(world, ent)
     local pc = ent.physics
 
     local bodyType = pc.type or constants.DEFAULT_BODY_TYPE
@@ -87,7 +87,7 @@ function DimensionStructure:addEntityToObject(world, ent)
     end
     local fixture = love.physics.newFixture(body, shape)
 
-    body:setLinearDamping(pc.friction or DEFAULT_FRICTION)
+    body:setLinearDamping(pc.friction or constants.DEFAULT_FRICTION)
 
     self.fixture_to_ent[fixture] = ent
     self.ent_to_fixture[ent] = fixture
@@ -95,7 +95,7 @@ end
 
 
 
-function DimensionStructure:removeEntityFromObject(_world, ent)
+function WorldDimensionStructure:removeEntityFromObject(_world, ent)
     local fixture = self:getFixture(ent)
     local body = fixture:getBody()
     self.fixture_to_ent[fixture] = nil
@@ -118,3 +118,6 @@ function WorldDimensionStructure:destroyObject(world)
     world:destroy()
 end
 
+
+
+return WorldDimensionStructure
