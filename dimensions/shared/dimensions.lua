@@ -12,7 +12,7 @@ local dimensions = {}
 
 
 
-local controllingDimensionGroup = umg.group("controllingDimension")
+local overseeingDimensionGroup = umg.group("overseeingDimension")
 
 
 local dimensionToControllerEnt = {--[[
@@ -39,18 +39,18 @@ local function destroyDimension(dimension)
 end
 
 
-controllingDimensionGroup:onAdded(function(ent)
-    assert(ent.controllingDimension, "wot wot?")
-    local dim = ent.controllingDimension
+overseeingDimensionGroup:onAdded(function(ent)
+    assert(ent.overseeingDimension, "wot wot?")
+    local dim = ent.overseeingDimension
     dimensionToControllerEnt[dim] = ent
     controllerEntToDimension[ent] = dim
     umg.call("dimensions:dimensionCreated", dim, ent)
 end)
 
 
-controllingDimensionGroup:onRemoved(function(ent)
-    if server and ent.controllingDimension then
-        destroyDimension(ent.controllingDimension)
+overseeingDimensionGroup:onRemoved(function(ent)
+    if server and ent.overseeingDimension then
+        destroyDimension(ent.overseeingDimension)
     end
 end)
 
@@ -69,7 +69,7 @@ function dimensions.createDimension(dimension, ent_or_nil)
 
     -- create a dimension handler entity if one wasn't passed in
     local ent = ent_or_nil or server.entities.dimension_controller()
-    ent.controllingDimension = dimension
+    ent.overseeingDimension = dimension
 
     dimensionToControllerEnt[dimension] = ent
     return ent

@@ -248,7 +248,7 @@ CONS:
 # question B:
 How are dimensions persisted to disk?
 
-IDEA: `controllingDimension` component.
+IDEA: `overseeingDimension` component.
 This component signifies that this entity owns/controls this dimension.
 
 That way, when we mutate dimensions, we can simply change the 
