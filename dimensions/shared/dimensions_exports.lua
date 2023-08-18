@@ -17,7 +17,7 @@ dimensions.getAllDimensions = api.getAllDimensions
 
 dimensions.DimensionVector = require("shared.dimension_vector")
 dimensions.DimensionPartition = require("shared.dimension_partition")
-dimensions.DimensionObject = require("shared.dimension_object")
+dimensions.DimensionStructure = require("shared.dimension_structure")
 
 
 --[[

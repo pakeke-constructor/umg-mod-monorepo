@@ -16,9 +16,9 @@ local getDimension = require("shared.get_dimension")
 
 
 local Partition = objects.Partition
-local DimensionObject = require("shared.dimension_object")
+local DimensionStructure = require("shared.dimension_object")
 
-local DimensionPartition = objects.Class("dimensions:DimensionPartition", DimensionObject)
+local DimensionPartition = objects.Class("dimensions:DimensionPartition", DimensionStructure)
 
 
 

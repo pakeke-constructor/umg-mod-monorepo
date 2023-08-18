@@ -1,7 +1,7 @@
 
 --[[
 
-A DimensionObject is an abstract data structure that contains
+A DimensionStructure is an abstract data structure that contains
 other Objects for each dimension.
 
 It's best understood through examples:
@@ -9,25 +9,25 @@ It's best understood through examples:
 
 For example:
 In the physics system, each dimension gets it's own physics world.
-Each physics world is stored cleanly inside of the `DimensionObject`.
-The DimensionObject handles moving entities between dimensions, by simply
+Each physics world is stored cleanly inside of the `DimensionStructure`.
+The DimensionStructure handles moving entities between dimensions, by simply
 removing entities from one physics world, and putting them in another.
 
 Another example:
 For rendering, each dimension has a ZIndexer data structure.
 (for ordered drawing.)
-All of the ZIndexers are handled by the DimensionObject.
+All of the ZIndexers are handled by the DimensionStructure.
 entities are moved between ZIndexers when they moved dimensions.
-(provided DimensionObject:entityMoved() is called)
+(provided DimensionStructure:entityMoved() is called)
 
 -------------------------
 
 There are 4 main functions that NEED to be called manually, or else it wont work:
 
-DimensionObject:super()  must be called on init
-DimensionObject:addEntity(ent)  adds entity
-DimensionObject:removeEntity(ent)  removes entity
-DimensionObject:entityMoved(ent, oldDim, newDim)  call this whenever `dimensions:entityMoved` event is called
+DimensionStructure:super()  must be called on init
+DimensionStructure:addEntity(ent)  adds entity
+DimensionStructure:removeEntity(ent)  removes entity
+DimensionStructure:entityMoved(ent, oldDim, newDim)  call this whenever `dimensions:entityMoved` event is called
 
 ]]
 
@@ -36,12 +36,12 @@ require("shared.dimension_vector") -- we need typecheck defs
 local getDimension = require("shared.get_dimension")
 
 
-local DimensionObject = objects.Class("dimensions:DimensionObject")
+local DimensionStructure = objects.Class("dimensions:DimensionStructure")
 
 
 
 
-function DimensionObject:super()
+function DimensionStructure:super()
     self.dimensionToObject = {--[[
         [dimension] --> Object
     ]]}
@@ -61,7 +61,7 @@ end
     guaranteed to return the object that contains this entity!!!!
     Use `getContainingObject` instead!!
 ]]
-function DimensionObject:getObject(dimension)
+function DimensionStructure:getObject(dimension)
     if self.dimensionToObject[dimension] then
         return self.dimensionToObject[dimension]
     end
@@ -76,7 +76,7 @@ end
 --[[
     Gets the object that contains the given entity.
 ]] 
-function DimensionObject:getObjectForEntity(ent)
+function DimensionStructure:getObjectForEntity(ent)
     local dim = self.entityToDimension[ent]
     if dim then
         return self:getObject(dim)
@@ -93,7 +93,7 @@ end
     If this isnt called, it's not the end of the world....
     we will just leak a bit of memory.
 ]]
-function DimensionObject:destroyDimension(dimension)
+function DimensionStructure:destroyDimension(dimension)
     local obj = self.dimensionToObject[dimension]
     if obj then
         self:destroyObject(obj)
@@ -106,7 +106,7 @@ end
     this doesn't actually *need* to be called.
     But you should call it whenever there's a `:dimensionCreated` event.
 ]]
-function DimensionObject:createDimension(dimension)
+function DimensionStructure:createDimension(dimension)
     self:getObject(dimension)
 end
 
@@ -116,7 +116,7 @@ end
 --[[
     This must be called whenever dimensions:entityMoved is called.
 ]]
-function DimensionObject:entityMoved(ent, _oldDim, newDim)
+function DimensionStructure:entityMoved(ent, _oldDim, newDim)
     if not self:contains(ent) then
         return
     end
@@ -141,7 +141,7 @@ end
 --[[
     Adds entity to dstructure
 ]]
-function DimensionObject:addEntity(ent)
+function DimensionStructure:addEntity(ent)
     local dim = getDimension(ent)
     self.entityToDimension[ent] = dim
     local obj = self:getObject(dim)
@@ -153,7 +153,7 @@ end
 --[[
     Removed entity from dstructure
 ]]
-function DimensionObject:removeEntity(ent)
+function DimensionStructure:removeEntity(ent)
     local dim = self.entityToDimension[ent]
     self.entityToDimension[ent] = nil
     local obj = self:getObject(dim)
@@ -162,12 +162,12 @@ end
 
 
 
-function DimensionObject:contains(ent)
+function DimensionStructure:contains(ent)
     return self.entityToDimension[ent]
 end
 
 
-function DimensionObject:hasDimension(dimension)
+function DimensionStructure:hasDimension(dimension)
     return self.dimensionToObject[dimension]
 end
 
@@ -181,17 +181,17 @@ Functions that need to be overridden:
 ==============================================================
 ]]
 
-function DimensionObject:newObject(dimension)
+function DimensionStructure:newObject(dimension)
     error("This needs to be overridden")
 end
 
 
-function DimensionObject:addEntityToObject(object, ent)
+function DimensionStructure:addEntityToObject(object, ent)
     error("This needs to be overridden")
 end
 
 
-function DimensionObject:removeEntityFromObject(object, ent)
+function DimensionStructure:removeEntityFromObject(object, ent)
     error("This needs to be overridden")
 end
 
@@ -200,9 +200,9 @@ end
 --[[
     Optional Overrides:
 ]]
-function DimensionObject:destroyObject(object)
+function DimensionStructure:destroyObject(object)
     -- Optional override
 end
 
 
-return DimensionObject
+return DimensionStructure

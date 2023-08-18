@@ -4,9 +4,9 @@ local ZIndexer = require("client.zindexer")
 
 --[[
 to understand this class,
-you'll first must understand DimensionObject in the dimensions mod.
+you'll first must understand DimensionStructure in the dimensions mod.
 ]]
-local DimensionZIndexer = objects.Class("rendering:DimensionZIndexer", dimensions.DimensionObject)
+local DimensionZIndexer = objects.Class("rendering:DimensionZIndexer", dimensions.DimensionStructure)
 
 
 

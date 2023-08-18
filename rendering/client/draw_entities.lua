@@ -18,7 +18,7 @@ local DimensionZIndexer = require("client.dimension_zindexer")
 
 
 local dimensionZIndexer = DimensionZIndexer()
--- ^^^ is an instance of dimensions.DimensionObject
+-- ^^^ is an instance of dimensions.DimensionStructure
 
 
 
@@ -45,7 +45,7 @@ end)
 umg.on("dimensions:entityMoved", function(ent, oldDim, newDim)
     -- This is called for entities that aren't draw entities,
     -- but oh well.
-    -- The DimensionObject will handle it gracefully.
+    -- The DimensionStructure will handle it gracefully.
     dimensionZIndexer:entityMoved(ent, oldDim, newDim)
 end)
 
