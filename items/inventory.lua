@@ -417,10 +417,7 @@ local function moveIntoEmptySlot(self, slotX, slotY, otherInv, otherSlotX, other
 
     if count < item.stackSize then
         -- then we are only moving part of the stack; so we must create a copy
-        local typename = item:type()
-        local newItem = server.entities[typename]()
-        -- TODO: This is kinda shitty, as this means that all items must have a blank constructor.
-        -- It would be better to use `ent:clone()` here when that's implemented.
+        local newItem = item:deepClone()
         newItem.stackSize = count
         item.stackSize = item.stackSize - count
         otherInv:set(otherSlotX, otherSlotY, newItem)
