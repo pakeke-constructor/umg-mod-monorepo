@@ -20,9 +20,19 @@ All of the ZIndexers are handled by the DimensionStructure.
 entities are moved between ZIndexers when they moved dimensions.
 (provided DimensionStructure:entityMoved() is called)
 
+
+
+-------------------------
+functions that MUST be overridden:
 -------------------------
 
-There are 4 main functions that NEED to be called manually, or else it wont work:
+object = DimensionStructure:newObject(dimension)
+DimensionStructure:addEntityToObject(object, ent)
+DimensionStructure:removeEntityFromObject(object, ent)
+
+-------------------------
+Functions that NEED to be called manually, or else it wont work:
+-------------------------
 
 DimensionStructure:super()  must be called on init
 DimensionStructure:addEntity(ent)  adds entity
@@ -182,17 +192,17 @@ Functions that need to be overridden:
 ]]
 
 function DimensionStructure:newObject(dimension)
-    error("This needs to be overridden")
+    error("OVERRIDE ME: when a new data structure should be made")
 end
 
 
 function DimensionStructure:addEntityToObject(object, ent)
-    error("This needs to be overridden")
+    error("OVERRIDE ME: add an entity to the data structure `object`")
 end
 
 
 function DimensionStructure:removeEntityFromObject(object, ent)
-    error("This needs to be overridden")
+    error("OVERRIDE ME: remove an entity from the data structure `object`")
 end
 
 
