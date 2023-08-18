@@ -22,21 +22,9 @@ local physics = {}
 
 
 
-local fixture_to_ent = {}
-local ent_to_fixture = {}
-
-
 local constants = require("shared.constants")
 
 
-
-
-local function beginContact(fixture_A, fixture_B, contact_obj)
-    local ent_A = fixture_to_ent[fixture_A]
-    local ent_B = fixture_to_ent[fixture_B]
-    umg.call("physics:collide", ent_A, ent_B, contact_obj)
-    umg.call("physics:collide", ent_B, ent_A, contact_obj)
-end
 
 
 local dimensionToWorld = {--[[
@@ -46,39 +34,6 @@ local dimensionToWorld = {--[[
 
 
 local strTc = typecheck.assert("string")
-
-
-local function createPhysicsWorld(dimension)
-    strTc(dimension)
-    local world = love.physics.newWorld(0,0)
-    -- TODO: should we be using the other callbacks here???
-    world:setCallbacks(beginContact, nil, nil, nil)
-    dimensionToWorld[dimension] = world
-end
-
-
-
-
-local function destroyPhysicsWorld(dimension)
-    strTc(dimension)
-    local world = dimensionToWorld[dimension]
-    if world then
-        world:destroy()
-        dimensionToWorld[dimension] = nil
-    end
-end
-
-
-
-local function getPhysicsWorld(dimension)
-    dimension = dimensions.getDimension(dimension)
-    local world = dimensionToWorld[dimension]
-    if not world then
-        createPhysicsWorld(dimension)
-        world = dimensionToWorld[dimension]
-    end
-    return world
-end
 
 
 

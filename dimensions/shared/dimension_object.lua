@@ -102,6 +102,15 @@ function DimensionObject:destroyDimension(dimension)
 end
 
 
+--[[
+    this doesn't actually *need* to be called.
+    But you should call it whenever there's a `:dimensionCreated` event.
+]]
+function DimensionObject:createDimension(dimension)
+    self:getObject(dimension)
+end
+
+
 
 
 --[[
