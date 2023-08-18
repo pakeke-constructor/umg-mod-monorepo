@@ -3,6 +3,9 @@
 
 data structure for ordered drawing of entities.
 
+Sorts entities by draw-index (aka z-index),
+then draws them.
+
 ]]
 
 
@@ -28,12 +31,10 @@ local HEAVY_UPDATE_FRAMES = 50
 local ZIndexer = objects.Class("rendering:ZIndexer")
 
 
-function ZIndexer:init(dimension)
+function ZIndexer:init()
     --[[
         each ZIndexer uses
     ]]
-    self.dimension = dimension
-
     -- Ordered drawing lists:
     self.sortedFrozenEnts = {} -- for ents that dont move
     self.sortedMoveEnts = {} -- for ents that move

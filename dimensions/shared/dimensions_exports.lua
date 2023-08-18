@@ -15,11 +15,9 @@ dimensions.getOverseer = api.getOverseer
 dimensions.getAllDimensions = api.getAllDimensions
 
 
-local DimensionVector = require("shared.dimension_vector")
-dimensions.DimensionVector = DimensionVector
-
-local DimensionPartition = require("shared.dimension_partition")
-dimensions.DimensionPartition = DimensionPartition
+dimensions.DimensionVector = require("shared.dimension_vector")
+dimensions.DimensionPartition = require("shared.dimension_partition")
+dimensions.DimensionObject = require("shared.dimension_object")
 
 
 --[[

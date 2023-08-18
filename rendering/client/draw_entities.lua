@@ -14,56 +14,17 @@ local currentCamera = require("client.current_camera")
 
 local constants = require("client.constants")
 
-local ZIndexer = require("client.zindexer")
+local DimensionZIndexer = require("client.dimension_zindexer")
 
 
-
-
-
-local dimensionToZIndexer = {}
-
-local function getZIndexer(dim)
-    dim = dimensions.getDimension(dim)
-    if not dimensionToZIndexer[dim] then
-        dimensionToZIndexer[dim] = ZIndexer(dim)
-    end
-
-    return dimensionToZIndexer[dim]
-end
-
+local dimensionZIndexer = DimensionZIndexer()
+-- ^^^ is an instance of dimensions.DimensionObject
 
 
 
 umg.on("dimensions:dimensionDestroyed", function(dim)
-    dimensionToZIndexer[dim] = nil
+    dimensionZIndexer:destroyDimension(dim)
 end)
-
-
-
-local function isDrawEntity(ent)
-    if ent.draw and ent.x and ent.y then
-        return true
-    end
-    return false
-end
-
-
-
-
-
-local function addToZIndexer(ent)
-    local zindexer = getZIndexer(ent.dimension)
-    zindexer:addEntity(ent)
-end
-
-
-local function removeFromZIndexer(ent, dim)
-    -- removes entity from the ZIndexer for the specified dimension
-    local zindexer = getZIndexer(dim)
-    zindexer:removeEntity(ent)
-end
-
-
 
 
 
@@ -71,32 +32,22 @@ local drawGroup = umg.group("x", "y", "draw")
 
 
 drawGroup:onAdded(function(ent)
-    addToZIndexer(ent)
+    dimensionZIndexer:addEntity(ent)
 end)
+
 
 drawGroup:onRemoved(function(ent)
-    removeFromZIndexer(ent, ent.dimension)
+    dimensionZIndexer:removeEntity(ent)
 end)
 
 
 
-
-
-
-umg.on("dimensions:entityMoved", function(ent, oldDimension, _newDim)
-    -- This is a hacky and dumb way of doing things!
-    if isDrawEntity(ent) then
-        return
-    end
-
-    if oldDimension then
-        removeFromZIndexer(ent, oldDimension)
-    end
-
-    addToZIndexer(ent)
+umg.on("dimensions:entityMoved", function(ent, oldDim, newDim)
+    -- This is called for entities that aren't draw entities,
+    -- but oh well.
+    -- The DimensionObject will handle it gracefully.
+    dimensionZIndexer:entityMoved(ent, oldDim, newDim)
 end)
-
-
 
 
 
@@ -109,13 +60,12 @@ end)
 
 
 
-
 --[[
     main draw function
 ]]
 umg.on("rendering:drawEntities", function(camera)
     local dim = dimensions.getDimension(camera:getDimension())
-    local zindexer = getZIndexer(dim)
+    local zindexer = dimensionZIndexer:getObject(dim)
     if zindexer then
         zindexer:drawEntities(camera)
     end

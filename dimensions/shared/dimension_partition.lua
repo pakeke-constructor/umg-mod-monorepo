@@ -32,10 +32,7 @@ end
 
 
 
---[[
-==========================
-    OVERRIDES:
-]]
+-- OVERRIDES:
 function DimensionPartition:addEntityToObject(partition, ent)
     partition:addEntity(ent)
 end
@@ -47,15 +44,7 @@ end
 function DimensionPartition:newObject()
     return Partition(self.chunkSize)
 end
---[[
-    END OF OVERRIDES.
-==========================
-]]
-
-
-
-
-
+-- END OF OVERRIDES.
 
 
 

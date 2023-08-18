@@ -4,17 +4,30 @@
 A DimensionObject is an abstract data structure that contains
 other Objects for each dimension.
 
+It's best understood through examples:
 
-----------------------
 
-EXAMPLES:
+For example:
+In the physics system, each dimension gets it's own physics world.
+Each physics world is stored cleanly inside of the `DimensionObject`.
+The DimensionObject handles moving entities between dimensions, by simply
+removing entities from one physics world, and putting them in another.
 
-DimensionObject<ZIndexer> is used for rendering.
-Each entity gets put inside a ZIndexer data structure, per dimension.
+Another example:
+For rendering, each dimension has a ZIndexer data structure.
+(for ordered drawing.)
+All of the ZIndexers are handled by the DimensionObject.
+entities are moved between ZIndexers when they moved dimensions.
+(provided DimensionObject:entityMoved() is called)
 
-DimensionObject<Box2d_world> used for physics.
-Each dimension gets allocated a box2d world.
-Entities
+-------------------------
+
+There are 4 main functions that NEED to be called manually, or else it wont work:
+
+DimensionObject:super()  must be called on init
+DimensionObject:addEntity(ent)  adds entity
+DimensionObject:removeEntity(ent)  removes entity
+DimensionObject:entityMoved(ent, oldDim, newDim)  call this whenever `dimensions:entityMoved` event is called
 
 ]]
 
@@ -53,7 +66,7 @@ function DimensionObject:getObject(dimension)
         return self.dimensionToObject[dimension]
     end
 
-    local partition = self:newObject(self.chunkSize)
+    local partition = self:newObject(dimension)
     self.dimensionToObject[dimension] = partition
     return partition
 end
@@ -141,7 +154,7 @@ end
 
 
 function DimensionObject:contains(ent)
-    return self.entToDimension[ent]
+    return self.entityToDimension[ent]
 end
 
 
@@ -159,7 +172,7 @@ Functions that need to be overridden:
 ==============================================================
 ]]
 
-function DimensionObject:newObject()
+function DimensionObject:newObject(dimension)
     error("This needs to be overridden")
 end
 
@@ -184,4 +197,3 @@ end
 
 
 return DimensionObject
-
