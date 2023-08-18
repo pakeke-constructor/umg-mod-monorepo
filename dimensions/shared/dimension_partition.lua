@@ -15,11 +15,10 @@ require("shared.dimension_vector") -- we need typecheck defs
 local getDimension = require("shared.get_dimension")
 
 
-
 local Partition = objects.Partition
+local DimensionObject = require("shared.dimension_object")
 
-
-local DimensionPartition = objects.Class("dimensions:DimensionPartition")
+local DimensionPartition = objects.Class("dimensions:DimensionPartition", DimensionObject)
 
 
 
@@ -27,112 +26,53 @@ local initTc = typecheck.assert("number")
 
 function DimensionPartition:init(chunkSize)
     initTc(chunkSize)
+    self:super()
     self.chunkSize = chunkSize
-
-    self.dimensionToPartition = {--[[
-        [dimension] --> Partition
-    ]]}
-
-    self.entityToDimension = {--[[
-        [entity] -> dimension
-    ]]}
 end
 
 
 
+--[[
+==========================
+    OVERRIDES:
+]]
+function DimensionPartition:addEntityToObject(partition, ent)
+    partition:addEntity(ent)
+end
+
+function DimensionPartition:removeEntityFromObject(partition, ent)
+    partition:removeEntity(ent)
+end
+
+function DimensionPartition:newObject()
+    return Partition(self.chunkSize)
+end
+--[[
+    END OF OVERRIDES.
+==========================
+]]
+
+
+
+
+
+
+
+
+
+
 function DimensionPartition:removeEmptyChunks()
-    for _, partition in pairs(self.dimensionToPartition) do
+    for _, partition in pairs(self.dimensionToObject) do
         partition:removeEmptyChunks()
     end
 end
 
 
 
-function getPartition(self, dimension)
-    if self.dimensionToPartition[dimension] then
-        return self.dimensionToPartition[dimension]
-    end
-
-    local partition = Partition(self.chunkSize)
-    self.dimensionToPartition[dimension] = partition
-    return partition
-end
-
-
-
-local function addEntity(self, ent)
-    local dim = getDimension(ent)
-    self.entityToDimension[ent] = dim
-    local partition = getPartition(self, dim)
-    partition:addEntity(ent)
-end
-
-
-
-local function removeEntity(self, ent)
-    local dim = self.entityToDimension[ent]
-    self.entityToDimension[ent] = nil
-    local partition = getPartition(self, dim)
-    partition:removeEntity(ent)
-end
-
-
-
-
-
-
---[[
-    call this whenever a dimension gets destroyed
-    (:dimensionDestroyed event)
-
-    If this isnt called, it's not the end of the world....
-    we will just leak some memory when dimensions are created
-]]
-function DimensionPartition:destroyDimension(dimension)
-    self.dimensionToPartition[dimension] = nil
-end
-
-
-
-
---[[
-    moves an entity into a different chunk if required
-]]
 function DimensionPartition:updateEntity(ent)
-    local lastDim = self.entityToDimension[ent]
-    local dim = getDimension(ent)
-    assert(lastDim, "?")
-    
-    if lastDim ~= dim then
-        -- then the entity has changed dimensions
-        removeEntity(self, ent)
-        addEntity(self, ent)
-    else
-        -- the entity hasn't changed dimensions,
-        -- so update within existing dimension partition.
-        local partition = getPartition(self, dim)
-        partition:updateEntity(ent)
-    end
+    local partition = self:getObjectForEntity(ent)
+    partition:updateEntity(ent)
 end
-
-
-
---[[
-:addEntity and :removeEntity need to be executed atomically,
-i.e. between frames.
-
-Tagging onto group's onRemoved and onAdded is what should be done in the ideal case.
-]]
-function DimensionPartition:addEntity(ent)
-    addEntity(self, ent)
-end
-
-
-function DimensionPartition:removeEntity(ent)
-    removeEntity(self, ent)
-end
-
-
 
 
 
@@ -144,17 +84,10 @@ function DimensionPartition:forEach(dVec, func)
     forEachAssert(dVec, func)
     local dim = getDimension(dVec)
 
-    if rawget(self.dimensionToPartition, dim) then
-        local partition = self.dimensionToPartition[dim]
+    if self:hasDimension(dim) then
+        local partition = self:getObject(dim)
         return partition:forEach(dVec.x, dVec.y, func)
     end
-end
-
-
-
-
-function DimensionPartition:contains(ent)
-    return self.entToDimension[ent]
 end
 
 
@@ -168,8 +101,8 @@ function DimensionPartition:iterator(dVec)
     iteratorTc(self, dVec)
     local dim = getDimension(dVec)
 
-    if rawget(self.dimensionToPartition, dim) then
-        local partition = self.dimensionToPartition[dim]
+    if self:hasDimension(dim) then
+        local partition = self:getObject(dim)
         return partition:iterator(dVec.x, dVec.y)
     end
     return ipairs(EMPTY)

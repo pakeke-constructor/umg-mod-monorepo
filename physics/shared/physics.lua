@@ -195,7 +195,7 @@ local function addToPhysicsWorld(ent)
         error("World was locked! This is a bug on my behalf, sorry")  
     end
     if (not ent.x) or (not ent.y) then
-        error("Physics entities must be given x and y components as numbers.")
+        error("Physics entities need x and y components.")
     end
     local pc = ent.physics
     if type(pc) ~= "table" then
@@ -216,7 +216,7 @@ end
 
 
 
-local function removeFromPhysicsWorld(ent, dimension)
+local function removeFromPhysicsWorld(ent)
     local fixture = ent_to_fixture[ent]
     local body = fixture:getBody()
     fixture_to_ent[fixture] = nil
@@ -236,8 +236,10 @@ end
 
 
 umg.on("dimensions:entityMoved", function(ent, oldDim, newDim)
-    removeFromPhysicsWorld(ent)
-    addToPhysicsWorld(ent)
+    if physicsGroup:has(ent) then
+        removeFromPhysicsWorld(ent)
+        addToPhysicsWorld(ent)
+    end
 end)
 
 

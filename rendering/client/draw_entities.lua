@@ -84,8 +84,8 @@ end)
 
 
 umg.on("dimensions:entityMoved", function(ent, oldDimension, _newDim)
-    if not isDrawEntity(ent) then
-        -- This is hacky and dumb, but oh well.
+    -- This is a hacky and dumb way of doing things!
+    if isDrawEntity(ent) then
         return
     end
 
