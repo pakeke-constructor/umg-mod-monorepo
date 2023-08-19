@@ -1,6 +1,10 @@
 
-base.client.groundTexture.setColor({199/255, 140/255, 89/255})
-base.client.groundTexture.setTextureList({"ground_texture"})
+
+
+base.client.groundTexture.setGround("overworld", {
+    color = {199/255, 140/255, 89/255},
+    images = {"ground_texture"}
+})
 
 
 

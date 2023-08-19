@@ -30,7 +30,7 @@ function popups.image(image, dvec, options)
 
     local obj = options or {}
     obj.color = obj.color or objects.Color.WHITE
-    obj.fade = obj.fade or DEFAULT_FADE_TIME
+    obj.fadeTime = obj.fadeTime or DEFAULT_FADE_TIME
     obj.duration = obj.duration or DEFAULT_POPUP_DURATION
     obj.rotation = obj.rotation or 0
     obj.rotationSpeed = obj.rotationSpeed or 0
@@ -43,9 +43,10 @@ function popups.image(image, dvec, options)
     obj.image = image
 
     obj.x, obj.y = dvec.x, dvec.y
-    obj.dimension = dvec.dimension
+    obj.dimension = dimensions.getDimension(dvec.dimension)
 
-    obj.endTime = obj.duration + getGameTime()
+    obj.startTime = getGameTime()
+    obj.endTime = obj.duration + obj.startTime
     imageHeap:insert(obj)
 end
 
@@ -59,15 +60,15 @@ local DEFAULT_BACKDROP_COLOR_SHIFT = -0.8
 local textHeap = objects.Heap(endTimeComparator)
 
 
-local textTc = typecheck.assert("string", "number", "number", "table?")
+local textTc = typecheck.assert("string", "dvector", "table?")
 
-function popups.text(text, x, y, options)
+function popups.text(text, dvec, options)
     --[[
         draw popup text for a short period of time
 
         List of options is shown below.
     ]]
-    textTc(text, x, y, options)
+    textTc(text, dvec, options)
     
     local obj = {}
     options = options or {}
@@ -91,7 +92,8 @@ function popups.text(text, x, y, options)
     obj.vx, obj.vy = options.vx or 0, options.vy or 0
 
     obj.text = text
-    obj.x, obj.y = x, y
+    obj.x, obj.y = dvec.x, dvec.y
+    obj.dimension = dimensions.getDimension(dvec.dimension)
 
     obj.startTime = getGameTime()
     obj.endTime = obj.duration + obj.startTime
@@ -160,7 +162,6 @@ local function drawTextObj(textObj)
 end
 
 
-
 local function drawImageObj(imageObj)
     local time = getGameTime()
     local timeElapsed = time - imageObj.startTime
@@ -190,16 +191,22 @@ end
 
 
 
-umg.on("rendering:drawEffects", function()
+umg.on("rendering:drawEffects", function(camera)
+    local dim = camera:getDimension()
+
     cleanHeap(textHeap)
     cleanHeap(imageHeap)
 
     for _, textObj in ipairs(textHeap) do
-        drawTextObj(textObj)
+        if textObj.dimension == dim then
+            drawTextObj(textObj)
+        end
     end
 
     for _, imageObj in ipairs(imageHeap) do
-        drawImageObj(imageObj)
+        if imageObj.dimension == dim then
+            drawImageObj(imageObj)
+        end
     end
 end)
 

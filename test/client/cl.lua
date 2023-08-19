@@ -1,17 +1,16 @@
 
 
-light.setBaseLighting(1,1,1)
 
+umg.on("@load", function()
+    light.setBaseLighting(1,1,1)
 
-vignette.setStrength(0.65)
+    vignette.setStrength(0.65)
 
-
-base.client.groundTexture.setColor(
-    {0.7,0.7,0.7}
-    -- {50/255, 100/255, 199/255}
---    {199/255, 140/255, 89/255}
-)
-base.client.groundTexture.setTextureList({"ground_texture_final4"})
+    base.client.groundTexture.setGround("overworld", {
+        images = {"ground_texture_final4"},
+        color = {0.7,0.7,0.7}
+    })
+end)
 
 
 
@@ -55,6 +54,7 @@ local DEFAULT_DIMENSION = dimensions.getDefaultDimension()
 
 
 function listener:keypressed(key, scancode, isrepeat)
+    juice.popups.image("3d_player_down_1", {x=0, y=0})
     if scancode == "q" then
         local e = control.getPlayer()
         local x, y = rendering.getWorldMousePosition()

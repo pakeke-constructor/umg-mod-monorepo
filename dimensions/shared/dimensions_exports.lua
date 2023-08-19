@@ -15,6 +15,20 @@ dimensions.getOverseer = api.getOverseer
 dimensions.getAllDimensions = api.getAllDimensions
 
 
+local type = type
+local function exists(dim)
+    if type(dim) ~= "string" then
+        return false, "expected dimension"
+    end
+    if not dimensions.getOverseer(dim) then
+        return false, "expected dimension"
+    end
+    return true
+end
+
+typecheck.addType("dimension", exists)
+
+
 dimensions.DimensionVector = require("shared.dimension_vector")
 dimensions.DimensionPartition = require("shared.dimension_partition")
 dimensions.DimensionStructure = require("shared.dimension_structure")
