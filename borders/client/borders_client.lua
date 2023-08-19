@@ -5,7 +5,6 @@
 local controllableGroup = umg.group("controllable", "controller", "x", "y")
 
 local max, min = math.max, math.min
-local abs = math.abs
 
 
 local function clampToWithinBorder(border, x,y)

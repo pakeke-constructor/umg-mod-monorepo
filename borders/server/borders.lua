@@ -1,30 +1,29 @@
 
-
 local max, min = math.max, math.min
 local abs = math.abs
+
 
 
 local WHITE = {1,1,1,1}
 
 
-
 function checkBorder(options)
-    local bd = {}
+    local border = {}
 
     assert(options.centerX, "borders need centerX")
     assert(options.centerY, "borders need centerY")
     assert(options.width, "borders need width")
     assert(options.height, "borders need height")
 
-    bd.color = options.color or WHITE
-    bd.centerX = options.centerX
-    bd.centerY = options.centerY
-    bd.x = options.centerX - options.width / 2
-    bd.y = options.centerY - options.height / 2
-    bd.width = options.width
-    bd.height = options.height
+    border.color = options.color or WHITE
+    border.centerX = options.centerX
+    border.centerY = options.centerY
+    border.x = options.centerX - options.width / 2
+    border.y = options.centerY - options.height / 2
+    border.width = options.width
+    border.height = options.height
     
-    return bd
+    return border
 end
 
 
@@ -49,9 +48,6 @@ local function clampToWithinBorder(border, x,y)
 end
 
 
-
-
-if server then
 
 
 
@@ -130,6 +126,4 @@ scheduling.runEvery(5, "@tick", function()
 end)
 
 
-
-end -- if server then
 

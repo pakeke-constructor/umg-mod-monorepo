@@ -33,6 +33,7 @@ local dim2 = "other"
 
 umg.on("@createWorld", function()
     dimensions.server.createDimension(dim2)
+    borders.setBorder(dim2, )
 
     for i=1, 30 do
         local e = newItem(ents.item, 1)
@@ -95,7 +96,6 @@ server.on("swapdimension", {
     handler = function(username, dim)
         for _,e in ipairs(controlGroup)do
             if e.controller == username then
-                print("going to: ", dim)
                 e.dimension = dim
             end
         end
