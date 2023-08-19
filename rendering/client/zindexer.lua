@@ -215,7 +215,7 @@ function ZIndexer:drawEntities(camera)
             -- If entities are very far apart, this loop may very well be called like 1 million times.
             -- We should check if the Y pos is on screen before doing something stupid like this;
             -- that way we won't hit a bajillion iterations in this loop
-            umg.call("rendering:drawIndex", dep)
+            umg.call("rendering:drawIndex", dep, camera)
         end
         last_draw_dep = draw_dep
 

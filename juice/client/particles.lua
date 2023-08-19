@@ -64,9 +64,14 @@ end
 
 
 
-umg.on("rendering:drawIndex", function( z_dep )
+umg.on("rendering:drawIndex", function(z_dep, camera)
+    local dimension = camera:getDimension()
+
     for _, emtr in ipairs(drawingPSyses[z_dep]) do
-        drawEmitter(emtr)
+        local dim = dimensions.getDimension(emtr.dimension)
+        if dim == dimension then
+            drawEmitter(emtr)
+        end
     end
 end)
 
@@ -158,15 +163,16 @@ local DEFAULT_PARTICLES = 10 -- default number of particles to emit
 
 
 
-local emitAssert = typecheck.assert("string", "number", "number", "number?", "number?", "table?")
+local emitAssert = typecheck.assert("string", "dvector", "number?", "table?")
 
 -- TODO: perhaps remove the `z` from this, and place at the back?
 -- Z shouldn't need to be a compulsory argument
-function particles.emit(name, x, y, z, num_particles, color)
-    emitAssert(name, x, y, z, num_particles, color)
+function particles.emit(name, dvec, num_particles, color)
+    emitAssert(name, dvec, num_particles, color)
     num_particles = num_particles or DEFAULT_PARTICLES
     color = color or DEFAULT_COLOR
-    z = z or 0
+
+    local x, y, z = dvec.x, dvec.y, dvec.z
     
     if not nameToPsys[name] then
         error("Unrecognised particle name: "..tostring(name) .. ".\nMake sure to register particles with `.define()!`")
@@ -187,6 +193,7 @@ function particles.emit(name, x, y, z, num_particles, color)
     emitter.y = y
     emitter.z = z
     emitter.x = x
+    emitter.dimension = dvec.dimension
     emitter.runtime = 0
     emitter.color = color
 

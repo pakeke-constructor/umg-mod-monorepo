@@ -22,9 +22,10 @@ local DEFAULT_DURATION = 0.4
 local DEFAULT_FADERINGS = 5 -- the number of faded rings that follow the shockwave
 
 
+local dvecTc = typecheck.assert("dvector")
+
 local function new(sw)
-    assert(type(sw) == "table", "Shockwave takes a table")
-    assert(sw.x and sw.y, "Not given x,y position for shockwave!")
+    dvecTc(sw)
 
     sw.color = sw.color or {1,1,1,1}
     sw.thickness = sw.thickness or DEFAULT_THICKNESS

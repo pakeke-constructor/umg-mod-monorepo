@@ -170,18 +170,24 @@ end
 
 
 
-umg.on("rendering:drawIndex", function(indx)
+umg.on("rendering:drawIndex", function(indx, camera)
     if drawIndexToAnimObj[indx] then
+        local dimension = camera:getDimension()
+
         local arr = drawIndexToAnimObj[indx]
         local len = #arr
         for i=len, 1, -1 do
             local animObj = arr[i]
-            if isFinished(animObj) then
-                -- remove from array
-                arr[i] = arr[#arr]
-                arr[#arr] = nil
-            else
-                drawAnimObj(animObj)
+            local dim = dimensions.getDimension(animObj)
+            -- only draw if dimensions match:
+            if dim == dimension then
+                if isFinished(animObj) then
+                    -- remove from array
+                    arr[i] = arr[#arr]
+                    arr[#arr] = nil
+                else
+                    drawAnimObj(animObj)
+                end
             end
         end
 

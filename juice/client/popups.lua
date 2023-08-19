@@ -20,29 +20,30 @@ local popups = {}
 local imageHeap = objects.Heap(endTimeComparator)
 
 
-local imageTc = typecheck.assert("string", "number", "number", "table?")
+local imageTc = typecheck.assert("string", "dvector", "table?")
 
-function popups.image(image, x, y, options)
+function popups.image(image, dvec, options)
     --[[
         draw a popup image for a short period of time
     ]]
-    imageTc(image, x, y, options)
+    imageTc(image, dvec, options)
 
-    local obj = {}
-    options = options or {}
-    obj.color = options.color or objects.Color.WHITE
-    obj.fade = options.fade or DEFAULT_FADE_TIME
-    obj.duration = options.duration or DEFAULT_POPUP_DURATION
-    obj.rotation = options.rotation or 0
-    obj.rotationSpeed = options.rotationSpeed or 0
-    obj.scale = options.scale or 1
-    obj.scaleX = options.scaleX or 1
-    obj.scaleY = options.scaleY or 1
+    local obj = options or {}
+    obj.color = obj.color or objects.Color.WHITE
+    obj.fade = obj.fade or DEFAULT_FADE_TIME
+    obj.duration = obj.duration or DEFAULT_POPUP_DURATION
+    obj.rotation = obj.rotation or 0
+    obj.rotationSpeed = obj.rotationSpeed or 0
+    obj.scale = obj.scale or 1
+    obj.scaleX = obj.scaleX or 1
+    obj.scaleY = obj.scaleY or 1
     
-    obj.vx, obj.vy = options.vx or 0, options.vy or 0
+    obj.vx, obj.vy = obj.vx or 0, obj.vy or 0
 
     obj.image = image
-    obj.x, obj.y = x, y
+
+    obj.x, obj.y = dvec.x, dvec.y
+    obj.dimension = dvec.dimension
 
     obj.endTime = obj.duration + getGameTime()
     imageHeap:insert(obj)

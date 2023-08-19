@@ -139,6 +139,9 @@ end)
 
 
 umg.on("rendering:drawIndex", function(drawIndex)
+    --[[
+        todo; this doesnt work with dimensions
+    ]]
     for _, terrain in ipairs(terrainIds.getTerrainObjects()) do
         local ditgm = terrain.drawIndexToGreedyMesh
         if ditgm and ditgm[drawIndex] then

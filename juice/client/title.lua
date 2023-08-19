@@ -76,8 +76,9 @@ local function title(text, options)
             time = 3, -- displays for X seconds
             fade = 1, -- fades out in X seconds
             color = {1,0,0},
+
             x = 1/2, -- in this example, X and Y location is in middle of screen. 
-            y = 1/2
+            y = 1/2,
         })
     ]]
     assert(type(text) == "string", "title(text, options) requires a string as first arg")

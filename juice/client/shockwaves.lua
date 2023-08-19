@@ -22,9 +22,13 @@ end)
 
 
 
-umg.on("rendering:drawEffects", function()
+umg.on("rendering:drawEffects", function(camera)
+    local dimension = camera:getDimension()
     for _,sw in ipairs(shockwaveSet) do
-        sw:draw()
+        local dim = dimensions.getDimension(sw.dimension)
+        if dim == dimension then
+            sw:draw()
+        end
     end
 end)
 

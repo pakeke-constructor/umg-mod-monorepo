@@ -69,7 +69,7 @@ local function setupCanvas(camera)
 
     for _, ent in ipairs(lightGroup) do
         -- TODO: Check if entity is on the screen
-        -- (it's harder than you think)
+        -- (its hard because of canvases, lg.getWidth() is not available)
         local dim = dimensions.getDimension(ent)
         if dim == dimension then
             local l = ent.light
