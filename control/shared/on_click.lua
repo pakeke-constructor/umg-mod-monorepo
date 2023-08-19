@@ -10,10 +10,12 @@ local RANGE_ACCEPTANCE = 80
 sync.proxyEventToClient("control:entityClicked")
 
 
+local getDimension = dimensions.getDimension
 
-local function isInRange(ent, worldX, worldY)
+
+local function isInRange(ent, worldX, worldY, dimension)
     local dist = math.distance(ent.x - worldX, ent.y - worldY)
-    return dist < RANGE_ACCEPTANCE
+    return dist < RANGE_ACCEPTANCE and dimension == getDimension(ent)
 end
 
 
@@ -23,15 +25,15 @@ local sf = sync.filters
 if server then
 
 server.on("entityClicked", {
-    arguments = {sf.entity, sf.number, sf.number, sf.number},
-    handler = function(sender_uname, ent, button, worldX, worldY)
+    arguments = {sf.entity, sf.number, sf.number, sf.number, sf.string},
+    handler = function(sender_uname, ent, button, worldX, worldY, dimension)
         if not (ent.onClick) then
             return
         end
         if button ~= 1 and button ~= 2 then
             return
         end
-        if not isInRange(ent, worldX, worldY) then
+        if not isInRange(ent, worldX, worldY, dimension) then
             return
         end
 
@@ -67,7 +69,9 @@ function listener:mousepressed(mx, my, button, istouch, presses)
     end
 
     if bestEnt then
-        client.send("entityClicked", bestEnt, button, worldX, worldY)
+        local camera = rendering.getCamera()
+        local dimension = camera:getDimension()
+        client.send("entityClicked", bestEnt, button, worldX, worldY, dimension)
         self:lockMouseButton(button)
     end
 end
