@@ -33,7 +33,12 @@ local dim2 = "other"
 
 umg.on("@createWorld", function()
     dimensions.server.createDimension(dim2)
-    borders.setBorder(dim2, )
+    borders.setBorder(dim2, {
+        centerX = 0,
+        centerY = 0,
+        width = 1000,
+        height = 10000
+    })
 
     for i=1, 30 do
         local e = newItem(ents.item, 1)

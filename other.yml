@@ -58,3 +58,5 @@ globals:
     any: true
   dimensions:
     any: true
+  borders:
+    any: true

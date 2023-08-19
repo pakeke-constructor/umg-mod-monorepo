@@ -12,7 +12,6 @@
       "move_behaviour",
       "terrain",
       "worldeditor",
-      "border",
       "commands",
       "modern",
       "weather",
@@ -20,7 +19,8 @@
       "scheduling",
       "projectiles",
       "rendering",
-      "xy"
+      "xy",
+      "borders"
     ],
     "type": "playable"
 }

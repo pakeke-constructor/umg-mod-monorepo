@@ -95,7 +95,3 @@ umg.on("rendering:postDrawWorld", function(camera)
 end)
 
 
-
-
-
-

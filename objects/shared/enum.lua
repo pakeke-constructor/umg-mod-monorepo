@@ -1,5 +1,11 @@
 
 
+local function has(self, k)
+    return rawget(self, k)
+end
+
+
+
 local ENUM_MT = {
     __index = function(t,k)
         error("Attempt to access undefined enum value: " .. k, 2)
@@ -32,6 +38,11 @@ local function newEnum(values)
             enum[v] = v
         end
     end
+
+    --[[
+        we probably want more useful enum methods here.
+    ]]
+    enum.has = has
 
     return setmetatable(enum, ENUM_MT)
 end

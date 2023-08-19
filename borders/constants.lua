@@ -1,4 +1,9 @@
 
+--[[
+    TODO: These aren't implemented or used yet!
+]]
+
+
 local BORDER_STYLES = objects.Enum({
     "STRIPED", -- stripes, like minecraft border
     "PLAIN", -- just a flat color

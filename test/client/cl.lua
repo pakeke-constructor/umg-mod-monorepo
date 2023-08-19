@@ -1,5 +1,12 @@
 
 
+base.client.groundTexture.setDefaultGround({
+    images = {"ground_texture_final4"},
+    color = {0.3,0.9,0.55}
+})
+
+
+
 
 umg.on("@load", function()
     vignette.setStrength(0.65)

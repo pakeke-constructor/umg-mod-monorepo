@@ -1,4 +1,4 @@
 {
-    "uses":["chunks","grids","chat","ui","items","light","move_behaviour","follow","border","worldeditor","base","categories","pulseworks"],
+    "uses":["chunks","grids","chat","ui","items","light","move_behaviour","follow","borders","worldeditor","base","categories","pulseworks"],
     "type": "playable"
 }
