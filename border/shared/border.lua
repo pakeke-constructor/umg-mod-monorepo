@@ -1,7 +1,7 @@
 
 
 
-local Border = objects.Class("worldborder:Border")
+local Border = objects.Class("border:Border")
 
 local WHITE = {1,1,1,1}
 
@@ -179,8 +179,8 @@ end -- if server then
 
 
 
-local worldborder = {}
-worldborder.Border = Border
+local border = {}
+border.Border = Border
 
-umg.expose("worldborder", worldborder)
+umg.expose("border", border)
 

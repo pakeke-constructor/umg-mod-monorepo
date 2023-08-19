@@ -1,6 +1,6 @@
 
 
-# worldborder components
+# border components
 
 
 ```lua

@@ -160,7 +160,7 @@ end
 local function spawnBorder(self)
     local cx, cy = self.x + self.width/2, self.y + self.height/2
     local ent = server.entities.empty()
-    ent.border = worldborder.Border({
+    ent.border = border.Border({
         centerX = cx,
         centerY = cy,
         width = self.width + constants.BOARD_BORDER_LEIGHWAY,

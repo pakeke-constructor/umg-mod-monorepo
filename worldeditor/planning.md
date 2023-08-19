@@ -142,11 +142,11 @@ Applies a command to a point
 
 
 # COMMANDS:
-Miscellaneous changes to a world  (e.g. worldborder, player spawn)
+Miscellaneous changes to a world  (e.g. border, player spawn)
 
 Commands should be deployed by other mods,
 or by the worldeditor itself.
-(For example, drawing the worldborder is a macro that tags onto the selection)
+(For example, drawing the border is a macro that tags onto the selection)
 
 
 ## PointCommand

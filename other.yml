@@ -20,7 +20,7 @@ globals:
     any: true
   chat:
     any: true
-  worldborder:
+  border:
     any: true
   zenith:
     any: true

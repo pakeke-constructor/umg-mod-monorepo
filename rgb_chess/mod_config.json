@@ -11,7 +11,7 @@
       "proximity",
       "ui",
       "commands",
-      "worldborder"
+      "border"
     ],
 
     "type": "playable"
