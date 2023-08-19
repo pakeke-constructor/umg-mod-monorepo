@@ -2,8 +2,6 @@
 
 
 umg.on("@load", function()
-    light.setBaseLighting(1,1,1)
-
     vignette.setStrength(0.65)
 
     base.client.groundTexture.setGround("overworld", {

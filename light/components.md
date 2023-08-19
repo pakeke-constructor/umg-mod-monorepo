@@ -8,5 +8,13 @@ ent.light = {
 }
 
 
+
+
+-- For dimension overseers:
+overseerEnt.baseLighting = {0.5,0.5,0.55}
+-- The base light level for a dimension.
+-- (this component is set automatically through the lighting API)
+
+
 ```
 

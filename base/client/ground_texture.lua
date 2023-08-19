@@ -1,14 +1,6 @@
 
 
-
-
-local dimensionToGroundTileObject = {--[[
-    [dimension] -> {
-        tileWidth = X,
-        tileHeight = X,
-        groundTileList = { "tile1", "tile2", ... }
-    }
-]]}
+local defaultGround
 
 
 
@@ -21,12 +13,15 @@ assert(WHITE,"wtf")
 
 
 
-local setGroundTc = typecheck.assert("dimension", "table")
-
-function groundTexture.setGround(dimension, obj)
-    setGroundTc(dimension, obj)
+local function parseGroundObject(obj)
+    --[[
+        returns: {
+            tileWidth = X,
+            tileHeight = X,
+            images = { "tile1", "tile2", ... }
+        }
+    ]]
     local images = obj.images
-    dimension = dimensions.getDimension(dimension)
     local buffer = objects.Array()
     for _,tilename in ipairs(images) do
         if not (client.assets.images[tilename]) then
@@ -45,12 +40,32 @@ function groundTexture.setGround(dimension, obj)
         assert(w==width and h==height, "All ground tiles must be the same size")
     end
 
-    dimensionToGroundTileObject[dimension] = {
-        groundTileList = buffer,
+    return {
+        images = buffer,
         tileWidth = width,
         tileHeight = height,
         color = obj.color or WHITE
     }
+end
+
+
+
+
+
+local setGroundTc = typecheck.assert("dimension", "table")
+local setDefaultGroundTc = typecheck.assert("table")
+
+
+function groundTexture.setDefaultGround(obj)
+    setDefaultGroundTc(obj)
+    defaultGround = parseGroundObject(obj)
+end
+
+
+function groundTexture.setGround(dimension, obj)
+    setGroundTc(dimension, obj)
+    local overseerEnt = dimensions.getOverseer(dimension)
+    overseerEnt.groundTexture = parseGroundObject(obj)
 end
 
 
@@ -61,7 +76,7 @@ local PRIME = 7
 
 
 local function drawGround(obj)
-    local groundTiles = obj.groundTileList
+    local images = obj.images
     local w,h = love.graphics.getDimensions()
 
     local camera = rendering.getCamera()
@@ -81,8 +96,8 @@ local function drawGround(obj)
     for x = start_x - dx, endx+tw*4, tw do
         for y = start_y - dy, endy+th*4, th do
             local normx, normy = math.floor(x/tw), math.floor(y/th) 
-            local index = ((PRIME*normx+normy) % groundTiles:size()) + 1
-            local tile = groundTiles[index]
+            local index = ((PRIME*normx+normy) % images:size()) + 1
+            local tile = images[index]
             local drawx = math.floor(normx * tw)
             local drawy = math.floor(normy * th)
             rendering.drawImage(tile, drawx, drawy)
@@ -93,7 +108,9 @@ end
 
 umg.on("rendering:drawGround", function(camera)
     local dimension = camera:getDimension()
-    local obj = dimensionToGroundTileObject[dimension]
+    local overseerEnt = dimensions.getOverseer(dimension)
+
+    local obj = overseerEnt.groundTexture or defaultGround
 
     if obj then
         love.graphics.push("all")

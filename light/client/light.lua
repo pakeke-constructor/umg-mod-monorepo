@@ -15,7 +15,7 @@ local DEFAULT = {0.55,0.55,0.7,1} --{0.85,0.85,0.85}
 local DEFAULT_LIGHT_IMAGE = "lights/default_light.png"
 
 
-local base_lighting = DEFAULT
+local defaultLighting = DEFAULT
 
 
 local light = {}
@@ -58,15 +58,21 @@ local DEFAULT_SIZE = 50
 local DEFAULT_COLOR = {1,1,1}
 
 
+
+
 local function setupCanvas(camera)
     love.graphics.push("all")
     love.graphics.setCanvas(canvas)
-    love.graphics.clear(base_lighting)
+
+    -- reset lights:
+    local dimension = camera:getDimension()
+    local overseerEnt = dimensions.getOverseer(dimension)
+    local col = overseerEnt.baseLighting or defaultLighting
+    love.graphics.clear(col)
 
     local globalSizeMod = umg.ask("light:getGlobalLightSizeMultiplier") or 1
 
-    local dimension = camera:getDimension()
-
+    -- display all lights:
     for _, ent in ipairs(lightGroup) do
         -- TODO: Check if entity is on the screen
         -- (its hard because of canvases, lg.getWidth() is not available)
@@ -107,17 +113,32 @@ end)
 
 
 
-function light.setBaseLighting(r,g,b)
-    if type(r) == "table" then
-        g=r[2]
-        b=r[3]
-        r=r[1]
-    end
+local rgbTc = typecheck.assert("number", "number", "number")
 
-    assert(type(r) == "number" and type(g) == "number" and type(b) == "number", "Bad usage of love.graphics.setBaseLighting")
-    base_lighting[1] = r
-    base_lighting[2] = g
-    base_lighting[3] = b
+
+local function getColor(r,g,b)
+    if type(r) == "table" then
+        r,g,b = r[1],r[2],r[3]
+    end
+    rgbTc(r,g,b)
+    return objects.Color({r,g,b})
+end
+
+
+function light.setDefaultLighting(r,g,b)
+    local color = getColor(r,g,b)
+    defaultLighting = color
+end
+
+
+local setLightingTc = typecheck.assert("dimension")
+
+
+function light.setLighting(dimension, r,g,b)
+    setLightingTc(dimension, r,g,b)
+    local color = getColor(r,g,b)
+    local overseerEnt = dimension.getOverseer(dimension)
+    overseerEnt.lighting = color
 end
 
 

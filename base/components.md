@@ -6,14 +6,6 @@ List of components defined in the base mod.
 
 ```lua
 
-ent.x
-ent.y
-ent.z   -- position components
-
-ent.vx
-ent.vy
-ent.vz -- velocity components
-
 
 ent.rot -- rotation (radians)
 
@@ -128,9 +120,6 @@ ent.init = function(ent, ...)
     ... 
 end
 
-
-
-ent.onDeath = function(ent) ... end
 
 ent.onUpdate = function(ent, dt)   end
 

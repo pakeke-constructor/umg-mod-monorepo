@@ -11,6 +11,9 @@ ent.maxHealth = 50
 
 
 
+ent.onDeath = function(ent)
+    -- called when this entity dies
+end
 
 
 ent.lifetime = 5
@@ -19,3 +22,4 @@ ent.lifetime = 5
 
 
 ```
+
