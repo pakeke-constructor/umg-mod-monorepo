@@ -9,7 +9,6 @@ local groundTexture = {}
 
 
 local WHITE = objects.Color.WHITE
-assert(WHITE,"wtf")
 
 
 

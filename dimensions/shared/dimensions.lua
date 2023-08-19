@@ -5,6 +5,7 @@ require("dimensions_events")
 
 local constants = require("shared.constants")
 
+local DEFAULT_DIMENSION = constants.DEFAULT_DIMENSION
 
 
 
@@ -89,6 +90,7 @@ end
 function dimensions.getOverseer(dim)
     -- gets the controller entity for a dimension.
     -- If the dimension doesn't exist, nil is returned.
+    dim = dim or DEFAULT_DIMENSION
     return dimensionToControllerEnt[dim]
 end
 
@@ -101,6 +103,11 @@ function dimensions.getAllDimensions()
         allDimensions:add(dim)
     end
     return allDimensions
+end
+
+
+function dimensions.iterator()
+    return pairs(dimensionToControllerEnt)
 end
 
 

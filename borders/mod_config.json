@@ -1,0 +1,10 @@
+{
+    "type": "base",
+    "uses": [
+        "dimensions",
+        "rendering",
+        "scheduling",
+        "objects",
+        "typecheck"
+    ]
+}

@@ -39,18 +39,18 @@ They are just a table of the following shape:
 
 
 
-### Dimension controllers:
+### Dimension overseers:
 Dimensions are represented by a single entity internally.
 
 It is created automatically when we create a dimension:
 ```lua
 local ent = dimensions.createDimension("my_dimension")
--- `ent` is the controller entity for `my_dimension`
+-- `ent` is the overseer entity for `my_dimension`
 ```
 
-If the "controller entity" is deleted, then that dimension is destroyed.
+If the "overseer entity" is deleted, then that dimension is destroyed.
 
-We can also specify our own controller entities, by passing them in:
+We can also specify our own overseer entities, by passing them in:
 ```lua
 local portalEnt = entities.server.newPortal(...)
 
@@ -67,11 +67,13 @@ dimensions.createDimension("my_dimension", portalEnt)
 
 -----------------------
 
-We can get the controller entity for a dimension with `dimensions.getOverseer`:
+We can get the overseer entity for a dimension with `dimensions.getOverseer`:
 ```lua
 local ent = dimensions.getOverseer(dimension)
 if ent == nil then
     print("dimension doesn't exist: ", dimension)
+else
+    print("The overseer for this dimension is: ", ent)
 end
 ```
 

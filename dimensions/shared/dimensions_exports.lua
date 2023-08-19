@@ -12,7 +12,10 @@ dimensions.getDimension = getDimension
 
 
 dimensions.getOverseer = api.getOverseer
+
 dimensions.getAllDimensions = api.getAllDimensions
+dimensions.iterator = api.iterator
+
 
 
 local type = type
