@@ -165,6 +165,9 @@ local function setupProjectile(item, projEnt, holderEnt, spreadFactor)
     end
 
     projEnt.x, projEnt.y = holderEnt.x + dx*startDistance, holderEnt.y + dy*startDistance
+    if holderEnt.dimension then
+        projEnt.dimension = holderEnt.dimension
+    end
 
     local inaccuracyAngle = (random()-0.5) * inaccuracy
     local spreadAngle = spreadFactor * spread

@@ -58,22 +58,27 @@ local DEFAULT_SIZE = 50
 local DEFAULT_COLOR = {1,1,1}
 
 
-local function setupCanvas()
+local function setupCanvas(camera)
     love.graphics.push("all")
     love.graphics.setCanvas(canvas)
     love.graphics.clear(base_lighting)
 
     local globalSizeMod = umg.ask("light:getGlobalLightSizeMultiplier") or 1
 
+    local dimension = camera:getDimension()
+
     for _, ent in ipairs(lightGroup) do
         -- TODO: Check if entity is on the screen
         -- (it's harder than you think)
-        local l = ent.light
-        local size = l.size or DEFAULT_SIZE
-        local sizeMod = umg.ask("light:getLightSizeMultiplier", ent) or 1
-        local scale = (size / W) * sizeMod * globalSizeMod
-        love.graphics.setColor(l.color or DEFAULT_COLOR)
-        love.graphics.draw(light_image, ent.x, ent.y, 0, scale, scale, W/2, H/2)
+        local dim = dimensions.getDimension(ent)
+        if dim == dimension then
+            local l = ent.light
+            local size = l.size or DEFAULT_SIZE
+            local sizeMod = umg.ask("light:getLightSizeMultiplier", ent) or 1
+            local scale = (size / W) * sizeMod * globalSizeMod
+            love.graphics.setColor(l.color or DEFAULT_COLOR)
+            love.graphics.draw(light_image, ent.x, ent.y, 0, scale, scale, W/2, H/2)
+        end
     end
 
     love.graphics.setCanvas()
@@ -93,8 +98,8 @@ local function drawCanvas()
 end
 
 
-umg.on("rendering:postDrawWorld", function()
-    setupCanvas()
+umg.on("rendering:postDrawWorld", function(camera)
+    setupCanvas(camera)
     local mode, alphamode = love.graphics.getBlendMode( )
     drawCanvas()
     love.graphics.setBlendMode(mode, alphamode)
