@@ -33,7 +33,7 @@ return {
         activation = 15
     };
 
-    init = base.initializers.initVxVy,
+    initVxVy = true,
 
     speed = SPEED;
     agility = SPEED * 10

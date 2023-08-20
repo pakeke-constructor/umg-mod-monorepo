@@ -23,6 +23,8 @@ return {
     },
 
     rgbProjectile = true,
+
+    initVxVy = true,
     
     superInit = function(ent, x, y, options)
         --[[
@@ -33,8 +35,6 @@ return {
                 ...
             }
         ]]
-        base.initializers.initVxVy(ent,x,y)
-
         assert(options and type(options) == "table", "Not given options table")
         assert(umg.exists(options.targetEntity), "Not given a targetEntity") 
 

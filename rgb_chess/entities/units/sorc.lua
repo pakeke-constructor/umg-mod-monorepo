@@ -32,6 +32,6 @@ return umg.extend(abstractSorcerer, {
         }
     },
 
-    init = base.initializers.initVxVy
+    initVxVy = true
 })
 

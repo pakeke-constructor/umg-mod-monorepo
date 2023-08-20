@@ -7,7 +7,7 @@ local function shouldEmitParticles(ent)
 end
 
 
-local function init(ent, x, y)
+local function init(ent)
     ent.particles = {
         type = "dust",
         rate = 20,
@@ -18,8 +18,6 @@ local function init(ent, x, y)
     ent.inventory = items.Inventory({
         width=3, height = 3, 
     })
-
-    base.initializers.initVxVy(ent, x, y);
 end
 
 
@@ -51,6 +49,7 @@ return {
     speed = PLAYER_SPEED;
     agility = PLAYER_SPEED * 20;
 
+    initVxVy = true,
     init = init
 }
 

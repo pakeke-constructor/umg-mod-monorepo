@@ -59,7 +59,7 @@ return {
     speed = SPEED;
     agility = SPEED * 10,
 
-    init = base.initializers.initVxVy
+    initVxVy = true
 }
 
 

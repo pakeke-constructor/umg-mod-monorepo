@@ -31,7 +31,7 @@ return umg.extend(abstractMelee, {
             squadronSize = 1
         }
     },
-
-    init = base.initializers.initVxVy
+    
+    initVxVy = true,
 })
 

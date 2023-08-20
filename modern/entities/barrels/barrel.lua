@@ -16,8 +16,8 @@ return {
         shape = love.physics.newCircleShape(8)
     };
 
-    init = function(ent,x,y)
-        base.initializers.initVxVy(ent,x,y)
+    initVxVy = true,
+    init = function(ent)
         ent.image = table.random(IMGS)
     end
 }

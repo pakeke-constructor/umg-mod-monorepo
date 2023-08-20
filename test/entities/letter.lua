@@ -11,8 +11,9 @@ return {
 
     init = function(ent,x,y,img)
         assert(img,"?")
-        base.initializers.initVxVy(ent,x,y,0,0)
         ent.image = img
-    end
+    end,
+
+    initVxVy = true
 }
 

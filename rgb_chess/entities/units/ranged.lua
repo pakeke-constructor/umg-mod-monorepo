@@ -15,6 +15,6 @@ return umg.extend(abstractRanged, {
     defaultAttackSpeed = 1,
     defaultPower = 8,
 
-    init = base.initializers.initVxVy
+    initVxVy = true
 })
 

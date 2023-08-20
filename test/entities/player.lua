@@ -61,13 +61,14 @@ return {
     openable = {},
 
     init = function(e, x, y, uname)
-        base.initializers.initVxVy(e,x,y)
         e.health = e.maxHealth
         e.controller = uname
         e.inventory = items.Inventory({
             width=7, height = 4,
         })
-    end
+    end,
+
+    initVxVy = true
 }
 
 
