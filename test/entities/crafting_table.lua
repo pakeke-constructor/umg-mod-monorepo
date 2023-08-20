@@ -35,6 +35,6 @@ return umg.extend(abstractCrafter, {
     openable = {distance = 100};
 
     crafter = my_crafter;
-    init = base.initializers.initXY
+    initXY = true
 })
 

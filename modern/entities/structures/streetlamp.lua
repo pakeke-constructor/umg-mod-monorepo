@@ -8,6 +8,6 @@ return {
         color = {1,0.87,0.87}
     };
 
-    init = base.initializers.initXY;
+    initXY = true
 }
 

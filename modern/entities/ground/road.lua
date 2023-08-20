@@ -14,7 +14,7 @@ return {
         diagonal = "road_diagonal"
     }),
 
-    init = base.initializers.initXY;
+    initXY = true,
 }
 
 

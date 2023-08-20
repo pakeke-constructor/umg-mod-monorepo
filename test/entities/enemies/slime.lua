@@ -67,6 +67,6 @@ return {
         speed = 0.6
     },
 
-    init = base.initializers.initXY
+    initXY = true
 }
 

@@ -12,6 +12,6 @@ return {
         love.graphics.circle("line", ent.x, ent.y, SIZE)
     end,
     
-    init = base.initializers.initXY
+    initXY = true
 }
 

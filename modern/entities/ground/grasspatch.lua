@@ -18,7 +18,7 @@ return {
         top = "grasspatch_top",
     }),
 
-    init = base.initializers.initXY;
+    initXY = true,
 }
 
 

@@ -13,7 +13,9 @@ return {
 
     drawDepth = 500, -- draw in front of other stuff
 
-    init = function(e,x,y)
+    initXY = true,
+
+    init = function(e)
         local cloudN = math.random(1,4)
         e.image = "cloud" .. tostring(cloudN)
         e.color = {0,0.0,0,0.3}
@@ -23,7 +25,6 @@ return {
         if math.random() > 0.5 then
             e.scaleY = -1
         end
-        base.initializers.initXY(e,x,y)
     end
 }
 

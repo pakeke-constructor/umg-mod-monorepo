@@ -23,13 +23,14 @@ return umg.extend(abstractButton, {
         end
     end,
 
+    initXY = true,
+
     init = function(ent, x, y, rgbTeam)
         assert(rgbTeam, "this ent needs to be assigned to an rgbTeam.")
         ent.nametag = {
             value = NOT_SHOWING_TAG
         }
         ent.rgbTeam = rgbTeam
-        base.initializers.initXY(ent,x,y)
     end
 })
 

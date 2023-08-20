@@ -16,13 +16,13 @@ return {
 
     onClick = true,
 
+    initXY = true,
+
     init = function(e,x,y,options)
         assertOptions(options)
         for k,v in pairs(options)do
             e[k] = v
         end
-
-        base.initializers.initXY(e,x,y)
     end
 }
 

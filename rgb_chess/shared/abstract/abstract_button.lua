@@ -38,10 +38,7 @@ return {
         end
     end,
 
-
-    init = function(ent, x, y)
-        base.initializers.initXY(ent,x,y)
-    end
+    initXY = true,
 }
 
 

@@ -111,9 +111,9 @@ return {
 
     inventoryName = "My Inventory" -- We can name inventories like this
 
-    init = function(ent, x, y)
-        base.initializers.initXY(ent,x,y)
+    initXY = true
 
+    init = function(ent)
         -- Upon creation, the `inventory` component should be set to a table,
         -- like the following:
         chest.inventory = Inventory({
@@ -193,9 +193,9 @@ For example, here's a basic entity that can hold a gun:
 return {
     image = "blob",
 
-    init = function(ent, x, y)
-        base.initializers.initXY(ent,x,y)
+    initXY = true
 
+    init = function(ent)
         ent.lookX, ent.lookY = 0,0
         -- the X and Y position that this entity is looking at.
         -- (This will also determine the face direction, and the direction

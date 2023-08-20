@@ -30,7 +30,7 @@ return {
         end
     end;
 
-    init = base.initializers.initXY
+    initXY = true
 }
 
 

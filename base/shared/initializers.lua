@@ -27,5 +27,37 @@ function initializers.initVxVy(e, x, y)
 end
 
 
+
+local function check2Numbers(x, y)
+    if type(x) == "number" and type(y) == "number" then
+        return true
+    end
+    return false
+end
+
+
+umg.on("@entityInit", function(ent, x, y)
+    if ent.initXY then
+        -- initialize x, y comps
+        if check2Numbers(x, y) then
+            ent.x = x
+            ent.y = y
+        end
+
+    elseif ent.initVxVy then
+        -- initialize x, y,
+        -- and also velocity comps.
+        if check2Numbers(x, y) then
+            ent.x = x
+            ent.y = y
+            ent.vx = 0
+            ent.vy = 0
+        end
+    end
+end)
+
+
+
+
 return initializers
 

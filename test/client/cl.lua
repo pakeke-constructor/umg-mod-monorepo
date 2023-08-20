@@ -59,7 +59,6 @@ local DEFAULT_DIMENSION = dimensions.getDefaultDimension()
 
 
 function listener:keypressed(key, scancode, isrepeat)
-    juice.popups.image("3d_player_down_1", {x=0, y=0})
     if scancode == "q" then
         local e = control.getPlayer()
         local x, y = rendering.getWorldMousePosition()

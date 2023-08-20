@@ -8,8 +8,9 @@ end
 return {
     swaying = {},
 
+    initXY = true,
+
     init = function(ent, x, y)
-        base.initializers.initXY(ent,x,y)
         ent.image = table.random(GRASS_IMAGES)
     end
 }
