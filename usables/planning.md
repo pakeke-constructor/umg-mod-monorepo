@@ -20,10 +20,12 @@ Stuff we want in the future:
 
 ## Q1: How are items actually held?
 Ideas:
-- `holditems` component: A `List<ItemEnt>` of items that are being held
-    ^^^ this is the best idea
+- Keep it same as before (only 1 item can be held)
+    ^^^ THIS IS THE BEST IDEA.
+    If modders want to support multi-hold, they can add the 
+    position components themselves and handle all that themselves.
+- `holditems` component: A `Set<ItemEnt>` of items that are being held
 - Set holdItems manually, and an internal system handles it.
-- Keep it same as before (only 1 item can be held) <--- BAD!!!
 
 
 
@@ -52,4 +54,16 @@ Emit the following callbacks:
 - `usables:itemCancelCharge` Cancelled (not charged for enough time)
 
 
+
+
+## Q4: How do we interact with the mod to say which items are held?
+We can only equip items if the entity has an inventory:
+```lua
+usables.equipItem(ent, invX, invY) -- where (invX, invY) are inventory coords
+usables.unequipItem(ent, invX, invY)
+```
+
+TODO: Where do we actually store the info for hold items?
+Do we do `holdItemX`, `holdItemY` as inventor coordinates?
+^^^ this would probably be the most robust.
 

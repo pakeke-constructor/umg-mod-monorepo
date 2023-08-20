@@ -1,15 +1,22 @@
 
 
-local holdingItemGroup = umg.group("holdItems", "x", "y")
+local holdItems = {}
+
+
+local holdingItemGroup = umg.group("holdItem", "x", "y")
 
 
 
 
-local function updateHoldItem(itemEnt, holderEnt, i, len)
-    -- todo: we can ask better questions here
+local function updateHoldItem(itemEnt, holderEnt)
+    if not itemEnt then
+        return
+    end
+
     local x, y = holderEnt.x, holderEnt.y
 
-    x, y = umg.ask("usables:getItemHoldPosition", itemEnt, holderEnt, i, len)
+    -- todo: we can ask more/better questions here
+    x, y = umg.ask("usables:getItemHoldPosition", itemEnt, holderEnt)
 
     itemEnt.dimension = holderEnt.dimension
     itemEnt.x, itemEnt.y = x, y
@@ -19,17 +26,22 @@ end
 
 
 local function updateHolderEnt(ent)
-    if not ent.holdItems then
+    if not ent.holdItem then
         return
     end
-
-    -- update all held items:
-    local len = #ent.holdItems
-    for i, itemEnt in ipairs(ent.holdItems) do
-        updateHoldItem(ent, itemEnt, i, len)
-    end
+    updateHoldItem(ent, ent.holdItem)
 end
 
+
+
+function holdItems.equipItem(ent, invX, invY)
+    -- holds the item at slot (invX, invY) in ent's inventory
+end
+
+
+function holdItems.unequipItem(ent)
+    
+end
 
 
 
@@ -37,7 +49,9 @@ if client then
 
 umg.on("state:gameUpdate", function()
     for _, ent in ipairs(holdingItemGroup) do
-        updateHolderEnt(ent)
+        if sync.isClientControlling(ent) then
+            updateHolderEnt(ent)
+        end
     end
 end)
 

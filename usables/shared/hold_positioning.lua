@@ -1,9 +1,6 @@
 
 
 
-
-
-
 local function getLookDirection(ent)
     if ent.lookX and ent.lookY then
         return math.normalize(ent.lookX - ent.x, ent.lookY - ent.y)
