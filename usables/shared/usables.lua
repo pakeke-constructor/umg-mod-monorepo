@@ -28,12 +28,18 @@ end
 
 
 
-function usables.canUseHoldItem(holder_ent, ...)
-    if (not umg.exists(holder_ent)) or (not getHoldItem(holder_ent)) then
+local function isUseItem(item)
+
+end
+
+
+
+function usables.canUseHoldItem(holder_ent, item, ...)
+    if (not umg.exists(holder_ent)) or (not umg.exists(item)) then
         return false
     end
 
-    local item = getHoldItem(holder_ent)
+    -- TODO: wot?
     if not item.useItem then
         return false
     end

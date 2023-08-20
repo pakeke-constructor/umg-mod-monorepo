@@ -26,23 +26,30 @@ Ideas:
 - Keep it same as before (only 1 item can be held) <--- BAD!!!
 
 
+
 ## Q2: What are we doing with the argument order for `items:useItem`?
 Args should look like this:
 `(itemEnt, holderEnt, useMode, ...)`
 where `useMode` is a number.
 
 
-## Q3: How to handle exotic use types:
 
-**Continuous item usage:**
-- `usables:startUseContinuous` item starts being used
-- `usables:useContinuous` (called every tick)
-- `usables:endUseContinuous` item stops being used
+## Q3: How do we handle exotic use types?
+Items should be able to be continuous AND chargable simultaneously.
 
-**Charge item usage:**
-- `usables:startCharge` item starts being charged
-- `usables:releaseCharge` Charge released (eg. bow and arrow shot)
-- `usables:cancelCharge` Cancelled (eg. not enough charge to properly use)
+**Components:**
+```lua
+item.itemChargeTime = X -- time taken to charge this item
+item.itemRepeatUsage = true -- repeats usage whilst being used (like ak47)
+```
+
+Emit the following callbacks:
+- `usables:itemStartCharge` item starts being charged
+- `usables:itemBeingCharged` called every tick whilst charging (pass in time)
+- `usables:itemUse` item starts being used
+- `usables:itemBeingUsed` called every tick whilst using (pass in time)
+- `usables:itemEndUse` item stops being used
+- `usables:itemCancelCharge` Cancelled (not charged for enough time)
 
 
 
