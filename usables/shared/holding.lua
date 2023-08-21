@@ -13,10 +13,17 @@ local function updateHoldItem(itemEnt, holderEnt)
         return
     end
 
-    local x, y = holderEnt.x, holderEnt.y
+    local x, y, rot, scaleX, scaleY
+    x, y = holderEnt.x, holderEnt.y
 
     -- todo: we can ask more/better questions here
     x, y = umg.ask("usables:getItemHoldPosition", itemEnt, holderEnt)
+    rot = umg.ask("usables:getItemRotation", itemEnt, holderEnt)
+    scaleX, scaleY = umg.ask("usables:getItemRotation", itemEnt, holderEnt)
+    
+    umg.call("usables:holdItemUpdate", itemEnt, holderEnt)
+
+    local rot = umg.ask("usables:getItemHoldRotation", itemEnt, holderEnt)
 
     itemEnt.dimension = holderEnt.dimension
     itemEnt.x, itemEnt.y = x, y

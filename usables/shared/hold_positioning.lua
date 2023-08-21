@@ -41,7 +41,7 @@ function holdTypes.tool(itemEnt, holderEnt)
     local hold_dist = getHoldDistance(itemEnt, holderEnt)
 
     itemEnt.rot = -math.atan2(dx,dy) + math.pi/2 + sinv/3
-    itemEnt.scaleX = dx>0 and 1 or -1
+    itemEnt.scaleY = dx>0 and 1 or -1
     -- TODO: This ^^^ is crappy!!! This will overwrite existing scale
     itemEnt.x = holderEnt.x + dx * hold_dist
     itemEnt.y = holderEnt.y + dy * hold_dist
@@ -79,6 +79,7 @@ function holdTypes.recoil(itemEnt, holderEnt)
     local addRot = itemEnt.itemHoldRotation or 0
     itemEnt.rot = addRot + -math.atan2(dx,dy) + math.pi/2 + sinv/3
     itemEnt.scaleY = dx>0 and 1 or -1
+    -- TODO: This ^^^ is crappy!!! This will overwrite existing scale
     itemEnt.x = holderEnt.x + dx * hold_dist
     itemEnt.y = holderEnt.y + dy * hold_dist
 end
@@ -95,7 +96,7 @@ end
 
 
 
-umg.answer("usables:getItemholdPositioning", function(itemEnt, holderEnt, i, len)
+umg.answer("usables:holdItemUpdate", function(itemEnt, holderEnt)
     if itemEnt.itemHoldType then
         local holdType = itemEnt.itemHoldType
         if not holdTypes[holdType] then
@@ -103,7 +104,7 @@ umg.answer("usables:getItemholdPositioning", function(itemEnt, holderEnt, i, len
         end
 
         local func = holdTypes[holdType]
-        func(itemEnt, holderEnt, i, len)
+        return func(itemEnt, holderEnt)
     end
 end)
 
