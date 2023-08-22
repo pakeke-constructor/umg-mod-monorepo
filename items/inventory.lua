@@ -92,6 +92,11 @@ end
 
 
 function Inventory:slotExists(x, y)
+    -- if out of bounds, return false
+    if (x < 1 or x > self.width) or (y < 1 or y > self.height) then
+        return false
+    end
+
     local ent = self.owner
     if ent.inventorySlots then
         return ent.inventorySlots[y] and ent.inventorySlots[y][x]

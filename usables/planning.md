@@ -63,7 +63,5 @@ usables.equipItem(ent, invX, invY) -- where (invX, invY) are inventory coords
 usables.unequipItem(ent, invX, invY)
 ```
 TODO: Where do we actually store the info for hold items?
-Do we do `holdItemX`, `holdItemY` as inventory coordinates?
-^^^ this would probably be the most robust.
-This way, when items are removed, nothing bad happens.
+idea: `ent.holdItem` component, which contains `slotX`, `slotY` values.
 

@@ -1,4 +1,8 @@
 
+local common = require("shared.common")
+
+
+
 
 local holdItems = {}
 
@@ -7,26 +11,26 @@ local holdingItemGroup = umg.group("holdItem", "x", "y")
 
 
 
+local getHoldDistance = common.getHoldDistance
+
+local function defaultHandler(itemEnt, holderEnt)
+    local x, y = holderEnt.x, holderEnt.y
+    itemEnt.x, itemEnt.y = x, y - getHoldDistance(itemEnt, holderEnt)
+end
+
+
 
 local function updateHoldItem(itemEnt, holderEnt)
     if not itemEnt then
         return
     end
-
-    local x, y, rot, scaleX, scaleY
-    x, y = holderEnt.x, holderEnt.y
-
     -- todo: we can ask more/better questions here
-    x, y = umg.ask("usables:getItemHoldPosition", itemEnt, holderEnt)
-    rot = umg.ask("usables:getItemRotation", itemEnt, holderEnt)
-    scaleX, scaleY = umg.ask("usables:getItemRotation", itemEnt, holderEnt)
-    
-    umg.call("usables:holdItemUpdate", itemEnt, holderEnt)
+    local handlerFunc = umg.ask("usables:getHoldItemHandler", itemEnt, holderEnt)
+    handlerFunc = handlerFunc or defaultHandler
 
-    local rot = umg.ask("usables:getItemHoldRotation", itemEnt, holderEnt)
+    handlerFunc(itemEnt, holderEnt)
 
     itemEnt.dimension = holderEnt.dimension
-    itemEnt.x, itemEnt.y = x, y
 end
 
 
@@ -43,6 +47,7 @@ end
 
 function holdItems.equipItem(ent, invX, invY)
     -- holds the item at slot (invX, invY) in ent's inventory
+    ent.holdItemX = invX
 end
 
 

@@ -1,4 +1,10 @@
 
+local common = require("shared.common")
+
+local getHoldDistance = common.getHoldDistance
+
+
+
 
 
 local function getLookDirection(ent)
@@ -10,17 +16,6 @@ local function getLookDirection(ent)
         end
     end
     return 0,0
-end
-
-
-
-local DEFAULT_HOLD_DISTANCE = 10
-
-
-local function getHoldDistance(ent, holderEnt)
-    local dis1 = ent.itemHoldDistance or DEFAULT_HOLD_DISTANCE
-    local dis2 = holderEnt.itemHoldDistance or DEFAULT_HOLD_DISTANCE
-    return dis1 + dis2
 end
 
 
@@ -95,16 +90,15 @@ end
 
 
 
+local PRIORITY = 1
 
-umg.answer("usables:holdItemUpdate", function(itemEnt, holderEnt)
+umg.answer("usables:getHoldItemHandler", function(itemEnt, holderEnt)
     if itemEnt.itemHoldType then
         local holdType = itemEnt.itemHoldType
-        if not holdTypes[holdType] then
-            error("Unknown item hold type: " .. tostring(holdType))
-        end
-
         local func = holdTypes[holdType]
-        return func(itemEnt, holderEnt)
+        if func then
+            return func, PRIORITY
+        end
     end
 end)
 
