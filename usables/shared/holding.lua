@@ -10,8 +10,10 @@ local holdItems = {}
 local holdingItemGroup = umg.group("holdItem", "x", "y")
 
 
-
 local getHoldDistance = common.getHoldDistance
+local getHoldItem = common.getHoldItem
+
+
 
 local function defaultHandler(itemEnt, holderEnt)
     local x, y = holderEnt.x, holderEnt.y
@@ -20,10 +22,12 @@ end
 
 
 
-local function updateHoldItem(itemEnt, holderEnt)
-    if not itemEnt then
-        return
-    end
+local entity2Tc = typecheck.assert("entity", "entity")
+
+
+function holdItems.updateHoldItemDirectly(itemEnt, holderEnt)
+    entity2Tc(itemEnt, holderEnt)
+
     -- todo: we can ask more/better questions here
     local handlerFunc = umg.ask("usables:getHoldItemHandler", itemEnt, holderEnt)
     handlerFunc = handlerFunc or defaultHandler
@@ -37,22 +41,103 @@ end
 
 
 local function updateHolderEnt(ent)
-    if not ent.holdItem then
+    local holdItem = getHoldItem(ent)
+    if holdItem then
+        holdItems.updateHoldItemDirectly(ent, holdItem)
+    end
+end
+
+
+
+local function equipItem(holderEnt, slotX, slotY)
+    -- holds the item at slot (slotX, slotY) in ent's inventory
+    local holdItem = holderEnt.holdItem or {}
+    holdItem.slotX = slotX
+    holdItem.slotY = slotY
+
+    local item = holderEnt.inventory:get(slotX, slotY)
+    if item then
+        umg.call("usables:equipItem", item, holderEnt)
+    end
+end
+
+
+
+
+
+local EV_NAME = "usables.equipItem"
+local sf = sync.filters
+
+
+if client then
+
+function holdItems.equipItem(holderEnt, slotX, slotY)
+    if sync.isClientControlling(holderEnt) then
+        client.send(EV_NAME, holderEnt, slotX, slotY)
+    end
+end
+
+client.on(EV_NAME, function(holderEnt, slotX, slotY)
+    equipItem(holderEnt, slotX, slotY)
+end)
+
+
+
+elseif server then
+
+function holdItems.equipItem(holderEnt, slotX, slotY)
+    server.broadcast(EV_NAME, holderEnt, slotX, slotY)
+end
+
+server.on(EV_NAME, {
+    arguments = {sf.controlEntity, sf.number, sf.number},
+    handler = function(sender, ent, slotX, slotY)
+        local inv = ent.inventory
+        if not inv then return end
+        slotX = math.floor(slotX)
+        slotY = math.floor(slotY)
+        
+        if inv:slotExists(slotX,slotY) then
+            equipItem(ent, slotX, slotY)
+        end
+    end
+})
+
+
+
+end
+
+
+
+local function removePositionComponents(itemEnt)
+    if itemEnt:hasComponent("x") then
+        itemEnt:removeComponent("x")
+    end
+
+    if itemEnt:hasComponent("y") then
+        itemEnt:removeComponent("y")
+    end
+
+    if itemEnt:hasComponent("dimension") then
+        itemEnt:removeComponent("dimension")
+    end
+end
+
+
+local entityTc = typecheck.assert("entity")
+
+function holdItems.unequipItem(holderEnt, itemEnt)
+    entityTc(holderEnt)
+    itemEnt = itemEnt or getHoldItem(holderEnt)
+    if not itemEnt then
         return
     end
-    updateHoldItem(ent, ent.holdItem)
-end
 
+    if server then
+        removePositionComponents(itemEnt)
+    end
 
-
-function holdItems.equipItem(ent, invX, invY)
-    -- holds the item at slot (invX, invY) in ent's inventory
-    ent.holdItemX = invX
-end
-
-
-function holdItems.unequipItem(ent)
-    
+    umg.call("usables:unequipItem", itemEnt, holderEnt)
 end
 
 

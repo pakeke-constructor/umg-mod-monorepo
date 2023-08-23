@@ -33,10 +33,6 @@ inventoryGroup:onAdded(function(ent)
         error("inventory was assigned incorrectly for ent: " .. tostring(ent))
     end
 
-    if not ent.stackSize then
-        ent.stackSize = 1
-    end
-
     ent.inventory:setup(ent)
 end)
 

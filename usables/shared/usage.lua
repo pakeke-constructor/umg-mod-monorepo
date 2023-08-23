@@ -7,10 +7,10 @@ Handles usage of items.
 
 ]]
 
-local usables = {}
+local usage = {}
 
-require("usables_events")
-require("usables_questions")
+require("usage_events")
+require("usage_questions")
 
 
 
@@ -34,7 +34,7 @@ end
 
 
 
-function usables.canUseHoldItem(holder_ent, item, ...)
+function usage.canUseHoldItem(holder_ent, item, ...)
     if (not umg.exists(holder_ent)) or (not umg.exists(item)) then
         return false
     end
@@ -51,7 +51,7 @@ function usables.canUseHoldItem(holder_ent, item, ...)
         return false
     end
 
-    local usageBlocked = umg.ask("usables:itemUsageBlocked", holder_ent, item, ...)
+    local usageBlocked = umg.ask("usage:itemUsageBlocked", holder_ent, item, ...)
     if usageBlocked then
         return false
     end
@@ -88,11 +88,11 @@ end
 
 if server then
 
-function usables.useHoldItem(holder_ent, ...)
+function usage.useHoldItem(holder_ent, ...)
     local item = getHoldItem(holder_ent)
     if item then
-        if usables.canUseHoldItem(holder_ent) then
-            usables.useItemDirectly(holder_ent, item, ...)
+        if usage.canUseHoldItem(holder_ent) then
+            usage.useItemDirectly(holder_ent, item, ...)
         else
             useItemDeny(item, holder_ent, ...)
         end
@@ -101,7 +101,7 @@ end
 
 local asserterDirect = typecheck.assert("entity?", "entity")
 
-function usables.useItemDirectly(holder_ent, item, ...)
+function usage.useItemDirectly(holder_ent, item, ...)
     asserterDirect(holder_ent, item)
     -- holder_ent could be nil here
     if type(item.useItem) == "function" then
@@ -120,7 +120,7 @@ server.on("usables:useItem", {
         if not getHoldItem(holder_ent) then return end
         if holder_ent.controller ~= sender then return end
 
-        usables.useHoldItem(holder_ent, ...)
+        usage.useHoldItem(holder_ent, ...)
     end
 })
 
@@ -140,12 +140,12 @@ if client then
 
 local function canUse(holder_ent)
     return sync.isClientControlling(holder_ent)
-        and usables.canUseHoldItem(holder_ent)
+        and usage.canUseHoldItem(holder_ent)
 end
 
 local asserter = typecheck.assert("entity")
 
-function usables.useHoldItem(holder_ent, ...)
+function usage.useHoldItem(holder_ent, ...)
     asserter(holder_ent)
     local item = holder_ent.inventory and holder_ent.inventory:getHoldItem()
     if canUse(holder_ent) then
@@ -174,5 +174,5 @@ end
 
 
 
-return usables
+return usage
 

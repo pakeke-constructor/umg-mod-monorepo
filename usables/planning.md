@@ -65,3 +65,19 @@ usables.unequipItem(ent, invX, invY)
 TODO: Where do we actually store the info for hold items?
 idea: `ent.holdItem` component, which contains `slotX`, `slotY` values.
 
+
+## PROBLEM 1:
+There is a potential for problems with item entities:
+Items may end up with position components, even when they are no longer
+being held.
+
+## PROBLEM 2:
+How do we handle syncing for holdItems?
+Solutions
+
+## PROBLEM 3:
+How do we handle switching between items?
+idea:
+- use number keys for quick switching
+- use mouse scroll for switching like minecraft
+

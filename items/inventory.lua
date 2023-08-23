@@ -180,7 +180,8 @@ function Inventory:_rawset(x, y, item_ent)
         self.inventory[i] = item_ent
     else
         if self.inventory[i] then
-            umg.call("items:itemRemoved", self.owner, self.inventory[i])
+            local removed_item = self.inventory[i]
+            umg.call("items:itemRemoved", self.owner, removed_item)
         end
         self.inventory[i] = nil
     end
@@ -736,7 +737,7 @@ local descriptionArgs = {Color = {0.56,0.56,0.56}}
 local TOOLTIP_DELTA = 3
 
 local function updateItemTooltip(itemEnt, mx, my)
-    Slab.BeginWindow("inventory:itemInfo", {
+    Slab.BeginWindow("inventory.itemInfo", {
         X = mx+TOOLTIP_DELTA, Y = my+TOOLTIP_DELTA,
         AllowResize = false
     })
