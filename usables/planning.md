@@ -104,35 +104,3 @@ umg.on("@tick", function(dt)
 end)
 ```
 
-
-## Q7:
-Right now, giving x,y comps to inventory items are just.. not robust.
-Lets plan a better way to do things.
-
-Why is it not robust?
-- We might forget to remove the (x,y) component when moving an item
-- There are many sources of "truth" for whether an item should have (x,y)
-    - (holdItem comp, x-y comps, inventory component)
-
-How about we create position management functionality within `Inventory`,
-which keeps track of items that have a position?
-Then, when the item moves out of the inventory, or is dropped,
-then the item's position components can get destroyed.
-
-This was *somewhat* similar to what we had before, but now it's just
-able to be extended nicely:
-API IDEA 1:
-```lua
-inv:allocatePosition(itemEnt, x, y)
--- allocates position for entity
-
-inv:deallocatePosition(itemEnt)
--- de-allocates position
-
-local xyAlloced = inv:isPositionAllocated(itemEnt)
--- Checks whether a position is allocated or not
-
-```
-
-
-
