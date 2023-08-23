@@ -31,20 +31,32 @@ local itemEnt = itemHandle:get() -- returns nil if invalid
 
 ```
 See code above.
-If an entity moves inventories, all of it's `handlers` become invalid.
-The handlers are managed internally by each inventory.
+If an entity moves inventories, all of it's `handles` become invalid.
+If an entity moves slots, it's handles also become invalid.
+handles are managed internally by each inventory.
 
 Ok, cool. This solves some of our problems, and will solve many more
 problems down the line.
 But this doesn't solve the (x,y) components still existing!
-One idea could be to create a `items:itemHandleDestroyed` callback,
+
+IDEA 2 - create a `items:itemHandleInvalidated` callback,
 passing in `(invEnt, itemHandle, itemEnt)`?
 ```lua
-itemHandle:addFlag("removePosition")
+itemHandle:addFlag("removePosition", true)
+local val = itemHandle:getFlag("removePosition")
 ```
 That way, we could add flags to itemHandles (eg above) to automatically
-apply properties to items.
+apply properties to items:
+```lua
+umg.on("items:itemHandleInvalidated", function(invEnt, itemHandle, item)
+    if itemHandle:getFlag("removePosition") then
+        item:removeComponent("x")
+        item:removeComponent("y")
+    end
+end)
+```
 Do some thinking.
+
 
 
 
