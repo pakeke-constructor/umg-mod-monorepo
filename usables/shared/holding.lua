@@ -49,6 +49,23 @@ end
 
 
 
+
+local function removePositionComponents(itemEnt)
+    if itemEnt:hasComponent("x") then
+        itemEnt:removeComponent("x")
+    end
+
+    if itemEnt:hasComponent("y") then
+        itemEnt:removeComponent("y")
+    end
+
+    if itemEnt:hasComponent("dimension") then
+        itemEnt:removeComponent("dimension")
+    end
+end
+
+
+
 local function equipItem(holderEnt, slotX, slotY)
     -- holds the item at slot (slotX, slotY) in ent's inventory
     local holdItem = holderEnt.holdItem or {}
@@ -60,6 +77,17 @@ local function equipItem(holderEnt, slotX, slotY)
         umg.call("usables:equipItem", item, holderEnt)
     end
 end
+
+
+local function unequipItem(holderEnt)
+    local holdItem = getHoldItem(holderEnt)
+    if holdItem then
+        removePositionComponents(holdItem)
+        umg.call("usables:unequipItem", holdItem, holderEnt)
+    end
+end
+
+
 
 
 
@@ -86,8 +114,22 @@ end)
 elseif server then
 
 function holdItems.equipItem(holderEnt, slotX, slotY)
+    local prevItem = getHoldItem(holderEnt)
+    if prevItem then
+        -- remove position components from the previous hold item
+        removePositionComponents(prevItem)
+    end
     server.broadcast(EV_NAME, holderEnt, slotX, slotY)
+    equipItem(holderEnt, slotX, slotY)
 end
+
+umg.on("items:itemRemoved", function(invEnt, itemEnt)
+    local holdItem = getHoldItem(invEnt)
+    if holdItem == itemEnt then
+        removePositionComponents(itemEnt)
+    end
+end)
+
 
 server.on(EV_NAME, {
     arguments = {sf.controlEntity, sf.number, sf.number},
@@ -109,19 +151,7 @@ end
 
 
 
-local function removePositionComponents(itemEnt)
-    if itemEnt:hasComponent("x") then
-        itemEnt:removeComponent("x")
-    end
 
-    if itemEnt:hasComponent("y") then
-        itemEnt:removeComponent("y")
-    end
-
-    if itemEnt:hasComponent("dimension") then
-        itemEnt:removeComponent("dimension")
-    end
-end
 
 
 local entityTc = typecheck.assert("entity")

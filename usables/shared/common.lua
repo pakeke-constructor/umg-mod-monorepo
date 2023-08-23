@@ -4,6 +4,15 @@ local common = {}
 
 
 
+function common.getHoldSlot(ent)
+    local holdItem = ent.holdItem
+    if (holdItem.slotX and holdItem.slotY) then
+        return ent.holdItemX, ent.holdItemY
+    end
+end
+
+
+
 function common.getHoldItem(ent)
     if not ent.inventory then
         return nil
@@ -15,8 +24,8 @@ function common.getHoldItem(ent)
         return holdItem
     end
 
-    if (holdItem.slotX and holdItem.slotY) then
-        local slotX, slotY = ent.holdItemX, ent.holdItemY
+    local slotX, slotY = common.getHoldSlot(ent)
+    if slotX then
         return ent.inventory:get(slotX, slotY)
     end
 end
