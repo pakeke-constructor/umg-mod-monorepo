@@ -4,7 +4,7 @@ local common = require("shared.common")
 
 
 
-local holdItems = {}
+local holding = {}
 
 
 local holdingItemGroup = umg.group("holdItem", "x", "y")
@@ -25,7 +25,7 @@ end
 local entity2Tc = typecheck.assert("entity", "entity")
 
 
-function holdItems.updateHoldItemDirectly(itemEnt, holderEnt)
+function holding.updateHoldItemDirectly(itemEnt, holderEnt)
     entity2Tc(itemEnt, holderEnt)
 
     -- todo: we can ask more/better questions here
@@ -43,7 +43,7 @@ end
 local function updateHolderEnt(ent)
     local holdItem = getHoldItem(ent)
     if holdItem then
-        holdItems.updateHoldItemDirectly(ent, holdItem)
+        holding.updateHoldItemDirectly(ent, holdItem)
     end
 end
 
@@ -61,22 +61,25 @@ end
 
 
 
-local EV_NAME = "usables.equipItem"
+local EQUIP_EV = "usables.equipItem"
+local UNEQUIP_EV = "usables.unequipItem"
+
 local sf = sync.filters
 
 
 if client then
 
-function holdItems.equipItem(holderEnt, slotX, slotY)
+function holding.equipItem(holderEnt, slotX, slotY)
     if sync.isClientControlling(holderEnt) then
-        client.send(EV_NAME, holderEnt, slotX, slotY)
+        client.send(EQUIP_EV, holderEnt, slotX, slotY)
     end
 end
 
-client.on(EV_NAME, function(holderEnt, slotX, slotY)
-    setHoldValues(holderEnt, slotX, slotY)
-end)
-
+function holding.unequipItem(holderEnt, slotX, slotY)
+    if sync.isClientControlling(holderEnt) then
+        client.send(UNEQUIP_EV, holderEnt, slotX, slotY)
+    end
+end
 
 
 elseif server then
@@ -111,14 +114,15 @@ local function unequipItem(holderEnt)
     end
 end
 
-function holdItems.equipItem(holderEnt, slotX, slotY)
+function holding.equipItem(holderEnt, slotX, slotY)
     local prevItem = getHoldItem(holderEnt)
     if prevItem then
         -- unequip previous item
         unequipItem(prevItem)
     end
     -- equip new item:
-    server.broadcast(EV_NAME, holderEnt, slotX, slotY)
+    server.broadcast(EQUIP_EV, holderEnt, slotX, slotY)
+    setHoldValues(holderEnt, slotX, slotY)
     equipItem(holderEnt, slotX, slotY)
 end
 
@@ -132,7 +136,7 @@ umg.on("items:itemRemoved", function(holderEnt, itemEnt)
 end)
 
 
-server.on(EV_NAME, {
+server.on(EQUIP_EV, {
     arguments = {sf.controlEntity, sf.number, sf.number},
     handler = function(sender, ent, slotX, slotY)
         local inv = ent.inventory
@@ -146,10 +150,19 @@ server.on(EV_NAME, {
     end
 })
 
+server.on(UNEQUIP_EV, {
+    arguments = {sf.controlEntity},
+    handler = function(sender, ent)
+        local inv = ent.inventory
+        if not inv then return end
+        unequipItem(ent)
+    end
+})
+
 local entityTc = typecheck.assert("entity")
 
-function holdItems.unequipItem(holderEnt)
-    -- able to programmatically unequip items:
+function holding.unequipItem(holderEnt)
+    -- programmatically unequip items:
     entityTc(holderEnt)
     assert(server, "?")
     unequipItem(holderEnt)

@@ -60,24 +60,79 @@ Emit the following callbacks:
 We can only equip items if the entity has an inventory:
 ```lua
 usables.equipItem(ent, invX, invY) -- where (invX, invY) are inventory coords
-usables.unequipItem(ent, invX, invY)
+usables.unequipItem(ent)
 ```
 TODO: Where do we actually store the info for hold items?
 idea: `ent.holdItem` component, which contains `slotX`, `slotY` values.
 
 
-## PROBLEM 1:
-There is a potential for problems with item entities:
-Items may end up with position components, even when they are no longer
-being held.
 
-## PROBLEM 2:
-How do we handle syncing for holdItems?
-Solutions
-
-## PROBLEM 3:
+## Q5:
 How do we handle switching between items?
 idea:
 - use number keys for quick switching
 - use mouse scroll for switching like minecraft
+
+
+## Q6:
+What should the API look like for item usage?
+We should probably map it as close to the user input as we can get.
+Idea: have a `useItem` function that we must call every tick:
+We must also pass in the "mode" of the item, a positive integer.
+```lua
+-- client side:
+local function pollControlEnts(mode)
+    local used = false
+    for _, ent in ipairs(controlInventoryEnts) do
+        if sync.isClientControlling(ent) and isHoldingItem(ent) then
+            usables.useItem(holderEnt, mode)
+            -- tells the engine that we are using this item this tick.
+            used = true
+        end
+    end
+    return used
+end
+
+local MOUSE_MODES = {1,2,3}
+umg.on("@tick", function(dt)
+    for _, mode in ipairs(MOUSE_MODES) do
+        if listener:isMouseButtonDown(mode) then
+            local used = pollControlEnts(mode)
+            if used then listener:lockMouseButton(mode)
+        end
+    end
+end)
+```
+
+
+## Q7:
+Right now, giving x,y comps to inventory items are just.. not robust.
+Lets plan a better way to do things.
+
+Why is it not robust?
+- We might forget to remove the (x,y) component when moving an item
+- There are many sources of "truth" for whether an item should have (x,y)
+    - (holdItem comp, x-y comps, inventory component)
+
+How about we create position management functionality within `Inventory`,
+which keeps track of items that have a position?
+Then, when the item moves out of the inventory, or is dropped,
+then the item's position components can get destroyed.
+
+This was *somewhat* similar to what we had before, but now it's just
+able to be extended nicely:
+API IDEA 1:
+```lua
+inv:allocatePosition(itemEnt, x, y)
+-- allocates position for entity
+
+inv:deallocatePosition(itemEnt)
+-- de-allocates position
+
+local xyAlloced = inv:isPositionAllocated(itemEnt)
+-- Checks whether a position is allocated or not
+
+```
+
+
 

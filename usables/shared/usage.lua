@@ -5,6 +5,11 @@
 Handles usage of items.
 
 
+
+TODO:
+All of this needs to be redone, to account for exotic use types.
+
+
 ]]
 
 local usage = {}
@@ -14,23 +19,15 @@ require("usage_questions")
 
 
 
+local common = require("shared.common")
+
+local getHoldItem = common.getHoldItem
+
+
 
 local DEFAULT_ITEM_COOLDOWN = 0.2
 
 
-local function getHoldItem(ent)
-    local inv = ent.inventory
-    if inv then
-        local item = inv:getHoldItem()
-        return umg.exists(item) and item
-    end
-end
-
-
-
-local function isUseItem(item)
-
-end
 
 
 
@@ -39,11 +36,7 @@ function usage.canUseHoldItem(holder_ent, item, ...)
         return false
     end
 
-    -- TODO: wot?
-    if not item.useItem then
-        return false
-    end
-
+    -- Else, we assume that any held item is usable.
     local time = state.getGameTime()
     local time_since_use = time - (item.itemLastUseTime or 0)
     local cooldown = (item.itemCooldown or DEFAULT_ITEM_COOLDOWN)
