@@ -1,7 +1,7 @@
 
 
 local function loadShared(items)
-    local Inventory = require("inventory")
+    local Inventory = require("shared.inventory")
     items.Inventory = Inventory
     
     local itemUsage

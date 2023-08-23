@@ -4,8 +4,8 @@
 local inventoryGroup = umg.group("inventory")
 -- group of all ents that have an `inventory` component.
 
-local Inventory = require("inventory")
-local valid_callbacks = require("inventory_callbacks")
+local Inventory = require("shared.inventory")
+local valid_callbacks = require("shared.inventory_callbacks")
 
 local groundItemsHandler = require("server.ground_items_handler")
 

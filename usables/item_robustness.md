@@ -56,6 +56,8 @@ umg.on("items:itemHandleInvalidated", function(invEnt, itemHandle, item)
 end)
 ```
 Do some thinking.
+Also, do we want `:getFlag`, `:setFlag` for this? Or do we just want
+`itemHandle.removePosition = true`...?
 
 
 

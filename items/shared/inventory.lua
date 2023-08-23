@@ -9,8 +9,11 @@ Inventory objects
 require("items_events")
 require("items_questions")
 
+local ItemHandle = require("shared.item_handle")
+
 
 local Inventory = objects.Class("items_mod:inventory")
+
 
 local updateStackSize
 if server then
@@ -622,6 +625,32 @@ function Inventory:getHoldItem()
     return self.holdItem
 end
 
+
+
+function Inventory:getItemHandles()
+    --[[
+        a lot of inventories don't need itemHandles, so we create
+        the data structure in a lazy fashion.
+    ]]
+    if self.itemHandles then
+        return self.itemHandles
+    end
+    self.itemHandles = {--[[
+        [itemEnt] -> ItemHandle
+    ]]}
+end
+
+
+function Inventory:createItemHandle(slotX, slotY)
+    assert2Numbers(slotX, slotY)
+    local item = self:get(slotX, slotY)
+    assert(item, "No entity in slot!")
+    
+    local ihandle = ItemHandle(slotX, slotY, item)
+    local itemHandles = self:getItemHandles()
+    itemHandles[item] = ihandle
+    return ihandle
+end
 
 
 

@@ -1,5 +1,5 @@
 
-local Inventory = require("inventory")
+local Inventory = require("shared.inventory")
 
 
 local inventoryGroup = umg.group("inventory")
