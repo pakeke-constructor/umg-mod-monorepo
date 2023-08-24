@@ -9,7 +9,8 @@ If an item is moved out of an inventory, or if an item moves slots,
 any ItemHandle for that item becomes invalid,
 and other systems that have a reference to that ItemHandle will know.
 
-This allows systems to use items in more complex ways, for example:
+This allows systems/components to reference items, whilst being robust.
+for example:
 - item holding
 - armour (ie. chestplate slot)
 - passive item buffs (ie. terraria passive item slots)
@@ -53,18 +54,7 @@ function ItemHandle:init(slotX, slotY, itemEnt)
 end
 
 
---[[
 
-TODO: In the future, we may want to check for 2 types of validity:
-
-- whether the item has moved slots
-- whether the item has moved INVENTORIES.
-
-
-Currently, :isValid() is just for slots.
-for future, we may want to do inventory-wide checks
-
-]]
 function ItemHandle:isValid()
     if not self.valid then
         return false
@@ -78,6 +68,20 @@ function ItemHandle:isValid()
 
     return true
 end
+--[[
+TODO: In the future, we may want to check for 2 types of validity:
+
+- whether the item has moved slots
+- whether the item has moved INVENTORIES.
+
+Currently, :isValid() is just for slots.
+for future, we may want to do invalidate ONLY when it moves inventories.
+
+Maybe we should split up into two distinct objects:
+ItemSlotHandle and ItemHandle?
+ItemSlotHandle invalidates when the item moves slots,
+ItemHandle invalidates when the item moves inventories.
+]]
 
 
 function ItemHandle:get()
@@ -88,22 +92,6 @@ function ItemHandle:get()
 end
 
 
-local strTc = typecheck.assert("string")
-
-function ItemHandle:setFlag(key, val)
-    strTc(key)
-    if ItemHandle[key] then
-        error("Invalid flag: " .. key)
-    end
-    self[key] = val
-end
-
-
-function ItemHandle:getFlag(key)
-    strTc(key)
-    return self[key]
-end
-
 
 function ItemHandle:getSlot()
     return self.slotX, self.slotY
@@ -111,7 +99,13 @@ end
 
 
 function ItemHandle:onInvalidate(invEnt, itemEnt)
-    --[[ to be overridden! ]]
+    --[[
+        to be overridden!
+
+        All sorts of custom logic can be put in here.
+        For example, removal of position components of the item-entity.
+        Or, trigger a recalculation of armor for the holder of the item.
+    ]]
 end
 
 

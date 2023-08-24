@@ -656,7 +656,7 @@ function Inventory:hasItemHandle(item)
 end
 
 
-function Inventory:getItemHandle(slotX, slotY)
+function Inventory:retrieveItemHandle(slotX, slotY)
     assert2Numbers(slotX, slotY)
     local item = self:get(slotX, slotY)
     assert(item, "No entity in slot!")
@@ -680,7 +680,6 @@ function tryInvalidateItemHandle(self, item)
 
     local ihandle = self.itemHandles[item]
     if ihandle then
-        umg.call("items:itemHandleInvalidated", self.owner, item, ihandle)
         ihandle:invalidate(self.owner)
         self.itemHandles[item] = nil
     end
