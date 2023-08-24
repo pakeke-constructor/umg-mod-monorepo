@@ -25,6 +25,16 @@ This will give good test data!!!
     Buy auctioned items
 
 
+## IDEA:: Resource mechanics:
+In RGB-Chess, many things are treated as resources.
+Money is the most basic resource.
+But besides that, we could have resources that
+
+- rerolls are a resource / currency
+- unit levels are a resource / currency
+- lives (or max hp) is a resource / currency
+
+
 
 ## Reroll mechanics:
 In rgb-chess, you get 1 free reroll every turn.
