@@ -84,20 +84,6 @@ end
 
 elseif server then
 
-local function removePositionComponents(itemEnt)
-    if itemEnt:hasComponent("x") then
-        itemEnt:removeComponent("x")
-    end
-
-    if itemEnt:hasComponent("y") then
-        itemEnt:removeComponent("y")
-    end
-
-    if itemEnt:hasComponent("dimension") then
-        itemEnt:removeComponent("dimension")
-    end
-end
-
 local function equipItem(holderEnt, slotX, slotY)
     setHoldValues(holderEnt, slotX, slotY)
     local item = holderEnt.inventory:get(slotX, slotY)
@@ -109,7 +95,6 @@ end
 local function unequipItem(holderEnt)
     local holdItem = getHoldItem(holderEnt)
     if holdItem then
-        removePositionComponents(holdItem)
         umg.call("usables:unequipItem", holdItem, holderEnt)
     end
 end

@@ -59,6 +59,20 @@ Do some thinking.
 Also, do we want `:getFlag`, `:setFlag` for this? Or do we just want
 `itemHandle.removePosition = true`...?
 
+IDEA 3 - Instead of adding weird flags to the object,
+just extend the `ItemHandle` and write directly to a method:
+```lua
+local extends = items.ItemHandle
+local HoldItemHandle = objects.Class("usables:HoldItemHandle", extends)
+
+function HoldItemHandle:onInvalidate(item)
+    item:removeComponent("x")
+    item:removeComponent("y")
+end
+```
+I think this way is a lot better than the weird flags, since it's
+just a bit more explicit, and the logic is better encapsulated.
+
 
 
 

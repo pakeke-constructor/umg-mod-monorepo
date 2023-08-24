@@ -14,19 +14,17 @@ end
 
 
 function common.getHoldItem(ent)
-    if not ent.inventory then
-        return nil
-    end
-
     local holdItem = ent.holdItem
     if umg.exists(holdItem) then
         -- its an entity
         return holdItem
     end
 
-    local slotX, slotY = common.getHoldSlot(ent)
-    if slotX then
-        return ent.inventory:get(slotX, slotY)
+    if getmetatable(holdItem) == items.ItemHandle then
+        if holdItem:isValid() then
+            -- it's an itemhandle, and it's valid!
+            return holdItem:get()
+        end
     end
 end
 

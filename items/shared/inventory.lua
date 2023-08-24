@@ -635,7 +635,8 @@ end
 
 
 
-function Inventory:getItemHandles()
+-- private method
+function Inventory:_getItemHandles()
     --[[
         a lot of inventories don't need itemHandles, so we create
         the data structure in a lazy fashion.
@@ -649,12 +650,18 @@ function Inventory:getItemHandles()
 end
 
 
+function Inventory:hasItemHandle(item)
+    local itemHandles = self:_getItemHandles()
+    return itemHandles[item]
+end
+
+
 function Inventory:getItemHandle(slotX, slotY)
     assert2Numbers(slotX, slotY)
     local item = self:get(slotX, slotY)
     assert(item, "No entity in slot!")
     
-    local itemHandles = self:getItemHandles()
+    local itemHandles = self:_getItemHandles()
     if itemHandles[item] then
         --return existing handle if it exists
         return itemHandles[item]
@@ -674,7 +681,7 @@ function tryInvalidateItemHandle(self, item)
     local ihandle = self.itemHandles[item]
     if ihandle then
         umg.call("items:itemHandleInvalidated", self.owner, item, ihandle)
-        ihandle:invalidate()
+        ihandle:invalidate(self.owner)
         self.itemHandles[item] = nil
     end
 end

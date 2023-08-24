@@ -53,6 +53,18 @@ function ItemHandle:init(slotX, slotY, itemEnt)
 end
 
 
+--[[
+
+TODO: In the future, we may want to check for 2 types of validity:
+
+- whether the item has moved slots
+- whether the item has moved INVENTORIES.
+
+
+Currently, :isValid() is just for slots.
+for future, we may want to do inventory-wide checks
+
+]]
 function ItemHandle:isValid()
     if not self.valid then
         return false
@@ -98,7 +110,15 @@ function ItemHandle:getSlot()
 end
 
 
-function ItemHandle:invalidate()
+function ItemHandle:onInvalidate(invEnt, itemEnt)
+    --[[ to be overridden! ]]
+end
+
+
+function ItemHandle:invalidate(invEnt)
+    if self:isValid() then
+        self:onInvalidate(invEnt, self._item)
+    end
     self.valid = false
     self._item = nil
 end
