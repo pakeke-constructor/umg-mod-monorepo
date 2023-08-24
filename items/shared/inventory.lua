@@ -133,10 +133,6 @@ function Inventory:setHover(slotX, slotY)
     self.hovering_x, self.hovering_y = slotX, slotY
 
     umg.call("items:hoverInventorySlot", self.owner, slotX, slotY)
-
-    if self.owner.autoHoldItem then
-        self:hold(slotX, slotY)
-    end
 end
 
 
@@ -564,75 +560,17 @@ end
 
 
 
+--[[
+TO REMOVE:
 
+:_setHoldSlot
+:hold
+:getHoldItem
+.holdItem
 
-local function clearPreviousHoldItem(self)
-    -- We remove position components from the previous item, since it's no longer being held.
-    -- When items are held, they are granted a position in the world.
-    local item = self.holdItem
-    self.holdItem = nil
-    if server and umg.exists(item) then
-        -- removeComponent should be server-authoritative generally
-        item:removeComponent("x")
-        item:removeComponent("y")
-    end
-end
+"setInventoryHoldSlot"
 
-
-function Inventory:_setHoldSlot(slotX, slotY)
-    -- sets the hold item slot
-    -- NOTE: This is a private method!!! This should not be called normally
-    local prevItem = self:getHoldItem()
-    local newItem = self:get(slotX, slotY)
-    if prevItem == newItem then
-        return
-    end
-
-    local ownerEnt = self.owner
-    
-    if umg.exists(prevItem) then
-        clearPreviousHoldItem(self)
-        umg.call("items:unequipItem", ownerEnt, prevItem)
-    end
-
-    if umg.exists(newItem) then
-        self.holdItem = newItem
-        umg.call("items:equipItem", ownerEnt, newItem)
-    end
-end
-
-
-
-function Inventory:hold(slotX, slotY)
-    --[[
-        The owner of this inventory will now hold the item in this slot.
-
-        Can be called client OR server,
-        but only works on client for entities controlled by the user.
-    ]]
-    assert2Numbers(slotX, slotY)
-
-    if client then
-        local owner_ent = umg.exists(self.owner) and self.owner
-
-
-        if owner_ent.controller == client.getUsername() then
-            client.send("setInventoryHoldSlot", owner_ent, slotX, slotY)
-        end
-    elseif server then
-        self:_setHoldSlot(slotX, slotY)
-        local owner_ent = umg.exists(self.owner) and self.owner
-        if owner_ent then
-            server.broadcast("setInventoryHoldSlot", owner_ent, slotX, slotY)
-        end
-    end
-end
-
-
-function Inventory:getHoldItem()
-    return self.holdItem
-end
-
+]]
 
 
 -- private method

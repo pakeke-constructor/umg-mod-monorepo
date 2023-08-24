@@ -39,7 +39,7 @@ local function holdStaffAutomatically(ent)
     if slot_x and slot_y then
         local item = inv:get(slot_x, slot_y)
         if inv:getHoldItem() ~= item then
-            inv:hold(slot_x, slot_y)
+            error("todo: hold automatically! (api has changed)")
         end
     end
 end

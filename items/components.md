@@ -179,35 +179,3 @@ ent.inventorySlots = {
 
 
 ```
-
-
-### Holding entities:
-If an entity should change it's move animation to face in the direction of
-the tool, then simply add the `faceDirection` component to the entity.
-(This should be a regular component, don't make it shared!)
-
-
-For example, here's a basic entity that can hold a gun:
-```lua
-
-return {
-    image = "blob",
-
-    initXY = true
-
-    init = function(ent)
-        ent.lookX, ent.lookY = 0,0
-        -- the X and Y position that this entity is looking at.
-        -- (This will also determine the face direction, and the direction
-        --   that the tool is facing)
-
-        ent.inventory = items.Inventory({width=1, height=1})
-
-        local gunItem = newGunItem()
-        ent.inventory:set(1,1, gunItem)
-        ent.inventory:hold(1,1) -- set it to hold slot (1,1)
-    end
-}
-
-
-```

@@ -102,17 +102,10 @@ inventory:swap(other_inventory, self_x, self_y, other_x, other_y)
 x,y = inventory:getSpace() -- gets a free space in the inventory.
 -- (returns nil if full.)
 
-inventory:hold(slot_x, slot_y) -- holds the item at (x,y)
-
-item = inventory:getHoldItem() -- gets hold item
-
 ```
 
 
 # server <--> client  events
-
-`setInventoryHoldSlot( ent, slotx, sloty )`
-Server <---> Client  ::: sets hold slot for an inventory
 
 ## Server --> Client
 `setInventoryItem( ent, x, y, item_ent )`

@@ -375,15 +375,6 @@ end)
 
 
 
-client.on("setInventoryHoldSlot", function(ent, x, y)
-    local inv = ent.inventory
-    if inv then
-        inv:_setHoldSlot(x, y)
-    end
-end)
-
-
-
 
 --[[
     Automatically close any inventories that can no longer

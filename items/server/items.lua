@@ -53,28 +53,7 @@ end)
 
 
 
-
 local sf = sync.filters
-
-
-server.on("setInventoryHoldSlot", {
-    arguments = {sf.controlEntity, sf.number, sf.number},
-    handler = function(sender, ent, slotX, slotY)
-        if not ent.inventory then return end
-        slotX = math.floor(slotX)
-        slotY = math.floor(slotY)
-        
-        local inv = ent.inventory
-        if slotX <= inv.width and slotX >= 1 and slotY <= inv.height and slotY >= 1 then
-            if inv:slotExists(slotX,slotY) then
-                inv:hold(slotX,slotY)
-            end
-        end
-    end
-})
-
-
-
 
 
 local function hasAccess(controlEnt, invEnt)
