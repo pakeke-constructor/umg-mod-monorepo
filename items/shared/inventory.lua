@@ -164,6 +164,9 @@ end
 
 
 
+
+local tryInvalidateItemHandle -- this function is defined lower down.
+
 function Inventory:_rawset(x, y, item_ent)
     --[[
         This is a helper function, and SHOULDN'T BE CALLED!!!!
@@ -186,6 +189,7 @@ function Inventory:_rawset(x, y, item_ent)
             local removed_item = self.inventory[i]
             umg.call("items:itemRemoved", self.owner, removed_item)
         end
+        tryInvalidateItemHandle(self, item_ent)
         self.inventory[i] = nil
     end
 end
@@ -496,6 +500,10 @@ function Inventory:swap(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     moveSwapTc(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     local item = self:get(slotX, slotY)
     local otherItem = otherInv:get(otherSlotX, otherSlotY)
+
+    tryInvalidateItemHandle(self, item)
+    tryInvalidateItemHandle(otherInv, otherItem)
+    
     otherInv:set(otherSlotX, otherSlotY, item)
     self:set(slotX, slotY, otherItem)
 end
@@ -641,17 +649,35 @@ function Inventory:getItemHandles()
 end
 
 
-function Inventory:createItemHandle(slotX, slotY)
+function Inventory:getItemHandle(slotX, slotY)
     assert2Numbers(slotX, slotY)
     local item = self:get(slotX, slotY)
     assert(item, "No entity in slot!")
     
-    local ihandle = ItemHandle(slotX, slotY, item)
     local itemHandles = self:getItemHandles()
+    if itemHandles[item] then
+        --return existing handle if it exists
+        return itemHandles[item]
+    end
+    -- else create new:
+    local ihandle = ItemHandle(slotX, slotY, item)
     itemHandles[item] = ihandle
     return ihandle
 end
 
+
+function tryInvalidateItemHandle(self, item)
+    if not self.itemHandles then
+        return
+    end
+
+    local ihandle = self.itemHandles[item]
+    if ihandle then
+        umg.call("items:itemHandleInvalidated", self.owner, item, ihandle)
+        ihandle:invalidate()
+        self.itemHandles[item] = nil
+    end
+end
 
 
 
