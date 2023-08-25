@@ -19,9 +19,12 @@ return {
     category = "player",
 
     canPickUpItems = true,
-    autoHoldItem = true,
 
-    clickToUseItems = true,
+    holdItemSlot = {
+        -- slot (1,1) in inventory is the hold slot
+        slotX = 1, slotY = 1
+    }, 
+    clickToUseHoldItem = true,
 
     shadow = {
         size=6

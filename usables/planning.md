@@ -104,3 +104,20 @@ umg.on("@tick", function(dt)
 end)
 ```
 
+
+
+
+
+
+- FINAL INVENTORY STUFF TO REMOVE:
+```
+:_setHoldSlot
+:hold
+:getHoldItem
+.holdItem
+autoHold
+
+"setInventoryHoldSlot"
+```
+
+

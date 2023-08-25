@@ -5,7 +5,6 @@ local holding = require("shared.holding")
 local usables = {}
 
 
-usables.getHoldSlot = common.getHoldSlot
 usables.getHoldItem = common.getHoldItem
 usables.getHoldDistance = common.getHoldDistance
 

@@ -105,8 +105,10 @@ elseif server then
 
 local function equipItem(holderEnt, slotX, slotY)
     setHoldValues(holderEnt, slotX, slotY)
-    local item = holderEnt.inventory:get(slotX, slotY)
+    local inv = holderEnt.inventory
+    local item = inv:get(slotX, slotY)
     if item then
+        holderEnt.holdItem = inv:retrieveItemHandle(slotX, slotY)
         umg.call("usables:equipItem", item, holderEnt)
     end
 end
@@ -243,3 +245,8 @@ end)
 
 end
 
+
+
+
+
+return holding

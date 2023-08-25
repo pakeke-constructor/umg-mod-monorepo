@@ -1,6 +1,9 @@
 
 
-local controllableGroup = umg.group("inventory", "controllable", "clickToUseItem")
+local usage = require("shared.usage")
+
+
+local controllableGroup = umg.group("inventory", "controllable", "clickToUseHoldItem")
 
 
 local listener = input.Listener({priority = 2})
@@ -9,7 +12,7 @@ local listener = input.Listener({priority = 2})
 local function useItems()
     for _, ent in ipairs(controllableGroup) do
         if sync.isClientControlling(ent) then
-            items.useHoldItem(ent)
+            usage.useHoldItem(ent)
         end
     end
 end

@@ -95,25 +95,3 @@ end)
 
 
 
-
-local controllableGroup = umg.group("inventory", "clickToUseItems", "controllable")
-
-local function useItems()
-    for _, ent in ipairs(controllableGroup) do
-        if ent.clickToUseItems then
-            if sync.isClientControlling(ent) then
-                items.useHoldItem(ent)
-            end
-        end
-    end
-end
-
-
-function listener:mousepressed(x, y, button, istouch, presses)
-    if button == 1 then
-        useItems()
-        self:lockMouseButton(button)
-    end
-end
-
-

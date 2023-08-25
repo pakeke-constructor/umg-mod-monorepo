@@ -560,17 +560,8 @@ end
 
 
 
---[[
-TO REMOVE:
 
-:_setHoldSlot
-:hold
-:getHoldItem
-.holdItem
 
-"setInventoryHoldSlot"
-
-]]
 
 
 -- private method
@@ -585,6 +576,7 @@ function Inventory:_getItemHandles()
     self.itemHandles = {--[[
         [itemEnt] -> ItemHandle
     ]]}
+    return self.itemHandles
 end
 
 

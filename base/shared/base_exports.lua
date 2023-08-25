@@ -19,8 +19,6 @@ end
 local function loadShared(base)
     base.gravity = require("shared.gravity");
 
-    base.initializers = require("shared.initializers")
-    
     base.components = require("shared.components")
 
     base.inspect = require("_libs.inspect");

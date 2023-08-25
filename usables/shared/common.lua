@@ -4,14 +4,6 @@ local common = {}
 
 
 
-function common.getHoldSlot(ent)
-    local holdItem = ent.holdItem
-    if (holdItem.slotX and holdItem.slotY) then
-        return ent.holdItemX, ent.holdItemY
-    end
-end
-
-
 
 function common.getHoldItem(ent)
     local holdItem = ent.holdItem

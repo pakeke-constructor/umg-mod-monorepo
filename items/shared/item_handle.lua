@@ -122,3 +122,6 @@ end
 function ItemHandle:invalidate()
     self.valid = false
 end
+
+
+return ItemHandle
