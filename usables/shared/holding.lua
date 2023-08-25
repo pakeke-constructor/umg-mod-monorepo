@@ -28,11 +28,12 @@ local entity2Tc = typecheck.assert("entity", "entity")
 function holding.updateHoldItemDirectly(itemEnt, holderEnt)
     entity2Tc(itemEnt, holderEnt)
 
-    -- todo: we can ask more/better questions here
     local handlerFunc = umg.ask("usables:getHoldItemHandler", itemEnt, holderEnt)
     handlerFunc = handlerFunc or defaultHandler
-
     handlerFunc(itemEnt, holderEnt)
+    -- todo: we can ask more/better questions here
+
+    umg.call("usables:updateHoldItem", itemEnt, holderEnt)
 
     itemEnt.dimension = holderEnt.dimension
 end
@@ -43,7 +44,7 @@ end
 local function updateHolderEnt(ent)
     local holdItem = getHoldItem(ent)
     if holdItem then
-        holding.updateHoldItemDirectly(ent, holdItem)
+        holding.updateHoldItemDirectly(holdItem, ent)
     end
 end
 
@@ -136,7 +137,7 @@ local function unequipItem(holderEnt, holdItem)
     local inv = holderEnt.inventory
     if inv and inv:getExistingItemHandle(holdItem) then
         -- invalidate 
-        local itemHandle = inv:retrieveItemHandle(holdItem)
+        local itemHandle = inv:getExistingItemHandle(holdItem)
         itemHandle:invalidate()
     end
     umg.call("usables:unequipItem", holdItem, holderEnt)
@@ -147,7 +148,7 @@ function holding.equipItem(holderEnt, slotX, slotY)
     local prevItem = getHoldItem(holderEnt)
     if prevItem then
         -- unequip previous item
-        unequipItem(prevItem)
+        unequipItem(holderEnt, prevItem)
     end
     -- equip new item:
     server.broadcast(EQUIP_EV, holderEnt, slotX, slotY)
@@ -190,13 +191,20 @@ server.on(UNEQUIP_EV, {
 
 local entityTc = typecheck.assert("entity")
 
-function holding.unequipItem(holderEnt)
+function holding.unequipItem(holderEnt, itemEnt)
     -- programmatically unequip items:
     entityTc(holderEnt)
-    unequipItem(holderEnt)
+    unequipItem(holderEnt, itemEnt)
 end
 
+umg.on("items:itemHandleInvalidated", function(itemEnt, itemHandle, invEnt)
+    if itemHandle:getFlag("holdItem") then
+        holding.unequipItem(invEnt, itemEnt)
+    end
+end)
+
 end
+
 
 
 

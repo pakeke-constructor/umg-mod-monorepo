@@ -50,9 +50,7 @@ end
 
 
 function attackTypes.item(ent, targetEnt)
-    if ent.inventory and ent.inventory:getHoldItem() then
-        items.useHoldItem(ent, targetEnt)
-    end
+    error("nyi")
 end
 
 

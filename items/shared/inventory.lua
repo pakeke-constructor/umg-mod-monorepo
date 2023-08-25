@@ -184,8 +184,8 @@ function Inventory:_rawset(x, y, item_ent)
         if self.inventory[i] then
             local removed_item = self.inventory[i]
             umg.call("items:itemRemoved", self.owner, removed_item)
+            tryInvalidateItemHandle(self, removed_item)
         end
-        tryInvalidateItemHandle(self, item_ent)
         self.inventory[i] = nil
     end
 end
@@ -622,6 +622,8 @@ function tryInvalidateItemHandle(self, item)
     if ihandle then
         ihandle:invalidate(self.owner)
         self.itemHandles[item] = nil
+        umg.call("items:itemHandleInvalidated", item, ihandle, self.owner)
+        print("INVALIDATED", item.id)
     end
 end
 
