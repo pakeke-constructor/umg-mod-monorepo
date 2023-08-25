@@ -595,6 +595,9 @@ end
 
 
 function Inventory:retrieveItemHandle(slotX, slotY)
+    --[[
+        retrieves an item handle at (slotX, slotY)
+    ]]
     assert2Numbers(slotX, slotY)
     local item = self:get(slotX, slotY)
     assert(item, "No entity in slot!")
@@ -608,6 +611,13 @@ function Inventory:retrieveItemHandle(slotX, slotY)
     local ihandle = ItemHandle(slotX, slotY, item)
     itemHandles[item] = ihandle
     return ihandle
+end
+
+function Inventory:getExistingItemHandle(item)
+    if not self.itemHandles then
+        return nil -- we dont have the handle
+    end
+    return self.itemHandles[item]
 end
 
 

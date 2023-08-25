@@ -1,5 +1,9 @@
 {
-    "uses": ["base","ui"],
+    "uses": [
+        "objects", "sync",
+        "rendering","ui",
+        "input"
+    ],
     
     "type": "base"
 }

@@ -85,10 +85,19 @@ ItemHandle invalidates when the item moves inventories.
 
 
 function ItemHandle:get()
+    -- gets item.
+    -- throws error is the handle is invalid.
     if self:isValid() then
         return self._item
     end
     error("ItemHandle was not valid! check using :isValid() before calling :get()")
+end
+
+
+
+function ItemHandle:rawget()
+    -- gets item, (unsafe)
+    return self._item
 end
 
 
@@ -98,21 +107,18 @@ function ItemHandle:getSlot()
 end
 
 
-function ItemHandle:onInvalidate(invEnt, itemEnt)
-    --[[
-        to be overridden!
+local strTc = typecheck.assert("string")
+function ItemHandle:setFlag(key, value)
+    strTc(key)
+    self[key] = value
+end
 
-        All sorts of custom logic can be put in here.
-        For example, removal of position components of the item-entity.
-        Or, trigger a recalculation of armor for the holder of the item.
-    ]]
+function ItemHandle:getFlag(key)
+    strTc(key)
+    return self[key]
 end
 
 
-function ItemHandle:invalidate(invEnt)
-    if self:isValid() then
-        self:onInvalidate(invEnt, self._item)
-    end
+function ItemHandle:invalidate()
     self.valid = false
-    self._item = nil
 end

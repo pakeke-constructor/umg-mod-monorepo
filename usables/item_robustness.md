@@ -2,6 +2,10 @@
 
 # Q7 - Item robustness.
 
+I made a new file for this, because it was getting too big.
+
+---------------
+
 Right now, giving x,y comps to inventory items are just.. not robust.
 Lets plan a better way to do things.
 
@@ -18,7 +22,7 @@ If we find a way to do this in a robust fashion, it'd be amazing.
 
 -----------------------
 
-#### Q7-SOLUTION-3
+#### Q7-SOLUTION-3-ALPHA
 Perhaps we can allocate a "handler" or something to items within
 an inventory?
 YES. That's it. this has gotta be the solution
@@ -39,7 +43,7 @@ Ok, cool. This solves some of our problems, and will solve many more
 problems down the line.
 But this doesn't solve the (x,y) components still existing!
 
-IDEA 2 - create a `items:itemHandleInvalidated` callback,
+IDEA: create a `items:itemHandleInvalidated` callback,
 passing in `(invEnt, itemHandle, itemEnt)`?
 ```lua
 itemHandle:addFlag("removePosition", true)
@@ -59,7 +63,8 @@ Do some thinking.
 Also, do we want `:getFlag`, `:setFlag` for this? Or do we just want
 `itemHandle.removePosition = true`...?
 
-IDEA 3 - Instead of adding weird flags to the object,
+#### Q7-SOLUTION-3-BRAVO
+Instead of adding weird flags to the object,
 just extend the `ItemHandle` and write directly to a method:
 ```lua
 local extends = items.ItemHandle
@@ -72,6 +77,29 @@ end
 ```
 I think this way is a lot better than the weird flags, since it's
 just a bit more explicit, and the logic is better encapsulated.
+- ^^^ IDIOT, This doesnt work, the inventory controls the concrete type
+of the ItemHandler.
+
+#### Q7-SOLUTION-3-CHARLIE
+Ok.
+So, the main source of the "problem" is that we want xy adding/removal
+to be done in the same place.<br>
+This is why the `ItemHandle` solution feels so darn good, because it's
+a singular object that captures the entire operation of adding/remming xy.
+So we definitely want to keep it.
+
+Limitations / bad things about Q7-S3-ALPHA: 
+- flag stuff is globally applied, which is yucky
+    its fine for components to be global, because components are 
+    well-defined. Its NOT okay for these flags to be global.
+    Its weird, and yucky.
+
+IDEA:  Super simple solution:
+How about the `holding` system, during updating, just loops through all
+of the holdItems, and removes components from any invalid handles?
+After removing, the holdItem is set to nil, so it's guaranteed to not
+be invalidated twice
+
 
 
 

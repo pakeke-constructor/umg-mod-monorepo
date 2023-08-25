@@ -67,8 +67,13 @@ local UNEQUIP_EV = "usables.unequipItem"
 local sf = sync.filters
 
 
-if client then
 
+if client then
+--[[
+==============================
+   SERVER
+==============================
+]]
 function holding.equipItem(holderEnt, slotX, slotY)
     if sync.isClientControlling(holderEnt) then
         client.send(EQUIP_EV, holderEnt, slotX, slotY)
@@ -82,6 +87,20 @@ function holding.unequipItem(holderEnt, slotX, slotY)
 end
 
 
+
+
+
+
+
+
+
+
+--[[
+==============================
+   SERVER
+==============================
+]]
+
 elseif server then
 
 local function equipItem(holderEnt, slotX, slotY)
@@ -92,11 +111,34 @@ local function equipItem(holderEnt, slotX, slotY)
     end
 end
 
-local function unequipItem(holderEnt)
-    local holdItem = getHoldItem(holderEnt)
-    if holdItem then
-        umg.call("usables:unequipItem", holdItem, holderEnt)
+local function removeComponents(item)
+    -- remove item position on invalidation:
+    if item:hasComponent("x") then
+        item:removeComponent("x")
     end
+    if item:hasComponent("y") then
+        item:removeComponent("y")
+    end
+    if item:hasComponent("dimension") then
+        item:removeComponent("dimension")
+    end
+end
+
+local function unequipItem(holderEnt, holdItem)
+    holdItem = holdItem or getHoldItem(holderEnt)
+    if not holdItem then
+        return
+    end
+
+    removeComponents(holdItem)
+    local inv = holderEnt.inventory
+    if inv and inv:getExistingItemHandle(holdItem) then
+        -- invalidate 
+        local itemHandle = inv:retrieveItemHandle(holdItem)
+        itemHandle:invalidate()
+    end
+    umg.call("usables:unequipItem", holdItem, holderEnt)
+    holderEnt:removeComponent("holdItem")
 end
 
 function holding.equipItem(holderEnt, slotX, slotY)
@@ -149,13 +191,10 @@ local entityTc = typecheck.assert("entity")
 function holding.unequipItem(holderEnt)
     -- programmatically unequip items:
     entityTc(holderEnt)
-    assert(server, "?")
     unequipItem(holderEnt)
 end
 
 end
-
-
 
 
 
@@ -174,9 +213,30 @@ end)
 
 elseif server then
 
+local function removeIfInvalid(ent)
+    if not items.ItemHandle.isInstance(ent.holdItem) then
+        -- if it's not an ItemHandle, check for existance,
+        -- and remove if not-exist.
+        if not umg.exists(ent.holdItem) then
+            ent:removeComponent("holdItem")
+        end
+        return
+    end
+
+    -- if is an itemHandle, and is invalid:
+    if not ent.holdItem:isValid() then
+        local itemEnt = ent.holdItem:rawget()
+        if umg.exists(itemEnt) then
+            holding.unequipItem(ent, itemEnt)
+        end
+        ent:removeComponent("holdItem")
+    end
+end
+
 -- We only need to update per tick, as this is what client sees
 umg.on("@tick", function()
     for _, ent in ipairs(holdingItemGroup) do
+        removeIfInvalid(ent)
         updateHolderEnt(ent)
     end
 end)
