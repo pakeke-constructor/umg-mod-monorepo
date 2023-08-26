@@ -145,3 +145,56 @@ terrible.<br>
 Also- this would be fragile, since the deepCloned entity would inherit
 the dodgy xy components.
 
+
+
+
+
+
+
+
+
+## Final plan:
+This is the best idea:
+
+Have a slotHandler class:
+```lua
+
+local SlotHandler = Class()
+
+...
+...
+...
+
+function SlotHandler:itemRemoved(item)
+    ... -- this function is overriden!
+end
+
+function SlotHandler:itemAdded(item)
+    ... -- this function is overriden!
+end
+```
+
+And a method in inv that takes a slotHandler object:
+```lua
+inv:setSlotHandler(slotX, slotY, slotHandler)
+```
+
+From there, we can extend the slotHandler to do custom stuff:
+```lua
+local HoldItemSlotHandler = Class(extends SlotHandler)
+...
+```
+
+And we can add a slotHandler automatically given the components:
+```lua
+local group = umg.group("inventory", "holdItemSlot")
+
+group:onAdded(function(ent)
+    local inv = ent.inventory
+    local his = ent.holdItemSlot
+
+    local obj = HoldItemSlotHandler(...)
+    inv:setSlotHandler(his.slotX, his.slotY, obj)
+end)
+```
+

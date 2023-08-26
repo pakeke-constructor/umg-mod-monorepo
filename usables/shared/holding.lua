@@ -93,9 +93,6 @@ end
 
 
 
-
-
-
 --[[
 ==============================
    SERVER
@@ -197,12 +194,6 @@ function holding.unequipItem(holderEnt, itemEnt)
     unequipItem(holderEnt, itemEnt)
 end
 
-umg.on("items:itemHandleInvalidated", function(itemEnt, itemHandle, invEnt)
-    if itemHandle:getFlag("holdItem") then
-        holding.unequipItem(invEnt, itemEnt)
-    end
-end)
-
 end
 
 
@@ -223,22 +214,27 @@ end)
 
 elseif server then
 
+local function isHandle(x)
+    return items.ItemHandle.isInstance(x)
+end
+
 local function removeIfInvalid(ent)
-    if not items.ItemHandle.isInstance(ent.holdItem) then
-        -- if it's not an ItemHandle, check for existance,
-        -- and remove if not-exist.
-        if not umg.exists(ent.holdItem) then
+    local holdItem = ent.holdItem
+    -- if is an itemHandle, and is invalid:
+    if isHandle(holdItem) then 
+        if not holdItem:isValid() then
+            local itemEnt = holdItem:rawget()
+            if umg.exists(itemEnt) then
+                holding.unequipItem(ent, itemEnt)
+            end
             ent:removeComponent("holdItem")
         end
         return
     end
 
-    -- if is an itemHandle, and is invalid:
-    if not ent.holdItem:isValid() then
-        local itemEnt = ent.holdItem:rawget()
-        if umg.exists(itemEnt) then
-            holding.unequipItem(ent, itemEnt)
-        end
+    -- if it's not an ItemHandle, check for existance,
+    -- and remove if not-exist.
+    if not umg.exists(holdItem) then
         ent:removeComponent("holdItem")
     end
 end
