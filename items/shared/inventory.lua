@@ -131,8 +131,27 @@ end
 
 
 
+local function addItem(self, slotX, slotY, item_ent)
+    -- calls appropriate callbacks and stuff
+    local slotHandle = self:getSlotHandle(slotX,slotY)
+    if slotHandle then
+        slotHandle:onItemAdded(item_ent)
+    end
+    umg.call("items:itemAdded", self.owner, item_ent, slotX, slotY)
+end
 
-local tryInvalidateItemHandle -- this function is defined lower down.
+
+local function removeItem(self, slotX, slotY, item_ent)
+    -- calls appropriate callbacks and stuff
+    local slotHandle = self:getSlotHandle(slotX,slotY)
+    if slotHandle then
+        slotHandle:onItemRemoved(item_ent)
+    end
+    umg.call("items:itemRemoved", self.owner, item_ent, slotX, slotY)
+end
+
+
+
 
 function Inventory:_rawset(x, y, item_ent)
     --[[
@@ -148,14 +167,18 @@ function Inventory:_rawset(x, y, item_ent)
     if item_ent then
         assertItem(item_ent)
         if item_ent ~= self.inventory[i] then
-            umg.call("items:itemAdded", self.owner, item_ent)
+            --[[
+                TODO: this doesn't work properly!
+                addItem is called MULTIPLE times when an item
+                is moved around in an inventory.
+            ]]
+            addItem(self, x, y, item_ent)
         end
         self.inventory[i] = item_ent
     else
         if self.inventory[i] then
-            local removed_item = self.inventory[i]
-            umg.call("items:itemRemoved", self.owner, removed_item)
-            tryInvalidateItemHandle(self, removed_item)
+            local removed_item = self:get(x,y)
+            removeItem(self, x, y, removed_item)
         end
         self.inventory[i] = nil
     end
@@ -586,6 +609,11 @@ end
 
 
 
+
+
+
+
+
 --[[
 Warning: 
 Yucky, bad rendering code below this point!!!
@@ -833,9 +861,8 @@ end
 
 
 
-local function drawExitButton(self)
+function Inventory:drawExitButton(x,y,w,h)
     love.graphics.setLineWidth(1)
-    local x,y,w,h = getExitButtonBounds(self)
     local col = self.color or WHITE
     love.graphics.setColor(col)
     love.graphics.rectangle("fill", x,y,w,h)
@@ -915,7 +942,6 @@ function Inventory:drawUI()
     
     self:drawBackground(X,Y,W,H)
 
-
     local offset = self.slotSeparation / 2
 
     -- draw interior
@@ -929,9 +955,13 @@ function Inventory:drawUI()
     end
 
     self:drawForeground(X,Y,W,H)
-    drawExitButton(self)
 
-    umg.call("items:drawInventory", self.owner)
+    do 
+        local x,y,w,h = getExitButtonBounds(self)
+        self:drawExitButton(self,x,y,w,h)
+    end
+
+    umg.call("items:drawInventory", self.owner, X,Y,W,H)
     
     love.graphics.pop()
 end
