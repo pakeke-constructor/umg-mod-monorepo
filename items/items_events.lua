@@ -58,9 +58,3 @@ umg.defineEvent("items:dropGroundItem")
 -- item picked up from ground
 umg.defineEvent("items:pickupGroundItem")
 
-
-
-
--- item handle is invalidated (see inventory ItemHandle)
-umg.defineEvent("items:itemHandleInvalidated")
-

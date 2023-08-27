@@ -9,7 +9,7 @@ Inventory objects
 require("items_events")
 require("items_questions")
 
-local ItemHandle = require("shared.item_handle")
+local SlotHandle = require("shared.slot_handle")
 
 
 local Inventory = objects.Class("items_mod:inventory")
@@ -565,68 +565,50 @@ end
 
 
 -- private method
-function Inventory:getItemHandles()
+local function getSlotHandles(self)
     --[[
-        a lot of inventories don't need itemHandles, so we create
-        the data structure in a lazy fashion.
+        a lot of inventories don't need slotHandle, so we create
+        the data structure in a lazy fashion:
     ]]
-    if self.itemHandles then
-        return self.itemHandles
+    if self.slotHandles then
+        return self.slotHandles
     end
-    self.itemHandles = {--[[
-        [itemEnt] -> ItemHandle
+    self.slotHandles = {--[[
+        [slotX] -> {
+            [slotY] -> slotHandle
+        }
     ]]}
-    return self.itemHandles
+    return self.slotHandles
 end
 
 
-function Inventory:hasItemHandle(item)
-    local itemHandles = self:getItemHandles()
-    return itemHandles[item]
+function Inventory:getSlotHandle(slotX, slotY)
+    local slotHandles = self.slotHandles
+    local arr = slotHandles and slotHandles[slotX]
+    return arr and arr[slotY]
 end
 
 
-function Inventory:retrieveItemHandle(slotX, slotY)
+function Inventory:setSlotHandle(slotX, slotY, slotHandle)
     --[[
-        retrieves an item handle at (slotX, slotY)
+        sets a slot handle at (slotX, slotY) to slotHandle
     ]]
     assert2Numbers(slotX, slotY)
-    local item = self:get(slotX, slotY)
-    assert(item, "No entity in slot!")
-    
-    local itemHandles = self:getItemHandles()
-    if itemHandles[item] then
-        --return existing handle if it exists
-        return itemHandles[item]
+    if not SlotHandle.isInstance(slotHandle) then
+        error("Not an instance of SlotHandle: " .. tostring(slotHandle))
     end
-    -- else create new:
-    local ihandle = ItemHandle(slotX, slotY, item)
-    itemHandles[item] = ihandle
-    return ihandle
+
+    if self:getSlotHandle(slotX,slotY) then
+        -- error, since we are overwriting existing:
+        error("Overwriting existing slot handle at: " .. tostring(slotX) .. ", " .. tostring(slotY))
+    end
+
+    -- else set new slotHandle:
+    local slotHandles = getSlotHandles(self)
+    local arr = slotHandles[slotX] or {}
+    slotHandles[slotX] = arr
+    arr[slotY] = slotHandle
 end
-
-function Inventory:getExistingItemHandle(item)
-    if not self.itemHandles then
-        return nil -- we dont have the handle
-    end
-    return self.itemHandles[item]
-end
-
-
-function tryInvalidateItemHandle(self, item)
-    if not self.itemHandles then
-        return
-    end
-
-    local ihandle = self.itemHandles[item]
-    if ihandle then
-        ihandle:invalidate(self.owner)
-        self.itemHandles[item] = nil
-        umg.call("items:itemHandleInvalidated", item, ihandle, self.owner)
-    end
-end
-
-
 
 
 
