@@ -49,6 +49,16 @@ function SlotHandle:canRemoveItem(item)
     return true -- (default)
 end
 
+function SlotHandle:preDraw(drawX, drawY, drawWidth, drawHeight)
+    -- to be overridden.
+    -- called when this slot should be drawn.
+end
+function SlotHandle:postDraw(drawX, drawY, drawWidth, drawHeight)
+    -- to be overridden.
+    -- called when this slot should be drawn.
+end
+-- These two are useful for cool, custom slot vfx!
+
 
 
 
@@ -56,8 +66,8 @@ function SlotHandle:addItem(item)
     self:onItemAdded(item)
 end
 
-function SlotHandle:addItem(item)
-    self:onItemAdded(item)
+function SlotHandle:removeItem(item)
+    self:onItemRemoved(item)
 end
 
 

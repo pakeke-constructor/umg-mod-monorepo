@@ -787,7 +787,7 @@ local function drawHighlights(draw_x, draw_y, W, H, r,g,b, offset, concave)
 end
 
 
-local function drawSlot(self, inv_x, inv_y, offset, color)
+function Inventory:drawSlot(inv_x, inv_y, offset, color)
     local x, y = inv_x - 1, inv_y - 1 -- inventory is 1 indexed
     local X = math.floor(self.draw_x + x * self.totalSlotSize + offset)
     local Y = math.floor(self.draw_y + y * self.totalSlotSize + offset)
@@ -895,21 +895,42 @@ end
 
 local INVENTORY_NAME_OFFSET = 4
 
-local function drawInventoryName(self)
+function Inventory:drawInventoryName()
     local name = getInventoryName(self)
-    if name then
-        local x,y,_,_ = self:getDrawBounds()
-        local X = x + INVENTORY_NAME_OFFSET
-        local Y = y + INVENTORY_NAME_OFFSET
-        local font = love.graphics.getFont()
-        local w,h = font:getWidth(name), font:getHeight()
-        local scale = EXTRA_TOP_BORDER / h
-        love.graphics.setColor(0,0,0,1)
-        love.graphics.print(name, X,Y,0,scale,scale)
+    if not name then
+        return
     end
+
+    local x,y,_,_ = self:getDrawBounds()
+    local X = x + INVENTORY_NAME_OFFSET
+    local Y = y + INVENTORY_NAME_OFFSET
+    local font = love.graphics.getFont()
+    local w,h = font:getWidth(name), font:getHeight()
+    local scale = EXTRA_TOP_BORDER / h
+    love.graphics.setColor(0,0,0,1)
+    love.graphics.print(name, X,Y,0,scale,scale)
 end
 
 
+
+function Inventory:drawBackground(x, y, w, h)
+    -- Draw inventory body
+    local col = self.color or WHITE
+    love.graphics.setColor(col) 
+    love.graphics.rectangle("fill", x, y, w, h)
+end
+
+
+function Inventory:drawForeground(x, y, w, h)
+    local col = self.color or WHITE
+    love.graphics.setLineWidth(2)
+    drawHighlights(x, y, w, h, col[1],col[2],col[3])
+
+    -- Draw outline
+    love.graphics.setColor(0,0,0)
+    love.graphics.rectangle("line", x, y, w, h)
+    self:drawInventoryName()
+end
 
 
 function Inventory:drawUI()
@@ -927,11 +948,8 @@ function Inventory:drawUI()
     
     love.graphics.setLineWidth(2)
     
-    -- Draw inventory body
-    love.graphics.setColor(col) 
-    love.graphics.rectangle("fill", X, Y, W, H)
+    self:drawBackground(X,Y,W,H)
 
-    drawInventoryName(self)
 
     local offset = self.slotSeparation / 2
 
@@ -940,18 +958,12 @@ function Inventory:drawUI()
         for y = 0, self.height - 1 do
             local inv_x, inv_y = x+1, y+1 -- inventory is 1-indexed
             if self:slotExists(inv_x, inv_y) then
-                drawSlot(self, inv_x, inv_y, offset, col)
+                self:drawSlot(self, inv_x, inv_y, offset, col)
             end
         end
     end
 
-    love.graphics.setLineWidth(2)
-    drawHighlights(X, Y, W, H, col[1],col[2],col[3])
-
-    -- Draw outline
-    love.graphics.setColor(0,0,0)
-    love.graphics.rectangle("line", X, Y, W, H)
-
+    self:drawForeground(X,Y,W,H)
     drawExitButton(self)
 
     umg.call("items:drawInventory", self.owner)
