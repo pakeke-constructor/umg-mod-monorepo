@@ -4,7 +4,7 @@ local items = {}
 
 
 items.Inventory = require("shared.inventory")
-items.ItemHandle = require("shared.item_handle")
+items.SlotHandle = require("shared.slot_handle")
 
 
 if server then

@@ -35,13 +35,8 @@ print(item.itemName) -- "banana"
 
 ```lua
 
-inv:set(1, 1, b) 
--- sets slot (1, 1) to banana item.
--- Inventory indexes start at (1,1) and go to (width,height)
-
-
 b = inv:get(1, 1) 
--- returns the item at location (1, 1), 
+-- returns the item at slot (1, 1), 
 -- or nil if there is no item.
 
 
@@ -49,16 +44,10 @@ inv:open() -- opens inventory for viewing
 inv:close() -- closes inventory
 
 
-
-item = inv:getHoldingItem()
--- gets the item that is currently being held.
--- This will generally only work for "player" inventories.
-
-
 num = inv:count("banana") 
 -- gets count of the total number of "bananas" in the 
 
-x, y = inv:getFreeSlot() 
+slotX, slotY = inv:getFreeSlot() 
 -- returns the closest empty slot in the inventory
 
 

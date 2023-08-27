@@ -1,9 +1,13 @@
 
--- item is moved in an inventory
+-- item is moved to an inventory slot
+-- WARNING: This callback is called when an item is moved WITHIN an inventory!
 umg.defineEvent("items:itemAdded")
 
--- item is removed from an inventory
+-- item is removed from an inventory slot
+-- WARNING: This callback is called when an item is moved WITHIN an inventory!
+-- For example, if we move this item from slot (1,1) to slot (1,2), itemRemoved is called.
 umg.defineEvent("items:itemRemoved")
+
 
 
 -- an inventory is opened

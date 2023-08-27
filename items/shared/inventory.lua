@@ -2,7 +2,11 @@
 
 --[[
 
-Inventory objects
+Inventory objects.
+
+Inventory objects can be extended, to create cooler, custom inventories.
+You can also override any part of the rendering, to create custom
+inventory backgrounds, custom slots, etc etc.
 
 ]]
 
@@ -104,9 +108,10 @@ end
 
 
 
-function Inventory:getIndex(x, y)
-    -- private method
-    return (self.height * (x-1)) + y
+function Inventory:getIndex(slotX, slotY)
+    -- internally, inventory is just an array.
+    -- This method gets index in the inventory array, given (slotX, slotY)
+    return (self.height * (slotX-1)) + slotY
 end
 
 
@@ -114,7 +119,8 @@ local floor = math.floor
 
 
 
-function Inventory:getXY(index)
+function Inventory:getSlot(index)
+    -- gets slot position from an index
     local yy = (index-1) % self.height + 1
     return floor(index / self.height - 0.01) + 1, yy
 end
@@ -131,26 +137,33 @@ end
 
 
 
---[[
-    WARNING: This doesn't work as you expect.
-    signalAddItem
-]]
-local function signalAddItem(self, slotX, slotY, item_ent)
-    -- calls appropriate callbacks and stuff
+
+local function signalAddToSlot(self, slotX, slotY, item_ent)
+    -- calls appropriate callbacks for item addition
     local slotHandle = self:getSlotHandle(slotX,slotY)
     if slotHandle then
         slotHandle:onItemAdded(item_ent)
     end
+end
+
+
+local function signalAddToInventory(self, slotX, slotY, item_ent)
+    signalAddToSlot(self, slotX, slotY, item_ent)
     umg.call("items:itemAdded", self.owner, item_ent, slotX, slotY)
 end
 
 
-local function signalRemoveItem(self, slotX, slotY, item_ent)
-    -- calls appropriate callbacks and stuff
+local function signalRemoveFromSlot(self, slotX, slotY, item_ent)
+    -- calls appropriate callbacks for item removal
     local slotHandle = self:getSlotHandle(slotX,slotY)
     if slotHandle then
         slotHandle:onItemRemoved(item_ent)
     end
+end
+
+
+local function signalRemoveFromInventory(self, slotX, slotY, item_ent)
+    signalRemoveFromSlot(self, slotX, slotY, item_ent)
     umg.call("items:itemRemoved", self.owner, item_ent, slotX, slotY)
 end
 
@@ -170,15 +183,8 @@ function Inventory:_rawset(x, y, item_ent)
     -- TODO: Is it fine to call these callbacks here???
     if item_ent then
         assertItem(item_ent)
-        if item_ent ~= self.inventory[i] then
-            signalAddItem(self, x, y, item_ent)
-        end
         self.inventory[i] = item_ent
     else
-        if self.inventory[i] then
-            local removed_item = self:get(x,y)
-            signalRemoveItem(self, x, y, removed_item)
-        end
         self.inventory[i] = nil
     end
 end
@@ -489,15 +495,49 @@ function Inventory:swap(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     moveSwapTc(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     local item = self:get(slotX, slotY)
     local otherItem = otherInv:get(otherSlotX, otherSlotY)
+    local isDifferent = self ~= otherInv
 
-    if (slotX ~= otherSlotX) or (slotY ~= otherSlotY) or (otherSlotX ~= otherSlotY) then
-        -- if the slots are actually different, enact callbacks:
-        signalRemoveItem(self, slotX, slotY, item)
-        signalRemoveItem(otherInv, otherSlotX, otherSlotY, otherItem)
-
-        otherInv:set(otherSlotX, otherSlotY, item)
-        self:set(slotX, slotY, otherItem)
+    if isDifferent then
+        -- if inventories are different, emit signals:
+        signalRemoveFromInventory(self, slotX, slotY, item)
+        signalRemoveFromInventory(otherInv, otherSlotX, otherSlotY, otherItem)
+    elseif (slotX ~= otherSlotX) or (slotY ~= otherSlotY) then
+        -- if the slots are different, but the inventory is the same, then signal just slot moved:
+        signalRemoveFromSlot(self, slotX, slotY, item)
+        signalRemoveFromSlot(otherInv, otherSlotX, otherSlotY, otherItem)
+    else
+        return -- its the same slot, and same inventory!
     end
+
+    if isDifferent then
+        signalAddToInventory(self, slotX, slotY, otherItem)
+        signalAddToInventory(otherInv, otherSlotX, otherSlotY, item)
+    else
+        signalAddToSlot(self, slotX, slotY, item)
+        signalAddToSlot(otherInv, otherSlotX, otherSlotY, otherItem)
+    end
+
+    otherInv:set(otherSlotX, otherSlotY, item)
+    self:set(slotX, slotY, otherItem)
+end
+
+
+function Inventory:add(slotX, slotY, item)
+    -- Adds an item to an inventory.
+    -- `item` must NOT be in any other inventory!
+    -- Or else the item will be duplicated across 2 inventories.
+    
+end
+
+
+function Inventory:remove(slotX, slotY)
+    -- Removes an item from a slot in an inventory.
+    -- This is analogous to deleting the item.
+    local item = self:get(slotX, slotY)
+    if umg.exists(item) then
+        signalRemoveItem(self, slotX, slotY, item)
+    end
+    self:set(slotX, slotY, nil)
 end
 
 
