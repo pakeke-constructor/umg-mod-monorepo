@@ -23,7 +23,7 @@ umg.on("mortality:damage", function(ent)
 end)
 
 
-umg.on("items:useItem", function(holderEnt, item, ...)
+umg.on("usables:useItem", function(holderEnt, item, ...)
     if item.projectileLauncher then
         sound.playSound("pew_main3", 0.6)
     end

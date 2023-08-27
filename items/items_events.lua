@@ -1,5 +1,5 @@
 
--- item is added to an inventory
+-- item is moved in an inventory
 umg.defineEvent("items:itemAdded")
 
 -- item is removed from an inventory
@@ -12,14 +12,6 @@ umg.defineEvent("items:openInventory")
 
 -- an inventory is closed
 umg.defineEvent("items:closeInventory")
-
-
-
--- an entity equips an item
-umg.defineEvent("items:equipItem")
-
--- an entity un-equips an item
-umg.defineEvent("items:unequipItem")
 
 
 
@@ -36,16 +28,6 @@ umg.defineEvent("items:displayItemTooltip")
 umg.defineEvent("items:drawInventory")
 
 end
-
-
-
-
--- An item is used
-umg.defineEvent("items:useItem")
-
--- Item usage is denied
--- TODO: Rename this? we can do better.
-umg.defineEvent("items:useItemDeny")
 
 
 

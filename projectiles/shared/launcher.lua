@@ -12,7 +12,7 @@ end
     we should prolly change argument order for this event.
     Why should `holderEnt` be first?? does it even matter?
 ]]
-umg.on("items:useItem", function(holderEnt, item, ...)
+umg.on("usables:useItem", function(holderEnt, item, ...)
     local targX, targY = holderEnt.lookX, holderEnt.lookY
     if (not targX) or (not targY) then
         return

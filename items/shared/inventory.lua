@@ -131,7 +131,11 @@ end
 
 
 
-local function addItem(self, slotX, slotY, item_ent)
+--[[
+    WARNING: This doesn't work as you expect.
+    signalAddItem
+]]
+local function signalAddItem(self, slotX, slotY, item_ent)
     -- calls appropriate callbacks and stuff
     local slotHandle = self:getSlotHandle(slotX,slotY)
     if slotHandle then
@@ -141,7 +145,7 @@ local function addItem(self, slotX, slotY, item_ent)
 end
 
 
-local function removeItem(self, slotX, slotY, item_ent)
+local function signalRemoveItem(self, slotX, slotY, item_ent)
     -- calls appropriate callbacks and stuff
     local slotHandle = self:getSlotHandle(slotX,slotY)
     if slotHandle then
@@ -167,18 +171,13 @@ function Inventory:_rawset(x, y, item_ent)
     if item_ent then
         assertItem(item_ent)
         if item_ent ~= self.inventory[i] then
-            --[[
-                TODO: this doesn't work properly!
-                addItem is called MULTIPLE times when an item
-                is moved around in an inventory.
-            ]]
-            addItem(self, x, y, item_ent)
+            signalAddItem(self, x, y, item_ent)
         end
         self.inventory[i] = item_ent
     else
         if self.inventory[i] then
             local removed_item = self:get(x,y)
-            removeItem(self, x, y, removed_item)
+            signalRemoveItem(self, x, y, removed_item)
         end
         self.inventory[i] = nil
     end
@@ -491,11 +490,14 @@ function Inventory:swap(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     local item = self:get(slotX, slotY)
     local otherItem = otherInv:get(otherSlotX, otherSlotY)
 
-    tryInvalidateItemHandle(self, item)
-    tryInvalidateItemHandle(otherInv, otherItem)
-    
-    otherInv:set(otherSlotX, otherSlotY, item)
-    self:set(slotX, slotY, otherItem)
+    if (slotX ~= otherSlotX) or (slotY ~= otherSlotY) or (otherSlotX ~= otherSlotY) then
+        -- if the slots are actually different, enact callbacks:
+        signalRemoveItem(self, slotX, slotY, item)
+        signalRemoveItem(otherInv, otherSlotX, otherSlotY, otherItem)
+
+        otherInv:set(otherSlotX, otherSlotY, item)
+        self:set(slotX, slotY, otherItem)
+    end
 end
 
 

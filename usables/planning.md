@@ -29,7 +29,7 @@ Ideas:
 
 
 
-## Q2: What are we doing with the argument order for `items:useItem`?
+## Q2: What are we doing with the argument order for `usables:useItem`?
 Args should look like this:
 `(itemEnt, holderEnt, useMode, ...)`
 where `useMode` is a number.
