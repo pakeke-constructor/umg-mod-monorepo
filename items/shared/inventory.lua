@@ -144,11 +144,6 @@ local function signalAddToSlot(self, slotX, slotY, item_ent)
     if slotHandle then
         slotHandle:onItemAdded(item_ent)
     end
-end
-
-
-local function signalAddToInventory(self, slotX, slotY, item_ent)
-    signalAddToSlot(self, slotX, slotY, item_ent)
     umg.call("items:itemAdded", self.owner, item_ent, slotX, slotY)
 end
 
@@ -159,11 +154,6 @@ local function signalRemoveFromSlot(self, slotX, slotY, item_ent)
     if slotHandle then
         slotHandle:onItemRemoved(item_ent)
     end
-end
-
-
-local function signalRemoveFromInventory(self, slotX, slotY, item_ent)
-    signalRemoveFromSlot(self, slotX, slotY, item_ent)
     umg.call("items:itemRemoved", self.owner, item_ent, slotX, slotY)
 end
 
@@ -201,6 +191,8 @@ end
         may be duplicated across multiple inventories.
 ]]
 function Inventory:set(slotX, slotY, item)
+    -- DON'T CALL THIS FUNCTION IF YOU ARE UNSURE!!!
+    -- Seriously, please!!! Don't be a fakken muppet
     assert(server, "Can only be called on server")
     assert2Numbers(slotX, slotY)
 
@@ -401,7 +393,7 @@ local function moveIntoTakenSlot(self, slotX, slotY, otherInv, otherSlotX, other
     local newStackSize = item.stackSize - count
     if newStackSize <= 0 then
         -- delete src item, since all it's stacks are gone
-        self:set(slotX, slotY, nil)
+        self:remove(slotX, slotY)
         item:delete()
     else
         -- else, we reduce the src item stacks
@@ -428,12 +420,12 @@ local function moveIntoEmptySlot(self, slotX, slotY, otherInv, otherSlotX, other
         local newItem = item:deepClone()
         newItem.stackSize = count
         item.stackSize = item.stackSize - count
-        otherInv:set(otherSlotX, otherSlotY, newItem)
+        otherInv:add(otherSlotX, otherSlotY, newItem)
         updateStackSize(item)
     else
         -- we are moving the whole item
-        otherInv:set(otherSlotX, otherSlotY, item)
-        self:set(slotX, slotY, nil)
+        self:remove(slotX, slotY)
+        otherInv:add(otherSlotX, otherSlotY, item)
     end
     return true -- success
 end
@@ -495,47 +487,44 @@ function Inventory:swap(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     moveSwapTc(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     local item = self:get(slotX, slotY)
     local otherItem = otherInv:get(otherSlotX, otherSlotY)
-    local isDifferent = self ~= otherInv
+    local isDifferent = (slotX ~= otherSlotX) or (slotY ~= otherSlotY) or (self ~= otherInv)
 
-    if isDifferent then
-        -- if inventories are different, emit signals:
-        signalRemoveFromInventory(self, slotX, slotY, item)
-        signalRemoveFromInventory(otherInv, otherSlotX, otherSlotY, otherItem)
-    elseif (slotX ~= otherSlotX) or (slotY ~= otherSlotY) then
-        -- if the slots are different, but the inventory is the same, then signal just slot moved:
-        signalRemoveFromSlot(self, slotX, slotY, item)
-        signalRemoveFromSlot(otherInv, otherSlotX, otherSlotY, otherItem)
-    else
-        return -- its the same slot, and same inventory!
+    if not isDifferent then
+        return -- we aren't moving anything!
     end
 
-    if isDifferent then
-        signalAddToInventory(self, slotX, slotY, otherItem)
-        signalAddToInventory(otherInv, otherSlotX, otherSlotY, item)
-    else
-        signalAddToSlot(self, slotX, slotY, item)
-        signalAddToSlot(otherInv, otherSlotX, otherSlotY, otherItem)
-    end
+    -- emit signals, then move
+    signalRemoveFromSlot(self, slotX, slotY, item)
+    signalRemoveFromSlot(otherInv, otherSlotX, otherSlotY, otherItem)
+    signalAddToSlot(self, slotX, slotY, item)
+    signalAddToSlot(otherInv, otherSlotX, otherSlotY, otherItem)
 
     otherInv:set(otherSlotX, otherSlotY, item)
     self:set(slotX, slotY, otherItem)
 end
 
 
+
+local addTc = typecheck.assert("number", "number", "entity?")
 function Inventory:add(slotX, slotY, item)
-    -- Adds an item to an inventory.
+    -- Directly adds an item to an inventory.
     -- `item` must NOT be in any other inventory!
-    -- Or else the item will be duplicated across 2 inventories.
-    
+    -- Or else the item-entity will be duplicated across BOTH inventories!!!
+    addTc(slotX, slotY, item)
+    if self:get(slotX, slotY) then
+        error("slot was taken: " .. tostring(slotX) .. ", " .. tostring(slotY))
+    end
+    signalAddToSlot(self, slotX, slotY, item)
+    self:set(slotX, slotY, item)
 end
 
 
 function Inventory:remove(slotX, slotY)
-    -- Removes an item from a slot in an inventory.
-    -- This is analogous to deleting the item.
+    -- Directly removes an item from a slot in an inventory.
+    -- This is kinda like deleting the item.
     local item = self:get(slotX, slotY)
     if umg.exists(item) then
-        signalRemoveItem(self, slotX, slotY, item)
+        signalRemoveFromSlot(self, slotX, slotY, item)
     end
     self:set(slotX, slotY, nil)
 end

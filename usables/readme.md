@@ -19,7 +19,7 @@ return {
         ent.inventory = items.Inventory({width=1, height=1})
 
         local gunItem = newGunItem()
-        ent.inventory:set(1,1, gunItem)
+        ent.inventory:add(1,1, gunItem)
     end
 }
 

@@ -134,7 +134,7 @@ local function removeIngredients(inventory, recipe)
                     item.stackSize = item.stackSize - amount
                     if item.stackSize == 0 then
                         item:delete()
-                        inventory:set(x,y,nil)
+                        inventory:remove(x,y)
                     end
                 end
             end
@@ -155,7 +155,7 @@ local function initializeItem(inventory, recipe, slotX, slotY)
             item_entity.y = owner.y
         end
     end
-    inventory:set(slotX, slotY, item_entity)
+    inventory:add(slotX, slotY, item_entity)
 end
 
 

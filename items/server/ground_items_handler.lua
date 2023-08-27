@@ -40,7 +40,7 @@ local PICKUP_DELAY_TIME = 4
 
 local function dropItem(itemEnt, x, y)
     local e = server.entities.items_ground_item(x, y)
-    e.inventory:set(1,1,itemEnt)
+    e.inventory:add(1,1,itemEnt)
     e.image = itemEnt.image
     umg.call("items:dropGroundItem", e, itemEnt)
     return e
