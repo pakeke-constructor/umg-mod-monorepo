@@ -60,6 +60,13 @@ end
 -- These two are useful for cool, custom slot vfx!
 
 
+function SlotHandle:getInventory()
+    return self.inventory
+end
+
+function SlotHandle:getOwner()
+    return self.inventory.owner
+end
 
 
 function SlotHandle:addItem(item)

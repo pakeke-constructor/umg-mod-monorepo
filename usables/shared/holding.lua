@@ -131,36 +131,15 @@ local function unequipItem(holderEnt, holdItem)
     end
 
     removeComponents(holdItem)
-    local inv = holderEnt.inventory
-    if inv and inv:getExistingItemHandle(holdItem) then
-        -- invalidate 
-        local itemHandle = inv:getExistingItemHandle(holdItem)
-        itemHandle:invalidate()
-    end
     umg.call("usables:unequipItem", holdItem, holderEnt)
     holderEnt:removeComponent("holdItem")
 end
 
 function holding.equipItem(holderEnt, slotX, slotY)
-    local prevItem = getHoldItem(holderEnt)
-    if prevItem then
-        -- unequip previous item
-        unequipItem(holderEnt, prevItem)
-    end
-    -- equip new item:
     server.broadcast(EQUIP_EV, holderEnt, slotX, slotY)
     setHoldValues(holderEnt, slotX, slotY)
     equipItem(holderEnt, slotX, slotY)
 end
-
-umg.on("items:itemRemoved", function(holderEnt, itemEnt)
-    -- if an item is removed from an inventory whilst holding,
-    -- unequip that item.
-    local holdItem = getHoldItem(holderEnt)
-    if holdItem == itemEnt then
-        unequipItem(holderEnt)
-    end
-end)
 
 
 server.on(EQUIP_EV, {
