@@ -65,12 +65,6 @@ function Inventory:init(options)
         self.color = DEFAULT_INVENTORY_COLOUR
     end
 
-    self.holding_x = nil -- The slot that the entity is holding
-    self.holding_y = nil
-
-    self.hovering_x = nil -- The slot that the entity is hovering over.
-    self.hovering_y = nil
-
     self.is_open = false
 
     self.owner = nil -- The entity that owns this inventory.
@@ -125,29 +119,6 @@ function Inventory:getXY(index)
     return floor(index / self.height - 0.01) + 1, yy
 end
 
-
-
-
-function Inventory:setHover(slotX, slotY)
-    assert2Numbers(slotX, slotY)
-    self.hovering_x, self.hovering_y = slotX, slotY
-
-    umg.call("items:hoverInventorySlot", self.owner, slotX, slotY)
-end
-
-
-function Inventory:getHover()
-    -- gets the slot that's currently being hovered over.
-    return self.hovering_x, self.hovering_y
-end
-
-
-function Inventory:getHoverItem()
-    local hx, hy = self.hovering_x, self.hovering_y
-    if hx and hy then
-        return self:get(hx,hy)
-    end
-end
 
 
 
@@ -803,12 +774,6 @@ function Inventory:drawSlot(inv_x, inv_y, offset, color)
     -- love.graphics.setColor(0,0,0)
     -- love.graphics.rectangle("line", X, Y, self.slotSize, self.slotSize)
 
-    if self.hovering_x == inv_x and self.hovering_y == inv_y then
-        love.graphics.setLineWidth(4)
-        love.graphics.setColor(0,0,0, 0.65)
-        love.graphics.rectangle("line", X, Y, self.slotSize, self.slotSize)
-    end
-
     if self:get(inv_x, inv_y) then
         local item = self:get(inv_x, inv_y)
         if umg.exists(item) then
@@ -973,25 +938,4 @@ end
 
 
 
-function Inventory:drawHoverWidget(x, y)
-    local item = self:get(x, y)
-    if not umg.exists(item) then return end
-    local mx, my = love.mouse.getPosition()
-    local ui_scale = rendering.getUIScale()
-    mx, my = mx / ui_scale, my / ui_scale
-    love.graphics.push("all")
-    love.graphics.setLineWidth(3)
-    love.graphics.setColor(1,1,1,0.7)
-    local ix = (x-1) * self.totalSlotSize + self.draw_x + self.totalSlotSize/2
-    local iy = (y-1) * self.totalSlotSize + self.draw_y + self.totalSlotSize/2
-    love.graphics.line(mx, my, ix, iy)
-    love.graphics.setColor(1,1,1)
-    love.graphics.circle("fill", mx,my, 2)
-    love.graphics.pop()
-end
-
-
-
 return Inventory
-
-

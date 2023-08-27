@@ -1,7 +1,4 @@
 
--- inventory slot is clicked on / hovered
-umg.defineEvent("items:hoverInventorySlot")
-
 -- item is added to an inventory
 umg.defineEvent("items:itemAdded")
 

@@ -96,7 +96,8 @@ end
 
 function Crafter:getResult(inventory)
     -- expects a flat array of ingredients.
-    assert(inventory.drawHoverWidget, "Crafter:getResult(inv) takes an inventory as first argument!")
+    local ok = items.Inventory.isInstance(inventory)
+    assert(ok, "Crafter:getResult(inv) takes an inventory as first argument!")
     
     local ingredientsToCounts = getIngredientsToCounts(inventory)
 
