@@ -493,14 +493,11 @@ function Inventory:swap(slotX, slotY, otherInv, otherSlotX, otherSlotY)
         return -- we aren't moving anything!
     end
 
-    -- emit signals, then move
-    signalRemoveFromSlot(self, slotX, slotY, item)
-    signalRemoveFromSlot(otherInv, otherSlotX, otherSlotY, otherItem)
-    signalAddToSlot(self, slotX, slotY, item)
-    signalAddToSlot(otherInv, otherSlotX, otherSlotY, otherItem)
+    self:remove(slotX, slotY)
+    otherInv:remove(otherSlotX, otherSlotY)
 
-    otherInv:set(otherSlotX, otherSlotY, item)
-    self:set(slotX, slotY, otherItem)
+    self:add(slotX, slotY, otherItem)
+    otherInv:add(otherSlotX, otherSlotY, item)
 end
 
 
