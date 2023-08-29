@@ -935,6 +935,29 @@ end
 
 
 
+function Inventory:drawHoverWidget(slotX, slotY)
+    --[[
+        if the player is picking up an item,
+        and about to move it, this stuff will be drawn!
+    ]]
+    local item = self:get(slotX, slotY)
+    if not umg.exists(item) then return end
+    local mx, my = love.mouse.getPosition()
+    local ui_scale = rendering.getUIScale()
+    mx, my = mx / ui_scale, my / ui_scale
+    love.graphics.push("all")
+    love.graphics.setLineWidth(3)
+    love.graphics.setColor(1,1,1,0.7)
+    local ix = (slotX-1) * self.totalSlotSize + self.draw_x + self.totalSlotSize/2
+    local iy = (slotY-1) * self.totalSlotSize + self.draw_y + self.totalSlotSize/2
+    love.graphics.line(mx, my, ix, iy)
+    love.graphics.setColor(1,1,1)
+    love.graphics.circle("fill", mx,my, 2)
+    love.graphics.pop()
+end
+
+
+
 function Inventory:drawBackground(x, y, w, h)
     -- Draw inventory body
     local col = self.color or WHITE
