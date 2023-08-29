@@ -138,7 +138,7 @@ end
 
 
 
-local function signalAddToSlot(self, slotX, slotY, item_ent)
+local function signalMoveToSlot(self, slotX, slotY, item_ent)
     -- calls appropriate callbacks for item addition
     local slotHandle = self:getSlotHandle(slotX,slotY)
     if slotHandle then
@@ -505,13 +505,14 @@ end
 local addTc = typecheck.assert("number", "number", "voidentity")
 function Inventory:add(slotX, slotY, item)
     -- Directly adds an item to an inventory.
+    -- WARNING: THIS METHOD IS QUITE DANGEROUS TO CALL!!!
     -- `item` must NOT be in any other inventory!
-    -- Or else the item-entity will be duplicated across BOTH inventories!!!
+    -- If item is in another inv, the item-entity will be duplicated across BOTH inventories!!!
     addTc(slotX, slotY, item)
     if self:get(slotX, slotY) then
         error("slot was taken: " .. tostring(slotX) .. ", " .. tostring(slotY))
     end
-    signalAddToSlot(self, slotX, slotY, item)
+    signalMoveToSlot(self, slotX, slotY, item)
     self:set(slotX, slotY, item)
 end
 

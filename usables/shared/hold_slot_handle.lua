@@ -30,6 +30,7 @@ end
 
 function HoldSlotHandle:onItemRemoved(itemEnt)
     if server then
+        print("YO!!! ", itemEnt)
         local holderEnt = self:getOwner()
         holding.unequipItem(holderEnt, itemEnt)
     end

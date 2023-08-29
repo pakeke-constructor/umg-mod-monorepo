@@ -71,15 +71,9 @@ if server then
 
 local function removeComponents(item)
     -- remove item position on invalidation:
-    if item:hasComponent("x") then
-        item:removeComponent("x")
-    end
-    if item:hasComponent("y") then
-        item:removeComponent("y")
-    end
-    if item:hasComponent("dimension") then
-        item:removeComponent("dimension")
-    end
+    item:removeComponent("x")
+    item:removeComponent("y")
+    item:removeComponent("dimension")
 end
 
 
