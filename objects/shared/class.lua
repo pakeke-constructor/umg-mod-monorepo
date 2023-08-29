@@ -108,29 +108,8 @@ local function newClass(name, extends)
 end
 
 
-local test = true
 
-if test then
---[[
-a instanceof A --> true
-b instanceof B --> true
 
-b instanceof A --> true
-a instanceof B --> false
-]]
-local A = newClass("objects:test:A")
-local B = newClass("objects:test:B", A) -- B extends A
-
-local a = A()
-local b = B()
-
-assert(A.isInstance(a))
-assert(B.isInstance(b))
-
-assert(A.isInstance(b))
-assert(not B.isInstance(a), "?")
-print("[objects] Inheritance test passed")
-end
 
 
 
