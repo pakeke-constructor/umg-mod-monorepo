@@ -44,7 +44,20 @@ local default_class_mt = {__call = newObj}
 
 
 
-local function isInstance(x, class, currentClass)
+local function isChildOf(child, parent)
+    --[[
+        returns true iff `child` is a child of `parent`
+    ]]
+    if child == parent then
+        return true
+    end
+
+    if child._extends then
+        return isChildOf(child._extends, parent)
+    end
+end
+
+local function isInstance(x, class)
     --[[
         checks if `x` is an instance of `class`
     ]]
@@ -52,14 +65,7 @@ local function isInstance(x, class, currentClass)
         return false
     end
     local cls = getmetatable(x)
-    if cls == class then
-        return true
-    end
-    if cls._extends then
-        local extends = cls._extends
-        return extends.isInstance and extends.isInstance(x)
-    end
-    return false
+    return isChildOf(cls, class)
 end
 
 
@@ -75,7 +81,6 @@ local function newClass(name, extends)
 
     local class = {}
     class.__index = class
-    class._extends = extends
 
     function class.isInstance(x)
         assert(x ~= class, "Call like Cls.isInstance(x), not Cls:isInstance(x)")
@@ -86,6 +91,10 @@ local function newClass(name, extends)
         if type(extends) ~= "table" then
             error("class(name, extends) expects a class as optional 2nd argument")
         end
+        if isChildOf(extends, class) then
+            error("Cannot inherit from this class!")
+        end
+        class._extends = extends
         setmetatable(class, {
             __index = extends,
             __call = newObj
@@ -120,6 +129,7 @@ assert(B.isInstance(b))
 
 assert(A.isInstance(b))
 assert(not B.isInstance(a), "?")
+print("[objects] Inheritance test passed")
 end
 
 
