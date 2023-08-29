@@ -979,7 +979,7 @@ function Inventory:drawUI()
         for y = 0, self.height - 1 do
             local inv_x, inv_y = x+1, y+1 -- inventory is 1-indexed
             if self:slotExists(inv_x, inv_y) then
-                self:drawSlot(self, inv_x, inv_y, offset, col)
+                self:drawSlot(inv_x, inv_y, offset, col)
             end
         end
     end
@@ -988,7 +988,7 @@ function Inventory:drawUI()
 
     do 
         local x,y,w,h = getExitButtonBounds(self)
-        self:drawExitButton(self,x,y,w,h)
+        self:drawExitButton(x,y,w,h)
     end
 
     umg.call("items:drawInventory", self.owner, X,Y,W,H)

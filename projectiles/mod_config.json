@@ -4,6 +4,6 @@
         "typecheck", "sync", "objects", "state",
         "input", "rendering", "reducers", "physics",
         "items", "control", "xy", "juice", "sound",
-        "mortality"
+        "mortality", "usables"
     ]
 }

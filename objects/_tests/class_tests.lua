@@ -5,9 +5,6 @@ local Class = require("shared.class")
 local test = false
 
 if test then
-    --[[
-        TODO: Wtf is this random 
-    ]]
 --[[
 a instanceof A --> true
 b instanceof B --> true

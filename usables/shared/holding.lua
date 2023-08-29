@@ -52,15 +52,6 @@ end
 
 
 
-local function setHoldValues(holderEnt, slotX, slotY)
-    -- holds the item at slot (slotX, slotY) in ent's inventory
-    local holdItem = holderEnt.holdItem or {}
-    holdItem.slotX = slotX
-    holdItem.slotY = slotY
-end
-
-
-
 
 local EQUIP_EV = "usables.equipItem"
 local UNEQUIP_EV = "usables.unequipItem"
@@ -69,29 +60,6 @@ local sf = sync.filters
 
 
 
-if client then
---[[
-==============================
-   SERVER
-==============================
-]]
-function holding.equipItem(holderEnt, slotX, slotY)
-    if sync.isClientControlling(holderEnt) then
-        client.send(EQUIP_EV, holderEnt, slotX, slotY)
-    end
-end
-
-function holding.unequipItem(holderEnt, slotX, slotY)
-    if sync.isClientControlling(holderEnt) then
-        client.send(UNEQUIP_EV, holderEnt, slotX, slotY)
-    end
-end
-
-
-
-
-
-
 
 --[[
 ==============================
@@ -99,17 +67,7 @@ end
 ==============================
 ]]
 
-elseif server then
-
-local function equipItem(holderEnt, slotX, slotY)
-    setHoldValues(holderEnt, slotX, slotY)
-    local inv = holderEnt.inventory
-    local item = inv:get(slotX, slotY)
-    if item then
-        holderEnt.holdItem = item
-        umg.call("usables:equipItem", item, holderEnt)
-    end
-end
+if server then
 
 local function removeComponents(item)
     -- remove item position on invalidation:
@@ -124,53 +82,28 @@ local function removeComponents(item)
     end
 end
 
-local function unequipItem(holderEnt, holdItem)
-    holdItem = holdItem or getHoldItem(holderEnt)
-    if not holdItem then
-        return
-    end
 
-    removeComponents(holdItem)
-    umg.call("usables:unequipItem", holdItem, holderEnt)
-    holderEnt:removeComponent("holdItem")
+local entityItemTc = typecheck.assert("entity", "voidentity")
+function holding.equipItem(holderEnt, itemEnt)
+    entityItemTc(holderEnt, itemEnt)
+    server.broadcast(EQUIP_EV, holderEnt, itemEnt)
+
+    holderEnt.holdItem = itemEnt
+    umg.call("usables:equipItem", itemEnt, holderEnt)
 end
-
-function holding.equipItem(holderEnt, slotX, slotY)
-    server.broadcast(EQUIP_EV, holderEnt, slotX, slotY)
-    setHoldValues(holderEnt, slotX, slotY)
-    equipItem(holderEnt, slotX, slotY)
-end
-
-
-server.on(EQUIP_EV, {
-    arguments = {sf.controlEntity, sf.number, sf.number},
-    handler = function(sender, ent, slotX, slotY)
-        local inv = ent.inventory
-        if not inv then return end
-        slotX = math.floor(slotX)
-        slotY = math.floor(slotY)
-        
-        if inv:slotExists(slotX,slotY) then
-            equipItem(ent, slotX, slotY)
-        end
-    end
-})
-
-server.on(UNEQUIP_EV, {
-    arguments = {sf.controlEntity},
-    handler = function(sender, ent)
-        local inv = ent.inventory
-        if not inv then return end
-        unequipItem(ent)
-    end
-})
-
-local entityTc = typecheck.assert("entity")
 
 function holding.unequipItem(holderEnt, itemEnt)
-    -- programmatically unequip items:
-    entityTc(holderEnt)
-    unequipItem(holderEnt, itemEnt)
+    -- programmatically unequip a held item:
+    entityItemTc(holderEnt, itemEnt)
+
+    -- if no item is specified, automatically try get the holdItem comp:
+    itemEnt = itemEnt or getHoldItem(holderEnt)
+    if not itemEnt then
+        return
+    end
+    removeComponents(itemEnt)
+    umg.call("usables:unequipItem", itemEnt, holderEnt)
+    holderEnt:removeComponent("holdItem")
 end
 
 end
@@ -193,26 +126,11 @@ end)
 
 elseif server then
 
-local function isHandle(x)
-    return items.ItemHandle.isInstance(x)
-end
-
 local function removeIfInvalid(ent)
     local holdItem = ent.holdItem
-    -- if is an itemHandle, and is invalid:
-    if isHandle(holdItem) then 
-        if not holdItem:isValid() then
-            local itemEnt = holdItem:rawget()
-            if umg.exists(itemEnt) then
-                holding.unequipItem(ent, itemEnt)
-            end
-            ent:removeComponent("holdItem")
-        end
-        return
-    end
-
-    -- if it's not an ItemHandle, check for existance,
-    -- and remove if not-exist.
+    -- remove if dead entity.
+    -- TODO: Do we need this code...?
+    -- I guess its better safe than sorry... :-)
     if not umg.exists(holdItem) then
         ent:removeComponent("holdItem")
     end

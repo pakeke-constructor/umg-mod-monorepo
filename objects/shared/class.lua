@@ -71,7 +71,7 @@ end
 
 
 
-local function newClass(name, extends)
+local function Class(name, extends)
     if type(name) ~= "string" then
         error("class(name) expects a string as first argument")
     end
@@ -109,10 +109,5 @@ end
 
 
 
-
-
-
-
-
-return newClass
+return Class
 
