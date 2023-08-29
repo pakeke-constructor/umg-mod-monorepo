@@ -49,7 +49,7 @@ end
 
 
 local dropItemHandler = dropItem
-local dropItemTc = typecheck.assert("table", "number", "number")
+local dropItemTc = typecheck.assert("voidentity", "number", "number")
 
 function groundItemsHandler.drop(itemEnt, x, y)
     -- TODO: We will need to do something about the dimension here.

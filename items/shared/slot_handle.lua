@@ -19,13 +19,21 @@ local SlotHandle = objects.Class("items:ItemHandle")
 ]]
 
 
-local initTc = typecheck.assert("number", "number", "table")
+local initTc = typecheck.assert("table")
 
-function SlotHandle:init(slotX, slotY, inventory)
-    initTc(slotX, slotY)
+function SlotHandle:init(inventory)
+    initTc(inventory)
+    self.inventory = inventory
+end
+
+
+
+local number2Tc = typecheck.assert("number", "number")
+
+function SlotHandle:setSlotPosition(slotX, slotY)
+    number2Tc(slotX, slotY)
     self.slotX = slotX
     self.slotY = slotY
-    self.inventory = inventory
 end
 
 

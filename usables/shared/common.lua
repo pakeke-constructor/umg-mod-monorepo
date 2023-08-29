@@ -4,19 +4,11 @@ local common = {}
 
 
 
-
 function common.getHoldItem(ent)
     local holdItem = ent.holdItem
     if umg.exists(holdItem) then
         -- its an entity
         return holdItem
-    end
-
-    if getmetatable(holdItem) == items.ItemHandle then
-        if holdItem:isValid() then
-            -- it's an itemhandle, and it's valid!
-            return holdItem:get()
-        end
     end
 end
 
@@ -31,7 +23,6 @@ function common.getHoldDistance(itemEnt, holderEnt)
     local dis2 = holderEnt.itemHoldDistance or DEFAULT_HOLD_DISTANCE
     return dis1 + dis2
 end
-
 
 
 

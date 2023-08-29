@@ -57,6 +57,15 @@ typecheck.ent = typecheck.entity
 
 
 
+function typecheck.voidentity(x)
+    -- an entity that may or may not exist
+    -- (ie an entity thats just been created)
+    return (type(x) == "table" and x.id), "expected entity"
+end
+
+
+
+
 function typecheck.optional(f)
     return function(x)
         return x == nil or f(x)

@@ -144,7 +144,7 @@ local function signalAddToSlot(self, slotX, slotY, item_ent)
     if slotHandle then
         slotHandle:onItemAdded(item_ent)
     end
-    umg.call("items:itemAdded", self.owner, item_ent, slotX, slotY)
+    umg.call("items:itemMoved", self.owner, item_ent, slotX, slotY)
 end
 
 
@@ -502,7 +502,7 @@ end
 
 
 
-local addTc = typecheck.assert("number", "number", "entity?")
+local addTc = typecheck.assert("number", "number", "voidentity")
 function Inventory:add(slotX, slotY, item)
     -- Directly adds an item to an inventory.
     -- `item` must NOT be in any other inventory!
@@ -624,6 +624,8 @@ function Inventory:setSlotHandle(slotX, slotY, slotHandle)
         -- error, since we are overwriting existing:
         error("Overwriting existing slot handle at: " .. tostring(slotX) .. ", " .. tostring(slotY))
     end
+
+    slotHandle:setSlotPosition(slotX, slotY)
 
     -- else set new slotHandle:
     local slotHandles = getSlotHandles(self)

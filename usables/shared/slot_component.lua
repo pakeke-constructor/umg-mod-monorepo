@@ -23,6 +23,6 @@ group:onAdded(function(ent)
     assert(his.slotX and his.slotY, "holdItemSlot not given slotX, slotY")
 
     local obj = HoldSlotHandle(inv)
-    inv:setSlotHandler(his.slotX, his.slotY, obj)
+    inv:setSlotHandle(his.slotX, his.slotY, obj)
 end)
 

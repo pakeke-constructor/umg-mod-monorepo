@@ -44,18 +44,19 @@ local default_class_mt = {__call = newObj}
 
 
 
-local function isInstance(x, class, extends)
+local function isInstance(x, class, currentClass)
     --[[
         checks if `x` is an instance of `class`
     ]]
     if type(x) ~= "table" then
         return false
     end
-    local mt = getmetatable(x)
-    if mt == class then
+    local cls = getmetatable(x)
+    if cls == class then
         return true
     end
-    if extends then
+    if cls._extends then
+        local extends = cls._extends
         return extends.isInstance and extends.isInstance(x)
     end
     return false
@@ -74,10 +75,11 @@ local function newClass(name, extends)
 
     local class = {}
     class.__index = class
+    class._extends = extends
 
     function class.isInstance(x)
         assert(x ~= class, "Call like Cls.isInstance(x), not Cls:isInstance(x)")
-        return isInstance(x, class, extends)
+        return isInstance(x, class)
     end
 
     if extends then
@@ -94,6 +96,30 @@ local function newClass(name, extends)
 
     umg.register(class, name)
     return class
+end
+
+
+local test = true
+
+if test then
+--[[
+a instanceof A --> true
+b instanceof B --> true
+
+b instanceof A --> true
+a instanceof B --> false
+]]
+local A = newClass("objects:test:A")
+local B = newClass("objects:test:B", A) -- B extends A
+
+local a = A()
+local b = B()
+
+assert(A.isInstance(a))
+assert(B.isInstance(b))
+
+assert(A.isInstance(b))
+assert(not B.isInstance(a), "?")
 end
 
 

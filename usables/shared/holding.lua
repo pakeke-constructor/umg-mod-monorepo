@@ -106,7 +106,7 @@ local function equipItem(holderEnt, slotX, slotY)
     local inv = holderEnt.inventory
     local item = inv:get(slotX, slotY)
     if item then
-        holderEnt.holdItem = inv:retrieveItemHandle(slotX, slotY)
+        holderEnt.holdItem = item
         umg.call("usables:equipItem", item, holderEnt)
     end
 end
