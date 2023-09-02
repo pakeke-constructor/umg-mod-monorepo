@@ -86,6 +86,11 @@ ent.eventSense = {
     player looks enemy in eyes -> enemy gets scared OF PLAYER.
     Do some thinking.
 ]]
+-- perhaps a controllableSense component?
+ent.controllableSense = {
+    -- explicitly detects controllable entities
+    ... -- TODO ???
+}
 
 ```
 
