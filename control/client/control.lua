@@ -11,7 +11,7 @@ require("control_events")
 local control = {}
 
 
-local controllableGroup = umg.group("controllable")
+local controllableGroup = umg.group("controllable", "x", "y")
 
 
 
@@ -67,8 +67,8 @@ local DELTA = 1000
 
 
 local function updateMoveEnt(ent)
-    ent.moveX = nil
-    ent.moveY = nil
+    ent.moveX = false
+    ent.moveY = false
 
     if listener:isControlDown(input.UP) then
         ent.moveY = ent.y - DELTA
@@ -88,7 +88,7 @@ end
 
 function listener:update()
     for _, ent in ipairs(controllableGroup) do
-        if sync.isClientControlling(ent) and ent.x and ent.y then
+        if sync.isClientControlling(ent) then
             if ent.controllable and ent.controllable.movement then
                 updateMoveEnt(ent)
             end

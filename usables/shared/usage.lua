@@ -53,7 +53,7 @@ function usage.canUseHoldItem(holder_ent, item, mode)
         if type(item.canUseItem) == "function" then
             return item:canUseItem(holder_ent, mode) -- return callback value
         else
-            return item.canUseItem -- it's probably a boolean
+            return item.canUseItem -- it's a boolean
         end
     end
 

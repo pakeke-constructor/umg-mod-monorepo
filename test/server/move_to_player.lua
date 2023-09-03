@@ -25,8 +25,8 @@ umg.on("@tick", function()
             ent.moveX = player.x
             ent.moveY = player.y
         else
-            ent.moveX = nil
-            ent.moveY = nil
+            ent.moveX = false
+            ent.moveY = false
         end
     end
 end)

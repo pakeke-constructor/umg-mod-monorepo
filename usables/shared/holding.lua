@@ -53,14 +53,6 @@ end
 
 
 
-local EQUIP_EV = "usables.equipItem"
-local UNEQUIP_EV = "usables.unequipItem"
-
-local sf = sync.filters
-
-
-
-
 --[[
 ==============================
    SERVER
@@ -80,7 +72,6 @@ end
 local entityItemTc = typecheck.assert("entity", "voidentity")
 function holding.equipItem(holderEnt, itemEnt)
     entityItemTc(holderEnt, itemEnt)
-    server.broadcast(EQUIP_EV, holderEnt, itemEnt)
 
     holderEnt.holdItem = itemEnt
     umg.call("usables:equipItem", itemEnt, holderEnt)
