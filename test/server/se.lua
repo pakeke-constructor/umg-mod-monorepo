@@ -61,11 +61,13 @@ umg.on("@createWorld", function()
         newItem(ents.ak47, 1)
     end
 
+    --[[
     for i=1,30 do
         local MAG = 100
         local x, y = math.random(-MAG, MAG), math.random(-MAG, MAG)
         ents.slime3(x,y - 1000)
     end
+    ]]
 
     for i=1, 30 do
         local MAG = 250

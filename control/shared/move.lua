@@ -74,6 +74,8 @@ local MOVE_THRESHOLD = 0.1
 
 
 local function setVelFromMove(ent, dt)
+    print("heyhey", ent:type())
+
     if (not ent.moveX) and (not ent.moveY) then
         -- If we don't have moveX or moveY, return early.
         return

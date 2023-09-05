@@ -62,10 +62,10 @@ function listener:keypressed(key, scancode, isrepeat)
     if scancode == "q" then
         local e = control.getPlayer()
         local x, y = rendering.getWorldMousePosition()
-        juice.particles.emit("smoke", e.x, e.y, 8, 10, {0.2,0.8,0.9})
+        juice.particles.emit("smoke", e, 10, {0.2,0.8,0.9})
         e.x = x
         e.y = y
-        juice.particles.emit("smoke", x, y, 8, 10)
+        juice.particles.emit("smoke", e, 10)
     end
     if scancode == "space" then
         local e = control.getPlayer()
