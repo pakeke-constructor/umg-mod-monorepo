@@ -46,6 +46,7 @@ dimensionGroup:onAdded(function(ent)
         -- Since ent.dimension == nil implies that the entity is in DEFAULT dimension
         moveDimensions(ent, DEFAULT_DIMENSION, dim)
     else
+        -- else, the ent STLL exists inside the default dimension
         entToDimension[ent] = DEFAULT_DIMENSION
     end
 end)

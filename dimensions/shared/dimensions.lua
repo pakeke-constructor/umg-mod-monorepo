@@ -82,7 +82,10 @@ local strTc = typecheck.assert("string")
 
 function dimensions.destroyDimension(dimension)
     strTc(dimension)
-    destroyDimension(dimension)
+    local overseer = dimensions.getOverseer(dimension)
+    if umg.exists(overseer) then
+        overseer:deepDelete()
+    end
 end
 
 

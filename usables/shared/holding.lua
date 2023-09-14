@@ -35,7 +35,7 @@ function holding.updateHoldItemDirectly(itemEnt, holderEnt)
 
     umg.call("usables:updateHoldItem", itemEnt, holderEnt)
 
-    itemEnt.dimension = holderEnt.dimension
+    itemEnt.dimension = dimensions.getDimension(holderEnt.dimension)
 end
 
 
@@ -61,7 +61,7 @@ end
 
 if server then
 
-local function removeComponents(item)
+local function remPosComponents(item)
     -- remove item position on invalidation:
     item:removeComponent("x")
     item:removeComponent("y")
@@ -86,7 +86,7 @@ function holding.unequipItem(holderEnt, itemEnt)
     if not itemEnt then
         return
     end
-    removeComponents(itemEnt)
+    remPosComponents(itemEnt)
     umg.call("usables:unequipItem", itemEnt, holderEnt)
     holderEnt:removeComponent("holdItem")
 end
