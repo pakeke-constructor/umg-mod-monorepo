@@ -9,6 +9,8 @@ local uname_to_player = {}
 local function make_player(uname)
     local ent = ents.player(0, 0, uname)
     ent.z = 0
+    ent.moveX = 0
+    ent.moveY = 0
     uname_to_player[uname] = ent
     return ent
 end
