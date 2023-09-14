@@ -1,5 +1,5 @@
 
-# umg tests
+# umg e2e tests
 
 This is not actually a playable mod;
 rather, this mod serves to test the core umg api.

@@ -55,6 +55,7 @@ return function()
 
     zenith.tick()
 
+    -- test that we aren't receiving packets:
     if client then
         client.send("send_to_server", 1, 3)
     end
@@ -62,7 +63,7 @@ return function()
     zenith.assert(not (aRecv or bRecv), "recieved invalid packet 1")
     zenith.tick()
 
-
+    -- test that we aren't receiving packets:
     if client then
         client.send("send_to_server", "hiii", 2.1)
     end
@@ -70,6 +71,7 @@ return function()
     zenith.assert(not (aRecv or bRecv), "recieved invalid packet 2")
     zenith.tick()
 
+    -- test that we aren't receiving packets:
     local str = "all goods"
     if client then
         aRecv, bRecv = str, 2
