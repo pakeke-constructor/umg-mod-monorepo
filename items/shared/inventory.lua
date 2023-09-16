@@ -477,9 +477,12 @@ end
 local function moveIntoEmptySlot(self, slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
     local item = self:get(slotX, slotY)
     count = getMoveStackCount(item, count)
-
     if count <= 0 then return
         false -- failure, no space
+    end
+
+    if not self:canRemoveFromSlot(slotX, slotY) then
+        return false -- failure, denied
     end
 
     if count < item.stackSize then
