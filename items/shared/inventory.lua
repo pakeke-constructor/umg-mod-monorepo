@@ -315,12 +315,12 @@ local function canAddToSlot(self, slotX, slotY, item)
 
     if slotHandle then
         local ok = slotHandle:canAddItem(item, slotX, slotY)
-        if ok then return true end
+        if not ok then return false end
     end
 
     local invEnt = self.owner
-    local ok = umg.ask("items:isItemAdditionBlocked", item, invEnt, slotX, slotY)
-    return ok
+    local isBlocked = umg.ask("items:isItemAdditionBlocked", item, invEnt, slotX, slotY)
+    return not isBlocked
 end
 
 
@@ -335,10 +335,6 @@ function Inventory:canAddToSlot(slotX, slotY, item, count)
         return nil
     end
 
-    if not canAddToSlot(self, slotX, slotY, item) then
-        return nil -- blocked by custom
-    end
-
     -- `count` is the number of items that we want to add. (defaults to the full stackSize of item)
     count = (count or item.stackSize) or 1
 
@@ -346,16 +342,21 @@ function Inventory:canAddToSlot(slotX, slotY, item, count)
     local item_ent = umg.exists(self.inventory[i]) and self.inventory[i]
     if item_ent then
         -- check that the item stacks can be combined:
-        if item_ent.itemName == item.itemName then
-            local remainingStackSize = (item_ent.maxStackSize or 1) - count
-            if (remainingStackSize >= count) then
-                -- the target slot is the same item type, and there is free space in the stack
-                return true
-            end
+        if item_ent.itemName ~= item.itemName then
+            return false -- deny; items can't be combined.
         end
-    else
-        return true -- slot is empty, so its fine to add
+
+        local remainingStackSize = (item_ent.maxStackSize or 1) - count
+        if (remainingStackSize < count) then
+            return false -- not enough stack space to combine
+        end
     end
+
+    if not canAddToSlot(self, slotX, slotY, item) then
+        return false -- blocked
+    end
+
+    return true -- Yup, we can add!
 end
 
 
@@ -371,8 +372,17 @@ end
 
 
 function Inventory:canRemoveFromSlot(slotX, slotY)
+    --[[
+        returns true if we can remove item from (slotX, slotY),
+        returns true if there is no item,
+        returns false if item removal is blocked.
+    ]]
     assert2Numbers(slotX, slotY)
     local item = self:get(slotX, slotY)
+    if not umg.exists(item) then
+        return true -- no item, so I guess we can remove
+    end
+
     local invEnt = self.owner
     local isBlocked = umg.ask("items:isItemRemovalBlocked", item, invEnt, slotX, slotY)
     return not isBlocked
@@ -391,7 +401,7 @@ function Inventory:tryRemoveFromSlot(slotX, slotY)
         return nil
     end
 
-    if self:canRemoveFromSlot(self, slotX, slotY, item) then
+    if self:canRemoveFromSlot(slotX, slotY) then
         self:remove(slotX, slotY)
     end
 end
@@ -558,14 +568,17 @@ function Inventory:trySwap(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     moveSwapTc(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     local item = self:get(slotX, slotY)
     local otherItem = otherInv:get(otherSlotX, otherSlotY)
-    local isDifferent = (slotX ~= otherSlotX) or (slotY ~= otherSlotY) or (self ~= otherInv)
 
-    if not isDifferent then
+    if item == otherItem then
         return -- we aren't moving anything!
     end
 
     local removeOk = self:canRemoveFromSlot(slotX, slotY) and otherInv:canRemoveFromSlot(otherSlotX, otherSlotY)
-    local addOk = self:canAddToSlot(slotX, slotY) and otherInv:canAddToSlot(otherSlotX, otherSlotY)
+
+    -- if there is no item, adding it to the other slot is ok. (explains the first OR condition)
+    local addOk1 = (not otherItem) or self:canAddToSlot(slotX, slotY, otherItem)
+    local addOk2 = (not item) or otherInv:canAddToSlot(otherSlotX, otherSlotY, item)
+    local addOk = addOk1 and addOk2
 
     if addOk and removeOk then
         self:remove(slotX, slotY)
