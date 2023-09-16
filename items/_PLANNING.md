@@ -83,24 +83,6 @@ InventoryObject = {
 }
 
 
--- Regular methods:
-inventory:open() -- opens inventory
-
-inventory:close()
-
-inventory:count(item)
-
-inventory:remove(item, amount) -- removes from any slot
-
-inventory:get(slot_x, slot_y)
-
-
-inventory:has(item, amount)
-
-inventory:swap(other_inventory, self_x, self_y, other_x, other_y)
-
-x,y = inventory:getSpace() -- gets a free space in the inventory.
--- (returns nil if full.)
 
 ```
 

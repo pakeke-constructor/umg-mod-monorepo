@@ -134,7 +134,7 @@ local function tryPickUp(ent, picked)
     if best_ent then
         -- pick up this groundItem
         local item = getWrappedItem(best_ent)
-        local success = best_ent.inventory:move(1,1, ent.inventory)
+        local success = best_ent.inventory:tryMove(1,1, ent.inventory)
         if success then
             -- realistically, `success` should always be true, (since we used findAvailableSlot)
             -- but its better to be safe than sorry

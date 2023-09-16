@@ -116,7 +116,7 @@ server.on("trySwapInventoryItem", {
             return
         end
         
-        inv1:swap(x,y, inv2, x2,y2)
+        inv1:trySwap(x,y, inv2, x2,y2)
     end
 })
 
@@ -166,7 +166,7 @@ server.on("tryMoveInventoryItem", {
             return
         end
 
-        inv1:moveToSlot(x,y, inv2, x2,y2, count)
+        inv1:tryMoveToSlot(x,y, inv2, x2,y2, count)
     end
 })
 

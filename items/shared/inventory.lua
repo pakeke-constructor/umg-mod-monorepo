@@ -187,7 +187,7 @@ end
     BIG WARNING:
     This is a very low-level function, and IS VERY DANGEROUS TO CALL!
     If you want to move inventory items around, take a look at the
-    :move  and  :swap  methods.
+    :tryMove  and  :trySwap  methods.
 
     Calling this function willy-nilly will make it so the same item
         may be duplicated across multiple inventories.
@@ -345,6 +345,7 @@ function Inventory:canAddToSlot(slotX, slotY, item, count)
     local i = self:getIndex(slotX, slotY)
     local item_ent = umg.exists(self.inventory[i]) and self.inventory[i]
     if item_ent then
+        -- check that the item stacks can be combined:
         if item_ent.itemName == item.itemName then
             local remainingStackSize = (item_ent.maxStackSize or 1) - count
             if (remainingStackSize >= count) then
@@ -379,7 +380,7 @@ end
 
 
 
-function Inventory:tryRemove(slotX, slotY)
+function Inventory:tryRemoveFromSlot(slotX, slotY)
     --[[
         tries to remove item from an inventory slot.
         On success, returns the removed item.
@@ -451,6 +452,10 @@ local function moveIntoTakenSlot(self, slotX, slotY, otherInv, otherSlotX, other
     local item = self:get(slotX, slotY)
     count = getMoveStackCount(item, count, targ)
 
+    if not self:canRemoveFromSlot(slotX, slotY) then
+        return false -- we can't remove items from this slot
+    end
+
     local newStackSize = item.stackSize - count
     if newStackSize <= 0 then
         -- delete src item, since all it's stacks are gone
@@ -464,6 +469,7 @@ local function moveIntoTakenSlot(self, slotX, slotY, otherInv, otherSlotX, other
     -- add stacks to the target item 
     targ.stackSize = targ.stackSize + count
     updateStackSize(item)
+    return true -- success.
 end
 
 
@@ -495,23 +501,25 @@ end
 
 local moveTc = typecheck.assert("number", "number", "table", "number?")
 
---[[
-    attempts to move the item at slotX, slotY in `self`
-    into otherInv
-]]
-function Inventory:move(slotX, slotY, otherInv, count)
+function Inventory:tryMove(slotX, slotY, otherInv, count)
+    --[[
+        attempts to move the item at slotX, slotY in `self`
+        into otherInv.
+
+        Returns true on success, false on failure.
+    ]]
     moveTc(slotX, slotY, otherInv, count)
     local item = self:get(slotX, slotY)
     local otherX, otherY = otherInv:findAvailableSlot(item, count)
     if otherX and otherY then
-        return self:moveToSlot(slotX, slotY, otherInv, otherX, otherY, count)
+        return self:tryMoveToSlot(slotX, slotY, otherInv, otherX, otherY, count)
     end
     return false
 end
 
 
 
-function Inventory:moveToSlot(slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
+function Inventory:tryMoveToSlot(slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
     --[[
         moves an item from one inventory to another.
         Can also specify the `stackSize` argument to only send part of a stack.
@@ -523,26 +531,25 @@ function Inventory:moveToSlot(slotX, slotY, otherInv, otherSlotX, otherSlotY, co
     local stackSize = item.stackSize or 1
     count = math.min(count or stackSize, stackSize)
 
-    local targ = otherInv:get(otherSlotX, otherSlotY)
-
-    if targ then
-        if otherInv:canAddToSlot(otherSlotX, otherSlotY, item, count) then
-            moveIntoTakenSlot(self, slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
-            return true -- success
-        end
-    else
-        moveIntoEmptySlot(self, slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
-        return true -- success
+    if not otherInv:canAddToSlot(otherSlotX, otherSlotY, item, count) then
+        return false -- failed
     end
-
-    return false -- failed
+    
+    local targ = otherInv:get(otherSlotX, otherSlotY)
+    if targ then
+        return moveIntoTakenSlot(self, slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
+    else
+        return moveIntoEmptySlot(self, slotX, slotY, otherInv, otherSlotX, otherSlotY, count)
+    end
 end
 
 
 
-function Inventory:swap(slotX, slotY, otherInv, otherSlotX, otherSlotY)
+function Inventory:trySwap(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     --[[
         swaps two items in inventories.
+        
+        Returns true on success, false on failure.
     ]]
     assert(server, "only available on server")
     moveSwapTc(slotX, slotY, otherInv, otherSlotX, otherSlotY)
@@ -554,11 +561,18 @@ function Inventory:swap(slotX, slotY, otherInv, otherSlotX, otherSlotY)
         return -- we aren't moving anything!
     end
 
-    self:remove(slotX, slotY)
-    otherInv:remove(otherSlotX, otherSlotY)
+    local removeOk = self:canRemoveFromSlot(slotX, slotY) and otherInv:canRemoveFromSlot(otherSlotX, otherSlotY)
+    local addOk = self:canAddToSlot(slotX, slotY) and otherInv:canAddToSlot(otherSlotX, otherSlotY)
 
-    self:add(slotX, slotY, otherItem)
-    otherInv:add(otherSlotX, otherSlotY, item)
+    if addOk and removeOk then
+        self:remove(slotX, slotY)
+        otherInv:remove(otherSlotX, otherSlotY)
+
+        self:add(slotX, slotY, otherItem)
+        otherInv:add(otherSlotX, otherSlotY, item)
+        return true
+    end
+    return false
 end
 
 
