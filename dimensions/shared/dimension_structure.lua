@@ -76,9 +76,10 @@ function DimensionStructure:getObject(dimension)
         return self.dimensionToObject[dimension]
     end
 
-    local partition = self:newObject(dimension)
-    self.dimensionToObject[dimension] = partition
-    return partition
+    local obj = self:newObject(dimension)
+    assert(obj, "You need to return a value from overridden DimensionStructure:newObject()")
+    self.dimensionToObject[dimension] = obj
+    return obj
 end
 
 

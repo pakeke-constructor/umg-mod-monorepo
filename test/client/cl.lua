@@ -67,6 +67,22 @@ function listener:keypressed(key, scancode, isrepeat)
         e.y = y
         juice.particles.emit("smoke", e, 10)
     end
+    if scancode == "e" then
+        local e = control.getPlayer()
+        local inv = e.inventory
+        local ct = 0
+        if inv then
+            for x=1, inv.width do
+                for y=1, inv.height do
+                    local item = inv:get(x,y)
+                    if item and item:hasComponent("x") then
+                        ct = ct + 1
+                    end
+                end
+            end
+        end
+        print("items with position: ", ct)
+    end
     if scancode == "space" then
         local e = control.getPlayer()
         if base.gravity.isOnGround(e) then

@@ -111,6 +111,8 @@ end
 function Inventory:getIndex(slotX, slotY)
     -- internally, inventory is just an array.
     -- This method gets index in the inventory array, given (slotX, slotY)
+
+    -- slotX and slotY values should be between 1 and width (or height)
     return (self.height * (slotX-1)) + slotY
 end
 
@@ -142,7 +144,7 @@ local function signalMoveToSlot(self, slotX, slotY, item_ent)
     -- calls appropriate callbacks for item addition
     local slotHandle = self:getSlotHandle(slotX,slotY)
     if slotHandle then
-        slotHandle:onItemAdded(item_ent)
+        slotHandle:onItemAdded(item_ent, slotX, slotY)
     end
     umg.call("items:itemMoved", self.owner, item_ent, slotX, slotY)
 end
@@ -152,7 +154,7 @@ local function signalRemoveFromSlot(self, slotX, slotY, item_ent)
     -- calls appropriate callbacks for item removal
     local slotHandle = self:getSlotHandle(slotX,slotY)
     if slotHandle then
-        slotHandle:onItemRemoved(item_ent)
+        slotHandle:onItemRemoved(item_ent, slotX, slotY)
     end
     umg.call("items:itemRemoved", self.owner, item_ent, slotX, slotY)
 end
@@ -283,7 +285,7 @@ function Inventory:hasRemoveAuthority(controlEnt, slotX, slotY)
         return false 
     end
 
-    local isBlocked = umg.ask("items:isItemRemovalBlocked", controlEnt, self.owner, slotX, slotY)
+    local isBlocked = umg.ask("items:isItemRemovalBlockedForControlEntity", controlEnt, self.owner, slotX, slotY)
     return not isBlocked
 end
 
@@ -301,11 +303,25 @@ function Inventory:hasAddAuthority(controlEnt, itemToBeAdded, slotX, slotY)
         return
     end
 
-    -- TODO: rename this question, it's terribly named
-    local isBlocked = umg.ask("items:isItemAdditionBlocked", controlEnt, self.owner, itemToBeAdded, slotX, slotY)
+    local isBlocked = umg.ask("items:isItemAdditionBlockedForControlEntity", controlEnt, self.owner, itemToBeAdded, slotX, slotY)
     return not isBlocked
 end
 
+
+
+
+local function canAddToSlot(self, slotX, slotY, item)
+    local slotHandle = self:getSlotHandle(slotX,slotY)
+
+    if slotHandle then
+        local ok = slotHandle:canAddItem(item, slotX, slotY)
+        if ok then return true end
+    end
+
+    local invEnt = self.owner
+    local ok = umg.ask("items:isItemAdditionBlocked", item, invEnt, slotX, slotY)
+    return ok
+end
 
 
 
@@ -317,6 +333,10 @@ function Inventory:canAddToSlot(slotX, slotY, item, count)
     canAddToSlotTc(slotX, slotY, item, count)
     if not self:slotExists(slotX, slotY) then
         return nil
+    end
+
+    if not canAddToSlot(self, slotX, slotY, item) then
+        return nil -- blocked by custom
     end
 
     -- `count` is the number of items that we want to add. (defaults to the full stackSize of item)
@@ -336,6 +356,47 @@ function Inventory:canAddToSlot(slotX, slotY, item, count)
         return true -- slot is empty, so its fine to add
     end
 end
+
+
+function Inventory:tryAddToSlot(slotX, slotY, item, count)
+    canAddToSlotTc(slotX, slotY, item, count)
+    if self:canAddToSlot(slotX, slotY, item, count) then
+        self:add(slotX, slotY)
+        return true
+    end
+    return false
+end
+
+
+
+function Inventory:canRemoveFromSlot(slotX, slotY)
+    assert2Numbers(slotX, slotY)
+    local item = self:get(slotX, slotY)
+    local invEnt = self.owner
+    local isBlocked = umg.ask("items:isItemRemovalBlocked", item, invEnt, slotX, slotY)
+    return not isBlocked
+end
+
+
+
+function Inventory:tryRemove(slotX, slotY)
+    --[[
+        tries to remove item from an inventory slot.
+        On success, returns the removed item.
+        On failure, returns nil.
+    ]]
+    local item = self:get(slotX, slotY)
+    if umg.exists(item) then
+        return nil
+    end
+
+    if self:canRemoveFromSlot(self, slotX, slotY, item) then
+        self:remove(slotX, slotY)
+    end
+end
+
+
+
 
 
 --[[
@@ -518,6 +579,7 @@ end
 
 
 function Inventory:remove(slotX, slotY)
+    -- WARNING: Somewhat unsafe to call!!!
     -- Directly removes an item from a slot in an inventory.
     -- This is kinda like deleting the item.
     local item = self:get(slotX, slotY)
@@ -526,6 +588,7 @@ function Inventory:remove(slotX, slotY)
     end
     self:set(slotX, slotY, nil)
 end
+
 
 
 
