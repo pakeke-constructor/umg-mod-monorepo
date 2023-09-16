@@ -574,21 +574,31 @@ function Inventory:trySwap(slotX, slotY, otherInv, otherSlotX, otherSlotY)
     end
 
     local removeOk = self:canRemoveFromSlot(slotX, slotY) and otherInv:canRemoveFromSlot(otherSlotX, otherSlotY)
+    if not removeOk then
+        return false -- we can't remove one of the items, so we can't swap
+    end
+
+    -- NOTE: This feels kinda dumb removing the items here,
+    -- because the operation isn't guaranteed to succeed yet...
+    self:remove(slotX, slotY)
+    otherInv:remove(otherSlotX, otherSlotY)
 
     -- if there is no item, adding it to the other slot is ok. (explains the first OR condition)
     local addOk1 = (not otherItem) or self:canAddToSlot(slotX, slotY, otherItem)
     local addOk2 = (not item) or otherInv:canAddToSlot(otherSlotX, otherSlotY, item)
     local addOk = addOk1 and addOk2
 
-    if addOk and removeOk then
-        self:remove(slotX, slotY)
-        otherInv:remove(otherSlotX, otherSlotY)
-
+    if addOk then
         self:add(slotX, slotY, otherItem)
         otherInv:add(otherSlotX, otherSlotY, item)
-        return true
+        return true -- success!
+    else
+        -- uh oh! reset to original slots. 
+        -- (TODO: this is dumb, because this will emit itemMoved events :/ )
+        self:add(slotX, slotY, otherItem)
+        otherInv:add(otherSlotX, otherSlotY, item)
+        return false -- failure; operation was reversed.
     end
-    return false
 end
 
 
