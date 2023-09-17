@@ -139,6 +139,11 @@ end
 
 
 
+function Inventory:onItemMoved(item, slotX, slotY)
+    -- Override this, if you want
+end
+
+
 
 local function signalMoveToSlot(self, slotX, slotY, item_ent)
     -- calls appropriate callbacks for item addition
@@ -146,7 +151,14 @@ local function signalMoveToSlot(self, slotX, slotY, item_ent)
     if slotHandle then
         slotHandle:onItemAdded(item_ent, slotX, slotY)
     end
+    self:onItemMoved(item_ent, slotX, slotY)
     umg.call("items:itemMoved", self.owner, item_ent, slotX, slotY)
+end
+
+
+
+function Inventory:onItemRemoved(item, slotX, slotY)
+    -- Override this, if you want
 end
 
 
@@ -156,6 +168,7 @@ local function signalRemoveFromSlot(self, slotX, slotY, item_ent)
     if slotHandle then
         slotHandle:onItemRemoved(item_ent, slotX, slotY)
     end
+    self:onItemRemoved(item_ent, slotX, slotY)
     umg.call("items:itemRemoved", self.owner, item_ent, slotX, slotY)
 end
 

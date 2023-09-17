@@ -1,4 +1,12 @@
 
+
+local GroundItemInventory = objects.Class("items:GroundItemInventory")
+
+function GroundItemInventory:onItemAdded()
+
+end
+
+
 return {
     groundItem = true,
     spinning = {},
