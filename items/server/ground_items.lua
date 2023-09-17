@@ -7,23 +7,18 @@ Entities that can pick up items off the ground have a `canPickUpItems` component
 
 local constants = require("shared.constants")
 
-
 local groundItemsHandler = {}
-
 
 
 
 local pickUpGroup = umg.group("x", "y", "canPickUpItems", "inventory")
 
-local groundItemGroup = umg.group("x", "y", "groundItem", "inventory")
+local groundItemGroup = umg.group("x", "y", "groundItem")
 
 
 
 
 local PICKUP_DISTANCE = constants.PICKUP_DISTANCE
-
-
-
 local CHUNK_SIZE = PICKUP_DISTANCE
 
 local groundItemPartition = dimensions.DimensionPartition(CHUNK_SIZE)
@@ -37,36 +32,36 @@ local PICKUP_DELAY_TIME = 4
 
 
 
-
-
 local function dropItem(itemEnt, dvec)
-    local e = server.entities.items_ground_item(dvec)
-    e.x = dvec.x
-    e.y = dvec.y
-    e.dimension = dimensions.getDimension(dvec.dimension)
-    e.inventory:add(1,1,itemEnt)
-    e.image = itemEnt.image
-    umg.call("items:dropGroundItem", e, itemEnt)
-    return e
+    itemEnt.x = dvec.x
+    itemEnt.y = dvec.y
+    itemEnt.dimension = dimensions.getDimension(dvec.dimension)
+    itemEnt.groundItem = true
+
+    umg.call("items:dropGroundItem", itemEnt)
 end
+
+
+
+local function pickUpItem(item, pickupEnt)
+    item:removeComponent("x")
+    item:removeComponent("y")
+    item:removeComponent("dimension")
+    item:removeComponent("groundItem")
+
+    umg.call("items:pickupGroundItem", item, pickupEnt)
+end
+
+
 
 
 
 local dropItemTc = typecheck.assert("voidentity", "dvector")
 
-local dropItemHandler = dropItem
-
 function groundItemsHandler.drop(itemEnt, dvec)
     dropItemTc(itemEnt, dvec)
-    return dropItemHandler(itemEnt, dvec)
+    dropItem(itemEnt, dvec)
 end
-
-
-function groundItemsHandler.setDropHandler(func)
-    dropItemHandler = func
-end
-
-
 
 
 
@@ -100,36 +95,30 @@ end
 
 
 
-
-local function getWrappedItem(groundItemEnt)
-    local inv = groundItemEnt.inventory
-    local w,h = inv.width, inv.height
-    assert(w == 1 and h == 1, "?")
-    -- the wrapped item will always be at slot 1,1
-    return inv:get(w,h) 
-end
-
-
-
-
 local function tryPickUp(ent, picked)
+    --[[
+        `ent` is the entity trying to pick up items
+    ]]
     local best_ent -- the best ground ent to pick up
+    local slotX, slotY
     local best_dist = math.huge
 
-    for _, groundEnt in groundItemPartition:iterator(ent) do
+    for _, item in groundItemPartition:iterator(ent) do
         --[[
             `groundEnt` has a 1x1 inventory, holding an item entity.
             We want to pick up that item.   
         ]]
-        local item = getWrappedItem(groundEnt)
-        if (not picked[groundEnt]) then 
+        if (not picked[item]) then 
             -- then the item is on the ground
-            local dist = math.distance(ent, groundEnt)
-            if canBePickedUp(dist, groundEnt) and dist < best_dist then
+            local dist = math.distance(ent, item)
+            if canBePickedUp(dist, item) and dist < best_dist then
                 -- always pick up the closest item.
-                if ent.inventory:findAvailableSlot(item) then
+                local sx, sy = ent.inventory:findAvailableSlot(item)
+                if sx then
+                    -- if there is a slot for this item, mark it
+                    slotX, slotY = sx, sy
                     best_dist = dist
-                    best_ent = groundEnt
+                    best_ent = item
                 end
             end
         end
@@ -137,15 +126,12 @@ local function tryPickUp(ent, picked)
 
     if best_ent then
         -- pick up this groundItem
-        local item = getWrappedItem(best_ent)
-        local success = best_ent.inventory:tryMove(1,1, ent.inventory)
+        local success = ent.inventory:tryAddToSlot(slotX, slotY, best_ent)
         if success then
             -- realistically, `success` should always be true, (since we used findAvailableSlot)
             -- but its better to be safe than sorry
             picked[best_ent] = true
-            umg.call("items:pickupGroundItem", ent, item)
-            -- delete the item on ground
-            best_ent:delete()
+            pickUpItem(best_ent, ent)
         end
     end
 end
@@ -165,18 +151,10 @@ end)
 
 
 
-local ct = 0
 local LOOP_CT = 8 -- we only want to update every X ticks, for efficiency
 
-umg.on("@tick", function(dt)
-    -- This function runs once every LOOP_CT frames:
-    ct = ct + 1
-    if ct < LOOP_CT then
-        return -- return early
-    else
-        ct = 0 -- else, we run function
-    end
-    -- ==========
+scheduling.runEvery(LOOP_CT, "@tick", function(dt)
+    -- Only run every X frames
     updatePartition()
 
     local picked = {}

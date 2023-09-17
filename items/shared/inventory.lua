@@ -376,7 +376,7 @@ end
 function Inventory:tryAddToSlot(slotX, slotY, item, count)
     canAddToSlotTc(slotX, slotY, item, count)
     if self:canAddToSlot(slotX, slotY, item, count) then
-        self:add(slotX, slotY)
+        self:add(slotX, slotY, item)
         return true
     end
     return false
@@ -735,11 +735,6 @@ function Inventory:setSlotHandle(slotX, slotY, slotHandle)
     assert2Numbers(slotX, slotY)
     if not SlotHandle.isInstance(slotHandle) then
         error("Not an instance of SlotHandle: " .. tostring(slotHandle))
-    end
-
-    if self:getSlotHandle(slotX,slotY) then
-        -- error, since we are overwriting existing:
-        error("Overwriting existing slot handle at: " .. tostring(slotX) .. ", " .. tostring(slotY))
     end
 
     slotHandle:setSlotPosition(slotX, slotY)

@@ -7,7 +7,7 @@ local inventoryGroup = umg.group("inventory")
 local Inventory = require("shared.inventory")
 local valid_callbacks = require("shared.inventory_callbacks")
 
-local groundItemsHandler = require("server.ground_items_handler")
+local groundItems= require("server.ground_items")
 
 
 
@@ -201,8 +201,8 @@ server.on("tryDropInventoryItem", {
         end
 
         if ent.x and ent.y then
-            local dvector = ent
-            groundItemsHandler.drop(item, dvector)
+            local dvector = ent -- dimensionVector is just the entity
+            groundItems.drop(item, dvector)
             inv:set(slotX, slotY, nil)
         end
     end

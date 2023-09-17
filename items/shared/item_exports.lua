@@ -8,9 +8,8 @@ items.SlotHandle = require("shared.slot_handle")
 
 
 if server then
-    local groundItemsHandler = require("server.ground_items_handler")
-    items.setDropHandler = groundItemsHandler.setDropHandler
-    items.drop = groundItemsHandler.drop
+    local groundAPI = require("server.ground_items")
+    items.drop = groundAPI.drop
 end
 
 

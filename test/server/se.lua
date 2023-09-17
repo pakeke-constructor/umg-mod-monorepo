@@ -22,8 +22,9 @@ local function newItem(ctor, stackSize)
     local MAG = 400
     local e = ctor()
     e.stackSize = stackSize
-    local gItem = items.drop(e, math.random(-MAG, MAG), math.random(-MAG, MAG))
-    return gItem
+    local dvec = {x=math.random(-MAG, MAG), y=math.random(-MAG, MAG)}
+    items.drop(e, dvec)
+    return e
 end
 
 
