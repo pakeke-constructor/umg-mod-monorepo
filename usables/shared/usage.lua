@@ -44,7 +44,7 @@ function usage.canUseHoldItem(holder_ent, item, mode)
         return false
     end
 
-    local usageBlocked = umg.ask("usage:itemUsageBlocked", holder_ent, item, mode)
+    local usageBlocked = umg.ask("usables:itemUsageBlocked", holder_ent, item, mode)
     if usageBlocked then
         return false
     end
@@ -84,7 +84,7 @@ if server then
 function usage.useHoldItem(holder_ent, mode)
     local item = getHoldItem(holder_ent)
     if item then
-        if usage.canUseHoldItem(holder_ent, item) then
+        if usage.canUseHoldItem(holder_ent, item, mode) then
             usage.useItemDirectly(holder_ent, item, mode)
         else
             useItemDeny(item, holder_ent, mode)
@@ -131,9 +131,9 @@ end
 
 if client then
 
-local function canUse(holder_ent)
+local function canUse(holder_ent, item, mode)
     return sync.isClientControlling(holder_ent)
-        and usage.canUseHoldItem(holder_ent)
+        and usage.canUseHoldItem(holder_ent, item, mode)
 end
 
 local asserter = typecheck.assert("entity")
@@ -141,7 +141,7 @@ local asserter = typecheck.assert("entity")
 function usage.useHoldItem(holder_ent, mode)
     asserter(holder_ent)
     local item = getHoldItem(holder_ent)
-    if canUse(holder_ent) then
+    if canUse(holder_ent, item, mode) then
         asserter(holder_ent)
         client.send("usables:useItem", holder_ent, mode)
         umg.call("usables:useItem", holder_ent, item, mode)

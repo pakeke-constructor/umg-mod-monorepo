@@ -1,5 +1,6 @@
 
 -- item usage
+-- returns whether an item is blocked from being able to be used
 umg.defineQuestion("usables:itemUsageBlocked", reducers.OR)
 
 
