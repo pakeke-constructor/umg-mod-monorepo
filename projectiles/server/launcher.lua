@@ -7,7 +7,7 @@ local launcher = {}
 
 
 
-local function getProjectileCount(item, holderEnt, ...)
+local function getProjectileCount(item, holderEnt, mode)
     --[[
         Returns the number of projectiles that should be shot
     ]]
@@ -26,9 +26,9 @@ end
 
 
 
-local function getProjectileType(item, holderEnt, ...)
+local function getProjectileType(item, holderEnt, mode)
     -- assumes `item` has `projectileLauncher` component
-    local projType = umg.ask("projectiles:getProjectileType", holderEnt, item, ...)
+    local projType = umg.ask("projectiles:getProjectileType", holderEnt, item, mode)
     if projType then
         -- allow for override
         return projType
@@ -185,19 +185,19 @@ end
 
 
 
-local function shoot(item, holderEnt, spreadFactor, ...)
-    local projEnt = spawnProjectileEntity(item, holderEnt, ...)
+local function shoot(item, holderEnt, spreadFactor, mode)
+    local projEnt = spawnProjectileEntity(item, holderEnt, mode)
     if projEnt then
         setupProjectile(item, projEnt, holderEnt, spreadFactor)
     end
 end
 
 
-function launcher.useItem(item, holderEnt, ...)
+function launcher.useItem(holderEnt, item, mode)
     assert(server, "not on server")
     assert(type(item.projectileLauncher) == "table", "wot wot???")
 
-    local num_to_shoot = getProjectileCount(item, holderEnt, ...)
+    local num_to_shoot = getProjectileCount(item, holderEnt, mode)
     
     -- we need these checks here so that we don't get NaNs w/ div by 0.
     if num_to_shoot <= 0 then
@@ -206,7 +206,7 @@ function launcher.useItem(item, holderEnt, ...)
 
     if num_to_shoot <= 1 then
         -- shoot one bullet.
-        shoot(item, holderEnt, 0, ...)
+        shoot(item, holderEnt, 0, mode)
         return
     end
 
@@ -214,7 +214,7 @@ function launcher.useItem(item, holderEnt, ...)
         -- spreadFactor = number from -0.5 to 0.5 that represents
         -- the current "spread" of the bullet.
         local spreadFactor = (i / (num_to_shoot-1)) - 0.5
-        shoot(item, holderEnt, spreadFactor, ...)
+        shoot(item, holderEnt, spreadFactor, mode)
     end
 end
 

@@ -416,6 +416,10 @@ input.setControls(DEFAULT_INPUT_MAPPING, DEFAULT_MOUSE_MAPPING)
 
 
 
+--[[
+    The reason we need to buffer events, is because listeners can
+    implement an :update() method that is called in-order.
+]]
 local eventBuffer = objects.Array()
 
 

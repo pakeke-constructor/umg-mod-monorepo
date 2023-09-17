@@ -443,6 +443,25 @@ end
 
 
 
+function Inventory:find(item_or_itemName)
+    --[[
+        finds the slot of an item, given an item (or itemName)
+    ]]
+    for x=1, self.width do
+        for y=1, self.height do
+            local item = self:get(x,y)
+            if umg.exists(item) and item == item_or_itemName or item.itemName == item_or_itemName then
+                -- found! return slot.
+                return x, y 
+            end
+        end
+    end
+    return nil -- no slot found
+end
+
+
+
+
 
 local moveSwapTc = typecheck.assert("number", "number", "table", "number", "number")
 

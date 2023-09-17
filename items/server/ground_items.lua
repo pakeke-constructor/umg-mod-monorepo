@@ -7,7 +7,7 @@ Entities that can pick up items off the ground have a `canPickUpItems` component
 
 local constants = require("shared.constants")
 
-local groundItemsHandler = {}
+local groundItems = {}
 
 
 
@@ -58,7 +58,7 @@ end
 
 local dropItemTc = typecheck.assert("voidentity", "dvector")
 
-function groundItemsHandler.drop(itemEnt, dvec)
+function groundItems.drop(itemEnt, dvec)
     dropItemTc(itemEnt, dvec)
     dropItem(itemEnt, dvec)
 end
@@ -166,4 +166,4 @@ scheduling.runEvery(LOOP_CT, "@tick", function(dt)
 end)
 
 
-return groundItemsHandler
+return groundItems

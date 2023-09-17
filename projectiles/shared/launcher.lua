@@ -7,12 +7,8 @@ end
 
 
 
---[[
-    TODO:
-    we should prolly change argument order for this event.
-    Why should `holderEnt` be first?? does it even matter?
-]]
-umg.on("usables:useItem", function(holderEnt, item, ...)
+
+umg.on("usables:useItem", function(holderEnt, item, mode) 
     local targX, targY = holderEnt.lookX, holderEnt.lookY
     if (not targX) or (not targY) then
         return
@@ -23,7 +19,7 @@ umg.on("usables:useItem", function(holderEnt, item, ...)
 
     if item.projectileLauncher then
         if server then
-            launcherServer.useItem(item, holderEnt, ...)
+            launcherServer.useItem(holderEnt, item, mode)
         elseif client then
             -- TODO: wtf do we do here?
             -- perhaps emit particles? provide api for playing sounds?

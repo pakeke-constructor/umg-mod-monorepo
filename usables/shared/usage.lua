@@ -149,6 +149,7 @@ function usage.useHoldItem(holder_ent, mode)
             item:useItem(holder_ent or false, mode)
         end
         item.itemLastUseTime = state.getGameTime()
+        return true
     elseif item then
         useItemDeny(item, holder_ent, mode)
     end

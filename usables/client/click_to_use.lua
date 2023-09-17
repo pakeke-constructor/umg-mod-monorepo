@@ -10,16 +10,22 @@ local listener = input.Listener({priority = 2})
 
 
 local function useItems(mode)
+    local used = false
     for _, ent in ipairs(controllableGroup) do
         if sync.isClientControlling(ent) then
-            usage.useHoldItem(ent, mode)
+            used = used or usage.useHoldItem(ent, mode)
         end
     end
+    return used
 end
+
 
 
 function listener:mousepressed(x, y, button, istouch, presses)
     local mode = button
-    useItems(mode)
-    self:lockMouseButton(button)
+    local used = useItems(mode)
+    if used then
+        -- only lock if an item was actually used
+        self:lockMouseButton(button)
+    end
 end

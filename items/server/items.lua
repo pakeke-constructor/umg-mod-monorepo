@@ -202,8 +202,8 @@ server.on("tryDropInventoryItem", {
 
         if ent.x and ent.y then
             local dvector = ent -- dimensionVector is just the entity
+            inv:remove(slotX, slotY)
             groundItems.drop(item, dvector)
-            inv:set(slotX, slotY, nil)
         end
     end
 })
