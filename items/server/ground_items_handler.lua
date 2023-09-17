@@ -38,10 +38,12 @@ local PICKUP_DELAY_TIME = 4
 
 
 
-local function dropItem(itemEnt, x, y)
-    local e = server.entities.items_ground_item(x, y)
-    e.x = x
-    e.y = y
+
+local function dropItem(itemEnt, dvec)
+    local e = server.entities.items_ground_item(dvec)
+    e.x = dvec.x
+    e.y = dvec.y
+    e.dimension = dimensions.getDimension(dvec.dimension)
     e.inventory:add(1,1,itemEnt)
     e.image = itemEnt.image
     umg.call("items:dropGroundItem", e, itemEnt)
@@ -50,13 +52,13 @@ end
 
 
 
-local dropItemHandler = dropItem
-local dropItemTc = typecheck.assert("voidentity", "number", "number")
+local dropItemTc = typecheck.assert("voidentity", "dvector")
 
-function groundItemsHandler.drop(itemEnt, x, y)
-    -- TODO: We will need to do something about the dimension here.
-    dropItemTc(itemEnt, x, y)
-    return dropItemHandler(itemEnt, x, y)
+local dropItemHandler = dropItem
+
+function groundItemsHandler.drop(itemEnt, dvec)
+    dropItemTc(itemEnt, dvec)
+    return dropItemHandler(itemEnt, dvec)
 end
 
 

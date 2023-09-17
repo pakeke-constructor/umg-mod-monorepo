@@ -178,7 +178,7 @@ server.on("tryDropInventoryItem", {
 
     handler = function(sender, controlEnt, ent, slotX, slotY)
         --[[
-            x, y, are coordinates of the position
+            slotX, slotY, are coordinates of the position
             IN THE INVENTORY.
             Not the position of an entity or anything!
         ]]
@@ -200,8 +200,11 @@ server.on("tryDropInventoryItem", {
             return
         end
 
-        groundItemsHandler.drop(item, ent.x, ent.y)
-        inv:set(slotX, slotY, nil)
+        if ent.x and ent.y then
+            local dvector = ent
+            groundItemsHandler.drop(item, dvector)
+            inv:set(slotX, slotY, nil)
+        end
     end
 })
 
