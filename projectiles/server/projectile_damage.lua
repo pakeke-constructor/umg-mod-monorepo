@@ -26,7 +26,7 @@ local function hit(projEnt, targetEnt)
         end
     end
 
-    umg.call("projectiles:projectileHit", projEnt, targetEnt)
+    umg.call("projectiles:hit", projEnt, targetEnt)
 
     mortality.server.kill(projEnt)
 end

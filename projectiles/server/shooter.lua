@@ -3,9 +3,6 @@ require("projectiles_questions")
 require("projectiles_events")
 
 
-local api = {}
-
-
 
 local function getProjectileCount(item, holderEnt, shooter)
     --[[

@@ -1,10 +1,5 @@
 
-
-local shooterServer
-if server then
-    shooterServer = require("server.shooter")
-end
-
+require("projectiles_events")
 
 
 local VALID_OPTIONS = {
@@ -31,24 +26,30 @@ if server then
     shoot = require("server.shooter")
 elseif client then
     function shoot(holderEnt, item, shooter)
-        
+        --[[
+            TODO: 
+            Here, on clientside, we should add options for more interesting stuff.
+            such as playing sfx, particles, etc.
+        ]]
     end
 end
 
 
 local DEFAULT_MODE = 1
 
-local function tryShoot(holderEnt, item, mode)
-    assert(server, "not on server")
-    local shooter = item.shooter
-    assert(type(shooter) == "table", "wot wot???")
 
+local function callShoot(holderEnt, item, shooter)
+    umg.call("projectiles:useGun", holderEnt, item, shooter)
+    shoot(holderEnt, item, shooter)
+end
+
+
+local function tryShoot(holderEnt, item, mode)
+    local shooter = item.shooter
     if isValid(shooter) then
-        print("mode: ", mode)
         local shmode = shooter.mode or DEFAULT_MODE
         if shmode == mode then
-            -- shoot:
-            shoot(holderEnt, item, shooter)
+            callShoot(holderEnt, item, shooter)
         end
     end
 
@@ -57,20 +58,8 @@ local function tryShoot(holderEnt, item, mode)
         if shooter_.mode == mode then
             -- linear search is bad, its fine tho
             -- There generally shouldn't be that many shoot modes, so it's prolly fine
-            shoot(holderEnt, item, shooter_)
+            callShoot(holderEnt, item, shooter)
         end
-    end
-
-
-
-
-
-    if server then
-        shooterServer.useItem(holderEnt, item, mode)
-    elseif client then
-        -- TODO: wtf do we do here?
-        -- perhaps emit particles? provide api for playing sounds?
-        -- Or we could just emit an event?
     end
 end
 
@@ -87,6 +76,8 @@ umg.on("usables:useItem", function(holderEnt, item, mode)
     end
 
     if item.shooter then
+        local shooter = item.shooter
+        assert(type(shooter) == "table", "ent.shooter needs to be a table")
         tryShoot(holderEnt, item, mode)
     end
 end)
