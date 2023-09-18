@@ -23,10 +23,8 @@ umg.on("mortality:damage", function(ent)
 end)
 
 
-umg.on("usables:useItem", function(holderEnt, item, mode)
-    if item.shooter then
-        sound.playSound("pew_main3", 0.6)
-    end
+umg.on("projectiles:useGun", function(holderEnt, item, shooter)
+    sound.playSound("pew_main3", 0.6)
 end)
 
 
