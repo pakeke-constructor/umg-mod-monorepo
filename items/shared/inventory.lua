@@ -338,6 +338,27 @@ end
 
 
 
+local function canCombineStacks(item1, item2, count)
+    --[[
+        Returns true if item1 can be combined into item2.
+        false otherwise.
+    ]]
+    -- `count` is the number of items that we want to add. (defaults to the full stackSize of item)
+    count = (count or item1.stackSize) or 1
+
+    if item1.itemName ~= item2.itemName then
+        return false -- deny; items can't be combined.
+    end
+
+    local remainingStackSize = (item1.maxStackSize or 1) - count
+    if (remainingStackSize < count) then
+        return false -- not enough stack space to combine
+    end
+
+    return true -- ok
+end
+
+
 local canAddToSlotTc = typecheck.assert("number", "number", "entity", "number?")
 
 -- returns `true` if we can add `count` stacks of item to (slotx, sloty)
@@ -353,14 +374,8 @@ function Inventory:canAddToSlot(slotX, slotY, item, count)
 
     local item_ent = self:get(slotX, slotY)
     if item_ent then
-        -- check that the item stacks can be combined:
-        if item_ent.itemName ~= item.itemName then
-            return false -- deny; items can't be combined.
-        end
-
-        local remainingStackSize = (item_ent.maxStackSize or 1) - count
-        if (remainingStackSize < count) then
-            return false -- not enough stack space to combine
+        if not canCombineStacks(item, item_ent, count) then
+            return false -- can't combine stacks!
         end
     end
 
@@ -645,7 +660,7 @@ function Inventory:add(slotX, slotY, item)
     local itm = self:get(slotX, slotY)
     if itm then
         -- increment stackSize:
-        assert(itm.itemName == item.itemName, "not matching itemNames")
+        assert(canCombineStacks(item, itm), "can't combine stacks!")
         itm.stackSize = (itm.stackSize or 1) + (item.stackSize or 1)
         item:delete()
     else
