@@ -121,7 +121,7 @@ local function getColor(r,g,b)
         r,g,b = r[1],r[2],r[3]
     end
     rgbTc(r,g,b)
-    return objects.Color({r,g,b})
+    return objects.Color(r,g,b)
 end
 
 
@@ -131,14 +131,16 @@ function light.setDefaultLighting(r,g,b)
 end
 
 
-local setLightingTc = typecheck.assert("dimension")
+local setLightingTc = typecheck.assert("dimension", "number", "number", "number")
 
 
 function light.setLighting(dimension, r,g,b)
     setLightingTc(dimension, r,g,b)
     local color = getColor(r,g,b)
     local overseerEnt = dimension.getOverseer(dimension)
-    overseerEnt.lighting = color
+    if overseerEnt then
+        overseerEnt.lighting = color
+    end
 end
 
 

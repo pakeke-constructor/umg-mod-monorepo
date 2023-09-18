@@ -1,8 +1,8 @@
 
 
-local launcherServer
+local shooterServer
 if server then
-    launcherServer = require("server.launcher")
+    shooterServer = require("server.shooter")
 end
 
 
@@ -17,9 +17,9 @@ umg.on("usables:useItem", function(holderEnt, item, mode)
         return
     end
 
-    if item.shooter or item. then
+    if item.shooter then
         if server then
-            launcherServer.useItem(holderEnt, item, mode)
+            shooterServer.useItem(holderEnt, item, mode)
         elseif client then
             -- TODO: wtf do we do here?
             -- perhaps emit particles? provide api for playing sounds?

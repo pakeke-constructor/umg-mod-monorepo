@@ -26,8 +26,7 @@ end
 
 
 local function getProjectileType(item, holderEnt, shComp)
-    -- assumes `item` has `projectileLauncher` component
-    local projType = umg.ask("projectiles:getProjectileType", holderEnt, item, mode)
+    local projType = umg.ask("projectiles:getProjectileType", holderEnt, item)
     if projType then
         -- allow for override
         return projType
@@ -132,7 +131,7 @@ end
 local DEFAULT_START_DISTANCE = 30
 
 local function getStartDistance(item, holderEnt)
-    return item.projectileLauncher.startDistance or DEFAULT_START_DISTANCE
+    return item.shooter.startDistance or DEFAULT_START_DISTANCE
 end
 
 
@@ -208,15 +207,42 @@ local function shoot(holderEnt, item, shComp)
 end
 
 
+
+local VALID_OPTIONS = {
+    -- if `ent.shooter` has any of these values,
+    -- then it is regarded as a valid shooter config:
+    "spawnProjectile",
+    "projectileType",
+    "count"
+}
+
+
+local function isValid(shComp)
+    for _, opt in ipairs(VALID_OPTIONS) do
+        if shComp[opt] then
+            return true
+        end
+    end
+    return false
+end
+
+
+
+local DEFAULT_MODE = 1
+
+
 function api.useItem(holderEnt, item, mode)
     assert(server, "not on server")
     local shooter = item.shooter
     assert(type(shooter) == "table", "wot wot???")
 
-    if shooter.mode == mode then
-        -- shoot:
-        local shootcfg = shooter -- shoot config is just the component
-        shoot(holderEnt, item, shootcfg)
+    if isValid(shooter) then
+        local shmode = shooter.mode or DEFAULT_MODE
+        if shmode == mode then
+            -- shoot:
+            local shootcfg = shooter -- shoot config is just the component
+            shoot(holderEnt, item, shootcfg)
+        end
     end
 
     for _, shootcfg in ipairs(shooter) do

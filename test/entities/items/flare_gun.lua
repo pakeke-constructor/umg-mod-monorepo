@@ -5,7 +5,7 @@ return {
     itemName = "Flare gun";
     itemDescription = "Shoots a flare to light the way",
 
-    projectileLauncher = {
+    shooter = {
         projectileType = "flare",
 
         speed = 350, -- speed of projectiles

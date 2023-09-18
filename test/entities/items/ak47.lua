@@ -5,7 +5,7 @@ return {
     image="suppressed_gun";
     itemName = "ak47";
 
-    projectileLauncher = {
+    shooter = {
         projectileType = "block",
 
         speed = 400, -- speed of projectiles

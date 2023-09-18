@@ -7,7 +7,7 @@ return {
     itemName = "Clone gun!";
     itemDescription = "Clones whatever entity uses it";
 
-    projectileLauncher = {
+    shooter = {
         spawnProjectile = function(itemEnt, holderEnt)
             local clone = holderEnt:deepClone()
             return clone

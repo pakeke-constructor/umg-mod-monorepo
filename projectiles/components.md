@@ -96,7 +96,6 @@ ent.gun = {
 
 
 ### PLANNING:
-What do we want for projectileLauncher?
 
 We want:
 - multiple projectiles

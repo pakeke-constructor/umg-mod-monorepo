@@ -5,13 +5,15 @@
 chat.handleCommand("lighting", {
     adminLevel = 50,
     arguments = {
+        {name = "dimension", type = "string"},
         {name = "r", type = "number"},
         {name = "g", type = "number"},
         {name = "b", type = "number"},
     },
-    handler = function(sender, r,g,b)
+    handler = function(sender, dimension, r,g,b)
         if client then
-            light.setBaseLighting(r,g,b)
+            local dim = dimensions.getDimension(dimension)
+            light.setLighting(dim, r,g,b)
         end
     end
 })

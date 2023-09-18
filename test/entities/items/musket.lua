@@ -17,7 +17,7 @@ return {
     image="musket";
     itemName = "musket";
 
-    projectileLauncher = {
+    shooter = {
         projectileType = "bullet",
 
         speed = 400, -- speed of projectiles
