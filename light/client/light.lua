@@ -67,7 +67,7 @@ local function setupCanvas(camera)
     -- reset lights:
     local dimension = camera:getDimension()
     local overseerEnt = dimensions.getOverseer(dimension)
-    local col = overseerEnt.baseLighting or defaultLighting
+    local col = overseerEnt.lighting or defaultLighting
     love.graphics.clear(col)
 
     local globalSizeMod = umg.ask("light:getGlobalLightSizeMultiplier") or 1
@@ -137,14 +137,15 @@ local setLightingTc = typecheck.assert("dimension", "number", "number", "number"
 function light.setLighting(dimension, r,g,b)
     setLightingTc(dimension, r,g,b)
     local color = getColor(r,g,b)
-    local overseerEnt = dimension.getOverseer(dimension)
+    local overseerEnt = dimensions.getOverseer(dimension)
     if overseerEnt then
         overseerEnt.lighting = color
+        return false
     end
+    return true
 end
 
 
 
 umg.expose("light", light)
-
 
