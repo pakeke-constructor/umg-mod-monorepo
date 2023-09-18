@@ -74,6 +74,13 @@ function holding.equipItem(holderEnt, itemEnt)
     entityItemTc(holderEnt, itemEnt)
 
     holderEnt.holdItem = itemEnt
+
+    if holderEnt.controller then
+        print("hi? ", holderEnt.controller)
+        itemEnt.controller = holderEnt.controller
+        sync.syncComponent(itemEnt, "controller")
+    end
+
     umg.call("usables:equipItem", itemEnt, holderEnt)
 end
 
@@ -87,8 +94,10 @@ function holding.unequipItem(holderEnt, itemEnt)
         return
     end
     remPosComponents(itemEnt)
-    umg.call("usables:unequipItem", itemEnt, holderEnt)
     holderEnt:removeComponent("holdItem")
+    itemEnt:removeComponent("controller")
+
+    umg.call("usables:unequipItem", itemEnt, holderEnt)
 end
 
 end
