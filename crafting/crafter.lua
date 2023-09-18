@@ -1,4 +1,17 @@
 
+--[[
+
+TODO:
+
+All of this needs to be redone!
+
+Because its shitt
+
+
+
+]]
+
+
 
 -- crafting table object:
 

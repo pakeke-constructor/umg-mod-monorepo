@@ -157,6 +157,23 @@ end
 
 
 
+function Inventory:onItemStackSizeChange(item, stackChange, slotX, slotY)
+    -- Override this, if you want
+end
+
+local function signalStackSizeChange(self, slotX, slotY, stackChange)
+    -- called when a stackSize of an item changes
+    local item = self:get(slotX, slotY)
+    local slotHandle = self:getSlotHandle(slotX,slotY)
+    if slotHandle then
+        slotHandle:onItemAdded(item, slotX, slotY)
+    end
+    self:onItemStacksizeChange(item, stackChange, slotX, slotY)
+    umg.call("items:stackSizeChange", self.owner, item, stackChange, slotX, slotY)
+end
+
+
+
 function Inventory:onItemRemoved(item, slotX, slotY)
     -- Override this, if you want
 end
@@ -520,12 +537,12 @@ local function moveIntoTakenSlot(self, slotX, slotY, otherInv, otherSlotX, other
         item:delete()
     else
         -- else, we reduce the src item stacks
-        item.stackSize = newStackSize
-        updateStackSize(item)
+        self:setStackSize(slotX, slotY, newStackSize)
     end
+
     -- add stacks to the target item 
-    targ.stackSize = targ.stackSize + count
-    updateStackSize(item)
+    local new = targ.stackSize + count
+    otherInv:setStackSize(otherSlotX, otherSlotY, new)
     return true -- success.
 end
 
@@ -545,10 +562,10 @@ local function moveIntoEmptySlot(self, slotX, slotY, otherInv, otherSlotX, other
     if count < item.stackSize then
         -- then we are only moving part of the stack; so we must create a copy
         local newItem = item:deepClone()
-        newItem.stackSize = count
-        item.stackSize = item.stackSize - count
+        newItem.stackSize = count 
+        -- We don't call :setStackSize above, because newItem has just been cloned
+        self:setStackSize(slotX, slotY, item.stackSize - count)
         otherInv:add(otherSlotX, otherSlotY, newItem)
-        updateStackSize(item)
     else
         -- we are moving the whole item
         self:remove(slotX, slotY)
@@ -661,10 +678,13 @@ function Inventory:add(slotX, slotY, item)
     if itm then
         -- increment stackSize:
         assert(canCombineStacks(item, itm), "can't combine stacks!")
-        itm.stackSize = (itm.stackSize or 1) + (item.stackSize or 1)
+        local stackSize = (itm.stackSize or 1) + (item.stackSize or 1)
+        self:setStackSize(slotX, slotY, stackSize)
         item:delete()
     else
         -- only signal an add to slot if the slot was empty:
+        -- TODO: Do some thinking about this!!!!!
+        -- We may want to signal a move
         signalMoveToSlot(self, slotX, slotY, item)
         self:set(slotX, slotY, item)
     end
@@ -680,6 +700,25 @@ function Inventory:remove(slotX, slotY)
         signalRemoveFromSlot(self, slotX, slotY, item)
     end
     self:set(slotX, slotY, nil)
+end
+
+
+function Inventory:setStackSize(slotX, slotY, stackSize)
+    -- WARNING: Somewhat unsafe to call!!!
+    -- Directly sets a stack size for an item.
+    -- Be careful when using!
+    local item = self:get(slotX, slotY)
+    if not item then
+        return
+    end
+    local change = stackSize - item.stackSize
+    if change == 0 then
+        return
+    end
+
+    item.stackSize = stackSize
+    updateStackSize(item)
+    signalStackSizeChange(self, slotX, slotY, change)
 end
 
 

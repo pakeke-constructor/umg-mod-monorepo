@@ -45,6 +45,8 @@ function SlotHandle:onItemAdded(item)
 end
 function SlotHandle:onItemRemoved(item)
 end
+function SlotHandle:onItemStacksizeChange(item, stackChange)
+end
 
 function SlotHandle:canAddItem(item)
     -- returns true/false,
