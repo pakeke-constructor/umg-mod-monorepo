@@ -1,17 +1,17 @@
 
 -- item is moved to an inventory slot
--- WARNING: This callback is called when an item is moved WITHIN an inventory!
+-- WARNING: This event is called when an item is moved WITHIN an inventory!
 -- For example, if we move item from slot (1,1) to slot (1,2) in the same inventory,
 -- itemMoved is called.
 umg.defineEvent("items:itemMoved")
 
 -- item is removed from an inventory slot
--- WARNING: This callback is called when an item is moved WITHIN an inventory!
+-- WARNING: This event is called when an item is moved WITHIN an inventory!
 -- For example, if we move item from slot (1,1) to slot (1,2) in the same inventory,
 -- itemRemoved is called.
 umg.defineEvent("items:itemRemoved")
 --[[
-    TODO: We might want a callback for when item is moved
+    TODO: We might want a event for when item is moved
     BETWEEN inventories
 ]]
 

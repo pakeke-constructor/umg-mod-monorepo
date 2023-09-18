@@ -78,20 +78,6 @@ umg.on("items:closeInventory", function(owner_ent)
 end)
 
 
-local function checkCallback(ent, callbackName, x, y, item)
-    --[[
-        returns true/false according to inventoryCallbacks component.
-        (Only works on `canRemove` and `canAdd`!!!)
-    ]]
-    if ent.inventoryCallbacks and ent.inventoryCallbacks[callbackName] then
-        item = item or ent.inventory:get(x,y)
-        return ent.inventoryCallbacks[callbackName](ent.inventory, x, y, item)
-    end
-    return true -- return true otherwise (no callbacks)
-end
-
-
-
 
 
 local function resetHoldingInv()
@@ -166,22 +152,8 @@ local function executeFullPut(inv, x, y)
                 move_count = math.min(math.ceil(holding.stackSize/div), targ.maxStackSize - targ.stackSize)
             end            
         else
-            -- We are swapping- so lets check that we actually can:
             swapping = true
-            local c1 = checkCallback(focus_inv.owner, "canAdd", focus_x, focus_y)
-            local c2 = checkCallback(inv.owner, "canRemove", x, y)
-            if not (c1 and c2) then
-                return
-            end
         end
-    end
-
-    if not checkCallback(inv.owner, "canAdd", x, y, holding) then
-        return
-    end
-
-    if not checkCallback(focus_inv.owner, "canRemove", focus_x, focus_y) then
-        return
     end
 
     if swapping then
@@ -228,12 +200,6 @@ local function executeBetaInteraction(inv, x, y)
     if focus_inv and umg.exists(focus_inv.owner) and focus_inv:get(focus_x, focus_y) then
         local controlEnt = getControlTransferEntity(inv, focus_inv)
         local holding_item = focus_inv:get(focus_x, focus_y)
-        if not checkCallback(inv.owner, "canAdd", x, y, holding_item) then
-            return
-        end
-        if not checkCallback(focus_inv.owner, "canRemove", focus_x, focus_y) then
-            return
-        end
         local targ = inv:get(x,y)
         if (not targ) or targ.itemName == holding_item.itemName then
             client.send("tryMoveInventoryItem", controlEnt, focus_inv.owner, inv.owner, focus_x,focus_y, x,y, 1)

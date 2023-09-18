@@ -20,7 +20,7 @@ Also, experience in [love2d](https://love2d.org) helps.
 - ECS Architecture:
     - [Entities](#entities)
     - [Groups](#groups)
-    - [Callbacks](#callbacks)
+    - [Events](#callbacks)
     - [Client-server communication](#client-server-communication)
 - Cheatsheet:
     - [General API reference](#general-api-reference)
@@ -184,10 +184,10 @@ drawGroup:has(ent) -- returns true if `ent` is in drawGroup, false otherwise.
 
 ```
 
-## Callbacks:
-Callbacks are used to broadcast events and hook onto them. It's just the Observer pattern.
+## Events:
+Events are used to broadcast events and hook onto them. It's just the Observer pattern.
 
-Callbacks can be used on clientside AND serverside, but are independent of one another.   
+Events can be used on clientside AND serverside, but are independent of one another.   
 I.e. if I do `call("event", ...)` on clientside, this event will ONLY be received on clientside.    
 (There is a seperate event bus for client-server communication; but don't worry about that for now)
 
