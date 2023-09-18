@@ -351,8 +351,7 @@ function Inventory:canAddToSlot(slotX, slotY, item, count)
     -- `count` is the number of items that we want to add. (defaults to the full stackSize of item)
     count = (count or item.stackSize) or 1
 
-    local i = self:getIndex(slotX, slotY)
-    local item_ent = umg.exists(self.inventory[i]) and self.inventory[i]
+    local item_ent = self:get(slotX, slotY)
     if item_ent then
         -- check that the item stacks can be combined:
         if item_ent.itemName ~= item.itemName then
@@ -410,7 +409,8 @@ function Inventory:tryRemoveFromSlot(slotX, slotY)
         On failure, returns nil.
     ]]
     local item = self:get(slotX, slotY)
-    if umg.exists(item) then
+    if not umg.exists(item) then
+        -- no item to remove
         return nil
     end
 
@@ -642,11 +642,16 @@ function Inventory:add(slotX, slotY, item)
     -- `item` must NOT be in any other inventory!
     -- If item is in another inv, the item-entity will be duplicated across BOTH inventories!!!
     addTc(slotX, slotY, item)
-    if self:get(slotX, slotY) then
-        error("slot was taken: " .. tostring(slotX) .. ", " .. tostring(slotY))
+    local itm = self:get(slotX, slotY)
+    if itm then
+        -- increment stackSize:
+        assert(itm.itemName == item.itemName, "not matching itemNames")
+        itm.stackSize = (itm.stackSize or 1) + (item.stackSize or 1)
+        item:delete()
+    else
+        self:set(slotX, slotY, item)
     end
     signalMoveToSlot(self, slotX, slotY, item)
-    self:set(slotX, slotY, item)
 end
 
 
