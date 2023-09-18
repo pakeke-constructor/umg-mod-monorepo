@@ -3,22 +3,21 @@ require("projectiles_questions")
 require("projectiles_events")
 
 
-local launcher = {}
+local api = {}
 
 
 
-local function getProjectileCount(item, holderEnt, mode)
+local function getProjectileCount(item, holderEnt, shComp)
     --[[
         Returns the number of projectiles that should be shot
     ]]
-    local plauncher = item.projectileLauncher
 
     --[[
         TODO: Do more complex stuff here,
         like a question bus..?
     ]]
-    if plauncher and plauncher.count then
-        return plauncher.count
+    if shComp and shComp.count then
+        return shComp.count
     end
     return 1 -- default is 1.
 end
@@ -26,7 +25,7 @@ end
 
 
 
-local function getProjectileType(item, holderEnt, mode)
+local function getProjectileType(item, holderEnt, shComp)
     -- assumes `item` has `projectileLauncher` component
     local projType = umg.ask("projectiles:getProjectileType", holderEnt, item, mode)
     if projType then
@@ -34,9 +33,8 @@ local function getProjectileType(item, holderEnt, mode)
         return projType
     end
 
-    local plauncher = item.projectileLauncher
-    if plauncher and plauncher.projectileType then
-        return plauncher.projectileType
+    if shComp and shComp.projectileType then
+        return shComp.projectileType
     end
 
     --[[
@@ -51,12 +49,11 @@ end
 
 local DEFAULT_PROJECTILE_SPEED = 300 -- this seems reasonable
 
-local function getProjectileSpeed(item, projectileEnt, holderEnt)
+local function getProjectileSpeed(item, projectileEnt, holderEnt, shComp)
     local speedMod = umg.ask("projectiles:getProjectileSpeed", item, projectileEnt, holderEnt) or 0
 
-    local plauncher = item.projectileLauncher
-    if plauncher and plauncher.projectileSpeed then
-        return plauncher.projectileSpeed + speedMod
+    if shComp and shComp.projectileSpeed then
+        return shComp.projectileSpeed + speedMod
     end
 
     if projectileEnt.speed then
@@ -72,12 +69,11 @@ end
 
 local DEFAULT_ACCURACY = 0
 
-local function getProjectileInaccuracy(item, projectileEnt, holderEnt)
+local function getProjectileInaccuracy(item, projectileEnt, holderEnt, shComp)
     local inaccuracyMod = umg.ask("projectiles:getProjectileInaccuracy", item, projectileEnt, holderEnt) or 0
 
-    local plauncher = item.projectileLauncher
-    if plauncher and plauncher.inaccuracy then
-        return plauncher.inaccuracy + inaccuracyMod
+    if shComp.inaccuracy then
+        return shComp.inaccuracy + inaccuracyMod
     end
 
     return DEFAULT_ACCURACY + inaccuracyMod
@@ -94,15 +90,11 @@ local MAX_SPREAD = math.pi
 
 
 
-local function getProjectileSpread(item, projectileEnt, holderEnt)
+local function getProjectileSpread(item, projectileEnt, holderEnt, shComp)
     local spreadMod = umg.ask("projectiles:getProjectileSpread", item, projectileEnt, holderEnt) or 0
 
-    local plauncher = item.projectileLauncher
-    if plauncher and plauncher.spread then
-        if plauncher.spread > MAX_SPREAD then
-            error("radian spread too big for entity: " .. tostring(item))
-        end
-        return plauncher.spread + spreadMod
+    if shComp.spread then
+        return math.min(MAX_SPREAD, shComp.spread + spreadMod)
     end
 
     return DEFAULT_SPREAD + spreadMod
@@ -114,20 +106,20 @@ end
 
 
 
-local function spawnProjectileEntity(item, holderEnt, ...)
+local function spawnProjectileEntity(item, holderEnt, shComp)
     --[[
         this function may return nil!!!
     ]]
     -- spawns a projectile entity (bullet.) Does not set position or anything.
     local ent
-    if item.projectileLauncher.spawnProjectile then
-        ent = item.projectileLauncher.spawnProjectile(item, holderEnt)
+    if shComp.spawnProjectile then
+        ent = shComp.spawnProjectile(item, holderEnt, shComp)
         if ent then
             return ent
         end
     end
 
-    local etype = getProjectileType(item, holderEnt)
+    local etype = getProjectileType(item, holderEnt, shComp)
     if server.entities[etype] then
         ent = server.entities[etype]()
     end
@@ -151,10 +143,10 @@ local random = love.math.random
 local sin, cos = math.sin, math.cos
 
 
-local function setupProjectile(item, projEnt, holderEnt, spreadFactor)
-    local speed = getProjectileSpeed(item, projEnt, holderEnt)
-    local inaccuracy = getProjectileInaccuracy(item, projEnt, holderEnt)
-    local spread = getProjectileSpread(item, projEnt, holderEnt)
+local function setupProjectile(item, projEnt, holderEnt, shComp, spreadFactor)
+    local speed = getProjectileSpeed(item, projEnt, holderEnt, shComp)
+    local inaccuracy = getProjectileInaccuracy(item, projEnt, holderEnt, shComp)
+    local spread = getProjectileSpread(item, projEnt, holderEnt, shComp)
 
     local startDistance = getStartDistance(item, holderEnt)
 
@@ -185,19 +177,16 @@ end
 
 
 
-local function shoot(item, holderEnt, spreadFactor, mode)
-    local projEnt = spawnProjectileEntity(item, holderEnt, mode)
+local function launch(item, holderEnt, shComp, spreadFactor)
+    local projEnt = spawnProjectileEntity(item, holderEnt, shComp)
     if projEnt then
-        setupProjectile(item, projEnt, holderEnt, spreadFactor)
+        setupProjectile(item, projEnt, holderEnt, shComp, spreadFactor)
     end
 end
 
 
-function launcher.useItem(holderEnt, item, mode)
-    assert(server, "not on server")
-    assert(type(item.projectileLauncher) == "table", "wot wot???")
-
-    local num_to_shoot = getProjectileCount(item, holderEnt, mode)
+local function shoot(holderEnt, item, shComp)
+    local num_to_shoot = getProjectileCount(item, holderEnt, shComp)
     
     -- we need these checks here so that we don't get NaNs w/ div by 0.
     if num_to_shoot <= 0 then
@@ -206,7 +195,7 @@ function launcher.useItem(holderEnt, item, mode)
 
     if num_to_shoot <= 1 then
         -- shoot one bullet.
-        shoot(item, holderEnt, 0, mode)
+        launch(item, holderEnt, shComp, 0)
         return
     end
 
@@ -214,24 +203,51 @@ function launcher.useItem(holderEnt, item, mode)
         -- spreadFactor = number from -0.5 to 0.5 that represents
         -- the current "spread" of the bullet.
         local spreadFactor = (i / (num_to_shoot-1)) - 0.5
-        shoot(item, holderEnt, spreadFactor, mode)
+        launch(item, holderEnt, shComp, spreadFactor)
+    end
+end
+
+
+function api.useItem(holderEnt, item, mode)
+    assert(server, "not on server")
+    local shooter = item.shooter
+    assert(type(shooter) == "table", "wot wot???")
+
+    if shooter.mode == mode then
+        -- shoot:
+        local shootcfg = shooter -- shoot config is just the component
+        shoot(holderEnt, item, shootcfg)
+    end
+
+    for _, shootcfg in ipairs(shooter) do
+        -- linear search is bad, its fine tho
+        -- There generally shouldn't be that many shoot modes, so it's prolly fine
+        if shootcfg.mode == mode then
+            shoot(holderEnt, item, shootcfg)
+        end
     end
 end
 
 
 
-local launchProjectileTc = typecheck.assert("entity", "entity", "entity")
+local shootTc = typecheck.assert("entity", "entity", "entity")
 
-function launcher.launchProjectile(item, projEnt, holderEnt)
-    launchProjectileTc(item, projEnt, holderEnt)
+
+-- default shooter config is empty
+local DEFAULT = {}
+
+
+
+function api.shoot(item, projEnt, holderEnt)
+    shootTc(item, projEnt, holderEnt)
     assert(server, "not on server")
     --[[
-        launches a projectile from an item entity in a 
+        launches a projectile from an item entity
     ]]
     -- spreadFactor is 0 by default.
-    setupProjectile(item, projEnt, holderEnt, 0)
+    setupProjectile(item, projEnt, holderEnt, DEFAULT, 0)
 end
 
 
-return launcher
+return api
 

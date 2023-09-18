@@ -17,7 +17,7 @@ umg.on("usables:useItem", function(holderEnt, item, mode)
         return
     end
 
-    if item.projectileLauncher then
+    if item.shooter or item. then
         if server then
             launcherServer.useItem(holderEnt, item, mode)
         elseif client then
