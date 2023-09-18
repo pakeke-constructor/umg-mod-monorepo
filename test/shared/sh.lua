@@ -1,6 +1,27 @@
 
 
 
+umg.on("items:dropGroundItem", function(item)
+    if server then
+        item.rot = 0
+        if umg.exists(item) then
+            sync.syncComponent(item, "rot")
+        end
+        item.spinning = {}
+    end
+end)
+
+
+umg.on("items:pickupGroundItem", function(item)
+    if server then
+        item:removeComponent("rot")
+        item:removeComponent("spinning")
+    end
+end)
+
+
+
+
 
 chat.handleCommand("lighting", {
     adminLevel = 50,

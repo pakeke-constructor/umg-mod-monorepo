@@ -10,12 +10,13 @@ umg.defineEvent("items:itemMoved")
 -- For example, if we move item from slot (1,1) to slot (1,2) in the same inventory,
 -- itemRemoved is called.
 umg.defineEvent("items:itemRemoved")
-
-
 --[[
     TODO: We might want a callback for when item is moved
     BETWEEN inventories
 ]]
+
+-- Called when a stackSize of an item changes
+umg.defineEvent("items:stackSizeChange")
 
 
 

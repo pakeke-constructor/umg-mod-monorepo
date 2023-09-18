@@ -168,7 +168,7 @@ local function signalStackSizeChange(self, slotX, slotY, stackChange)
     if slotHandle then
         slotHandle:onItemAdded(item, slotX, slotY)
     end
-    self:onItemStacksizeChange(item, stackChange, slotX, slotY)
+    self:onItemStackSizeChange(item, stackChange, slotX, slotY)
     umg.call("items:stackSizeChange", self.owner, item, stackChange, slotX, slotY)
 end
 
@@ -670,6 +670,8 @@ end
 local addTc = typecheck.assert("number", "number", "voidentity")
 function Inventory:add(slotX, slotY, item)
     -- Directly adds an item to an inventory.
+    -- If the item is combined as a stack, the old item is deleted.
+
     -- WARNING: THIS METHOD IS QUITE DANGEROUS TO CALL!!!
     -- `item` must NOT be in any other inventory!
     -- If item is in another inv, the item-entity will be duplicated across BOTH inventories!!!
@@ -681,10 +683,10 @@ function Inventory:add(slotX, slotY, item)
         local stackSize = (itm.stackSize or 1) + (item.stackSize or 1)
         self:setStackSize(slotX, slotY, stackSize)
         item:delete()
+        -- TODO ^^^ maybe we should set the stackSize to 0 instead of deleting?
+        -- that way, another system will handle the deletion of item entities with 0 stack size... could be cleaner
     else
-        -- only signal an add to slot if the slot was empty:
-        -- TODO: Do some thinking about this!!!!!
-        -- We may want to signal a move
+        -- only signal an add to slot if the slot was empty
         signalMoveToSlot(self, slotX, slotY, item)
         self:set(slotX, slotY, item)
     end
@@ -709,11 +711,11 @@ function Inventory:setStackSize(slotX, slotY, stackSize)
     -- Be careful when using!
     local item = self:get(slotX, slotY)
     if not item then
-        return
+        return -- wot wot??? lmao
     end
     local change = stackSize - item.stackSize
     if change == 0 then
-        return
+        return -- no change.
     end
 
     item.stackSize = stackSize
