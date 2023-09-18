@@ -6,15 +6,6 @@ require("light_questions")
 local DEFAULT = {0.55,0.55,0.7,1} --{0.85,0.85,0.85}
 
 
-
---[[
-    important note:
-    This image is stored OUTSIDE of assets/images,
-    which means that it won't be loaded by the texture atlas.
-]]
-local DEFAULT_LIGHT_IMAGE = "lights/default_light.png"
-
-
 local defaultLighting = DEFAULT
 
 
@@ -24,16 +15,6 @@ local lightGroup = umg.group("x","y","light")
 
 
 local light_image, W, H
-
-
-function light.setLightImage(imgName)
-    light_image = love.graphics.newImage(imgName)
-    W, H = light_image:getDimensions()
-end
-
-
-light.setLightImage(DEFAULT_LIGHT_IMAGE)
-
 
 
 local LEIGH = 20
@@ -113,39 +94,29 @@ end)
 
 
 
-local rgbTc = typecheck.assert("number", "number", "number")
 
-
-local function getColor(r,g,b)
-    if type(r) == "table" then
-        r,g,b = r[1],r[2],r[3]
-    end
-    rgbTc(r,g,b)
-    return objects.Color(r,g,b)
-end
-
-
-function light.setDefaultLighting(r,g,b)
-    local color = getColor(r,g,b)
+function light.setDefaultLighting(color)
     defaultLighting = color
 end
 
 
-local setLightingTc = typecheck.assert("dimension", "number", "number", "number")
 
-
-function light.setLighting(dimension, r,g,b)
-    setLightingTc(dimension, r,g,b)
-    local color = getColor(r,g,b)
-    local overseerEnt = dimensions.getOverseer(dimension)
-    if overseerEnt then
-        overseerEnt.lighting = color
-        return false
-    end
-    return true
+function light.setLightImage(imgName)
+    light_image = love.graphics.newImage(imgName)
+    W, H = light_image:getDimensions()
 end
 
 
+--[[
+    important note:
+    This image is stored OUTSIDE of assets/images,
+    which means that it won't be loaded by the texture atlas.
+]]
+local DEFAULT_LIGHT_IMAGE = "lights/default_light.png"
 
-umg.expose("light", light)
+light.setLightImage(DEFAULT_LIGHT_IMAGE)
 
+
+
+
+return light
