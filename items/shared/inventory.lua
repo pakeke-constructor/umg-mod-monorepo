@@ -664,9 +664,10 @@ function Inventory:add(slotX, slotY, item)
         itm.stackSize = (itm.stackSize or 1) + (item.stackSize or 1)
         item:delete()
     else
+        -- only signal an add to slot if the slot was empty:
+        signalMoveToSlot(self, slotX, slotY, item)
         self:set(slotX, slotY, item)
     end
-    signalMoveToSlot(self, slotX, slotY, item)
 end
 
 
