@@ -189,17 +189,17 @@ drawGroup:has(ent) -- returns true if `ent` is in drawGroup, false otherwise.
 Event buses and Question buses are the *heart* of UMG.<br>
 Without them, UMG would be worthless.
 
-Event buses: Dispatching information
-    - Dispatch events with `call`
-    - When we dispatch information, we don't care who responds
-    - Respond to events with `on`
-    - (Similar to pub-sub design pattern)
+Event buses: 
+- Dispatch events with `call`
+- When we dispatch information, we don't care who responds
+- Respond to events with `on`
+- (Similar to pub-sub design pattern)
 
-Question buses: Gathering information
-    - Request information with `ask`
-    - When we gather information, we don't care who gives it
-    - Provide information with `answer`
-    - (Similar to pub-sub design pattern, but in reverse)
+Question buses: 
+- Request information with `ask`
+- When we gather information, we don't care who gives it
+- Provide information with `answer`
+- (Similar to pub-sub design pattern, but in reverse)
 
 Remember that in UMG, we have clientside AND serverside.<br>
 Buses are not synced across the network.
