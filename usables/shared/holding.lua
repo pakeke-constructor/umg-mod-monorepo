@@ -69,6 +69,8 @@ local function remPosComponents(item)
 end
 
 
+local EMPTY = {}
+
 local entityItemTc = typecheck.assert("entity", "voidentity")
 function holding.equipItem(holderEnt, itemEnt)
     entityItemTc(holderEnt, itemEnt)
@@ -76,7 +78,8 @@ function holding.equipItem(holderEnt, itemEnt)
     holderEnt.holdItem = itemEnt
 
     if holderEnt.controller then
-        print("hi? ", holderEnt.controller)
+        itemEnt.controllable = itemEnt.controllable or EMPTY
+        -- We must set `controllable` comp here. See sync/control for why
         itemEnt.controller = holderEnt.controller
         sync.syncComponent(itemEnt, "controller")
     end
@@ -95,6 +98,7 @@ function holding.unequipItem(holderEnt, itemEnt)
     end
     remPosComponents(itemEnt)
     holderEnt:removeComponent("holdItem")
+    itemEnt:removeComponent("controllable")
     itemEnt:removeComponent("controller")
 
     umg.call("usables:unequipItem", itemEnt, holderEnt)
