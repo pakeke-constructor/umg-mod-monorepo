@@ -74,12 +74,12 @@ First, lets understand the types of components.<br>
 There are 2 component types, "shared" and "regular":
 
 | **Component:**   | Shared component | Regular component |
-----------------------------------------------------------------------------------------------------
-| **Ownership:**   | shared between all entities of the same type | Each entity has their own copy |
+|------------------|------------------|-------------------|
+| **Ownership:** | shared between all entities of the same type | Each entity has their own copy |
 | **Takes space?** | No | Yes |
-| **Modifiable?**  | No(t really) | Yes |
+| **Modifiable?** | No(t really) | Yes |
 | **Accessible via `ent.compName`?** | Yes | Yes |
-| Can be removed?  | No | Yes |
+| Can be removed? | No | Yes |
 | Determines what groups an entity is in? | Yes | Yes |
 | Saved with the entity? | No | Yes |
 
