@@ -49,7 +49,7 @@ return {
     };
 
     glow = {
-        color = {0,1,1}
+        color = {1,0.8,0.1, 0.4}
     },
 
     moveAnimation = {

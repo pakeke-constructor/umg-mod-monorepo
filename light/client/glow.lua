@@ -8,12 +8,15 @@ local DEFAULT_GLOW_IMG = "light_default_glow"
 
 local DEFAULT_SIZE = 24
 
+local WHITE = {1,1,1,1}
+
 
 local function drawGlow(ent)
     love.graphics.push("all")
     local g = ent.glow
+    love.graphics.setColor(g.color or WHITE)
     local imgname = g.image or DEFAULT_GLOW_IMG
-    local glow_quad = client.assets[imgname]
+    local glow_quad = client.assets.images[imgname]
     if not glow_quad then
         error("Unknown image for glow: " .. tostring(imgname))
     end
