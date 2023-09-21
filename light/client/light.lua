@@ -40,6 +40,18 @@ local DEFAULT_COLOR = {1,1,1}
 
 
 
+local function drawLight(ent, globalModifier)
+    local l = ent.light
+    local size = l.size or DEFAULT_SIZE
+    if l.image then
+        error("Custom light images aren't supported yet")
+    end
+    local sizeMod = umg.ask("light:getLightSizeMultiplier", ent) or 1
+    local scale = (size / W) * sizeMod * globalModifier
+    love.graphics.setColor(l.color or DEFAULT_COLOR)
+    love.graphics.draw(light_image, ent.x, ent.y, ent.rot, scale, scale, W/2, H/2)
+end
+
 
 local function setupCanvas(camera)
     love.graphics.push("all")
@@ -51,7 +63,7 @@ local function setupCanvas(camera)
     local col = overseerEnt.lighting or defaultLighting
     love.graphics.clear(col)
 
-    local globalSizeMod = umg.ask("light:getGlobalLightSizeMultiplier") or 1
+    local globalModifier = umg.ask("light:getGlobalLightSizeMultiplier") or 1
 
     -- display all lights:
     for _, ent in ipairs(lightGroup) do
@@ -59,12 +71,7 @@ local function setupCanvas(camera)
         -- (its hard because of canvases, lg.getWidth() is not available)
         local dim = dimensions.getDimension(ent)
         if dim == dimension then
-            local l = ent.light
-            local size = l.size or DEFAULT_SIZE
-            local sizeMod = umg.ask("light:getLightSizeMultiplier", ent) or 1
-            local scale = (size / W) * sizeMod * globalSizeMod
-            love.graphics.setColor(l.color or DEFAULT_COLOR)
-            love.graphics.draw(light_image, ent.x, ent.y, 0, scale, scale, W/2, H/2)
+            drawLight(ent, globalModifier)
         end
     end
 

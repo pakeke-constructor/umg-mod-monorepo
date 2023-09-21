@@ -8,6 +8,13 @@ ent.light = {
 }
 
 
+ent.glow = {
+    color = {0,1,1}, -- the glow is cyan colored.
+    size = 40 -- 40 pixels size
+}
+
+
+
 
 
 -- For dimension overseers:
