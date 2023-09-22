@@ -75,7 +75,8 @@ return {
         })
     end,
 
-    initVxVy = true
+    initVxVy = true,
+    initLook = true
 }
 
 

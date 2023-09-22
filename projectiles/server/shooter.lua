@@ -23,7 +23,7 @@ end
 
 
 local function getProjectileType(item, holderEnt, shooter)
-    local projType = umg.ask("projectiles:getProjectileType", holderEnt, item)
+    local projType = umg.ask("projectiles:getProjectileType", item, holderEnt)
     if projType then
         -- allow for override
         return projType
@@ -105,8 +105,10 @@ end
 local function spawnProjectileEntity(item, holderEnt, shooter)
     --[[
         this function may return nil!!!
+
+        spawns a projectile entity (bullet.) 
+        Does not set position or anything.
     ]]
-    -- spawns a projectile entity (bullet.) Does not set position or anything.
     local ent
     if shooter.spawnProjectile then
         ent = shooter.spawnProjectile(item, holderEnt, shooter)
@@ -152,6 +154,7 @@ local function setupProjectile(item, projEnt, holderEnt, shooter, spreadFactor)
         dx = dx/mag; dy=dy/mag
     end
 
+    -- set projectile position:
     projEnt.x, projEnt.y = holderEnt.x + dx*startDistance, holderEnt.y + dy*startDistance
     if holderEnt.dimension then
         projEnt.dimension = holderEnt.dimension
@@ -159,14 +162,14 @@ local function setupProjectile(item, projEnt, holderEnt, shooter, spreadFactor)
 
     local inaccuracyAngle = (random()-0.5) * inaccuracy
     local spreadAngle = spreadFactor * spread
-    -- angle shift of direction of bullet
+    -- angle = direction modifier of bullet
     local angle = inaccuracyAngle + spreadAngle
 
     -- shift by angle:
     local dx2 = dx*cos(angle) - dy*sin(angle)
     local dy2 = dx*sin(angle) + dy*cos(angle)
 
-    -- amplify by speed:
+    -- add speed:
     projEnt.vx = dx2 * speed
     projEnt.vy = dy2 * speed     
 end

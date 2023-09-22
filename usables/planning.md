@@ -59,11 +59,11 @@ Emit the following callbacks:
 ## Q4: How do we interact with the mod to say which items are held?
 We can only equip items if the entity has an inventory:
 ```lua
-usables.equipItem(ent, invX, invY) -- where (invX, invY) are inventory coords
+usables.equipItem(ent, item) -- equips/unequips item
 usables.unequipItem(ent)
 ```
 TODO: Where do we actually store the info for hold items?
-idea: `ent.holdItem` component, which contains `slotX`, `slotY` values.
+idea: `ent.holdItem` component
 
 
 
