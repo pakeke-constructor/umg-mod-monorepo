@@ -356,7 +356,9 @@ local function setupServerReciever(compName, options)
     server.on(eventSyncName, {
         arguments = {filters.controlEntity, filters.any},
         handler = function(sender, ent, compVal)
-            if shouldAcceptServerside(ent, compVal) then
+            if 
+                --ent[compName] and 
+                shouldAcceptServerside(ent, compVal) then
                 ent[compName] = compVal
             end
         end

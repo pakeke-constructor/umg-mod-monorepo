@@ -22,29 +22,18 @@ end
 
 
 
-local entity2Tc = typecheck.assert("entity", "entity")
 
+local function updateHolderEnt(holderEnt)
+    local itemEnt = getHoldItem(holderEnt)
+    if itemEnt then
+        local handlerFunc = umg.ask("usables:getHoldItemHandler", itemEnt, holderEnt)
+        handlerFunc = handlerFunc or defaultHandler
+        handlerFunc(itemEnt, holderEnt)
+        -- todo: we can ask more/better questions here
 
-function holding.updateHoldItemDirectly(itemEnt, holderEnt)
-    entity2Tc(itemEnt, holderEnt)
+        umg.call("usables:updateHoldItem", itemEnt, holderEnt)
 
-    local handlerFunc = umg.ask("usables:getHoldItemHandler", itemEnt, holderEnt)
-    handlerFunc = handlerFunc or defaultHandler
-    handlerFunc(itemEnt, holderEnt)
-    -- todo: we can ask more/better questions here
-
-    umg.call("usables:updateHoldItem", itemEnt, holderEnt)
-
-    itemEnt.dimension = dimensions.getDimension(holderEnt.dimension)
-end
-
-
-
-
-local function updateHolderEnt(ent)
-    local holdItem = getHoldItem(ent)
-    if holdItem then
-        holding.updateHoldItemDirectly(holdItem, ent)
+        itemEnt.dimension = dimensions.getDimension(holderEnt.dimension)
     end
 end
 
