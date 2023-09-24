@@ -31,6 +31,8 @@ properties.define({
 
 properties.recalculate(ent, "speed")
 
+properties.exists(propertyName) -- return true/false
+
 ```
 
 # Extra features:
@@ -44,29 +46,77 @@ hmmmm.... this could go against the `getProperty` method from before.
 Do some more thinking.
 
 ### planning for dynamic property mutation:
-Ok, so the big main issue, is that we can't *really* use a question
-bus for obtaining property values, since that question bus would be polled for ALL existing properties.
+We could use multiple `getProperty` handlers, which would allow the `properties` mod greater control with handle custom mutations:
 ```lua
-
--- alternative define:
+-- alternative define idea:
 properties.define({
-  name = "speed",
+  name = "maxHealth",
   getProperty = function(ent)
     -- additive property value
   end,
 
   getMultiplier = function(ent)
-    -- (optional function)
+    -- (optional func)
     -- multiplier for property. 
 
+    -- (If this func isn't supplied, multiplier is 1)
+  end,
+
+  onRecalculate = function(ent)
+    -- (optional func)
+    -- called when property is recalculated:
+    ent.health = math.min(ent.health, ent.maxHealth)
   end
 })
 
 
+--[[
+  TODO: think of an API where we can actually mutate artitrary properties cleanly.
 
+  We ideally want it:
+    - stateless
+    - per entity
+    - agnostic w.r.t property name
+]]
 
 ```
 
+## Random idea 1:
+Create a function that mutates a property on the fly:
+```lua
+
+--[[
+  multiplies an entity's speed by 2 for 5 seconds
+]]
+properties.mutate({
+  type = "multiply"
+  target = ent,
+  property = "speed",
+  value = 2,
+  duration = 5
+})
+
+
+```
+On second thought; NO, this is bad, because it's stateful, and it's meaningless state too.
+
+--------------
+
+Aha! 
+What about this though:
+
+Create an `effects` component, that keeps track of all the effects that `ent` has?
+This way, we can mutate any effects we want.<br/>
+GG. This has got to be the solution.
+
+# `effects` component:
+```lua
+
+properties.effect(ent, )
+
+
+
+```
 
 
 
