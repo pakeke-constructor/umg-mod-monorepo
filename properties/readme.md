@@ -2,11 +2,39 @@
 
 # Properties API:
 
+Question: What is a property?<br/>
+A: A property is a component that represents a "statistic" of an entity.
+
+Properties can only be numbers.
+
+A property is anything that is used to represent that "statistics" of an entity.
+For example, on the Skyrim
+
+----------------
+
+What's a good example of a property?
+- maxHealth
+- damage
+- speed
+- armor
+- charisma
+- luck
+- endurance
+- agility
+
+What isn't a property?
+- x, y positions
+- health
+- rotation
+- scaleX, scaleY, scale
+
+
+
+
 ```lua
 
 -- alternative define idea:
-properties.define({
-    name = "maxHealth",
+properties.define("maxHealth", {
     getModifier = function(ent)
         -- additive property value
     end,
@@ -29,7 +57,7 @@ end
 
 
 
-properties.recalculate(ent, "speed")
+properties.calculate(ent, "speed")
 
 -- check if a property exists:
 properties.exists(propertyName) -- return true/false
@@ -65,7 +93,7 @@ Very cool.
 umg.answer("properties:getPropertyModifier", function(ent, property)
     if ent.effects then
         if ent.effects[property] then
-            local efct = ent.potionEffects[property]
+            local efct = ent.effects[property]
             return efct.strength
         end
     end

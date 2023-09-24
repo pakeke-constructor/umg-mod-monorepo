@@ -102,7 +102,7 @@ On second thought; NO, this is bad, because it's stateful, and it's meaningless 
 
 ------------
 
-Best solution:<br/>
+# Best solution:
 Just use a generic question that asks a question for each property:
 ```lua
 
@@ -115,4 +115,52 @@ umg.answer("properties:getPropertyModifier", function(ent, property)
 end)
 
 ```
+
+
+
+# There are still some issues though!
+
+### How do we configure recalculation?
+
+Ideally, we want our properties to be "ticked properties".<br/>
+But, perhaps sometimes we don't want to recalculate per tick....
+
+IDEA: Have ticked recalculation be on by default.<br/>
+To account for this, add an option: `noTickedRecalculation` to turn off ticked recalculation.
+
+---------------
+
+### Exclusion of entities
+
+What happens if we want to exclude our entity from the calculation?
+
+I.e. we give our entity a `damage` value, and don't want other systems to affect it?<br/>
+Do we just say "tough nuts" and not allow this setup...? 
+
+Yeah, honestly, I think thats the best call.
+Having properties be "overridden" in an arbitrary manner would be weird.
+
+-------------
+
+### Instantiating properties and nice defaults
+
+How do we signal that entities should be added to the property calculation pool?
+Well, we could just take all entities that have the property... but that would be a bit funny, since that would mean we are setting the component, only for it to be instantly recalculated.
+
+**IDEA:**<br/>
+We also want to make it easy to just "set" base property values.<br/>
+How about we have a `baseDamage` component or something,
+defined with the property? ie:
+
+```lua
+properties.define("damage", {
+  base = "baseDamage"
+})
+```
+
+With this example, `ent.baseDamage` is automatically added to the `ent.damage` value upon recalculation.
+
+Also, a nice side effect of this could be that entitys are automatically granted the `damage` component if it has `baseDamage` component.<br/>
+This completely fixes are initialization problem.
+
 
