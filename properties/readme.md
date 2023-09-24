@@ -43,6 +43,30 @@ hmmmm.... this could go against the `getProperty` method from before.
 
 Do some more thinking.
 
+### planning for dynamic property mutation:
+Ok, so the big main issue, is that we can't *really* use a question
+bus for obtaining property values, since that question bus would be polled for ALL existing properties.
+```lua
+
+-- alternative define:
+properties.define({
+  name = "speed",
+  getProperty = function(ent)
+    -- additive property value
+  end,
+
+  getMultiplier = function(ent)
+    -- (optional function)
+    -- multiplier for property. 
+
+  end
+})
+
+
+
+
+```
+
 
 
 
