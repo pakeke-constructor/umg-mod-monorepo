@@ -112,9 +112,27 @@ GG. This has got to be the solution.
 # `effects` component:
 ```lua
 
-properties.effect(ent, )
+-- add speed to entity
+properties.add("speed", ent, value)
 
+-- multiply speed 
+properties.multiply(propertyName, ent, value)
 
+```
+
+No, that's bad, because it's still stateful.
+Perhaps we can support `effect`s, but we shouldn't prioritize it.
+
+A better solution is just to have questions:
+```lua
+
+umg.answer("properties:getPropertyMultiplier", function(ent, property)
+  ...
+end)
+
+umg.answer("properties:getPropertyModifier", function(ent, property)
+  ...
+end)
 
 ```
 

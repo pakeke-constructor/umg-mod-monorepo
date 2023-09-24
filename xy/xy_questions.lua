@@ -16,7 +16,7 @@ umg.defineQuestion("xy:isFrictionDisabled", reducers.OR)
     What's the different between speed and velocity?
 
     speed = How fast an entity can move if it WANTS to move
-        i.e. car is driving down the road at 20 speed
+        i.e. car turns on engine, drives down the road at 20 speed
 
     velocity = How fast an entity is ACTUALLY moving.
         Depends on environmental circumstances.
