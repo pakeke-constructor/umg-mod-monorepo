@@ -163,4 +163,39 @@ With this example, `ent.baseDamage` is automatically added to the `ent.damage` v
 Also, a nice side effect of this could be that entitys are automatically granted the `damage` component if it has `baseDamage` component.<br/>
 This completely fixes are initialization problem.
 
+--------------
+
+### Entities without properties
+
+Our setup has one glaring issue:
+It only works on entities that have the `property`.
+For example, our `speed` modifiers will only work on entities with
+the `speed` component.
+
+This is bad. Our previous setup had it so that entities didn't need
+to have `speed` component; `xy:getSpeed` was still called globally
+for all entities that needed speed.
+
+Hmm...<br/>
+I think this can be fixed by having a function we can call for defaults:
+```lua
+local prop = properties.get(ent, "speed")
+-- or something similar to this...?
+```
+Internally, this would call `xy:getSpeed` and all the other questions.
+This would allow us to have our cake and eat it too.
+
+(If entity has a `.speed` component though, it returns that instead.)
+
+----------------
+
+### Giving entities properties
+
+There should also be an easy way for entities to be given properties.
+Perhaps just `ent.propertyName = X` would suffice...?
+
+Do some more thinking.
+
+
+
 

@@ -17,10 +17,10 @@ What's a good example of a property?
 - damage
 - speed
 - armor
-- charisma
 - luck
 - endurance
 - agility
+- regeneration
 
 What isn't a property?
 - x, y positions
@@ -29,12 +29,15 @@ What isn't a property?
 - scaleX, scaleY, scale
 
 
+------------
 
+# API:
 
 ```lua
 
 -- alternative define idea:
 properties.define("maxHealth", {
+    base = "baseMaxHealth",
     getModifier = function(ent)
         -- additive property value
     end,
