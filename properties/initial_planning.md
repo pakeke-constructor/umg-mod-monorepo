@@ -192,10 +192,28 @@ This would allow us to have our cake and eat it too.
 ### Giving entities properties
 
 There should also be an easy way for entities to be given properties.
-Perhaps just `ent.propertyName = X` would suffice...?
+Perhaps just `ent.propertyName = X` would suffice...?<br/>
+A common idiom could be
+```lua
+ent.propertyName = properties.get(ent, "propertyName")
+```
 
 Do some more thinking.
 
+IDEA:
+I think explicit is better than implicit.
+how about we do
+```lua
+properties.add(ent, "propertyName")
+-- adds `propertyName` to `ent``.
+```
 
+
+### What about entities that don't want to have a certain property?
+for example, an entity that doesn't want to have `health` component?
+Should this entity be able to say "no" to being given this property automatically...?
+
+Because currently, the way it stands, is that if an entity receives a modifier for a property, the property is given to that entity,
+(and thus the component is given to that entity too.)
 
 
