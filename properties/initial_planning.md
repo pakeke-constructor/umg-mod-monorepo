@@ -213,7 +213,11 @@ properties.add(ent, "propertyName")
 for example, an entity that doesn't want to have `health` component?
 Should this entity be able to say "no" to being given this property automatically...?
 
-Because currently, the way it stands, is that if an entity receives a modifier for a property, the property is given to that entity,
+Because currently, the plan is:<br/>
+If an entity receives a modifier for a property, the property is given to that entity,
 (and thus the component is given to that entity too.)
+
+SOLUTION: make it so that properties ARE NOT given to entities
+automatically.
 
 
