@@ -1,0 +1,6 @@
+{
+    "type": "base",
+    "uses": [
+        "typecheck", "reducers"
+    ]
+}

@@ -1,4 +1,6 @@
 
+require("properties_questions")
+
 
 local properties = {}
 
@@ -70,6 +72,7 @@ end
 
 
 local function makeBasePropertyGroup(property, config)
+    assert(server,"?")
     if not config.base then
         return -- no base property! return
     end
@@ -161,7 +164,10 @@ function properties.get(ent, property)
     if config.default then
         return config.default
     end
-    return nil -- there is no property for this entity
+    -- TODO: Wtf do we do here????
+    -- perhaps we should throw error instead??
+    -- This whole thing is cursed, it's too generic.
+    return 0 
 end
 
 
