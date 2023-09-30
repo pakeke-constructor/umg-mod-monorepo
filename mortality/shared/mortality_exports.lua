@@ -18,16 +18,6 @@ local damage = require("shared.damage")
 
 
 
-local getRegen = require("shared.get_regen")
-
-local getRegenerationTc = typecheck.assert("entity")
-function mortality.getRegeneration(ent)
-    getRegenerationTc(ent)
-    return getRegen(ent)
-end
-
-
-
 if server then
 -- server-side only API
 mortality.server = {}

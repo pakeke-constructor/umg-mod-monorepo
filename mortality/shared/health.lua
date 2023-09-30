@@ -33,9 +33,6 @@ hpGroup:onAdded(function(ent)
 end)
 
 
-local getRegeneration = require("shared.get_regen")
-
-
 
 if server then
 -- only update health values on server-side.
@@ -48,7 +45,7 @@ umg.on("@tick", function(dt)
         end
 
         -- do regeneration:
-        local regen = getRegeneration(ent)
+        local regen = ent.regeneration or 0
         local amount = regen * dt
         local maxHealth = ent.maxHealth or math.huge
         ent.health = math.min(maxHealth, ent.health + amount)
