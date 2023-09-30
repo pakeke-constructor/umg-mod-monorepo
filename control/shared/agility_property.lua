@@ -4,7 +4,7 @@ require("control_questions")
 
 local DEFAULT_AGILITY = 100
 
-properties.declareProperty("agility", {
+properties.defineProperty("agility", {
     base = "baseAgility",
     default = DEFAULT_AGILITY,
 

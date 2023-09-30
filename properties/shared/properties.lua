@@ -147,7 +147,7 @@ local configTableType = {
 }
 local defineTc = typecheck.assert("string", configTableType)
 
-function properties.declareProperty(property, config)
+function properties.defineProperty(property, config)
     defineTc(property, config)
     if propertyToConfig[property] then
         error("Property is already defined: " .. tostring(property))

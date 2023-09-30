@@ -84,14 +84,9 @@ local function setVelFromMove(ent, dt)
     ent.vx = ent.vx or 0
     ent.vy = ent.vy or 0
 
-    if not ent.agility then
-        properties.addProperty(ent, "agility")
-    end
-    if not ent.speed then
-        properties.addProperty(ent, "speed")
-    end
-    local agility = ent.agility or getAgility(ent)
-    local speed = xy.getSpeed(ent)
+    ent.agility = ent.agility or properties.computeProperty(ent, "agility")
+    ent.speed = ent.speed or properties.computeProperty(ent, "speed")
+    local agility, speed = ent.agility, ent.speed
 
     local dvx = (moveX - x)
     local dvy = (moveY - y)

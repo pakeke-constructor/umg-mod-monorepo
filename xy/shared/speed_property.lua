@@ -5,7 +5,7 @@ require("xy_questions")
 local options = require("shared.options")
 
 
-properties.declareProperty("agility", {
+properties.defineProperty("agility", {
     base = "baseAgility",
     default = options.DEFAULT_SPEED,
 

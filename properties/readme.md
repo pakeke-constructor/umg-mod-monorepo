@@ -36,7 +36,7 @@ What isn't a property?
 ```lua
 
 -- alternative define idea:
-properties.declareProperty("maxHealth", {
+properties.defineProperty("maxHealth", {
     base = "baseMaxHealth",
     default = 10, -- default `maxHealth` is 10
     requiredComponents = {...},

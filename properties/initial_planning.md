@@ -20,7 +20,7 @@ That's it!
 # API:
 ```lua
 
-properties.declareProperty({
+properties.defineProperty({
   name = "speed",
   getProperty = function(ent)
     return umg.ask("xy:getSpeed", ent)
@@ -49,7 +49,7 @@ Do some more thinking.
 We could use multiple `getProperty` handlers, which would allow the `properties` mod greater control with handle custom mutations:
 ```lua
 -- alternative define idea:
-properties.declareProperty({
+properties.defineProperty({
   name = "maxHealth",
   getProperty = function(ent)
     -- additive property value
@@ -153,7 +153,7 @@ How about we have a `baseDamage` component or something,
 defined with the property? ie:
 
 ```lua
-properties.declareProperty("damage", {
+properties.defineProperty("damage", {
   base = "baseDamage"
 })
 ```
