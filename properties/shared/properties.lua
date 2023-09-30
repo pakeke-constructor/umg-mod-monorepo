@@ -36,11 +36,11 @@ end
 
 
 local function getMultiplier(ent, property)
-    return umg.ask("properties:getPropertyMultiplier", ent, property)
+    return umg.ask("properties:getPropertyMultiplier", ent, property) or 1
 end
 
 local function getModifier(ent, property)
-    return umg.ask("properties:getPropertyModifier", ent, property)
+    return umg.ask("properties:getPropertyModifier", ent, property) or 0
 end
 
 
@@ -49,10 +49,10 @@ local function computeProperty(ent, property, config)
     local modifier = getBaseValue(ent, config) -- additive modifier
 
     if config.getMultiplier then
-        multiplier = multiplier * config.getMultiplier(ent)
+        multiplier = multiplier * config.getMultiplier(ent) or 1
     end
     if config.getModifier then
-        modifier = modifier + config.getModifier(ent)
+        modifier = modifier + config.getModifier(ent) or 0
     end
 
     multiplier = multiplier * getMultiplier(ent, property)
@@ -85,7 +85,7 @@ local function makeBasePropertyGroup(property)
     -- the "base" value of the property for the entity.
     -- for example, `baseDamage`
     local baseProperty = config.base
-    local group = makeGroup(property, config)
+    local group = makeGroup(baseProperty, config)
 
     group:onAdded(function(ent)
         -- all entities with [baseProperty] component get given the property
@@ -136,12 +136,12 @@ end
 
 
 local configTableType = {
-    base = "string?",
+    base = "string",
     default = "number?",
     requiredComponents = "table?",
 
-    getModifier = "function",
-    getMultiplier = "function",
+    getModifier = "function?",
+    getMultiplier = "function?",
 
     onRecalculate = "function?"
 }
@@ -168,14 +168,23 @@ end
 
 
 
-local entpTc = typecheck.assert("entity", "property")
+local computeTc = typecheck.assert("entity", "property")
 
 function properties.computeProperty(ent, property)
-    entpTc(ent, property)
+    computeTc(ent, property)
     local config = propertyToConfig[property]
     return computeProperty(ent, property, config)
 end
 
+
+
+local getDefaultTc = typecheck.assert("property")
+
+function properties.getDefault(property)
+    getDefaultTc(property)
+    local config = propertyToConfig[property]
+    return config.default or 0
+end
 
 
 

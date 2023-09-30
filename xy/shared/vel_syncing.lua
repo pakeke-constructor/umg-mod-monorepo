@@ -23,8 +23,8 @@ sync.autoSyncComponent("vy", {
 
             -- But... speed hax was already possible with SYNC_LEIGHWAY. 
             -- Oh well! There are bigger fish to fry
-            ent.speed = ent.speed or properties.computeProperty(ent, "speed")
-            return abs(vy) <= ent.speed
+            local speed = ent.speed or properties.getDefault("speed")
+            return abs(vy) <= speed
         end,
 
         shouldForceSyncClientside = function()
@@ -47,8 +47,8 @@ sync.autoSyncComponent("vx", {
     
     bidirectional = {
         shouldAcceptServerside = function(ent, vx)
-            ent.speed = ent.speed or properties.computeProperty(ent, "speed")
-            return abs(vx) <= ent.speed
+            local speed = ent.speed or properties.getDefault("speed")
+            return abs(vx) <= speed
         end,
         shouldForceSyncClientside = function()
             return false

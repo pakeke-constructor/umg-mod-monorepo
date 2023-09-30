@@ -3,7 +3,6 @@
 local options = require("shared.options")
 local constants = require("shared.constants")
 
-local getSpeed = require("shared.get_speed")
 
 
 local NUMBER_SYNC_THRESHOLD = constants.NUMBER_SYNC_THRESHOLD
@@ -12,6 +11,11 @@ local NUMBER_SYNC_THRESHOLD = constants.NUMBER_SYNC_THRESHOLD
 
 
 local abs = math.abs
+
+
+local function getSpeed(ent)
+    return ent.speed or properties.getDefault("speed")
+end
 
 
 

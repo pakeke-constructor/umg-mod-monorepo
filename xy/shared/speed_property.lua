@@ -5,15 +5,15 @@ require("xy_questions")
 local options = require("shared.options")
 
 
-properties.defineProperty("agility", {
-    base = "baseAgility",
+properties.defineProperty("speed", {
+    base = "baseSpeed",
     default = options.DEFAULT_SPEED,
 
     getModifier = function(ent)
-        return umg.ask("control:getAgilityModifier", ent) or 0
+        return umg.ask("xy:getSpeedModifier", ent) or 0
     end,
     getMultiplier = function(ent)
-        return umg.ask("control:getAgilityMultiplier", ent) or 1
+        return umg.ask("xy:getSpeedMultiplier", ent) or 1
     end
 })
 
