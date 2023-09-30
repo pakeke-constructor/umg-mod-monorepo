@@ -53,8 +53,6 @@ sync.autoSyncComponent("moveY", {
 
 
 
-local getAgility = require("shared.get_agility")
-
 local max, min, distance = math.max, math.min, math.distance
 
 
@@ -86,7 +84,13 @@ local function setVelFromMove(ent, dt)
     ent.vx = ent.vx or 0
     ent.vy = ent.vy or 0
 
-    local agility = getAgility(ent)
+    if not ent.agility then
+        properties.addProperty(ent, "agility")
+    end
+    if not ent.speed then
+        properties.addProperty(ent, "speed")
+    end
+    local agility = ent.agility or getAgility(ent)
     local speed = xy.getSpeed(ent)
 
     local dvx = (moveX - x)

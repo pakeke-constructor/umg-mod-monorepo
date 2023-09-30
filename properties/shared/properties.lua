@@ -12,6 +12,10 @@ local propertyToConfig = {--[[
 ]]}
 
 
+local function getConfig(property)
+    return propertyToConfig[property]
+end
+
 
 local function isProperty(property)
     return propertyToConfig[property], "expected property"
@@ -71,8 +75,9 @@ end
 
 
 
-local function makeBasePropertyGroup(property, config)
+local function makeBasePropertyGroup(property)
     assert(server,"?")
+    local config = getConfig(property)
     if not config.base then
         return -- no base property! return
     end
@@ -101,18 +106,28 @@ elseif client then
 end
 
 
+local function updateGroup(group, property, config)
+    -- updates all entities in a group:
+    for _, ent in ipairs(group) do
+        ent.property = computeProperty(ent, property, config)
+    end
+end
 
-local function makePropertyGroup(property, config)
 
+local function makePropertyGroup(property)
+    local config = getConfig(property)
     local group = makeGroup(property, config)
     
-    --[[
-        TODO: We need to add for more finer-grained control here.
-    ]]
-    local skips = config.skips or 1
-    scheduling.runEvery(skips, tickEvent, function()
-        for _, ent in ipairs(group) do
-            ent.property = computeProperty(ent, property)
+    local count = 1
+    umg.on(tickEvent, function()
+        local skips = config.skips or 1
+        count = count + 1
+
+        -- only update after we have skipped `skips` times.
+        -- This allows us to make property calculation more "lazy"
+        if count > skips then
+            updateGroup(group, property, config)
+            count = 1
         end
     end)
 end
@@ -132,7 +147,7 @@ local configTableType = {
 }
 local defineTc = typecheck.assert("string", configTableType)
 
-function properties.define(property, config)
+function properties.defineProperty(property, config)
     defineTc(property, config)
     if propertyToConfig[property] then
         error("Property is already defined: " .. tostring(property))
@@ -142,35 +157,24 @@ function properties.define(property, config)
     table.insert(propertyList, property)
 
     if server then
-        makeBasePropertyGroup(property, config)
-        makePropertyGroup(property, config)
+        makeBasePropertyGroup(property)
+        makePropertyGroup(property)
     elseif client then
         if config.shouldComputeClientside then
-            makePropertyGroup(property, config)
+            makePropertyGroup(property)
         end
     end
 end
 
 
 
-local getTc = typecheck.assert("entity", "property")
+local entpTc = typecheck.assert("entity", "property")
 
-function properties.get(ent, property)
-    getTc(ent, property)
-    if ent[property] then
-        return ent[property]
-    end
+function properties.computeProperty(ent, property)
+    entpTc(ent, property)
     local config = propertyToConfig[property]
-    if config.default then
-        return config.default
-    end
-    -- TODO: Wtf do we do here????
-    -- perhaps we should throw error instead??
-    -- This whole thing is cursed, it's too generic.
-    return 0 
+    return computeProperty(ent, property, config)
 end
-
-
 
 
 

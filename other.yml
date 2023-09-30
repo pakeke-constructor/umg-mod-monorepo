@@ -60,3 +60,5 @@ globals:
     any: true
   borders:
     any: true
+  properties:
+    any: true

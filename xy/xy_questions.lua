@@ -25,7 +25,7 @@ umg.defineQuestion("xy:isFrictionDisabled", reducers.OR)
     Car's max speed is 20, but it's velocity can still be bigger than 20.
 ]]
 -- Gets the flat speed of an entity
-umg.defineQuestion("xy:getSpeed", reducers.ADD)
+umg.defineQuestion("xy:getSpeedModifier", reducers.ADD)
 
 -- Gets the speed multiplier of an entity
 umg.defineQuestion("xy:getSpeedMultiplier", reducers.MULTIPLY)
