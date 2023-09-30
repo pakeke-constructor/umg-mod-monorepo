@@ -1,6 +1,5 @@
 
 local constants = require("shared.constants")
-local getSpeed = require("shared.get_speed")
 
 
 local NUMBER_SYNC_THRESHOLD = constants.NUMBER_SYNC_THRESHOLD

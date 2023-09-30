@@ -27,7 +27,7 @@ typecheck.addType("property", isProperty)
 
 
 local function getBaseValue(ent, config)
-    local baseProperty = config.baseProperty
+    local baseProperty = config.base
     if baseProperty and ent[baseProperty] then
         return ent[baseProperty]
     end
@@ -147,7 +147,7 @@ local configTableType = {
 }
 local defineTc = typecheck.assert("string", configTableType)
 
-function properties.defineProperty(property, config)
+function properties.declareProperty(property, config)
     defineTc(property, config)
     if propertyToConfig[property] then
         error("Property is already defined: " .. tostring(property))
