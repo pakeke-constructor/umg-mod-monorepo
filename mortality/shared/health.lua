@@ -18,6 +18,10 @@ sync.autoSyncComponent("health", {
     lerp = false
 })
 
+sync.autoSyncComponent("maxHealth", {
+    lerp = false
+})
+
 
 
 
