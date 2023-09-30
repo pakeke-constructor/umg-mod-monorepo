@@ -39,6 +39,7 @@ What isn't a property?
 properties.define("maxHealth", {
     base = "baseMaxHealth",
     default = 10, -- default `maxHealth` is 10
+    requiredComponents = {...},
 
     getModifier = function(ent)
         -- additive property value
