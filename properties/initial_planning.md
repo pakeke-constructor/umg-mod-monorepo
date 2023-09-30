@@ -218,6 +218,9 @@ If an entity receives a modifier for a property, the property is given to that e
 (and thus the component is given to that entity too.)
 
 SOLUTION: make it so that properties ARE NOT given to entities
-automatically.
+automatically.<br/>
+FUTURE OLI:  
+Yeah this is a classic example of YOU overworking yourself, Oli.
+Don't work when you are tired. You'll come up with stupid ideas like the original idea
 
 

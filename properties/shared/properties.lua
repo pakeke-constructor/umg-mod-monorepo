@@ -11,6 +11,53 @@ local propertyToConfig = {--[[
 
 
 
+local function isProperty(property)
+    return propertyToConfig[property], "expected property"
+end
+
+typecheck.addType("property", isProperty)
+
+
+
+
+local function getBaseValue(ent, config)
+    local baseProperty = config.baseProperty
+    if baseProperty and ent[baseProperty] then
+        return ent[baseProperty]
+    end
+    return config.default or 0
+end
+
+
+local function getMultiplier(ent, property)
+    return umg.ask("properties:getPropertyMultiplier", ent, property)
+end
+
+local function getModifier(ent, property)
+    return umg.ask("properties:getPropertyModifier", ent, property)
+end
+
+
+local function computeProperty(ent, property, config)
+    local multiplier = 1 -- multiplicative modifier
+    local modifier = getBaseValue(ent, config) -- additive modifier
+
+    if config.getMultiplier then
+        multiplier = multiplier * config.getMultiplier(ent)
+    end
+    if config.getModifier then
+        modifier = modifier + config.getModifier(ent)
+    end
+
+    multiplier = multiplier * getMultiplier(ent, property)
+    modifier = modifier + getModifier(ent, property)
+
+    return modifier * multiplier
+end
+
+
+
+
 
 local EMPTY = {}
 
@@ -53,9 +100,18 @@ end
 
 
 local function makePropertyGroup(property, config)
-    local extraComps = config.requiredComponents or EMPTY
-    local group = makeGroup(property, config)
 
+    local group = makeGroup(property, config)
+    
+    --[[
+        TODO: We need to add for more finer-grained control here.
+    ]]
+    local skips = config.skips or 1
+    scheduling.runEvery(skips, tickEvent, function()
+        for _, ent in ipairs(group) do
+            ent.property = computeProperty(ent, property)
+        end
+    end)
 end
 
 
@@ -82,11 +138,31 @@ function properties.define(property, config)
     propertyToConfig[property] = config
     table.insert(propertyList, property)
 
-    makeBasePropertyGroup(property, config)
-    makePropertyGroup(property, config)
+    if server then
+        makeBasePropertyGroup(property, config)
+        makePropertyGroup(property, config)
+    elseif client then
+        if config.shouldComputeClientside then
+            makePropertyGroup(property, config)
+        end
+    end
 end
 
 
+
+local getTc = typecheck.assert("entity", "property")
+
+function properties.get(ent, property)
+    getTc(ent, property)
+    if ent[property] then
+        return ent[property]
+    end
+    local config = propertyToConfig[property]
+    if config.default then
+        return config.default
+    end
+    return nil -- there is no property for this entity
+end
 
 
 
