@@ -45,20 +45,8 @@ ent.shooter = {
 }
 
 
+ent.
 
-
-ent.modalShooter = {
-    {
-        mode = 1
-        ... -- same as component above
-    },
-
-    {
-        -- We can have multiple components!
-        mode = 1
-        ... -- same as component above
-    },
-}
 
 
 
