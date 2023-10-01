@@ -45,7 +45,17 @@ ent.shooter = {
 }
 
 
-ent.
+ent.shooter = {
+    -- supports multiple modes:
+    {
+        mode = 2,
+        ...
+    },
+    {
+        mode = 3,
+        ...
+    }
+}
 
 
 

@@ -24,7 +24,7 @@ We ideally want to extrapolate a bunch of behaviour to base mods.
 
 moveBehaviour mod:
 
-Kill (or refactor) the `moveBehaviour` mod.
+Completely refactor (and rename) the `moveBehaviour` mod.
 It's bad, and a bunch of it was replaced with `moveX` and `moveY`.
 Currently moveBehaviour is just a bit *too* specialized and complicated.
 
@@ -34,6 +34,8 @@ Some more simple components would be great to have, though:
     - (causes `moveX` and `moveY` values to be set to target-ent)
     - This would allow for homing bullets.
     - The `control` mod or `move_behaviour` mod should define this
+
+Do some more thinking.
 
 
 -------------
@@ -45,14 +47,22 @@ We need:
 - Bullets that are not physics-based
 - Bullets that only collide with a specific entity (i.e targetted)
 
+(You may be tempted to add an API that creates projectiles.
+But this is a dumb idea; because projectiles are just regular entities.
+Why not just instantiate the entities..?)
 
 
------------
+----------
 
-- We need to extrapolate melee attacks to base mod.
-    The `action` mod defines a few properties:
-        - strength property
-        
+### IDEA: 
+Extrapolate attack-behaviour stuff to `actions` mod.
+
+The `actions` mod will provide a well-defined way for entities
+to invoke single-time actions.
+
+
+IMPORTANT NOTE:
+`actions` mod is unrelated to attacking!!!!
 
 
 
