@@ -4,7 +4,7 @@ local SHAPE = love.physics.newCircleShape(1)
 
 
 return {
-    moveRotation = true,
+    rotateOnMovement = true,
     image = "bullet",
 
     projectile = {

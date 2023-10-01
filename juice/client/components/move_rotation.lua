@@ -6,7 +6,7 @@
     Great for bullets and stuff.
 ]]
 
-local moveRotationGroup = umg.group("vx", "vy", "moveRotation")
+local rotateOnMovementGroup = umg.group("vx", "vy", "rotateOnMovement")
 
 
 
@@ -15,12 +15,12 @@ local DEFAULT_START_ANGLE = 0 -- radians
 
 umg.on("state:gameUpdate", function(dt)
     --[[
-        moveRotation = {
+        rotateOnMovement = {
             startAngle = 0 or nil
         }
     ]]
-    for _, ent in ipairs(moveRotationGroup) do
-        local moveRot = ent.moveRotation
+    for _, ent in ipairs(rotateOnMovementGroup) do
+        local moveRot = ent.rotateOnMovement
         local startAngle = DEFAULT_START_ANGLE
         if type(moveRot) == "table" then
             startAngle = moveRot.startAngle or DEFAULT_START_ANGLE

@@ -20,7 +20,7 @@ end
 
 
 return {
-    moveRotation = true,
+    rotateOnMovement = true,
     draw = true,
 
     image = "shotgunshell",

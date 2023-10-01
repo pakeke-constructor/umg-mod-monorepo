@@ -15,7 +15,7 @@ return {
     speed = constants.PROJECTILE_SPEED,
     image = "bullet",
 
-    moveRotation = {};
+    rotateOnMovement = {};
 
     moveBehaviour = {
         type = "follow",
