@@ -54,18 +54,39 @@ Why not just instantiate the entities..?)
 
 ----------
 
-### IDEA: 
+We need to extract melee attacks into a base mod somehow.
+I can't think of a clean way to do it, though.
+
+The problem is that we are lowkey solving 2 problems in one:
+
+- Problem 1: attack-behaviour of entities:
+    - when does an entity attack?
+    - who does the entity attack? etc
+- Problem 2: Dispatch of melee attack
+    - how much damage does entity do?
+    - How many targets does the attack have? etc
+
+Problem-2 can perhaps be ignored... but problem-1 definitely cannot.
+
+
+### IDEA 1:
 Extrapolate attack-behaviour stuff to `actions` mod.
 
 The `actions` mod will provide a well-defined way for entities
 to invoke single-time actions.
-
+(Kind of like how `moveX` and `moveY` provide movement.)
 
 IMPORTANT NOTE:
-`actions` mod is unrelated to attacking!!!!
+`actions` mod is unrelated to attacking.
+It just provides an interface for actions to be defined/executed.
 
+We should be able to add attacking in easily, though.
 
+Future thoughts:
+We should also make the `actions` mod future-compatible with the `ai` mod.<br/>
+In fact, ideally, (if we do decide to implement the actions mod,)
+the `ai` mod should extend the `actions` mod, and tag into it.
 
-
+Do some thinking!!! ^^^^^
 
 
