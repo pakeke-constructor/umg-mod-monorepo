@@ -165,8 +165,6 @@ local DEFAULT_PARTICLES = 10 -- default number of particles to emit
 
 local emitAssert = typecheck.assert("string", "dvector", "number?", "table?")
 
--- TODO: perhaps remove the `z` from this, and place at the back?
--- Z shouldn't need to be a compulsory argument
 function particles.emit(name, dvec, num_particles, color)
     emitAssert(name, dvec, num_particles, color)
     num_particles = num_particles or DEFAULT_PARTICLES

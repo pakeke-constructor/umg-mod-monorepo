@@ -12,10 +12,14 @@ end
 
 
 umg.on("@tick", function()
-    for i, obj in ipairs(runningNextTick)do
+    -- clone to ensure that we dont prematurely delete functions that
+    -- were added during iteration
+    local cloned = runningNextTick:clone()
+    runningNextTick:clear()
+
+    for i, obj in ipairs(cloned) do
         obj.func(unpack(obj))
     end
-    runningNextTick:clear()
 end)
 
 

@@ -2,6 +2,7 @@
     "type": "base",
     "uses": [
         "state", "rendering", 
-        "reducers", "typecheck"
+        "reducers", "typecheck",
+        "objects"
     ]
 }

@@ -90,6 +90,15 @@ end
 
 
 
+function Array:clone()
+    local newArray = Array()
+    for i=1, self.len do
+        local item = self[i]
+        newArray:add(item)
+    end
+    return newArray
+end
+
 
 local funcTc = typecheck.assert("table", "function")
 
