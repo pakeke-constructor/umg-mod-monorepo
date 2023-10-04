@@ -66,7 +66,7 @@ The problem is that we are lowkey solving 2 problems in one:
     - how much damage does entity do?
     - How many targets does the attack have? etc
 
-Problem-2 can perhaps be ignored... but problem-1 definitely cannot.
+Problem-2 can perhaps be ignored, if the infrastructure of the solution to problem-1 is good enough.
 
 
 ### IDEA 1:

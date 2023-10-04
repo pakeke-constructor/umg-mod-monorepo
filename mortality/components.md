@@ -4,10 +4,9 @@
 ```lua
 
 
--- health / maxHealth components
 ent.health = 10
 
-ent.maxHealth = 50
+ent.maxHealth = 50 -- is a property!
 
 
 

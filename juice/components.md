@@ -4,6 +4,22 @@
 ```lua
 
 
+--[[
+    TODO: Change this to progressBar.
+    Have healthBar component CREATE a progressBar component at runtime
+]]
+ent.healthBar = { -- health bar above entity!
+    -- All of these are optional values:
+    offset = 10, -- how high it's drawn
+    drawWidth = 20,
+    drawHeight = 5,
+    healthColor = {1,0.2,0.2},
+    outlineColor = {0,0,0},
+    backgroundColor = {0.4,0.4,0.4,0.4}
+}
+
+
+
 
 ent.nametag = { -- renders a nametag above the entity
     value = "name", --  if value is nil, `.controller` component is used.
