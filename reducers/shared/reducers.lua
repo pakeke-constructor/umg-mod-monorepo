@@ -194,6 +194,7 @@ function reducers.SINGLE_COLLECT(a, b)
         table.insert(ret, a)
     end
     table.insert(ret, b)
+    return ret
 end
 
 
