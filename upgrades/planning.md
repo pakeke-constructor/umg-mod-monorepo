@@ -131,5 +131,27 @@ ie. upgrades that do MORE than just mutate a property.
 
 ie: 
 When entity is on fire:
+    add +2 damage
+
+
+# How often should we automatically recalculate?
+OK.
+Obviously, this is a bit awkward. 
+We want dynamic upgrades. ie. per-tick recalculation.
+
+but our cacheing mechanism allows us to be super efficient,
+and only recalculate when an upgrade is added/removed.
+
+However, if we only recalculate when an upgrade is added/removed,
+then we aren't really able to have dynamic upgrades.<br/>
+For example:
+    double damage when on <50% health
+
+We want the best of both worlds.
+What if we keep two lists, one for `dynamic` upgrades, and one for
+`static` upgrades...?
+
+hmmm... this could get messy, do some thinking
+
 
 
