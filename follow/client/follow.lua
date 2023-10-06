@@ -42,7 +42,7 @@ function listener:wheelmoved(dx,dy)
     end
 
     -- now clamp:
-    camera.scale = math.min(math.max(camera.scale, MIN_ZOOM), MAX_ZOOM)
+    camera.scale = math.clamp(camera.scale, MIN_ZOOM, MAX_ZOOM)
 
     self:lockMouseWheel()
 end

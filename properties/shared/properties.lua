@@ -43,6 +43,13 @@ local function getModifier(ent, property)
     return umg.ask("properties:getPropertyModifier", ent, property) or 0
 end
 
+local function getClamp(ent, property)
+    -- the min/max a property value can take
+    local min, max = umg.ask("properties:getPropertyClamp", ent, property)
+    max = math.max(max, min) -- max cant be smaller than min.
+    return min, max
+end
+
 
 local function computeProperty(ent, property, config)
     local multiplier = 1 -- multiplicative modifier
@@ -58,7 +65,10 @@ local function computeProperty(ent, property, config)
     multiplier = multiplier * getMultiplier(ent, property)
     modifier = modifier + getModifier(ent, property)
 
-    return modifier * multiplier
+    local value = modifier * multiplier
+    local min, max = getClamp(ent, property)
+
+    return math.clamp(value, min, max)
 end
 
 

@@ -48,9 +48,14 @@ ent.upgrades = UpgradeManager({
 
 
 
--- Upgrade entities:
-ent.upgrade = {
 
+
+-- Upgrade entities:
+-- ie entities that *provide* the upgrades.
+ent.upgrade = {
+    property = "strength",
+    multiplier = 1.5,
+    modifier = 10
 }
 
 
@@ -88,20 +93,32 @@ UpgradeManager:recalculate(property?)
 
 
 
+
 --[[
     Integration with items mod:
 ]]
-umg.on("items:itemMoved", function(ent, itemEnt)
+local UpgradeSlotHandle = objects.Class("...", items.SlotHandle)
+
+function UpgradeSlotHandle:onItemAdded(itemEnt)
+    local ent = self:getOwner()
     if isUpgrade(itemEnt) and ent.upgrades then
         ent.upgrades:addUpgrade(itemEnt)
     end
-end)
+end
 
-umg.on("items:itemRemoved", function(ent, itemEnt)
+function UpgradeSlotHandle:onItemRemoved(itemEnt)
+    local ent = self:getOwner()
     if isUpgrade(itemEnt) and ent.upgrades then
         ent.upgrades:removeUpgrade(itemEnt)
     end
-end)
+end
+
+function UpgradeSlotHandle:canAddItem(itemEnt)
+    return isUpgrade(itemEnt)
+end
+--[[
+    This would also work great with armor, boots, etc etc.
+]]
 
 
 ```
@@ -113,6 +130,6 @@ We want special upgrades.
 ie. upgrades that do MORE than just mutate a property.
 
 ie: 
-When entity is on
+When entity is on fire:
 
 

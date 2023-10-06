@@ -19,7 +19,7 @@ local setStrengthTC = typecheck.assert("number")
 
 function vignette.setStrength(strength)
     setStrengthTC(strength)
-    vignetteStrength = math.min(math.max(0, strength), 1)
+    vignetteStrength = math.clamp(strength, 0, 1)
 end
 
 --[[
