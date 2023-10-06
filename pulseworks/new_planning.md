@@ -1,6 +1,6 @@
 
 
-# wireworld planning:
+# Pulseworks new planning:
 
 Components:
 ```lua
@@ -45,7 +45,8 @@ ent.reactance = 1
 ## Emergence:
 We want any entity to be able to conduct pulse.
 
-For example, the player.
+For example, a metal buffalo.
+When a metal buffalo runs past a circuit, it should conduct pulse.
 
 
 ## Alternative electrical components:

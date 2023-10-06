@@ -8,6 +8,8 @@ then draws them.
 
 ]]
 
+print("hi")
+
 
 local constants = require("client.constants")
 local sort = require("libs.sort")

@@ -1,0 +1,5 @@
+{
+    "uses": ["dimensions", "objects"],
+    
+    "type": "base"
+}
