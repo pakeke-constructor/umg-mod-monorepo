@@ -286,7 +286,8 @@ We want the best of both worlds.
 What if we keep two lists, one for `dynamic` upgrades, and one for
 `static` upgrades...?
 
-hmmm... this could get messy, do some thinking
+hmmm... this could be fragile, since that would require
+upgrades to explicitly state whether they are dynamic or static.
 
 **SOLUTION:**<br/>
 Upgrades are individual entities, right?
