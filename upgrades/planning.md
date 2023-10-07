@@ -133,6 +133,15 @@ ie:
 When entity is on fire:
     add +2 damage
 
+**DO A LOT OF THINKING ABOUT THIS!!!**
+This has the potential to be REALLY good.
+Think of `usable` items, and how amazing/extensive they are.   
+Surely we can emulate some of that awesomeness here, too?
+
+Make sure to emit sufficient questions, and events
+
+
+
 
 # How often should we automatically recalculate?
 OK.
