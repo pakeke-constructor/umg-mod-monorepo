@@ -43,9 +43,15 @@ local function getModifier(ent, property)
     return umg.ask("properties:getPropertyModifier", ent, property) or 0
 end
 
+
+local DEFAULT_MAX = 1000000000 -- 1 billion seems good..??
+local DEFAULT_MIN = -DEFAULT_MAX
+
 local function getClamp(ent, property)
     -- the min/max a property value can take
     local min, max = umg.ask("properties:getPropertyClamp", ent, property)
+    min = min or DEFAULT_MIN
+    max = max or DEFAULT_MAX
     max = math.max(max, min) -- max cant be smaller than min.
     return min, max
 end
