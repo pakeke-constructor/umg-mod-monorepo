@@ -1,17 +1,16 @@
 
 
-# upgrades mod
+# effects mod
 
-Handles upgrades for entities, that modify properties and stuff.
+Handles upgrades and passives for entities, 
+that modify properties and stuff.
 
-The reason I created this file, is because I thought of 
-a nice (and efficient) way to cache upgrades.
 
 
 ## idea / implementation:
 
 IDEA:
-Have `upgrades` be regular entities! (ie could be item entities)
+Have `effect` be regular entities! (ie could be item entities)
 
 -------------
 
@@ -19,7 +18,7 @@ When calculating properties,
 we can take advantage of the fact that state *already exists.*
 ```lua
 
-ent.upgrades = UpgradeManager({
+ent.effects = EffectHandler({
     modifiers = {
         -- list of modifiers for all properties:
         -- (This just serves as an internal cache)
@@ -50,15 +49,6 @@ ent.upgrades = UpgradeManager({
 
 
 
--- Upgrade entities:
--- ie entities that *provide* the upgrades.
-ent.upgrade = {
-    ... -- info about what the upgrade does
-}
-
-
-
-
 
 umg.answer("properties:getPropertyMultiplier", function(ent, prop)
     if ent.upgrades then
@@ -72,18 +62,22 @@ end)
 umg.answer(...)
 -- (same for `modifiers`)
 
+umg.answer(...)
+-- (same for clamps)
+
 
 
 -- add/remove upgrades:
-UpgradeManager:addUpgrade(itemEnt)
-UpgradeManager:removeUpgrade(itemEnt)
--- these should emit `:upgradeAdded` and :upgradeRemoved callbacks
--- (assuming that the upgrade WAS actually added/removed.)
+EffectHandler:addEffect(itemEnt)
+EffectHandler:removeEffect(itemEnt)
+-- these should emit `:effectAdded` and :effectRemoved callbacks
+-- (assuming that the effect WAS actually added/removed.)
 
-UpgradeManager:getMultiplier(property)
-UpgradeManager:getModifier(property)
+EffectHandler:getMultiplier(property)
+EffectHandler:getModifier(property)
+EffectHandler:getClamp(property)
 
-UpgradeManager:recalculate(property?)
+EffectHandler:recalculate(property?)
 -- recalculates cache.
 -- if property not specified, recalculates all properties.
 -- This will also get rid of dead entities.
@@ -95,23 +89,23 @@ UpgradeManager:recalculate(property?)
 --[[
     Integration with items mod:
 ]]
-local UpgradeSlotHandle = objects.Class("...", items.SlotHandle)
+local EffectSlotHandle = objects.Class("...", items.SlotHandle)
 
-function UpgradeSlotHandle:onItemAdded(itemEnt)
+function EffectSlotHandle:onItemAdded(itemEnt)
     local ent = self:getOwner()
     if isUpgrade(itemEnt) and ent.upgrades then
         ent.upgrades:addUpgrade(itemEnt)
     end
 end
 
-function UpgradeSlotHandle:onItemRemoved(itemEnt)
+function EffectSlotHandle:onItemRemoved(itemEnt)
     local ent = self:getOwner()
     if isUpgrade(itemEnt) and ent.upgrades then
         ent.upgrades:removeUpgrade(itemEnt)
     end
 end
 
-function UpgradeSlotHandle:canAddItem(itemEnt)
+function EffectSlotHandle:canAddItem(itemEnt)
     return isUpgrade(itemEnt)
 end
 --[[
@@ -201,9 +195,11 @@ Some upgrades will be computationally expensive.
 Each entity should choose how much cacheing they should do; because the
 entity itself will know (roughly) how expensive it is.
 
+when an effect is added, `effect:`
+
 ```lua
 -- basic setup:
-ent.upgrade = {
+ent.effect = {
     property = "strength",
     multiplier = 1.5,
     modifier = 10,
@@ -211,7 +207,7 @@ ent.upgrade = {
 
 -- Exact same as before, but using functions instead:
 -- This allows us to do more exotic calculations! :)
-ent.upgrade = {
+ent.effect = {
     property = "strength",
     shouldApply = function(ent, ownerEnt)
         return true -- if returns false, this upgrade doesnt apply
@@ -226,7 +222,7 @@ ent.upgrade = {
 
 -- Exact same as before, but using multiple rules:
 -- (This is useful if we want +5% health, -2% speed or something)
-ent.upgrade = {
+ent.effect = {
     {
         property = "strength",
         multiplier = 0.9
@@ -241,19 +237,46 @@ ent.upgrade = {
 
 
 # Passive format:
-A "passive" is an action that is triggered.
+A "passive" is an action that is triggered:
 ```lua
 
 ent.passive = {
     -- TODO: how should we do triggers? Do some thinking.
     trigger = "mortality:onDamage",
 
-    -- an ``
-    action = function(ent, ownerEnt)
+    -- an `effects:shouldBlockPassiveActivation` question
+    -- should be asked here (internally)
+    shouldActivate = function(ent, ownerEnt)
+        return true
+    end,
 
+    -- an `effects:passiveTrigger` event is emitted here
+    action = function(ent, ownerEnt)
+        -- do something
     end
 }
+
+-- using effects:shouldBlockPassiveActivation,
+-- we can create a couple of good components:
+
+ent.passiveCooldown = 3 -- passive can only happen once every 3 seconds
+
+ent.passiveActivations = 100 -- how many times the passive can activate
+-- (decreases once every time the passive activates)
 ```
+
+
+
+# SUPER IMPORTANT:
+Could it be possible to reduce the coupling between `EffectHandler`
+and `effect`/`passive` entities to zero?
+
+Similar to how `usables` was de-coupled from `items` mod.
+
+^^^ If this is too hard, dont do it this way.
+But PLEASE. Try to do it this way. take the `usables` and `items` mods
+as examples.
+It's much better for `usables` to be abstracted away.
 
 
 
@@ -269,7 +292,7 @@ ent.passive = {
 -------------
 
 
-# How often should we automatically recalculate?
+# How often should we automatically recalculate properties?
 OK.
 Obviously, this is a bit awkward. 
 We want dynamic upgrades. ie. per-tick recalculation.
@@ -287,10 +310,10 @@ What if we keep two lists, one for `dynamic` upgrades, and one for
 `static` upgrades...?
 
 hmmm... this could be fragile, since that would require
-upgrades to explicitly state whether they are dynamic or static.
+upgrades to explicitly know whether they are dynamic or static.
+And thats just dumb.
 
 **SOLUTION:**<br/>
 Upgrades are individual entities, right?
 How about we allow for each entity to choose it's own cacheing behaviour.
-This could be a bit bloat-y tho.
 
