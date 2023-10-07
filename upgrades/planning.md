@@ -74,7 +74,7 @@ umg.answer(...)
 
 
 
--- add/remove upgrades
+-- add/remove upgrades:
 UpgradeManager:addUpgrade(itemEnt)
 UpgradeManager:removeUpgrade(itemEnt)
 -- these should emit `:upgradeAdded` and :upgradeRemoved callbacks
@@ -175,18 +175,83 @@ TODO: Maybe these are closer to "abilities" than "upgrades"...?
     - Meta/reflective behaviour
     - Requires a well-defined `trigger` format
 
-
-Ok. So clearly we have a few issues here.
-The first thing that becomes immediately apparent:<br/>
-We *need* to allow upgrades to contain internal state. But we need to do this cleanly.
+- On death: revive as 3 clones of yourself, and delete this upgrade.
+    - This one is actually really easy, just delete self! :)
 
 
+## IDEA: Split into `upgrade` and `passive`.
+There are a types of upgrades:
+- Upgrades:
+    - stat up, when condition
+    - do something each frame, when condition
+- Passives:
+    trigger, action
+    - on trigger, do action
+    - (We dont need targets/filters here, since we will emit an event.
+        Future systems can use targets/filters if they want)
+
+
+-------------
+
+
+
+# Upgrade format:
+TODO: We need to add some options to allow for cacheing.
+Some upgrades will be computationally expensive.
+Each entity should choose how much cacheing they should do; because the
+entity itself will know (roughly) how expensive it is.
 
 ```lua
+-- basic setup:
 ent.upgrade = {
     property = "strength",
     multiplier = 1.5,
-    modifier = 10
+    modifier = 10,
+}
+
+-- Exact same as before, but using functions instead:
+-- This allows us to do more exotic calculations! :)
+ent.upgrade = {
+    property = "strength",
+    shouldApply = function(ent, ownerEnt)
+        return true -- if returns false, this upgrade doesnt apply
+    end,
+    multiplier = function(ent, ownerEnt)
+        return 1.5
+    end,
+    modifier = function(ent, ownerEnt)
+        return 10
+    end
+}
+
+-- Exact same as before, but using multiple rules:
+-- (This is useful if we want +5% health, -2% speed or something)
+ent.upgrade = {
+    {
+        property = "strength",
+        multiplier = 0.9
+    },
+    {
+        property = "strength",
+        modifier = 10
+    }
+}
+
+```
+
+
+# Passive format:
+A "passive" is an action that is triggered.
+```lua
+
+ent.passive = {
+    -- TODO: how should we do triggers? Do some thinking.
+    trigger = "mortality:onDamage",
+
+    -- an ``
+    action = function(ent, ownerEnt)
+
+    end
 }
 ```
 
@@ -198,7 +263,8 @@ ent.upgrade = {
 
 
 
---------------
+
+
 
 -------------
 
@@ -222,5 +288,8 @@ What if we keep two lists, one for `dynamic` upgrades, and one for
 
 hmmm... this could get messy, do some thinking
 
-
+**SOLUTION:**<br/>
+Upgrades are individual entities, right?
+How about we allow for each entity to choose it's own cacheing behaviour.
+This could be a bit bloat-y tho.
 
