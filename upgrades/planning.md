@@ -53,9 +53,7 @@ ent.upgrades = UpgradeManager({
 -- Upgrade entities:
 -- ie entities that *provide* the upgrades.
 ent.upgrade = {
-    property = "strength",
-    multiplier = 1.5,
-    modifier = 10
+    ... -- info about what the upgrade does
 }
 
 
@@ -135,12 +133,74 @@ When entity is on fire:
 
 **DO A LOT OF THINKING ABOUT THIS!!!**
 This has the potential to be REALLY good.
-Think of `usable` items, and how amazing/extensive they are.   
+Think of usable items, and how amazing/extensive they are.   
 Surely we can emulate some of that awesomeness here, too?
 
-Make sure to emit sufficient questions, and events
+Make sure to emit sufficient questions, and events!
+
+Ok. I think the fairest way to evaluate how "effective" the upgrade
+system is, is to come up with a bunch of upgrades that we would LIKE
+to have, and then try to create a setup that would easily allow
+for all those types.
+
+### Ideas for what we want:
+
+- When below 50% health, gain x2 strength
+    - Conditional upgrades at runtime
+
+- Lose 2 Max hp, +5 speed
+    - Multi-property upgrades
+
+- Gain 50% of maxHealth as strength, up to a maximum of 100
+    - Incrementors that depend on other components/properties
+
+- When lit on fire, emit a pulse of electricity
+    - Responding to changes to holder entity; interacting with world
+
+- If entity's inventory is full, gain +10 speed
+    - Introspecting entity
+
+- If taken damage in last 3 seconds, shoot cheese instead of bullets
+    - Tagging onto events cleanly
+    - Answering questions cleanly
+
+### We also want some more "meta" upgrades:
+TODO: Maybe these are closer to "abilities" than "upgrades"...?
+
+- Upon taking damage: this upgrade mimics a random upgrade for 5 seconds
+    - Meta/reflective behaviour
+    - Dynamicism. Able to change itself easily.
+
+- Upon taking damage: Trigger all other upgrade abilities
+    - Meta/reflective behaviour
+    - Requires a well-defined `trigger` format
 
 
+Ok. So clearly we have a few issues here.
+The first thing that becomes immediately apparent:<br/>
+We *need* to allow upgrades to contain internal state. But we need to do this cleanly.
+
+
+
+```lua
+ent.upgrade = {
+    property = "strength",
+    multiplier = 1.5,
+    modifier = 10
+}
+```
+
+
+
+
+
+
+
+
+
+--------------
+
+-------------
 
 
 # How often should we automatically recalculate?
