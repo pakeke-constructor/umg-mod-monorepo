@@ -271,12 +271,11 @@ ent.passiveActivations = 100 -- how many times the passive can activate
 Could it be possible to reduce the coupling between `EffectHandler`
 and `effect`/`passive` entities to zero?
 
-Similar to how `usables` was de-coupled from `items` mod.
+Similar to how `usables` was de-coupled from the `Inventory`...?
 
-^^^ If this is too hard, dont do it this way.
-But PLEASE. Try to do it this way. take the `usables` and `items` mods
-as examples.
-It's much better for `usables` to be abstracted away.
+^^^ If this is too difficult, dont do it.
+But PLEASE. At least try to do it this way.
+take the `usables` and `Inventory` de-coupling as the golden example.
 
 
 
