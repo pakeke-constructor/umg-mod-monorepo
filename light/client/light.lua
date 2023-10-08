@@ -53,15 +53,26 @@ local function drawLight(ent, globalModifier)
 end
 
 
+local function resetLighting(dimension)
+    local overseerEnt = dimensions.getOverseer(dimension)
+    local col = overseerEnt.lighting or defaultLighting
+    local r,g,b = col[1], col[2], col[3]
+    local r1,g1,b1 = umg.ask("light:getGlobalLightingModifier")
+    r1 = r1 or 0
+    g1 = g1 or 0
+    b1 = b1 or 0
+    love.graphics.clear(r+r1, g+g1, b+b1)
+end
+
+
+
 local function setupCanvas(camera)
     love.graphics.push("all")
     love.graphics.setCanvas(canvas)
+    local dimension = camera:getDimension()
 
     -- reset lights:
-    local dimension = camera:getDimension()
-    local overseerEnt = dimensions.getOverseer(dimension)
-    local col = overseerEnt.lighting or defaultLighting
-    love.graphics.clear(col)
+    resetLighting(dimension)
 
     local globalModifier = umg.ask("light:getGlobalLightSizeMultiplier") or 1
 

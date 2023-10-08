@@ -57,6 +57,15 @@ function reducers.ADD_VECTOR(x1,x2, y1,y2)
 end
 
 
+function reducers.ADD_VECTOR3(x1,x2, y1,y2, z1,z2)
+    --[[
+        combines 3d vectors together by adding.
+        (Answers must return 3 numbers)
+    ]]
+    return x1 + x2, y1 + y2, z1+z2
+end
+
+
 function reducers.MULTIPLY_VECTOR(x1,x2, y1,y2)
     --[[
         combines vectors together by multiplying.

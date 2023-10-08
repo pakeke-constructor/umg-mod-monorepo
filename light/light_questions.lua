@@ -13,3 +13,5 @@ umg.defineQuestion("light:getLightSizeMultiplier", reducers.MULTIPLY)
 ]]
 umg.defineQuestion("light:getGlobalLightSizeMultiplier", reducers.MULTIPLY)
 
+
+umg.defineQuestion("light:getGlobalLightingModifier", reducers.ADD_VECTOR3)
