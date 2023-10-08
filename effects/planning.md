@@ -3,7 +3,17 @@
 # effects mod
 
 Handles upgrades and passives for entities, 
-that modify properties and stuff.
+that modify properties and provide effects.
+
+Examples of effects:
+- Armor
+- Potion effects
+- Upgrades (ie. +2 maxHealth)
+- Passives (ie. explode on death)
+
+^^^ All of these entities are examples of `effect`s!
+They all use the same system, and IMO, that's *beautiful.*
+
 
 
 
@@ -158,6 +168,13 @@ for all those types.
     - Tagging onto events cleanly
     - Answering questions cleanly
 
+- Upon picking up coins: have a 20% chance to double the pickup.
+    - Tagging onto events cleanly
+
+- Gives night vision
+    - Answering questions cleanly
+
+
 ### We also want some more "meta" upgrades:
 TODO: Maybe these are closer to "abilities" than "upgrades"...?
 
@@ -165,24 +182,34 @@ TODO: Maybe these are closer to "abilities" than "upgrades"...?
     - Meta/reflective behaviour
     - Dynamicism. Able to change itself easily.
 
-- Upon taking damage: Trigger all other upgrade abilities
+- Upon taking damage: Trigger all other passive effects
     - Meta/reflective behaviour
     - Requires a well-defined `trigger` format
 
+- -5% speed. After 200 seconds, this effect deletes itself, 
+        and all active effects are doubled in potency.
+    - Meta/reflective behaviour
+
 - On death: revive as 3 clones of yourself, and delete this upgrade.
-    - This one is actually really easy, just delete self! :)
+    - This one is actually really easy, just delete self!
+
+- On shoot bullet: Give all onDeath effects to the shot bullet
+    - THIS ONE WOULD BE SO COOL! :D
 
 
-## IDEA: Split into `upgrade` and `passive`.
+
+## IDEA: Split into parts: 
+### `effect`, `effectAnswer`, and `effectTrigger`:
 There are a types of upgrades:
-- Upgrades:
+- effect:
     - stat up, when condition
     - do something each frame, when condition
-- Passives:
-    trigger, action
-    - on trigger, do action
+- eventEffect:
+    - triggers an ability by listening to events from an event-bus.
     - (We dont need targets/filters here, since we will emit an event.
         Future systems can use targets/filters if they want)
+- questionEffect:
+    answers a question from a question-bus.
 
 
 -------------
@@ -236,35 +263,63 @@ ent.effect = {
 ```
 
 
-# Passive format:
-A "passive" is an action that is triggered:
+# eventEffects:
 ```lua
 
-ent.passive = {
+ent.eventEffect = {
     -- TODO: how should we do triggers? Do some thinking.
     trigger = "mortality:onDamage",
 
-    -- an `effects:shouldBlockPassiveActivation` question
+    -- an `effects:shouldBlockPassiveTrigger` question
     -- should be asked here (internally)
-    shouldActivate = function(ent, ownerEnt)
+    shouldTrigger = function(ent, ownerEnt)
         return true
-    end,
-
-    -- an `effects:passiveTrigger` event is emitted here
-    action = function(ent, ownerEnt)
-        -- do something
     end
+    -- After a passive is triggered, 
+    -- a `effects:passiveTrigger` event is emitted.
+
+    -- Note that passives don't actually contain any abilities!
+    -- that is done by the `ability` component.
 }
+
 
 -- using effects:shouldBlockPassiveActivation,
 -- we can create a couple of good components:
+ent.eventEffectCooldown = 3 -- passive can only happen once every 3 seconds
 
-ent.passiveCooldown = 3 -- passive can only happen once every 3 seconds
-
-ent.passiveActivations = 100 -- how many times the passive can activate
+ent.eventEffectActivations = 100 -- how many times the passive can activate
 -- (decreases once every time the passive activates)
+-- We can use this to do stuff like: max 100 activations per round
 ```
 
+# Ability component:
+We also need an `ability` so that our passive actually has an effect:
+```lua
+ent.ability = {
+    activate = function(ent, ownerEnt)
+        -- do something.
+        -- `ownerEnt` is the entity that the ability was activated on.
+    end
+}
+
+
+-- To activate an ability, use:
+effect.activateAbility(abilityEnt, ownerEnt)
+
+```
+
+
+# Potion effect implementation:
+We can support potions by adding a `lifetime` component
+to an effect/passive entity.
+
+this is honestly beautiful.
+This essentially means that we can take ANY effect,
+and convert it into a potion-effect.
+
+
+
+-----------------
 
 
 # SUPER IMPORTANT:
@@ -281,6 +336,36 @@ take the `usables` and `Inventory` de-coupling as the golden example.
 
 
 
+
+# Tagging onto events/questions:
+How do we tag onto events cleanly?
+For example, say that one of our `passive` items wants to respond
+to the `projectiles:getProjectileType` question.<br/>
+How should we allow this response?
+
+Perhaps an api:
+`effects.callEvent(ent, eventName)`:
+Dispatches an event to `ent`, (iff `ent` has .effects component)
+
+Same for questions: `answer = effects.askQuestion(ent, questionName)`
+
+Example:
+```lua
+umg.on("items:itemMoved", function(ownerEnt, item, sx, sy)
+    effects.dispatchEvent("items:itemMoved", ownerEnt, item, sx, sy)
+end)
+```
+We *could* do this automatically, like `sync.autoSyncComponent`...<br/>
+But the reason we dispatch it manually, is because for some events,
+`ownerEnt` may be in a different order.<br/>
+Its cleaner and less fragile if we be explicit, rather than assuming
+that `ownerEnt` is passed first.
+
+
+
+
+# Abstracting away `abilities`:
+We want to be able to reuse `abilities`
 
 
 
