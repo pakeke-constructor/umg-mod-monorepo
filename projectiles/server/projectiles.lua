@@ -26,12 +26,15 @@ end
 
 local DEFAULT_LIFETIME = 5
 
-local MAXX = 0xffffffffff -- any lifetime longer than this is pointless
+local LONG_TIME = 0xffffffffff -- >500 years in seconds
+
 
 projectileGroup:onAdded(function(ent)
     assertOk(ent)
     local lifetime = ent.projectile.lifetime or DEFAULT_LIFETIME
-    if lifetime < MAXX then
+    if lifetime < LONG_TIME then
+        -- this check is for efficiency reasons.
+        -- Any time longer than this, and we shouldnt bother adding .lifetime
         ent.lifetime = lifetime
     end
 end)

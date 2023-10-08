@@ -202,7 +202,7 @@ TODO: Maybe these are closer to "abilities" than "upgrades"...?
 
 - propertyEffect:
     - modify property, when condition
-- frameEffect:
+- frameEffect: 
     - do something each frame, when condition
 - componentEffect:
     - ensure a component exists / change a component, when condition
