@@ -1,8 +1,53 @@
 
+
+local projectileGroup = umg.group("projectile")
+
+
 --[[
 
-TODO:
+projectiles should decay over time.
 
+We don't want proj entities existing "forever", because that
+would be dumb, AND it would put strain on the engine.
+
+Proposal:
+Every `projectile` entity is given a `lifetime` value.
+(A default value is given if none provided)
+
+
+]]
+local function assertOk(ent)
+    local proj = ent.projectile
+    if type(proj) ~= "table" then
+        error(".projectile component needs to be a table. Not the case for: " .. tostring(ent:type()))
+    end
+end
+
+
+local DEFAULT_LIFETIME = 5
+
+local MAXX = 0xffffffffff -- any lifetime longer than this is pointless
+
+projectileGroup:onAdded(function(ent)
+    assertOk(ent)
+    local lifetime = ent.projectile.lifetime or DEFAULT_LIFETIME
+    if lifetime < MAXX then
+        ent.lifetime = lifetime
+    end
+end)
+
+
+
+
+
+
+
+
+
+
+--[[
+
+For collisions:
 There are still a few unsupported features.
 
 We need:
