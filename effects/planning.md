@@ -35,7 +35,7 @@ ent.effects = EffectHandler({
         maxHealth = 10,
         --[[
         this is the AGGREGATE maxHealth modifier 
-        from ALL maxHeath upgrades.
+        from ALL maxHeath effects.
         ]] 
         ...
     },
@@ -45,13 +45,13 @@ ent.effects = EffectHandler({
         speed = 0.9,
         --[[
         this is the AGGREGATE speed multiplier 
-        from ALL speed upgrades.
+        from ALL speed effects.
         ]] 
     }
 
-    upgrades = Set({
-        -- a set of upgrade entities:
-        upgradeEnt, upgradeEnt2
+    effects = Set({
+        -- a set of effect entities:
+        effectEnt, effectEnt2
     })
 })
 
@@ -62,8 +62,8 @@ ent.effects = EffectHandler({
 
 umg.answer("properties:getPropertyMultiplier", function(ent, prop)
     if ent.upgrades then
-        if ent.upgrades.multipliers[prop] then
-            return ent.upgrades.multipliers[prop]
+        if ent.effects.multipliers[prop] then
+            return ent.effects.multipliers[prop]
         end
     end
 end)
@@ -198,17 +198,21 @@ TODO: Maybe these are closer to "abilities" than "upgrades"...?
 
 
 
-## IDEA: Split into parts: 
-### `effect`, `effectAnswer`, and `effectTrigger`:
-There are a types of upgrades:
-- effect:
-    - stat up, when condition
+## Split into parts: 
+
+- propertyEffect:
+    - modify property, when condition
+- frameEffect:
     - do something each frame, when condition
-- effectTrigger:
+- componentEffect:
+    - ensure a component exists / change a component, when condition
+    This is useful for stuff like `ent.fireResistance`, because we can
+    set `ent.fireResistance=true` without needing to tap into the q-bus.
+- triggerEffect:
     - triggers an ability by listening to events from an event-bus.
     - (We dont need targets/filters here, since we will emit an event.
         Future systems can use targets/filters if they want)
-- effectAnswer:
+- answerEffect:
     answers a question from a question-bus.
 
 
@@ -216,25 +220,26 @@ There are a types of upgrades:
 
 
 
-# Upgrade format:
+
+# propertyEffect:
 TODO: We need to add some options to allow for cacheing.
-Some upgrades will be computationally expensive.
+Some propertyEffects will be computationally expensive.
 Each entity should choose how much cacheing they should do; because the
 entity itself will know (roughly) how expensive it is.
-
-when an effect is added, `effect:`
-
 ```lua
 -- basic setup:
-ent.effect = {
+ent.propertyEffect = {
     property = "strength",
     multiplier = 1.5,
     modifier = 10,
 }
+--[[
+    TODO: Allow for cacheing!
+]]
 
 -- Exact same as before, but using functions instead:
 -- This allows us to do more exotic calculations! :)
-ent.effect = {
+ent.propertyEffect = {
     property = "strength",
     shouldApply = function(ent, ownerEnt)
         return true -- if returns false, this upgrade doesnt apply
@@ -249,7 +254,7 @@ ent.effect = {
 
 -- Exact same as before, but using multiple rules:
 -- (This is useful if we want +5% health, -2% speed or something)
-ent.effect = {
+ent.propertyEffect = {
     {
         property = "strength",
         multiplier = 0.9
@@ -268,13 +273,13 @@ ent.effect = {
 
 
 
-# effectAnswer:
-We can use `effectAnswer`
+# answerEffect:
+We can use `answerEffect` to answer questions from question-buses
 ```lua
 
-ent.effectAnswer = {
-    -- TODO: Think of how we are going to do this!
-    -- I think that implicit umg.answer is a bad idea.
+ent.answerEffect = {
+    -- TODO: Plan this better, integrate this with
+    -- effects.askQuestion
     question = "light:getGlobalLightSizeMultiplier",
 
     shouldAnswer = function(ent, ownerEnt)
@@ -295,27 +300,26 @@ ent.effectAnswer = {
 
 
 
-# effectTrigger:
-effectTriggers are 
+# triggerEffect:
+triggerEffects are 
 ```lua
 
-ent.effectTrigger = {
+ent.triggerEffect = {
+    -- TODO: Plan this better, integrate this with
+    -- effects.callEvent
     event = "mortality:onDamage",
 
-    -- an `effects:isEventTriggerBlocked` question
+    -- an `effects:isTriggerBlocked` question
     -- should be asked here (internally)
     shouldTrigger = function(ent, ownerEnt)
         return true
     end
-    -- After a passive is triggered, 
-    -- a `effects:eventTrigger` event is emitted.
 
+    -- After this is triggered,
+    -- a `effects:triggerEffect` event is emitted.
     trigger = function(ent, ownerEnt)
         -- do something
     end
-
-    -- Note that passives don't actually contain any abilities!
-    -- that is done by the `ability` component.
 }
 
 
@@ -342,7 +346,7 @@ ent.ability = {
 
 
 -- To activate an ability, use:
-effect.activateAbility(abilityEnt, ownerEnt)
+effects.activateAbility(abilityEnt, ownerEnt)
 --[[
     This allows us to use abilities in a context that is unrelated
     to effects!

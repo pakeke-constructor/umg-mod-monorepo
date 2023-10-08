@@ -7,8 +7,7 @@ We don't want proj entities existing "forever", because that
 would be dumb, AND it would put strain on the engine.
 
 Proposal:
-Every `projectile` entity is given a `decay` value.
-A sensible default could be like, 2 seconds, or something.
+Every `projectile` entity is given a `lifetime` value.
 
 
 
@@ -17,10 +16,6 @@ A sensible default could be like, 2 seconds, or something.
 
 
 local projectileGroup = umg.group("projectile")
-
-
-
-local DEFAULT_LIFETIME = 5
 
 
 
@@ -34,7 +29,7 @@ end
 
 projectileGroup:onAdded(function(ent)
     assertOk(ent)
-    local lifetime = ent.projectile.lifetime or DEFAULT_LIFETIME
+    local lifetime = ent.projectile.lifetime
     ent.lifetime = lifetime
 end)
 
