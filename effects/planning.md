@@ -182,9 +182,9 @@ TODO: Maybe these are closer to "abilities" than "upgrades"...?
     - Meta/reflective behaviour
     - Dynamicism. Able to change itself easily.
 
-- Upon taking damage: Trigger all other passive effects
+- Upon taking damage: Trigger all other effects this entity has
     - Meta/reflective behaviour
-    - Requires a well-defined `trigger` format
+    - Requires a well-defined trigger format
 
 - -5% speed. After 200 seconds, this effect deletes itself, 
         and all active effects are doubled in potency.
@@ -204,11 +204,11 @@ There are a types of upgrades:
 - effect:
     - stat up, when condition
     - do something each frame, when condition
-- eventEffect:
+- effectTrigger:
     - triggers an ability by listening to events from an event-bus.
     - (We dont need targets/filters here, since we will emit an event.
         Future systems can use targets/filters if they want)
-- questionEffect:
+- effectAnswer:
     answers a question from a question-bus.
 
 
@@ -263,48 +263,93 @@ ent.effect = {
 ```
 
 
-# eventEffects:
+
+
+
+
+
+# effectAnswer:
+We can use `effectAnswer`
 ```lua
 
-ent.eventEffect = {
-    -- TODO: how should we do triggers? Do some thinking.
-    trigger = "mortality:onDamage",
+ent.effectAnswer = {
+    -- TODO: Think of how we are going to do this!
+    -- I think that implicit umg.answer is a bad idea.
+    question = "light:getGlobalLightSizeMultiplier",
 
-    -- an `effects:shouldBlockPassiveTrigger` question
+    shouldAnswer = function(ent, ownerEnt)
+        return true
+    end,
+
+    answer = 1.5
+    answer = function(ent, ownerEnt, ...)
+        -- `...` are extra arguments that are passed
+        return 1.5 -- same as above
+    end
+}
+
+```
+
+
+
+
+
+
+# effectTrigger:
+effectTriggers are 
+```lua
+
+ent.effectTrigger = {
+    event = "mortality:onDamage",
+
+    -- an `effects:isEventTriggerBlocked` question
     -- should be asked here (internally)
     shouldTrigger = function(ent, ownerEnt)
         return true
     end
     -- After a passive is triggered, 
-    -- a `effects:passiveTrigger` event is emitted.
+    -- a `effects:eventTrigger` event is emitted.
+
+    trigger = function(ent, ownerEnt)
+        -- do something
+    end
 
     -- Note that passives don't actually contain any abilities!
     -- that is done by the `ability` component.
 }
 
 
--- using effects:shouldBlockPassiveActivation,
+-- using effects:isEventTriggerBlocked,
 -- we can create a couple of good components:
-ent.eventEffectCooldown = 3 -- passive can only happen once every 3 seconds
+ent.eventTriggerCooldown = 3 -- can only trigger once every 3 seconds
 
-ent.eventEffectActivations = 100 -- how many times the passive can activate
--- (decreases once every time the passive activates)
--- We can use this to do stuff like: max 100 activations per round
+ent.eventTriggerActivations = 100 -- how many times it can trigger
+-- (decreases by 1 every time it triggers)
+-- We can use this to do stuff like: max 100 triggers per round
 ```
 
 # Ability component:
-We also need an `ability` so that our passive actually has an effect:
+We also need an `ability` so that our eventTrigger actually has an effect:
 ```lua
 ent.ability = {
+    canActivate = function(ent, ownerEnt)
+        return true
+    end,
     activate = function(ent, ownerEnt)
         -- do something.
-        -- `ownerEnt` is the entity that the ability was activated on.
     end
 }
 
 
 -- To activate an ability, use:
 effect.activateAbility(abilityEnt, ownerEnt)
+--[[
+    This allows us to use abilities in a context that is unrelated
+    to effects!
+]]
+-- Also: use buses when activating the ability, too:
+-- `effects:isAbilityActivationBlocked` question
+-- `effects:activateAbility` event
 
 ```
 
@@ -360,13 +405,6 @@ But the reason we dispatch it manually, is because for some events,
 `ownerEnt` may be in a different order.<br/>
 Its cleaner and less fragile if we be explicit, rather than assuming
 that `ownerEnt` is passed first.
-
-
-
-
-# Abstracting away `abilities`:
-We want to be able to reuse `abilities`
-
 
 
 
