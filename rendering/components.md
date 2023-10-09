@@ -12,6 +12,9 @@ drawable = true
 image = true
 
 
+onDraw = function(ent)
+    ...
+end
 
 
 

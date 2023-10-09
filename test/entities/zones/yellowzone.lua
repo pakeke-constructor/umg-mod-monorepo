@@ -3,7 +3,7 @@
 local SIZE = 400
 
 return {
-    draw = true,
+    drawable = true,
     yellowZone = true,
     drawDepth = -SIZE,
     size = SIZE,

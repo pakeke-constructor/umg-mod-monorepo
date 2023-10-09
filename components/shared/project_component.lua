@@ -37,7 +37,7 @@ ent.shadow = {...}
 ent:removeComponent("image")
     ent.drawable --> should still be true!
 ]]
-local targetToProjectorGroupList = {--[[
+local targetToProjectorGroupSet = {--[[
     Maps targetComponents to the projectors.
 
     [targetComponent] -> List{ group1, group2, group3, ... }
@@ -65,7 +65,7 @@ local function setupProjectionRemoval(group, targetComponent)
             return -- wtf??? okay...? How tf did this happen?!??
         end
 
-        local projectorGroupList = targetToProjectorGroupList[targetComponent]
+        local projectorGroupList = targetToProjectorGroupSet[targetComponent]
         for _, pGroup in ipairs(projectorGroupList) do
             if pGroup:has(ent) then
                 -- We shouldn't remove the targetComponent,
@@ -119,6 +119,15 @@ local function project(projection, targetComponent, targetValue)
 
     local group = getGroup(projection)
 
+    -- add group to projector group list:
+    local set = targetToProjectorGroupSet[targetComponent]
+    if not set then
+        set = objects.Set()
+        targetToProjectorGroupSet[targetComponent] = set
+    end
+    set:add(group)
+
+    -- set up group projection addition/removal:
     setupProjection(group, targetComponent, targetValue)
     setupProjectionRemoval(group, targetComponent)
 end

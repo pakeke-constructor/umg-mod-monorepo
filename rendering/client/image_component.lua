@@ -28,9 +28,6 @@ local getImage = entityProperties.getImage
 
 
 
-components.project("image", "drawable")
-
-
 
 umg.on("rendering:drawEntity", function(ent)
     local img = getImage(ent)
