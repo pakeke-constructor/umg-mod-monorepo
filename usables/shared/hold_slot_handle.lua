@@ -23,7 +23,9 @@ local holding = require("shared.holding")
 function HoldSlotHandle:onItemAdded(itemEnt)
     if server then
         local holderEnt = self:getOwner()
-        holding.equipItem(holderEnt, itemEnt)
+        if itemEnt.holdable then
+            holding.equipItem(holderEnt, itemEnt)
+        end
     end
 end
 

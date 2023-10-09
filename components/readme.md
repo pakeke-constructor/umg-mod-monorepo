@@ -4,6 +4,7 @@ Provides some useful functions for manipulating components.
 
 
 ```lua
+components.project(projectedComp, targetComp, val)
 -- projects a component onto another component.
 
 -- For example:

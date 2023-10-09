@@ -25,16 +25,24 @@ end
 
 local function updateHolderEnt(holderEnt)
     local itemEnt = getHoldItem(holderEnt)
-    if itemEnt then
-        local handlerFunc = umg.ask("usables:getHoldItemHandler", itemEnt, holderEnt)
-        handlerFunc = handlerFunc or defaultHandler
-        handlerFunc(itemEnt, holderEnt)
-        -- todo: we can ask more/better questions here
-
-        umg.call("usables:updateHoldItem", itemEnt, holderEnt)
-
-        itemEnt.dimension = dimensions.getDimension(holderEnt.dimension)
+    if not itemEnt then
+        return -- no hold item
     end
+
+    if server and (not itemEnt.holdable) then
+        -- unequip the item! its no longer holdable.
+        holding.unequipItem(holderEnt, itemEnt)
+        return
+    end
+
+    local handlerFunc = umg.ask("usables:getHoldItemHandler", itemEnt, holderEnt)
+    handlerFunc = handlerFunc or defaultHandler
+    handlerFunc(itemEnt, holderEnt)
+    -- todo: we can ask more/better questions here
+
+    umg.call("usables:updateHoldItem", itemEnt, holderEnt)
+
+    itemEnt.dimension = dimensions.getDimension(holderEnt.dimension)
 end
 
 
@@ -50,11 +58,14 @@ end
 
 if server then
 
-local function remPosComponents(item)
+local function remItemComponents(item)
     -- remove item position on invalidation:
     item:removeComponent("x")
     item:removeComponent("y")
     item:removeComponent("dimension")
+
+    item:removeComponent("controllable")
+    item:removeComponent("controller")
 end
 
 
@@ -63,6 +74,9 @@ local EMPTY = {}
 local entityItemTc = typecheck.assert("entity", "voidentity")
 function holding.equipItem(holderEnt, itemEnt)
     entityItemTc(holderEnt, itemEnt)
+    if not itemEnt.holdable then
+        error("item is not holdable: (has no .holdable component)", itemEnt)
+    end
 
     holderEnt.holdItem = itemEnt
 
@@ -85,11 +99,8 @@ function holding.unequipItem(holderEnt, itemEnt)
     if not itemEnt then
         return
     end
-    remPosComponents(itemEnt)
+    remItemComponents(itemEnt)
     holderEnt:removeComponent("holdItem")
-    itemEnt:removeComponent("controllable")
-    itemEnt:removeComponent("controller")
-
     umg.call("usables:unequipItem", itemEnt, holderEnt)
 end
 
