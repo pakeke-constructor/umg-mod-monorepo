@@ -91,6 +91,7 @@ end
 
 
 local function getGrid(gridType, width, height)
+    assert(width>0 and height>0, "width or height invalid")
     if not gridMap[gridType] then
         gridMap[gridType] = Grid(gridType, width, height)
     end

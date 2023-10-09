@@ -98,9 +98,13 @@ local function fudgeUIScale(scale)
 end
 
 
+
+local MIN_SCALE = 0.001 -- UI scale cant be lower than this.
+-- The reason we need a min value here is to avoid division by 0
+
 function draw.setUIScale(scale)
     assert(type(scale) == "number", "love.graphics.setUIScale(scale) requires a number")
-    scaleUI = fudgeUIScale(scale)
+    scaleUI = math.max(fudgeUIScale(scale), MIN_SCALE)
 end
 
 

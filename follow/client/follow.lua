@@ -22,8 +22,11 @@ function follow.setMinZoom(min_zoom)
     MIN_ZOOM = min_zoom
 end
 
+
+local MIN_ZOOM_SPEED = 0.0000001
+local MAX_ZOOM_SPEED = 100000000
 function follow.setZoomSpeed(speed)
-    zoom_speed = speed
+    zoom_speed = math.clamp(speed, MIN_ZOOM_SPEED, MAX_ZOOM_SPEED)
 end
 
 

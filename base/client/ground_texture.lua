@@ -86,7 +86,7 @@ local function drawGround(obj)
     start_y = start_y - LEIGHWAY
     endx, endy = endx+LEIGHWAY, endy+LEIGHWAY
 
-    local tw,th = obj.tileWidth-1, obj.tileHeight-1
+    local tw,th = math.max(obj.tileWidth-1,1), math.max(obj.tileHeight-1,1)
     
     local dx = camera.x % tw
     local dy = camera.y % th
