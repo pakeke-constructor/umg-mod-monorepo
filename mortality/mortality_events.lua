@@ -7,6 +7,6 @@ umg.defineEvent("mortality:entityDeath")
 
 -- Called when an entity takes damage through
 -- `mortality.server.damage(ent, x)`
-umg.defineEvent("mortality:damage")
+umg.defineEvent("mortality:entityDamaged")
 
 

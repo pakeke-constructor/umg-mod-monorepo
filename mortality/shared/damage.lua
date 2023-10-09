@@ -3,7 +3,7 @@
 require("mortality_events")
 require("mortality_questions")
 
-sync.proxyEventToClient("mortality:damage")
+sync.proxyEventToClient("mortality:entityDamaged")
 
 
 
@@ -22,7 +22,7 @@ local function damage(ent, dmg)
     -- TODO: is this in the correct order?
     -- should we change the health after emitting the callback?
     ent.health = ent.health - dmg
-    umg.call("mortality:damage", ent, dmg)
+    umg.call("mortality:entityDamaged", ent, dmg)
 end
 
 
