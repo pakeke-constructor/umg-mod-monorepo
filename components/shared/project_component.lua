@@ -4,8 +4,17 @@
 
 TODO: SUPER SUPER IMPORTANT:
 
-There is a *HUGE* optimization opportunity we can make here.
-If loop over all entityTypes, and check for etypes with components
+There is a pretty big optimization opportunity we can make here.
+We can loop over all entityTypes, and check for etypes with
+projection-components.
+
+From there, we should add targetComponents to the etype from a static
+context!
+This would make things a bit more efficient.
+
+The issue, is that currently the UMG engine doesn't allow for mutating
+entity-types at runtime.
+Some changes will need to happen before we can do this optimization.
 
 
 
