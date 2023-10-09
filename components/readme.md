@@ -7,7 +7,7 @@ Provides some useful functions for manipulating components.
 -- projects a component onto another component.
 
 -- For example:
-project("image", "drawable", true)
+components.project("image", "drawable", true)
 --[[
 This is basically saying:
 when an entity gets an `image` component:
@@ -17,7 +17,7 @@ when an entity gets an `image` component:
 
 -- We can also do groups:
 local g = umg.group("foo", "bar", 42)
-project(g, "foobar")
+components.project(g, "foobar")
 --[[
     any entity with `foo` and `bar` components
     automatically get `ent.foobar = 42`
