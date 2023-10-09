@@ -46,7 +46,7 @@ server.on("entityClicked", {
 
 else -- clientside:
 
-local clickEnts = umg.group("x", "y", "onClick")
+local clickEnts = umg.group("x", "y", "clickable")
 local listener = input.Listener({priority = 0})
 
 function listener:mousepressed(mx, my, button, istouch, presses)
@@ -82,7 +82,7 @@ end
 
 
 umg.on("control:entityClicked", function(ent, username, button, worldX, worldY)
-    if type(ent.onClick) == "function" then
+    if ent.onClick then
         ent:onClick(username, button, worldX, worldY)
     end
 end)
