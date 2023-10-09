@@ -57,17 +57,6 @@ local function setupProjection(group, targetComponent, targetValue)
 end
 
 
-local function hasProjector(ent, projector)
-    -- `projector` is either a group, or a component name.
-    if type(projector) == "string" then
-        -- its a compName
-        return ent[projector]
-    elseif type(projector) == "table" then
-        -- its a group!
-        return projector:has(ent)
-    end
-    return false
-end
 
 
 local function setupProjectionRemoval(group, targetComponent)
@@ -76,11 +65,11 @@ local function setupProjectionRemoval(group, targetComponent)
             return -- wtf??? okay...? How tf did this happen?!??
         end
 
-        local projectors = targetToProjectorGroupList[targetComponent]
-        for _, projector in ipairs(projectors) do
-            if hasProjector(ent, projector) then
-                -- no need to remove the targetComponent,
-                -- since there something else projecting it.
+        local projectorGroupList = targetToProjectorGroupList[targetComponent]
+        for _, pGroup in ipairs(projectorGroupList) do
+            if pGroup:has(ent) then
+                -- We shouldn't remove the targetComponent,
+                -- since there is another group that is projecting it.
                 return
             end
         end
