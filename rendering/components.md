@@ -5,7 +5,7 @@
 ```lua
 
 
-draw = true
+drawable = true
 -- tells the engine that this entity should be drawn.
 
 

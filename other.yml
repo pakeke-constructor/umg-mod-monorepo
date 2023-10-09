@@ -62,3 +62,5 @@ globals:
     any: true
   properties:
     any: true
+  components:
+    any: true

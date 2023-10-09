@@ -28,14 +28,7 @@ local getImage = entityProperties.getImage
 
 
 
-local imageGroup = umg.group("image")
-
-imageGroup:onAdded(function(ent)
-    if not ent.draw then
-        ent.draw = true
-    end
-end)
-
+components.project("image", "drawable")
 
 
 

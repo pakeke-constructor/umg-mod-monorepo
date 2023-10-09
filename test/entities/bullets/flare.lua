@@ -21,7 +21,7 @@ end
 
 return {
     rotateOnMovement = true,
-    draw = true,
+    drawable = true,
 
     image = "shotgunshell",
 

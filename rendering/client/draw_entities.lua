@@ -28,7 +28,7 @@ end)
 
 
 
-local drawGroup = umg.group("x", "y", "draw")
+local drawGroup = umg.group("x", "y", "drawable")
 
 
 drawGroup:onAdded(function(ent)

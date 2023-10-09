@@ -17,7 +17,7 @@ end
 
 return {
     testMoveToPlayer = true,
-    draw = true,
+    drawable = true,
     slime = true,
 
     spawnOnDeath = {
