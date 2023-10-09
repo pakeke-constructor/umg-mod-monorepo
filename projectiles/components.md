@@ -81,6 +81,7 @@ ent.projectile = {
 --[[
 
 TODO: 
+this componen
 gun component that provides a bunch of sensible defaults.
 Also plays a default sound, and emits default particles.
 Afterwards, provides a bunch of default sounds/particles to choose from.

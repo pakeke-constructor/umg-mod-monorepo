@@ -39,7 +39,7 @@ local DEFAULT_MODE = 1
 
 
 local function callShoot(holderEnt, item, shooter)
-    umg.call("projectiles:useGun", holderEnt, item, shooter)
+    umg.call("projectiles:useShooter", holderEnt, item, shooter)
     shoot(holderEnt, item, shooter)
 end
 
