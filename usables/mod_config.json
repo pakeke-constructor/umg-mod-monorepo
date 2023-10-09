@@ -1,4 +1,4 @@
 {
     "type": "base",
-    "uses": ["items", "objects", "sync", "input"]
+    "uses": ["items", "objects", "sync", "input", "components"]
 }

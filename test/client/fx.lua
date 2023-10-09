@@ -23,7 +23,7 @@ umg.on("mortality:damage", function(ent)
 end)
 
 
-umg.on("projectiles:useGun", function(holderEnt, item, shooter)
+umg.on("projectiles:useShooter", function(holderEnt, item, shooter)
     sound.playSound("pew_main3", 0.6)
 end)
 

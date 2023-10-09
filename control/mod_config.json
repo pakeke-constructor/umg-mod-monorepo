@@ -1,4 +1,4 @@
 {
     "type": "base",
-    "uses": ["input", "rendering", "xy", "sync"]
+    "uses": ["input", "rendering", "xy", "sync", "components"]
 }
