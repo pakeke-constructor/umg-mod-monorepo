@@ -28,6 +28,11 @@ When calculating properties,
 we can take advantage of the fact that state *already exists.*
 ```lua
 
+--[[
+    The `effects` component is handled internally.
+    The modder is not expected to change any of this;
+    (this is just how it is represented.)
+]]
 ent.effects = EffectHandler({
     modifiers = {
         -- list of modifiers for all properties:
@@ -98,6 +103,7 @@ EffectHandler:recalculate(property?)
 
 --[[
     Integration with items mod:
+    (Don't worry about this if you don't know about SlotHandles)
 ]]
 local EffectSlotHandle = objects.Class("...", items.SlotHandle)
 
