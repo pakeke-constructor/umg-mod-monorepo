@@ -331,9 +331,9 @@ ent.triggerEffect = {
 
 -- using effects:isEventTriggerBlocked,
 -- we can create a couple of good components:
-ent.eventTriggerCooldown = 3 -- can only trigger once every 3 seconds
+ent.triggerEffectCooldown = 3 -- can only trigger once every 3 seconds
 
-ent.eventTriggerActivations = 100 -- how many times it can trigger
+ent.triggerEffectActivations = 100 -- how many times it can trigger
 -- (decreases by 1 every time it triggers)
 -- We can use this to do stuff like: max 100 triggers per round
 ```

@@ -1,4 +1,18 @@
 
+
+--[[
+
+Sparse-Set implementation.
+
+
+Supports O(1) addition and removal.
+Also supports iteration.
+
+Order is not consistent, and will change quite dynamically.
+
+
+]]
+
 -- Need to make sure this is loaded; it may not be loaded yet
 local Class = require("shared.class")
 
