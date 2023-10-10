@@ -1,4 +1,8 @@
 
+--[[
+    this entity is used to test component projection!
+    :)
+]]
 return {
     onClick = function(ent)
         if ent.animation then
