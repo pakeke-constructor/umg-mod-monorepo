@@ -16,6 +16,9 @@ local quad_to_ox
 quad_to_ox = setmetatable({}, {
     -- quadname -> offset x
     __index = function(_,quad)
+        if not quad.getViewport then
+            error("wot? " .. tostring(quad))
+        end
         local _,_, w, _ = quad:getViewport()
         quad_to_ox[quad] = w / 2
         return w/2
@@ -55,7 +58,9 @@ end
 
 local getImageOffsets = imageSizes.getImageOffsets
 
+local getImageSizeTc = typecheck.assert("userdata|string")
 function imageSizes.getImageSize(quad_or_name)
+    getImageSizeTc(quad_or_name)
     local ox, oy = getImageOffsets(quad_or_name)
     return ox * 2, oy * 2
 end

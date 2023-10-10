@@ -17,7 +17,7 @@ local function getEntityDisplaySize(ent)
 
     local size_x, size_y = DEFAULT_SIZE, DEFAULT_SIZE
     if ent.image then
-        size_x, size_y = rendering.getImageSize(ent)
+        size_x, size_y = rendering.getImageSize(ent.image)
     end
 
     return sx * size_x, sy * size_y

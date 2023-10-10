@@ -43,6 +43,9 @@ umg.on("@createWorld", function()
         height = 10000
     })
 
+    local e = server.entities.test(0,0)
+    e.image = "spot_block"
+
     for i=1, 30 do
         local e = newItem(ents.item, 1)
         e.dimension = dim2

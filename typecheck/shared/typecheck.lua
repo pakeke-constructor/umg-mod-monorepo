@@ -36,6 +36,11 @@ function typecheck.table(x)
 end
 
 
+function typecheck.userdata(x)
+    return type(x) == "userdata", "expected userdata"
+end
+
+
 function typecheck.func(x)
     return type(x) == "function", "expected function"
 end
