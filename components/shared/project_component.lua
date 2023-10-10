@@ -61,6 +61,12 @@ end
 
 local function setupProjectionRemoval(group, targetComponent)
     group:onRemoved(function(ent)
+        --[[
+            This is kinda bad, since it makes entity deletion
+            O(n^2), where `n` is the number of regular components being projected to our targetComponent.
+
+            I think its fine tho.
+        ]]
         if not ent[targetComponent] then
             return -- wtf??? okay...? How tf did this happen?!??
         end

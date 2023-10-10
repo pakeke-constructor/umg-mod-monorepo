@@ -242,7 +242,7 @@ ent.propertyEffect = {
 ent.propertyEffect = {
     property = "strength",
     shouldApply = function(ent, ownerEnt)
-        return true -- if returns false, this upgrade doesnt apply
+        return true -- if returns false, this effect doesnt apply
     end,
     multiplier = function(ent, ownerEnt)
         return 1.5
