@@ -79,15 +79,10 @@ end
 local function drawEntity(ent)
     if isOnScreen(ent) and not isHidden(ent) then
         setColorOfEnt(ent)
-        umg.call("rendering:preDrawEntity", ent)
-        if ent.onPreDraw then
-            ent:onPreDraw()
-        end
         umg.call("rendering:drawEntity", ent)
         if ent.onDraw then
             ent:onDraw()
         end
-        umg.call("rendering:postDrawEntity", ent)
     end
 end
 

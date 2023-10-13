@@ -2,7 +2,9 @@
 
 local defaultColor = {0,0,0,0.6}
 
-umg.on("rendering:preDrawEntity", function(ent)
+local prio = -10
+
+umg.on("rendering:drawEntity", function(ent)
     if ent.shadow and ent.image then
         local r,b,g,a = love.graphics.getColor()
         local size = ent.shadow.size
@@ -11,5 +13,5 @@ umg.on("rendering:preDrawEntity", function(ent)
         love.graphics.circle("fill", ent.x, ent.y + oy, size)
         love.graphics.setColor(r,b,g,a)
     end
-end)
+end, prio)
 

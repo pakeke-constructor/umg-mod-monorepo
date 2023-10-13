@@ -64,6 +64,7 @@ umg.on("ui:slabUpdate", function()
 end)
 
 
+local prio = -1
 
 umg.on("rendering:preDrawUI", function()
     if entBeingHovered then
@@ -82,7 +83,7 @@ umg.on("rendering:preDrawUI", function()
         love.graphics.circle("line", x/scale, y/scale, circle_size)
         love.graphics.pop()
     end
-end)
+end, prio)
 
 
 

@@ -61,11 +61,11 @@ end
 
 function SlotHandle:preDraw(drawX, drawY, drawWidth, drawHeight)
     -- to be overridden.
-    -- called when this slot should be drawn.
+    -- called before this slot should be drawn.
 end
 function SlotHandle:postDraw(drawX, drawY, drawWidth, drawHeight)
     -- to be overridden.
-    -- called when this slot should be drawn.
+    -- called after this slot should be drawn.
 end
 -- These two are useful for cool, custom slot vfx!
 

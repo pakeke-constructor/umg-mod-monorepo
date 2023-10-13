@@ -55,16 +55,11 @@ function draw.drawWorld(customCamera)
 
     camera:attach()
 
-    umg.call("rendering:preDrawWorld", camera)
-
     umg.call("rendering:drawGround", camera)
     umg.call("rendering:drawEntities", camera)
     umg.call("rendering:drawEffects", camera)
 
     camera:draw()
-
-    umg.call("rendering:postDrawWorld", camera)
-
     camera:detach()
 end
 
@@ -127,9 +122,7 @@ end
 
 umg.on("state:drawUI", function()
     love.graphics.scale(scaleUI)
-    umg.call("rendering:preDrawUI")
     umg.call("rendering:drawUI")
-    umg.call("rendering:postDrawUI")
 end)
 
 

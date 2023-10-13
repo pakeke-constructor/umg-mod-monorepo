@@ -7,9 +7,7 @@ end
 
 -- entity drawing
 -- (Passes ent as first argument)
-umg.defineEvent("rendering:preDrawEntity")
 umg.defineEvent("rendering:drawEntity")
-umg.defineEvent("rendering:postDrawEntity")
 
 
 -- drawing stuff at Z-index (passes z-index as first arg)
@@ -17,21 +15,17 @@ umg.defineEvent("rendering:drawIndex")
 
 
 
--- Drawing of world:
-umg.defineEvent("rendering:preDrawWorld")
+umg.defineEvent("drawWorld")
 
+-- Drawing of world:
 umg.defineEvent("rendering:drawGround")
 umg.defineEvent("rendering:drawEntities")
 umg.defineEvent("rendering:drawEffects")
-
-umg.defineEvent("rendering:postDrawWorld")
 
 
 
 
 
 -- rendering 
-umg.defineEvent("rendering:preDrawUI")
 umg.defineEvent("rendering:drawUI")
-umg.defineEvent("rendering:postDrawUI")
 
