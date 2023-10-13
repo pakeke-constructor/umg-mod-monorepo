@@ -29,10 +29,10 @@ end
 
 
 
-local PRIO = -1
+local ORDER = 1
 
 umg.on("rendering:drawEntity", function(ent)
     if ent.glow then
         drawGlow(ent)
     end
-end, PRIO)
+end, ORDER)

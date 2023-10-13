@@ -81,14 +81,14 @@ end
 
 
 
-local PRIO = -5
+local ORDER = 10 -- draw Slab UI last
 
-umg.on("rendering:drawUI", function()
+umg.on("rendering:drawUI", ORDER, function()
 	love.graphics.push("all")
 	love.graphics.setLineWidth(1)
     Slab.Draw()
 	love.graphics.pop()
-end, PRIO)
+end)
 
 
 

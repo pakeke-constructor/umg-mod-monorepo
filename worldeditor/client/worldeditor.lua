@@ -118,10 +118,10 @@ end
 
 
 -- Make sure we draw this stuff last.
-local PRIO = -150
+local ORDER = 150
 
 
-umg.on("rendering:drawEffects", function()
+umg.on("rendering:drawEffects", ORDER, function()
     if _G.settings.editing then
         love.graphics.push("all")
         love.graphics.setLineWidth(3)
@@ -133,7 +133,7 @@ umg.on("rendering:drawEffects", function()
         end
         love.graphics.pop()
     end
-end, PRIO)
+end)
 
 
 

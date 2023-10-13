@@ -64,9 +64,9 @@ umg.on("ui:slabUpdate", function()
 end)
 
 
-local prio = -1
+local ORDER = 1
 
-umg.on("rendering:preDrawUI", function()
+umg.on("rendering:preDrawUI", ORDER, function()
     if entBeingHovered then
         love.graphics.push("all")
         love.graphics.setColor(1,1,1,0.3)
@@ -83,7 +83,7 @@ umg.on("rendering:preDrawUI", function()
         love.graphics.circle("line", x/scale, y/scale, circle_size)
         love.graphics.pop()
     end
-end, prio)
+end)
 
 
 

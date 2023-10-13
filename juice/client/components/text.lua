@@ -8,7 +8,6 @@ local WHITE = {1,1,1}
 local DEFAULT_BG_BORDER = 2
 
 
-local PRIO = -1
 
 
 local function getText(ent)
@@ -34,7 +33,9 @@ end
 
 
 
-umg.on("rendering:drawEntity", function(ent)
+local ORDER = 1 -- draw text on top of ent
+
+umg.on("rendering:drawEntity", ORDER, function(ent)
     --[[
         text = {
             value = "hello",
@@ -73,6 +74,7 @@ umg.on("rendering:drawEntity", function(ent)
         local yy = y + (text_oy - height/2 - border) * scale
         local ww = (width + border*2) * scale
         local hh = (height + border*2) * scale
+        love.graphics.setColor(text.background)
         love.graphics.rectangle("fill", xx, yy, ww, hh)
     end
 
@@ -98,5 +100,5 @@ umg.on("rendering:drawEntity", function(ent)
     )
 
     love.graphics.pop()
-end, PRIO)
+end)
 

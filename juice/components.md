@@ -30,11 +30,11 @@ ent.nametag = true -- entity will have a nametag above its head :)
 -- (Similar to nametag component)
 ent.text = {
     -- we can set value of text through a component:
-    component = "controller"
-    -- we can also specify a default value:
+    component = "controller" -- txt value == ent.controllable
+    -- specify a default value:
     default = "unnamed player"
 
-    -- or we can set value directly:
+    -- or, set text value directly:
     value = "hello, i am text",
 
     ox = 0, oy = -20, -- draw offsets
