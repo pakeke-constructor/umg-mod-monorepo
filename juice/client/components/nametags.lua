@@ -20,6 +20,7 @@ local SCALE = 1/2
 
 local EXTRA_OY = 10
 
+error("TODO: Project this onto text component!")
 
 
 local function getNametagText(ent)
