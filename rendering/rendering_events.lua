@@ -14,19 +14,15 @@ umg.defineEvent("rendering:drawEntity")
 umg.defineEvent("rendering:drawIndex")
 
 
-
--- Rendering world:
-umg.defineEvent("rendering:drawWorld")
-
 --[[
-
--- TODO: remove these.
--- Make sure they are all replaced with the appropriate stuff!
-umg.defineEvent("rendering:drawGround")
-umg.defineEvent("rendering:drawEntities")
-umg.defineEvent("rendering:drawEffects")
-
+    Rendering world:
 ]]
+-- Rendering ground:
+umg.defineEvent("rendering:drawGround")
+-- Rendering entities:
+umg.defineEvent("rendering:drawEntities")
+-- Rendering effects:
+umg.defineEvent("rendering:drawEffects")
 
 
 -- Rendering ui:

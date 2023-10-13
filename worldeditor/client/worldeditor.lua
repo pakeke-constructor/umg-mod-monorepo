@@ -117,9 +117,11 @@ end
 
 
 
+-- Make sure we draw this stuff last.
 local PRIO = -150
 
-umg.on("rendering:drawWorld", function()
+
+umg.on("rendering:drawEffects", function()
     if _G.settings.editing then
         love.graphics.push("all")
         love.graphics.setLineWidth(3)

@@ -66,7 +66,7 @@ ent.effects = EffectHandler({
 
 
 umg.answer("properties:getPropertyMultiplier", function(ent, prop)
-    if ent.upgrades then
+    if ent.effects then
         if ent.effects.multipliers[prop] then
             return ent.effects.multipliers[prop]
         end

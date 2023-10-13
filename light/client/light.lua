@@ -103,14 +103,12 @@ local function drawCanvas()
 end
 
 
-local PRIO = -100 -- should be drawn last! (thats why prio is so high)
-
-umg.on("rendering:drawWorld", function(camera)
+umg.on("rendering:drawEffects", function(camera)
     setupCanvas(camera)
     local mode, alphamode = love.graphics.getBlendMode( )
     drawCanvas()
     love.graphics.setBlendMode(mode, alphamode)
-end, PRIO)
+end)
 
 
 
