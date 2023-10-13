@@ -49,11 +49,20 @@ local type = type
 
 
 local function setupProjection(group, targetComponent, targetValue)
-    group:onAdded(function(ent)
-        if not ent[targetComponent] then
-            ent[targetComponent] = targetValue
-        end
-    end)
+    if type(targetValue) == "function" then
+        local func = targetValue
+        group:onAdded(function(ent)
+            if not ent[targetComponent] then
+                ent[targetComponent] = func(ent, targetComponent)
+            end
+        end)
+    else
+        group:onAdded(function(ent)
+            if not ent[targetComponent] then
+                ent[targetComponent] = targetValue
+            end
+        end)
+    end
 end
 
 
@@ -69,6 +78,10 @@ local function setupProjectionRemoval(group, targetComponent)
         ]]
         if not ent[targetComponent] then
             return -- wtf??? okay...? How tf did this happen?!??
+        end
+
+        if ent:isShared(targetComponent) then
+            return -- we can't remove shared components.
         end
 
         local projectorGroupList = targetToProjectorGroupSet[targetComponent]
@@ -119,6 +132,11 @@ local function project(projection, targetComponent, targetValue)
     --[[
         `projection` is either a component that is being projected,
         or a group who's members will be projected.
+
+        `targetComponent` is the component that will be created.
+
+        `targetValue` is either a component value,
+            or a function that generates a component value.
     ]]
     projectTc(projection, targetComponent)
     targetValue = targetValue or true
