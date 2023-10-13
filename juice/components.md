@@ -6,7 +6,7 @@
 
 --[[
     TODO: Change this to progressBar.
-    Have healthBar component CREATE a progressBar component at runtime
+    Have healthBar component project onto progressBar
 ]]
 ent.healthBar = { -- health bar above entity!
     -- All of these are optional values:
@@ -21,11 +21,7 @@ ent.healthBar = { -- health bar above entity!
 
 
 
-ent.nametag = { -- renders a nametag above the entity
-    value = "name", --  if value is nil, `.controller` component is used.
-    -- (Else, a question-bus question is asked)
-}
-
+ent.nametag = true -- entity will have a nametag above its head :)
 
 
 
