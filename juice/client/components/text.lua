@@ -9,7 +9,7 @@ local WHITE = {1,1,1}
 local PRIO = -1
 
 
-umg.on("rendering:postDrawEntity", function(ent)
+umg.on("rendering:drawEntity", function(ent)
     --[[
         text = {
             value = "hello",
