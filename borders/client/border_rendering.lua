@@ -75,8 +75,9 @@ end
 
 
 
+local PRIO = -10 -- draw borders AFTER everything else.
 
-umg.on("rendering:postDrawWorld", function(camera)
+umg.on("rendering:drawWorld", function(camera)
     local dimension = camera:getDimension()
     local overseerEnt = dimensions.getOverseer(dimension)
     local border = overseerEnt.border
@@ -92,6 +93,6 @@ umg.on("rendering:postDrawWorld", function(camera)
         love.graphics.setColor(BORDER_LINE_COLOR)
         love.graphics.rectangle("line", border.x, border.y, border.width, border.height)
     end
-end)
+end, PRIO)
 
 

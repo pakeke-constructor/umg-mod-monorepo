@@ -94,7 +94,9 @@ local function drawCanvas()
 end
 
 
-umg.on("rendering:postDrawWorld", function()
+local PRIO = -10
+
+umg.on("rendering:drawWorld", function()
     local mode, alphamode = love.graphics.getBlendMode()
     love.graphics.push("all")
     love.graphics.origin()
@@ -104,7 +106,7 @@ umg.on("rendering:postDrawWorld", function()
     
     love.graphics.pop()
     love.graphics.setBlendMode(mode, alphamode)
-end)
+end, PRIO)
 
 
 

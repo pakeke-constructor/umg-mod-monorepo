@@ -15,17 +15,20 @@ umg.defineEvent("rendering:drawIndex")
 
 
 
-umg.defineEvent("drawWorld")
+-- Rendering world:
+umg.defineEvent("rendering:drawWorld")
 
--- Drawing of world:
+--[[
+
+-- TODO: remove these.
+-- Make sure they are all replaced with the appropriate stuff!
 umg.defineEvent("rendering:drawGround")
 umg.defineEvent("rendering:drawEntities")
 umg.defineEvent("rendering:drawEffects")
 
+]]
 
 
-
-
--- rendering 
+-- Rendering ui:
 umg.defineEvent("rendering:drawUI")
 

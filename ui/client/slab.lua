@@ -81,13 +81,14 @@ end
 
 
 
+local PRIO = -5
 
-umg.on("rendering:postDrawUI", function()
+umg.on("rendering:drawUI", function()
 	love.graphics.push("all")
 	love.graphics.setLineWidth(1)
     Slab.Draw()
 	love.graphics.pop()
-end)
+end, PRIO)
 
 
 

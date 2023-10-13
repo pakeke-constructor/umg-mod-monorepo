@@ -6,6 +6,8 @@ local DCOL = 0.4
 local WHITE = {1,1,1}
 
 
+local PRIO = -1
+
 
 umg.on("rendering:postDrawEntity", function(ent)
     --[[
@@ -59,5 +61,5 @@ umg.on("rendering:postDrawEntity", function(ent)
 
         love.graphics.pop()
     end
-end)
+end, PRIO)
 

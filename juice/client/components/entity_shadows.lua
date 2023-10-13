@@ -2,7 +2,7 @@
 
 local defaultColor = {0,0,0,0.6}
 
-local prio = -10
+local prio = 10
 
 umg.on("rendering:drawEntity", function(ent)
     if ent.shadow and ent.image then

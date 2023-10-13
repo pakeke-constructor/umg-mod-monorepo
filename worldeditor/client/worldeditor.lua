@@ -117,7 +117,9 @@ end
 
 
 
-umg.on("rendering:postDrawWorld", function()
+local PRIO = -150
+
+umg.on("rendering:drawWorld", function()
     if _G.settings.editing then
         love.graphics.push("all")
         love.graphics.setLineWidth(3)
@@ -129,7 +131,7 @@ umg.on("rendering:postDrawWorld", function()
         end
         love.graphics.pop()
     end
-end)
+end, PRIO)
 
 
 

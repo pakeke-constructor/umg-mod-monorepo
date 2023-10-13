@@ -28,8 +28,11 @@ local function drawGlow(ent)
 end
 
 
-umg.on("rendering:postDrawEntity", function(ent)
+
+local PRIO = -1
+
+umg.on("rendering:drawEntity", function(ent)
     if ent.glow then
         drawGlow(ent)
     end
-end)
+end, PRIO)
