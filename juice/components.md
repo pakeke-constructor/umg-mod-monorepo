@@ -22,17 +22,26 @@ ent.healthBar = { -- health bar above entity!
 
 
 ent.nametag = true -- entity will have a nametag above its head :)
+-- the nametag will be the value of the `.controllable` component
 
 
 
 -- renders text in front of the entity
 -- (Similar to nametag component)
 ent.text = {
-    value = "brute",
+    -- we can set value of text through a component:
+    component = "controller"
+    -- we can also specify a default value:
+    default = "unnamed player"
+
+    -- or we can set value directly:
+    value = "hello, i am text",
+
     ox = 0, oy = -20, -- draw offsets
     scale = 1,
-    overlay = true -- (text will look nicer with this enabled)
-    color = {1,1,1}
+    overlay = true, -- (text will look nicer with this enabled)
+    color = {1,1,1}, -- text color
+    background = {0.2,0.2,0.2,0.5} -- background color
 }
 
 

@@ -5,6 +5,8 @@ local font = love.graphics.getFont()
 local DCOL = 0.4
 local WHITE = {1,1,1}
 
+local DEFAULT_BG_BORDER = 2
+
 
 local PRIO = -1
 
@@ -66,7 +68,7 @@ umg.on("rendering:drawEntity", function(ent)
     local color = text.color or ent.color or WHITE
 
     if text.background then
-        local border = 2 -- extra couple of pixels on background
+        local border = text.backgroundBorder or DEFAULT_BG_BORDER
         local xx = ent.x + (text_ox - width/2 - border) * scale
         local yy = y + (text_oy - height/2 - border) * scale
         local ww = (width + border*2) * scale
