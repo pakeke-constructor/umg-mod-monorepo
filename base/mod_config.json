@@ -5,6 +5,6 @@
         "input", "rendering", "reducers", "physics",
         "control", "xy", "follow", "juice", "sound",
         "mortality", "scheduling", "dimensions", "initializers",
-        "usables"
+        "usables", "components"
     ]
 }

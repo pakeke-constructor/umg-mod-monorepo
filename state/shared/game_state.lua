@@ -30,9 +30,7 @@ gameState:on("@update", function(dt)
     local modif = umg.ask("state:getDeltaTimeMultiplier") or 1
     dt = min(MAX_DT, max(MIN_DT, dt * modif))
 
-    umg.call("state:gamePreUpdate", dt)
     umg.call("state:gameUpdate", dt)
-    umg.call("state:gamePostUpdate", dt)
 end)
 
 gameState:on("@draw", function(dt)
